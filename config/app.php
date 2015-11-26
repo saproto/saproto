@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
 
     /*
     |--------------------------------------------------------------------------
@@ -144,6 +144,10 @@ return [
         Proto\Providers\AuthServiceProvider::class,
         Proto\Providers\EventServiceProvider::class,
         Proto\Providers\RouteServiceProvider::class,
+
+        /*
+         * External Service Providers
+         */
 
     ],
 

@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "saproto/saproto",
+    "description": "S.A. Proto Web Application",
+    "keywords": ["proto", "utwente", "association"],
+    "license": "CC-BY-NC-SA-4.0",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
@@ -21,11 +21,6 @@
         "psr-4": {
             "Proto\\": "app/"
         }
-    },
-    "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
     },
     "scripts": {
         "post-install-cmd": [
