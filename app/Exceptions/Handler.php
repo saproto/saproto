@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace Proto\Exceptions;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
