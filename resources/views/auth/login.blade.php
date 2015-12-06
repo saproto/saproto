@@ -6,6 +6,14 @@
 
         {!! csrf_field() !!}
 
+        @if (count($errors) > 0)
+            @foreach ($errors->all() as $error)
+                <script type="text/javascript">
+                    Materialize.toast('{{ $error }}', 3000, 'rounded')
+                </script>
+            @endforeach
+        @endif
+
         <div class="row">
 
             <div class="grey-text lighten-5 input-field col l6 offset-l3 m12 s12">

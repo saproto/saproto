@@ -24,7 +24,11 @@
                     <a href="{{ route('homepage') }}" class="brand-logo">S.A. Proto</a>
                     <a href="#" data-activates="mobile-navbar" class="button-collapse"><i class="material-icons">menu</i></a>
                     <div id="authentication" class="right hide-on-med-and-down">
-                        <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::show') }}"><i class="fa fa-key right"></i>login</a>
+                        @if (Auth::check())
+                            <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::logout') }}"><i class="fa fa-lock right"></i>logout</a>
+                        @else
+                            <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::show') }}"><i class="fa fa-key right"></i>login</a>
+                        @endif
                     </div>
                     <ul class="right hide-on-med-and-down">
                         @include('website/navigation/navbar')
