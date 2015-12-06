@@ -11,6 +11,25 @@
 |
 */
 
-Route::get('/', function () {
+/*
+ * The main route for the frontpage.
+ */
+Route::get('/', ['as' => 'homepage', function () {
     return view('website/default/default');
+}]);
+
+/*
+ * Routes related to authentication.
+ */
+Route::group(['as' => 'login::'], function () {
+    Route::get('auth/login', ['as' => 'show', 'uses' => 'Auth\AuthController@getLogin']);
+    Route::post('auth/login', ['as' => 'post', 'uses' => 'Auth\AuthController@postLogin']);
+    Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+
+    Route::get('password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset']);
+    Route::post('password/reset', ['uses' => 'Auth\PasswordController@postReset']);
+    Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
+    Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
+
 });
+

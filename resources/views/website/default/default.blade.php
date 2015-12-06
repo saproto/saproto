@@ -3,25 +3,28 @@
 
     <head>
 
-        <title>S.A. Proto | New Website</title>
+        <title>S.A. Proto | @section('page-title')Default Page Title@show</title>
 
-        @include('website/default/jquery')
-        @include('website/default/materialize')
-        @include('website/default/fontawesome')
+        @include('website/default/stylesheets')
 
         @include('website/default/custom')
+
+        @section('stylesheet')
+        @show
 
     </head>
 
     <body style="display: block;">
 
+        @include('website/default/javascripts')
+
         <div class="navbar-fixed">
             <nav>
                 <div id="main-navigation" class="nav-wrapper light-green">
-                    <a href="/" class="brand-logo">S.A. Proto</a>
+                    <a href="{{ route('homepage') }}" class="brand-logo">S.A. Proto</a>
                     <a href="#" data-activates="mobile-navbar" class="button-collapse"><i class="material-icons">menu</i></a>
                     <div id="authentication" class="right hide-on-med-and-down">
-                        <a class="waves-effect waves-light btn white light-green-text" href=""><i class="fa fa-key right"></i>login</a>
+                        <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::show') }}"><i class="fa fa-key right"></i>login</a>
                     </div>
                     <ul class="right hide-on-med-and-down">
                         @include('website/navigation/navbar')
@@ -33,8 +36,12 @@
             </nav>
         </div>
 
-        <div class="container">
-        </div>
+        <p>
+            &nbsp;
+        </p>
+
+        @section('content')
+        @show
 
     </body>
 
