@@ -23,7 +23,7 @@ Route::get('/', ['as' => 'homepage', function () {
  */
 Route::group(['as' => 'login::'], function () {
     Route::get('auth/login', ['as' => 'show', 'uses' => 'Auth\AuthController@getLogin']);
-    Route::post('auth/login', ['as' => 'post', 'uses' => 'Auth\AuthController@postLogin']);
+    Route::post('auth/login', ['middleware' => 'utwente.auth', 'as' => 'post', 'uses' => 'Auth\AuthController@postLogin']);
     Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
 
     Route::get('password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset']);
