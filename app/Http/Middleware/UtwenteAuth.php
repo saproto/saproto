@@ -58,9 +58,13 @@ class UtwenteAuth
                 // Get member from database based on UTwente username
                 $member = Proto\Member::where('utwente_username', '=', $username)->get()->first();
 
-                // Login with user_id from selected member
-                Auth::loginUsingId($member->user_id);
-                return redirect('/');
+                if($member) { // Check whether member object exists
+                    // Login with user_id from selected member
+                    Auth::loginUsingId($member->user_id);
+                    return redirect('/');
+                }else{
+                    return($next($request));
+                }
             }else{
                 return $next($request);
             }
