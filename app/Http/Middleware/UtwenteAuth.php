@@ -4,6 +4,7 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Auth;
+use Proto;
 
 class UtwenteAuth
 {
@@ -54,9 +55,11 @@ class UtwenteAuth
 
             // If response matches token, user is verified.
             if($response == $token) {
-                // Login as Jonathan Juursema when password and username are verified on RADIUS.
-                // TODO: use members table to login as proper user.
-                Auth::loginUsingId(1);
+                // Get member from database based on UTwente username
+                $member = Proto\Member::where('utwente_username', '=', $username)->get()->first();
+
+                // Login with user_id from selected member
+                Auth::loginUsingId($member->user_id);
                 return redirect('/');
             }else{
                 return $next($request);
