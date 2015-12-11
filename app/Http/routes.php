@@ -27,7 +27,7 @@ Route::group(['as' => 'login::'], function () {
     Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
 
     Route::get('password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset']);
-    Route::post('password/reset', ['uses' => 'Auth\PasswordController@postReset']);
+    Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'Auth\PasswordController@postReset']);
     Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
     Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
 

@@ -2,7 +2,7 @@
 
 @section('container')
 
-    <form method="POST" action="{{ route('login::resetpass') }}">
+    <form method="POST" action="{{ route('login::resetpass::submit') }}">
 
         {!! csrf_field() !!}
 
