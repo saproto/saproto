@@ -26,7 +26,8 @@ return [
     |
     */
 
-    'url' => 'http://jonathan.dev.saproto.nl',
+    //'url' => 'http://jonathan.dev.saproto.nl',
+    'url' => env('APP_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -148,6 +149,7 @@ return [
         /*
          * External Service Providers
          */
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
     ],
 
