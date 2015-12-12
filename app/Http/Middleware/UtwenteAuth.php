@@ -20,6 +20,7 @@ class UtwenteAuth
 
         $username = $request->input('email');
         $password = $request->input('password');
+        $remember = $request->input('remember');
 
         $regex = '/^[smx]\d\d\d\d\d\d\d$/';
 
@@ -60,7 +61,7 @@ class UtwenteAuth
 
                 if($member) { // Check whether member object exists
                     // Login with user_id from selected member
-                    Auth::loginUsingId($member->user_id);
+                    Auth::loginUsingId($member->user_id, $remember);
                     return redirect('/');
                 }else{
                     return($next($request));
