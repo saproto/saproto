@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
     <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>S.A. Proto | @section('page-title')Default Page Title@show</title>
 
@@ -18,27 +22,44 @@
 
         @include('website/default/javascripts')
 
-        <div class="navbar-fixed">
-            <nav>
-                <div id="main-navigation" class="nav-wrapper light-green">
-                    <a href="{{ route('homepage') }}" class="brand-logo">S.A. Proto</a>
-                    <a href="#" data-activates="mobile-navbar" class="button-collapse"><i class="material-icons">menu</i></a>
-                    <div id="authentication" class="right hide-on-med-and-down">
-                        @if (Auth::check())
-                            <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::logout') }}"><i class="fa fa-lock right"></i>logout</a>
-                        @else
-                            <a class="waves-effect waves-light btn white light-green-text" href="{{ route('login::show') }}"><i class="fa fa-key right"></i>login</a>
-                        @endif
-                    </div>
-                    <ul class="right hide-on-med-and-down">
-                        @include('website/navigation/navbar')
-                    </ul>
-                    <ul class="side-nav" id="mobile-navbar">
-                        @include('website/navigation/navbar')
-                    </ul>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+
+                <!--
+                    Navbar header. The part where the icon and name and shit is.
+                //-->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ route('homepage') }}">S.A. Proto</a>
                 </div>
-            </nav>
-        </div>
+
+                <!--
+                    The auth and logout shit.
+                //-->
+                <form class="navbar-form navbar-right">
+                    @if (Auth::check())
+                        <a href="{{ route('login::logout') }}" class="btn btn-default btn-danger"><i class="fa fa-lock"></i></a>
+                    @else
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">
+                            <i class="fa fa-unlock-alt"></i>
+                        </button>
+                    @endif
+                </form>
+
+                <!--
+                    The actual navbar contents with links to pages and tools and shit.
+                //-->
+                <ul class="nav navbar-nav navbar-right">
+                    @include('website/navigation/navbar')
+                </ul>
+
+            </div>
+        </nav>
 
         <p>
             &nbsp;
@@ -46,6 +67,10 @@
 
         @section('content')
         @show
+
+        @if (!Auth::check())
+            @include('auth/modal');
+        @endif
 
     </body>
 
