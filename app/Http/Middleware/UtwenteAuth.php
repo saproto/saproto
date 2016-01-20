@@ -57,11 +57,11 @@ class UtwenteAuth
             // If response matches token, user is verified.
             if($response == $token) {
                 // Get member from database based on UTwente username
-                $member = Proto\Member::where('utwente_username', '=', $username)->get()->first();
+                $user = Proto\User::where('utwente_username', '=', $username)->get()->first();
 
-                if($member) { // Check whether member object exists
+                if($user) { // Check whether member object exists
                     // Login with user_id from selected member
-                    Auth::loginUsingId($member->user_id, $remember);
+                    Auth::loginUsingId($user->id, $remember);
                     return redirect('/');
                 }else{
                     return($next($request));

@@ -4,9 +4,9 @@ namespace Proto;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Member extends Model
+class Address extends Model
 {
-    protected $table = 'members';
+    protected $table  = 'addresses';
 
     public function user()
     {

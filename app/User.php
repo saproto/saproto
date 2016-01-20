@@ -40,4 +40,20 @@ class User extends Model implements AuthenticatableContract,
     public function member() {
         return $this->hasOne('Proto\Member');
     }
+
+    public function bank() {
+        return $this->hasOne('Proto\Bank');
+    }
+
+    public function address() {
+        return $this->hasMany('Proto\Address');
+    }
+
+    public function utwente() {
+        return $this->hasOne('Proto\Utwente');
+    }
+
+    public function study() {
+        return $this->hasMany('Proto\Study');
+    }
 }
