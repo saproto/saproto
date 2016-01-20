@@ -22,7 +22,7 @@ class UtwenteAuth
         $password = $request->input('password');
         $remember = $request->input('remember');
 
-        $regex = '/^[smx]\d\d\d\d\d\d\d$/';
+        $regex = '/^[smx][0-9]{7}$/';
 
         if(preg_match($regex, $username)) {
 
