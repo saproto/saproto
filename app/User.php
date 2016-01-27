@@ -10,6 +10,23 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+/**
+ * Proto\User
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property string $utwente_username
+ * @property-read \Proto\Member $member
+ * @property-read \Proto\Bank $bank
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Address[] $address
+ * @property-read \Proto\Utwente $utwente
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Study[] $study
+ */
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
                                     CanResetPasswordContract
