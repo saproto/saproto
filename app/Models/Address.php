@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto;
+namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

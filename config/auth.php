@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => Proto\User::class,
+    'model' => Proto\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------
