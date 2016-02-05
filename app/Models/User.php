@@ -27,6 +27,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Address[] $address
  * @property-read \Proto\Models\Utwente $utwente
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
 class User extends Model implements AuthenticatableContract,
                                     CanResetPasswordContract
@@ -65,22 +66,22 @@ class User extends Model implements AuthenticatableContract,
     protected $hidden = ['password', 'remember_token'];
 
     public function member() {
-        return $this->hasOne('Proto\Member');
+        return $this->hasOne('Proto\Models\Member');
     }
 
     public function bank() {
-        return $this->hasOne('Proto\Bank');
+        return $this->hasOne('Proto\Models\Bank');
     }
 
     public function address() {
-        return $this->hasMany('Proto\Address');
+        return $this->hasMany('Proto\Models\Address');
     }
 
     public function utwente() {
-        return $this->hasOne('Proto\Utwente');
+        return $this->hasOne('Proto\Models\Utwente');
     }
 
     public function study() {
-        return $this->hasMany('Proto\Study');
+        return $this->hasMany('Proto\Models\Study');
     }
 }

@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $faculty
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\User[] $user
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class Study extends Model
 {
@@ -18,6 +20,6 @@ class Study extends Model
 
     public function user()
     {
-        return $this->belongsToMany('Proto\User');
+        return $this->belongsToMany('Proto\Models\User');
     }
 }

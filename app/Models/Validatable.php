@@ -5,6 +5,10 @@ namespace Proto\Models;
 use Eloquent;
 use Validator;
 
+/**
+ * Proto\Models\Validatable
+ *
+ */
 class Validatable extends Eloquent
 {
     protected $rules;

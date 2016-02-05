@@ -31,7 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $address_visible
  * @property boolean $receive_newsletter
  * @property boolean $receive_sms
- * @property-read \Proto\User $user
+ * @property-read \Proto\Models\User $user
+ * @property boolean $primary_member
  */
 class Member extends Model
 {
@@ -42,6 +43,6 @@ class Member extends Model
 
     public function user()
     {
-        return $this->belongsTo('Proto\User');
+        return $this->belongsTo('Proto\Models\User');
     }
 }

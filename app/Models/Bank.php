@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $machtigingid
  * @property string $withdrawal_type
  * @property-read \Proto\Models\User $user
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class Bank extends Validatable
 {
@@ -28,6 +30,6 @@ class Bank extends Validatable
 
     public function user()
     {
-        return $this->belongsTo('Proto\User');
+        return $this->belongsTo('Proto\Models\User');
     }
 }
