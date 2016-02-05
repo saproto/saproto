@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Eloquent;
 
 class Validatable extends Eloquent
 {
