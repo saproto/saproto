@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $bic
  * @property string $machtigingid
  * @property string $withdrawal_type
- * @property-read \Proto\User $user
+ * @property-read \Proto\Models\User $user
  */
 class Bank extends Validatable
 {
