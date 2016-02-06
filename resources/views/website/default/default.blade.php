@@ -76,7 +76,7 @@
         @show
 
         @if (!Auth::check())
-            @include('auth/modal');
+            @include('auth/modal')
         @endif
 
     </body>
