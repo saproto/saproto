@@ -39,8 +39,8 @@ Route::group(['middleware' => 'dev'], function() {
     /*
      * Routes related to user profiles.
      */
-    Route::group(['prefix' => 'profile', 'as' => 'profile::', 'middleware' => ['auth']], function () {
-        Route::get('{id?}', ['as' => 'show', 'uses' => 'UserProfileController@show']);
+    Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
+        Route::get('{id?}', ['as' => 'profile', 'uses' => 'UserProfileController@show']);
     });
 
 });

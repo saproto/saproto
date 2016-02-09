@@ -2,7 +2,7 @@
 
 @section('container')
 
-    {!! BootForm::open(['model' => $user, 'update' => 'UserPreferenceController@updateOwn']) !!}
+    {!! BootForm::open(['model' => $user, 'update' => 'UserPreferenceController@update']) !!}
         {!! BootForm::text('name') !!}
         {!! BootForm::text('email') !!}
         {!! BootForm::password('password') !!}
