@@ -42,10 +42,11 @@ Route::group(['as' => 'login::'], function () {
 /*
  * Routes related to user profiles.
  */
-Route::group(['prefix' => 'profile', 'as' => 'profile::'], function() {
-    Route::get('edit', ['uses' => 'UserPreferenceController@editOwn', 'as' => 'editOwn', 'middleware' => ['auth']]);
-    Route::get('', ['uses' => 'UserPreferenceController@showOwn', 'middleware' => ['auth']]);
-    Route::get('{id}', ['uses' => 'UserPreferenceController@show', 'middleware' => ['auth']]);
-    Route::get('edit/{id}', ['uses' => 'UserPreferenceController@edit', 'middleware' => ['auth', 'role:admin']]);
-    Route::put('edit/{id}', ['uses' => 'UserPreferenceController@update', 'middleware' => ['auth', 'role:admin']]);
+Route::group(['prefix' => 'profile', 'as' => 'profile::', 'middleware' => ['auth']], function() {
+    Route::get('edit', ['uses' => 'UserPreferenceController@editOwn', 'as' => 'editOwn']);
+    Route::get('', ['uses' => 'UserPreferenceController@showOwn']);
+    Route::get('{id}', ['uses' => 'UserPreferenceController@show']);
+    Route::get('edit/{id}', ['uses' => 'UserPreferenceController@edit', 'middleware' => ['role:admin']]);
+    Route::put('edit/{id}', ['uses' => 'UserPreferenceController@update', 'middleware' => ['role:admin']]);
+    Route::put('edit', ['uses' => 'UserPreferenceController@updateOwn']);
 });

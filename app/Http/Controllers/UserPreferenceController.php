@@ -91,4 +91,20 @@ class UserPreferenceController extends Controller
 
         return response()->redirectTo('/');
     }
+
+    public function updateOwn(Request $request)
+    {
+
+        $user = User::find(Auth::id());
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if(!empty($request->password)) $user->password = bcrypt($request->password);
+
+        $user->save();
+
+        Session::flash('flash_message', 'Profile updated.');
+
+        return response()->redirectTo('/');
+    }
 }
