@@ -22,6 +22,13 @@
 
         @include('website/default/javascripts')
 
+        @if (Session::has('flash_message'))
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ Session::get('flash_message') }}
+            </div>
+        @endif
+
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
 

@@ -10,6 +10,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\User;
 
 use Auth;
+use Session;
 
 class UserPreferenceController extends Controller
 {
@@ -85,6 +86,8 @@ class UserPreferenceController extends Controller
         if(!empty($request->password)) $user->password = bcrypt($request->password);
 
         $user->save();
+
+        Session::flash('flash_message', 'Profile updated.');
 
         return response()->redirectTo('/');
     }
