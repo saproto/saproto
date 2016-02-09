@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $mail
  * @property string $room_number
  * @property string $phone_number
- * @property-read \Proto\User $user
+ * @property-read \Proto\Models\User $user
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
