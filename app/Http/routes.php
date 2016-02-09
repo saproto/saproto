@@ -30,6 +30,22 @@ Route::group(['as' => 'login::'], function () {
     Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'Auth\PasswordController@postReset']);
     Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
     Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
-
 });
 
+/*Route::group(['prefix' => 'test', 'as' => 'test::', 'middleware' => ['auth']], function() {
+    Route::get('edit', ['uses' => 'FormTestController@index', 'middleware' => ['role:admin']]);
+    Route::get('edit/{id}', ['uses' => 'FormTestController@edit']);
+    Route::put('edit/{id}', ['as' => 'edit::update', 'uses' => 'FormTestController@update']);
+    Route::post('test/edit', ['as' => 'edit::store   ', 'uses' => 'FormTestController@store']);
+});*/
+
+/*
+ * Routes related to user profiles.
+ */
+Route::group(['prefix' => 'profile', 'as' => 'profile::'], function() {
+    Route::get('edit', ['uses' => 'UserPreferenceController@editOwn', 'as' => 'editOwn', 'middleware' => ['auth']]);
+    Route::get('', ['uses' => 'UserPreferenceController@showOwn', 'middleware' => ['auth']]);
+    Route::get('{id}', ['uses' => 'UserPreferenceController@show', 'middleware' => ['auth']]);
+    Route::get('edit/{id}', ['uses' => 'UserPreferenceController@edit', 'middleware' => ['auth', 'role:admin']]);
+    Route::put('edit/{id}', ['uses' => 'UserPreferenceController@update', 'middleware' => ['auth', 'role:admin']]);
+});
