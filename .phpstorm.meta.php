@@ -3,7 +3,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2015-12-12.
+    * Generated on 2016-02-09.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -40,6 +40,9 @@ namespace PHPSTORM_META {
             'view.engine.resolver' instanceof \Illuminate\View\Engines\EngineResolver,
             'view.finder' instanceof \Illuminate\View\FileViewFinder,
             'view' instanceof \Illuminate\View\Factory,
+            'entrust' instanceof \Zizaco\Entrust\Entrust,
+            'command.entrust.migration' instanceof \Zizaco\Entrust\MigrationCommand,
+            'command.entrust.classes' instanceof \Zizaco\Entrust\ClassCreatorCommand,
             'command.app.name' instanceof \Illuminate\Foundation\Console\AppNameCommand,
             'command.clear-compiled' instanceof \Illuminate\Foundation\Console\ClearCompiledCommand,
             'command.command.make' instanceof \Illuminate\Foundation\Console\CommandMakeCommand,
@@ -89,7 +92,6 @@ namespace PHPSTORM_META {
             'command.migrate.status' instanceof \Illuminate\Database\Console\Migrations\StatusCommand,
             'command.seed' instanceof \Illuminate\Database\Console\Seeds\SeedCommand,
             'command.seeder.make' instanceof \Illuminate\Database\Console\Seeds\SeederMakeCommand,
-            'seeder' instanceof \Illuminate\Database\Seeder,
             'composer' instanceof \Illuminate\Foundation\Composer,
             'command.queue.table' instanceof \Illuminate\Queue\Console\TableCommand,
             'command.queue.failed' instanceof \Illuminate\Queue\Console\ListFailedCommand,
@@ -121,6 +123,9 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'html' instanceof \Collective\Html\HtmlBuilder,
+            'form' instanceof \Collective\Html\FormBuilder,
+            'bootstrap_form' instanceof \Watson\BootstrapForm\BootstrapForm,
         ],
         \Illuminate\Contracts\Container\Container::make('') => [
             '' == '@',
@@ -153,6 +158,9 @@ namespace PHPSTORM_META {
             'view.engine.resolver' instanceof \Illuminate\View\Engines\EngineResolver,
             'view.finder' instanceof \Illuminate\View\FileViewFinder,
             'view' instanceof \Illuminate\View\Factory,
+            'entrust' instanceof \Zizaco\Entrust\Entrust,
+            'command.entrust.migration' instanceof \Zizaco\Entrust\MigrationCommand,
+            'command.entrust.classes' instanceof \Zizaco\Entrust\ClassCreatorCommand,
             'command.app.name' instanceof \Illuminate\Foundation\Console\AppNameCommand,
             'command.clear-compiled' instanceof \Illuminate\Foundation\Console\ClearCompiledCommand,
             'command.command.make' instanceof \Illuminate\Foundation\Console\CommandMakeCommand,
@@ -202,7 +210,6 @@ namespace PHPSTORM_META {
             'command.migrate.status' instanceof \Illuminate\Database\Console\Migrations\StatusCommand,
             'command.seed' instanceof \Illuminate\Database\Console\Seeds\SeedCommand,
             'command.seeder.make' instanceof \Illuminate\Database\Console\Seeds\SeederMakeCommand,
-            'seeder' instanceof \Illuminate\Database\Seeder,
             'composer' instanceof \Illuminate\Foundation\Composer,
             'command.queue.table' instanceof \Illuminate\Queue\Console\TableCommand,
             'command.queue.failed' instanceof \Illuminate\Queue\Console\ListFailedCommand,
@@ -234,6 +241,9 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'html' instanceof \Collective\Html\HtmlBuilder,
+            'form' instanceof \Collective\Html\FormBuilder,
+            'bootstrap_form' instanceof \Watson\BootstrapForm\BootstrapForm,
         ],
         \App::make('') => [
             '' == '@',
@@ -266,6 +276,9 @@ namespace PHPSTORM_META {
             'view.engine.resolver' instanceof \Illuminate\View\Engines\EngineResolver,
             'view.finder' instanceof \Illuminate\View\FileViewFinder,
             'view' instanceof \Illuminate\View\Factory,
+            'entrust' instanceof \Zizaco\Entrust\Entrust,
+            'command.entrust.migration' instanceof \Zizaco\Entrust\MigrationCommand,
+            'command.entrust.classes' instanceof \Zizaco\Entrust\ClassCreatorCommand,
             'command.app.name' instanceof \Illuminate\Foundation\Console\AppNameCommand,
             'command.clear-compiled' instanceof \Illuminate\Foundation\Console\ClearCompiledCommand,
             'command.command.make' instanceof \Illuminate\Foundation\Console\CommandMakeCommand,
@@ -315,7 +328,6 @@ namespace PHPSTORM_META {
             'command.migrate.status' instanceof \Illuminate\Database\Console\Migrations\StatusCommand,
             'command.seed' instanceof \Illuminate\Database\Console\Seeds\SeedCommand,
             'command.seeder.make' instanceof \Illuminate\Database\Console\Seeds\SeederMakeCommand,
-            'seeder' instanceof \Illuminate\Database\Seeder,
             'composer' instanceof \Illuminate\Foundation\Composer,
             'command.queue.table' instanceof \Illuminate\Queue\Console\TableCommand,
             'command.queue.failed' instanceof \Illuminate\Queue\Console\ListFailedCommand,
@@ -347,6 +359,9 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'html' instanceof \Collective\Html\HtmlBuilder,
+            'form' instanceof \Collective\Html\FormBuilder,
+            'bootstrap_form' instanceof \Watson\BootstrapForm\BootstrapForm,
         ],
         app('') => [
             '' == '@',
@@ -379,6 +394,9 @@ namespace PHPSTORM_META {
             'view.engine.resolver' instanceof \Illuminate\View\Engines\EngineResolver,
             'view.finder' instanceof \Illuminate\View\FileViewFinder,
             'view' instanceof \Illuminate\View\Factory,
+            'entrust' instanceof \Zizaco\Entrust\Entrust,
+            'command.entrust.migration' instanceof \Zizaco\Entrust\MigrationCommand,
+            'command.entrust.classes' instanceof \Zizaco\Entrust\ClassCreatorCommand,
             'command.app.name' instanceof \Illuminate\Foundation\Console\AppNameCommand,
             'command.clear-compiled' instanceof \Illuminate\Foundation\Console\ClearCompiledCommand,
             'command.command.make' instanceof \Illuminate\Foundation\Console\CommandMakeCommand,
@@ -428,7 +446,6 @@ namespace PHPSTORM_META {
             'command.migrate.status' instanceof \Illuminate\Database\Console\Migrations\StatusCommand,
             'command.seed' instanceof \Illuminate\Database\Console\Seeds\SeedCommand,
             'command.seeder.make' instanceof \Illuminate\Database\Console\Seeds\SeederMakeCommand,
-            'seeder' instanceof \Illuminate\Database\Seeder,
             'composer' instanceof \Illuminate\Foundation\Composer,
             'command.queue.table' instanceof \Illuminate\Queue\Console\TableCommand,
             'command.queue.failed' instanceof \Illuminate\Queue\Console\ListFailedCommand,
@@ -460,6 +477,9 @@ namespace PHPSTORM_META {
             'command.ide-helper.models' instanceof \Barryvdh\LaravelIdeHelper\Console\ModelsCommand,
             'command.ide-helper.meta' instanceof \Barryvdh\LaravelIdeHelper\Console\MetaCommand,
             'blade.compiler' instanceof \Illuminate\View\Compilers\BladeCompiler,
+            'html' instanceof \Collective\Html\HtmlBuilder,
+            'form' instanceof \Collective\Html\FormBuilder,
+            'bootstrap_form' instanceof \Watson\BootstrapForm\BootstrapForm,
         ],
     ];
 }
