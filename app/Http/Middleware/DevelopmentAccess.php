@@ -28,7 +28,7 @@ class DevelopmentAccess
      */
     public function handle($request, Closure $next)
     {
-        $ipWhitelist = explode(',', getenv('DEV_ALLOWED'));
+        $this->ipWhitelist = explode(',', getenv('DEV_ALLOWED'));
 
         if (app()->environment() != 'production' && $this->clientNotAllowed()) {
             config(['app.debug' => false]);
