@@ -47,6 +47,12 @@ class DevelopmentAccess
     {
         $isAllowedIP = in_array(request()->ip(), $this->ipWhitelist);
 
-        return ((!$isAllowedIP && auth()->guest()) || (($isAllowedIP && !auth()->guest())));
+        if(!auth()->guest()) {
+            return false;
+        }elseif(auth()->guest() && $isAllowedIP) {
+            return false;
+        }else{
+            return true;
+        }
     }
 }
