@@ -49,7 +49,7 @@ Route::group(['middleware' => 'dev'], function() {
 
     Route::group(['prefix' => 'member', 'as' => 'member::', 'middleware' => ['auth', 'role:admin']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
-        Route::get('view/nested/{id}', ['as' => 'list', 'uses' => 'MemberAdminController@showDetails']);
+        Route::get('view/nested/{id}', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
     });
 
 });
