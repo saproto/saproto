@@ -1,0 +1,1 @@
+<h1>{{ $user->name }} @if($user->member->gender == 1) <i class="fa fa-mars"></i> @elseif($user->member->gender == 2) <i class="fa fa-venus"></i> @endif</h1>
