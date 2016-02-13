@@ -19,15 +19,28 @@ class MemberAdminController extends Controller
      */
     public function index()
     {
-        $search = Input::get('search');
+        return view('members.overview');
+    }
+
+    public function showSearch(Request $request) {
+        $search = $request->input('query');
 
         if ($search) {
             $users = User::where('name', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%')->paginate(20);
         } else {
             $users = User::paginate(20);
         }
-        return view('members.list', ['users' => $users, 'search' => $search]);
+
+        return view('members.nested.list', ['users' => $users]);
     }
+
+
+    /**
+     * Show the nested details view for member admin.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
 
     public function showDetails($id) {
         $user = User::find($id);

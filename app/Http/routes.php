@@ -46,10 +46,10 @@ Route::group(['middleware' => 'dev'], function() {
     /*
      * Routes related to members.
      */
-
     Route::group(['prefix' => 'member', 'as' => 'member::', 'middleware' => ['auth', 'role:admin']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
-        Route::get('view/nested/{id}', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
+        Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
+        Route::get('{id}/nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
     });
 
 });
