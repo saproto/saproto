@@ -10,6 +10,9 @@ use Proto\Http\Controllers\Controller;
 
 use Proto\Models\User;
 
+use Auth;
+use Entrust;
+
 class MemberAdminController extends Controller
 {
     /**
@@ -45,6 +48,15 @@ class MemberAdminController extends Controller
     public function showDetails($id) {
         $user = User::find($id);
         return view('members.nested.details', ['user' => $user]);
+    }
+
+    public function impersonate($id) {
+        if(Auth::user()->hasRole('admin')) {
+            Auth::loginUsingId($id);
+            return redirect('/');
+        }else{
+            return abort(403, 'You are not authorized to access this');
+        }
     }
 
     /**

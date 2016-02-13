@@ -50,6 +50,7 @@ Route::group(['middleware' => 'dev'], function() {
         Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
         Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
         Route::get('{id}/nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
+        Route::get('{id}/impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
     });
 
 });
