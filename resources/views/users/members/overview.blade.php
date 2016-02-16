@@ -43,7 +43,7 @@
         function makeClickable() {
             $(".member").click(function (e) {
                 e.preventDefault();
-                $("#memberDetail").load("/member/" + $(this).attr('user_id') + "/nested");
+                $("#memberDetail").load("/user/" + $(this).attr('user_id') + "/member/nested");
             });
         }
 
