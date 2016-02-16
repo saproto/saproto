@@ -40,6 +40,19 @@ Route::group(['middleware' => 'dev'], function () {
      * Routes related to user profiles.
      */
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
+        /*
+         * Routes related to members.
+         */
+        Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'role:board|root']], function () {
+            Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
+            Route::get('impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
+        });
+
+        Route::group(['prefix' => 'members', 'as' => 'member::'], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
+            Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
+        });
+
         Route::get('{id?}', ['as' => 'profile', 'uses' => 'UserProfileController@show']);
 
         /*
@@ -49,16 +62,6 @@ Route::group(['middleware' => 'dev'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
             Route::delete('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
-        });
-
-        /*
-         * Routes related to members.
-         */
-        Route::group(['prefix' => 'member', 'as' => 'member::', 'middleware' => ['auth', 'role:board']], function () {
-            Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
-            Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
-            Route::get('{id}/nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-            Route::get('{id}/impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
         });
     });
 

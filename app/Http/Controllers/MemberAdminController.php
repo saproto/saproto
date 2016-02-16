@@ -22,7 +22,7 @@ class MemberAdminController extends Controller
      */
     public function index()
     {
-        return view('members.overview');
+        return view('users.members.overview');
     }
 
     public function showSearch(Request $request) {
@@ -34,7 +34,7 @@ class MemberAdminController extends Controller
             $users = User::paginate(20);
         }
 
-        return view('members.nested.list', ['users' => $users]);
+        return view('users.members.nested.list', ['users' => $users]);
     }
 
 
@@ -47,7 +47,7 @@ class MemberAdminController extends Controller
 
     public function showDetails($id) {
         $user = User::find($id);
-        return view('members.nested.details', ['user' => $user]);
+        return view('users.members.nested.details', ['user' => $user]);
     }
 
     public function impersonate($id) {
