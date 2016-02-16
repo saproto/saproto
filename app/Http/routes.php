@@ -50,6 +50,16 @@ Route::group(['middleware' => 'dev'], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
             Route::delete('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
         });
+
+        /*
+         * Routes related to members.
+         */
+        Route::group(['prefix' => 'member', 'as' => 'member::', 'middleware' => ['auth', 'role:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
+            Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
+            Route::get('{id}/nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
+            Route::get('{id}/impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
+        });
     });
 
 });
