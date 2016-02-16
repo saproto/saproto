@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['middleware' => 'dev'], function() {
+Route::group(['middleware' => 'dev'], function () {
 
     /*
      * The main route for the frontpage.
@@ -41,16 +41,15 @@ Route::group(['middleware' => 'dev'], function() {
      */
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
         Route::get('{id?}', ['as' => 'profile', 'uses' => 'UserProfileController@show']);
-    });
 
-    /*
-     * Routes related to members.
-     */
-    Route::group(['prefix' => 'member', 'as' => 'member::', 'middleware' => ['auth', 'role:admin']], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
-        Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
-        Route::get('{id}/nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-        Route::get('{id}/impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
+        /*
+         * Routes related to addresses.
+         */
+        Route::group(['prefix' => '{id}/address', 'as' => 'address::', 'middleware' => ['auth']], function () {
+            Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
+            Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
+            Route::delete('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
+        });
     });
 
 });

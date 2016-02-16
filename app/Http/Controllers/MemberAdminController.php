@@ -51,7 +51,7 @@ class MemberAdminController extends Controller
     }
 
     public function impersonate($id) {
-        if(Auth::user()->hasRole('admin')) {
+        if(Auth::user()->hasRole('root')) {
             Auth::loginUsingId($id);
             return redirect('/');
         }else{

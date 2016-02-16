@@ -30,7 +30,7 @@
                         @endif
 
                         @foreach($user->address as $address)
-                            @if(($address->type == "STUDY" && ($user->member->address_visible || Auth::id() == $user->id || Auth::user()->can('admin.view'))))
+                            @if(($address->type == "STUDY" && ($user->member->address_visible || Auth::id() == $user->id || Auth::user()->can('bigbrother'))))
                                 <hr>
                                 <p>
                                     <span class="pull-right" style="text-align: right;">
@@ -60,7 +60,7 @@
 
         </div>
 
-        @if(Auth::id() == $user->id || Auth::user()->can('admin.view'))
+        @if(Auth::id() == $user->id || Auth::user()->can('bigbrother'))
 
             <div class="col-md-4 col-xs-12">
 
@@ -102,7 +102,8 @@
 
                 <div class="btn-group-justified btn-group" role="group">
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-success">New address</button>
+                        <a type="button" class="btn btn-success" href="{{ route('user::address::add', ['id' => Auth::user()->id]) }}">New
+                            address</a>
                     </div>
                 </div>
 

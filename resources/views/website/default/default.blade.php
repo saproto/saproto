@@ -46,28 +46,6 @@
                 </div>
 
                 <!--
-                    The auth and logout shit.
-                //-->
-                    @if (Auth::check())
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{{ route('user::profile') }}">Profile</a></li>
-
-                                    <li><a href="{{ route('login::logout') }}">Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    @else
-                        <form class="navbar-form navbar-right">
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">
-                                <i class="fa fa-unlock-alt"></i>
-                            </button>
-                        </form>
-                    @endif
-
-                <!--
                     The actual navbar contents with links to pages and tools and shit.
                 //-->
                 <ul class="nav navbar-nav navbar-right">
