@@ -30,7 +30,7 @@
                         @endif
 
                         @foreach($user->address as $address)
-                            @if(($address->type == "STUDY" && ($user->member->address_visible || Auth::id() == $user->id || Auth::user()->can('bigbrother'))))
+                            @if(($address->is_primary == true && ($user->member->address_visible || Auth::id() == $user->id || Auth::user()->can('bigbrother'))))
                                 <hr>
                                 <p>
                                     <span class="pull-right" style="text-align: right;">
@@ -76,25 +76,30 @@
 
                             <p>
                                 <strong>
-                                    @if($address->type == 'STUDY')
-                                        <i class="fa fa-graduation-cap"></i>
-                                    @elseif($address->type == 'HOME')
-                                        <i class="fa fa-users"></i>
-                                    @elseif($address->type == 'OTHER')
-                                        <i class="fa fa-home"></i>
+                                    @if($address->is_primary == true)
+                                        Address <i class="fa fa-star"></i>
+                                    @else
+                                        Address
                                     @endif
-                                    Address
                                 </strong>
                             </p>
 
-                            <div class="btn-group-justified btn-group" role="group">
+                            @if($address->is_primary == false && Auth::user()->can('board'))
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-default">Edit</button>
+                                    <div class="btn-group" role="group">
+                                        <form method="POST" action="{{ route('user::address::primary', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                            {!! csrf_field() !!}
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-star"></i></button>
+                                        </form>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <form method="POST" action="{{ route('user::address::delete', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                            {!! csrf_field() !!}
+                                            &nbsp;<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-danger">Delete</button>
-                                </div>
-                            </div>
+                            @endif
 
                         </div>
                     </div>
@@ -102,7 +107,8 @@
 
                 <div class="btn-group-justified btn-group" role="group">
                     <div class="btn-group" role="group">
-                        <a type="button" class="btn btn-success" href="{{ route('user::address::add', ['id' => Auth::user()->id]) }}">New
+                        <a type="button" class="btn btn-success"
+                           href="{{ route('user::address::add', ['id' => $user->id]) }}">New
                             address</a>
                     </div>
                 </div>

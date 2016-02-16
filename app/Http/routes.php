@@ -61,7 +61,8 @@ Route::group(['middleware' => 'dev'], function () {
         Route::group(['prefix' => '{id}/address', 'as' => 'address::', 'middleware' => ['auth']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
-            Route::delete('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
+            Route::post('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
+            Route::post('primary/{address_id}', ['as' => 'primary', 'uses' => 'AddressController@makePrimary']);
         });
     });
 
