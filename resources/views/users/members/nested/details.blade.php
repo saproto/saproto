@@ -1,7 +1,7 @@
 <div class="panel-heading">
     <h3 class="panel-title">@if($user->member) <span class="label label-success">Member</span> @else
             <span
-                    class="label label-danger">No member</span> @endif {{ $user->name }} <a href="/member/{{ $user->id }}/impersonate"><span class="pull-right label label-default">Impersonate</span></a></h3>
+                    class="label label-danger">No member</span> @endif {{ $user->name }} <a href="/user/{{ $user->id }}/member/impersonate"><span class="pull-right label label-default">Impersonate</span></a></h3>
 </div>
 
 <div class="panel-body">
