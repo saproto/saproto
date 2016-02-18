@@ -43,8 +43,8 @@ class AddressController extends Controller
         if ($address == null) {
             abort(404, "Address $address_id not found.");
         }
-        if ($address->is_primary) {
-            abort(404, "Cannot delete primary address.");
+        if ($address->is_primary && $user->member != null) {
+            abort(404, "Cannot delete primary address of a member.");
         }
         $address->delete();
         Session::flash("flash_message","Deleted address.");
@@ -90,13 +90,13 @@ class AddressController extends Controller
         $newaddress = json_decode($request->input("address-data"));
 
         // Establish new address
-        $address = new Address;
+        $address = new Address();
         $address->street = $newaddress->street;
         $address->number = $newaddress->number;
         $address->zipcode = $newaddress->zipcode;
         $address->city = $newaddress->city;
         $address->country = $newaddress->country;
-        $address->user_id = $id;
+        $address->user_id = $user->id;
 
         // See if we have a primary address already...
         $address->is_primary = true;
