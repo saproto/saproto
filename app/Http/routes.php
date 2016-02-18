@@ -64,6 +64,15 @@ Route::group(['middleware' => 'dev'], function () {
             Route::post('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
             Route::post('primary/{address_id}', ['as' => 'primary', 'uses' => 'AddressController@makePrimary']);
         });
+
+        /*
+         * Routes related to bank accounts
+         */
+        Route::group(['prefix' => '{id}/bank', 'as' => 'bank::', 'middleware' => ['auth']], function () {
+            Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
+            Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
+        });
     });
 
 });

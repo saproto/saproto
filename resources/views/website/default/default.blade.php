@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
+<head>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>S.A. Proto | @section('page-title')Default Page Title@show</title>
+    <title>S.A. Proto | @section('page-title')Default Page Title@show</title>
 
-        @include('website/default/stylesheets')
+    @include('website/default/stylesheets')
 
-        @include('website/default/custom')
+    @include('website/default/custom')
 
-        @section('stylesheet')
-        @show
+    @section('stylesheet')
+    @show
 
-    </head>
+</head>
 
-    <body style="display: block;">
+<body style="display: block;">
 
-        @include('website/default/javascripts')
+@include('website/default/javascripts')
 
-        @if (Session::has('flash_message'))
-            <div class="alert alert-info alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ Session::get('flash_message') }}
-            </div>
-        @endif
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
 
-                <!--
-                    Navbar header. The part where the icon and name and shit is.
-                //-->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="{{ route('homepage') }}">S.A. Proto</a>
-                </div>
+        <!--
+            Navbar header. The part where the icon and name and shit is.
+        //-->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ route('homepage') }}">S.A. Proto</a>
+        </div>
 
-                <!--
-                    The actual navbar contents with links to pages and tools and shit.
-                //-->
-                <ul class="nav navbar-nav navbar-right">
-                    @include('website/navigation/navbar')
-                </ul>
+        <!--
+            The actual navbar contents with links to pages and tools and shit.
+        //-->
+        <ul class="nav navbar-nav navbar-right">
+            @include('website/navigation/navbar')
+        </ul>
 
-            </div>
-        </nav>
+    </div>
+</nav>
 
-        <p>
-            &nbsp;
-        </p>
+<p>
+    &nbsp;
+</p>
 
-        @section('content')
-        @show
+<div class="container">
+    @if (Session::has('flash_message'))
+        <div class="alert alert-info alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ Session::get('flash_message') }}
+        </div>
+    @endif
 
-        @if (!Auth::check())
-            @include('auth/modal')
-        @endif
+    @foreach($errors->all() as $e)
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ $e }}
+        </div>
+    @endforeach
+</div>
 
-    </body>
+@section('content')
+@show
+
+@if (!Auth::check())
+    @include('auth/modal')
+@endif
+
+</body>
 
 </html>

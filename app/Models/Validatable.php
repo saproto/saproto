@@ -11,13 +11,13 @@ use Validator;
  */
 class Validatable extends Eloquent
 {
-    protected $rules;
+    protected $rules = array();
     protected $errors;
 
     public function validate($data) {
         $v = Validator::make($data, $this->rules);
         if ($v->fails()) {
-            $this->errors = $v->errors;
+            $this->errors = $v->errors();
             return false;
         }
         return true;
