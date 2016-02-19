@@ -53,6 +53,8 @@ Route::group(['middleware' => 'dev'], function () {
             Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
         });
 
+        Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'MemberAdminController@quitImpersonating']);
+
         Route::get('{id?}', ['as' => 'profile', 'uses' => 'UserProfileController@show']);
 
         /*

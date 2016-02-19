@@ -12,6 +12,7 @@ use Proto\Models\User;
 
 use Auth;
 use Entrust;
+use Session;
 
 class MemberAdminController extends Controller
 {
@@ -52,10 +53,21 @@ class MemberAdminController extends Controller
 
     public function impersonate($id) {
         if(Auth::user()->hasRole('root')) {
+            $impersonator = Auth::id();
             Auth::loginUsingId($id);
+            Session::put('impersonator', $impersonator);
             return redirect('/');
         }else{
             return abort(403, 'You are not authorized to access this');
+        }
+    }
+
+    public function quitImpersonating() {
+        if(Session::has('impersonator')) {
+            $impersonator = Session::get('impersonator');
+            Session::put('impersonator', NULL);
+            Auth::loginUsingId($impersonator);
+            return redirect('/');
         }
     }
 

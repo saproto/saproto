@@ -13,7 +13,7 @@
         <ul class="dropdown-menu">
             <li><a href="{{ route('user::profile') }}">Profile</a></li>
 
-            <li><a href="{{ route('login::logout') }}">Logout</a></li>
+                @if (Session::has('impersonator')) <li><a href="{{ route('user::quitimpersonating') }}">Quit impersonating</a></li> @else <li><a href="{{ route('login::logout') }}">Logout</a></li> @endif
         </ul>
     </li>
 @else
