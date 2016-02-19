@@ -26,6 +26,12 @@ class MemberAdminController extends Controller
         return view('users.members.overview');
     }
 
+    /**
+     * Displays nested search results for member admin.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showSearch(Request $request) {
         $search = $request->input('query');
 
@@ -45,12 +51,17 @@ class MemberAdminController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-
     public function showDetails($id) {
         $user = User::find($id);
         return view('users.members.nested.details', ['user' => $user]);
     }
 
+    /**
+     * Allows user to impersonate another user if user has root role.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     */
     public function impersonate($id) {
         if(Auth::user()->hasRole('root')) {
             $impersonator = Auth::id();
@@ -62,6 +73,11 @@ class MemberAdminController extends Controller
         }
     }
 
+    /**
+     * Allows user to return to own user when impersonating another user.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function quitImpersonating() {
         if(Session::has('impersonator')) {
             $impersonator = Session::get('impersonator');
