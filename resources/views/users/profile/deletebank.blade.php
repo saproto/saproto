@@ -11,26 +11,26 @@
                 @if($user->member != null)
 
                     <p>
-                        Members cannot delete their authorization, because their membership fee will be withdrawn
-                        using this authorization. If you are a member and wish to delete your authorization, you
-                        first need to cancel your membership.
-                    </p>
-
-                @else
-
-                    <p>
-                        This action will cancel your current automatic withdrawal authorization. Everything bought
-                        up until now will still be withdrawn from this bank account, but no more purchases can be
-                        made using this authorization.
-                    </p>
-
-                    <p>
-                        After all outstanding balance with this authorization has been paid, the authorization will
-                        be permanently deleted. If you wish to make purchases in the future, you can always add a
-                        new authorization.
+                        <strong>
+                            Deleting your authorization means you won't be able to attend activities, buy stuff and
+                            otherwise do anything that costs money. You can always add a new authorization.
+                        </strong>
                     </p>
 
                 @endif
+
+                <p>
+                    This action will cancel your current automatic withdrawal authorization. Everything bought
+                    up until now will still be withdrawn from this bank account, but no more purchases can be
+                    made using this authorization.
+                </p>
+
+                <p>
+                    After all outstanding balance with this authorization has been paid, the authorization will
+                    be permanently deleted. If you wish to make purchases in the future, you can always add a
+                    new authorization.
+                </p>
+
             </div>
             <div class="modal-footer">
                 <form method="POST" action="{{ route('user::bank::delete', ['id' => $user->id]) }}">
@@ -38,11 +38,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Keep my authorization active
                     </button>
-                    <button type="submit" class="btn btn-danger"
-                            @if($user->member != null)
-                            disabled
-                            @endif
-                    >
+                    <button type="submit" class="btn btn-danger">
                         Cancel my authorization
                     </button>
                 </form>
