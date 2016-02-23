@@ -4,6 +4,7 @@ namespace Proto\Models;
 
 use Zizaco\Entrust\EntrustRole;
 
+
 /**
  * Proto\Models\Role
  *

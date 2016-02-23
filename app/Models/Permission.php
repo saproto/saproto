@@ -4,6 +4,7 @@ namespace Proto\Models;
 
 use Zizaco\Entrust\EntrustPermission;
 
+
 /**
  * Proto\Models\Permission
  *

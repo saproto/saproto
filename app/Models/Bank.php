@@ -4,8 +4,9 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
- * Proto\Bank
+ * Proto\Models\Bank
  *
  * @property integer $id
  * @property integer $user_id
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $bic
  * @property string $machtigingid
  * @property string $withdrawal_type
- * @property-read \Proto\Models\User $user
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */

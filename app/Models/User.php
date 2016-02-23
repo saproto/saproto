@@ -11,22 +11,36 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+
 /**
- * Proto\User
+ * Proto\Models\User
  *
  * @property integer $id
- * @property string $name
+ * @property string $name_first
+ * @property string $name_last
+ * @property string $name_initials
+ * @property string $birthdate
+ * @property boolean $gender
+ * @property string $nationality
+ * @property string $phone
+ * @property string $website
  * @property string $email
+ * @property string $biography
+ * @property boolean $phone_visible
+ * @property boolean $address_visible
+ * @property boolean $receive_newsletter
+ * @property boolean $receive_sms
  * @property string $password
  * @property string $remember_token
+ * @property string $utwente_username
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property string $utwente_username
  * @property-read \Proto\Models\Member $member
  * @property-read \Proto\Models\Bank $bank
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Address[] $address
  * @property-read \Proto\Models\Utwente $utwente
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
+ * @property-read mixed $name
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
 class User extends Model implements AuthenticatableContract,
@@ -83,5 +97,9 @@ class User extends Model implements AuthenticatableContract,
 
     public function study() {
         return $this->hasMany('Proto\Models\Study');
+    }
+
+    public function getNameAttribute($value) {
+        return $this->name_first . " " . $this->name_last;
     }
 }

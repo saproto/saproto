@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Eloquent;
 use Validator;
 
+
 /**
  * Proto\Models\Validatable
  *
