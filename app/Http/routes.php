@@ -75,6 +75,19 @@ Route::group(['middleware' => 'dev'], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
         });
+
+        /*
+         * Routes related to bank accounts
+         */
+        Route::group(['prefix' => '{id}/study', 'as' => 'study::', 'middleware' => ['auth']], function () {
+            Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
+            Route::post('link', ['as' => 'add', 'uses' => 'StudyController@link']);
+
+            Route::post('unlink/{study_id}', ['as' => 'delete', 'uses' => 'StudyController@unlink']);
+
+            Route::get('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
+            Route::post('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
+        });
     });
 
 });
