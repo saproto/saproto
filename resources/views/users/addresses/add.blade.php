@@ -1,18 +1,17 @@
-@extends('website.default.container')
+@extends('website.default.panel')
 
-@section('container')
+@section('page-title')
+    Add address for {{ $user->name }}
+@endsection
 
-    <div class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
+@section('panel-title')
+    Add an address for {{ $user->name }}
+@endsection
 
-        <div class="panel panel-default">
-            <div class="panel-heading">New address for {{ $user->name }}</div>
-            <div class="panel-body">
-                <form method="POST" action="{{ route('user::address::add', ['id' => $user->id]) }}">
-                    @include('users.addresses.form')
-                </form>
-            </div>
-        </div>
+@section('panel-body')
 
-    </div>
+    <form method="POST" action="{{ route('user::address::add', ['id' => $user->id]) }}">
+        @include('users.addresses.form')
+    </form>
 
 @endsection

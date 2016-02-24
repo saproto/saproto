@@ -63,8 +63,13 @@ Route::group(['middleware' => 'dev'], function () {
         Route::group(['prefix' => '{id}/address', 'as' => 'address::', 'middleware' => ['auth']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
+
             Route::post('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
+
             Route::post('primary/{address_id}', ['as' => 'primary', 'uses' => 'AddressController@makePrimary']);
+
+            Route::get('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@editForm']);
+            Route::post('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@edit']);
         });
 
         /*

@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
+use PhpParser\Node\Expr\Cast\Object_;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
@@ -47,7 +48,7 @@ class AddressController extends Controller
             abort(404, "Cannot delete primary address of a member.");
         }
         $address->delete();
-        Session::flash("flash_message","Deleted address.");
+        Session::flash("flash_message","Your address has been deleted.");
         return Redirect::route('user::profile', ['id' => $id]);
     }
 
@@ -71,7 +72,7 @@ class AddressController extends Controller
             }
             $address->save();
         }
-        Session::flash("flash_message","Primary address updated.");
+        Session::flash("flash_message","Your primary address has been saved.");
         return Redirect::route('user::profile', ['id' => $id]);
     }
 
@@ -87,16 +88,9 @@ class AddressController extends Controller
             abort(403, "You cannot add an address for " . $user->name . ".");
         }
 
-        $newaddress = json_decode($request->input("address-data"));
-
         // Establish new address
-        $address = new Address();
-        $address->street = $newaddress->street;
-        $address->number = $newaddress->number;
-        $address->zipcode = $newaddress->zipcode;
-        $address->city = $newaddress->city;
-        $address->country = $newaddress->country;
-        $address->user_id = $user->id;
+        $address = new Address($this->parseInput($request));
+        $address->user_id = $id;
 
         // See if we have a primary address already...
         $address->is_primary = true;
@@ -110,10 +104,93 @@ class AddressController extends Controller
         // Save it baby!
         $address->save();
 
-        Session::flash("flash_message","Address added.");
+        Session::flash("flash_message","The address has been added.");
 
         return Redirect::route('user::profile', ['id' => $id]);
 
+    }
+
+    public function edit($id, $address_id, Request $request) {
+
+        $address = Address::find($address_id);
+        $user = $address->user;
+
+        if ($address == null) {
+            abort(404, "Address $address_id not found.");
+        }
+
+        if ($user == null) {
+            abort(404, "Member $id not found.");
+        }
+
+        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403, "You cannot edit an address for " . $user->name . ".");
+        }
+
+        $address->fill($this->parseInput($request));
+        $address->save();
+
+        Session::flash("flash_message","The address has been edited.");
+
+        return Redirect::route('user::profile', ['id' => $id]);
+
+    }
+
+    public function editForm($id, $address_id) {
+        $address = Address::find($address_id);
+        if ($address == null) {
+            abort(404, "Address $id not found.");
+        }
+        $user = $address->user;
+        if ($user == null) {
+            abort(404, "Member $id not found.");
+        }
+        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403, "You cannot edit an address for " . $user->name . ".");
+        }
+        return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
+    }
+
+    private function parseInput($request) {
+        $newaddress = json_decode($request->input("address-data"));
+
+        $address = array();
+
+        if ($newaddress == null) {
+            abort(500, "Missing an address.");
+        }
+
+        if (!property_exists($newaddress, 'street') || $newaddress->street == "") {
+            abort(500, "Address is missing a street name.");
+        } else {
+            $address['street'] = $newaddress->street;
+        }
+
+        if (!property_exists($newaddress, 'number') || $newaddress->number == "") {
+            abort(500, "Address is missing a street number.");
+        } else {
+            $address['number'] = $newaddress->number;
+        }
+
+        if (!property_exists($newaddress, 'zipcode') || $newaddress->zipcode == "") {
+            abort(500, "Address is missing a zipcode.");
+        } else {
+            $address['zipcode'] = $newaddress->zipcode;
+        }
+
+        if (!property_exists($newaddress, 'city') || $newaddress->city == "") {
+            abort(500, "Address is missing a city.");
+        } else {
+            $address['city'] = $newaddress->city;
+        }
+
+        if (!property_exists($newaddress, 'country') || $newaddress->country == "") {
+            abort(500, "Address is missing a country.");
+        } else {
+            $address['country'] = $newaddress->country;
+        }
+
+        return $address;
     }
 
 }

@@ -119,15 +119,11 @@
                             @if((Auth::user()->can('board') || Auth::id() == $user->id))
                                 <div class="row">
                                     <div class="col-md-4 col-xs-4 pull-right">
-                                        <form method="POST"
-                                              action="{{ route('user::address::delete', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                            {!! csrf_field() !!}
-                                            <div class="btn-group btn-group-justified" role="group">
-                                                <a class="btn btn-default">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </div>
-                                        </form>
+                                        <div class="btn-group btn-group-justified" role="group">
+                                            <a class="btn btn-default" href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </div>
                                     </div>
                                     @if ($address->is_primary == false)
                                         <div class="col-md-4 col-xs-4 pull-right">
@@ -260,7 +256,8 @@
 
                                     <div class="col-md-6">
                                         <div class="btn-group-justified btn-group" role="group">
-                                            <a type="button" class="btn btn-default" href="{{ route("user::study::edit", ["id" => $user->id, "study_id" => $study->id]) }}">Edit</a>
+                                            <a type="button" class="btn btn-default"
+                                               href="{{ route("user::study::edit", ["id" => $user->id, "study_id" => $study->id]) }}">Edit</a>
                                         </div>
                                     </div>
 

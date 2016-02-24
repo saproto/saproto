@@ -10,7 +10,7 @@
 
 <!-- Search bar //-->
 <div class="form-group">
-    <label for="address-string" class="control-label">Your address:</label>
+    <label for="address-string" class="control-label">Look up an address:</label>
     <input type="text" class="form-control" id="address-string" name="address-string"
            placeholder="42 Wallaby Way, Sydney">
 </div>
@@ -26,7 +26,7 @@
 <input type="hidden" id="address-data" name="address-data">
 
 <div class="form-group">
-    <label for="address-preview" class="control-label">You will save:</label>
+    <label for="address-preview" class="control-label">Your address will be:</label>
     <input type="text" class="form-control" id="address-preview" placeholder="Waiting for input..." disabled>
 </div>
 

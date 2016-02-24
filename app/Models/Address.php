@@ -28,4 +28,6 @@ class Address extends Model
     {
         return $this->belongsTo('Proto\Models\User');
     }
+
+    protected $fillable = ['street', 'number', 'zipcode', 'city', 'country'];
 }
