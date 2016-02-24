@@ -32,7 +32,7 @@ class BankController extends Controller
         if ($user->bank != null) {
             abort(500, "This user already has a bank account.");
         }
-        return view('users.bankaccounts.add', ['user' => $user]);
+        return view('users.bankaccounts.addbank', ['user' => $user]);
     }
 
     public function delete($id)
@@ -78,7 +78,7 @@ class BankController extends Controller
 
         $bank = new Bank();
         if (!$bank->validate($new)) {
-            return Redirect::route('user::profile', ['id' => $id])->withErrors($bank->errors());
+            return Redirect::route('user::bank::add', ['id' => $id])->withErrors($bank->errors());
         }
 
         // Save it baby!

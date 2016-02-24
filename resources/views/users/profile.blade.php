@@ -120,7 +120,8 @@
                                 <div class="row">
                                     <div class="col-md-4 col-xs-4 pull-right">
                                         <div class="btn-group btn-group-justified" role="group">
-                                            <a class="btn btn-default" href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                            <a class="btn btn-default"
+                                               href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
                                         </div>
@@ -207,10 +208,10 @@
 
                     <div class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-success" data-toggle="modal"
-                                    data-target="#bank-modal-add">
+                            <a type="submit" class="btn btn-success"
+                               href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
                                 Authorize for automatic withdrawal
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -291,7 +292,6 @@
 
     </div>
 
-    @include("users.profile.addbank")
     @include("users.profile.deletebank");
 
 @endsection
