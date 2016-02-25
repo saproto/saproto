@@ -12,6 +12,7 @@ git pull
 if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
   echo "Not updateing dependencies.";
 else
+  composer self-update
   composer install
 fi
 
@@ -27,6 +28,7 @@ fi
 
 # Do migrations.
 php artisan migrate
+php artisan app:migrate
 
 # Disable maintenance mode.
 php artisan up
