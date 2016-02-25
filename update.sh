@@ -12,7 +12,6 @@ git pull
 if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
   echo "Not updateing dependencies.";
 else
-  composer self-update
   composer install
 fi
 
