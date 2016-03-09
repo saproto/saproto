@@ -39,6 +39,19 @@ class GenerateRoles extends Command
      */
     public function handle()
     {
+        $perms = [
+            array(
+                'name' => 'admin',
+                'display' => 'Board',
+                'description' => 'User is in the board.'
+            ),
+            array(
+                'name' => 'root',
+                'display' => 'Have You Tried Turning It Off And On Again committee',
+                'description' => 'User is epic and part of the HYTTIOAOAc.'
+            )
+        ];
+
         $roles = [
             array(
                 'name' => 'board',
@@ -51,6 +64,18 @@ class GenerateRoles extends Command
                 'description' => 'Has the permission to see all personal information.'
             )
         ];
+
+        foreach ($perms as $perm) {
+            $new = new Permission();
+            $new->name = $perm['name'];
+            $new->display_name = $perm['display'];
+            $new->description = $perm['description'];
+            try {
+                $new->save();
+            } catch (\Exception $e) {
+                $this->info('Skipping permission ' . $perm['name'] . ".");
+            }
+        }
 
         foreach ($roles as $role) {
             $new = new Permission();
