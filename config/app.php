@@ -26,7 +26,6 @@ return [
     |
     */
 
-    //'url' => 'http://jonathan.dev.saproto.nl',
     'url' => env('APP_URL'),
 
     /*
