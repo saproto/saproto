@@ -6,6 +6,11 @@ use Illuminate\Console\Command;
 use Proto\Models\Permission;
 use Proto\Models\Role;
 
+/**
+ * TODO
+ * Autorelate permissions to roles.
+ */
+
 class GenerateRoles extends Command
 {
     /**
@@ -39,29 +44,32 @@ class GenerateRoles extends Command
      */
     public function handle()
     {
+
         $perms = [
             array(
-                'name' => 'admin',
-                'display' => 'Board',
-                'description' => 'User is in the board.'
+                'name' => 'bigbrother',
+                'display' => 'Big Brother',
+                'description' => 'Has the permission to see all personal information.'
             ),
             array(
-                'name' => 'root',
-                'display' => 'Have You Tried Turning It Off And On Again committee',
-                'description' => 'User is epic and part of the HYTTIOAOAc.'
+                'name' => 'board',
+                'display' => 'Board Permission',
+                'description' => 'Has the permission to act as the board.'
             )
         ];
 
         $roles = [
             array(
-                'name' => 'board',
-                'display' => 'Board Permission',
-                'description' => 'Has the permission to act as the board.'
+                'name' => 'root',
+                'display' => 'Have You Tried Turning It Off And On Again committee',
+                'description' => 'User is epic and part of the HYTTIOAOAc.',
+                'perms' => ['bigbrother', 'board']
             ),
             array(
-                'name' => 'bigbrother',
-                'display' => 'Big Brother',
-                'description' => 'Has the permission to see all personal information.'
+                'name' => 'admin',
+                'display' => 'Board',
+                'description' => 'User is in the board.',
+                'perms' => ['bigbrother', 'board']
             )
         ];
 
@@ -77,8 +85,9 @@ class GenerateRoles extends Command
             }
         }
 
+
         foreach ($roles as $role) {
-            $new = new Permission();
+            $new = new Role();
             $new->name = $role['name'];
             $new->display_name = $role['display'];
             $new->description = $role['description'];
