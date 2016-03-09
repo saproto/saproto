@@ -29,6 +29,9 @@ fi
 php artisan migrate
 php artisan app:migrate
 
+# Add necessary roles.
+php artisan app:generateroles
+
 # Disable maintenance mode.
 php artisan up
 
