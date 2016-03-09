@@ -33,8 +33,14 @@ class Initialmigration extends Migration
             $table->boolean('receive_newsletter')->default(true);
             $table->boolean('receive_sms')->default(true);
 
-            $table->string('utwente_username');
+            $table->string('utwente_username')->nullable();
         });
+
+	Schema::create('sessions', function ($table) {
+	    $table->string('id')->unique();
+	    $table->text('payload');
+    	    $table->integer('last_activity');
+	});
 
         Schema::create('addresses', function ($table) {
             $table->increments('id');
@@ -46,7 +52,7 @@ class Initialmigration extends Migration
             $table->string('city');
             $table->string('country');
 
-            $table->boolean('is_primary')
+            $table->boolean('is_primary');
 
             $table->timestamps();
         });
