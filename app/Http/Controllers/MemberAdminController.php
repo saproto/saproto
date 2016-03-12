@@ -63,7 +63,7 @@ class MemberAdminController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
      */
     public function impersonate($id) {
-        if(Auth::user()->hasRole('root')) {
+        if(Auth::user()->can('admin')) {
             $impersonator = Auth::id();
             Auth::loginUsingId($id);
             Session::put('impersonator', $impersonator);

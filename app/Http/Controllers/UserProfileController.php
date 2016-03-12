@@ -40,7 +40,7 @@ class UserProfileController extends Controller
      */
     public function edit($id)
     {
-        if(Auth::user()->hasRole('admin')) {
+        if(Auth::user()->can('board')) {
             $user = User::find($id);
             return view('forms.profile', ['user' => $user]);
         }else{
