@@ -90,7 +90,8 @@ class MigrateFromOldSite extends Command
                         'phone_visible' => $this->laraveldb->real_escape_string($member['privacy_phone_visible']),
                         'address_visible' => $this->laraveldb->real_escape_string($member['privacy_address_visible']),
                         'receive_newsletter' => $this->laraveldb->real_escape_string($member['privacy_receive_newsletter']),
-                        'receive_sms' => $this->laraveldb->real_escape_string($member['privacy_receive_sms'])
+                        'receive_sms' => $this->laraveldb->real_escape_string($member['privacy_receive_sms']),
+                        'created_at' => "'" . $member['member_since']  . "'"
                     ),
                     'memberdata' => (strtotime($member['member_till']) > date('U') ? array(
                         'user_id' => $this->laraveldb->real_escape_string($member['member_id']),
@@ -98,7 +99,8 @@ class MigrateFromOldSite extends Command
                         'fee_cycle' => "'" . $this->laraveldb->real_escape_string($member['fee_cycle']) . "'",
                         'primary_member' => ($member['association_primary'] == null ? 'FALSE' : 'TRUE'),
                         'till' => ($member['member_till'] == '2099-01-01' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($member['member_till']) . "'"),
-                        'proto_mail' => ($member['proto_mail_enabled'] == 1 ? "'" . $this->laraveldb->real_escape_string($member['proto_mail']) . "'" : 'NULL')
+                        'proto_mail' => ($member['proto_mail_enabled'] == 1 ? "'" . $this->laraveldb->real_escape_string($member['proto_mail']) . "'" : 'NULL'),
+                        'created_at' => "'" . $member['member_since']  . "'"
                     ) : false),
                     'bankdata' => array(
                         'user_id' => $this->laraveldb->real_escape_string($member['member_id']),

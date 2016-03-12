@@ -36,7 +36,7 @@ class MemberAdminController extends Controller
         $search = $request->input('query');
 
         if ($search) {
-            $users = User::where('name', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%')->paginate(20);
+            $users = User::where('name_first', 'LIKE', '%'.$search.'%')->orWhere('name_last', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%')->paginate(20);
         } else {
             $users = User::paginate(20);
         }

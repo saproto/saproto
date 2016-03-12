@@ -137,7 +137,11 @@
                 You are not a member of {{ config('association.name') }}.
             @else
                 You have been a member of {{ config('association.name') }}
-                as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                @if(date('U', strtotime($user->member->created_at)) > 0)
+                    as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                @else
+                    since <strong>ancient times</strong>!
+                @endif
             @endif
         </p>
         @if($user->member != null && $user->member->till != null)
