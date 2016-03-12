@@ -95,11 +95,12 @@ class AddressController extends Controller
         // Establish new address
         $address = new Address();
 
-        $address->user_id = $id;
-        if (!$address->validate($request->all())) {
+        $addressdata = $request->all();
+        $addressdata['user_id'] = $user->id;
+        if (!$address->validate($addressdata)) {
             return Redirect::route('user::address::add', ['id' => $id])->withErrors($address->errors());
         }
-        $address->fill($request->all());
+        $address->fill($addressdata);
 
         // See if we have a primary address already...
         $address->is_primary = true;
@@ -137,10 +138,13 @@ class AddressController extends Controller
             abort(403, "You cannot edit an address for this user.");
         }
 
-        if (!$address->validate($request->all())) {
+        $addressdata = $request->all();
+        $addressdata['user_id'] = $user->id;
+
+        if (!$address->validate($addressdata)) {
             return Redirect::route('user::address::edit', ['id' => $id, 'address_id' => $address_id])->withErrors($address->errors());
         }
-        $address->fill($request->all());
+        $address->fill($addressdata);
         $address->save();
 
         Session::flash("flash_message", "The address has been edited.");
