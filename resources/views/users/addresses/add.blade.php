@@ -10,7 +10,7 @@
 
 @section('panel-body')
 
-    <form method="POST" action="{{ route('user::address::add', ['id' => $user->id]) }}">
+    <form class="form-horizontal" method="POST" action="{{ route('user::address::add', ['id' => $user->id]) }}">
         @include('users.addresses.form')
     </form>
 

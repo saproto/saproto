@@ -19,7 +19,7 @@
 
     <hr>
 
-    <form method="POST" action="{{ route('user::address::edit', ['id' => $user->id, 'address_id' => $address->id]) }}">
+    <form class="form-horizontal" method="POST" action="{{ route('user::address::edit', ['id' => $user->id, 'address_id' => $address->id]) }}">
         @include('users.addresses.form')
     </form>
 

@@ -1,33 +1,58 @@
 {!! csrf_field() !!}
 
-@if (count($errors) > 0)
-    @foreach ($errors->all() as $error)
-        <script type="text/javascript">
-            Materialize.toast('{{ $error }}', 3000, 'rounded')
-        </script>
-    @endforeach
-@endif
-
-<!-- Search bar //-->
+        <!-- Search bar //-->
 <div class="form-group">
-    <label for="address-string" class="control-label">Look up an address:</label>
-    <input type="text" class="form-control" id="address-string" name="address-string"
-           placeholder="42 Wallaby Way, Sydney">
+    <label for="address-string" class="col-sm-3 control-label">Search</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="address-string" placeholder="42 Wallaby Way, Sydney">
+    </div>
 </div>
 
 <!-- Container for preview //-->
-<ul id="autocomplete-results" class="list-group">
-</ul>
+<div class="form-group">
+    <label for="address-string" class="col-sm-3 control-label">Results</label>
+    <div class="col-sm-9">
+        <ul id="autocomplete-results" class="list-group">
+            <a class="list-group-item">Enter search term...</a>
+        </ul>
+    </div>
+</div>
+
+<hr>
 
 <!-- We need a map... //-->
 <div id="map" style="display: none;"></div>
 
 <!-- Actual form data in JSON //-->
-<input type="hidden" id="address-data" name="address-data">
-
 <div class="form-group">
-    <label for="address-preview" class="control-label">Your address will be:</label>
-    <input type="text" class="form-control" id="address-preview" placeholder="Waiting for input..." disabled>
+    <label for="street" class="col-sm-3 control-label">Street</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way">
+    </div>
+</div>
+<div class="form-group">
+    <label for="number" class="col-sm-3 control-label">Number</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="number" name="number" placeholder="42">
+    </div>
+</div>
+<div class="form-group">
+    <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN">
+    </div>
+</div>
+<div class="form-group">
+    <label for="city" class="col-sm-3 control-label">City</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="city" name="city" placeholder="Sydney">
+    </div>
+</div>
+<div class="form-group">
+    <label for="country" class="col-sm-3 control-label">Country</label>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" id="country" name="country" placeholder="Australia">
+    </div>
 </div>
 
 <hr>
@@ -37,8 +62,7 @@
 <button onClick="javascript:history.go(-1)" class="btn btn-default">Cancel</button>
 
 <!-- Form JS //-->
-<script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key={{ getenv('GOOGLE_KEY_PUBLIC') }}&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ getenv('GOOGLE_KEY_PUBLIC') }}&libraries=places"></script>
 
 <script type="text/javascript">
 
@@ -68,8 +92,11 @@
                         }, function (place, status) {
                             if (status == "OK") {
                                 var data = placeToObject(place);
-                                $("#address-data").val(JSON.stringify(data));
-                                $("#address-preview").val(data.street + " " + data.number + ", " + data.zipcode + " " + data.city + ", " + data.country)
+                                $("#street").val(data.street);
+                                $("#number").val(data.number);
+                                $("#zipcode").val(data.zipcode);
+                                $("#city").val(data.city);
+                                $("#country").val(data.country);
                             }
                         });
                     });

@@ -20,9 +20,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $is_primary
  * @property-read \Proto\Models\User $user
  */
-class Address extends Model
+class Address extends Validatable
 {
     protected $table  = 'addresses';
+
+    protected $rules = array(
+        'user_id' => 'required|integer',
+        'street' => 'required|string',
+        'number' => 'required|string',
+        'zipcode' => 'required|string',
+        'city' => 'required|string',
+        'country'=> 'required|string'
+    );
 
     public function user()
     {

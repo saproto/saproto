@@ -93,8 +93,13 @@ class AddressController extends Controller
         }
 
         // Establish new address
-        $address = new Address($this->parseInput($request));
+        $address = new Address();
+
         $address->user_id = $id;
+        if (!$address->validate($request->all())) {
+            return Redirect::route('user::address::add', ['id' => $id])->withErrors($address->errors());
+        }
+        $address->fill($request->all());
 
         // See if we have a primary address already...
         $address->is_primary = true;
@@ -132,7 +137,10 @@ class AddressController extends Controller
             abort(403, "You cannot edit an address for this user.");
         }
 
-        $address->fill($this->parseInput($request));
+        if (!$address->validate($request->all())) {
+            return Redirect::route('user::address::edit', ['id' => $id, 'address_id' => $address_id])->withErrors($address->errors());
+        }
+        $address->fill($request->all());
         $address->save();
 
         Session::flash("flash_message", "The address has been edited.");
@@ -155,49 +163,6 @@ class AddressController extends Controller
             abort(403, "You cannot edit an address for this user.");
         }
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
-    }
-
-    private function parseInput($request)
-    {
-        $newaddress = json_decode($request->input("address-data"));
-
-        $address = array();
-
-        if ($newaddress == null) {
-            abort(500, "Missing an address.");
-        }
-
-        if (!property_exists($newaddress, 'street') || $newaddress->street == "") {
-            abort(500, "Address is missing a street name.");
-        } else {
-            $address['street'] = $newaddress->street;
-        }
-
-        if (!property_exists($newaddress, 'number') || $newaddress->number == "") {
-            abort(500, "Address is missing a street number.");
-        } else {
-            $address['number'] = $newaddress->number;
-        }
-
-        if (!property_exists($newaddress, 'zipcode') || $newaddress->zipcode == "") {
-            abort(500, "Address is missing a zipcode.");
-        } else {
-            $address['zipcode'] = $newaddress->zipcode;
-        }
-
-        if (!property_exists($newaddress, 'city') || $newaddress->city == "") {
-            abort(500, "Address is missing a city.");
-        } else {
-            $address['city'] = $newaddress->city;
-        }
-
-        if (!property_exists($newaddress, 'country') || $newaddress->country == "") {
-            abort(500, "Address is missing a country.");
-        } else {
-            $address['country'] = $newaddress->country;
-        }
-
-        return $address;
     }
 
     public function toggleHidden($id, Request $request)
