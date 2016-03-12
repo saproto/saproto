@@ -2,35 +2,32 @@
 
 @section('container')
 
-    <form method="POST" action="{{ route('login::resetpass') }}">
+    <div class="col-md-4 col-md-offset-4">
 
-        {!! csrf_field() !!}
+        <form method="POST" action="{{ route('login::resetpass') }}">
 
-        @if (count($errors) > 0)
-            @foreach ($errors->all() as $error)
-                <script type="text/javascript">
-                    Materialize.toast('{{ $error }}', 3000, 'rounded')
-                </script>
-            @endforeach
-        @endif
+            <div class="panel panel-default">
+                <div class="panel-heading">Request password reset</div>
+                <div class="panel-body">
 
-        <div class="row">
+                    <div class="form-group">
+                        <label for="email" class="control-label">E-mail:</label>
+                        <input type="text" class="form-control" id="email" name="email"
+                               placeholder="d.adams@student.utwente.nl">
+                    </div>
 
-            <div class="grey-text lighten-5 input-field col offset-l3 l6 m12 s12">
-                <input id="username" name="email" type="text" class="validate">
-                <label for="username">Username</label>
+                    {!! csrf_field() !!}
+
+                </div>
+                <div class="panel-footer clearfix">
+
+                    <button type="submit" class="btn btn-success pull-right">Request reset</button>
+
+                </div>
             </div>
 
-        </div>
+        </form>
 
-        <div class="row">
-
-            <div class="col offset-l1 l6 m12 s12">
-                <button type="submit" class="waves-effect waves-light btn light-green right"><i class="fa fa-send right"></i>send request</button>
-            </div>
-
-        </div>
-
-    </form>
+    </div>
 
 @endsection

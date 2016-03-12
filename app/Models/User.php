@@ -29,7 +29,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
-class User extends Model implements AuthenticatableContract,
+class User extends Validatable implements AuthenticatableContract,
                                     CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, EntrustUserTrait;
@@ -46,7 +46,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['email', 'password', 'receive_sms', 'receive_newsletter', 'phone_visible', 'website', 'phone'];
 
     /**
      * The rules for validation.
@@ -54,8 +54,8 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $rules = array(
-        'name' => 'required',
-        'email' => 'required|email'
+        'email' => 'required|email',
+        'phone' => 'regex:(\+[0-9]{1,16})'
     );
 
     /**

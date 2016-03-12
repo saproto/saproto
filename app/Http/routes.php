@@ -43,7 +43,7 @@ Route::group(['middleware' => 'dev'], function () {
         /*
          * Routes related to members.
          */
-        Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'role:board|root']], function () {
+        Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'role:board|admin']], function () {
             Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
             Route::get('impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
         });
@@ -54,6 +54,9 @@ Route::group(['middleware' => 'dev'], function () {
         });
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'MemberAdminController@quitImpersonating']);
+
+        Route::get('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
+        Route::post('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
 
         Route::get('{id?}', ['as' => 'profile', 'uses' => 'UserProfileController@show']);
 
@@ -70,6 +73,8 @@ Route::group(['middleware' => 'dev'], function () {
 
             Route::get('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@editForm']);
             Route::post('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@edit']);
+
+            Route::get('togglehidden', ['as' => 'togglehidden', 'uses' => 'AddressController@toggleHidden']);
         });
 
         /*

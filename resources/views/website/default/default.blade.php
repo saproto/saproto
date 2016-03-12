@@ -41,7 +41,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ route('homepage') }}">S.A. Proto</a>
+            <a class="navbar-brand" href="{{ route('homepage') }}">{{ config("association.name") }}</a>
         </div>
 
         <!--

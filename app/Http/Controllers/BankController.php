@@ -51,7 +51,7 @@ class BankController extends Controller
         $user->bank->save();
 
         Session::flash("flash_message", "Deleted bank account.");
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
     public function add($id, Request $request)
@@ -87,7 +87,7 @@ class BankController extends Controller
 
         Session::flash("flash_message", "New withdrawal authorization added.");
 
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 

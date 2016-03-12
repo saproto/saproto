@@ -74,7 +74,7 @@ class StudyController extends Controller
         }
 
         $user->studies()->attach($study->id, ['created_at' => $request->input("start"), 'till' => ($request->input("end") == "" ? null : $request->input("end"))]);
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
     public function editLink($id, $study_id, Request $request) {
@@ -102,7 +102,7 @@ class StudyController extends Controller
         $study->pivot->created_at = $request->input("start");
         $study->pivot->till = ($request->input("end") == '' ? null : $request->input("end"));
         $study->pivot->save();
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
     public function unlink($id, $study_id)
@@ -122,7 +122,7 @@ class StudyController extends Controller
             abort(500, $user->name . " is not linked to " . $study->name . ".");
         }
         $user->studies()->detach($study->id);
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
 }

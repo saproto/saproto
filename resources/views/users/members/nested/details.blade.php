@@ -1,7 +1,15 @@
 <div class="panel-heading">
-    <h3 class="panel-title">@if($user->member) <span class="label label-success">Member</span> @else
-            <span
-                    class="label label-danger">No member</span> @endif {{ $user->name }} <a href="/user/{{ $user->id }}/member/impersonate"><span class="pull-right label label-default">Impersonate</span></a></h3>
+    <h3 class="panel-title">
+        @if($user->member)
+            <span class="label label-success">Member</span>
+        @else
+            <span class="label label-danger">No member</span>
+        @endif
+        {{ $user->name }}
+        <a href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
+            <span class="pull-right label label-default">Impersonate</span>
+        </a>
+    </h3>
 </div>
 
 <div class="panel-body">
@@ -54,4 +62,28 @@
             </div>
         @endif
     </div>
+</div>
+
+<div class="panel-footer">
+
+    <div class="col clearfix">
+
+        <div class="col-md-6 col-xs-6">
+            <div class="btn-group btn-group-justified" role="group">
+                <a class="btn btn-default" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
+                    Dashboard
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-6">
+            <div class="btn-group btn-group-justified" role="group">
+                <a class="btn btn-default" href="{{ route('user::profile', ['id' => $user->id]) }}">
+                    Profile
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 </div>

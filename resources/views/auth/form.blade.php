@@ -2,14 +2,6 @@
 
     {!! csrf_field() !!}
 
-    @if (count($errors) > 0)
-        @foreach ($errors->all() as $error)
-            <script type="text/javascript">
-                Materialize.toast('{{ $error }}', 3000, 'rounded')
-            </script>
-        @endforeach
-    @endif
-
     <div class="form-group">
         <label for="recipient-name" class="control-label">Username:</label>
         <input type="text" class="form-control" id="username" name="email" placeholder="s1234567">

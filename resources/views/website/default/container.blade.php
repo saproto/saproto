@@ -4,13 +4,9 @@
 
     <div class="container">
 
-        <div class="row">
+        @section('container')
 
-            @section('container')
-
-            @show
-
-        </div>
+        @show
 
     </div>
 

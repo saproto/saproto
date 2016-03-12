@@ -21,24 +21,26 @@ use Redirect;
 class AddressController extends Controller
 {
 
-    public function addForm($id) {
+    public function addForm($id)
+    {
         $user = User::find($id);
         if ($user == null) {
             abort(404, "Member $id not found.");
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add an address for " . $user->name . ".");
+            abort(403, "You cannot add an address for this user.");
         }
         return view('users.addresses.add', ['user' => $user]);
     }
 
-    public function delete($id, $address_id) {
+    public function delete($id, $address_id)
+    {
         $user = User::find($id);
         if ($user == null) {
             abort(404, "Member $id not found.");
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot delete an address for " . $user->name . ".");
+            abort(403, "You cannot delete an address for this user.");
         }
         $address = Address::find($address_id);
         if ($address == null) {
@@ -48,23 +50,24 @@ class AddressController extends Controller
             abort(404, "Cannot delete primary address of a member.");
         }
         $address->delete();
-        Session::flash("flash_message","Your address has been deleted.");
-        return Redirect::route('user::profile', ['id' => $id]);
+        Session::flash("flash_message", "Your address has been deleted.");
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
-    public function makePrimary($id, $address_id) {
+    public function makePrimary($id, $address_id)
+    {
         $user = User::find($id);
         if ($user == null) {
             abort(404, "Member $id not found.");
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot update primary address for " . $user->name . ".");
+            abort(403, "You cannot update primary address for this user.");
         }
         $address = Address::find($address_id);
         if ($address == null) {
             abort(404, "Address $address_id not found.");
         }
-        foreach($user->address as $address) {
+        foreach ($user->address as $address) {
             if ($address->id != $address_id) {
                 $address->is_primary = false;
             } else {
@@ -72,11 +75,12 @@ class AddressController extends Controller
             }
             $address->save();
         }
-        Session::flash("flash_message","Your primary address has been saved.");
-        return Redirect::route('user::profile', ['id' => $id]);
+        Session::flash("flash_message", "Your primary address has been saved.");
+        return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
-    public function add($id, Request $request) {
+    public function add($id, Request $request)
+    {
 
         $user = User::find($id);
 
@@ -85,7 +89,7 @@ class AddressController extends Controller
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add an address for " . $user->name . ".");
+            abort(403, "You cannot add an address for this user.");
         }
 
         // Establish new address
@@ -94,7 +98,7 @@ class AddressController extends Controller
 
         // See if we have a primary address already...
         $address->is_primary = true;
-        foreach($user->address as $a) {
+        foreach ($user->address as $a) {
             if ($a->is_primary == true) {
                 $address->is_primary = false;
                 break;
@@ -104,13 +108,14 @@ class AddressController extends Controller
         // Save it baby!
         $address->save();
 
-        Session::flash("flash_message","The address has been added.");
+        Session::flash("flash_message", "The address has been added.");
 
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 
-    public function edit($id, $address_id, Request $request) {
+    public function edit($id, $address_id, Request $request)
+    {
 
         $address = Address::find($address_id);
         $user = $address->user;
@@ -124,19 +129,20 @@ class AddressController extends Controller
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot edit an address for " . $user->name . ".");
+            abort(403, "You cannot edit an address for this user.");
         }
 
         $address->fill($this->parseInput($request));
         $address->save();
 
-        Session::flash("flash_message","The address has been edited.");
+        Session::flash("flash_message", "The address has been edited.");
 
-        return Redirect::route('user::profile', ['id' => $id]);
+        return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 
-    public function editForm($id, $address_id) {
+    public function editForm($id, $address_id)
+    {
         $address = Address::find($address_id);
         if ($address == null) {
             abort(404, "Address $id not found.");
@@ -146,12 +152,13 @@ class AddressController extends Controller
             abort(404, "Member $id not found.");
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot edit an address for " . $user->name . ".");
+            abort(403, "You cannot edit an address for this user.");
         }
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
     }
 
-    private function parseInput($request) {
+    private function parseInput($request)
+    {
         $newaddress = json_decode($request->input("address-data"));
 
         $address = array();
@@ -191,6 +198,28 @@ class AddressController extends Controller
         }
 
         return $address;
+    }
+
+    public function toggleHidden($id, Request $request)
+    {
+
+        $user = User::find($id);
+
+        if ($user == null) {
+            abort(404, "Member $id not found.");
+        }
+
+        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403, "You cannot toggle address visibility for this user.");
+        }
+
+        $user->address_visible = !$user->address_visible;
+        $user->save();
+
+        Session::flash("flash_message", "Your primary address is now " . ($user->address_visible ? 'visible' : 'hidden') . " for members.");
+
+        return Redirect::back();
+
     }
 
 }
