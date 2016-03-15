@@ -1,4 +1,4 @@
-@extends('website.default.panel')
+@extends('website.layouts.panel')
 
 @section('page-title')
     Bank authorization for {{ $user->name }}

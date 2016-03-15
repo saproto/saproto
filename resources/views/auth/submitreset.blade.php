@@ -1,6 +1,6 @@
-@extends('website/default/container')
+@extends('website.layouts.panel')
 
-@section('container')
+@section('content')
 
     <form method="POST" action="{{ route('login::resetpass::submit') }}">
 

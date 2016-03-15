@@ -1,10 +1,10 @@
-@extends('website.default.container')
+@extends('website.layouts.default')
 
 @section('page-title')
     Dashboard for {{ $user->name }}
 @endsection
 
-@section('container')
+@section('content')
 
     <div class="row">
         <div class="col-md-5 col-xs-12">

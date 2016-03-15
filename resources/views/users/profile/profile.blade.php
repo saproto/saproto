@@ -1,18 +1,10 @@
-@extends('website.default.container')
+@extends('website.layouts.default')
 
 @section('page-title')
     {{ $user->name }}
 @endsection
 
-@section('pre-container')
-
-    <h3 style="text-align: center;"><strong>{{ $user->name }}</strong></h3>
-
-    <hr>
-
-@endsection
-
-@section('container')
+@section('content')
 
     <div class=row">
         <div class="col-md-4">

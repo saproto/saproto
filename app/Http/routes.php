@@ -15,9 +15,7 @@
  * The main route for the frontpage.
  */
 
-Route::get('/', ['as' => 'homepage', function () {
-    return view('website/default/default');
-}]);
+Route::get('/', ['as' => 'homepage', 'uses' => 'HomeController@show']);
 
 /*
  * Routes related to authentication.

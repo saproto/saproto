@@ -1,4 +1,4 @@
-@extends('website.default.panel')
+@extends('website.layouts.panel')
 
 @section('page-title')
     Edit study for {{ $user->name }}

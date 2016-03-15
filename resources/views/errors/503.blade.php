@@ -1,47 +1,35 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Be right back.</title>
+@extends('website.master')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
+@section('page-title')
+    Maintenance
+@endsection
 
-        <style>
-            html, body {
-                height: 100%;
-            }
+@section('stylesheet')
+    @parent
 
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
+    html, body {
+        min-width: 100%;
+        min-height: 100%;
+    }
 
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
+    body {
+        background-image: url('{{ asset('images/application/maintenancebg.jpg') }}');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
 
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
+    #maintenance {
+        padding: 15% 0;
+        color: #fff;
+        text-align: center;
+        text-shadow: 0px 0px 10px #000;
+    }
+@endsection
 
-            .title {
-                font-size: 72px;
-                margin-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Be right back.</div>
-            </div>
-        </div>
-    </body>
-</html>
+@section('body')
+    <div id="maintenance">
+        <h1>Maintenance mode.</h1>
+        Oh snap! This site is currently in maintenance mode. Check back in a few moments.
+    </div>
+@endsection

@@ -1,4 +1,4 @@
-@extends('website.default.default')
+@extends('website.layouts.default')
 
 @section('content')
 

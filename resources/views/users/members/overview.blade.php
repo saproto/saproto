@@ -1,35 +1,33 @@
-@extends('website.default.container')
+@extends('website.layouts.default')
 
-@section('container')
-    <div class="row">
-        <div class="col-md-5 col-xs-12">
-            <div class="row">
+@section('content')
+    <div class="col-md-5 col-xs-12">
+        <div class="row">
 
 
-                <div class="col-md-12" style="margin-bottom: 15px">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" name="search" class="form-control" id="search" placeholder="Search for...">
+            <div class="col-md-12" style="margin-bottom: 15px">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <input type="text" name="search" class="form-control" id="search" placeholder="Search for...">
                     <span class="input-group-btn">
                         <button class="btn btn-default" id="goSearch">Go!</button>
                     </span>
-                    </div>
                 </div>
-
-
-                <div class="col-md-12" id="results">
-                    Loading...
-                </div>
-
-
             </div>
-        </div>
 
-        <div class="col-md-7 col-xs-12">
-            <div class="panel panel-default" id="memberDetail">
-                <div class="panel-body">
-                    <p>Choose a member</p>
-                </div>
+
+            <div class="col-md-12" id="results">
+                Loading...
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="col-md-7 col-xs-12">
+        <div class="panel panel-default" id="memberDetail">
+            <div class="panel-body">
+                <p>Choose a member</p>
             </div>
         </div>
     </div>
@@ -88,8 +86,8 @@
                 doSearch(query, 0);
             });
 
-            $("#search").keyup(function(e) {
-                if(e.keyCode == 13) {
+            $("#search").keyup(function (e) {
+                if (e.keyCode == 13) {
                     e.preventDefault();
                     var query = $(this).val();
                     doSearch(query, 0);
