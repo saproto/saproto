@@ -18,6 +18,10 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \Proto\Http\Middleware\VerifyCsrfToken::class,
+
+        // Our own middleware
+        \Proto\Http\Middleware\EnforceHTTPS::class,
+        \Proto\Http\Middleware\DevelopmentAccess::class
     ];
 
     /**
@@ -29,7 +33,6 @@ class Kernel extends HttpKernel
         'auth' => \Proto\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Proto\Http\Middleware\RedirectIfAuthenticated::class,
-        'utwente.auth' => \Proto\Http\Middleware\UtwenteAuth::class,
-        'dev' => \Proto\Http\Middleware\DevelopmentAccess::class,
+        'utwente.auth' => \Proto\Http\Middleware\UtwenteAuth::class
     ];
 }
