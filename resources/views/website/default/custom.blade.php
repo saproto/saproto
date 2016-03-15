@@ -5,4 +5,8 @@
         padding-bottom: 20px;
     }
 
+    .borderless td, .borderless th {
+        border: none !important;
+    }
+
 </style>

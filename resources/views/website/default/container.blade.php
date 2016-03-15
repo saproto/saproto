@@ -2,6 +2,10 @@
 
 @section('content')
 
+    @section('pre-container')
+
+    @show
+
     <div class="container">
 
         @section('container')

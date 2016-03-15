@@ -33,6 +33,7 @@ class Kernel extends HttpKernel
         'auth' => \Proto\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Proto\Http\Middleware\RedirectIfAuthenticated::class,
-        'utwente.auth' => \Proto\Http\Middleware\UtwenteAuth::class
+        'utwente.auth' => \Proto\Http\Middleware\UtwenteAuth::class,
+        'member' => \Proto\Http\Middleware\Member::class
     ];
 }

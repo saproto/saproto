@@ -88,4 +88,13 @@ class User extends Validatable implements AuthenticatableContract,
     public function getNameAttribute($value) {
         return $this->name_first . " " . $this->name_last;
     }
+
+    public function getPrimaryAddress() {
+        foreach($this->address as $address) {
+            if ($address->is_primary) {
+                return $address;
+            }
+        }
+        return null;
+    }
 }

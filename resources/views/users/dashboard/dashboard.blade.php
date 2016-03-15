@@ -17,6 +17,6 @@
         </div>
     </div>
 
-    @include("users.profile.deletebank");
+    @include("users.dashboard.deletebank");
 
 @endsection
