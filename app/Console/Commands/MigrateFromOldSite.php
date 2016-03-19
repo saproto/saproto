@@ -135,7 +135,6 @@ class MigrateFromOldSite extends Command
             // Now we continue with the committee participations.
             $participation = array();
             $committeesparticipation = $this->legacydb->query("SELECT * FROM committees");
-            $societiesparticipation = $this->legacydb->query("SELECT * FROM societies");
 
             while ($committeeparticipation = $committeesparticipation->fetch_assoc()) {
                 $participation[]['data'] = array(
@@ -147,14 +146,16 @@ class MigrateFromOldSite extends Command
                     'end' => ($committeeparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : "'" . $committeeparticipation['enroll_end'] . "'")
                 );
             }
-            while ($societiesparticipation = $committeesparticipation->fetch_assoc()) {
+
+            $societiesparticipation = $this->legacydb->query("SELECT * FROM societies");
+            while ($societyparticipation = $societiesparticipation->fetch_assoc()) {
                 $participation[]['data'] = array(
-                    'user_id' => $committeeparticipation['user_id'],
-                    'committee_id' => $committeeparticipation['wordpress_id'],
-                    'role' => ($committeeparticipation['role'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($committeeparticipation['role']) . "'"),
-                    'edition' => ($committeeparticipation['edition'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($committeeparticipation['edition']) . "'"),
-                    'start' => "'" . $committeeparticipation['enroll_start'] . "'",
-                    'end' => ($committeeparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : "'" . $committeeparticipation['enroll_end'] . "'")
+                    'user_id' => $societyparticipation['user_id'],
+                    'committee_id' => $societyparticipation['wordpress_id'],
+                    'role' => ($societyparticipation['role'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($societyparticipation['role']) . "'"),
+                    'edition' => ($societyparticipation['edition'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($societyparticipation['edition']) . "'"),
+                    'start' => "'" . $societyparticipation['enroll_start'] . "'",
+                    'end' => ($societyparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : "'" . $societyparticipation['enroll_end'] . "'")
                 );
             }
 
@@ -257,6 +258,7 @@ class MigrateFromOldSite extends Command
             $usersactivities = array();
             $usersactivitiesquery = $this->legacydb->query("SELECT * FROM activities");
             $usersactivitiescounter = 1;
+
             while ($useractivity = $usersactivitiesquery->fetch_assoc()) {
                 if (!array_key_exists($useractivity['proto_username'], $studnr2id)) {
                     continue;
@@ -264,7 +266,7 @@ class MigrateFromOldSite extends Command
                 $usersactivities[$usersactivitiescounter]['data'] = array(
                     'user_id' => $studnr2id[$useractivity['proto_username']],
                     'activity_id' => $useractivity['post_id'],
-                    'committees_events_id' => (array_key_exists($activity['participant_type'], $commsevents2id) && $commsevents2id[$activity['participant_type']][$useractivity['post_id']] != null ? $commsevents2id[$activity['participant_type']][$useractivity['post_id']] : 'NULL'),
+                    'committees_events_id' => ($useractivity['participant_type'] != -1 ? $commsevents2id[$useractivity['participant_type']][$useractivity['post_id']] : 'NULL'),
                     'created_at' => "'" . $useractivity['date'] . "'"
                 );
                 $usersactivitiescounter++;
