@@ -65,30 +65,16 @@ class User extends Validatable implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function member() {
-        return $this->hasOne('Proto\Models\Member');
-    }
-
-    public function bank() {
-        return $this->hasOne('Proto\Models\Bank');
-    }
-
-    public function address() {
-        return $this->hasMany('Proto\Models\Address');
-    }
-
-    public function utwente() {
-        return $this->hasOne('Proto\Models\Utwente');
-    }
-
-    public function studies() {
-        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot('till')->withTimestamps();
-    }
-
-    public function getNameAttribute($value) {
+    /**
+     * @return string The full name of the user.
+     */
+    public function getNameAttribute() {
         return $this->name_first . " " . $this->name_last;
     }
 
+    /**
+     * @return null|Address The primary address of the user, if any.
+     */
     public function getPrimaryAddress() {
         foreach($this->address as $address) {
             if ($address->is_primary) {
@@ -96,5 +82,40 @@ class User extends Validatable implements AuthenticatableContract,
             }
         }
         return null;
+    }
+
+    /**
+     * @return mixed The associated membership details, if any.
+     */
+    public function member() {
+        return $this->hasOne('Proto\Models\Member');
+    }
+
+    /**
+     * @return mixed The associated bank authorization, if any.
+     */
+    public function bank() {
+        return $this->hasOne('Proto\Models\Bank');
+    }
+
+    /**
+     * @return mixed The associated addresses, if any.
+     */
+    public function address() {
+        return $this->hasMany('Proto\Models\Address');
+    }
+
+    /**
+     * @return mixed The associated University of Twente details, if any.
+     */
+    public function utwente() {
+        return $this->hasOne('Proto\Models\Utwente');
+    }
+
+    /**
+     * @return mixed The associated studies, if any.
+     */
+    public function studies() {
+        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot('till')->withTimestamps();
     }
 }
