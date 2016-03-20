@@ -180,6 +180,42 @@ class MigrateFromOldSite extends Command
                 );
             }
 
+            // Now, we parse the old Google calendar.
+            // Too many activities, so we do multiple requests.
+            $activity2eventid = array();
+
+            $url[0] = "https://www.googleapis.com/calendar/v3/calendars/qnuekutikmgts7fanfbccrbqe0@group.calendar.google.com/events?singleEvents=true&orderBy=startTime&key=AIzaSyAaCgF3obw_g1v0kg_uthgw8XFeq_4haao&timeMin=2011-01-01T00%3A00%3A00%2B01%3A00&timeMax=2015-01-01T00%3A00%3A00%2B02%3A00";
+            $url[1] = "https://www.googleapis.com/calendar/v3/calendars/qnuekutikmgts7fanfbccrbqe0@group.calendar.google.com/events?singleEvents=true&orderBy=startTime&key=AIzaSyAaCgF3obw_g1v0kg_uthgw8XFeq_4haao&timeMin=2015-01-01T00%3A00%3A00%2B01%3A00&timeMax=2016-01-01T00%3A00%3A00%2B02%3A00";
+            $url[2] = "https://www.googleapis.com/calendar/v3/calendars/qnuekutikmgts7fanfbccrbqe0@group.calendar.google.com/events?singleEvents=true&orderBy=startTime&key=AIzaSyAaCgF3obw_g1v0kg_uthgw8XFeq_4haao&timeMin=2016-01-01T00%3A00%3A00%2B01%3A00&timeMax=2017-01-01T00%3A00%3A00%2B02%3A00";
+            $eventsdata = array();
+            for ($i = 0; $i < 3; $i++) {
+                $d = json_decode(file_get_contents($url[$i]));
+                foreach ($d->items as $e) {
+                    $eventsdata[] = $e;
+                }
+                $this->info("Got <" . count($d->items) . "> items from GCal url <$i>.");
+            }
+            $this->info("Retrieved <" . count($eventsdata) . "> events from Google Calendar.");
+
+            $events = array();
+            $eventcounter = 1;
+            foreach ($eventsdata as $event) {
+                $events[$eventcounter]['data'] = array(
+                    'id' => $eventcounter,
+                    'title' => "'" . $this->laraveldb->real_escape_string($event->summary) . "'",
+                    'description' => "'" . $this->laraveldb->real_escape_string(property_exists($event, "description") ? $event->description : "No description.") . "'",
+                    'start' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime((property_exists($event->start, "dateTime") ? $event->start->dateTime : $event->start->date)))) . "'",
+                    'end' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime((property_exists($event->end, "dateTime") ? $event->end->dateTime : $event->end->date)))) . "'",
+                    'location' => "'" . $this->laraveldb->real_escape_string(property_exists($event, "location") ? $event->location : "Location unknown or no location.") . "'",
+                    'created_at' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime($event->created))) . "'",
+                    'updated_at' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime($event->updated))) . "'"
+                );
+                if (property_exists($event, "description") && (preg_match('/.*saproto\.nl\/activity\/([a-zA-Z0-9_-]+)\/{0,1}/', $event->description, $m) || preg_match('/.*saproto\.nl\/\?p=([0-9_-]+)\/{0,1}/', $event->description, $m))) {
+                    $activity2eventid[$m[1]] = $eventcounter;
+                }
+                $eventcounter++;
+            }
+
             // Now we do activities.
             $activities = array();
             $commsevents = array();
@@ -188,7 +224,7 @@ class MigrateFromOldSite extends Command
             while ($activity = $activitiesquery->fetch_assoc()) {
                 $activities[$activity['id']]['data'] = array(
                     'id' => $activity['id'],
-                    'event_id' => 1,
+                    'event_id' => (array_key_exists($activity['id'], $activity2eventid) ? $activity2eventid[$activity['id']] : (array_key_exists($activity['post_name'], $activity2eventid) ? $activity2eventid[$activity['post_name']] : 'NULL')),
                     'price' => 'NULL',
                     'participants' => 'NULL',
                     'registration_start' => 'NULL',
@@ -235,7 +271,7 @@ class MigrateFromOldSite extends Command
                                 if ($amount > 0) {
                                     $commsevents[$commseventscounter]['data'] = array(
                                         'id' => $commseventscounter,
-                                        'event_id' => $activity['id'],
+                                        'activity_id' => $activity['id'],
                                         'committee_id' => $commid,
                                         'amount' => $amount
                                     );
@@ -266,7 +302,7 @@ class MigrateFromOldSite extends Command
                 $usersactivities[$usersactivitiescounter]['data'] = array(
                     'user_id' => $studnr2id[$useractivity['proto_username']],
                     'activity_id' => $useractivity['post_id'],
-                    'committees_events_id' => ($useractivity['participant_type'] != -1 ? $commsevents2id[$useractivity['participant_type']][$useractivity['post_id']] : 'NULL'),
+                    'committees_activities_id' => ($useractivity['participant_type'] != -1 ? $commsevents2id[$useractivity['participant_type']][$useractivity['post_id']] : 'NULL'),
                     'created_at' => "'" . $useractivity['date'] . "'"
                 );
                 $usersactivitiescounter++;
@@ -292,7 +328,7 @@ class MigrateFromOldSite extends Command
                 $this->error("TRUNCATE studies: " . $this->laraveldb->error);
             }
             if (!$this->laraveldb->query("TRUNCATE TABLE studies_users")) {
-                $this->error("TRUNCATE studiesusers: " . $this->laraveldb->error);
+                $this->error("TRUNCATE studies_users: " . $this->laraveldb->error);
             }
             if (!$this->laraveldb->query("TRUNCATE TABLE activities")) {
                 $this->error("TRUNCATE activities: " . $this->laraveldb->error);
@@ -303,14 +339,14 @@ class MigrateFromOldSite extends Command
             if (!$this->laraveldb->query("TRUNCATE TABLE committees")) {
                 $this->error("TRUNCATE committees: " . $this->laraveldb->error);
             }
-            if (!$this->laraveldb->query("TRUNCATE TABLE committees_events")) {
+            if (!$this->laraveldb->query("TRUNCATE TABLE committees_activities")) {
                 $this->error("TRUNCATE committees_events: " . $this->laraveldb->error);
             }
             if (!$this->laraveldb->query("TRUNCATE TABLE committees_users")) {
                 $this->error("TRUNCATE committees_users: " . $this->laraveldb->error);
             }
-            if (!$this->laraveldb->query("TRUNCATE TABLE studies_users")) {
-                $this->error("TRUNCATE studiesusers: " . $this->laraveldb->error);
+            if (!$this->laraveldb->query("TRUNCATE TABLE events")) {
+                $this->error("TRUNCATE events: " . $this->laraveldb->error);
             }
             if (!$this->laraveldb->query("SET FOREIGN_KEY_CHECKS = 1")) {
                 $this->error("TRUNCATEPOST: " . $this->laraveldb->error);
@@ -326,9 +362,10 @@ class MigrateFromOldSite extends Command
 
             $this->write_to_db($committees, 'data', 'committees');
             $this->write_to_db($participation, 'data', 'committees_users');
-            $this->write_to_db($commsevents, 'data', 'committees_events');
+            $this->write_to_db($commsevents, 'data', 'committees_activities');
 
             $this->write_to_db($activities, 'data', 'activities');
+            $this->write_to_db($events, 'data', 'events');
             $this->write_to_db($usersactivities, 'data', 'activities_users');
 
             // We close the database connection.
@@ -350,6 +387,8 @@ class MigrateFromOldSite extends Command
      */
     function write_to_db($dataset, $data_name, $table_name)
     {
+
+        $c = 0;
         foreach ($dataset as $ref_id => $data) {
 
             if ($dataset[$ref_id][$data_name] != null && $dataset[$ref_id][$data_name] != false) {
@@ -380,8 +419,13 @@ class MigrateFromOldSite extends Command
                     $this->error("$table_name($ref_id): $query " . PHP_EOL . $this->laraveldb->error . PHP_EOL);
                 }
 
+                $c++;
+
             }
 
         }
+
+        $this->info("Wrote to database <$c> instances of " . $table_name);
+
     }
 }
