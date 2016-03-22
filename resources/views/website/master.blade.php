@@ -12,11 +12,9 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    <style type="text/css">
-        @section('stylesheet')
-            @include('website.layouts.assets.customcss')
-        @show
-    </style>
+    @section('stylesheet')
+        @include('website.layouts.assets.customcss')
+    @show
 
 </head>
 

@@ -4,6 +4,9 @@
 
     @include('website.navigation.navbar')
 
+    <div class="jumbotron">
+    </div>
+
     <div class="container">
         @if (Session::has('flash_message'))
             <div class="alert alert-info alert-dismissable">

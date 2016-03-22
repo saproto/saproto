@@ -1,1 +1,22 @@
+// Colors from http://paletton.com/#uid=71X0u0kqZshgFA7lCu8tmmGy4hP
+
+$brand-primary: #D6DF23;
+$brand-success: #8DD021;
+$brand-info: #48269A;
+
+$navbar-default-bg: rgba(0, 0, 0, 0.8);
+
+$navbar-default-brand-color: $brand-primary;
+$navbar-default-brand-hover-color: $navbar-default-brand-color;
+
+$navbar-default-color: #fff;
+
+$navbar-default-link-color: $navbar-default-color;
+$navbar-default-link-hover-color: $brand-primary;
+
+$navbar-default-link-active-bg: $brand-primary;
+$navbar-default-link-active-color: #fff;
+
+
+
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
