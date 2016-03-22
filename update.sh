@@ -31,7 +31,7 @@ fi
 
 # Do migrations.
 php artisan migrate
-php artisan app:migrate
+php artisan app:migrate --no-confirmation
 
 # Add necessary roles.
 php artisan app:generateroles
