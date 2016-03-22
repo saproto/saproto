@@ -10,8 +10,7 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "laravelcollective/html": "5.1.*",
         "doctrine/dbal": "^2.5",
-        "zizaco/entrust": "dev-laravel-5",
-        "watson/bootstrap-form": "^1.0"
+        "zizaco/entrust": "dev-laravel-5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -36,8 +35,7 @@
             "php artisan clear-compiled"
         ],
         "post-update-cmd": [
-            "php artisan optimize",
-            "php artisan vendor:publish --tag=materializecss --force"
+            "php artisan optimize"
         ],
         "post-root-package-install": [
             "php -r \"copy('.env.example', '.env');\""

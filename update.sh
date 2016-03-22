@@ -13,10 +13,14 @@ if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
   echo "Not updateing dependencies.";
 else
   composer install
+  npm install
 fi
 
 # Always clear the cache.
 php artisan cache:clear
+
+# Generate all CSS and JS
+gulp
 
 # Should we update permissions?
 if [ "$1" == --no-permissions ] || [ "$2" == --no-permissions ]; then
