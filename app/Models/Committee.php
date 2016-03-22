@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto;
+namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class Committee extends Model
      *
      * @var string
      */
-    protected $table = 'events';
+    protected $table = 'committees';
 
     /**
      * @return mixed All events organized by this committee.

@@ -1,20 +1,3 @@
-<div class="panel btn-group btn-group-justified" role="group">
-    @if($user->member == null)
-        <a class="btn btn-default">
-            {{ $user->name_first }} is not a member of {{ config('association.name') }}.
-        </a>
-    @else
-        <a class="btn btn-primary">
-            {{ $user->name_first }} is a member
-            @if(date('U', strtotime($user->member->created_at)) > 0)
-                as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
-            @else
-                since <strong>ancient times</strong>!
-            @endif
-        </a>
-    @endif
-</div>
-
 <div class="panel panel-default">
     <div class="panel-body">
         <table class="table borderless">
@@ -57,4 +40,21 @@
             @endif
         </table>
     </div>
+</div>
+
+<div class="panel btn-group btn-group-justified" role="group">
+    @if($user->member == null)
+        <a class="btn btn-default">
+            {{ $user->name_first }} is not a member of {{ config('association.name') }}.
+        </a>
+    @else
+        <a class="btn btn-primary">
+            {{ $user->name_first }} is a member
+            @if(date('U', strtotime($user->member->created_at)) > 0)
+                as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+            @else
+                since <strong>ancient times</strong>!
+            @endif
+        </a>
+    @endif
 </div>

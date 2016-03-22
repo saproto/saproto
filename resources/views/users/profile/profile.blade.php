@@ -10,7 +10,10 @@
         <div class="col-md-4">
             @include('users.profile.about')
         </div>
-        <div class="col-md-8">
+        <div class="col-md-4">
+            @include('users.profile.committees')
+        </div>
+        <div class="col-md-4">
             @include('users.profile.timeline')
         </div>
     </div>

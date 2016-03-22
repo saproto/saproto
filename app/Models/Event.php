@@ -1,6 +1,6 @@
 <?php
 
-namespace Proto;
+namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class Event extends Model
      *
      * @var string
      */
-    protected $table = 'committees';
+    protected $table = 'events';
 
     /**
      * @return mixed The activity associated with this event, if any.

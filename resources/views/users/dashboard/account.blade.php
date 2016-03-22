@@ -126,28 +126,3 @@
         </form>
     </div>
 </div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <strong>Membership</strong>
-    </div>
-    <div class="panel-body">
-        <p style="text-align: center;">
-            @if($user->member == null)
-                You are not a member of {{ config('association.name') }}.
-            @else
-                You have been a member of {{ config('association.name') }}
-                @if(date('U', strtotime($user->member->created_at)) > 0)
-                    as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
-                @else
-                    since <strong>ancient times</strong>!
-                @endif
-            @endif
-        </p>
-        @if($user->member != null && $user->member->till != null)
-            <p style="text-align: center;">
-                Your membership will end on {{ date('F j, Y', strtotime($user->member->till)) }}.
-            </p>
-        @endif
-    </div>
-</div>

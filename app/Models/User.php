@@ -30,7 +30,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
 class User extends Validatable implements AuthenticatableContract,
-                                    CanResetPasswordContract
+    CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, EntrustUserTrait;
 
@@ -68,15 +68,17 @@ class User extends Validatable implements AuthenticatableContract,
     /**
      * @return string The full name of the user.
      */
-    public function getNameAttribute() {
+    public function getNameAttribute()
+    {
         return $this->name_first . " " . $this->name_last;
     }
 
     /**
      * @return null|Address The primary address of the user, if any.
      */
-    public function getPrimaryAddress() {
-        foreach($this->address as $address) {
+    public function getPrimaryAddress()
+    {
+        foreach ($this->address as $address) {
             if ($address->is_primary) {
                 return $address;
             }
@@ -87,35 +89,84 @@ class User extends Validatable implements AuthenticatableContract,
     /**
      * @return mixed The associated membership details, if any.
      */
-    public function member() {
+    public function member()
+    {
         return $this->hasOne('Proto\Models\Member');
     }
 
     /**
      * @return mixed The associated bank authorization, if any.
      */
-    public function bank() {
+    public function bank()
+    {
         return $this->hasOne('Proto\Models\Bank');
     }
 
     /**
      * @return mixed The associated addresses, if any.
      */
-    public function address() {
+    public function address()
+    {
         return $this->hasMany('Proto\Models\Address');
     }
 
     /**
      * @return mixed The associated University of Twente details, if any.
      */
-    public function utwente() {
+    public function utwente()
+    {
         return $this->hasOne('Proto\Models\Utwente');
     }
 
     /**
-     * @return mixed The associated studies, if any.
+     * @return mixed All associated studies, if any.
      */
-    public function studies() {
+    public function studies()
+    {
         return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot('till')->withTimestamps();
+    }
+
+    public function committees()
+    {
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'asc');
+    }
+
+    public function committeesFilter($filter = null)
+    {
+        $d = $this->committees;
+        $r = array();
+        switch ($filter) {
+            case null:
+                // No filter, so no operation.
+                break;
+            case 'past':
+                // Committees the user has been a member of in the past, but not anymore.
+                foreach ($d as $k => $c) {
+                    if ($c->pivot->end != null && date('U', strtotime($c->pivot->end)) < date('U')) {
+                        $r[] = $d[$k];
+                    }
+                }
+                break;
+            case 'current':
+                // Committees the user is currently a member of.
+                foreach ($d as $k => $c) {
+                    if (date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U'))) {
+                        $r[] = $d[$k];
+                    }
+                }
+                break;
+            case 'future':
+                // Committees the user is going to be a member of.
+                foreach ($d as $k => $c) {
+                    if ((date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U')))) {
+                        $r[] = $d[$k];
+                    }
+                }
+                break;
+            default:
+                throw new \InvalidArgumentException("Invalid filter. Possible values are null (default), 'past', 'current' and 'future'");
+                break;
+        }
+        return $r;
     }
 }
