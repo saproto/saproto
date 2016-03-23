@@ -1,68 +1,78 @@
 {!! csrf_field() !!}
 
-        <!-- Search bar //-->
-<div class="form-group">
-    <label for="address-string" class="col-sm-3 control-label">Search</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="address-string" placeholder="42 Wallaby Way, Sydney">
-    </div>
-</div>
+<div class="row">
 
-<!-- Container for preview //-->
-<div class="form-group">
-    <label for="address-string" class="col-sm-3 control-label">Results</label>
-    <div class="col-sm-9">
-        <ul id="autocomplete-results" class="list-group">
-            <a class="list-group-item">Enter search term...</a>
-        </ul>
-    </div>
-</div>
+    <div class="col-md-6 col-xs-12">
 
-<hr>
+        <!-- We need a map... //-->
+        <div id="map" style="display: none;"></div>
 
-<!-- We need a map... //-->
-<div id="map" style="display: none;"></div>
+        <!-- Actual form data in JSON //-->
+        <div class="form-group">
+            <label for="street" class="col-sm-3 control-label">Street</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way"
+                       value="{{ (isset($address) ? $address->street : "") }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="number" class="col-sm-3 control-label">Number</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="number" name="number" placeholder="42" value="{{ (isset($address) ? $address->number : "") }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN" value="{{ (isset($address) ? $address->zipcode : "") }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="city" class="col-sm-3 control-label">City</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="city" name="city" placeholder="Sydney" value="{{ (isset($address) ? $address->city : "") }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="country" class="col-sm-3 control-label">Country</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="country" name="country" placeholder="Australia" value="{{ (isset($address) ? $address->country : "") }}">
+            </div>
+        </div>
 
-<!-- Actual form data in JSON //-->
-<div class="form-group">
-    <label for="street" class="col-sm-3 control-label">Street</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way">
-    </div>
-</div>
-<div class="form-group">
-    <label for="number" class="col-sm-3 control-label">Number</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="number" name="number" placeholder="42">
-    </div>
-</div>
-<div class="form-group">
-    <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN">
-    </div>
-</div>
-<div class="form-group">
-    <label for="city" class="col-sm-3 control-label">City</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="city" name="city" placeholder="Sydney">
-    </div>
-</div>
-<div class="form-group">
-    <label for="country" class="col-sm-3 control-label">Country</label>
-    <div class="col-sm-9">
-        <input type="text" class="form-control" id="country" name="country" placeholder="Australia">
-    </div>
-</div>
+        <button onClick="javascript:history.go(-1)" class="btn btn-default pull-right" style="width: 100px;">Cancel
+        </button>
+        <button type="submit" class="btn btn-success pull-right" style="margin-right: 15px; width: 100px;">Save</button>
 
-<hr>
+    </div>
 
-<!-- Form controls //-->
-<button type="submit" class="btn btn-success">Save</button>
-<button onClick="javascript:history.go(-1)" class="btn btn-default">Cancel</button>
+    <div class="col-md-6 col-xs-12">
+
+        <div class="panel">
+            <div class="panel-body">
+
+                <p>You can use the form below to search for an address and auto-complete the form. You can also manually
+                    fill in the form.</p>
+
+                <input type="text" class="form-control" id="address-string"
+                       placeholder="42 Wallaby Way, Sydney">
+
+                <hr>
+
+                <ul id="autocomplete-results" class="list-group">
+                    <a class="list-group-item">Enter search term...</a>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 <!-- Form JS //-->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ getenv('GOOGLE_KEY_PUBLIC') }}&libraries=places"></script>
+<script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key={{ getenv('GOOGLE_KEY_PUBLIC') }}&libraries=places"></script>
 
 <script type="text/javascript">
 

@@ -1,10 +1,10 @@
 @if(count($user->committeesFilter('current')) > 0)
 
-    <h4>Member of {{ count($user->committeesFilter('current')) }} committees</h4>
+    <h3>Committees</h3>
 
-    @foreach($user->committeesFilter('current') as $committee)
-        <div class="panel panel-default" style="text-align: center;">
-            <div class="panel-body">
+    <ul class="list-group">
+        @foreach($user->committeesFilter('current') as $committee)
+            <li class="list-group-item">
                 <strong>
                     {{ $committee->name }}
                 </strong>
@@ -13,9 +13,9 @@
                 @endif
                 <br>
                 <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
-            </div>
-        </div>
-    @endforeach
+            </li>
+        @endforeach
+    </ul>
 
 @else
 
@@ -29,7 +29,7 @@
 
     <hr>
 
-    <h4>Has been a member of {{ count($user->committeesFilter('past')) }} committees</h4>
+    <h4>In the past</h4>
 
     <ul class="list-group">
         @foreach($user->committeesFilter('past') as $committee)
@@ -41,7 +41,8 @@
                     {{ $committee->pivot->edition }}
                 @endif
                 <br>
-                <sub>As {{$committee->pivot->role}} between {{$committee->pivot->start}} and {{$committee->pivot->end}}</sub>
+                <sub>As {{$committee->pivot->role}} between {{$committee->pivot->start}}
+                    and {{$committee->pivot->end}}</sub>
             </li>
         @endforeach
     </ul>

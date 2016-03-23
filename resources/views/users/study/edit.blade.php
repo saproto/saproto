@@ -18,8 +18,8 @@
         <div class="form-group">
             <label for="study" class="col-sm-2 control-label">Study</label>
 
-            <div class="col-sm-10">
-                <input class="form-control" type="text" disabled value="{{ $study->name }}">
+            <div class="col-sm-10 control-label" style="text-align: left;">
+                {{ $study->name }}
             </div>
         </div>
 
@@ -43,15 +43,15 @@
             </div>
         </div>
 
-        <hr>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success">Save</button>
-                <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
-            </div>
-        </div>
-
     </form>
+
+@endsection
+
+@section('panel-footer')
+
+    <div class="pull-right">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
+    </div>
 
 @endsection

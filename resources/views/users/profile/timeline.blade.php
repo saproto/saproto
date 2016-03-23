@@ -1,1 +1,0 @@
-<p style="text-align: center;">This feature is not yet implemented.</p>

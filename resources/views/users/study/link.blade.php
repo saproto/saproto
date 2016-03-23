@@ -26,8 +26,6 @@
             </div>
         </div>
 
-        <hr>
-
         <div class="form-group">
             <label for="start" class="col-sm-2 control-label">Start</label>
             <div class="col-sm-10">
@@ -42,15 +40,15 @@
             </div>
         </div>
 
-        <hr>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-success">Add</button>
-                <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
-            </div>
-        </div>
-
     </form>
+
+@endsection
+
+@section('panel-footer')
+
+    <div class="pull-right">
+        <button type="submit" class="btn btn-success">Add</button>
+        <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
+    </div>
 
 @endsection

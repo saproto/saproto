@@ -44,22 +44,24 @@
                 << Insert all kinds of important stuff. >>
 
             </p>
-
-            <hr>
-
-            <button type="submit" class="btn btn-success"
-                    @if($user->id != Auth::id())
-                    disabled
-                    @endif
-            >
-                I have read all the important stuff and agree with it.
-            </button>
-
-            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
-                Cancel
-            </button>
         </form>
 
     @endif
+
+@endsection
+
+@section('panel-footer')
+
+    <button type="submit" class="btn btn-success"
+            @if($user->id != Auth::id())
+            disabled
+            @endif
+    >
+        I have read all the important stuff and agree with it.
+    </button>
+
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+        Cancel
+    </button>
 
 @endsection

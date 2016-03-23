@@ -1,11 +1,10 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Account information</strong>
+        <strong>Basic information</strong>
     </div>
     <div class="panel-body">
-        <form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
 
-            {!! csrf_field() !!}
+        <div class="form-horizontal">
 
             <div class="form-group">
                 <label for="name_first" class="col-sm-4 control-label">Name</label>
@@ -44,8 +43,19 @@
                 <div class="col-sm-8 control-label" style="text-align: left;">{{ $user->nationality }}</div>
             </div>
 
-            <hr>
+        </div>
 
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Update account</strong>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
+
+            {!! csrf_field() !!}
             <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-mail</label>
 
@@ -78,7 +88,8 @@
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input name="receive_sms" type="checkbox" {{ ($user->receive_sms == 1 ? 'checked' : '') }}>
+                            <input name="receive_sms"
+                                   type="checkbox" {{ ($user->receive_sms == 1 ? 'checked' : '') }}>
                             Receive text messages
                         </label>
                     </div>
@@ -89,7 +100,8 @@
                 <label for="website" class="col-sm-4 control-label">Homepage</label>
 
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="website" name="website" value="{{ $user->website }}">
+                    <input type="text" class="form-control" id="website" name="website"
+                           value="{{ $user->website }}">
                 </div>
             </div>
 

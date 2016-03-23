@@ -46,7 +46,7 @@
                 </li>
             @else
                 <form class="navbar-form navbar-right">
-                    <a class="btn btn-success" href="{{ route('login::show') }}">
+                    <a class="btn btn-primary" href="{{ route('login::show') }}">
                         <i class="fa fa-unlock-alt"></i>
                     </a>
                 </form>

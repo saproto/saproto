@@ -1,26 +1,19 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.default')
 
 @section('page-title')
     Edit address for {{ $user->name }}
 @endsection
 
-@section('panel-title')
-    Edit an address for {{ $user->name }}
-@endsection
+@section('content')
 
-@section('panel-body')
+    <div class="panel panel-default">
+        <div class="panel-heading">Edit an address for {{ $user->name }}</div>
+        <div class="panel-body">
+            <form class="form-horizontal" method="POST" action="{{ route('user::address::edit', ['id' => $user->id, 'address_id' => $address->id]) }}">
+                @include('users.addresses.form')
+            </form>
+        </div>
+    </div>
 
-    <p></p><strong>Current address:</strong></p>
-    <p>
-        {{ $address->street }} {{ $address->number }}<br>
-        {{ $address->zipcode }}, {{ $address->city }}<br>
-        {{ $address->country }}
-    </p>
-
-    <hr>
-
-    <form class="form-horizontal" method="POST" action="{{ route('user::address::edit', ['id' => $user->id, 'address_id' => $address->id]) }}">
-        @include('users.addresses.form')
-    </form>
 
 @endsection
