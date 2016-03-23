@@ -1,4 +1,4 @@
-@extends('website.layouts.default')
+@extends('website.layouts.default-nobg')
 
 @section('page-title')
     Edit address for {{ $user->name }}

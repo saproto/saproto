@@ -1,5 +1,9 @@
 @extends('website.layouts.panel')
 
+@section('page-title')
+    Authenticate
+@endsection
+
 @section('panel-title')
     {{ config('association.name') }} - Authenticate
 @endsection
@@ -16,7 +20,8 @@
         </div>
         <div class="form-group">
             <label for="message-text" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="correct horse battery staple">
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="correct horse battery staple">
         </div>
 
         <div class="checkbox">
@@ -25,12 +30,12 @@
             </label>
         </div>
 
-@endsection
+        @endsection
 
-@section('panel-footer')
-        <button type="submit" class="btn btn-success">Authenticate</button>
+        @section('panel-footer')
+            <button type="submit" class="btn btn-success">Authenticate</button>
 
-        <a class="btn btn-default pull-right" href="{{ route('login::resetpass') }}">Forgot your password?</a>
+            <a class="btn btn-default pull-right" href="{{ route('login::resetpass') }}">Forgot your password?</a>
 
     </form>
 @endsection

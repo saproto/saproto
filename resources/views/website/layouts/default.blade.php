@@ -1,13 +1,9 @@
-@extends('website.master')
+@extends('website.layouts.content')
 
-@section('body')
+@section('container')
 
-    @include('website.navigation.navbar')
+    <div id="container" class="container">
 
-    <div class="jumbotron">
-    </div>
-
-    <div class="container">
         @if (Session::has('flash_message'))
             <div class="alert alert-info alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -21,9 +17,6 @@
                 {{ $e }}
             </div>
         @endforeach
-    </div>
-
-    <div class="container">
 
         @yield('content')
 

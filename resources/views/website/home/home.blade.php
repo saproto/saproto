@@ -1,5 +1,13 @@
-@extends('website.layouts.default')
+@extends('website.master')
 
-@section('content')
-    Hello world!
+@section('body')
+
+    @include('website.navigation.navbar')
+
+    @if (Auth::check())
+        @include('website.home.members')
+    @else
+        @include('website.home.external')
+    @endif
+
 @endsection

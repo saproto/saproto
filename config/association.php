@@ -26,6 +26,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Association long name
+    |--------------------------------------------------------------------------
+    |
+    | The tagline to be shown on the homepage to external visitors.
+    |
+    */
+
+    'tagline' => 'S.A. Proto is the study association for Creative Technology at the University of Twente.',
+
+    /*
+    |--------------------------------------------------------------------------
     | Administrative committee name
     |--------------------------------------------------------------------------
     |
