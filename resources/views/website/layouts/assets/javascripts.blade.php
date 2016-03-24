@@ -1,7 +1,19 @@
 <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 
 <script type="text/javascript">
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+    $(document).ready(function () {
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $(window).scroll(function () {
+            var scroll = $(window).scrollTop();
+
+            if (scroll >= 100) {
+                $("#navbar").addClass("navbar-scroll");
+            } else {
+                $("#navbar").removeClass("navbar-scroll");
+            }
+        });
+    });
 </script>

@@ -18,18 +18,6 @@
                 </sub>
             </p>
 
-            <hr>
-
-
-            <div class="btn-group btn-group-justified" role="group">
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-danger" data-toggle="modal"
-                            data-target="#bank-modal-cancel">
-                        Cancel authorization
-                    </button>
-                </div>
-            </div>
-
         @else
 
             <div class="btn-group btn-group-justified" role="group">
@@ -43,5 +31,15 @@
 
         @endif
 
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-danger" data-toggle="modal"
+                        data-target="#bank-modal-cancel">
+                    Cancel authorization
+                </button>
+            </div>
+        </div>
     </div>
 </div>

@@ -68,4 +68,19 @@ return [
 
     'boardmail' => 'board@proto.utwente.nl',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Address
+    |--------------------------------------------------------------------------
+    |
+    | The postal or visiting address of your association.
+    |
+    */
+
+    'address_street' => 'Drienerlolaan 5',
+    'address_extra' => 'Zilverling A230',
+    'address_zip' => '7522NB',
+    'address_city' => 'Enschede',
+    'address_country' => 'Netherlands',
+
 ];

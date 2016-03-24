@@ -1,14 +1,39 @@
+<!-- Extra style //-->
 <style type="text/css">
 
     html, body {
+        background-color: #333;
+        height: 100%;
+    }
+
+    #wrap {
+        min-height: 100%;
+    }
+
+    #main {
+        overflow:auto;
+        padding-bottom:120px; /* this needs to be bigger than footer height*/
+    }
+
+    #navbar {
+        transition: all 0.5s;
+
+    }
+    .navbar-scroll {
         background-color: #222;
+    }
+    #navbar {
+        text-shadow: 0 0 5px #000;
+    }
+    #navbar .dropdown-menu {
+        text-shadow: none;
     }
 
     #header {
         background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
         background-size: cover;
         height: 400px;
-        border-bottom: 15px solid #99E502;
+        border-bottom: 5px solid #d7df21;
     }
     #header .container {
         color: #fff !important;
@@ -32,6 +57,29 @@
         padding: 15px 0;
     }
 
+    #footer {
+        position: relative;
+        margin-top: -120px;
+        height: 120px;
+        clear:both;
+        padding-top:20px;
+
+        background-color: #111;
+        color: #fff;
+    }
+
+    .green {
+        color: #d7df21;
+    }
+    .white {
+        color: #fff;
+    }
+
+</style>
+
+<!-- Bootstrap overrides //-->
+<style type="text/css">
+
     .borderless td, .borderless th {
         border: none !important;
     }
@@ -41,6 +89,10 @@
     }
     .panel .panel {
         border: 1px solid #ddd;
+    }
+
+    .btn {
+        text-shadow: 0 0 5px #000;
     }
 
 </style>

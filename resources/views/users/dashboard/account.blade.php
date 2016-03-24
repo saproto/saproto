@@ -48,12 +48,15 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <strong>Update account</strong>
-    </div>
-    <div class="panel-body">
-        <form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
+<form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <strong>Update account</strong>
+        </div>
+
+        <div class="panel-body">
 
             {!! csrf_field() !!}
             <div class="form-group">
@@ -122,19 +125,18 @@
                            placeholder="For changing e-mail or password">
                 </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <div class="col-sm-8 col-md-offset-4">
-                    <div class="btn-group btn-group-justified" role="group">
-                        <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary">
-                                Update account
-                            </button>
-                        </div>
-                    </div>
+        <div class="panel-footer">
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-primary">
+                        Update account
+                    </button>
                 </div>
             </div>
+        </div>
 
-        </form>
     </div>
-</div>
+
+</form>

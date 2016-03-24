@@ -4,16 +4,6 @@
     </div>
     <div class="panel-body">
 
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <a type="button" class="btn btn-primary" href="{{ route('user::address::add', ['id' => $user->id]) }}">
-                    Add another address
-                </a>
-            </div>
-        </div>
-
-        <hr>
-
         @foreach($user->address as $address)
             <div class="panel panel-default">
 
@@ -108,5 +98,14 @@
             secondary addresses are always hidden.
         </p>
 
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <a type="button" class="btn btn-primary" href="{{ route('user::address::add', ['id' => $user->id]) }}">
+                    Add another address
+                </a>
+            </div>
+        </div>
     </div>
 </div>

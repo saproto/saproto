@@ -10,7 +10,7 @@
 
             <h1>
                 <span>
-                    <strong>@yield('page-title')</strong>
+                   @yield('page-title')
                 </span>
             </h1>
 

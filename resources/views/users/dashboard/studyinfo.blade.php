@@ -4,16 +4,6 @@
     </div>
     <div class="panel-body">
 
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <a type="button" class="btn btn-primary" href="{{ route('user::study::add', ['id' => $user->id]) }}">
-                    Add another study
-                </a>
-            </div>
-        </div>
-
-        <hr>
-
         @if(count($user->studies) == 0)
             <p style="text-align: center;">
                 <strong>
@@ -74,5 +64,14 @@
                 </div>
             @endforeach
         @endif
+    </div>
+    <div class="panel-footer">
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <a type="button" class="btn btn-primary" href="{{ route('user::study::add', ['id' => $user->id]) }}">
+                    Add another study
+                </a>
+            </div>
+        </div>
     </div>
 </div>
