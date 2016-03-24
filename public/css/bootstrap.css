@@ -7074,17 +7074,17 @@ button.list-group-item-danger.active:focus {
 }
 
 .panel-default {
-  border-color: 0px solid #000;
+  border-color: #ddd;
 }
 
 .panel-default > .panel-heading {
   color: #fff;
   background-color: #222;
-  border-color: 0px solid #000;
+  border-color: #ddd;
 }
 
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: 0px solid #000;
+  border-top-color: #ddd;
 }
 
 .panel-default > .panel-heading .badge {
@@ -7093,7 +7093,7 @@ button.list-group-item-danger.active:focus {
 }
 
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
-  border-bottom-color: 0px solid #000;
+  border-bottom-color: #ddd;
 }
 
 .panel-primary {

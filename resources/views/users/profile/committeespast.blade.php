@@ -1,9 +1,9 @@
-<h3>Committees</h3>
+@if(count($user->committeesFilter('past')) > 0)
 
-@if(count($user->committeesFilter('current')) > 0)
+    <h3>In the past</h3>
 
     <ul class="list-group">
-        @foreach($user->committeesFilter('current') as $committee)
+        @foreach($user->committeesFilter('past') as $committee)
             <li class="list-group-item">
                 <strong>
                     {{ $committee->name }}
@@ -12,15 +12,10 @@
                     {{ $committee->pivot->edition }}
                 @endif
                 <br>
-                <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
+                <sub>As {{$committee->pivot->role}} between {{$committee->pivot->start}}
+                    and {{$committee->pivot->end}}</sub>
             </li>
         @endforeach
     </ul>
-
-@else
-
-    <p>
-        Currently not a member of a committee.
-    </p>
 
 @endif

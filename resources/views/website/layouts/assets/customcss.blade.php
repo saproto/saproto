@@ -69,10 +69,16 @@
     }
 
     .green {
-        color: #d7df21;
+        color: #d7df21 !important;
     }
     .white {
-        color: #fff;
+        color: #fff !important;
+    }
+    .dark {
+        background-color: #333 !important;
+    }
+    .light {
+        background-color: #fafafa !important;
     }
 
 </style>
@@ -85,14 +91,11 @@
     }
 
     .panel {
-        border: none;
+        border-width: 0;
+        box-shadow: 0px 0px 20px -7px #333;
     }
     .panel .panel {
-        border: 1px solid #ddd;
-    }
-
-    .btn {
-        text-shadow: 0 0 5px #000;
+        border-width: 1px;
     }
 
 </style>
