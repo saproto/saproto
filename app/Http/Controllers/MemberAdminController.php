@@ -92,7 +92,7 @@ class MemberAdminController extends Controller
 
         $member = new Member();
 
-        $member->primary_member = Input::get('primary_member');
+        $member->primary_member = (Input::get('primary_member') == '1' ? true : false);
         $member->type = Input::get('type');
         $member->fee_cycle = Input::get('fee_cycle');
         $member->user_id = $user->id;

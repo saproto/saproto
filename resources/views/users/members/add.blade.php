@@ -16,7 +16,7 @@
                         <div class="row">
                             <label for="primary_member" class="col-sm-3 control-label">Primary member</label>
                             <div class="col-sm-9">
-                                <input type="checkbox" class="form-control" id="primary_member" name="primary_member" checked="checked">
+                                <input type="checkbox" class="form-control" id="primary_member" name="primary_member" value="1" checked="checked">
                             </div>
                         </div>
                         <div class="row">
