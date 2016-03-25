@@ -38,7 +38,7 @@
                         <li><a href="{{ route('user::profile') }}">My Profile</a></li>
 
                         @if (Session::has('impersonator'))
-                            <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>
+                            <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonating</a></li>
                         @else
                             <li><a href="{{ route('login::logout') }}">Logout</a></li>
                         @endif

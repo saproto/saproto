@@ -42,9 +42,13 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'role:board|admin']], function () {
         Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
         Route::get('impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
+
+        Route::post('add', ['as' => 'add', 'uses' => 'MemberAdminController@addMembership']);
+        Route::post('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
+        Route::get('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
     });
 
-    Route::group(['prefix' => 'members', 'as' => 'member::'], function () {
+    Route::group(['prefix' => 'members', 'as' => 'member::', 'middleware' => ['auth', 'role:board|admin']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
         Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
     });

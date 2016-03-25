@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\Member;
 use Proto\Models\User;
 
 use Auth;
@@ -26,17 +27,11 @@ class MemberAdminController extends Controller
         return view('users.members.overview');
     }
 
-    /**
-     * Displays nested search results for member admin.
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function showSearch(Request $request) {
         $search = $request->input('query');
 
         if ($search) {
-            $users = User::where('name_first', 'LIKE', '%'.$search.'%')->orWhere('name_last', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%')->paginate(20);
+            $users = User::where('name_first', 'LIKE', '%'.$search.'%')->orWhere('name_last', 'LIKE', '%'.$search.'%')->orWhere('name_initials', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%')->paginate(20);
         } else {
             $users = User::paginate(20);
         }
@@ -51,22 +46,22 @@ class MemberAdminController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+
     public function showDetails($id) {
         $user = User::find($id);
         return view('users.members.nested.details', ['user' => $user]);
     }
 
     /**
-     * Allows user to impersonate another user if user has root role.
+     * Allows impersonation of another user.
      *
      * @param $id
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     * @return mixed
      */
     public function impersonate($id) {
-        if(Auth::user()->can('admin')) {
-            $impersonator = Auth::id();
+        if(Auth::user()->hasRole('admin')) {
+            Session::put("impersonator", Auth::user()->id);
             Auth::loginUsingId($id);
-            Session::put('impersonator', $impersonator);
             return redirect('/');
         }else{
             return abort(403, 'You are not authorized to access this');
@@ -74,82 +69,63 @@ class MemberAdminController extends Controller
     }
 
     /**
-     * Allows user to return to own user when impersonating another user.
+     * Returns to the original user when impersonating.
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return mixed
      */
     public function quitImpersonating() {
-        if(Session::has('impersonator')) {
-            $impersonator = Session::get('impersonator');
-            Session::put('impersonator', NULL);
-            Auth::loginUsingId($impersonator);
-            return redirect('/');
+        if(Session::has("impersonator")) {
+            Auth::loginUsingId(Session::get("impersonator"));
+            Session::pull("impersonator");
+            return response()->redirectTo("/");
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Adds a member object to a user.
      *
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return mixed
      */
-    public function create()
-    {
-        //
+    public function addMembership($id) {
+        $user = User::find($id);
+
+        $member = new Member();
+
+        $member->primary_member = Input::get('primary_member');
+        $member->type = Input::get('type');
+        $member->fee_cycle = Input::get('fee_cycle');
+        $member->user_id = $user->id;
+
+        $member->save();
+
+        Session::flash("flash_message", "Membership added to user ".$user->name);
+
+        return redirect()->route('user::member::list');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Adds membership end date to member object.
+     * Member object will be removed by cron job on end date.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return mixed
      */
-    public function store(Request $request)
-    {
-        //
+    public function endMembership($id) {
+        $user = User::find($id);
+
+        if(!Input::get('date')) {
+            $endDate = null;
+            Session::flash("flash_message", "Membership end has been removed.");
+        }else{
+            Session::flash("flash_message", "Membership end date been added.");
+            $endDate = Input::get('date');
+        }
+        $user->member->till = $endDate;
+
+        $user->member->save();
+
+        return redirect()->route('user::member::list');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

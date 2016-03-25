@@ -44,9 +44,25 @@
                         <table class="table">
                             <tr>
                                 <td width="25%">Gender</td>
-                                <td>@if($user->member->gender == 1) <i
-                                            class="fa fa-mars"></i> @elseif($user->member->gender == 2)
-                                        <i class="fa fa-venus"></i> @endif</td>
+                                <td>@if($user->gender == 1)
+                                        Male
+                                    @elseif($user->gender == 2)
+                                        Female
+                                    @elseif($user->gender == 0)
+                                        Unknown
+                                    @elseif($user->gender == 9)
+                                        Not applicable
+                                    @else
+                                        Invalid gender value
+                                    @endif</td>
+                            </tr>
+                            <tr>
+                                <td>Member since</td>
+                                <td>{{ date('F j, Y', strtotime($user->member->created_at)) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Member until</td>
+                                <td>@if($user->member->till) <span style="color: red;">{{ date('F j, Y', strtotime($user->member->till)) }}</span> @else &mdash; @endif</td>
                             </tr>
                             <tr>
                                 <td>Member type</td>
@@ -68,7 +84,7 @@
 
     <div class="col clearfix">
 
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-4 col-xs-4">
             <div class="btn-group btn-group-justified" role="group">
                 <a class="btn btn-default" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
                     Dashboard
@@ -76,7 +92,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-4 col-xs-4">
             <div class="btn-group btn-group-justified" role="group">
                 <a class="btn btn-default" href="{{ route('user::profile', ['id' => $user->id]) }}">
                     Profile
@@ -84,6 +100,29 @@
             </div>
         </div>
 
+        <div class="col-md-4 col-xs-4">
+            <div class="btn-group btn-group-justified" role="group">
+                @if(!$user->member) <a class="btn btn-primary" data-toggle="modal" data-target="#addMembership">
+                    Make member
+                </a>
+                @elseif($user->member && !$user->member->till) <a class="btn btn-danger" data-toggle="modal"
+                                                                  data-target="#removeMembership">
+                    End membership
+                </a>
+                @else <a class="btn btn-danger" href="{{ route("user::member::remove", ['id' => $user->id]) }}">
+                    Reinstate membership
+                </a>
+                @endif
+            </div>
+        </div>
+
     </div>
 
 </div>
+
+
+<!-- Modal for adding membership to user -->
+@include("users.members.add")
+
+<!-- Modal for removing membership from user -->
+@include("users.members.remove")
