@@ -1,5 +1,9 @@
 @extends('website.layouts.default')
 
+@section('page-title')
+    Member Administration
+@endsection
+
 @section('content')
     <div class="col-md-5 col-xs-12">
         <div class="row">
