@@ -22,7 +22,7 @@
                         <div class="row">
                             <label for="type" class="col-sm-3 control-label">Member type</label>
                             <div class="col-sm-9">
-                                <select name="type" id="type">
+                                <select name="type" id="type" class="form-control">
                                     <option value="ORDINARY" selected="selected">Ordinary</option>
                                     <option value="ASSOCIATE">Associate</option>
                                     <option value="HONORARY">Honorary</option>
@@ -33,7 +33,7 @@
                         <div class="row">
                             <label for="fee_cycle" class="col-sm-3 control-label">Fee cycle</label>
                             <div class="col-sm-9">
-                                <select name="fee_cycle" id="fee_cycle">
+                                <select name="fee_cycle" id="fee_cycle" class="form-control">
                                     <option value="YEARLY" selected="selected">Yearly</option>
                                     <option value="FULLTIME">Fulltime</option>
                                 </select>
