@@ -29,6 +29,32 @@
                             <td>Student#</td>
                             <td>{{ $user->utwente_username }}</td>
                         </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td>@if($user->gender == 1)
+                                    Male
+                                @elseif($user->gender == 2)
+                                    Female
+                                @elseif($user->gender == 0)
+                                    Unknown
+                                @elseif($user->gender == 9)
+                                    Not applicable
+                                @else
+                                    Invalid gender value
+                                @endif</td>
+                        </tr>
+                        <tr>
+                            <td>Birth date</td>
+                            <td>{{ date('F j, Y', strtotime($user->birthdate)) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nationality</td>
+                            <td>{{ $user->nationality }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ $user->phone }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -43,21 +69,7 @@
                     <div class="panel-body">
                         <table class="table">
                             <tr>
-                                <td width="25%">Gender</td>
-                                <td>@if($user->gender == 1)
-                                        Male
-                                    @elseif($user->gender == 2)
-                                        Female
-                                    @elseif($user->gender == 0)
-                                        Unknown
-                                    @elseif($user->gender == 9)
-                                        Not applicable
-                                    @else
-                                        Invalid gender value
-                                    @endif</td>
-                            </tr>
-                            <tr>
-                                <td>Member since</td>
+                                <td width="25%">Member since</td>
                                 <td>{{ date('F j, Y', strtotime($user->member->created_at)) }}</td>
                             </tr>
                             <tr>
