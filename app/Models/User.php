@@ -111,14 +111,6 @@ class User extends Validatable implements AuthenticatableContract,
     }
 
     /**
-     * @return mixed The associated University of Twente details, if any.
-     */
-    public function utwente()
-    {
-        return $this->hasOne('Proto\Models\Utwente');
-    }
-
-    /**
      * @return mixed All associated studies, if any.
      */
     public function studies()
