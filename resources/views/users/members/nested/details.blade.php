@@ -6,9 +6,11 @@
             <span class="label label-danger">No member</span>
         @endif
         {{ $user->name }}
+        @if(Auth::user()->hasRole('admin'))
         <a href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
             <span class="pull-right label label-default">Impersonate</span>
         </a>
+        @endif
     </h3>
 </div>
 
