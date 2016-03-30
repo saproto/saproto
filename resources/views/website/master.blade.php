@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <title>{{ config('association.name') }} | @yield('page-title','Website')
+    <title>S.A. Proto | @yield('page-title','Default Page Title')
     </title>
 
     @include('website.layouts.assets.stylesheets')
