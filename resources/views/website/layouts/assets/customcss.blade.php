@@ -33,7 +33,7 @@
         background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
         background-size: cover;
         height: 400px;
-        border-bottom: 5px solid #d7df21;
+        border-bottom: 5px solid #C1FF00;
     }
     #header .container {
         color: #fff !important;
@@ -69,7 +69,7 @@
     }
 
     .green {
-        color: #d7df21 !important;
+        color: #C1FF00 !important;
     }
     .white {
         color: #fff !important;

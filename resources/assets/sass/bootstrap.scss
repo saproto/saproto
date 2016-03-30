@@ -1,10 +1,12 @@
 // Colors from http://paletton.com/#uid=72m0u0kvJuNjIBVp1wQxUoaDBiX
 
-$brand-primary: #d7df21;
-$brand-success: #99E502;
-$brand-info: #C50270;
-$brand-warning: #FF3838;
-$brand-danger: #C10000;
+$brand-primary: #C1FF00;
+$brand-success: #7FBA00;
+$brand-info: #7F38A9;
+$brand-warning: #C75600;
+$brand-danger: #C50005;
+
+$link-color: $brand-success;
 
 $navbar-default-bg: transparent;
 
@@ -14,7 +16,7 @@ $navbar-default-brand-hover-color: $navbar-default-brand-color;
 $navbar-default-color: #fff;
 
 $navbar-default-link-color: $navbar-default-color;
-$navbar-default-link-hover-color: $brand-primary;
+$navbar-default-link-hover-color: $brand-success;
 
 $navbar-default-link-active-bg: transparent;
 $navbar-default-link-active-color: #fff;

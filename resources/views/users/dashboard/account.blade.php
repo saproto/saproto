@@ -130,7 +130,7 @@
         <div class="panel-footer">
             <div class="btn-group btn-group-justified" role="group">
                 <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-success">
                         Update account
                     </button>
                 </div>

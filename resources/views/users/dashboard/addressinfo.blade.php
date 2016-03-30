@@ -32,7 +32,7 @@
                                 <div class="col-md-4 col-xs-4">
                                     <div class="btn-group btn-group-justified" role="group">
                                         <div class="btn-group" role="group">
-                                            <button class="btn btn-primary" disabled>
+                                            <button class="btn btn-success" disabled>
                                                 <i class="fa fa-star"></i>
                                             </button>
                                         </div>
@@ -102,7 +102,7 @@
     <div class="panel-footer">
         <div class="btn-group btn-group-justified" role="group">
             <div class="btn-group" role="group">
-                <a type="button" class="btn btn-primary" href="{{ route('user::address::add', ['id' => $user->id]) }}">
+                <a type="button" class="btn btn-success" href="{{ route('user::address::add', ['id' => $user->id]) }}">
                     Add another address
                 </a>
             </div>

@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ route('homepage') }}">{{ config("association.name") }}</a>
+            <a class="navbar-brand" href="{{ route('homepage') }}">Study Association Proto</a>
         </div>
 
         <!--
@@ -24,7 +24,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Administration <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ route("user::member::list") }}">Member Administration</a></li>
+                        <li><a href="{{ route("user::member::list") }}">User Administration</a></li>
                     </ul>
                 </li>
             @endif
@@ -38,7 +38,7 @@
                         <li><a href="{{ route('user::profile') }}">My Profile</a></li>
 
                         @if (Session::has('impersonator'))
-                            <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonating</a></li>
+                            <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>
                         @else
                             <li><a href="{{ route('login::logout') }}">Logout</a></li>
                         @endif
@@ -46,8 +46,8 @@
                 </li>
             @else
                 <form class="navbar-form navbar-right">
-                    <a class="btn btn-primary" href="{{ route('login::show') }}">
-                        <i class="fa fa-unlock-alt"></i>
+                    <a class="btn btn-success" href="{{ route('login::show') }}">
+                        LOG-IN
                     </a>
                 </form>
             @endif

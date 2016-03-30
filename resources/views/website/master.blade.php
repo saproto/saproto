@@ -41,14 +41,14 @@
                 <strong>
                     <span class="fa fa-home"></span>&nbsp;&nbsp;
                     <span class="org url" href="http://www.kick-in.nl/"><span
-                                class="green">{{ config('association.name') }}</span></span>
+                                class="green">S.A. Proto</span></span>
                 </strong>
                 <br>
                 <span class="adr">
-                    <span class="extended-address">{{ config('association.address_extra') }}</span><br>
-                    <span class="street-address">{{ config('association.address_street') }}</span><br>
-                    <span class="postal-code">{{ config('association.address_zip') }}</span>
-                    <span class="locality">{{ config('association.address_city') }}</span><br>
+                    <span class="extended-address">Zilverling A230</span><br>
+                    <span class="street-address">Drienerlolaan 5</span><br>
+                    <span class="postal-code">7522NB</span>
+                    <span class="locality">Enschede</span><br>
                 </span>
             </div>
             <div class="col-md-3 col-xs-6">
@@ -58,16 +58,16 @@
                     4423</a><br>
                 <span class="fa fa-paperclip"></span>&nbsp;&nbsp;
                 <a class="email white"
-                   href="mailto:{{ config('association.boardmail') }}">{{ config('association.boardmail') }}</a>
+                   href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
             </div>
             <div class="col-md-4 col-xs-6">
 
-                &copy; {{ date('Y') }} {{ config('association.name') }}. All rights reserved.<br>
+                &copy; {{ date('Y') }} S.A. Proto. All rights reserved.<br>
                 <sub>
-                    The codebase for this website has been created with ♥ by the folks of the <a
-                            href="https://www.saproto.nl/developers" target="_blank">Have You Tried Turning It Off And
+                    This website has been created with ♥ by the folks of the <a
+                            href="https://www.saproto.nl/developers" class="green" target="_blank">Have You Tried Turning It Off And
                         On Again committee</a> of Study Association Proto. The source is available on <a
-                            href="https://github.com/saproto/saproto" target="_blank">GitHub</a>.
+                            href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
                 </sub>
             </div>
             <div class="col-md-3 col-xs-6" style="text-align: right;">

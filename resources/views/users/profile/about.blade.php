@@ -48,11 +48,11 @@
     <div class="panel-footer">
         <div class="btn-group btn-group-justified">
             @if($user->member == null)
-                <a class="btn btn-warning">
-                    {{ $user->name_first }} is not a member of {{ config('association.name') }}.
+                <a class="btn btn-info">
+                    {{ $user->name_first }} is not a member of S.A. Proto.
                 </a>
             @else
-                <a class="btn btn-primary">
+                <a class="btn btn-success">
                     {{ $user->name_first }} is a member
                     @if(date('U', strtotime($user->member->created_at)) > 0)
                         as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
