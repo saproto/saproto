@@ -1,11 +1,11 @@
 @extends('website.layouts.panel')
 
 @section('page-title')
-    Authenticate
+    Authentication
 @endsection
 
 @section('panel-title')
-    {{ config('association.name') }} - Authenticate
+    Authentication
 @endsection
 
 @section('panel-body')
@@ -33,7 +33,7 @@
         @endsection
 
         @section('panel-footer')
-            <button type="submit" class="btn btn-success">Authenticate</button>
+            <button type="submit" class="btn btn-success">LOG-IN</button>
 
             <a class="btn btn-default pull-right" href="{{ route('login::resetpass') }}">Forgot your password?</a>
 

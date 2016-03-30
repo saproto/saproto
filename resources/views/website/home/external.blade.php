@@ -3,10 +3,10 @@
     <div class="container">
 
         <h1>
-            <strong>Welcome to {{ config('association.longname') }}</strong>
+            <strong>Welcome to Study Association Proto</strong>
         </h1>
         <h3>
-            {{ config('association.tagline') }}
+            S.A. Proto is the study association for Creative Technology at the University of Twente.
         </h3>
 
     </div>
