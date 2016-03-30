@@ -28,13 +28,17 @@ class AuthLoginEventHandler
     public function handle(User $user, $remember)
     {
         // We will grant the user all roles to which he is entitled!
-        foreach($user->committeesFilter('current') as $committee) {
-            switch($committee->slug) {
+        foreach ($user->committeesFilter('current') as $committee) {
+            switch ($committee->slug) {
                 case config('proto.rootcommittee'):
-                    $user->attachRole(Role::where('name', '=', 'admin')->first());
+                    if (!$user->hasRole('admin')) {
+                        $user->attachRole(Role::where('name', '=', 'admin')->first());
+                    }
                     break;
                 case config('proto.boardcommittee'):
-                    $user->attachRole(Role::where('name', '=', 'board')->first());
+                    if (!$user->hasRole('board')) {
+                        $user->attachRole(Role::where('name', '=', 'board')->first());
+                    }
                     break;
             }
         }
