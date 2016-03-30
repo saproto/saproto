@@ -22,8 +22,8 @@ class DevelopmentAccess
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -32,7 +32,7 @@ class DevelopmentAccess
 
         if (app()->environment() != 'production' && app()->environment() != 'staging' && $this->clientNotAllowed()) {
             config(['app.debug' => false]);
-            return abort(403, 'You cannot access the development environment from this IP. Try <a href="https://staging.saproto.nl/">staging</a> if you are interested.');
+            return abort(403, 'You cannot access the development environment from ' . request()->ip() . '. Try <a href="https://staging.saproto.nl/">staging</a> if you are interested.');
         }
         return $next($request);
     }
@@ -46,11 +46,11 @@ class DevelopmentAccess
     {
         $isAllowedIP = in_array(request()->ip(), $this->ipWhitelist);
 
-        if(!auth()->guest()) {
+        if (!auth()->guest()) {
             return false;
-        }elseif(auth()->guest() && $isAllowedIP) {
+        } elseif (auth()->guest() && $isAllowedIP) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
