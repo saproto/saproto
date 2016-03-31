@@ -72,7 +72,12 @@
                         <table class="table">
                             <tr>
                                 <td width="25%">Member since</td>
+                                @if(date('U', strtotime($user->member->created_at)) > 0)
                                 <td>{{ date('F j, Y', strtotime($user->member->created_at)) }}</td>
+                                @else
+                                <td>ancient times</td>
+                                @endif
+
                             </tr>
                             <tr>
                                 <td>Member until</td>
