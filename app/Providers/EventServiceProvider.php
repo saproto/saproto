@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Proto\Events\SomeEvent' => [
-            'Proto\Listeners\EventListener',
+        'auth.login' => [
+            'Proto\Handlers\Events\AuthLoginEventHandler',
         ],
     ];
 

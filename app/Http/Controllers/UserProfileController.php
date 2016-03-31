@@ -35,7 +35,15 @@ class UserProfileController extends Controller
             abort(404, "This user does not exist.");
         }
 
-        return view('users.profile.profile', ['user' => $user]);
+        $ldap = null;
+        if ($user->utwente_username) {
+            $data = json_decode(file_get_contents('http://www.proto.utwente.nl/ldap/search.php?query=uid=' . md5($user->utwente_username)));
+            if ($data->count > 0) {
+                $ldap = $data->entries[0];
+            }
+        }
+
+        return view('users.profile.profile', ['user' => $user, 'ldap' => $ldap]);
     }
 
 }
