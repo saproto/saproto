@@ -7,9 +7,9 @@
         @endif
         {{ $user->name }}
         @if(Auth::user()->hasRole('admin'))
-        <a href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
-            <span class="pull-right label label-default">Impersonate</span>
-        </a>
+            <a href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
+                <span class="pull-right label label-default">Impersonate</span>
+            </a>
         @endif
     </h3>
 </div>
@@ -73,15 +73,17 @@
                             <tr>
                                 <td width="25%">Member since</td>
                                 @if(date('U', strtotime($user->member->created_at)) > 0)
-                                <td>{{ date('F j, Y', strtotime($user->member->created_at)) }}</td>
+                                    <td>{{ date('F j, Y', strtotime($user->member->created_at)) }}</td>
                                 @else
-                                <td>ancient times</td>
+                                    <td>ancient times</td>
                                 @endif
 
                             </tr>
                             <tr>
                                 <td>Member until</td>
-                                <td>@if($user->member->till) <span style="color: red;">{{ date('F j, Y', strtotime($user->member->till)) }}</span> @else &mdash; @endif</td>
+                                <td>@if($user->member->till) <span
+                                            style="color: red;">{{ date('F j, Y', strtotime($user->member->till)) }}</span> @else &mdash; @endif
+                                </td>
                             </tr>
                             <tr>
                                 <td>Member type</td>
@@ -143,5 +145,5 @@
 <!-- Modal for adding membership to user -->
 @include("users.members.add")
 
-<!-- Modal for removing membership from user -->
+        <!-- Modal for removing membership from user -->
 @include("users.members.remove")
