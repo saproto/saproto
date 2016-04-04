@@ -97,6 +97,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Committees</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            @foreach($user->committees as $committee)
+                                <li class="list-group-item">
+                                    <strong>
+                                        {{ $committee->name }}
+                                    </strong>
+                                    @if($committee->pivot->edition != null)
+                                        {{ $committee->pivot->edition }}
+                                    @endif
+                                    <br>
+                                    <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
         @endif
     </div>
 </div>
@@ -145,5 +169,5 @@
 <!-- Modal for adding membership to user -->
 @include("users.members.add")
 
-        <!-- Modal for removing membership from user -->
+<!-- Modal for removing membership from user -->
 @include("users.members.remove")
