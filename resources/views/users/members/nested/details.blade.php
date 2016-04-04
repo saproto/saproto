@@ -104,6 +104,7 @@
                         <h3 class="panel-title">Committees</h3>
                     </div>
                     <div class="panel-body">
+                        @if(count($user->committees) > 0)
                         <ul class="list-group">
                             @foreach($user->committees as $committee)
                                 <li class="list-group-item">
@@ -118,6 +119,9 @@
                                 </li>
                             @endforeach
                         </ul>
+                        @else
+                        This member has never been in any committees.
+                        @endif
                     </div>
                 </div>
             </div>
