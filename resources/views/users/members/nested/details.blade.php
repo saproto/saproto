@@ -57,6 +57,30 @@
                             <td>Phone</td>
                             <td>{{ $user->phone }}</td>
                         </tr>
+                        @if(count($user->studies) > 0)
+                            <tr>
+                                <td>Studies</td>
+                                <td>
+
+                                    @foreach($user->studies as $study)
+                                        <p>
+                                            <strong>{{ $study->name }}</strong><br>
+                                            {{ $study->faculty }}
+
+                                            <br>
+
+                                            @if($study->pivot->till == null)
+                                                Since {{ date('d-m-Y',strtotime($study->pivot->created_at)) }}
+                                            @else
+                                                Between {{ date('d-m-Y',strtotime($study->pivot->created_at)) }}
+                                                and {{ date('d-m-Y',strtotime($study->pivot->till)) }}
+                                            @endif
+                                        </p>
+                                    @endforeach
+
+                                </td>
+                            </tr>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -105,22 +129,22 @@
                     </div>
                     <div class="panel-body">
                         @if(count($user->committees) > 0)
-                        <ul class="list-group">
-                            @foreach($user->committees as $committee)
-                                <li class="list-group-item">
-                                    <strong>
-                                        {{ $committee->name }}
-                                    </strong>
-                                    @if($committee->pivot->edition != null)
-                                        {{ $committee->pivot->edition }}
-                                    @endif
-                                    <br>
-                                    <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
-                                </li>
-                            @endforeach
-                        </ul>
+                            <ul class="list-group">
+                                @foreach($user->committees as $committee)
+                                    <li class="list-group-item">
+                                        <strong>
+                                            {{ $committee->name }}
+                                        </strong>
+                                        @if($committee->pivot->edition != null)
+                                            {{ $committee->pivot->edition }}
+                                        @endif
+                                        <br>
+                                        <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
+                                    </li>
+                                @endforeach
+                            </ul>
                         @else
-                        This member has never been in any committees.
+                            This member has never been in any committees.
                         @endif
                     </div>
                 </div>
@@ -173,5 +197,5 @@
 <!-- Modal for adding membership to user -->
 @include("users.members.add")
 
-<!-- Modal for removing membership from user -->
+        <!-- Modal for removing membership from user -->
 @include("users.members.remove")
