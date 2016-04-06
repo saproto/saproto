@@ -32,6 +32,11 @@ class CommitteeController extends Controller
     public function show($id)
     {
         $committee = Committee::find($id);
+
+        if (!$committee->public && (!Auth::check() || !Auth::user()->can('board'))) {
+            abort(404, "Committee $id not found.");
+        }
+
         $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
 
         foreach ($committee->users as $user) {

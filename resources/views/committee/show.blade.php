@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-8">
+        <div class="col-md-{{ (Auth::check() ? '8' : '8 col-md-offset-2') }}">
 
             <div id="container" class="committee-container">
                 {!! $committee->description !!}
@@ -22,53 +22,56 @@
 
         </div>
 
-        <div class="col-md-4">
+        @if(Auth::check())
 
-            @foreach($members['editions'] as $edition)
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{ $committee->name }} <strong>{{ $edition[0]->pivot->edition }}</strong>
-                    </div>
-                    <div class="panel-body">
-                        @foreach($edition as $i => $member)
-                            <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
-                            <br>
-                            {{ $member->pivot->role }}
-                            @if ($member->pivot->end)
-                                between {{ date('M \'y',strtotime($member->pivot->start)) }}
-                                and {{ date('M \'y',strtotime($member->pivot->end)) }}.
-                            @else
-                                since {{ date('M \'y',strtotime($member->pivot->start)) }}.
-                            @endif
-                            @if($i != count($edition) - 1)
-                                <hr class="committee-seperator">
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            @endforeach
+            <div class="col-md-4">
 
-            @if(count($members['members']['current']) > 0)
-                <div class="panel panel-default">
-                    <div class="panel-heading">Current members</strong>
+                @foreach($members['editions'] as $edition)
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{{ $committee->name }}
+                            <strong>{{ $edition[0]->pivot->edition }}</strong>
+                        </div>
+                        <div class="panel-body">
+                            @foreach($edition as $i => $member)
+                                <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
+                                <br>
+                                {{ $member->pivot->role }}
+                                @if ($member->pivot->end)
+                                    between {{ date('M \'y',strtotime($member->pivot->start)) }}
+                                    and {{ date('M \'y',strtotime($member->pivot->end)) }}.
+                                @else
+                                    since {{ date('M \'y',strtotime($member->pivot->start)) }}.
+                                @endif
+                                @if($i != count($edition) - 1)
+                                    <hr class="committee-seperator">
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        @foreach($members['members']['current'] as $i => $member)
-                            <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
-                            <br>
-                            {{ ($member->pivot->role ? $member->pivot->role : 'General Member') }}
-                            @if ($member->pivot->end)
-                                between {{ date('M \'y',strtotime($member->pivot->start)) }}
-                                and {{ date('M \'y',strtotime($member->pivot->end)) }}.
-                            @else
-                                since {{ date('M \'y',strtotime($member->pivot->start)) }}.
-                            @endif
-                            @if($i != count($members['members']['current']) - 1)
-                                <hr class="committee-seperator">
-                            @endif
-                        @endforeach
+                @endforeach
+
+                @if(count($members['members']['current']) > 0)
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Current members</strong>
+                        </div>
+                        <div class="panel-body">
+                            @foreach($members['members']['current'] as $i => $member)
+                                <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
+                                <br>
+                                {{ ($member->pivot->role ? $member->pivot->role : 'General Member') }}
+                                @if ($member->pivot->end)
+                                    between {{ date('M \'y',strtotime($member->pivot->start)) }}
+                                    and {{ date('M \'y',strtotime($member->pivot->end)) }}.
+                                @else
+                                    since {{ date('M \'y',strtotime($member->pivot->start)) }}.
+                                @endif
+                                @if($i != count($members['members']['current']) - 1)
+                                    <hr class="committee-seperator">
+                                @endif
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
 
                 @if(count($members['members']['past']) > 0)
                     <div class="panel panel-default">
@@ -93,7 +96,9 @@
                     </div>
                 @endif
 
-        </div>
+            </div>
+
+        @endif
 
     </div>
 

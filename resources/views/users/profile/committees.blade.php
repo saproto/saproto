@@ -5,12 +5,12 @@
     <ul class="list-group">
         @foreach($user->committeesFilter('current') as $committee)
             <li class="list-group-item">
+                {!! ($committee->public ? '<a href="' . route("committee::show", ["id" => $committee->id]) . '">' : '') !!}
                 <strong>
                     {{ $committee->name }}
                 </strong>
-                @if($committee->pivot->edition != null)
-                    {{ $committee->pivot->edition }}
-                @endif
+                {{ ($committee->pivot->edition ? $committee->pivot->edition : '') }}
+                {!! ($committee->public ? '</a>' : '') !!}
                 <br>
                 <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
             </li>
