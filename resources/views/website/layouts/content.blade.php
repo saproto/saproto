@@ -1,8 +1,6 @@
 @extends('website.master')
 
-@section('body')
-
-    @include('website.navigation.navbar')
+@section('header')
 
     <div id="header">
 
@@ -17,6 +15,14 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('body')
+
+    @include('website.navigation.navbar')
+
+    @yield('header')
 
     @yield('container')
 

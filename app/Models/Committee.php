@@ -26,4 +26,12 @@ class Committee extends Model
     public function helpedActivities() {
         return $this->hasMany('Proto\Models\Activity', 'committees_events')->withPivot(array('amount', 'id'))->withTimestamps();
     }
+
+    /**
+     * @return mixed All users associated with this committee.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
+    }
 }

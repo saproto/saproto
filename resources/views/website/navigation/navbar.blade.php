@@ -19,6 +19,15 @@
             The actual navbar contents with links to pages and tools and shit.
         //-->
         <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                   aria-expanded="false">Association <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ route("committee::list") }}">Committees</a></li>
+                </ul>
+            </li>
+
             @if (Auth::check() && Auth::user()->can("board"))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

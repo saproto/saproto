@@ -1,34 +1,44 @@
-<div id="header">
+@extends('website.layouts.content')
 
-    <div class="container">
+@section('header')
 
-        <h1>
-            <strong>Hi, {{ Auth::user()->name_first }}</strong>
-        </h1>
-        <h3>
-            Nice to see you back!
-        </h3>
+    <div id="header">
+
+        <div class="container">
+
+            <h1>
+                <strong>Hi, {{ Auth::user()->name_first }}</strong>
+            </h1>
+            <h3>
+                Nice to see you back!
+            </h3>
+
+        </div>
 
     </div>
 
-</div>
+@endsection
 
-<div id="container" class="container home-container">
+@section('container')
 
-    @if (Session::has('flash_message'))
-        <div class="alert alert-info alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
+    <div id="container" class="container home-container">
 
-    @foreach($errors->all() as $e)
-        <div class="alert alert-danger alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ $e }}
-        </div>
-    @endforeach
+        @if (Session::has('flash_message'))
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ Session::get('flash_message') }}
+            </div>
+        @endif
 
-    This is the landing page for members!
+        @foreach($errors->all() as $e)
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ $e }}
+            </div>
+        @endforeach
 
-</div>
+        This is the landing page for members!
+
+    </div>
+
+@endsection
