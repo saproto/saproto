@@ -26,9 +26,9 @@
 
                 </div>
 
-                <div class="panel-footer clearfix">
+                @if(Auth::check() && Auth::user()->can('board'))
 
-                    @if(Auth::check() && Auth::user()->can('board'))
+                    <div class="panel-footer clearfix">
                         <a href="{{ route("committee::toggle", ["id" => $committee->id]) }}"
                            class="btn btn-danger pull-right">
                             Hide / Show
@@ -38,9 +38,10 @@
                             Edit
                         </a>
                         <br>
-                    @endif
 
-                </div>
+                    </div>
+                    
+                @endif
 
             </div>
 
