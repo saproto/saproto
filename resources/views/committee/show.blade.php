@@ -28,7 +28,7 @@
 
                 <div class="panel-footer clearfix">
 
-                    @if(Auth::user()->can('board'))
+                    @if(Auth::check() && Auth::user()->can('board'))
                         <a href="{{ route("committee::toggle", ["id" => $committee->id]) }}"
                            class="btn btn-danger pull-right">
                             Hide / Show
