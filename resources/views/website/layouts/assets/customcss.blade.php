@@ -98,4 +98,17 @@
         border-width: 1px;
     }
 
+    .container-panel {
+        background-color: #fff;
+        box-shadow: 0 0 20px;
+    }
+
+    .container-panel .panel-header, .container-panel .panel-footer {
+        padding: 10px 50px;
+    }
+
+    .container-panel .panel-body {
+        padding: 50px;
+    }
+
 </style>

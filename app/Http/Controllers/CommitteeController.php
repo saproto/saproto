@@ -54,26 +54,7 @@ class CommitteeController extends Controller
         return view('committee.show', ['committee' => $committee, 'members' => $members]);
     }
 
-    public
-    function delete($id)
-    {
-        $committee = Committee::find($id);
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to delete a committee.");
-        }
-        if ($committee == null) {
-            abort(404, "Committee $id not found.");
-        }
-
-        Session::flash("flash_message", "The " . $committee->name . " has been deleted.");
-        $committee->delete();
-        return Redirect::route('committee::list', ['id' => $id]);
-    }
-
-
-    public
-    function add(Request $request)
+    public function add(Request $request)
     {
 
         if (!Auth::check() || !Auth::user()->can('board')) {
@@ -96,8 +77,7 @@ class CommitteeController extends Controller
 
     }
 
-    public
-    function edit($id, Request $request)
+    public function edit($id, Request $request)
     {
 
         $committee = Committee::find($id);
@@ -121,8 +101,7 @@ class CommitteeController extends Controller
 
     }
 
-    public
-    function addForm()
+    public function addForm()
     {
         if (!Auth::check() || !Auth::user()->can('board')) {
             abort(403, "You are not allowed to add a committee.");
@@ -131,8 +110,7 @@ class CommitteeController extends Controller
         return view('committee.edit', ['new' => true]);
     }
 
-    public
-    function editForm($id)
+    public function editForm($id)
     {
         $committee = Committee::find($id);
 
@@ -147,8 +125,7 @@ class CommitteeController extends Controller
         return view('committee.edit', ['new' => false, 'id' => $id, 'data' => $committee]);
     }
 
-    public
-    function toggleHidden($id, Request $request)
+    public function toggleHidden($id, Request $request)
     {
 
         $committee = Committee::find($id);

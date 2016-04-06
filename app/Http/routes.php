@@ -114,5 +114,5 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
     Route::get('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editForm']);
     Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
 
-    Route::get('{id}/delete', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@delete']);
+    Route::get('{id}/toggle', ['as' => 'toggle', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@toggleHidden']);
 });

@@ -10,14 +10,38 @@
 
         <div class="col-md-{{ (Auth::check() ? '8' : '8 col-md-offset-2') }}">
 
-            <div id="container" class="committee-container">
-                {!! $committee->description !!}
-                <hr>
-                If you want, you can e-mail them at
-                <a href="mailto:{{ $committee->slug }}@proto.utwente.nl">
-                    {{ $committee->slug }}@proto.utwente.nl
-                </a>
-                .
+            <div class="panel panel-default container-panel">
+
+                <div class="panel-body">
+
+                    {!! $committee->description !!}
+
+                    <hr>
+
+                    If you want, you can e-mail them at
+                    <a href="mailto:{{ $committee->slug }}@proto.utwente.nl">
+                        {{ $committee->slug }}@proto.utwente.nl
+                    </a>
+                    .
+
+                </div>
+
+                <div class="panel-footer clearfix">
+
+                    @if(Auth::user()->can('board'))
+                        <a href="{{ route("committee::toggle", ["id" => $committee->id]) }}"
+                           class="btn btn-danger pull-right">
+                            Hide / Show
+                        </a>
+                        &nbsp;
+                        <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-default">
+                            Edit
+                        </a>
+                        <br>
+                    @endif
+
+                </div>
+
             </div>
 
         </div>
@@ -25,6 +49,15 @@
         @if(Auth::check())
 
             <div class="col-md-4">
+
+                @if(!$committee->public)
+                    <div class="btn-group btn-group-justified">
+                        <a class="btn btn-info">
+                            This committee is hidden!
+                        </a>
+                    </div>
+                    <br>
+                @endif
 
                 @foreach($members['editions'] as $edition)
                     <div class="panel panel-default">
@@ -109,10 +142,6 @@
     @parent
 
     <style type="text/css">
-
-        .committee-container {
-            margin-top: 0 !important;
-        }
 
         .committee-seperator {
             margin: 10px 0;
