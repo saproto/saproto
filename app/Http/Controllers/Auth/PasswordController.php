@@ -28,4 +28,6 @@ class PasswordController extends Controller
     public function __construct()
     {
     }
+
+    protected $redirectTo = '/user/dashboard';
 }

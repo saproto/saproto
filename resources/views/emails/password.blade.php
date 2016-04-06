@@ -7,13 +7,13 @@
 </p>
 
 <p>
-    Click here to reset your password:
+    Click here (or copy/paste the URL in your browser) to reset your password:
     <br>
-    > {{ url('password/reset/'.$token) }}
+    <a href="{{ route("login::resetpass::token",['token' => $token]) }}">{{ route("login::resetpass::token",['token' => $token]) }}</a>
 </p>
 
 <p>
     Kind regards,
     <br>
-    The program responsible for sending your password reset links
+    The Have You Tried Turning It Off And On Again committee
 </p>
