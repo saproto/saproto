@@ -10,26 +10,27 @@
 
         @if($key % 3 == 0)
             <div class="row">
-        @endif
+                @endif
 
-        <div class="col-md-4 col-xs-6">
+                <div class="col-md-4 col-xs-6">
 
-            <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
-                <div class="committee">
-                    <div class="committee-name">
-                        {{ $committee->name }}
-                    </div>
-                    @if(!$committee->public)
-                        <div class="committee-hidden">
-                            <i class="fa fa-eye-slash"></i>
+                    <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
+                        <div class="committee"
+                             style="{{ ($committee->image ? "background-image: url(".route('file::get', ['id'=>$committee->image->id]).");" : '') }}">
+                            <div class="committee-name">
+                                {{ $committee->name }}
+                            </div>
+                            @if(!$committee->public)
+                                <div class="committee-hidden">
+                                    <i class="fa fa-eye-slash"></i>
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </a>
+
                 </div>
-            </a>
 
-        </div>
-
-        @if($key % 3 == 2)
+                @if($key % 3 == 2)
             </div>
         @endif
 
@@ -50,6 +51,8 @@
 
             background-color: #666;
             background: linear-gradient(to bottom right, #333, #666);
+            background-size: cover;
+            background-position: center center;
 
             margin-bottom: 30px;
         }
@@ -58,7 +61,7 @@
             position: absolute;
             bottom: 0;
 
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             color: #fff;
             padding: 10px 30px;
         }
@@ -82,6 +85,7 @@
 
             color: #fff;
         }
+
         .committee-hidden:hover {
             text-decoration: none;
         }

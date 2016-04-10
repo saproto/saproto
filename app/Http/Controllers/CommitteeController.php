@@ -4,8 +4,11 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 use PhpParser\Node\Expr\Cast\Object_;
+use Proto\Models\StorageEntry;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
@@ -91,6 +94,31 @@ class CommitteeController extends Controller
         $committee->save();
 
         Session::flash("flash_message", "Changes have been saved.");
+
+        return Redirect::route('committee::show', ['id' => $id]);
+
+    }
+
+    public function image($id, Request $request) {
+
+        $committee = Committee::find($id);
+
+        if (!Auth::check() || !Auth::user()->can('board')) {
+            abort(403, "You are not allowed to edit a committee.");
+        }
+
+        $image = $request->file('image');
+        $name = date('U') . "-" . mt_rand(1000,9999);
+        Storage::disk('local')->put($name,  File::get($image));
+
+        $file = new StorageEntry();
+        $file->mime = $image->getClientMimeType();
+        $file->original_filename = $image->getClientOriginalName();
+        $file->filename = $name;
+        $file->save();
+
+        $committee->image()->associate($file);
+        $committee->save();
 
         return Redirect::route('committee::show', ['id' => $id]);
 

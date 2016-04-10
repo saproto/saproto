@@ -1,10 +1,10 @@
 <?php
 
-namespace Proto;
+namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class StorageEntry extends Model
 {
     /**
      * The database table used by the model.
@@ -12,4 +12,8 @@ class File extends Model
      * @var string
      */
     protected $table = 'files';
+
+    public function committees() {
+        return $this->hasMany('Proto\Models\Committee');
+    }
 }

@@ -26,18 +26,17 @@
 
                     <div class="panel-footer clearfix">
                         <a href="{{ route("committee::show", ["id" => $committee->id]) }}"
-                           class="btn btn-default pull-right">
+                           class="btn btn-default">
                             Cancel
                         </a>
                         &nbsp;
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success pull-right">
                             Save
                         </button>
 
                     </div>
 
                 </div>
-
 
             </div>
 
@@ -76,6 +75,57 @@
 
     </div>
 
+    <div class="row">
+
+        <form method="post" action="{{ route("committee::image", ["id" => $committee->id]) }}" enctype="multipart/form-data">
+
+            {!! csrf_field() !!}
+
+            <div class="col-md-8">
+
+                <div class="panel panel-default container-panel">
+
+                    <div class="panel-body">
+
+                        @if($committee->image)
+
+                            <img src="{{ route('file::get', $committee->image->id) }}" width="100%;">
+
+                        @else
+                            <p style="text-align: center;">
+                                This committee has no banner image yet. Upload one now!
+                            </p>
+                        @endif
+
+                        <hr>
+
+                            <div class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label for="image" class="col-sm-4 control-label">New banner image</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="image" type="file" name="image">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                    </div>
+
+                    <div class="panel-footer clearfix">
+                        <button type="submit" class="btn btn-success pull-right">
+                            Replace committee image
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
 @endsection
 
 @section('javascript')
@@ -87,5 +137,21 @@
     <script>
         tinymce.init({selector: '#editor'});
     </script>
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+
+        @if($committee->image)
+        #header {
+            background-image: url('{{ route("file::get", ['id' => $committee->image->id]) }}');
+        }
+        @endif
+
+    </style>
 
 @endsection

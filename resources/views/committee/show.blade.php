@@ -141,6 +141,12 @@
             margin: 10px 0;
         }
 
+        @if($committee->image)
+        #header {
+            background-image: url('{{ route("file::get", ['id' => $committee->image->id]) }}');
+        }
+        @endif
+
     </style>
 
 @endsection

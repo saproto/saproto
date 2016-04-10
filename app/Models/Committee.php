@@ -35,5 +35,9 @@ class Committee extends Model
         return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
     }
 
+    public function image() {
+        return $this->belongsTo('Proto\Models\StorageEntry');
+    }
+
     protected $fillable = ['name', 'slug', 'description', 'public'];
 }
