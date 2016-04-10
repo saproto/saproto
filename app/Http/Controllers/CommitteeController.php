@@ -13,6 +13,8 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Committee;
+use Proto\Models\CommitteeMembership;
+use Proto\Models\User;
 
 use Auth;
 use Entrust;
@@ -40,21 +42,7 @@ class CommitteeController extends Controller
             abort(404, "Committee $id not found.");
         }
 
-        $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
-
-        foreach ($committee->users as $user) {
-            if ($user->pivot->edition) {
-                $members['editions'][$user->pivot->edition][] = $user;
-            } else {
-                if (!$user->pivot->end || date('U', strtotime($user->pivot->end)) > date('U')) {
-                    $members['members']['current'][] = $user;
-                } else {
-                    $members['members']['past'][] = $user;
-                }
-            }
-        }
-
-        return view('committee.show', ['committee' => $committee, 'members' => $members]);
+        return view('committee.show', ['committee' => $committee, 'members' => $committee->allmembers()]);
     }
 
     public function add(Request $request)
@@ -99,7 +87,8 @@ class CommitteeController extends Controller
 
     }
 
-    public function image($id, Request $request) {
+    public function image($id, Request $request)
+    {
 
         $committee = Committee::find($id);
 
@@ -108,17 +97,22 @@ class CommitteeController extends Controller
         }
 
         $image = $request->file('image');
-        $name = date('U') . "-" . mt_rand(1000,9999);
-        Storage::disk('local')->put($name,  File::get($image));
+        if ($image) {
+            $name = date('U') . "-" . mt_rand(1000, 9999);
+            Storage::disk('local')->put($name, File::get($image));
 
-        $file = new StorageEntry();
-        $file->mime = $image->getClientMimeType();
-        $file->original_filename = $image->getClientOriginalName();
-        $file->filename = $name;
-        $file->save();
+            $file = new StorageEntry();
+            $file->mime = $image->getClientMimeType();
+            $file->original_filename = $image->getClientOriginalName();
+            $file->filename = $name;
+            $file->save();
 
-        $committee->image()->associate($file);
-        $committee->save();
+            $committee->image()->associate($file);
+            $committee->save();
+        } else {
+            $committee->image()->dissociate();
+            $committee->save();
+        }
 
         return Redirect::route('committee::show', ['id' => $id]);
 
@@ -145,7 +139,7 @@ class CommitteeController extends Controller
             abort(403, "You are not allowed to edit a committee.");
         }
 
-        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee]);
+        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allmembers()]);
     }
 
     public function toggleHidden($id, Request $request)
@@ -165,6 +159,62 @@ class CommitteeController extends Controller
         $committee->save();
 
         Session::flash("flash_message", "The committee is now " . ($committee->public ? 'visible' : 'hidden') . ".");
+
+        return Redirect::back();
+
+    }
+
+    /**
+     * Committee membership tools below
+     */
+    public function addMembership(Request $request) {
+
+        if (!Auth::check() || !Auth::user()->can('board')) {
+            abort(403, "You are not allowed to edit a committee.");
+        }
+
+        $user = User::find($request->user_id);
+        $committee = Committee::find($request->committee_id);
+        if ($user == null) {
+            abort(404, "Member {$request->user_id} not found.");
+        }
+        if ($committee == null) {
+            abort(404, "Committee {$request->committee_id} not found.");
+        }
+
+        $data = $request->all();
+
+        if ($data['role'] == "") $data["role"] = null;
+        if ($data['edition'] == "") $data["edition"] = null;
+        if ($data['end'] == "") $data["end"] = null;
+
+        $membership = new CommitteeMembership();
+        if (!$membership->validate($data)) {
+            return Redirect::route('committee::edit', ['id' => $request->committee_id])->withErrors($membership->errors());
+        }
+        $membership->fill($data);
+
+        $membership->save();
+
+        return Redirect::back();
+
+    }
+
+    public function deleteMembership($id)
+    {
+
+        if (!Auth::check() || !Auth::user()->can('board')) {
+            abort(403, "You are not allowed to edit a committee.");
+        }
+
+        $membership = CommitteeMembership::find($id);
+        if ($membership == null) {
+            abort(404, "Membership $id not found.");
+        }
+
+        Session::flash("flash_message", "You have removed " . $membership->user->name . " from " . $membership->committee->name . ".");
+
+        $membership->delete();
 
         return Redirect::back();
 

@@ -12,7 +12,7 @@
                 {{ ($committee->pivot->edition ? $committee->pivot->edition : '') }}
                 {!! ($committee->public ? '</a>' : '') !!}
                 <br>
-                <sub>As {{$committee->pivot->role}} since {{$committee->pivot->start}}</sub>
+                <sub>As {{ ($committee->pivot->role ? $committee->pivot->role : 'General Member') }} since {{$committee->pivot->start}}</sub>
             </li>
         @endforeach
     </ul>

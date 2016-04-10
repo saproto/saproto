@@ -32,11 +32,31 @@ class Committee extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
     }
 
     public function image() {
         return $this->belongsTo('Proto\Models\StorageEntry');
+    }
+
+    public function allmembers() {
+
+        $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
+
+        foreach ($this->users as $user) {
+            if ($user->pivot->edition) {
+                $members['editions'][$user->pivot->edition][] = $user;
+            } else {
+                if (!$user->pivot->end || date('U', strtotime($user->pivot->end)) > date('U')) {
+                    $members['members']['current'][] = $user;
+                } else {
+                    $members['members']['past'][] = $user;
+                }
+            }
+        }
+
+        return $members;
+
     }
 
     protected $fillable = ['name', 'slug', 'description', 'public'];

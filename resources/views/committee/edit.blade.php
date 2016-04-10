@@ -6,124 +6,16 @@
 
 @section('content')
 
-    <div class="row">
+    <ul id="committee-tab" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab"
+                                                  class="white">Committee Info</a></li>
+        <li role="presentation"><a href="#members" aria-controls="members" role="tab" data-toggle="tab" class="white">Committee
+                Members</a></li>
+    </ul>
 
-        <form method="post" action="{{ route("committee::edit", ["id" => $committee->id]) }}">
-
-            {!! csrf_field() !!}
-
-            <div class="col-md-8">
-
-                <div class="panel panel-default container-panel">
-
-                    <div class="panel-body">
-
-                    <textarea id="editor" name="description">
-                        {!! $committee->description !!}
-                    </textarea>
-
-                    </div>
-
-                    <div class="panel-footer clearfix">
-                        <a href="{{ route("committee::show", ["id" => $committee->id]) }}"
-                           class="btn btn-default">
-                            Cancel
-                        </a>
-                        &nbsp;
-                        <button type="submit" class="btn btn-success pull-right">
-                            Save
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-4">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Committee properties
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="name">Committee name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                   value="{{ $committee->name }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="slug">Committee e-mail alias</label>
-                            <input type="text" class="form-control" id="slug" name="slug"
-                                   value="{{ $committee->slug }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="public">Committee visibility</label>
-                            <select class="form-control" id="public" name="public">
-                                <option value="0" {{ ($committee->public ? '' : 'selected') }}>Only visible to board
-                                </option>
-                                <option value="1" {{ ($committee->public ? 'selected' : '') }}>Visible to everyone
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </form>
-
-    </div>
-
-    <div class="row">
-
-        <form method="post" action="{{ route("committee::image", ["id" => $committee->id]) }}" enctype="multipart/form-data">
-
-            {!! csrf_field() !!}
-
-            <div class="col-md-8">
-
-                <div class="panel panel-default container-panel">
-
-                    <div class="panel-body">
-
-                        @if($committee->image)
-
-                            <img src="{{ route('file::get', $committee->image->id) }}" width="100%;">
-
-                        @else
-                            <p style="text-align: center;">
-                                This committee has no banner image yet. Upload one now!
-                            </p>
-                        @endif
-
-                        <hr>
-
-                            <div class="form-horizontal">
-
-                                <div class="form-group">
-                                    <label for="image" class="col-sm-4 control-label">New banner image</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="image" type="file" name="image">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                    </div>
-
-                    <div class="panel-footer clearfix">
-                        <button type="submit" class="btn btn-success pull-right">
-                            Replace committee image
-                        </button>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </form>
-
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="info">@include('committee.form-committee')</div>
+        <div role="tabpanel" class="tab-pane" id="members">@include('committee.form-members')</div>
     </div>
 
 @endsection
@@ -136,6 +28,31 @@
 
     <script>
         tinymce.init({selector: '#editor'});
+
+        $('#committee-tab a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+    </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script>
+        $("#member-name").autocomplete({
+            minLength: 3,
+            source: "{{ route("api::members") }}",
+            select: function (event, ui) {
+                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);;
+                $("#member-id").val(ui.item.id);
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>").append(item.name).appendTo(ul);
+        };
+        $("#member-clear").click(function() {
+            $("#member-name").val("").prop('disabled', false);;
+            $("#member-id").val("");
+        });
     </script>
 
 @endsection
@@ -145,6 +62,10 @@
     @parent
 
     <style type="text/css">
+
+        .committee-seperator {
+            margin: 10px 0;
+        }
 
         @if($committee->image)
         #header {

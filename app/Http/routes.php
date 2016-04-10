@@ -121,4 +121,17 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
     Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
 
     Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
+
+    Route::group(['prefix' => 'membership', 'as' => 'membership::'], function () {
+        Route::get('{id}/delete', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@deleteMembership']);
+        Route::get('{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editMembershipForm']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addMembership']);
+    });
+});
+
+/**
+ * Routes related to the API.
+ */
+Route::group(['prefix' => 'api', 'as' => 'api::'], function() {
+    Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
 });
