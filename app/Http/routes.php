@@ -101,7 +101,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
 });
 
 /*
- * Routes related to authentication.
+ * Routes related to committees.
  */
 Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
     Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
@@ -113,6 +113,4 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
 
     Route::get('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editForm']);
     Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
-
-    Route::get('{id}/toggle', ['as' => 'toggle', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@toggleHidden']);
 });

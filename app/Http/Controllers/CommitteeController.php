@@ -86,18 +86,13 @@ class CommitteeController extends Controller
             abort(403, "You are not allowed to edit a committee.");
         }
 
-        $committeedata = $request->all();
-
-        if (!$committeedata->validate($committeedata)) {
-            return Redirect::route('committee::view', ['id' => $id])->withErrors($committee->errors());
-        }
-        $committeedata->fill($committeedata);
+        $committee->fill($request->all());
 
         $committee->save();
 
         Session::flash("flash_message", "Changes have been saved.");
 
-        return Redirect::route('committee::view', ['id' => $id]);
+        return Redirect::route('committee::show', ['id' => $id]);
 
     }
 
@@ -122,7 +117,7 @@ class CommitteeController extends Controller
             abort(403, "You are not allowed to edit a committee.");
         }
 
-        return view('committee.edit', ['new' => false, 'id' => $id, 'data' => $committee]);
+        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee]);
     }
 
     public function toggleHidden($id, Request $request)

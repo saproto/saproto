@@ -29,18 +29,11 @@
                 @if(Auth::check() && Auth::user()->can('board'))
 
                     <div class="panel-footer clearfix">
-                        <a href="{{ route("committee::toggle", ["id" => $committee->id]) }}"
-                           class="btn btn-danger pull-right">
-                            Hide / Show
-                        </a>
-                        &nbsp;
                         <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-default">
                             Edit
                         </a>
-                        <br>
-
                     </div>
-                    
+
                 @endif
 
             </div>

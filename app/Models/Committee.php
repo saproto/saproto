@@ -34,4 +34,6 @@ class Committee extends Model
     {
         return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
     }
+
+    protected $fillable = ['name', 'slug', 'description', 'public'];
 }
