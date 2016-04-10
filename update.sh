@@ -5,6 +5,9 @@ echo "Starting update...";
 # Enable maintenance mode.
 php artisan down
 
+# Always clear the cache.
+php artisan cache:clear
+
 # Pull the new data.
 git pull
 
@@ -14,9 +17,6 @@ if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
 else
   composer install
 fi
-
-# Always clear the cache.
-php artisan cache:clear
 
 # Should we update permissions?
 if [ "$1" == --no-permissions ] || [ "$2" == --no-permissions ]; then
@@ -31,6 +31,18 @@ php artisan app:migrate --no-confirmation
 
 # Add necessary roles.
 php artisan app:generateroles
+
+# Fancy artisan stuff for the IDE.
+rm .phpstorm.meta.php
+rm _ide_helper.php
+rm _ide_helper_models.php
+
+php artisan ide-helper:generate
+php artisan ide-helper:models --nowrite
+php artisan ide-helper:meta
+
+# Optimize application.
+php artisan optimize
 
 # Disable maintenance mode.
 php artisan up
