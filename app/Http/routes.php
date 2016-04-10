@@ -99,6 +99,12 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::post('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
     });
 });
+/**
+ * Routes related to files.
+ */
+Route::group(['prefix' => 'file', 'as' => 'file::'], function() {
+    Route::get('{id}', ['as' => 'get', 'uses' => 'FileController@get']);
+});
 
 /*
  * Routes related to committees.
