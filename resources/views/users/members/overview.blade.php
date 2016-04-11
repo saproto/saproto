@@ -35,6 +35,11 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+
+    @parent
 
     <script>
         var currentQuery = "";
@@ -102,4 +107,5 @@
         initSearch();
         doSearch("", 0); // Start with an empty search, so list will be loaded with all members.
     </script>
+
 @endsection
