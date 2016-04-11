@@ -10,7 +10,8 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "laravelcollective/html": "5.1.*",
         "doctrine/dbal": "^2.5",
-        "zizaco/entrust": "dev-laravel-5"
+        "zizaco/entrust": "dev-laravel-5",
+        "s-ichikawa/laravel-sendgrid-driver": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

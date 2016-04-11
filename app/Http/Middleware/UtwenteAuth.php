@@ -42,8 +42,7 @@ class UtwenteAuth
             openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
 
             // Start CURL to secureAuth on WESP
-            $url = env('UTWENTEAUTH_SRV');
-            $ch = curl_init($url);
+            $ch = curl_init(env('UTWENTEAUTH_SRV'));
 
             // Tell CURL to post encrypted userData in base64
             curl_setopt($ch, CURLOPT_POST, 1);

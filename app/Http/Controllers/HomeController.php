@@ -14,6 +14,10 @@ class HomeController extends Controller
      */
     public function show()
     {
-        return view('website.home.home', ['foo'=>'bar']);
+        if(\Auth::check()) {
+            return view('website.home.members');
+        }else {
+            return view('website.home.external');
+        }
     }
 }

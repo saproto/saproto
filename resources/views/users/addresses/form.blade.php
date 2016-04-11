@@ -18,30 +18,35 @@
         <div class="form-group">
             <label for="number" class="col-sm-3 control-label">Number</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="number" name="number" placeholder="42" value="{{ (isset($address) ? $address->number : "") }}">
+                <input type="text" class="form-control" id="number" name="number" placeholder="42"
+                       value="{{ (isset($address) ? $address->number : "") }}">
             </div>
         </div>
         <div class="form-group">
             <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN" value="{{ (isset($address) ? $address->zipcode : "") }}">
+                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN"
+                       value="{{ (isset($address) ? $address->zipcode : "") }}">
             </div>
         </div>
         <div class="form-group">
             <label for="city" class="col-sm-3 control-label">City</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="city" name="city" placeholder="Sydney" value="{{ (isset($address) ? $address->city : "") }}">
+                <input type="text" class="form-control" id="city" name="city" placeholder="Sydney"
+                       value="{{ (isset($address) ? $address->city : "") }}">
             </div>
         </div>
         <div class="form-group">
             <label for="country" class="col-sm-3 control-label">Country</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="country" name="country" placeholder="Australia" value="{{ (isset($address) ? $address->country : "") }}">
+                <input type="text" class="form-control" id="country" name="country" placeholder="Australia"
+                       value="{{ (isset($address) ? $address->country : "") }}">
             </div>
         </div>
 
-        <button onClick="javascript:history.go(-1)" class="btn btn-default pull-right" style="width: 100px;">Cancel
-        </button>
+        <a href="{{ route("user::dashboard", ['id' => $user->id]) }}" class="btn btn-default pull-right" style="width: 100px;">
+            Cancel
+        </a>
         <button type="submit" class="btn btn-success pull-right" style="margin-right: 15px; width: 100px;">Save</button>
 
     </div>

@@ -14,7 +14,6 @@
 /*
  * The main route for the frontpage.
  */
-
 Route::get('/', ['as' => 'homepage', 'uses' => 'HomeController@show']);
 
 /*
@@ -25,7 +24,7 @@ Route::group(['as' => 'login::'], function () {
     Route::post('auth/login', ['middleware' => 'utwente.auth', 'as' => 'post', 'uses' => 'Auth\AuthController@postLogin']);
     Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
 
-    Route::get('password/reset/{token}', ['uses' => 'Auth\PasswordController@getReset']);
+    Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'Auth\PasswordController@getReset']);
     Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'Auth\PasswordController@postReset']);
 
     Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
@@ -36,19 +35,20 @@ Route::group(['as' => 'login::'], function () {
  * Routes related to user profiles.
  */
 Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
+
     /*
      * Routes related to members.
      */
-    Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'role:board|admin']], function () {
+    Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-        Route::get('impersonate', ['as' => 'impersonate', 'uses' => 'MemberAdminController@impersonate']);
+        Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:admin'], 'uses' => 'MemberAdminController@impersonate']);
 
         Route::post('add', ['as' => 'add', 'uses' => 'MemberAdminController@addMembership']);
         Route::post('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
         Route::get('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
     });
 
-    Route::group(['prefix' => 'members', 'as' => 'member::', 'middleware' => ['auth', 'role:board|admin']], function () {
+    Route::group(['prefix' => 'admin', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
         Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
     });
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     /*
      * Routes related to addresses.
      */
-    Route::group(['prefix' => '{id}/address', 'as' => 'address::', 'middleware' => ['auth']], function () {
+    Route::group(['prefix' => '{id}/address', 'as' => 'address::'], function () {
         Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
         Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
 
@@ -80,7 +80,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     /*
      * Routes related to bank accounts
      */
-    Route::group(['prefix' => '{id}/bank', 'as' => 'bank::', 'middleware' => ['auth']], function () {
+    Route::group(['prefix' => '{id}/bank', 'as' => 'bank::'], function () {
         Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
         Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
         Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
@@ -89,7 +89,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     /*
      * Routes related to bank accounts
      */
-    Route::group(['prefix' => '{id}/study', 'as' => 'study::', 'middleware' => ['auth']], function () {
+    Route::group(['prefix' => '{id}/study', 'as' => 'study::'], function () {
         Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
         Route::post('link', ['as' => 'add', 'uses' => 'StudyController@link']);
 
@@ -98,4 +98,40 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
         Route::post('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
     });
+});
+/**
+ * Routes related to files.
+ */
+Route::group(['prefix' => 'file', 'as' => 'file::'], function() {
+    Route::get('{id}', ['as' => 'get', 'uses' => 'FileController@get']);
+});
+
+/*
+ * Routes related to committees.
+ */
+Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
+    Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
+
+    Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addForm']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
+
+    Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
+
+    Route::get('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editForm']);
+    Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
+
+    Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
+
+    Route::group(['prefix' => 'membership', 'as' => 'membership::'], function () {
+        Route::get('{id}/delete', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@deleteMembership']);
+        Route::get('{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editMembershipForm']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addMembership']);
+    });
+});
+
+/**
+ * Routes related to the API.
+ */
+Route::group(['prefix' => 'api', 'as' => 'api::'], function() {
+    Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
 });
