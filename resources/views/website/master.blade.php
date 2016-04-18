@@ -80,6 +80,10 @@
     @include('website.layouts.assets.javascripts')
 @show
 
+@if($app->environment('staging'))
+    @include('website.stagingwarn')
+@endif
+
 </body>
 
 </html>
