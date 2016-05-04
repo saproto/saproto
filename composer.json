@@ -2,7 +2,7 @@
     "name": "saproto/saproto",
     "description": "S.A. Proto Web Application",
     "keywords": ["proto", "utwente", "association"],
-    "license": "CC-BY-NC-SA-4.0",
+    "license": "proprietary",
     "type": "project",
     "require": {
         "php": ">=5.5.9",
