@@ -1,51 +1,77 @@
 {
-    "name": "saproto/saproto",
-    "description": "S.A. Proto Web Application",
-    "keywords": ["proto", "utwente", "association"],
-    "license": "proprietary",
-    "type": "project",
-    "require": {
-        "php": ">=5.5.9",
-        "laravel/framework": "5.1.*",
-        "barryvdh/laravel-ide-helper": "^2.1",
-        "laravelcollective/html": "5.1.*",
-        "doctrine/dbal": "^2.5",
-        "zizaco/entrust": "dev-laravel-5",
-        "s-ichikawa/laravel-sendgrid-driver": "dev-master"
+  "name": "saproto/saproto",
+  "version": "1.0.0-alpha",
+  "description": "S.A. Proto Web Application",
+  "homepage": "https://www.saproto.nl",
+  "keywords": [
+    "proto",
+    "utwente",
+    "association"
+  ],
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Jonathan Juursema",
+      "email": "jonathan@proto.utwente.nl",
+      "homepage": "https://www.jonathanj.nl",
+      "role": "developer"
     },
-    "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1"
-    },
-    "autoload": {
-        "classmap": [
-            "database"
-        ],
-        "psr-4": {
-            "Proto\\": "app/"
-        }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "php artisan clear-compiled",
-            "php artisan optimize"
-        ],
-        "pre-update-cmd": [
-            "php artisan clear-compiled"
-        ],
-        "post-update-cmd": [
-            "php artisan optimize"
-        ],
-        "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "php artisan key:generate"
-        ]
-    },
-    "config": {
-        "preferred-install": "dist"
+    {
+      "name": "Thijs Dortmann",
+      "email": "thijs@proto.utwente.nl",
+      "homepage": "http://www.thzd.nl",
+      "role": "developer"
     }
+  ],
+  "support": {
+    "email": "haveyoutriedturningitoffandonagain@proto.utwente.nl",
+    "issues": "https://github.com/saproto/saproto/issues",
+    "irc": "irc://irc.snt.utwente.nl/saproto",
+    "source": "https://github.com/saproto/saproto"
+  },
+  "type": "project",
+  "require": {
+    "php": ">=5.5.9",
+    "laravel/framework": "5.1.*",
+    "barryvdh/laravel-ide-helper": "^2.1",
+    "laravelcollective/html": "5.1.*",
+    "doctrine/dbal": "^2.5",
+    "zizaco/entrust": "dev-laravel-5",
+    "s-ichikawa/laravel-sendgrid-driver": "dev-master"
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.4",
+    "mockery/mockery": "0.9.*",
+    "phpunit/phpunit": "~4.0",
+    "phpspec/phpspec": "~2.1"
+  },
+  "autoload": {
+    "classmap": [
+      "database"
+    ],
+    "psr-4": {
+      "Proto\\": "app/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php artisan clear-compiled",
+      "php artisan optimize"
+    ],
+    "pre-update-cmd": [
+      "php artisan clear-compiled"
+    ],
+    "post-update-cmd": [
+      "php artisan optimize"
+    ],
+    "post-root-package-install": [
+      "php -r \"copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": [
+      "php artisan key:generate"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist"
+  }
 }
