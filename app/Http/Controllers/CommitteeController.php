@@ -3,9 +3,6 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 
 use PhpParser\Node\Expr\Cast\Object_;
 use Proto\Models\StorageEntry;
@@ -98,14 +95,8 @@ class CommitteeController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            $name = date('U') . "-" . mt_rand(1000, 9999);
-            Storage::disk('local')->put($name, File::get($image));
-
             $file = new StorageEntry();
-            $file->mime = $image->getClientMimeType();
-            $file->original_filename = $image->getClientOriginalName();
-            $file->filename = $name;
-            $file->save();
+            $file->createFrom($image);
 
             $committee->image()->associate($file);
             $committee->save();
@@ -167,7 +158,8 @@ class CommitteeController extends Controller
     /**
      * Committee membership tools below
      */
-    public function addMembership(Request $request) {
+    public function addMembership(Request $request)
+    {
 
         if (!Auth::check() || !Auth::user()->can('board')) {
             abort(403, "You are not allowed to edit a committee.");
