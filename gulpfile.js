@@ -10,7 +10,8 @@ elixir(function (mix) {
             'jquery/dist/jquery.min.js',
             'moment/min/moment.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
-            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+            'js-cookie/src/js.cookie.js'
         ], './public/assets/vendor.js', bower)
 
         .styles([
