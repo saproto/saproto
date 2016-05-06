@@ -45,10 +45,6 @@ class CommitteeController extends Controller
     public function add(Request $request)
     {
 
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to add a committee.");
-        }
-
         $committee = new Committee();
 
         $committeedata = $request->all();
@@ -69,10 +65,6 @@ class CommitteeController extends Controller
     {
 
         $committee = Committee::find($id);
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
-        }
 
         $committee->fill($request->all());
 
@@ -111,9 +103,6 @@ class CommitteeController extends Controller
 
     public function addForm()
     {
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to add a committee.");
-        }
 
         return view('committee.edit', ['new' => true]);
     }
@@ -126,33 +115,7 @@ class CommitteeController extends Controller
             abort(404, "Committee $id not found.");
         }
 
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
-        }
-
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allmembers()]);
-    }
-
-    public function toggleHidden($id, Request $request)
-    {
-
-        $committee = Committee::find($id);
-
-        if ($committee == null) {
-            abort(404, "Committee $id not found.");
-        }
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
-        }
-
-        $committee->public = !$committee->public;
-        $committee->save();
-
-        Session::flash("flash_message", "The committee is now " . ($committee->public ? 'visible' : 'hidden') . ".");
-
-        return Redirect::back();
-
     }
 
     /**
@@ -160,10 +123,6 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
-        }
 
         $user = User::find($request->user_id);
         $committee = Committee::find($request->committee_id);
@@ -194,10 +153,6 @@ class CommitteeController extends Controller
 
     public function deleteMembership($id)
     {
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
-        }
 
         $membership = CommitteeMembership::find($id);
         if ($membership == null) {
