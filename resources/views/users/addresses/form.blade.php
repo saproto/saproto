@@ -12,35 +12,35 @@
             <label for="street" class="col-sm-3 control-label">Street</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way"
-                       value="{{ (isset($address) ? $address->street : "") }}">
+                       value="{{ $address->street or "" }}">
             </div>
         </div>
         <div class="form-group">
             <label for="number" class="col-sm-3 control-label">Number</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="number" name="number" placeholder="42"
-                       value="{{ (isset($address) ? $address->number : "") }}">
+                       value="{{ $address->number or "" }}">
             </div>
         </div>
         <div class="form-group">
             <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN"
-                       value="{{ (isset($address) ? $address->zipcode : "") }}">
+                       value="{{ $address->zipcode or "" }}">
             </div>
         </div>
         <div class="form-group">
             <label for="city" class="col-sm-3 control-label">City</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="city" name="city" placeholder="Sydney"
-                       value="{{ (isset($address) ? $address->city : "") }}">
+                       value="{{ $address->city or "" }}">
             </div>
         </div>
         <div class="form-group">
             <label for="country" class="col-sm-3 control-label">Country</label>
             <div class="col-sm-9">
                 <input type="text" class="form-control" id="country" name="country" placeholder="Australia"
-                       value="{{ (isset($address) ? $address->country : "") }}">
+                       value="{{ $address->country or "" }}">
             </div>
         </div>
 
