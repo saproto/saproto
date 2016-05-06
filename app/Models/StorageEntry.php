@@ -43,12 +43,4 @@ class StorageEntry extends Model
         $this->fillFrom($postFile);
         $this->save();
     }
-
-    /*
-     * We need all this relationships because other models would like to relate to a StorageEntry
-     */
-    public function committees()
-    {
-        return $this->hasMany('Proto\Models\Committee');
-    }
 }

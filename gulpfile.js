@@ -1,18 +1,25 @@
 var elixir = require('laravel-elixir');
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
+var bower = './resources/assets/bower/';
 
-require('laravel-elixir-bower');
+elixir(function (mix) {
+    mix
+        .sass('bootstrap.scss', 'public/assets/bootstrap.css')
 
-elixir(function(mix) {
-    mix.sass('bootstrap.scss').browserify('app.js');
+        .scripts([
+            'jquery/dist/jquery.min.js',
+            'moment/min/moment.min.js',
+            'bootstrap/dist/js/bootstrap.min.js',
+            'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'
+        ], './public/assets/vendor.js', bower)
+
+        .styles([
+            'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css',
+            'font-awesome/css/font-awesome.min.css'
+        ], './public/assets/vendor.css', bower)
+
+        .copy(
+            bower + 'font-awesome/fonts',
+            './public/fonts'
+        );
 });

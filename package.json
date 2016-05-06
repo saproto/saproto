@@ -2,7 +2,6 @@
   "dependencies": {
     "bootstrap-sass": "^3.0.0",
     "gulp": "^3.0.0",
-    "laravel-elixir": "^3.0.0",
-    "laravel-elixir-bower": "^0.1.0"
+    "laravel-elixir": "^3.0.0"
   }
 }

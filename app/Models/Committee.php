@@ -36,7 +36,7 @@ class Committee extends Model
     }
 
     public function image() {
-        return $this->belongsTo('Proto\Models\StorageEntry');
+        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
     public function allmembers() {
