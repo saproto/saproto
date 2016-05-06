@@ -1,4 +1,5 @@
 /vendor
+/resources/assets/bower
 /node_modules
 .env
 /.well-known
