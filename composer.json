@@ -37,7 +37,8 @@
     "laravelcollective/html": "5.1.*",
     "doctrine/dbal": "^2.5",
     "zizaco/entrust": "dev-laravel-5",
-    "s-ichikawa/laravel-sendgrid-driver": "dev-master"
+    "s-ichikawa/laravel-sendgrid-driver": "dev-master",
+    "nesbot/carbon": "^1.21"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

@@ -102,7 +102,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
 /**
  * Routes related to files.
  */
-Route::group(['prefix' => 'file', 'as' => 'file::'], function() {
+Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
     Route::get('{id}', ['as' => 'get', 'uses' => 'FileController@get']);
 });
 
@@ -129,9 +129,24 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
     });
 });
 
-/**
+/*
+ * Routes related to narrowcasting.
+ */
+Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
+    Route::get('/', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
+    Route::get('/list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
+    Route::get('/list.json', ['as' => 'api::list', 'uses' => 'NarrowcastingController@indexApi']);
+    Route::get('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
+    Route::post('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@edit']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
+    Route::get('/clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
+});
+
+/*
  * Routes related to the API.
  */
-Route::group(['prefix' => 'api', 'as' => 'api::'], function() {
+Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
 });

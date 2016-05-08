@@ -34,6 +34,7 @@
                        aria-expanded="false">Administration <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route("user::member::list") }}">User Administration</a></li>
+                        <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting Administration</a></li>
                     </ul>
                 </li>
             @endif
