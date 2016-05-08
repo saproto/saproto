@@ -22,5 +22,9 @@ elixir(function (mix) {
         .copy(
             bower + 'font-awesome/fonts',
             './public/fonts'
+        )
+        .copy(
+            bower + 'bootstrap/fonts',
+            './public/fonts/bootstrap'
         );
 });
