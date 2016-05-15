@@ -64,7 +64,7 @@ class MemberAdminController extends Controller
             Auth::loginUsingId($id);
             return redirect('/');
         }else{
-            return abort(403, 'You are not authorized to access this');
+            return abort(403);
         }
     }
 

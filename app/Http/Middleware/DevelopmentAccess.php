@@ -32,7 +32,7 @@ class DevelopmentAccess
 
         if (app()->environment() != 'production' && app()->environment() != 'staging' && $this->clientNotAllowed()) {
             config(['app.debug' => false]);
-            return abort(403, 'You cannot access the development environment from ' . request()->ip() . '. Try <a href="https://staging.saproto.nl/">staging</a> if you are interested.');
+            return abort(403);
         }
         return $next($request);
     }

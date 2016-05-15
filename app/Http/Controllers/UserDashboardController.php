@@ -32,11 +32,11 @@ class UserDashboardController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            abort(404, "This user does not exist.");
+            abort(404);
         }
 
         if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403, "You are unauthorized to access the dashboard for this user.");
+            abort(403);
         }
 
         return view('users.dashboard.dashboard', ['user' => $user]);
@@ -50,11 +50,11 @@ class UserDashboardController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            abort(404, "This user does not exist.");
+            abort(404);
         }
 
         if ($user->id != Auth::id() && !User::can('board')) {
-            abort(403, "You are unauthorized to edit this user.");
+            abort(403);
         }
 
         $userdata = array('email'=>$user->email);

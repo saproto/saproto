@@ -24,13 +24,13 @@ class BankController extends Controller
     {
         $user = User::find($id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add a bank account for " . $user->name . ".");
+            abort(403);
         }
         if ($user->bank != null) {
-            abort(500, "This user already has a bank account.");
+            abort(500);
         }
         return view('users.bankaccounts.addbank', ['user' => $user]);
     }
@@ -39,13 +39,13 @@ class BankController extends Controller
     {
         $user = User::find($id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot delete a bank account for " . $user->name . ".");
+            abort(403);
         }
         if ($user->bank == null) {
-            abort(500, "This user has no bank account.");
+            abort(500);
         }
         $user->bank->user_id = null;
         $user->bank->save();
@@ -60,11 +60,11 @@ class BankController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add a bank account for " . $user->name . ".");
+            abort(403);
         }
 
         // Establish new bank

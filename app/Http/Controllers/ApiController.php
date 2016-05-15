@@ -19,7 +19,7 @@ class ApiController extends Controller
 
 
         if (!Auth::check() || !Auth::user()->member) {
-            abort(403, "You are not authorized to access this information.");
+            abort(403);
         }
 
         $users = User::all();

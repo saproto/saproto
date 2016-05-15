@@ -25,10 +25,10 @@ class AddressController extends Controller
     {
         $user = User::find($id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add an address for this user.");
+            abort(403);
         }
         return view('users.addresses.add', ['user' => $user]);
     }
@@ -37,17 +37,17 @@ class AddressController extends Controller
     {
         $user = User::find($id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot delete an address for this user.");
+            abort(403);
         }
         $address = Address::find($address_id);
         if ($address == null) {
-            abort(404, "Address $address_id not found.");
+            abort(404);
         }
         if ($address->is_primary && $user->member != null) {
-            abort(404, "Cannot delete primary address of a member.");
+            abort(404);
         }
         $address->delete();
         Session::flash("flash_message", "Your address has been deleted.");
@@ -58,14 +58,14 @@ class AddressController extends Controller
     {
         $user = User::find($id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot update primary address for this user.");
+            abort(403);
         }
         $address = Address::find($address_id);
         if ($address == null) {
-            abort(404, "Address $address_id not found.");
+            abort(404);
         }
         foreach ($user->address as $address) {
             if ($address->id != $address_id) {
@@ -85,11 +85,11 @@ class AddressController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot add an address for this user.");
+            abort(403);
         }
 
         // Establish new address
@@ -127,15 +127,15 @@ class AddressController extends Controller
         $user = $address->user;
 
         if ($address == null) {
-            abort(404, "Address $address_id not found.");
+            abort(404);
         }
 
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot edit an address for this user.");
+            abort(403);
         }
 
         $addressdata = $request->all();
@@ -157,14 +157,14 @@ class AddressController extends Controller
     {
         $address = Address::find($address_id);
         if ($address == null) {
-            abort(404, "Address $id not found.");
+            abort(404);
         }
         $user = $address->user;
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot edit an address for this user.");
+            abort(403);
         }
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
     }
@@ -175,11 +175,11 @@ class AddressController extends Controller
         $user = User::find($id);
 
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot toggle address visibility for this user.");
+            abort(403);
         }
 
         $user->address_visible = !$user->address_visible;

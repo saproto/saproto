@@ -19,6 +19,6 @@ class Member
         if (Auth::check() && Auth::user()->member != null) {
             return $next($request);
         }
-        abort(403, "You need to be a member to see this page.");
+        abort(403);
     }
 }
