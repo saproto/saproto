@@ -36,7 +36,7 @@ class CommitteeController extends Controller
         $committee = Committee::find($id);
 
         if (!$committee->public && (!Auth::check() || !Auth::user()->can('board'))) {
-            abort(404, "Committee $id not found.");
+            abort(404);
         }
 
         return view('committee.show', ['committee' => $committee, 'members' => $committee->allmembers()]);
@@ -82,7 +82,7 @@ class CommitteeController extends Controller
         $committee = Committee::find($id);
 
         if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403, "You are not allowed to edit a committee.");
+            abort(403);
         }
 
         $image = $request->file('image');
@@ -112,7 +112,7 @@ class CommitteeController extends Controller
         $committee = Committee::find($id);
 
         if ($committee == null) {
-            abort(404, "Committee $id not found.");
+            abort(404);
         }
 
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allmembers()]);
@@ -127,10 +127,26 @@ class CommitteeController extends Controller
         $user = User::find($request->user_id);
         $committee = Committee::find($request->committee_id);
         if ($user == null) {
-            abort(404, "Member {$request->user_id} not found.");
+            abort(404);
         }
         if ($committee == null) {
-            abort(404, "Committee {$request->committee_id} not found.");
+            abort(404);
+        }
+
+        if ($committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
+
+            Session::flash("flash_message", "This committee is protected. You cannot add members to this committee if you are not in it.");
+
+            return Redirect::back();
+
+        }
+
+        if ($user->id == Auth::id() && !Auth::user()->can('admin')) {
+
+            Session::flash("flash_message", "You cannot add yourself to a committee. Please ask someone else to do so.");
+
+            return Redirect::back();
+
         }
 
         $data = $request->all();
@@ -147,6 +163,8 @@ class CommitteeController extends Controller
 
         $membership->save();
 
+        Session::flash("flash_message", "You have added " . $membership->user->name . " to " . $membership->committee->name . ".");
+
         return Redirect::back();
 
     }
@@ -156,7 +174,23 @@ class CommitteeController extends Controller
 
         $membership = CommitteeMembership::find($id);
         if ($membership == null) {
-            abort(404, "Membership $id not found.");
+            abort(404);
+        }
+
+        if ($membership->committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
+
+            Session::flash("flash_message", "This committee is protected. You cannot delete members from this committee if you are not in it.");
+
+            return Redirect::back();
+
+        }
+
+        if ($membership->user->id == Auth::id() && !Auth::user()->can('admin')) {
+
+            Session::flash("flash_message", "You cannot remove yourself from a committee. Please ask someone else to do so.");
+
+            return Redirect::back();
+
         }
 
         Session::flash("flash_message", "You have removed " . $membership->user->name . " from " . $membership->committee->name . ".");
