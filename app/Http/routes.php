@@ -89,14 +89,14 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     /*
      * Routes related to bank accounts
      */
-    Route::group(['prefix' => '{id}/study', 'as' => 'study::'], function () {
+    Route::group(['prefix' => '{user_id}/study', 'as' => 'study::'], function () {
         Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
         Route::post('link', ['as' => 'add', 'uses' => 'StudyController@link']);
 
-        Route::post('unlink/{study_id}', ['as' => 'delete', 'uses' => 'StudyController@unlink']);
+        Route::get('unlink/{link_id}', ['as' => 'delete', 'uses' => 'StudyController@unlink']);
 
-        Route::get('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
-        Route::post('edit/{study_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
+        Route::get('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
+        Route::post('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
     });
 });
 /**

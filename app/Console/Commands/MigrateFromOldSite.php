@@ -126,7 +126,7 @@ class MigrateFromOldSite extends Command
                     'studylinks' => ($member['utwente_study'] != '' ? array(
                         'study_id' => $studyid,
                         'user_id' => $this->laraveldb->real_escape_string($member['member_id']),
-                        'created_at' => "'" . $member['utwente_study_since'] . '-09-01' . "'"
+                        'start' => strtotime($member['utwente_study_since'] . '-09-01')
                     ) : false)
                 );
             }

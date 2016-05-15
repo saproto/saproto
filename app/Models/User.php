@@ -115,12 +115,12 @@ class User extends Validatable implements AuthenticatableContract,
      */
     public function studies()
     {
-        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot('till')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('start', 'end', 'id'))->withTimestamps();
     }
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_start', 'asc');
     }
 
     public function committeesFilter($filter = null)

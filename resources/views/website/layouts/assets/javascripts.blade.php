@@ -19,18 +19,5 @@
             }
         });
 
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
-            },
-            format: 'DD-MM-YYYY HH:mm'
-        });
-
     });
 </script>

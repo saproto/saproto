@@ -13,6 +13,6 @@ class Study extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'studies_users')->withPivot('till')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'studies_users')->withPivot(array('id', 'start', 'end'))->withTimestamps();
     }
 }

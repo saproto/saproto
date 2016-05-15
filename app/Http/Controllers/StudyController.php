@@ -9,6 +9,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Study;
+use Proto\Models\StudyEntry;
 use Proto\Models\User;
 
 use Auth;
@@ -20,109 +21,108 @@ use Redirect;
 class StudyController extends Controller
 {
 
-    public function linkForm($id)
+    public function linkForm($user_id)
     {
-        $user = User::find($id);
+        $user = User::find($user_id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot link a study for " . $user->name . ".");
+            abort(403);
         }
-        return view('users.study.link', ['user' => $user, 'studies' => Study::all()]);
+        return view('users.study.edit', ['link' => null, 'user' => $user, 'studies' => Study::all()]);
     }
 
-    public function editLinkForm($id, $study_id)
+    public function editLinkForm($user_id, $link_id)
     {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404, "Member $id not found.");
+        $link = StudyEntry::find($link_id);
+        if ($link == null) {
+            abort(404);
         }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot link a study for " . $user->name . ".");
+        if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403);
         }
-        $study = Study::find($study_id);
-        if ($study == null) {
-            abort(404, "Study $id not found.");
-        }
-        if (!$user->studies->contains($study_id)) {
-            abort(500, $user->name . " is not linked to " . $study->name . ".");
-        }
-        return view('users.study.edit', ['user' => $user, 'study' => $user->studies()->find($study_id)]);
+        return view('users.study.edit', ['link' => $link, 'user' => $link->user]);
     }
 
-    public function link($id, Request $request)
+    public function link($user_id, Request $request)
     {
-        if ($request->input("start") == "") {
-            abort(500, "The start date is required.");
-        }
 
-        $user = User::find($id);
+        $user = User::find($user_id);
         if ($user == null) {
-            abort(404, "Member $id not found.");
+            abort(404);
         }
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot link a study for " . $user->name . ".");
+            abort(403);
+        }
+
+        $start = null;
+        if (($time = strtotime($request->input("start"))) === false) {
+            abort(500);
+        } else {
+            $start = $time;
+        }
+
+        $end = null;
+        if ($request->input('end') != "" && strtotime($request->input("end")) === false) {
+            abort(500);
+        } else {
+            $time = strtotime($request->input("end"));
+            $end = $time;
         }
 
         $study = Study::find($request->input("study"));
         if ($study == null) {
-            abort(404, "Study $id not found.");
-        }
-        if ($user->studies->contains($study->id)) {
-            abort(500, $user->name . " is already linked to " . $study->name . ".");
+            abort(404);
         }
 
-        $user->studies()->attach($study->id, ['created_at' => $request->input("start"), 'till' => ($request->input("end") == "" ? null : $request->input("end"))]);
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        $user->studies()->attach($study->id, ['end' => $end, 'start' => $start, 'user_id' => $user->id, 'study_id' => $study->id]);
+        return Redirect::route('user::dashboard', ['id' => $user->id]);
     }
 
-    public function editLink($id, $study_id, Request $request) {
-        if ($request->input("start") == "") {
-            abort(500, "The start date is required.");
-        }
-
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404, "Member $id not found.");
-        }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot unlink a study for " . $user->name . ".");
-        }
-
-        $study = Study::find($study_id);
-        if ($study == null) {
-            abort(404, "Study $id not found.");
-        }
-        if (!$user->studies->contains($study_id)) {
-            abort(500, $user->name . " is not linked to " . $study->name . ".");
-        }
-
-        $study = $user->studies->find($study->id);
-        $study->pivot->created_at = $request->input("start");
-        $study->pivot->till = ($request->input("end") == '' ? null : $request->input("end"));
-        $study->pivot->save();
-        return Redirect::route('user::dashboard', ['id' => $id]);
-    }
-
-    public function unlink($id, $study_id)
+    public function editLink($user_id, $link_id, Request $request)
     {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404, "Member $id not found.");
+        $link = StudyEntry::find($link_id);
+        if (!$link) {
+            abort(404);
         }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403, "You cannot unlink a study for " . $user->name . ".");
+        if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403);
         }
-        $study = Study::find($study_id);
-        if ($study == null) {
-            abort(404, "Study $id not found.");
+
+        $start = null;
+        if (($time = strtotime($request->input("start"))) === false) {
+            abort(500);
+        } else {
+            $start = $time;
         }
-        if (!$user->studies->contains($study_id)) {
-            abort(500, $user->name . " is not linked to " . $study->name . ".");
+
+        $end = null;
+        if ($request->input('end') != "" && strtotime($request->input("end")) === false) {
+            abort(500);
+        } else {
+            $time = strtotime($request->input("end"));
+            $end = $time;
         }
-        $user->studies()->detach($study->id);
-        return Redirect::route('user::dashboard', ['id' => $id]);
+
+        $link->start = $start;
+        $link->end = $end;
+        $link->save();
+
+        return Redirect::route('user::dashboard', ['id' => $link->user->id]);
+    }
+
+    public function unlink($user_id, $link_id)
+    {
+        $link = StudyEntry::find($link_id);
+        if ($link == null) {
+            abort(404);
+        }
+        if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+            abort(403);
+        }
+        $link->delete();
+        return Redirect::route('user::dashboard', ['id' => $link->user->id]);
     }
 
 }

@@ -22,11 +22,11 @@
 
                             <br>
 
-                            @if($study->pivot->till == null)
-                                Since {{ date('d-m-Y',strtotime($study->pivot->created_at)) }}
+                            @if($study->pivot->end == null)
+                                Since {{ date('d-m-Y',$study->pivot->start) }}
                             @else
-                                Between {{ date('d-m-Y',strtotime($study->pivot->created_at)) }}
-                                and {{ date('d-m-Y',strtotime($study->pivot->till)) }}
+                                Between {{ date('d-m-Y',$study->pivot->start) }}
+                                and {{ date('d-m-Y',$study->pivot->end) }}
                             @endif
 
                         </p>
@@ -40,22 +40,17 @@
                             <div class="col-md-6">
                                 <div class="btn-group-justified btn-group" role="group">
                                     <a type="button" class="btn btn-default"
-                                       href="{{ route("user::study::edit", ["id" => $user->id, "study_id" => $study->id]) }}"><i
+                                       href="{{ route("user::study::edit", ["user_id" =>$user->id ,"link_id" => $study->pivot->id]) }}"><i
                                                 class="fa fa-pencil"></i></a>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <form method="POST"
-                                      action="{{ route('user::study::delete', ['study_id' => $study->id, 'id' => $user->id]) }}">
-                                    {!! csrf_field() !!}
-                                    <div class="btn-group btn-group-justified" role="group">
-                                        <div class="btn-group" role="group">
-                                            <button type="submit" class="btn btn-danger"><i
-                                                        class="fa fa-trash-o"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <div class="btn-group btn-group-justified" role="group">
+                                    <a type="button" class="btn btn-danger"
+                                       href="{{ route('user::study::delete', ['link_id' => $study->pivot->id, 'user_id' => $user->id]) }}"><i
+                                                class="fa fa-trash-o"></i></a>
+                                </div>
                             </div>
 
                         </div>
