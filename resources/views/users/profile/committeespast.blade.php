@@ -11,8 +11,12 @@
                 </strong>
                 {{ ($committee->pivot->edition ? $committee->pivot->edition : '') }}
                 {!! ($committee->public ? '</a>' : '') !!}
+
+                ({{ ($committee->pivot->role ? $committee->pivot->role : 'General Member') }})
                 <br>
-                <sub>As {{ ($committee->pivot->role ? $committee->pivot->role : 'General Member') }} since {{$committee->pivot->start}}</sub>
+                <sub>
+                    Between {{date('j F Y', $committee->pivot->start)}} and {{date('j F Y', $committee->pivot->end)}}.
+                </sub>
             </li>
         @endforeach
     </ul>

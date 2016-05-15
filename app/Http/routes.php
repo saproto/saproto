@@ -122,10 +122,11 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
 
     Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
 
-    Route::group(['prefix' => 'membership', 'as' => 'membership::'], function () {
-        Route::get('{id}/delete', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@deleteMembership']);
-        Route::get('{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@editMembershipForm']);
-        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addMembership']);
+    Route::group(['prefix' => 'membership', 'as' => 'membership::', 'middleware' => ['auth', 'permission:board']], function () {
+        Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
+        Route::get('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembershipForm']);
+        Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
+        Route::post('add', ['as' => 'add', 'uses' => 'CommitteeController@addMembership']);
     });
 });
 

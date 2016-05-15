@@ -142,8 +142,8 @@ class MigrateFromOldSite extends Command
                     'committee_id' => $committeeparticipation['wordpress_id'],
                     'role' => ($committeeparticipation['role'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($committeeparticipation['role']) . "'"),
                     'edition' => ($committeeparticipation['edition'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($committeeparticipation['edition']) . "'"),
-                    'start' => "'" . $committeeparticipation['enroll_start'] . "'",
-                    'end' => ($committeeparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : "'" . $committeeparticipation['enroll_end'] . "'")
+                    'start' => strtotime($committeeparticipation['enroll_start']),
+                    'end' => ($committeeparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : strtotime($committeeparticipation['enroll_end']))
                 );
             }
 
@@ -154,8 +154,8 @@ class MigrateFromOldSite extends Command
                     'committee_id' => $societyparticipation['wordpress_id'],
                     'role' => ($societyparticipation['role'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($societyparticipation['role']) . "'"),
                     'edition' => ($societyparticipation['edition'] == '' ? 'NULL' : "'" . $this->laraveldb->real_escape_string($societyparticipation['edition']) . "'"),
-                    'start' => "'" . $societyparticipation['enroll_start'] . "'",
-                    'end' => ($societyparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : "'" . $societyparticipation['enroll_end'] . "'")
+                    'start' => strtotime($societyparticipation['enroll_start']),
+                    'end' => ($societyparticipation['enroll_end'] == '2999-12-31' ? 'NULL' : strtotime($societyparticipation['enroll_end']))
                 );
             }
 

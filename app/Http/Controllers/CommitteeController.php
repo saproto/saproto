@@ -66,13 +66,21 @@ class CommitteeController extends Controller
 
         $committee = Committee::find($id);
 
+        if ($committee->slug == config('proto.rootcommittee') && $request->slug != $committee->slug) {
+
+            Session::flash("flash_message", "This committee is protected. You cannot change it's e-mail alias.");
+
+            return Redirect::back();
+
+        }
+
         $committee->fill($request->all());
 
         $committee->save();
 
         Session::flash("flash_message", "Changes have been saved.");
 
-        return Redirect::route('committee::show', ['id' => $id]);
+        return Redirect::route('committee::edit', ['id' => $id]);
 
     }
 
@@ -153,7 +161,16 @@ class CommitteeController extends Controller
 
         if ($data['role'] == "") $data["role"] = null;
         if ($data['edition'] == "") $data["edition"] = null;
-        if ($data['end'] == "") $data["end"] = null;
+        if ($data['end'] == "") {
+            $data["end"] = null;
+        } else {
+            if (($data["end"] = strtotime($data["end"])) === false) {
+                abort(500);
+            }
+        }
+        if (($data["start"] = strtotime($data["start"])) === false) {
+            abort(500);
+        }
 
         $membership = new CommitteeMembership();
         if (!$membership->validate($data)) {
@@ -166,6 +183,43 @@ class CommitteeController extends Controller
         Session::flash("flash_message", "You have added " . $membership->user->name . " to " . $membership->committee->name . ".");
 
         return Redirect::back();
+
+    }
+
+    public function editMembershipForm($id)
+    {
+
+        $membership = CommitteeMembership::find($id);
+        if (!$membership) {
+            abort(404);
+        }
+
+        return view("committee.membership-edit", ["membership" => $membership]);
+
+    }
+
+    public function editMembership($id, Request $request)
+    {
+
+        $membership = CommitteeMembership::find($id);
+        if (!$membership) {
+            abort(404);
+        }
+
+        $membership->role = $request->role;
+        $membership->edition = $request->edition;
+        if (($membership->start = strtotime($request->start)) === false) {
+            Session::flash("flash_message", "Ill-formatted start date.");
+            return Redirect::back();
+        }
+        if (($membership->end = strtotime($request->end)) === false) {
+            Session::flash("flash_message", "Ill-formatted start date.");
+            return Redirect::back();
+        }
+
+        $membership->save();
+
+        return Redirect::route("committee::edit", ["id" => $membership->committee->id]);
 
     }
 
@@ -195,9 +249,11 @@ class CommitteeController extends Controller
 
         Session::flash("flash_message", "You have removed " . $membership->user->name . " from " . $membership->committee->name . ".");
 
+        $committee_id = $membership->committee->id;
+
         $membership->delete();
 
-        return Redirect::back();
+        return Redirect::route("committee::edit", ["id" => $committee_id]);
 
     }
 

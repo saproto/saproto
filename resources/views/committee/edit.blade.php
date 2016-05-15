@@ -6,16 +6,22 @@
 
 @section('content')
 
-    <ul id="committee-tab" class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#info" aria-controls="info" role="tab" data-toggle="tab"
-                                                  class="white">Committee Info</a></li>
-        <li role="presentation"><a href="#members" aria-controls="members" role="tab" data-toggle="tab" class="white">Committee
-                Members</a></li>
-    </ul>
+    <div class="row">
 
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="info">@include('committee.form-committee')</div>
-        <div role="tabpanel" class="tab-pane" id="members">@include('committee.form-members')</div>
+        <div class="col-md-7">
+
+            @include('committee.form-members')
+
+            @include('committee.form-committee')
+
+        </div>
+
+        <div class="col-md-5">
+
+            @include('committee.members-list')
+
+        </div>
+
     </div>
 
 @endsection
@@ -42,16 +48,33 @@
             minLength: 3,
             source: "{{ route("api::members") }}",
             select: function (event, ui) {
-                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);;
+                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
+                ;
                 $("#member-id").val(ui.item.id);
                 return false;
             }
         }).autocomplete("instance")._renderItem = function (ul, item) {
             return $("<li>").append(item.name).appendTo(ul);
         };
-        $("#member-clear").click(function() {
-            $("#member-name").val("").prop('disabled', false);;
+        $("#member-clear").click(function () {
+            $("#member-name").val("").prop('disabled', false);
+            ;
             $("#member-id").val("");
+        });
+    </script>
+
+    <script type="text/javascript">
+        // Initializes datetimepickers for consistent options
+        $('.datetime-picker').datetimepicker({
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-arrow-up",
+                down: "fa fa-arrow-down",
+                next: "fa fa-chevron-right",
+                previous: "fa fa-chevron-left"
+            },
+            format: 'DD-MM-YYYY'
         });
     </script>
 

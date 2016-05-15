@@ -32,8 +32,8 @@ class CommitteeMembership extends Validatable
     protected $rules = array(
         'user_id' => 'required|integer',
         'committee_id' => 'required|integer',
-        'start' => 'required|date',
-        'end' => 'date',
+        'start' => 'required|integer',
+        'end' => 'integer',
         'role' => 'string',
         'edition' => 'string'
     );

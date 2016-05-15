@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ (Auth::check() ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ (Auth::check() ? '7' : '6 col-md-offset-6') }}">
 
             <div class="panel panel-default container-panel">
 
@@ -42,7 +42,7 @@
 
         @if(Auth::check())
 
-            <div class="col-md-4">
+            <div class="col-md-5">
 
                 @if(!$committee->public)
                     <div class="btn-group btn-group-justified">
