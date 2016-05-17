@@ -112,34 +112,9 @@
         padding: 50px;
     }
 
-    .nav-tabs {
-        border: none !important;
-        padding-left: 20px;
-    }
-    .nav-tabs li {
-        background: none;
-        border: none !important;
-    }
-    .nav-tabs li:hover, .nav-tabs li.active, .nav-tabs li {
-        margin-bottom: 0 !important;
-        border: none !important;
-    }
-    .nav-tabs li.active a {
-        background-color: #fff;
-        color: #000000 !important;
-        border: none !important;
-        text-shadow: none;
-    }
-    .nav-tabs li a {
-        border: none !important;
-        text-shadow: 0 0 10px #000;
-        transition: all 0.1s;
-    }
-    .nav-tabs li a:hover {
-        background-color: #333 !important;
-        color: #fff !important;
-        border: none !important;
-        text-shadow: none;
+    .navbar-title, .navbar-title:hover, .navbar-title:active {
+        background-color: transparent !important;
+        font-style: italic;
     }
 
 </style>

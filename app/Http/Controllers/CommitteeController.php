@@ -47,17 +47,12 @@ class CommitteeController extends Controller
 
         $committee = new Committee();
 
-        $committeedata = $request->all();
-        if (!$committee->validate($committeedata)) {
-            return Redirect::route('committee::add', ['id' => $id])->withErrors($committee->errors());
-        }
-        $committee->fill($committeedata);
-
+        $committee->fill($request->all());
         $committee->save();
 
-        Session::flash("flash_message", "The committee has been added.");
+        Session::flash("flash_message", "Your new committee has been added!");
 
-        return Redirect::route('committee::view', ['id' => $committee->id]);
+        return Redirect::route('committee::show', ['id' => $committee->id]);
 
     }
 
@@ -80,7 +75,7 @@ class CommitteeController extends Controller
 
         Session::flash("flash_message", "Changes have been saved.");
 
-        return Redirect::route('committee::edit', ['id' => $id]);
+        return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
 
     }
 
@@ -88,10 +83,6 @@ class CommitteeController extends Controller
     {
 
         $committee = Committee::find($id);
-
-        if (!Auth::check() || !Auth::user()->can('board')) {
-            abort(403);
-        }
 
         $image = $request->file('image');
         if ($image) {
@@ -111,7 +102,6 @@ class CommitteeController extends Controller
 
     public function addForm()
     {
-
         return view('committee.edit', ['new' => true]);
     }
 
@@ -212,8 +202,8 @@ class CommitteeController extends Controller
             Session::flash("flash_message", "Ill-formatted start date.");
             return Redirect::back();
         }
-        if (($membership->end = strtotime($request->end)) === false) {
-            Session::flash("flash_message", "Ill-formatted start date.");
+        if ($request->end != "" && ($membership->end = strtotime($request->end)) === false) {
+            Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
         }
 

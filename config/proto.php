@@ -28,4 +28,15 @@ return [
 
     'boardcommittee' => 'association-board',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Primary e-mail domain
+    |--------------------------------------------------------------------------
+    |
+    | This domain will be prefixed to e-mail slugs in order to complete e-mail addresses.
+    |
+    */
+
+    'emaildomain' => 'proto.utwente.nl',
+
 ];

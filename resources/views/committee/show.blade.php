@@ -19,10 +19,9 @@
                     <hr>
 
                     If you want, you can e-mail them at
-                    <a href="mailto:{{ $committee->slug }}@proto.utwente.nl">
-                        {{ $committee->slug }}@proto.utwente.nl
-                    </a>
-                    .
+                    <a href="mailto:{{ $committee->slug . "@" . config('proto.emaildomain') }}">
+                        {{ $committee->slug . "@" . config('proto.emaildomain') }}
+                    </a>.
 
                 </div>
 

@@ -1,14 +1,18 @@
 @extends('website.layouts.default-nobg')
 
 @section('page-title')
-    Edit: {{ $committee->name }}
+    @if($new)
+        Create new committee
+    @else
+        Edit: {{ $committee->name }}
+    @endif
 @endsection
 
 @section('content')
 
     <div class="row">
 
-        <div class="col-md-7">
+        <div class="{{ ($new ? 'col-md-6 col-md-offset-3' : 'col-md-7') }}">
 
             @include('committee.form-members')
 
@@ -16,11 +20,15 @@
 
         </div>
 
-        <div class="col-md-5">
+        @if(!$new)
 
-            @include('committee.members-list')
+            <div class="col-md-5">
 
-        </div>
+                @include('committee.members-list')
+
+            </div>
+
+        @endif
 
     </div>
 
@@ -90,8 +98,8 @@
             margin: 10px 0;
         }
 
-        @if($committee->image)
-        #header {
+        @if(!$new && $committee->image)
+            #header {
             background-image: url('{{ route("file::get", ['id' => $committee->image->id]) }}');
         }
         @endif
