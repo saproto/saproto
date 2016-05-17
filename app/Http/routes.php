@@ -150,6 +150,20 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
 });
 
 /*
+ * Routes related to narrowcasting.
+ */
+Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
+
+    Route::get('/', ['as' => 'list', 'uses' => 'StudyController@index']);
+    Route::get('/add', ['as' => 'add', 'uses' => 'StudyController@create']);
+    Route::post('/add', ['as' => 'add', 'uses' => 'StudyController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
+
+});
+
+/*
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {

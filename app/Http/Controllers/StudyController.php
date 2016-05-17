@@ -21,6 +21,71 @@ use Redirect;
 class StudyController extends Controller
 {
 
+    public function index()
+    {
+        $studies = Study::all();
+        return view('study.list', ['studies' => $studies]);
+    }
+
+    public function create()
+    {
+        return view('study.edit', ['new' => true]);
+    }
+
+    public function store(Request $request)
+    {
+        $study = new Study($request->all());
+        if ($request->has('utwente')) {
+            $study->utwente = true;
+        } else {
+            $study->utwente = false;
+        }
+        $study->save();
+        Session::flash('flash_message', "Study '" . $study->name . "' has been created.");
+        return Redirect::route("study::list");
+    }
+
+    public function edit($id)
+    {
+        $study = Study::find($id);
+        if (!$study) {
+            abort(404);
+        }
+        return view('study.edit', ['new' => false, 'study' => $study]);
+    }
+
+    public function update($id, Request $request)
+    {
+        $study = Study::find($id);
+        if (!$study) {
+            abort(404);
+        }
+        $study->fill($request->all());
+        if ($request->has('utwente')) {
+            $study->utwente = true;
+        } else {
+            $study->utwente = false;
+        }
+        $study->save();
+        Session::flash('flash_message', "Study '" . $study->name . "' has been updated.");
+        return Redirect::route("study::list");
+    }
+
+    public function destroy($id)
+    {
+        $study = Study::find($id);
+        if (!$study) {
+            abort(404);
+        }
+        if (count($study->users) > 0) {
+            Session::flash('flash_message', "Study '" . $study->name . "' has users associated with it. You cannot remove it.");
+            return Redirect::route("study::list");
+        }
+        Session::flash('flash_message', "Study '" . $study->name . "' has been removed.");
+        $study->delete();
+        return Redirect::route("study::list");
+    }
+
     public function linkForm($user_id)
     {
         $user = User::find($user_id);

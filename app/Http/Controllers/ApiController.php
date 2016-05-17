@@ -39,4 +39,10 @@ class ApiController extends Controller
 
     }
 
+    public function train(Request $request) {
+
+        return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=".$_GET['station']));
+
+    }
+
 }
