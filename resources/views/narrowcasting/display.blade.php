@@ -46,24 +46,40 @@
             background-size: cover;
             background-position: center center;
             transition: transform 2s;
-            transform: translate(0,0);
+            transform: translate(0, 0);
         }
+
         .slide.old {
             transform: translate(0, 100%);
         }
+
         .slide.new {
             transform: translate(0, -100%);
         }
 
-        #protologo img {
+        #protologo {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            background-color: rgba(0, 0, 0, 0.8);
-            border-radius: 8px;
-            padding: 20px;
-            opacity: 0.8;
+            top: 0;
+            height: 50px;
+            left: 0;
+            right: 0;
+        }
+        #protologo div {
+            height: 50px;
+            line-height: 55px;
+
+            margin: -10px auto 0 auto;
+            width: 400px;
+
+            color: #fff;
+            background-color: #000000;
+
+            opacity: 0.5;
+            text-align: center;
+            font-size: 20px;
+            text-shadow: 0 0 5px #000;
+
+            border-radius: 5px;
         }
 
     </style>
@@ -81,7 +97,9 @@
 </div>
 
 <div id="protologo">
-    <img src="{{ asset('images/logo/inverse.png') }}">
+    <div>
+        Study Association Proto
+    </div>
 </div>
 
 @include('website.layouts.assets.javascripts')
