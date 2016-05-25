@@ -43,4 +43,22 @@ class StorageEntry extends Model
         $this->fillFrom($postFile);
         $this->save();
     }
+
+    public function createFromUrl($url)
+    {
+
+        $file = File::getRemote($url);
+        if ($file === false) {
+            return false;
+        }
+
+        $name = date('U') . "-" . mt_rand(1000, 9999);
+        Storage::disk('local')->put($name, $file);
+
+        $this->mime = $file->getClientMimeType();
+        $this->original_filename = $file->getClientOriginalName();
+        $this->filename = $name;
+        $this->save();
+
+    }
 }

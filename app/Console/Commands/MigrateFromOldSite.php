@@ -13,7 +13,7 @@ class MigrateFromOldSite extends Command
      *
      * @var string
      */
-    protected $signature = 'app:migrate {--no-confirmation : Skips the confirmation questions.}';
+    protected $signature = 'proto:migrate {--no-confirmation : Skips the confirmation questions.}';
 
     /**
      * The console command description.
@@ -83,6 +83,7 @@ class MigrateFromOldSite extends Command
                         'email' => "'" . $this->laraveldb->real_escape_string($member['contact_email']) . "'",
                         'password' => "'correct horse battery staple'",
                         'utwente_username' => ($member['utwente_relation'] == 1 ? "'" . $this->laraveldb->real_escape_string($member['utwente_username']) . "'" : 'NULL'),
+                        'proto_username' => "'" . $this->laraveldb->real_escape_string($member['proto_username']) . "'",
                         'name_first' => "'" . $this->laraveldb->real_escape_string($member['name_first']) . "'",
                         'name_last' => "'" . $this->laraveldb->real_escape_string($member['name_last']) . "'",
                         'name_initials' => "'" . $this->laraveldb->real_escape_string($member['name_initials']) . "'",

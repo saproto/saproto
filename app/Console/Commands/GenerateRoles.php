@@ -17,7 +17,7 @@ class GenerateRoles extends Command
      *
      * @var string
      */
-    protected $signature = 'app:generateroles';
+    protected $signature = 'proto:generateroles';
 
     /**
      * The console command description.

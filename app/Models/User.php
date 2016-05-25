@@ -103,6 +103,13 @@ class User extends Validatable implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed The profile picture of this user.
+     */
+    public function image() {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+    }
+
+    /**
      * @return mixed The associated addresses, if any.
      */
     public function address()

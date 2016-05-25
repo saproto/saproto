@@ -27,10 +27,10 @@ fi
 
 # Do migrations.
 php artisan migrate
-php artisan app:migrate --no-confirmation
+php artisan proto:migrate --no-confirmation
 
 # Add necessary roles.
-php artisan app:generateroles
+php artisan proto:generateroles
 
 # Fancy artisan stuff for the IDE.
 rm .phpstorm.meta.php
