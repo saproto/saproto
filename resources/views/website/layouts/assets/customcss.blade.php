@@ -1,4 +1,5 @@
 <!-- Extra style //-->
+
 <style type="text/css">
 
     html, body {
@@ -11,20 +12,23 @@
     }
 
     #main {
-        overflow:auto;
-        padding-bottom:120px; /* this needs to be bigger than footer height*/
+        overflow: auto;
+        padding-bottom: 120px; /* this needs to be bigger than footer height*/
     }
 
     #navbar {
         transition: all 0.5s;
 
     }
+
     .navbar-scroll {
         background-color: #222;
     }
+
     #navbar {
         text-shadow: 0 0 5px #000;
     }
+
     #navbar .dropdown-menu {
         text-shadow: none;
     }
@@ -35,6 +39,7 @@
         height: 400px;
         border-bottom: 5px solid #C1FF00;
     }
+
     #header .container {
         color: #fff !important;
         padding-top: 100px;
@@ -48,9 +53,11 @@
         padding: 50px;
         box-shadow: 0 0 20px;
     }
+
     #container.home-container {
         margin-top: 50px;
     }
+
     #container.container-nobg {
         background-color: transparent;
         box-shadow: none;
@@ -61,8 +68,8 @@
         position: relative;
         margin-top: -120px;
         height: 120px;
-        clear:both;
-        padding-top:20px;
+        clear: both;
+        padding-top: 20px;
 
         background-color: #111;
         color: #fff;
@@ -71,17 +78,41 @@
     .green {
         color: #C1FF00 !important;
     }
+
     .white {
         color: #fff !important;
     }
+
     .gray {
         color: #333 !important;
     }
+
     .dark {
         background-color: #333 !important;
     }
+
     .light {
         background-color: #fafafa !important;
+    }
+
+    .member {
+        height: 40px;
+        line-height: 30px;
+        padding: 5px 20px 5px 5px;
+        text-align: left;
+    }
+    .member:nth-child(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    .member-picture {
+        width: 30px;
+        height: 30px;
+        background-size: cover;
+        background-position: center center;
+        float: left;
+        background-color: #333;
+        border-radius: 15px;
+        margin-right: 10px;
     }
 
 </style>
@@ -96,6 +127,7 @@
     .panel {
         border-width: 0;
     }
+
     .panel .panel {
         border-width: 1px;
     }
@@ -141,8 +173,9 @@
 
         transition: all 0.2s;
     }
+
     .ui-menu-item:hover {
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgba(0, 0, 0, 0.1);
         cursor: pointer;
     }
 

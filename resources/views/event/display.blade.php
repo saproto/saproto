@@ -54,8 +54,12 @@
 
                                     <div class="panel-body">
 
-                                        @foreach($event->activity->helpingUsers($committee->id) as $user)
-
+                                        @foreach($event->activity->helpingUsers($committee) as $user)
+                                            <div class="member">
+                                                <div class="member-picture"
+                                                     style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
+                                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                            </div>
                                         @endforeach
 
                                     </div>
@@ -87,19 +91,27 @@
                     </div>
 
                     <div class="panel-body" id="event-description">
-                        @if (date('U') > $event->activity->registration_start && date('U') < $event->activity->registration_start)
+                        @if (date('U') < $event->activity->registration_start)
                             <p style="text-align: center;">
                                 Open between {{ date('M d, H:i', $event->activity->registration_start) }}
                                 and {{ date('M d, H:i', $event->activity->registration_end) }}.
                             </p>
-                        @else
+                        @elseif (date('U') < $event->activity->registration_end)
                             <p style="text-align: center;">
                                 Sign-up closes {{ date('M d, H:i', $event->activity->registration_end) }}.
+                            </p>
+                        @else
+                            <p style="text-align: center;">
+                                Sign-up closed.
                             </p>
                         @endif
                         <hr>
                         @foreach($event->activity->users as $user)
-                            <p>{{ $user->name }}</p>
+                            <div class="member">
+                                <div class="member-picture"
+                                     style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
+                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                            </div>
                         @endforeach
                     </div>
 

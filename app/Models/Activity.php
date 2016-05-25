@@ -37,6 +37,7 @@ class Activity extends Model
     /**
      * @param Committee|null $committee The committee of which to retrieve the helping users. If null, returns all helping users.
      * @return array The list of helping users.
+     * TODO Doesn't work yet. :(
      */
     public function helpingUsers(Committee $committee = null) {
         $u = array();
