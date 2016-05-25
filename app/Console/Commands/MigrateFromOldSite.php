@@ -204,8 +204,8 @@ class MigrateFromOldSite extends Command
                     'id' => $eventcounter,
                     'title' => "'" . $this->laraveldb->real_escape_string($event->summary) . "'",
                     'description' => "'" . $this->laraveldb->real_escape_string(property_exists($event, "description") ? $event->description : "No description.") . "'",
-                    'start' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime((property_exists($event->start, "dateTime") ? $event->start->dateTime : $event->start->date)))) . "'",
-                    'end' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime((property_exists($event->end, "dateTime") ? $event->end->dateTime : $event->end->date)))) . "'",
+                    'start' => strtotime((property_exists($event->start, "dateTime") ? $event->start->dateTime : $event->start->date)),
+                    'end' => strtotime((property_exists($event->end, "dateTime") ? $event->end->dateTime : $event->end->date)),
                     'location' => "'" . $this->laraveldb->real_escape_string(property_exists($event, "location") ? $event->location : "Location unknown or no location.") . "'",
                     'created_at' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime($event->created))) . "'",
                     'updated_at' => "'" . $this->laraveldb->real_escape_string(date("Y-m-d H:i:s", strtotime($event->updated))) . "'"
@@ -235,6 +235,10 @@ class MigrateFromOldSite extends Command
                     'created_at' => "'" . $activity['post_date_gmt'] . "'",
                     'updated_at' => "'" . $activity['post_modified_gmt'] . "'"
                 );
+
+                if ($activities[$activity['id']]['data']['event_id'] != 'NULL') {
+                    $events[$activities[$activity['id']]['data']['event_id']]['data']['description'] = "'" . $this->laraveldb->real_escape_string(nl2br(preg_replace("/[\r\n]+/", "\n", $activity['post_content']))) . "'";
+                }
 
                 $activitiesmetaquery = $this->legacydb->query("SELECT * FROM wp_postmeta WHERE post_id = " . $activity['id']);
                 $activityregstart = array('date' => null, 'time' => null);
@@ -283,8 +287,8 @@ class MigrateFromOldSite extends Command
                     }
                 }
 
-                $activities[$activity['id']]['data']['registration_start'] = "'" . date("Y-m-d H:i:s", strtotime($activityregstart['date'] . " " . $activityregstart['time'])) . "'";
-                $activities[$activity['id']]['data']['registration_end'] = "'" . date("Y-m-d H:i:s", strtotime($activityregend['date'] . " " . $activityregend['time'])) . "'";
+                $activities[$activity['id']]['data']['registration_start'] = strtotime($activityregstart['date'] . " " . $activityregstart['time']) + 0;
+                $activities[$activity['id']]['data']['registration_end'] = strtotime($activityregend['date'] . " " . $activityregend['time']) + 0;
             }
 
             if (!$this->legacydb->select_db("admin_members")) {

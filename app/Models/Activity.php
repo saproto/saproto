@@ -23,8 +23,8 @@ class Activity extends Model
     /**
      * @return mixed A list of participants to this activity.
      */
-    public function participants() {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->wherePivot('committees_activities_id', '!=', 'null')->withTimestamps();
+    public function users() {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')->withTimestamps();
     }
 
     /**

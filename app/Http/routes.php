@@ -150,7 +150,25 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
 });
 
 /*
- * Routes related to narrowcasting.
+ * Routes related to events.
+ */
+Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
+
+    Route::get('/', ['as' => 'list', 'uses' => 'EventController@index']);
+    Route::get('/add', ['as' => 'add', 'uses' => 'EventController@create']);
+    Route::post('/add', ['as' => 'add', 'uses' => 'EventController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'EventController@edit']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'EventController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'EventController@destroy']);
+
+    Route::get('/archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
+
+    Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);
+
+});
+
+/*
+ * Routes related to studies.
  */
 Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
 
