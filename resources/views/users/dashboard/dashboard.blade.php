@@ -18,6 +18,9 @@
             @include('users.dashboard.studyinfo')
         </div>
     </div>
-    @include("users.dashboard.deletebank")
+
+    @if($user->bank != null)
+        @include("users.dashboard.deletebank")
+    @endif
 
 @endsection

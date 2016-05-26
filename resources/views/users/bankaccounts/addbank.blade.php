@@ -10,18 +10,19 @@
 
 @section('panel-body')
 
-    @if($user->id != Auth::id())
+    <form method="POST" action="{{ route('user::bank::add', ['id' => $user->id]) }}">
 
-        <p>
-            Sorry, but due to accountability issues you can only add authorizations for yourself.
-            If {{ $user->name }} really wants to pay via automatic withdrawal, they should configure
-            so
-            themselves.
-        </p>
+        @if($user->id != Auth::id())
 
-    @else
+            <p>
+                Sorry, but due to accountability issues you can only add authorizations for yourself.
+                If {{ $user->name }} really wants to pay via automatic withdrawal, they should configure
+                so
+                themselves.
+            </p>
 
-        <form method="POST" action="{{ route('user::bank::add', ['id' => $user->id]) }}">
+        @else
+
             {!! csrf_field() !!}
             <div class="form-group">
                 <label for="iban">Account IBAN</label>
@@ -44,24 +45,25 @@
                 << Insert all kinds of important stuff. >>
 
             </p>
-        </form>
 
-    @endif
+        @endif
 
-@endsection
+        @endsection
 
-@section('panel-footer')
+        @section('panel-footer')
 
-    <button type="submit" class="btn btn-success"
-            @if($user->id != Auth::id())
-            disabled
-            @endif
-    >
-        I have read all the important stuff and agree with it.
-    </button>
+            <button type="submit" class="btn btn-success"
+                    @if($user->id != Auth::id())
+                    disabled
+                    @endif
+            >
+                I have read all the important stuff and agree with it.
+            </button>
 
-    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
-        Cancel
-    </button>
+            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+                Cancel
+            </button>
+
+    </form>
 
 @endsection
