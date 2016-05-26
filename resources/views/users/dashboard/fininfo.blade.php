@@ -20,26 +20,36 @@
 
         @else
 
-            <div class="btn-group btn-group-justified" role="group">
-                <div class="btn-group" role="group">
-                    <a type="submit" class="btn btn-success"
-                       href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
-                        Authorize for automatic withdrawal
-                    </a>
-                </div>
-            </div>
+            <p style="text-align: center; font-style: italic;">
+                There is currently no active authorization.
+            </p>
 
         @endif
 
     </div>
+
     <div class="panel-footer">
         <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-danger" data-toggle="modal"
-                        data-target="#bank-modal-cancel">
-                    Cancel authorization
-                </button>
-            </div>
+
+            @if($user->bank != null)
+
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-danger" data-toggle="modal"
+                            data-target="#bank-modal-cancel">
+                        Cancel authorization
+                    </button>
+                </div>
+
+            @else
+
+                <a type="submit" class="btn btn-success"
+                   href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
+                    Authorize for automatic withdrawal
+                </a>
+
+            @endif
+
         </div>
     </div>
+
 </div>
