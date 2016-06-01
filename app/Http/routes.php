@@ -180,6 +180,15 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
 
 });
 
+/**
+ * Routes related to the Quote Corner.
+ */
+Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
+    Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
+});
+
 /*
  * Routes related to the API.
  */

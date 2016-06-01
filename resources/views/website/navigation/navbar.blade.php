@@ -26,6 +26,9 @@
                 <ul class="dropdown-menu">
                     <li><a href="{{ route("committee::list") }}">Committees</a></li>
                     <li><a href="{{ route("event::list") }}">Calendar</a></li>
+                    @if (Auth::check())
+                        <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
+                    @endif
                 </ul>
             </li>
 
