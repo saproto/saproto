@@ -87,18 +87,18 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
-                        Sign-up
+                        Activity Sign-up
                     </div>
 
                     <div class="panel-body" id="event-description">
                         @if (date('U') < $event->activity->registration_start)
                             <p style="text-align: center;">
-                                Open between {{ date('M d, H:i', $event->activity->registration_start) }}
-                                and {{ date('M d, H:i', $event->activity->registration_end) }}.
+                                Open between {{ date('F d, H:i', $event->activity->registration_start) }}
+                                and {{ date('F d, H:i', $event->activity->registration_end) }}.
                             </p>
                         @elseif (date('U') < $event->activity->registration_end)
                             <p style="text-align: center;">
-                                Sign-up closes {{ date('M d, H:i', $event->activity->registration_end) }}.
+                                Sign-up closes {{ date('F d, H:i', $event->activity->registration_end) }}.
                             </p>
                         @else
                             <p style="text-align: center;">
