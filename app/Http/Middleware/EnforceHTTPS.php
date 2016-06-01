@@ -17,7 +17,7 @@ class EnforceHTTPS
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->secure()) {
+        if (!$request->secure() && env('SSL', true)) {
             return redirect()->secure($request->getRequestUri());
         }
 
