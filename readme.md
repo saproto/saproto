@@ -48,16 +48,16 @@ Now you have set-up your website correctly. The only thing that remains is point
 ln -s /home/user/domains/example.saproto.nl/saproto/public /home/user/domains/example.saproto.nl/public_html
 ```
 
-If you wish to edit the stylesheet as well, you'll need to use Gulp for that. Gulp compiles our SASS files and publishes them to the public directory for you. You can install all needed components using `npm`:
+If you wish to edit the stylesheet as well, you'll need to use Grunt for that. Grunt compiles our SASS files and publishes them to the public directory for you. You can install all needed components using `npm`:
 
 ```
 npm install
 ```
 
-Then you only need to start Gulp by running the following once:
+Then you only need to start Grunt by running the following once:
 
 ```
-gulp
+grunt
 ```
 
 That's it, everything should be up and running!

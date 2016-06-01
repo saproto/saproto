@@ -1,7 +1,28 @@
 {
-  "name": "S.A. Proto",
-  "private": true,
-  "dependencies": {
+  "name": "saproto",
+  "version": "0.0.1",
+  "homepage": "https://github.com/saproto/saproto/tree/master/example",
+  "license": "GNU General Public License (http://www.gnu.org/licenses)",
+  "description": "",
+  "keywords": [
+    "SAPROTO",
+    "Utwente",
+    "University of Twente",
+    "Laravel",
+    "AngularJS",
+    "JS",
+    "SASS",
+    "CSS",
+    "Bower",
+    "Grunt"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "main": "./public/index.php",
+  "ignore": [],
+  "dependencies": {},
+  "devDependencies": {
     "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
     "bootstrap": "^3.3.6",
