@@ -139,7 +139,6 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
 
     Route::get('/', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
     Route::get('/list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
-    Route::get('/list.json', ['as' => 'api::list', 'uses' => 'NarrowcastingController@indexApi']);
     Route::get('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
     Route::post('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
     Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@edit']);
@@ -181,9 +180,19 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
 
 });
 
+/**
+ * Routes related to the Quote Corner.
+ */
+Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
+    Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
+});
+
 /*
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
+    Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 });

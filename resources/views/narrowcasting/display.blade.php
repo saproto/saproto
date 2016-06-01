@@ -114,7 +114,7 @@
     function updateCampaigns() {
 
         $.ajax({
-            url: '{{ route("narrowcasting::api::list") }}',
+            url: '{{ route("api::narrowcasting") }}',
             dateType: 'json',
             success: function (data) {
                 campaigns = data;

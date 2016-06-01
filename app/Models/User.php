@@ -168,4 +168,12 @@ class User extends Validatable implements AuthenticatableContract,
         }
         return $r;
     }
+
+    /**
+     * @return mixed Any quotes the user posted
+     */
+    public function quotes()
+    {
+        return $this->hasMany('Proto\Models\Quote');
+    }
 }
