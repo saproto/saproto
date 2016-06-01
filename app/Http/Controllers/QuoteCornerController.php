@@ -35,12 +35,8 @@ class QuoteCornerController extends Controller
             'user_id' => Auth::id()
         );
 
-        $quote = new Quote();
-        if (!$quote->validate($new, ['quote' => 'required'])) {
-            return Redirect::route('quotes::add')->withErrors($quote->errors());
-        }
+        $quote = new Quote($new);
 
-        $quote->fill($new);
         $quote->save();
 
         Session::flash("flash_message", "Quote added.");
@@ -54,10 +50,6 @@ class QuoteCornerController extends Controller
         $quote = Quote::find($id);
         if ($quote == null) {
             abort(404, "Quote $id not found.");
-        }
-
-        if (!Auth::user()->can('board')) {
-            abort(403, "You are not allowed to delete quotes.");
         }
 
         $quote->delete();
