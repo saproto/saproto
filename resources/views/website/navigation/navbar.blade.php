@@ -26,6 +26,9 @@
                 <ul class="dropdown-menu">
                     <li><a href="{{ route("committee::list") }}">Committees</a></li>
                     <li><a href="{{ route("event::list") }}">Calendar</a></li>
+                    @if (Auth::check())
+                        <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
+                    @endif
                 </ul>
             </li>
 
@@ -34,13 +37,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Administration <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="navbar-title">Administration:</a></li>
-                        <li><a href="{{ route("user::member::list") }}">Users</a></li>
-                        <li><a href="{{ route("study::list") }}">Studies</a></li>
-                        <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a class="navbar-title">Create new:</a></li>
-                        <li><a href="{{ route("committee::add") }}">Committee</a></li>
+                        <li><a href="{{ route("user::member::list") }}">User Administration</a></li>
                     </ul>
                 </li>
             @endif
