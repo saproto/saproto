@@ -49,20 +49,43 @@
                                 <div class="panel panel-default">
 
                                     <div class="panel-heading">
+
                                         {{ $committee->name }}
+
                                     </div>
 
                                     <div class="panel-body">
 
-                                        @foreach($event->activity->helpingUsers($committee) as $user)
+                                        @foreach($event->activity->helpingUsers($committee->pivot->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
-                                                     style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
-                                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                                     style="background-image:url('{{ route("file::get", ['id' => $participation->user->photo]) }}');">
+                                                </div>
+                                                <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
                                             </div>
                                         @endforeach
 
                                     </div>
+
+                                    @if($committee->isMember(Auth::user()))
+
+                                        <div class="panel-footer">
+
+                                            @if($event->activity->getHelpingParticipation($committee, Auth::user()) !== null)
+                                                <a class="btn btn-warning" style="width: 100%;"
+                                                   href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($committee, Auth::user())->id]) }}">
+                                                    I won't help anymore.
+                                                </a>
+                                            @else
+                                                <a class="btn btn-success" style="width: 100%;"
+                                                   href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $committee->pivot->id]) }}">
+                                                    I'll help!
+                                                </a>
+                                            @endif
+
+                                        </div>
+
+                                    @endif
 
                                 </div>
 
@@ -91,12 +114,28 @@
                     </div>
 
                     <div class="panel-body" id="event-description">
+
                         @if (date('U') < $event->activity->registration_start)
                             <p style="text-align: center;">
                                 Open between {{ date('F d, H:i', $event->activity->registration_start) }}
                                 and {{ date('F d, H:i', $event->activity->registration_end) }}.
                             </p>
                         @elseif (date('U') < $event->activity->registration_end)
+
+                            <p>
+                                @if($event->activity->getParticipation(Auth::user()) !== null)
+                                    <a class="btn btn-warning" style="width: 100%;"
+                                       href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}">
+                                        Sign me out. <i class="fa fa-frown-o" aria-hidden="true"></i>
+                                    </a>
+                                @else
+                                    <a class="btn btn-success" style="width: 100%;"
+                                       href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
+                                        Sign me up!
+                                    </a>
+                                @endif
+                            </p>
+
                             <p style="text-align: center;">
                                 Sign-up closes {{ date('F d, H:i', $event->activity->registration_end) }}.
                             </p>
@@ -105,14 +144,19 @@
                                 Sign-up closed.
                             </p>
                         @endif
+
                         <hr>
+
                         @foreach($event->activity->users as $user)
+
                             <div class="member">
                                 <div class="member-picture"
                                      style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
                             </div>
+
                         @endforeach
+
                     </div>
 
                 </div>

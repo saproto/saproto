@@ -16,14 +16,16 @@ class Committee extends Model
     /**
      * @return mixed All events organized by this committee.
      */
-    public function organizedActivities() {
+    public function organizedActivities()
+    {
         return $this->hasMany('Proto\Models\Activity', 'organizing_committee');
     }
 
     /**
      * @return mixed All activities at which this committee helped out.
      */
-    public function helpedActivities() {
+    public function helpedActivities()
+    {
         return $this->hasMany('Proto\Models\Activity', 'committees_events')->withPivot(array('amount', 'id'))->withTimestamps();
     }
 
@@ -35,11 +37,13 @@ class Committee extends Model
         return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
     }
 
-    public function image() {
+    public function image()
+    {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    public function allmembers() {
+    public function allmembers()
+    {
 
         $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
 
@@ -57,6 +61,17 @@ class Committee extends Model
 
         return $members;
 
+    }
+
+    /**
+     * @param User $user The user to check membership for.
+     * @return bool Whether the user is currently a member of this committee.
+     */
+    public function isMember(User $user)
+    {
+        $p = CommitteeMembership::where('user_id', $user->id)->where('committee_id', $this->id)->where('start', '<=', date('U'))->first();
+        if (!$p) return false;
+        return (!$p->end || $p->end > date('U'));
     }
 
     protected $fillable = ['name', 'slug', 'description', 'public'];

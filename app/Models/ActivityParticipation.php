@@ -4,7 +4,7 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CommitteeMembership extends Validatable
+class ActivityParticipation extends Validatable
 {
     /**
      * The database table used by the model.
