@@ -26,7 +26,7 @@ class Activity extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')->withPivot('id')->withTimestamps();
     }
 
     /**

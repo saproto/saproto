@@ -4,10 +4,18 @@
 
     display: none;
 
-    &:hover {
-      display: block;
+    &__button {
+
+      &--delete {
+        color: $brand-danger !important;
+      }
+
     }
 
   }
 
+}
+
+.member:hover .activity__admin-controls {
+  display: block;
 }

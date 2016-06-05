@@ -62,6 +62,16 @@
                                                      style="background-image:url('{{ route("file::get", ['id' => $participation->user->photo]) }}');">
                                                 </div>
                                                 <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
+
+                                                @if(Auth::user()->can('board'))
+                                                    <p class="pull-right activity__admin-controls">
+                                                        <a class="activity__admin-controls__button--delete"
+                                                           href="{{ route('event::deleteparticipation', ['participation_id' => $participation->id]) }}">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </a>
+                                                    </p>
+                                                @endif
+
                                             </div>
                                         @endforeach
 
@@ -155,8 +165,11 @@
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                 @if(Auth::user()->can('board'))
-                                    <p data-toggle="tooltip" data-placement="top" title="Sign out" class="pull-right">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    <p class="pull-right activity__admin-controls">
+                                        <a class="activity__admin-controls__button--delete"
+                                           href="{{ route('event::deleteparticipation', ['participation_id' => $user->pivot->id]) }}">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
                                     </p>
                                 @endif
                             </div>

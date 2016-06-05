@@ -164,8 +164,8 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
     Route::get('/archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
     // Related to participation
-    Route::get('/participate/{id}', ['as' => 'addparticipation', 'uses' => 'ActivityController@addParticipation']);
-    Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ActivityController@destroyParticipation']);
+    Route::get('/participate/{id}', ['as' => 'addparticipation', 'uses' => 'ParticipationController@create']);
+    Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
 
     // Show event
     Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);
