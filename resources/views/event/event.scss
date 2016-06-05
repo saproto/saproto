@@ -1,0 +1,13 @@
+.activity {
+
+  &__admin-controls {
+
+    display: none;
+
+    &:hover {
+      display: block;
+    }
+
+  }
+
+}

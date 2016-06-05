@@ -147,12 +147,18 @@
 
                         <hr>
 
-                        @foreach($event->activity->users as $user)
+                        @foreach($event->activity->participants as $user)
 
                             <div class="member">
                                 <div class="member-picture"
                                      style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+
+                                @if(Auth::user()->can('board'))
+                                    <p data-toggle="tooltip" data-placement="top" title="Sign out" class="pull-right">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </p>
+                                @endif
                             </div>
 
                         @endforeach
