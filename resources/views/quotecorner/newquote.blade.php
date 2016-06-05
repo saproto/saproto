@@ -7,10 +7,7 @@
             {{ csrf_field() }}
             <div class="form-group" style="margin-bottom: 0;">
                 <div class="col-sm-12">
-                    {{--<div id="input" style="width: 100%; min-height:100px; outline:none;" contentEditable="true"></div>--}}
-                    <textarea id="field" rows="4" cols="30" form="addquote" name="quote" placeholder="Quote goes here"
-                              style="width: 100%; outline:none; resize:none; border:none; overflow:hidden;"
-                              required></textarea>
+                    <textarea id="field" rows="4" cols="30" form="addquote" name="quote" placeholder="Quote goes here" style="width: 100%; outline:none; resize:none; border:none; overflow:hidden;" required></textarea>
                 </div>
             </div>
         </div>

@@ -62,7 +62,7 @@ class ImportProfilePictures extends Command
                 $file->filename = $name;
                 $file->save();
 
-                $user->image()->associate($file);
+                $user->photo()->associate($file);
                 $user->save();
 
                 $this->info("Profile picture downloaded for " . $user->name . "!");

@@ -50,6 +50,7 @@
                     <div class="panel-body">
 
                         <div id="quotes">
+
                             @foreach($data as $key => $entry)
                                 @if($key > 1)
                                     <hr>
@@ -67,6 +68,7 @@
                                     </div>
                                 @endif
                             @endforeach
+
                         </div>
 
                     </div>
@@ -81,9 +83,11 @@
 
 @endsection
 
-@section('styles')
+@section('stylesheet')
 
-    <style>
+    @parent
+
+    <style type="text/css">
 
         #bigquote {
             font-size: 50px;
@@ -128,4 +132,4 @@
 
     </style>
 
-@show
+@endsection
