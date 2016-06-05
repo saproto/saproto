@@ -147,7 +147,7 @@
 
                         <hr>
 
-                        @foreach($event->activity->participants as $user)
+                        @foreach($event->activity->users as $user)
 
                             <div class="member">
                                 <div class="member-picture"
