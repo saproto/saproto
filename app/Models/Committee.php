@@ -26,7 +26,7 @@ class Committee extends Model
      */
     public function helpedActivities()
     {
-        return $this->hasMany('Proto\Models\Activity', 'committees_events')->withPivot(array('amount', 'id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Activity', 'committees_events')->withPivot(array('amount', 'id'))->withTimestamps();
     }
 
     /**
