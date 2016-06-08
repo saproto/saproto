@@ -4,7 +4,7 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Quote extends Validatable
+class Quote extends Model
 {
     protected $table = 'quotes';
 

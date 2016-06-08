@@ -14,7 +14,7 @@
             <h3>Profile picture</h3>
         </div>
         <div class="col-md-4">
-            <h3>Achievements</h3>
+            @include('users.profile.achievements')
         </div>
     </div>
 
