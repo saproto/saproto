@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{ asset('assets/vendor.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
