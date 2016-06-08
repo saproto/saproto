@@ -180,14 +180,18 @@ class User extends Validatable implements AuthenticatableContract,
     /**
      * @return mixed Any Achievements the user aquired
      */
-    public function user_achieved()
+    public function achieved()
     {
-        $achievements = $this->achievements();
-        %r = array();
+        $achievements = $this->achievements;
+        $r = array();
+        foreach ($achievements as $key => $achievement) {
+            $r[] = $achievement;
+        }
+        return $r;
     }
 
     public function achievements()
     {
-        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'user_id', 'achievement_id'))->withTimestamps()->orderBy('pivot_updated_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'created_at'))->withTimestamps()->orderBy('pivot_updated_at', 'asc');
     }
 }

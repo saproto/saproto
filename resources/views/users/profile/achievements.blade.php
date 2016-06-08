@@ -1,18 +1,18 @@
 <h3>Achievements</h3>
 
-@if(count($user->achievements()) > 0)
+@if(count($user->achieved()) > 0)
 
     <ul class="list-group">
 
-        @foreach($user->achievements() as $key => $achievement)
+        @foreach($user->achieved() as $key => $achievement)
 
             <li class="list-group-item">
 
-                <img src="{{ $achievements[$key]->img }}" alt="{{ $achievement[$key]->name }} icon"/>
-                <strong>{{ $achievements[$key]->name }}</strong>
-                <p>{{ $achievements[$key]->desc }}</p>
+                <img src="{{ $achievement->img_file_id }}" alt="{{ $achievement->name }} icon"/>
+                <strong>{{ $achievement->name }}</strong>
+                <p>{{ $achievement->desc }}</p>
                 <br>
-                <sub>Aquired on {{date('j F Y', $achievements[$key]->name->date)}}.</sub>
+                <sub>Aquired on {{ $achievement->pivot->created_at->format('m/d/Y') }}.</sub>
 
             </li>
 
@@ -23,7 +23,7 @@
 @else
 
     <p>
-        This person hasn't achieved a single thing.
+        Didn't achieved a single thing.
     </p>
 
 @endif
