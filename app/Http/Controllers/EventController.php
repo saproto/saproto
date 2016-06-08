@@ -8,6 +8,8 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Event;
 
+use Auth;
+
 class EventController extends Controller
 {
     /**
@@ -127,4 +129,52 @@ class EventController extends Controller
     {
         //
     }
+
+
+    public function apiEvents(Request $request)
+    {
+
+        if (!Auth::check() || !Auth::user()->member) {
+            abort(403);
+        }
+
+        $events = Event::all();
+        $data = array();
+
+        foreach ($events as $event) {
+            $item = new \stdClass();
+            $item->id = $event->id;
+            $item->title = $event->title;
+            $item->description = $event->description;
+            $item->start = $event->start;
+            $item->end = $event->end;
+            $item->location = $event->location;
+            $data[] = $item;
+        }
+
+        return $data;
+
+    }
+
+    public function apiEventsSingle($id, Request $request)
+    {
+
+        if (!Auth::check() || !Auth::user()->member) {
+            abort(403);
+        }
+
+        $event = Event::findOrFail($id);
+
+        $item = new \stdClass();
+        $item->id = $event->id;
+        $item->title = $event->title;
+        $item->description = $event->description;
+        $item->start = $event->start;
+        $item->end = $event->end;
+        $item->location = $event->location;
+
+        return (array) $item;
+
+    }
+
 }
