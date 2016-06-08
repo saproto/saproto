@@ -172,8 +172,47 @@ class EventController extends Controller
         $item->start = $event->start;
         $item->end = $event->end;
         $item->location = $event->location;
+        $item->activity = $event->activity;
+
+        if($event->activity) {
+            $item->activity->id = $event->activity->id;
+            $item->activity->event_id = $event->activity->event_id;
+            $item->activity->price = $event->activity->price;
+            $item->activity->participants = $event->activity->participants;
+            $item->activity->registration_start = $event->activity->registration_start;
+            $item->activity->registration_end = $event->activity->registration_end;
+            $item->activity->active = $event->activity->active;
+            $item->activity->closed = $event->activity->closed;
+            $item->activity->organizing_commitee = $event->activity->organizing_commitee;
+        }
 
         return (array) $item;
+
+    }
+
+    public function apiEventsMembers($id, Request $request)
+    {
+
+        if (!Auth::check() || !Auth::user()->member) {
+            abort(403);
+        }
+
+        $activities = Event::findOrFail($id)->activity->users;
+        $data = array();
+
+        foreach ($activities as $activity) {
+            $item = new \stdClass();
+            $item->id = $activity->id;
+            $item->email = $activity->email;
+            $item->name_first = $activity->name_first;
+            $item->name_last = $activity->name_last;
+            $item->name_initials = $activity->name_initials;
+            $item->birthdate = $activity->birthdate;
+            $item->gender = $activity->gender;
+            $data[] = $item;
+        }
+
+        return $data;
 
     }
 

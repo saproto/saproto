@@ -195,10 +195,7 @@ Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('events', ['as' => 'list', 'uses' => 'EventController@apiEvents']);
     Route::get('events/{id}', ['as' => 'get', 'uses' => 'EventController@apiEventsSingle']);
-
-    Route::get('activities', ['as' => 'list', 'uses' => 'ActivityController@apiActivities']);
-    Route::get('activities/{id}', ['as' => 'get', 'uses' => 'ActivityController@apiActivitiesSingle']);
-    Route::get('activities/{id}/members', ['as' => 'getMembers', 'uses' => 'ActivityController@apiActivitiesMembers']);
+    Route::get('events/{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
 
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
