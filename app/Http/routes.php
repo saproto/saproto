@@ -193,6 +193,13 @@ Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
+    Route::get('events', ['as' => 'list', 'uses' => 'ApiController@events']);
+    Route::get('events/{id}', ['as' => 'get', 'uses' => 'ApiController@eventsSingle']);
+
+    Route::get('activities', ['as' => 'list', 'uses' => 'ApiController@activities']);
+    Route::get('activities/{id}', ['as' => 'get', 'uses' => 'ApiController@activitiesSingle']);
+    Route::get('activities/{id}/members', ['as' => 'getMembers', 'uses' => 'ApiController@activitiesMembers']);
+
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 });
