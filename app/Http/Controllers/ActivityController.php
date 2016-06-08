@@ -11,6 +11,8 @@ use Proto\Models\Event;
 
 use Redirect;
 
+use Auth;
+
 class ActivityController extends Controller
 {
 
@@ -76,4 +78,5 @@ class ActivityController extends Controller
 
         return Redirect::route('event::edit', ['id' => $event->id]);
     }
+
 }

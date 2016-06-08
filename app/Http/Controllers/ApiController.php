@@ -3,20 +3,21 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\User;
+use Proto\Models\Event;
+use Proto\Models\Activity;
 
 use Auth;
 
 class ApiController extends Controller
 {
-
     public function members(Request $request)
     {
-
 
         if (!Auth::check() || !Auth::user()->member) {
             abort(403);
