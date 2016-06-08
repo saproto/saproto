@@ -192,6 +192,6 @@ class User extends Validatable implements AuthenticatableContract,
 
     public function achievements()
     {
-        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'created_at'))->withTimestamps()->orderBy('pivot_updated_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'created_at'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 }
