@@ -1,6 +1,6 @@
 @foreach($members['editions'] as $edition)
 
-    <div class="panel panel-default">
+    <div class="panel panel-default members">
 
         <div class="panel-heading">{{ $committee->name }}
             <strong>{{ $edition[0]->pivot->edition }}</strong>
