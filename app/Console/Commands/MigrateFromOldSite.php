@@ -290,6 +290,7 @@ class MigrateFromOldSite extends Command
 
                 $activities[$activity['id']]['data']['registration_start'] = strtotime($activityregstart['date'] . " " . $activityregstart['time']) + 0;
                 $activities[$activity['id']]['data']['registration_end'] = strtotime($activityregend['date'] . " " . $activityregend['time']) + 0;
+                $activities[$activity['id']]['data']['deregistration_end'] = strtotime($activityregend['date'] . " " . $activityregend['time']) + 0;
             }
 
             if (!$this->legacydb->select_db("admin_members")) {

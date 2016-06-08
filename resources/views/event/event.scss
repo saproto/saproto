@@ -1,0 +1,21 @@
+.activity {
+
+  &__admin-controls {
+
+    display: none;
+
+    &__button {
+
+      &--delete {
+        color: $brand-danger !important;
+      }
+
+    }
+
+  }
+
+}
+
+.member:hover .activity__admin-controls {
+  display: block;
+}

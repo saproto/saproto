@@ -8,6 +8,8 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Event;
 
+use Session;
+use Redirect;
 use Auth;
 
 class EventController extends Controller
@@ -19,7 +21,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = Event::orderBy('start')->get();
         $data = [[], [], []];
         $years = [];
 
@@ -71,7 +73,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('event.edit', ['event' => null]);
     }
 
     /**
@@ -82,7 +84,18 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $event = new Event();
+        $event->title = $request->title;
+        $event->start = strtotime($request->start);
+        $event->end = strtotime($request->end);
+        $event->location = $request->location;
+
+        $event->save();
+
+        Session::flash("flash_message", "Your event '" . $event->title . "' has been added.");
+        return Redirect::route('event::show', ['id' => $event->id]);
+
     }
 
     /**
@@ -93,7 +106,8 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return view('event.display', ['event' => Event::findOrFail($id)]);
+        $event = Event::findOrFail($id);
+        return view('event.display', ['event' => $event]);
     }
 
     /**
@@ -104,7 +118,8 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $event = Event::findOrFail($id);
+        return view('event.edit', ['event' => $event]);
     }
 
     /**
@@ -116,7 +131,18 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $event = Event::findOrFail($id);
+        $event->title = $request->title;
+        $event->start = strtotime($request->start);
+        $event->end = strtotime($request->end);
+        $event->location = $request->location;
+
+        $event->save();
+
+        Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
+        return Redirect::route('event::show', ['id' => $event->id]);
+
     }
 
     /**
@@ -127,7 +153,18 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event = Event::findOrFail($id);
+
+        if ($event->activity !== null) {
+            Session::flash("flash_message", "You cannot delete event '" . $event->title . "' since it has a participation details.");
+            return Redirect::back();
+        }
+
+        Session::flash("flash_message", "The event '" . $event->title . "' has been deleted.");
+
+        $event->delete();
+
+        return Redirect::route('event::list');
     }
 
 
