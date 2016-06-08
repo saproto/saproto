@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\Activity;
+
+use Auth;
+
 class ActivityController extends Controller
 {
     /**
@@ -84,4 +88,5 @@ class ActivityController extends Controller
     {
         //
     }
+
 }
