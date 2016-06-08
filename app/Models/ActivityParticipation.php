@@ -27,7 +27,7 @@ class ActivityParticipation extends Validatable
         return $this->belongsTo('Proto\Models\Activity');
     }
 
-    protected $fillable = ['user_id', 'activity_id', 'committees_activities_id', 'role', 'edition', 'start', 'end'];
+    protected $fillable = ['user_id', 'activity_id', 'committees_activities_id', 'withdrawn', 'backup'];
 
     protected $rules = array(
         'user_id' => 'required|integer',

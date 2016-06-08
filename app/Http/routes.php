@@ -155,17 +155,21 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
 Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 
     Route::get('/', ['as' => 'list', 'uses' => 'EventController@index']);
-    Route::get('/add', ['as' => 'add', 'uses' => 'EventController@create']);
-    Route::post('/add', ['as' => 'add', 'uses' => 'EventController@store']);
-    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'EventController@edit']);
-    Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'EventController@update']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'EventController@destroy']);
+    Route::get('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@create']);
+    Route::post('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@edit']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@destroy']);
 
     Route::get('/archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
     // Related to participation
     Route::get('/participate/{id}', ['as' => 'addparticipation', 'uses' => 'ParticipationController@create']);
     Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
+
+    // Related to activities
+    Route::post('/signup/{id}', ['as'=>'addsignup', 'uses' => 'ActivityController@save']);
+    Route::get('/signup/{id}/delete', ['as'=>'deletesignup', 'uses' => 'ActivityController@delete']);
 
     // Show event
     Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);

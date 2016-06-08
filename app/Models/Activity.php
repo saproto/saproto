@@ -4,8 +4,19 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Activity extends Model
+class Activity extends Validatable
 {
+
+    protected $rules = array(
+        'registration_start' => 'required|integer',
+        'registration_end' => 'required|integer',
+        'deregistration_end' => 'required|integer',
+        'participants' => 'integer',
+        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/'
+    );
+
+    protected $fillable = ['registration_start', 'registration_end', 'deregistration_end', 'participants', 'price'];
+
     /**
      * The database table used by the model.
      *
@@ -26,7 +37,17 @@ class Activity extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')->withPivot('id')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
+            ->where('withdrawn', false)->where('backup', false)->withPivot('id')->withTimestamps()->get();
+    }
+
+    /**
+     * @return mixed A list of participants to this activity.
+     */
+    public function backupUsers()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
+            ->where('withdrawn', false)->where('backup', true)->withPivot('id')->withTimestamps()->get();
     }
 
     /**
@@ -43,7 +64,7 @@ class Activity extends Model
      */
     public function helpingUsers($helpid)
     {
-        return ActivityParticipation::where('committees_activities_id', $helpid)->get();
+        return ActivityParticipation::where('committees_activities_id', $helpid)->where('withdrawn', false)->get();
     }
 
     /**
@@ -56,7 +77,8 @@ class Activity extends Model
         $h = HelpingCommittee::where('activity_id', $this->id)->where('committee_id', $committee->id)->first();
         if ($h === null) return null;
 
-        $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)->where('committees_activities_id', $h->id)->first();
+        $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
+            ->where('withdrawn', false)->where('committees_activities_id', $h->id)->first();
         return $p;
     }
 
@@ -66,8 +88,8 @@ class Activity extends Model
      */
     public function getParticipation(User $user)
     {
-        $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)->whereNull('committees_activities_id')->first();
-        return $p;
+        return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
+            ->whereNull('committees_activities_id')->where('withdrawn', false)->first();
     }
 
     /**
@@ -76,5 +98,41 @@ class Activity extends Model
     public function organizingCommittee()
     {
         $this->hasOne('Proto\Models\Committee', 'organizing_committee');
+    }
+
+    /**
+     * @return bool Returns whether the activity is full or not.
+     */
+    public function isFull()
+    {
+        return count($this->users()) >= $this->participants;
+    }
+
+    /**
+     * @return int The amount of free spots available.
+     */
+    public function freeSpots()
+    {
+        if ($this->participants == null) {
+            return null;
+        } else {
+            return ($this->participants - count($this->users()));
+        }
+    }
+
+    /**
+     * @return bool Returns whether one can still subscribe for this activity.
+     */
+    public function canSubscribe()
+    {
+        return date('U') > $this->registration_start && date('U') < $this->registration_end;
+    }
+
+    /**
+     * @return bool Returns whether one can still unsubscribe for this activity.
+     */
+    public function canUnsubscribe()
+    {
+        return $this->deregistration_end === null || date('U') < $this->deregistration_end;
     }
 }

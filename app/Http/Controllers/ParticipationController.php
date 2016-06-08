@@ -24,8 +24,12 @@ class ParticipationController extends Controller
         $event = Event::findOrFail($id);
         if (!$event->activity) {
             abort(500, "You cannot subscribe for " . $event->title . ".");
-        } elseif ($event->activity->registration_start > date('U') || $event->activity->registration_end < date('U')) {
+        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
+            abort(500, "You are already subscribed for " . $event->title . ".");
+        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id')) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");
+        } elseif ($event->activity->closed) {
+            abort(500, "This activity is closed, you cannot change participation anymore.");
         }
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
@@ -36,13 +40,16 @@ class ParticipationController extends Controller
                 abort(500, "You are not a member of the " . $helping->committee . " and thus cannot help on behalf of it.");
             }
             $data['committees_activities_id'] = $helping->id;
+        } else {
+            if ($event->activity->isFull()) {
+                $data['backup'] = true;
+            }
         }
 
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
 
-        $request->session()->flash('flash_message', ($participation->user->id == Auth::id() ? 'You have' : $participation->user->name . 'has') . " been added to " . $participation->activity->event->title . ".");
         return Redirect::back();
 
     }
@@ -53,18 +60,42 @@ class ParticipationController extends Controller
      * @param  int $id The id of the participation to be removed.
      * @return \Illuminate\Http\Response
      */
-    public function destroy($participation_id, Request $request)
+    public
+    function destroy($participation_id, Request $request)
     {
         $participation = ActivityParticipation::findOrFail($participation_id);
+
         if ($participation->user->id == Auth::id() || Auth::user()->can('board')) {
-            if ($participation->activity->registration_end < date('U') && !Auth::user()->can('board')) {
-                abort(500, "You cannot unsubscribe for this event at this time.");
+
+            if ($participation->committees_activities_id === null) {
+
+                if ($participation->activity->closed) {
+                    abort(500, "This activity is closed, you cannot change participation anymore.");
+                }
+
+                if (!$participation->activity->canUnsubscribe() && !Auth::user()->can('board')) {
+                    abort(500, "You cannot unsubscribe for this event at this time.");
+                } else {
+                    $backupparticipation = ActivityParticipation::where('activity_id', $participation->activity->id)
+                        ->whereNull('committees_activities_id')->where('withdrawn', false)->where('backup', true)
+                        ->first();
+                    if ($backupparticipation !== null) {
+                        $backupparticipation->backup = false;
+                        $backupparticipation->save();
+                    }
+                }
+
             }
-            $request->session()->flash('flash_message', ($participation->user->id == Auth::id() ? 'You have' : $participation->user->name . 'has') . " been removed from " . $participation->activity->event->title . ".");
-            $participation->delete();
+
+            $participation->withdrawn = true;
+            $participation->save();
+
             return Redirect::back();
+
         } else {
+
             abort(403);
+
         }
     }
 }
