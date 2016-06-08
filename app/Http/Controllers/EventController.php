@@ -172,9 +172,9 @@ class EventController extends Controller
         $item->start = $event->start;
         $item->end = $event->end;
         $item->location = $event->location;
-        $item->activity = $event->activity;
 
-        if($event->activity) {
+        if($event->activity !== null) {
+            $item->activity = new \stdClass();
             $item->activity->id = $event->activity->id;
             $item->activity->event_id = $event->activity->event_id;
             $item->activity->price = $event->activity->price;
