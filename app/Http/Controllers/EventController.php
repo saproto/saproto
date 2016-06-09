@@ -21,7 +21,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::orderBy('start')->get();
+        if (Auth::user()->can('board')) {
+            $events = Event::orderBy('start')->get();
+        } else {
+            $events = Event::where('secret', false)->orderBy('start')->get();
+        }
         $data = [[], [], []];
         $years = [];
 
@@ -51,7 +55,11 @@ class EventController extends Controller
      */
     public function archive($year)
     {
-        $events = Event::where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+        if (Auth::user()->can('board')) {
+            $events = Event::where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+        } else {
+            $events = Event::where('secret', false)->where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+        }
         $months = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
@@ -137,11 +145,12 @@ class EventController extends Controller
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
+        $event->secret = $request->secret;
 
         $event->save();
 
         Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
-        return Redirect::route('event::show', ['id' => $event->id]);
+        return Redirect::route('event::edit', ['id' => $event->id]);
 
     }
 
@@ -210,7 +219,7 @@ class EventController extends Controller
         $item->end = $event->end;
         $item->location = $event->location;
 
-        if($event->activity !== null) {
+        if ($event->activity !== null) {
             $item->activity = new \stdClass();
             $item->activity->id = $event->activity->id;
             $item->activity->event_id = $event->activity->event_id;
@@ -223,7 +232,7 @@ class EventController extends Controller
             $item->activity->organizing_commitee = $event->activity->organizing_commitee;
         }
 
-        return (array) $item;
+        return (array)$item;
 
     }
 

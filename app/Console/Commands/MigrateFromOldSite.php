@@ -230,8 +230,6 @@ class MigrateFromOldSite extends Command
                     'participants' => 'NULL',
                     'registration_start' => 'NULL',
                     'registration_end' => 'NULL',
-                    'secret' => 'FALSE',
-                    'active' => ($activity['post_status'] == 'publish' ? 'TRUE' : 'FALSE'),
                     'closed' => 'FALSE',
                     'created_at' => "'" . $activity['post_date_gmt'] . "'",
                     'updated_at' => "'" . $activity['post_modified_gmt'] . "'"
@@ -253,7 +251,7 @@ class MigrateFromOldSite extends Command
                             $activities[$activity['id']]['data']['participants'] = ($activitymeta['meta_value'] <= 0 ? 'NULL' : $activitymeta['meta_value']);
                             break;
                         case 'registration_visibility':
-                            $activities[$activity['id']]['data']['secret'] = ($activitymeta['meta_value'] != 'visible' ? 'TRUE' : 'FALSE');
+                            $events[$activity2eventid[$activity['id']]]['data']['secret'] = ($activitymeta['meta_value'] != 'visible' ? 'TRUE' : 'FALSE');
                             break;
                         case 'closed':
                             $activities[$activity['id']]['data']['closed'] = 'TRUE';

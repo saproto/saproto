@@ -24,29 +24,75 @@
 
                         {!! csrf_field() !!}
 
-                        <div class="form-group">
-                            <label for="name">Event name:</label>
-                            <input type="text" class="form-control" id="name" name="title"
-                                   placeholder="Lightsaber Building in the SmartXp" value="{{ $event->title or '' }}"
-                                   required>
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label for="name">Event name:</label>
+                                    <input type="text" class="form-control" id="name" name="title"
+                                           placeholder="Lightsaber Building in the SmartXp"
+                                           value="{{ $event->title or '' }}"
+                                           required>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="location-group">
+                                    <label for="slide_duration">Location:</label>
+                                    <input type="text" class="form-control" id="location" name="location"
+                                           placeholder="SmartXp" value="{{ $event->location or '' }}" required>
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="form-group">
-                            <label for="event_start">Event start:</label>
-                            <input type="text" class="form-control datetime-picker" id="event_start" name="start"
-                                   value="{{ ($event ? date('d-m-Y H:i', $event->start) : '') }}" required>
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label for="event_start">Event start:</label>
+                                    <input type="text" class="form-control datetime-picker" id="event_start"
+                                           name="start"
+                                           value="{{ ($event ? date('d-m-Y H:i', $event->start) : '') }}" required>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label for="event_end">Event end:</label>
+                                    <input type="text" class="form-control datetime-picker" id="event_end" name="end"
+                                           value="{{ ($event ? date('d-m-Y H:i', $event->end) : '') }}" required>
+                                </div>
+
+                            </div>
+
                         </div>
 
-                        <div class="form-group">
-                            <label for="event_end">Event end:</label>
-                            <input type="text" class="form-control datetime-picker" id="event_end" name="end"
-                                   value="{{ ($event ? date('d-m-Y H:i', $event->end) : '') }}" required>
-                        </div>
+                        <div class="row">
 
-                        <div class="location-group">
-                            <label for="slide_duration">Location:</label>
-                            <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="SmartXp" value="{{ $event->location or '' }}" required>
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Event visibility:</label>
+                                    <select name="secret" class="form-control">
+                                        <option value="1" {{ ($event->secret ? 'selected' : '') }}>This activity is
+                                            secret.
+                                        </option>
+                                        <option value="0" {{ (!$event->secret ? 'selected' : '') }}>This activity is
+                                            public.
+                                        </option>
+                                    </select>
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
