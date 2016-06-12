@@ -44,6 +44,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a class="navbar-title">Create new:</a></li>
                         <li><a href="{{ route("committee::add") }}">Committee</a></li>
+                        <li><a href="{{ route("event::add") }}">Event</a></li>
                     </ul>
                 </li>
             @endif

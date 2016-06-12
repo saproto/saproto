@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\GenerateRoles::class,
         Commands\MigrateFromOldSite::class,
-        Commands\ImportProfilePictures::class
+        Commands\ImportProfilePictures::class,
+        Commands\TestEmail::class
     ];
 
     /**

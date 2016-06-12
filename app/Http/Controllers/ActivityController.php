@@ -6,87 +6,77 @@ use Illuminate\Http\Request;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
-
 use Proto\Models\Activity;
+use Proto\Models\Event;
+
+use Redirect;
 
 use Auth;
 
 class ActivityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request, $id)
     {
-        //
-    }
+        $event = Event::findOrFail($id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $new = $event->activity === null;
+        $activity = ($new ? new Activity() : $event->activity);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $data = [
+            'registration_start' => strtotime($request->registration_start),
+            'registration_end' => strtotime($request->registration_end),
+            'deregistration_end' => strtotime($request->deregistration_end),
+            'participants' => ($request->participants == 0 ? null : $request->participants),
+            'price' => $request->price
+        ];
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        if (!$activity->validate($data)) {
+            return Redirect::route('event::edit', ['id' => $event->id])->withErrors($activity->errors());
+        }
+
+        $activity->fill($data);
+
+        $activity->save();
+
+        if ($new) {
+            $activity->event()->associate($event);
+            $activity->save();
+        }
+
+        $request->session()->flash('flash_message', 'Your changes have been saved.');
+
+        return Redirect::route('event::edit', ['id' => $event->id]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request, $id)
     {
-        //
+        $event = Event::findOrFail($id);
+
+        if (!$event->activity) {
+            abort(500, "There is no participation data to delete.");
+        } elseif (count($event->activity->users()) > 0) {
+            abort(500, "You cannot delete participation data because there are still participants to this activity.");
+        }
+
+        $event->activity()->delete();
+
+        $request->session()->flash('flash_message', 'Participation data deleted.');
+
+        return Redirect::route('event::edit', ['id' => $event->id]);
     }
 
 }

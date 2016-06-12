@@ -24,6 +24,10 @@
 
                     @ {{ $event->location }}
 
+                    <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
+                        <span class="label label-success pull-right">Edit</span>
+                    </a>
+
                 </div>
 
                 <div class="panel-body" id="event-description">
@@ -49,20 +53,53 @@
                                 <div class="panel panel-default">
 
                                     <div class="panel-heading">
+
                                         {{ $committee->name }}
+
                                     </div>
 
                                     <div class="panel-body">
 
-                                        @foreach($event->activity->helpingUsers($committee) as $user)
+                                        @foreach($event->activity->helpingUsers($committee->pivot->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
-                                                     style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
-                                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                                     style="background-image:url('{{ route("file::get", ['id' => $participation->user->photo]) }}');">
+                                                </div>
+                                                <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
+
+                                                @if(Auth::user()->can('board'))
+                                                    <p class="pull-right activity__admin-controls">
+                                                        <a class="activity__admin-controls__button--delete"
+                                                           href="{{ route('event::deleteparticipation', ['participation_id' => $participation->id]) }}">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </a>
+                                                    </p>
+                                                @endif
+
                                             </div>
                                         @endforeach
 
                                     </div>
+
+                                    @if($committee->isMember(Auth::user()))
+
+                                        <div class="panel-footer">
+
+                                            @if($event->activity->getHelpingParticipation($committee, Auth::user()) !== null)
+                                                <a class="btn btn-warning" style="width: 100%;"
+                                                   href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($committee, Auth::user())->id]) }}">
+                                                    I won't help anymore.
+                                                </a>
+                                            @else
+                                                <a class="btn btn-success" style="width: 100%;"
+                                                   href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $committee->pivot->id]) }}">
+                                                    I'll help!
+                                                </a>
+                                            @endif
+
+                                        </div>
+
+                                    @endif
 
                                 </div>
 
@@ -87,32 +124,109 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
-                        Sign-up
+                        Activity Sign-up
+                        @if($event->activity->canSubscribe())
+                            ({{ $event->activity->freeSpots() }} places available)
+                        @endif
                     </div>
 
                     <div class="panel-body" id="event-description">
-                        @if (date('U') < $event->activity->registration_start)
-                            <p style="text-align: center;">
-                                Open between {{ date('M d, H:i', $event->activity->registration_start) }}
-                                and {{ date('M d, H:i', $event->activity->registration_end) }}.
-                            </p>
-                        @elseif (date('U') < $event->activity->registration_end)
-                            <p style="text-align: center;">
-                                Sign-up closes {{ date('M d, H:i', $event->activity->registration_end) }}.
-                            </p>
-                        @else
-                            <p style="text-align: center;">
-                                Sign-up closed.
-                            </p>
-                        @endif
+
+                        <p style="text-align: center;">
+                            @if($event->activity->getParticipation(Auth::user()) !== null)
+                                @if ($event->activity->getParticipation(Auth::user())->backup)
+                                    You are on the <strong>back-up list</strong>.
+                                @else
+                                    <strong>You are signed up for this activity!</strong>
+                                @endif
+                            @else
+                                You are <strong>not signed</strong> up for this activity.
+                            @endif
+                        </p>
+
+                        <p>
+                            @if($event->activity->getParticipation(Auth::user()) !== null)
+                                @if($event->activity->canUnsubscribe())
+                                    <a class="btn btn-warning" style="width: 100%;"
+                                       href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}">
+                                        @if ($event->activity->getParticipation(Auth::user())->backup)
+                                            Sign me out of the back-up list.
+                                        @else
+                                            Sign me out. <i class="fa fa-frown-o" aria-hidden="true"></i>
+                                        @endif
+                                    </a>
+                                @endif
+                            @else
+                                @if($event->activity->canSubscribe())
+                                    <a class="btn btn-{{ ($event->activity->isFull() ? 'warning' : 'success') }}"
+                                       style="width: 100%;"
+                                       href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
+                                        @if ($event->activity->isFull())
+                                            Activity is full. Sign me up for the back-up list.
+                                        @else
+                                            Sign me up!
+                                        @endif
+                                    </a>
+                                @endif
+                            @endif
+                        </p>
+
+                        <p style="text-align: center;">
+                            Sign up is possible between {{ date('F j, H:i', $event->activity->registration_start) }}
+                            and {{ date('F j, H:i', $event->activity->registration_end) }}. You can sign out
+                            untill {{ date('F j, H:i', $event->activity->deregistration_end) }}.
+                        </p>
+
                         <hr>
-                        @foreach($event->activity->users as $user)
+
+                        @foreach($event->activity->users() as $user)
+
                             <div class="member">
                                 <div class="member-picture"
                                      style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+
+                                @if(Auth::user()->can('board'))
+                                    <p class="pull-right activity__admin-controls">
+                                        <a class="activity__admin-controls__button--delete"
+                                           href="{{ route('event::deleteparticipation', ['participation_id' => $user->pivot->id]) }}">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </a>
+                                    </p>
+                                @endif
                             </div>
+
                         @endforeach
+
+                        @if (count($event->activity->backupUsers()) > 0)
+
+                            <hr>
+
+                            <p style="text-align: center;">
+                                Back-up list:
+                            </p>
+
+                            @foreach($event->activity->backupUsers() as $user)
+
+                                <div class="member">
+                                    <div class="member-picture"
+                                         style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
+                                    <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+
+                                    @if(Auth::user()->can('board'))
+                                        <p class="pull-right activity__admin-controls">
+                                            <a class="activity__admin-controls__button--delete"
+                                               href="{{ route('event::deleteparticipation', ['participation_id' => $user->pivot->id]) }}">
+                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                            </a>
+                                        </p>
+                                    @endif
+                                </div>
+
+                            @endforeach
+
+                        @endif
+
                     </div>
 
                 </div>

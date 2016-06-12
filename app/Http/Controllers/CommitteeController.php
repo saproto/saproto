@@ -3,12 +3,11 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use PhpParser\Node\Expr\Cast\Object_;
-use Proto\Models\StorageEntry;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\StorageEntry;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\User;
