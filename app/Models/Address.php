@@ -21,6 +21,6 @@ class Address extends Validatable
     {
         return $this->belongsTo('Proto\Models\User');
     }
-
-    protected $fillable = ['user_id', 'street', 'number', 'zipcode', 'city', 'country'];
+    
+    protected $guarded = ['id'];
 }

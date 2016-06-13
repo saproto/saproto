@@ -27,7 +27,7 @@ class StudyEntry extends Validatable
         return $this->belongsTo('Proto\Models\Study');
     }
 
-    protected $fillable = ['user_id', 'study_id', 'start'];
+    protected $guarded = ['id'];
 
     protected $rules = array(
         'user_id' => 'required|integer',

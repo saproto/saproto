@@ -8,8 +8,7 @@ class Member extends Model
 {
     protected $table = 'members';
 
-    protected $rules = array(
-    );
+    protected $guarded = ['id', 'user_id'];
 
     public function user()
     {

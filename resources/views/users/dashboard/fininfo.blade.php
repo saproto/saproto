@@ -12,7 +12,7 @@
 
             <p style="text-align: center">
                 <sub>
-                    {{ ($user->bank->withdrawal_type == "FRST" ? "First time" : "Recurring") }}
+                    {{ ($user->bank->is_first ? "First time" : "Recurring") }}
                     authorization issued on {{ $user->bank->created_at }}.<br>
                     Authorization ID: {{ $user->bank->machtigingid }}
                 </sub>

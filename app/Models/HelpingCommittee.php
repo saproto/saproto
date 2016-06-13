@@ -27,7 +27,7 @@ class HelpingCommittee extends Validatable
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    protected $fillable = ['user_id', 'committee_id', 'role', 'edition', 'start', 'end'];
+    protected $guarded = ['id'];
 
     protected $rules = array(
         'activity_id' => 'required|integer',
