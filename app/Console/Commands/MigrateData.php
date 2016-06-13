@@ -81,7 +81,7 @@ class MigrateData extends Command
                 $user = User::create([
                     'id' => $member['member_id'],
                     'email' => $member['contact_email'],
-                    'password' => "'correct horse battery staple'",
+                    'password' => "correct horse battery staple",
                     'utwente_username' => ($member['utwente_relation'] == 1 ? $member['utwente_username'] : null),
                     'proto_username' => $member['proto_username'],
                     'name_first' => $member['name_first'],
@@ -284,7 +284,7 @@ class MigrateData extends Command
 
                 $a = Activity::create([
                     'id' => $activity['id'],
-                    'event_id' => (array_key_exists($activity['id'], $activityslug2eventid) ? $activityslug2eventid[$activity['id']] : (array_key_exists($activity['post_name'], $activityslug2eventid) ? $activityslug2eventid[$activity['post_name']] : 'NULL')),
+                    'event_id' => (array_key_exists($activity['id'], $activityslug2eventid) ? $activityslug2eventid[$activity['id']] : (array_key_exists($activity['post_name'], $activityslug2eventid) ? $activityslug2eventid[$activity['post_name']] : null)),
                     'price' => 'NULL',
                     'participants' => 'NULL',
                     'registration_start' => 'NULL',
@@ -296,6 +296,10 @@ class MigrateData extends Command
                     'updated_at' => $activity['post_modified_gmt']
                 ]);
                 $a->save();
+
+                if (!$a->event_id) {
+                    $this->error('No event found for activity ' . $activity['post_title'] . '. Orphaned.');
+                }
 
                 if ($a->event) {
                     $a->event->description = nl2br(preg_replace("/[\r\n]+/", "\n", $activity['post_content']));
@@ -382,6 +386,7 @@ class MigrateData extends Command
                 $user = User::where('proto_username', $useractivity['proto_username'])->first();
 
                 if (!$user) {
+                    $this->error('No user found for ' . $useractivity['proto_username'] . '. Skipping.');
                     continue;
                 }
 

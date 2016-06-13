@@ -1,6 +1,6 @@
 <h3>Committees</h3>
 
-@if(count($user->committeesFilter('current')) > 0)
+@if(count($user->committees) > 0)
 
     <ul class="list-group">
         @foreach($user->committeesFilter('current') as $committee)
