@@ -26,8 +26,8 @@ class CommitteeMembership extends Validatable
     public function committee() {
         return $this->belongsTo('Proto\Models\Committee');
     }
-
-    protected $fillable = ['user_id', 'committee_id', 'role', 'edition', 'start', 'end'];
+    
+    protected $guarded = ['id'];
 
     protected $rules = array(
         'user_id' => 'required|integer',

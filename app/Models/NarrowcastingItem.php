@@ -14,4 +14,6 @@ class NarrowcastingItem extends Model
     public function image() {
         return $this->belongsTo('Proto\Models\StorageEntry');
     }
+
+    protected $guarded = ['id'];
 }

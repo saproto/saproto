@@ -41,12 +41,7 @@ class User extends Validatable implements AuthenticatableContract,
      */
     protected $table = 'users';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['email', 'password', 'receive_sms', 'receive_newsletter', 'phone_visible', 'website', 'phone'];
+    protected $guarded = ['password', 'remember_token'];
 
     /**
      * The rules for validation.
@@ -141,7 +136,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'past':
                 // Committees the user has been a member of in the past, but not anymore.
                 foreach ($d as $k => $c) {
-                    if ($c->pivot->end != null && date('U', strtotime($c->pivot->end)) < date('U')) {
+                    if ($c->pivot->end != null && $c->pivot->end < date('U')) {
                         $r[] = $d[$k];
                     }
                 }
@@ -149,7 +144,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'current':
                 // Committees the user is currently a member of.
                 foreach ($d as $k => $c) {
-                    if (date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U'))) {
+                    if ($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U'))) {
                         $r[] = $d[$k];
                     }
                 }
@@ -157,7 +152,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'future':
                 // Committees the user is going to be a member of.
                 foreach ($d as $k => $c) {
-                    if ((date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U')))) {
+                    if (($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U')))) {
                         $r[] = $d[$k];
                     }
                 }
@@ -175,5 +170,20 @@ class User extends Validatable implements AuthenticatableContract,
     public function quotes()
     {
         return $this->hasMany('Proto\Models\Quote');
+    }
+
+    /**
+     * @param User $user
+     * @return bool Whether the user is currently in the specified committee.
+     */
+    public function isInCommittee(Committee $committee)
+    {
+        $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->where('start', '<=', date('U'))->get();
+        foreach($p as $participation) {
+            if (!$participation->end || $participation->end > date('U')) {
+                return true;
+            }
+        }
+        return false;
     }
 }

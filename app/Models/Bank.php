@@ -15,6 +15,6 @@ class Bank extends Validatable
         'withdrawal_type' => 'required|in:FRST,RCUR'
     );
 
-    protected $fillable = ['user_id', 'iban', 'bic', 'machtigingid', 'withdrawal_type'];
+    protected $guarded = ['id'];
 
 }

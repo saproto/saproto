@@ -32,7 +32,7 @@ class CommitteeController extends Controller
 
     public function show($id)
     {
-        $committee = Committee::find($id);
+        $committee = Committee::findOrFail($id);
 
         if (!$committee->public && (!Auth::check() || !Auth::user()->can('board'))) {
             abort(404);
