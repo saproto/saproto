@@ -42,11 +42,11 @@ class User extends Validatable implements AuthenticatableContract,
     protected $table = 'users';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are guarded.
      *
      * @var array
      */
-    protected $fillable = ['email', 'password', 'receive_sms', 'receive_newsletter', 'phone_visible', 'website', 'phone'];
+    protected $guarded = ['password', 'remember_token'];
 
     /**
      * The rules for validation.
@@ -141,7 +141,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'past':
                 // Committees the user has been a member of in the past, but not anymore.
                 foreach ($d as $k => $c) {
-                    if ($c->pivot->end != null && date('U', strtotime($c->pivot->end)) < date('U')) {
+                    if ($c->pivot->end != null && $c->pivot->end < date('U')) {
                         $r[] = $d[$k];
                     }
                 }
@@ -149,7 +149,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'current':
                 // Committees the user is currently a member of.
                 foreach ($d as $k => $c) {
-                    if (date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U'))) {
+                    if ($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U'))) {
                         $r[] = $d[$k];
                     }
                 }
@@ -157,7 +157,7 @@ class User extends Validatable implements AuthenticatableContract,
             case 'future':
                 // Committees the user is going to be a member of.
                 foreach ($d as $k => $c) {
-                    if ((date('U', strtotime($c->pivot->start)) < date('U') && ($c->pivot->end == null || date('U', strtotime($c->pivot->end)) > date('U')))) {
+                    if ($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U'))) {
                         $r[] = $d[$k];
                     }
                 }

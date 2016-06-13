@@ -19,4 +19,7 @@ class Event extends Model
     public function activity() {
         return $this->hasOne('Proto\Models\Activity');
     }
+
+    protected $guarded = ['id'];
+    
 }

@@ -15,7 +15,7 @@ class Activity extends Validatable
         'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/'
     );
 
-    protected $fillable = ['registration_start', 'registration_end', 'deregistration_end', 'participants', 'price'];
+    protected $guarded = ['id'];
 
     /**
      * The database table used by the model.

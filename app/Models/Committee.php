@@ -74,5 +74,6 @@ class Committee extends Model
         return (!$p->end || $p->end > date('U'));
     }
 
-    protected $fillable = ['name', 'slug', 'description', 'public'];
+    protected $guarded = ['id'];
+    
 }
