@@ -21,7 +21,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->can('board')) {
+        if (Auth::check() && Auth::user()->can('board')) {
             $events = Event::orderBy('start')->get();
         } else {
             $events = Event::where('secret', false)->orderBy('start')->get();
@@ -55,7 +55,7 @@ class EventController extends Controller
      */
     public function archive($year)
     {
-        if (Auth::user()->can('board')) {
+        if (Auth::check() && Auth::user()->can('board')) {
             $events = Event::where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
         } else {
             $events = Event::where('secret', false)->where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
