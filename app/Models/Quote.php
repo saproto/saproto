@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Quote extends Model
 {
     protected $table = 'quotes';
-
-    protected $fillable = ['user_id', 'quote'];
+    
+    protected $guarded = ['id'];
 
     public function user()
     {

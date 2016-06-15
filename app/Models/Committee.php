@@ -69,10 +69,14 @@ class Committee extends Model
      */
     public function isMember(User $user)
     {
-        $p = CommitteeMembership::where('user_id', $user->id)->where('committee_id', $this->id)->where('start', '<=', date('U'))->first();
-        if (!$p) return false;
-        return (!$p->end || $p->end > date('U'));
+        $p = CommitteeMembership::where('user_id', $user->id)->where('committee_id', $this->id)->where('start', '<=', date('U'))->get();
+        foreach($p as $participation) {
+            if (!$participation->end || $participation->end > date('U')) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    protected $fillable = ['name', 'slug', 'description', 'public'];
+    protected $guarded = [];
 }

@@ -19,4 +19,14 @@ class Event extends Model
     public function activity() {
         return $this->hasOne('Proto\Models\Activity');
     }
+
+    /**
+     * @return mixed The image associated with this event, if any.
+     */
+    public function image() {
+        return $this->belongsTo('Proto\Models\StorageEntry');
+    }
+
+    protected $guarded = ['id'];
+    
 }
