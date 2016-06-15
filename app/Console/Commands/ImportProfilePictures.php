@@ -4,6 +4,7 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
@@ -53,14 +54,11 @@ class ImportProfilePictures extends Command
                     continue;
                 }
 
-                $name = "imported_profile_pics/" . date('U') . "-" . mt_rand(1000, 9999);
-                Storage::disk('local')->put($name, file_get_contents($url));
+                $data = tmpfile();
+                fwrite($data, file_get_contents($url));
 
                 $file = new StorageEntry();
-                $file->mime = "image/jpeg";
-                $file->original_filename = $user->proto_username;
-                $file->filename = $name;
-                $file->save();
+                $file->createFromFile(File::get(stream_get_meta_data($data)['uri']));
 
                 $user->photo()->associate($file);
                 $user->save();

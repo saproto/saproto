@@ -103,7 +103,7 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
  * Routes related to files.
  */
 Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-    Route::get('{id}', ['as' => 'get', 'uses' => 'FileController@get']);
+    Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@get']);
 });
 
 /*

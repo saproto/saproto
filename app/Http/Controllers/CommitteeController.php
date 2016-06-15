@@ -86,7 +86,7 @@ class CommitteeController extends Controller
         $image = $request->file('image');
         if ($image) {
             $file = new StorageEntry();
-            $file->createFrom($image);
+            $file->createFromFile($image);
 
             $committee->image()->associate($file);
             $committee->save();
