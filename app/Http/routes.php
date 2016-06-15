@@ -193,10 +193,10 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
 /**
  * Routes related to the Quote Corner.
  */
-Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
-    Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
-    Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
-    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
+Route::group(['prefix' => 'quotes', 'middleware' => ['auth'], 'as' => 'quotes::'], function () {
+    Route::get('/', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
+    Route::post('/add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
 });
 
 /*
@@ -209,4 +209,16 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
 
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
+});
+
+/**
+ * Routes related to the Achievement system.
+ */
+Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:board'], 'as' => 'achievement::'], function() {
+    Route::get('/', ['as' => 'list', 'uses' => 'AchievementController@overview']);
+    Route::get('/add', ['as' => 'add', 'uses' => 'AchievementController@create']);
+    Route::post('/add', ['as' => 'add', 'uses' => 'AchievementController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
+    Route::post('/add/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
 });

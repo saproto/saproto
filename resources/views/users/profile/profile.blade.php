@@ -26,7 +26,7 @@
             @include('users.profile.timeline')
         </div>
         <div class="col-md-4">
-            @include('users.profile.achievements')
+            @include('users.profile.achieved')
         </div>
     </div>
 

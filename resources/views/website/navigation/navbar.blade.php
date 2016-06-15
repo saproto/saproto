@@ -41,6 +41,7 @@
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
+                        <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a class="navbar-title">Create new:</a></li>
                         <li><a href="{{ route("committee::add") }}">Committee</a></li>
