@@ -12,7 +12,7 @@ class CreateAchievementTable extends Migration
      */
     public function up()
     {
-        Schema::create('achievements', function (Blueprint $table) {
+        Schema::create('achievement', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('desc');
@@ -36,7 +36,7 @@ class CreateAchievementTable extends Migration
      */
     public function down()
     {
-        Schema::drop('achievements');
+        Schema::drop('achievement');
         Schema::drop('achievements_users');
     }
 }
