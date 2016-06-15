@@ -289,8 +289,6 @@ class MigrateData extends Command
                     'participants' => 'NULL',
                     'registration_start' => 'NULL',
                     'registration_end' => 'NULL',
-                    'secret' => 'FALSE',
-                    'active' => ($activity['post_status'] == 'publish' ? 'TRUE' : 'FALSE'),
                     'closed' => 'FALSE',
                     'created_at' => $activity['post_date_gmt'],
                     'updated_at' => $activity['post_modified_gmt']
@@ -319,7 +317,9 @@ class MigrateData extends Command
                             $a->participants = ($activitymeta['meta_value'] <= 0 ? null : $activitymeta['meta_value']);
                             break;
                         case 'registration_visibility':
-                            $a->secret = ($activitymeta['meta_value'] != 'visible' ? true : false);
+                            if ($a->event) {
+                                $a->event->secret = ($activitymeta['meta_value'] != 'visible' ? true : false);
+                            }
                             break;
                         case 'closed':
                             $a->closed = true;

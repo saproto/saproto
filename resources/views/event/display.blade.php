@@ -14,6 +14,10 @@
 
                 <div class="panel-heading" style="text-align: center;">
 
+                    @if ($event->secret)
+                        [ Hidden! ]
+                    @endif
+
                     From {{ date('l j F, H:i', $event->start) }} till
 
                     @if (($event->end - $event->start) < 3600 * 24)

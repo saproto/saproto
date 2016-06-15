@@ -42,18 +42,23 @@
 
             <div class="form-group">
                 <label for="editor">Description</label>
-                <textarea id="editor" name="description" placeholder="{!! ($new ? 'Please elaborate on why this committee is awesome.' : $committee->description) !!}"></textarea>
+                @if ($new)
+                    <textarea id="editor" name="description"
+                              placeholder="Please elaborate on why this committee is awesome."></textarea>
+                @else
+                    <textarea id="editor" name="description">{{ $committee->description }}</textarea>
+                @endif
             </div>
 
         </div>
 
         <div class="panel-footer clearfix">
 
-                <a href="{{ ($new ? 'javascript:history.go(-1)' : route("committee::show", ["id" => $committee->id]) ) }}"
-                   class="btn btn-default">
-                    Cancel
-                </a>
-                &nbsp;
+            <a href="{{ ($new ? 'javascript:history.go(-1)' : route("committee::show", ["id" => $committee->id]) ) }}"
+               class="btn btn-default">
+                Cancel
+            </a>
+            &nbsp;
 
             <button type="submit" class="btn btn-success pull-right">
                 Save

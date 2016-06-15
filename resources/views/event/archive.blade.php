@@ -37,7 +37,7 @@
                                     @endif
 
                                     <a class="activity" href="{{ route('event::show', ['id' => $event->id]) }}">
-                                        <div class="activity {{ ($i % 2 == 1 ? 'odd' : '') }}">
+                                        <div class="activity {{ ($i % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                             <p><strong>{{ $event->title }}</strong></p>
                                             <p><i class="fa fa-map-marker"
                                                   aria-hidden="true"></i> {{ $event->location }}
