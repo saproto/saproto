@@ -75,6 +75,16 @@
 
                         </div>
 
+                        <div class="form-group">
+                            <label for="editor">Description</label>
+                            @if (!$event)
+                                <textarea id="editor" name="description"
+                                          placeholder="Please elaborate on why this event is awesome."></textarea>
+                            @else
+                                <textarea id="editor" name="description">{{ $event->description }}</textarea>
+                            @endif
+                        </div>
+
                         <div class="row">
 
                             <div class="col-md-6">
@@ -249,6 +259,13 @@
     @parent
 
     <script type="text/javascript">
+
+        var simplemde = new SimpleMDE({
+            element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({
             icons: {

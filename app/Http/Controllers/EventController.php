@@ -99,6 +99,8 @@ class EventController extends Controller
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
+        $event->secret = $request->secret;
+        $event->description = $request->description;
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -154,6 +156,7 @@ class EventController extends Controller
         $event->end = strtotime($request->end);
         $event->location = $request->location;
         $event->secret = $request->secret;
+        $event->description = $request->description;
 
         if ($request->file('image')) {
             $file = new StorageEntry();
