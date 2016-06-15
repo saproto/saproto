@@ -39,9 +39,6 @@
     @parent
 
     <script>
-        // tinymce.init({selector: '#editor'});g
-
-        // Most options demonstrate the non-default behavior
         var simplemde = new SimpleMDE({
             element: $("#editor")[0],
             toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
