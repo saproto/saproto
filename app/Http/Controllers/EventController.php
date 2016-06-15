@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Event;
+use Proto\Models\StorageEntry;
 
 use Session;
 use Redirect;
@@ -99,6 +100,13 @@ class EventController extends Controller
         $event->end = strtotime($request->end);
         $event->location = $request->location;
 
+        if ($request->file('image')) {
+            $file = new StorageEntry();
+            $file->createFrom($request->file('image'));
+
+            $event->image()->associate($file);
+        }
+
         $event->save();
 
         Session::flash("flash_message", "Your event '" . $event->title . "' has been added.");
@@ -146,6 +154,13 @@ class EventController extends Controller
         $event->end = strtotime($request->end);
         $event->location = $request->location;
         $event->secret = $request->secret;
+
+        if ($request->file('image')) {
+            $file = new StorageEntry();
+            $file->createFrom($request->file('image'));
+
+            $event->image()->associate($file);
+        }
 
         $event->save();
 
