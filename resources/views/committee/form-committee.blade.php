@@ -42,9 +42,7 @@
 
             <div class="form-group">
                 <label for="editor">Description</label>
-                <textarea id="editor" name="description">
-                    {!! ($new ? 'Please elaborate on why this committee is awesome.' : $committee->description) !!}
-                </textarea>
+                <textarea id="editor" name="description" placeholder="{!! ($new ? 'Please elaborate on why this committee is awesome.' : $committee->description) !!}"></textarea>
             </div>
 
         </div>

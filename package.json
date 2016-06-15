@@ -59,6 +59,7 @@
           "./resources/assets/bower/bootstrap/dist/js/bootstrap.min.js",
           "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
           "./resources/assets/bower/js-cookie/src/js.cookie.js",
+          "./resources/assets/bower/simplemde/dist/simplemde.min.js",
           "./resources/assets/bower/angular/angular.js"
       ],
       "dest": "application.js",
@@ -81,6 +82,7 @@
       "src": [
           "./resources/views/**/*.scss",
           "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
+          "./resources/assets/bower/simplemde/dist/simplemde.min.css",
           "./resources/assets/bower/font-awesome/css/font-awesome.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
