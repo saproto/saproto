@@ -38,10 +38,12 @@
 
     @parent
 
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-
     <script>
-        tinymce.init({selector: '#editor'});
+        var simplemde = new SimpleMDE({
+            element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
 
         $('#committee-tab a').click(function (e) {
             e.preventDefault();
