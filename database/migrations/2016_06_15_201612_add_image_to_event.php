@@ -12,10 +12,8 @@ class AddImageToEvent extends Migration
      */
     public function up()
     {
-        Schema::create('google2fa', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('secret');
+        Schema::table('events', function ($table) {
+            $table->integer('image_id')->nullable()->default(null);
         });
     }
 
@@ -26,6 +24,8 @@ class AddImageToEvent extends Migration
      */
     public function down()
     {
-        Schema::drop('google2fa');
+        Schema::table('events', function ($table) {
+            $table->dropColumn('image_id');
+        });
     }
 }
