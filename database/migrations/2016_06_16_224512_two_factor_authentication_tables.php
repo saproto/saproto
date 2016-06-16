@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddImageToEvent extends Migration
+class TwoFactorAuthenticationTables extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,12 @@ class AddImageToEvent extends Migration
      */
     public function up()
     {
+
         Schema::create('google2fa', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->string('secret');
+            $table->timestamps();
         });
     }
 
