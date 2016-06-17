@@ -13,6 +13,7 @@ use Proto\Models\User;
 
 use Auth;
 use Redirect;
+use Yubikey;
 
 class AuthController extends Controller
 {
@@ -33,16 +34,51 @@ class AuthController extends Controller
             return Redirect::route('homepage');
         } else {
 
-            if ($request->session()->has('2fa_user') && $request->has('2fa_token')) {
+            if ($request->session()->has('2fa_user') && ($request->has('2fa_totp_token') || $request->has('2fa_yubikey_token'))) {
 
-                // Catching Two Factor Authentication attempt
-                if ($google2fa->verifyKey($request->session()->get('2fa_user')->tfa_totp_key, $request->input('2fa_token'))) {
-                    Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
-                    return Redirect::intended(route('homepage'));
-                } else {
-                    $request->session()->flash('flash_message', 'Invalid token. Please try again.');
+                if ($request->has('2fa_totp_token') && $request->has('2fa_yubikey_token')) {
+
+                    $request->session()->flash('flash_message', 'Please enter only one of the tokens.');
                     $request->session()->reflash();
                     return view('auth.2fa');
+
+                } elseif ($request->session()->get('2fa_user')->tfa_totp_key && $request->has('2fa_totp_token') && $request->input('2fa_totp_token') != '') {
+
+                    // Catching Two Factor Authentication attempt
+                    if ($google2fa->verifyKey($request->session()->get('2fa_user')->tfa_totp_key, $request->input('2fa_totp_token'))) {
+                        Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
+                        return Redirect::intended(route('homepage'));
+                    } else {
+                        $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
+                        $request->session()->reflash();
+                        return view('auth.2fa');
+                    }
+
+                } elseif ($request->session()->get('2fa_user')->tfa_yubikey_identity && $request->has('2fa_yubikey_token') && $request->input('2fa_yubikey_token') != '') {
+
+                    try {
+
+                        if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
+                            Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
+                            return Redirect::intended(route('homepage'));
+                        } else {
+                            $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
+                            $request->session()->reflash();
+                            return view('auth.2fa');
+                        }
+
+                    } catch (\Exception $e) {
+                        $request->session()->flash('flash_message', $e->getMessage());
+                        $request->session()->reflash();
+                        return view('auth.2fa');
+                    }
+
+                } else {
+
+                    $request->session()->flash('flash_message', 'Invalid authentication attempt. Try again.');
+                    $request->session()->reflash();
+                    return view('auth.2fa');
+
                 }
 
             } else {
@@ -59,7 +95,7 @@ class AuthController extends Controller
                 if ($user && Auth::validate($user, $request->all())) {
 
                     // Catch users that have 2FA enabled.
-                    if ($user->tfa_totp_key) {
+                    if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
                         $request->session()->flash('2fa_user', $user);
                         $request->session()->flash('2fa_remember', $remember);
                         return view('auth.2fa');
@@ -106,7 +142,7 @@ class AuthController extends Controller
                         if ($response == $token) {
 
                             // Catch users that have 2FA enabled.
-                            if ($user->tfa_totp_key) {
+                            if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
                                 $request->session()->flash('2fa_user', $user);
                                 $request->session()->flash('2fa_remember', $remember);
                                 return view('auth.2fa');
@@ -130,7 +166,8 @@ class AuthController extends Controller
 
     }
 
-    public function getLogout()
+    public
+    function getLogout()
     {
         Auth::logout();
         return Redirect::route('homepage');
