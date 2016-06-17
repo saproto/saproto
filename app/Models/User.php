@@ -100,7 +100,8 @@ class User extends Validatable implements AuthenticatableContract,
     /**
      * @return mixed The profile picture of this user.
      */
-    public function photo() {
+    public function photo()
+    {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
@@ -173,7 +174,6 @@ class User extends Validatable implements AuthenticatableContract,
     }
 
     /**
-<<<<<<< HEAD
      * @return mixed Any Achievements the user aquired
      */
     public function achieved()
@@ -190,15 +190,14 @@ class User extends Validatable implements AuthenticatableContract,
     {
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'created_at'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
-}
-=======
-     * @param User $user
+
+    /** @param User $user
      * @return bool Whether the user is currently in the specified committee.
      */
     public function isInCommittee(Committee $committee)
     {
         $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->where('start', '<=', date('U'))->get();
-        foreach($p as $participation) {
+        foreach ($p as $participation) {
             if (!$participation->end || $participation->end > date('U')) {
                 return true;
             }
@@ -206,4 +205,3 @@ class User extends Validatable implements AuthenticatableContract,
         return false;
     }
 }
->>>>>>> master

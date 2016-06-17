@@ -38,16 +38,24 @@ class AchievementController extends Controller
     public function update($id, Request $request)
     {
         $achievement = Achievement::find($id);
-        if (!$achievement) {
-            abort(404);
-        }
+        if (!$achievement) abort(404);
         $achievement->fill($request->all());
         $achievement->save();
         Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been updated.");
         return Redirect::route("achievement::list");
     }
 
-    public function destroy($id)
+    public function edit($id)
+    {
+        $achievement = Achievement::find($id);
+        if (!$achievement) {
+            abort(404);
+        }
+        return view('study.edit', ['new' => false, 'achievement' => $achievement]);
+    }
+
+    public
+    function destroy($id)
     {
         $achievement = Achievement::find($id);
         if (!$achievement) {

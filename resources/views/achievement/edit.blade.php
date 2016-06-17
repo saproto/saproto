@@ -16,33 +16,47 @@
         {!! csrf_field() !!}
 
         <div class="form-group">
-            <label for="name">achievement:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Achievement name"
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Be Awesome"
                    value="{{ $achievement->name or '' }}" required>
         </div>
 
         <div class="form-group">
-            <label for="faculty">Faculty (or similar):</label>
-            <input type="text" class="form-control" id="faculty" name="faculty" placeholder="EEMCS"
-                   value="{{ $achievement->faculty or '' }}" required>
+            <label for="faculty">Description:</label>
+            <input type="text" class="form-control" id="faculty" name="faculty" placeholder="Become member of Proto"
+                   value="{{ $achievement->desc or '' }}" required>
         </div>
 
         <div class="form-group">
-            <label for="faculty">Type:</label>
+            <label for="faculty">Tier:</label>
             <select class="form-control" name="type">
-                <option value="BSc" {{ (!$new && $achievement->type == "BSc" ? 'selected' : '') }}>Bachelor</option>
-                <option value="MSc" {{ (!$new && $achievement->type == "MSc" ? 'selected' : '') }}>Master</option>
-                <option value="Minor" {{ (!$new && $achievement->type == "Minor" ? 'selected' : '') }}>Minor</option>
-                <option value="Other" {{ (!$new && $achievement->type == "Other" ? 'selected' : '') }}>Other</option>
+                <option value="COMMON"
+                        {{ (!$new && $achievement->tier == "COMMON" ? 'selected' : '') }}>
+                    COMMON
+                </option>
+                <option value="UNCOMMON"
+                        {{ (!$new && $achievement->tier == "UNCOMMON" ? 'selected' : '') }}>
+                    UNCOMMON
+                </option>
+                <option value="RARE"
+                        {{ (!$new && $achievement->tier == "RARE" ? 'selected' : '') }}>RARE
+                </option>
+                <option value="EPIC"
+                        {{ (!$new && $achievement->tier == "EPIC" ? 'selected' : '') }}>EPIC
+                </option>
+                <option value="LEGENDARY"
+                        {{ (!$new && $achievement->tier == "LEGENDARY" ? 'selected' : '') }}>
+                    LEGENDARY
+                </option>
             </select>
         </div>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="utwente" {{ (!$new && $achievement->utwente ? 'checked' : '') }}>
-                This is a achievement at the University of Twente
-            </label>
-        </div>
+        {{--<div class="checkbox">--}}
+        {{--<label>--}}
+        {{--<input type="checkbox" name="boardAssigned" {{ (!$new && $achievement->automatic ? 'checked' : '') }}>--}}
+        {{--This achievement gets assigned by an admin--}}
+        {{--</label>--}}
+        {{--</div>--}}
 
         @if(!$new)
 
@@ -60,11 +74,11 @@
                 <tbody>
                 <tr>
                     <td>Members only</td>
-                    <td>{{ count($achievement->current()) }}</td>
+                    {{--                    <td>{{ count($achievement->current()) }}</td>--}}
                 </tr>
                 <tr>
                     <td>All users</td>
-                    <td>{{ count($achievement->current(false)) }}</td>
+                    {{--                    <td>{{ count($achievement->current(false)) }}</td>--}}
                 </tr>
                 </tbody>
             </table>
@@ -80,5 +94,68 @@
             <a href="{{ route("achievement::list") }}" class="btn btn-default pull-right">Cancel</a>
 
     </form>
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+
+        select, option {
+            background: #fff;
+            color: black;
+        }
+
+        select option:hover {
+            background: black;
+            color: black;
+            cursor: none;
+        }
+
+        select.COMMON, option[value="COMMON"] {
+            background: #FFFFFF;
+            color: black;
+        }
+
+        select.UNCOMMON, option[value="UNCOMMON"] {
+            background: #1E90FF;
+            color: white;
+        }
+
+        select.RARE, option[value="RARE"] {
+            background: #9932CC;
+            color: white;
+        }
+
+        select.EPIC, option[value="EPIC"] {
+            background: #333333;
+            color: white;
+        }
+
+        select.LEGENDARY, option[value="LEGENDARY"] {
+            background: #C1FF00;
+            color: black;
+        }
+
+        /********** ONLY FIREFOX **********/
+        /*select option:checked {*/
+        /*box-shadow: 0 0 10px 100px #555 inset;*/
+        /*}*/
+
+    </style>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+        $('select').on('change', function (ev) {
+            $(this).attr('class', 'form-control').addClass($(this).children(':selected').val());
+        });
+    </script>
 
 @endsection

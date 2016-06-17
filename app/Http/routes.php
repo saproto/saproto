@@ -219,6 +219,6 @@ Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:bo
     Route::get('/add', ['as' => 'add', 'uses' => 'AchievementController@create']);
     Route::post('/add', ['as' => 'add', 'uses' => 'AchievementController@store']);
     Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
-    Route::post('/add/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
     Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
 });
