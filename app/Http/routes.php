@@ -106,6 +106,9 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedForm']);
         Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
         Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
+        Route::get('yubikey', ['as' => 'addyubikey', 'uses' => 'TFAController@yubikeyForm']);
+        Route::post('yubikey', ['as' => 'addyubikey', 'uses' => 'TFAController@yubikeyPost']);
+        Route::get('deleteyubikey', ['as' => 'deleteyubikey', 'uses' => 'TFAController@yubikeyDelete']);
     });
 });
 /**

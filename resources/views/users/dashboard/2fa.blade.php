@@ -4,41 +4,89 @@
     </div>
     <div class="panel-body">
 
-        @if($user->timebased2fa)
+        <div class="row">
 
-            <p style="text-align: center;">
-                <strong>
-                    Time-Based 2 Factor Authentication enabled.
-                </strong>
-            </p>
+            <div class="col-md-6">
 
-            <div class="btn-group btn-group-justified" role="group">
-                <div class="btn-group" role="group">
-                    <a href="{{ route('user::2fa::deletetimebased', ['user' => $user->id]) }}"
-                       class="btn btn-danger">
-                        Disable Time-Based 2FA
-                    </a>
-                </div>
+                @if($user->tfa_totp_key)
+
+                    <p style="text-align: center;">
+                        <strong>
+                            Time-Based 2 Factor Authentication enabled.
+                        </strong>
+                    </p>
+
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('user::2fa::deletetimebased', ['user' => $user->id]) }}"
+                               class="btn btn-danger">
+                                Disable Time-Based 2FA
+                            </a>
+                        </div>
+                    </div>
+
+                @else
+
+                    <p style="text-align: center;">
+                        <strong>
+                            No Time-Based 2 Factor Authentication configured.
+                        </strong>
+                    </p>
+
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('user::2fa::addtimebased', ['user' => $user->id]) }}"
+                               class="btn btn-success">
+                                Configure Time-Based 2FA
+                            </a>
+                        </div>
+                    </div>
+
+                @endif
+
             </div>
 
-        @else
+            <div class="col-md-6">
 
-            <p style="text-align: center;">
-                <strong>
-                    No Time-Based 2 Factor Authentication configured.
-                </strong>
-            </p>
+                @if($user->tfa_yubikey_identity)
 
-            <div class="btn-group btn-group-justified" role="group">
-                <div class="btn-group" role="group">
-                    <a href="{{ route('user::2fa::addtimebased', ['user' => $user->id]) }}"
-                       class="btn btn-success">
-                        Configure Time-Based 2FA
-                    </a>
-                </div>
+                    <p style="text-align: center;">
+                        <strong>
+                            YubiKey configured.
+                        </strong>
+                    </p>
+
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('user::2fa::deleteyubikey', ['user' => $user->id]) }}"
+                               class="btn btn-danger">
+                                Disable YubiKey 2FA
+                            </a>
+                        </div>
+                    </div>
+
+                @else
+
+                    <p style="text-align: center;">
+                        <strong>
+                            No YubiKey configured.
+                        </strong>
+                    </p>
+
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <a href="{{ route('user::2fa::addyubikey', ['user' => $user->id]) }}"
+                               class="btn btn-success">
+                                Configure YubiKey 2FA
+                            </a>
+                        </div>
+                    </div>
+
+                @endif
+
             </div>
 
-        @endif
+        </div>
 
     </div>
 

@@ -40,7 +40,8 @@
     "s-ichikawa/laravel-sendgrid-driver": "dev-master",
     "nesbot/carbon": "^1.21",
     "pragmarx/google2fa": "^0.7.1",
-    "illuminate/html": "5.*"
+    "illuminate/html": "5.*",
+    "bitbeans/yubikey": "dev-master"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
