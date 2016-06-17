@@ -98,9 +98,18 @@ class User extends Validatable implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed The associated Google 2 Step Authentication, if any.
+     */
+    public function timebased2fa()
+    {
+        return $this->hasOne('Proto\Models\TimeBased2FA');
+    }
+
+    /**
      * @return mixed The profile picture of this user.
      */
-    public function photo() {
+    public function photo()
+    {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
@@ -179,7 +188,7 @@ class User extends Validatable implements AuthenticatableContract,
     public function isInCommittee(Committee $committee)
     {
         $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->where('start', '<=', date('U'))->get();
-        foreach($p as $participation) {
+        foreach ($p as $participation) {
             if (!$participation->end || $participation->end > date('U')) {
                 return true;
             }
