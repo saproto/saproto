@@ -98,14 +98,6 @@ class User extends Validatable implements AuthenticatableContract,
     }
 
     /**
-     * @return mixed The associated Google 2 Step Authentication, if any.
-     */
-    public function timebased2fa()
-    {
-        return $this->hasOne('Proto\Models\TimeBased2FA');
-    }
-
-    /**
      * @return mixed The profile picture of this user.
      */
     public function photo()

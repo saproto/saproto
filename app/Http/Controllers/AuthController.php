@@ -36,7 +36,7 @@ class AuthController extends Controller
             if ($request->session()->has('2fa_user') && $request->has('2fa_token')) {
 
                 // Catching Two Factor Authentication attempt
-                if ($google2fa->verifyKey($request->session()->get('2fa_user')->timebased2fa->secret, $request->input('2fa_token'))) {
+                if ($google2fa->verifyKey($request->session()->get('2fa_user')->tfa_totp_key, $request->input('2fa_token'))) {
                     Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
                     return Redirect::intended(route('homepage'));
                 } else {
@@ -59,8 +59,9 @@ class AuthController extends Controller
                 if ($user && Auth::validate($user, $request->all())) {
 
                     // Catch users that have 2FA enabled.
-                    if ($user->timebased2fa) {
+                    if ($user->tfa_totp_key) {
                         $request->session()->flash('2fa_user', $user);
+                        $request->session()->flash('2fa_remember', $remember);
                         return view('auth.2fa');
                     } else {
                         Auth::login($user, $remember);
@@ -105,7 +106,7 @@ class AuthController extends Controller
                         if ($response == $token) {
 
                             // Catch users that have 2FA enabled.
-                            if ($user->timebased2fa) {
+                            if ($user->tfa_totp_key) {
                                 $request->session()->flash('2fa_user', $user);
                                 $request->session()->flash('2fa_remember', $remember);
                                 return view('auth.2fa');

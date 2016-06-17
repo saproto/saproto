@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
 
-        @if($user->timebased2fa)
+        @if($user->tfa_totp_key)
 
             <p style="text-align: center;">
                 <strong>

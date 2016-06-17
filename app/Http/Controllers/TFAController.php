@@ -9,7 +9,6 @@ use Proto\Http\Controllers\Controller;
 
 use PragmaRX\Google2FA\Google2FA;
 use Proto\Models\User;
-use Proto\Models\TimeBased2FA;
 
 use Auth;
 use Redirect;
@@ -50,15 +49,8 @@ class TFAController extends Controller
 
         if ($google2fa->verifyKey($secret, $code)) {
 
-            $tfa = ($user->timebased2fa === null ? new TimeBased2FA() : $user->timebased2fa);
-
-            $tfa->secret = $secret;
-            $tfa->save();
-
-            if ($user->timebased2fa === null) {
-                $tfa->user()->associate($user);
-                $tfa->save();
-            }
+            $user->tfa_totp_key = $secret;
+            $user->save();
 
             $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication enabled!');
             return Redirect::route('user::dashboard', ['id' => $user->id]);
@@ -82,8 +74,9 @@ class TFAController extends Controller
             abort(403);
         }
 
-        if ($user->timebased2fa !== null) {
-            $user->timebased2fa->delete();
+        if ($user->tfa_totp_key !== null) {
+            $user->tfa_totp_key = null;
+            $user->save();
         }
 
         $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
