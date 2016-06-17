@@ -74,7 +74,7 @@
 
         @if($committee->image)
         #header {
-            background-image: url('{{ route("file::get", ['id' => $committee->image->id]) }}');
+            background-image: url('{{ $committee->image->generatePath() }}');
         }
         @endif
 

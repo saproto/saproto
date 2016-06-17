@@ -10,7 +10,7 @@
 
 @section('panel-body')
 
-    <form method="POST" action="{{ route('login::show') }}">
+    <form method="POST" action="{{ route('login::post') }}">
 
         {!! csrf_field() !!}
 

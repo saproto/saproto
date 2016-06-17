@@ -20,9 +20,9 @@ Route::get('/', ['as' => 'homepage', 'uses' => 'HomeController@show']);
  * Routes related to authentication.
  */
 Route::group(['as' => 'login::'], function () {
-    Route::get('auth/login', ['as' => 'show', 'uses' => 'Auth\AuthController@getLogin']);
-    Route::post('auth/login', ['middleware' => 'utwente.auth', 'as' => 'post', 'uses' => 'Auth\AuthController@postLogin']);
-    Route::get('auth/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+    Route::get('auth/login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
+    Route::post('auth/login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
+    Route::get('auth/logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
     Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'Auth\PasswordController@getReset']);
     Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'Auth\PasswordController@postReset']);
@@ -98,12 +98,21 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
         Route::post('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
     });
+
+    /*
+     * Routes related to 2FA
+     */
+    Route::group(['prefix' => '{user_id}/2fa', 'as' => '2fa::'], function () {
+        Route::get('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedForm']);
+        Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
+        Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
+    });
 });
 /**
  * Routes related to files.
  */
 Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-    Route::get('{id}', ['as' => 'get', 'uses' => 'FileController@get']);
+    Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@get']);
 });
 
 /*

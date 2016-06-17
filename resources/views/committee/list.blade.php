@@ -16,7 +16,7 @@
 
                     <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
                         <div class="committee"
-                             style="{{ ($committee->image ? "background-image: url(".route('file::get', ['id'=>$committee->image->id]).");" : '') }}">
+                             style="{{ ($committee->image ? "background-image: url(".$committee->image->generatePath().");" : '') }}">
                             <div class="committee-name">
                                 {{ $committee->name }}
                             </div>

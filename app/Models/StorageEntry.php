@@ -2,6 +2,8 @@
 
 namespace Proto\Models;
 
+use Hash;
+
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Facades\Input;
@@ -17,48 +19,29 @@ class StorageEntry extends Model
      */
     protected $table = 'files';
 
-    /**
-     * This method initializes a StorageEntry object from a HTTP POST'ed file.
-     * It fixes writing the file to the disk and seeding the object with the correct values for consistency. :)
-     *
-     * @param $postFile The file (must be from HTTP POST).
-     */
-    public function fillFrom($postFile)
-    {
-        $name = date('U') . "-" . mt_rand(1000, 9999);
-        Storage::disk('local')->put($name, File::get($postFile));
-
-        $this->mime = $postFile->getClientMimeType();
-        $this->original_filename = $postFile->getClientOriginalName();
-        $this->filename = $name;
-    }
-
-    /**
-     * See fillForm, but also saves afterwards.
-     *
-     * @param $postFile The file (must be from HTTP POST).
-     */
-    public function createFrom($postFile)
-    {
-        $this->fillFrom($postFile);
-        $this->save();
-    }
-
-    public function createFromUrl($url)
+    public function createFromFile($file)
     {
 
-        $file = File::getRemote($url);
-        if ($file === false) {
-            return false;
-        }
+        $this->hash = $this->generateHash();
 
-        $name = date('U') . "-" . mt_rand(1000, 9999);
-        Storage::disk('local')->put($name, $file);
+        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        Storage::disk('local')->put($this->filename, File::get($file));
 
         $this->mime = $file->getClientMimeType();
         $this->original_filename = $file->getClientOriginalName();
-        $this->filename = $name;
+
         $this->save();
 
+    }
+
+    private function generateHash()
+    {
+        return sha1(date('U') . mt_rand(1, 99999999999));
+    }
+
+    public function generatePath()
+    {
+        return route('file::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename]);
     }
 }
