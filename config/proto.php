@@ -39,4 +39,15 @@ return [
 
     'emaildomain' => 'proto.utwente.nl',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Roles that require Two-Factor Authentication
+    |--------------------------------------------------------------------------
+    |
+    | Users that have any of these roles will be forced by the application to enable TFA to enhance security.
+    |
+    */
+
+    'tfaroles' => ['admin', 'board'],
+
 ];
