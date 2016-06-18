@@ -17,21 +17,6 @@ use Redirect;
 class TFAController extends Controller
 {
 
-    public function timebasedForm($user_id, Request $request, Google2FA $google2fa)
-    {
-        $user = User::findOrFail($user_id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
-        $secret = ($request->session()->has('2fa_secret') ? $request->session()->get('2fa_secret') : $google2fa->generateSecretKey(32));
-        $request->session()->flash('2fa_secret', $secret);
-        $qrcode = $google2fa->getQRCodeGoogleUrl('S.A. Proto', $user->name, $secret);
-
-        return view('users.2fa.timebased', ['user' => $user, 'qrcode' => $qrcode, 'secret' => $secret]);
-    }
-
     public function timebasedPost($user_id, Request $request, Google2FA $google2fa)
     {
 
@@ -83,17 +68,6 @@ class TFAController extends Controller
         $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
         return Redirect::route('user::dashboard', ['id' => $user->id]);
 
-    }
-
-    public function yubikeyForm($user_id, Request $request, Google2FA $google2fa)
-    {
-        $user = User::findOrFail($user_id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
-        return view('users.2fa.yubikey', ['user' => $user]);
     }
 
     public function yubikeyPost($user_id, Request $request)

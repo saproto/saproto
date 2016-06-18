@@ -1,45 +1,39 @@
-@extends('website.layouts.panel')
+<div id="yubikey-modal" class="modal fade " tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
-@section('page-title')
-    Enabling Two Factor Authentication
-@endsection
+            <form method="post" action="{{ route('user::2fa::addyubikey', ['user_id' => $user->id]) }}"
+                  class="form-horizontal">
 
-@section('panel-title')
-    Configuring YubiKey 2 Factor Authentication for {{ $user->name }}
-@endsection
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">YubiKey 2FA</h4>
+                </div>
 
-@section('panel-body')
+                <div class="modal-body">
 
-    <form method="post" action="{{ route('user::2fa::addyubikey', ['user_id' => $user->id]) }}"
-          class="form-horizontal">
+                    <p style="text-align: center;">
+                        Insert your YubiKey.<br>
+                        If necessary, press the button on it.
+                    </p>
 
-        <div class="row">
+                    {!! csrf_field() !!}
 
-            <p style="text-align: center;">
-                Insert your YubiKey and, if necessary, press the button on it.
-            </p>
+                    <p style="text-align: center;">
+                        <input type="password" class="form-control" name="2facode" placeholder="Your YubiKey OTP."
+                               autofocus>
+                    </p>
 
-            <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+                </div>
 
-                {!! csrf_field() !!}
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" value="Save">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+                </div>
 
-                <p style="text-align: center;">
-                    <input type="password" class="form-control" name="2facode" placeholder="Your YubiKey OTP." autofocus>
-                </p>
-
-            </div>
+            </form>
 
         </div>
-
-        @endsection
-
-        @section('panel-footer')
-
-            <div class="pull-right">
-                <input type="submit" class="btn btn-success" value="Save">
-                <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
-            </div>
-
-    </form>
-
-@endsection
+    </div>
+</div>

@@ -103,10 +103,8 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
      * Routes related to 2FA
      */
     Route::group(['prefix' => '{user_id}/2fa', 'as' => '2fa::'], function () {
-        Route::get('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedForm']);
         Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
         Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
-        Route::get('yubikey', ['as' => 'addyubikey', 'uses' => 'TFAController@yubikeyForm']);
         Route::post('yubikey', ['as' => 'addyubikey', 'uses' => 'TFAController@yubikeyPost']);
         Route::get('deleteyubikey', ['as' => 'deleteyubikey', 'uses' => 'TFAController@yubikeyDelete']);
     });
