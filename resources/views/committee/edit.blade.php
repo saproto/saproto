@@ -102,7 +102,7 @@
 
         @if(!$new && $committee->image)
             #header {
-            background-image: url('{{ route("file::get", ['id' => $committee->image->id]) }}');
+            background-image: url('{!! $committee->image->generateImagePath(2000,500) !!}');
         }
         @endif
 

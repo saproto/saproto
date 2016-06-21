@@ -3,6 +3,8 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use PragmaRX\Google2FA\Google2FA;
+
 use Redirect;
 use Hash;
 
@@ -23,7 +25,7 @@ class UserDashboardController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id = null)
+    public function show(Request $request, $id = null)
     {
         if ($id == null) {
             $id = Auth::id();
@@ -39,10 +41,18 @@ class UserDashboardController extends Controller
             abort(403);
         }
 
-        return view('users.dashboard.dashboard', ['user' => $user]);
+        $qrcode = null;
+        if (!$user->tfa_totp_key) {
+            $google2fa = new Google2FA();
+            $request->session()->flash('2fa_secret', ($request->session()->has('2fa_secret') ? $request->session()->get('2fa_secret') : $google2fa->generateSecretKey(32)));
+            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A. Proto', $user->name, $request->session()->get('2fa_secret'));
+        }
+
+        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode]);
     }
 
-    public function update($id = null, Request $request) {
+    public function update($id = null, Request $request)
+    {
         if ($id == null) {
             $id = Auth::id();
         }
@@ -57,7 +67,7 @@ class UserDashboardController extends Controller
             abort(403);
         }
 
-        $userdata = array('email'=>$user->email);
+        $userdata = array('email' => $user->email);
 
         if (($user->email != $request->input('email')) || ($request->input('newpassword') != "")) {
             if (!Hash::check($request->input('old_pass'), $user->password)) {

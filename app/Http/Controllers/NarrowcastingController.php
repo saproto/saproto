@@ -36,7 +36,14 @@ class NarrowcastingController extends Controller
      */
     public function indexApi()
     {
-        return NarrowcastingItem::where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get();
+        $data = [];
+        foreach (NarrowcastingItem::where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get() as $item) {
+            $data[] = [
+                'slide_duration' => $item->slide_duration,
+                'image' => $item->image->generateImagePath(2000, 1200)
+            ];
+        }
+        return $data;
     }
 
     /**
@@ -70,7 +77,7 @@ class NarrowcastingController extends Controller
         $narrowcasting->slide_duration = $request->slide_duration;
 
         $file = new StorageEntry();
-        $file->createFrom($request->file('image'));
+        $file->createFromFile($request->file('image'));
 
         $narrowcasting->image()->associate($file);
 
@@ -154,9 +161,10 @@ class NarrowcastingController extends Controller
 
     }
 
-    public function clear() {
+    public function clear()
+    {
 
-        foreach(NarrowcastingItem::where('campaign_end', '<', date('U'))->get() as $item) {
+        foreach (NarrowcastingItem::where('campaign_end', '<', date('U'))->get() as $item) {
             $item->delete();
         }
 

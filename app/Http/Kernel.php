@@ -21,7 +21,8 @@ class Kernel extends HttpKernel
 
         // Our own middleware
         \Proto\Http\Middleware\EnforceHTTPS::class,
-        \Proto\Http\Middleware\DevelopmentAccess::class
+        \Proto\Http\Middleware\DevelopmentAccess::class,
+        \Proto\Http\Middleware\EnforceTFA::class
     ];
 
     /**

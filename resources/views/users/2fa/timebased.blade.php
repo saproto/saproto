@@ -1,54 +1,46 @@
-@extends('website.layouts.panel')
+<div id="totp-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-@section('page-title')
-    Enabling Two Factor Authentication
-@endsection
+            <form method="post" action="{{ route('user::2fa::addtimebased', ['user_id' => $user->id]) }}"
+                  class="form-horizontal">
 
-@section('panel-title')
-    Configuring timed-based 2 Factor Authentication for {{ $user->name }}
-@endsection
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Time Based Two-Factor Authentication</h4>
+                </div>
 
-@section('panel-body')
+                <div class="modal-body">
 
-    <form method="post" action="{{ route('user::2fa::addtimebased', ['user_id' => $user->id]) }}"
-          class="form-horizontal">
+                    <p style="text-align: center;">
+                        Scan the code below with your favorite 2FA app and enter your code below to verify.
+                    </p>
 
-        <div class="row">
+                    {!! csrf_field() !!}
 
-            <p style="text-align: center;">
-                Scan the code below with your favorite 2FA app and enter your code below to verify.
-            </p>
+                    <p style="text-align: center;">
+                        <img src="{{ $tfa_qrcode }}">
+                    </p>
 
-            <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+                    <p style="text-align: center; padding: 0 150px;">
+                        <input class="form-control" name="2facode" placeholder="Your six digit code.">
+                    </p>
 
-                {!! csrf_field() !!}
+                    <p style="text-align: center;">
+                        You can also enter the below secret key manually.<br>
+                        <strong>{{ Session::get('2fa_secret') }}</strong>
+                    </p>
 
-                <p style="text-align: center;">
-                    <img src="{{ $qrcode }}">
-                </p>
+                </div>
 
-                <p style="text-align: center;">
-                    <input class="form-control" name="2facode" placeholder="Your six digit code.">
-                </p>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-success" value="Save">
+                    <a data-dismiss="modal" class="btn btn-default">Cancel</a>
+                </div>
 
-                <p style="text-align: center;">
-                    You can also enter the below secret key manually.<br>
-                    <strong>{{ $secret }}</strong>
-                </p>
-
-            </div>
+            </form>
 
         </div>
-
-        @endsection
-
-        @section('panel-footer')
-
-            <div class="pull-right">
-                <input type="submit" class="btn btn-success" value="Save">
-                <a onClick="javascript:history.go(-1);" class="btn btn-default">Cancel</a>
-            </div>
-
-    </form>
-
-@endsection
+    </div>
+</div>

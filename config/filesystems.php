@@ -33,21 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root'   => storage_path('app'),
-        ],
-
-        'ftp' => [
-            'driver'   => 'ftp',
-            'host'     => 'ftp.saproto.nl',
-            'username' => '',
-            'password' => '',
-
-            // Optional FTP Settings...
-            // 'port'     => 21,
-            // 'root'     => '',
-            // 'passive'  => true,
-            // 'ssl'      => true,
-            // 'timeout'  => 30,
-        ],
+        ]
 
     ],
 

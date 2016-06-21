@@ -86,7 +86,7 @@
 
                 @if($committee->image)
 
-                    <img src="{{ route('file::get', $committee->image->id) }}" width="100%;">
+                    <img src="{!! $committee->image->generateImagePath(700,null) !!}" width="100%;">
 
                 @else
                     <p>
