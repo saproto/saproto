@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity && $event->activity->participants ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ ($event->activity && $event->activity->participants && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
 
             <div class="panel panel-default">
 
@@ -42,7 +42,7 @@
 
             </div>
 
-            @if($event->activity)
+            @if($event->activity && Auth::check() && Auth::user()->member)
 
                 @foreach($event->activity->helpingCommittees as $key => $committee)
 
@@ -121,7 +121,7 @@
 
         </div>
 
-        @if($event->activity && $event->activity->participants)
+        @if($event->activity && $event->activity->participants && Auth::check() && Auth::user()->member)
 
             <div class="col-md-4">
 
