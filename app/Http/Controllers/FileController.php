@@ -18,7 +18,7 @@ class FileController extends Controller
     public function get($id, $hash)
     {
 
-        $entry = StorageEntry::find($id);
+        $entry = StorageEntry::findOrFail($id);
 
         if ($hash != $entry->hash) {
             abort(404);
@@ -36,8 +36,8 @@ class FileController extends Controller
     public function getImage($id, $hash, Request $request)
     {
 
-        $entry = StorageEntry::find($id);
-
+        $entry = StorageEntry::findOrFail($id);
+        
         if ($hash != $entry->hash) {
             abort(404);
         }

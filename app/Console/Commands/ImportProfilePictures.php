@@ -12,7 +12,6 @@ use Proto\Models\User;
 class ImportProfilePictures extends Command
 {
 
-    private $laraveldb, $legacydb;
     /**
      * The name and signature of the console command.
      *
@@ -54,11 +53,8 @@ class ImportProfilePictures extends Command
                     continue;
                 }
 
-                $data = tmpfile();
-                fwrite($data, file_get_contents($url));
-
                 $file = new StorageEntry();
-                $file->createFromFile(File::get(stream_get_meta_data($data)['uri']));
+                $file->createFromData(file_get_contents($url), 'image/jpeg', 'importedprofilepic-' . $user->name);
 
                 $user->photo()->associate($file);
                 $user->save();

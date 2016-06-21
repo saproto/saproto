@@ -35,6 +35,22 @@ class StorageEntry extends Model
 
     }
 
+    public function createFromData($data, $mime, $name)
+    {
+
+        $this->hash = $this->generateHash();
+
+        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        Storage::disk('local')->put($this->filename, $data);
+
+        $this->mime = $mime;
+        $this->original_filename = $name;
+
+        $this->save();
+
+    }
+
     private function generateHash()
     {
         return sha1(date('U') . mt_rand(1, 99999999999));
