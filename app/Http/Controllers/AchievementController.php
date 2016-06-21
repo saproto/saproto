@@ -51,7 +51,7 @@ class AchievementController extends Controller
         if (!$achievement) {
             abort(404);
         }
-        return view('study.edit', ['new' => false, 'achievement' => $achievement]);
+        return view('achievement.edit', ['new' => false, 'achievement' => $achievement]);
     }
 
     public

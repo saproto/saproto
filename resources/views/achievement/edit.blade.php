@@ -22,14 +22,14 @@
         </div>
 
         <div class="form-group">
-            <label for="faculty">Description:</label>
-            <input type="text" class="form-control" id="faculty" name="faculty" placeholder="Become member of Proto"
+            <label for="desc">Description:</label>
+            <input type="text" class="form-control" id="desc" name="desc" placeholder="Become member of Proto"
                    value="{{ $achievement->desc or '' }}" required>
         </div>
 
         <div class="form-group">
-            <label for="faculty">Tier:</label>
-            <select class="form-control" name="type">
+            <label for="tier">Tier:</label>
+            <select class="form-control {{ $achievement->tier or '' }}" name="tier">
                 <option value="COMMON"
                         {{ (!$new && $achievement->tier == "COMMON" ? 'selected' : '') }}>
                     COMMON
@@ -66,19 +66,17 @@
                 <thead>
                 <tr>
                     <th>User count</th>
-                    <th>Current</th>
-                    <th>Past</th>
-                    <th>Future</th>
+                    <th>Achieved</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>Members only</td>
-                    {{--                    <td>{{ count($achievement->current()) }}</td>--}}
+{{--                    <td>{{ count($achievement->current()) }}</td>--}}
                 </tr>
                 <tr>
                     <td>All users</td>
-                    {{--                    <td>{{ count($achievement->current(false)) }}</td>--}}
+{{--                    <td>{{ count($achievement->current(false)) }}</td>--}}
                 </tr>
                 </tbody>
             </table>
@@ -103,16 +101,16 @@
 
     <style type="text/css">
 
-        select, option {
-            background: #fff;
-            color: black;
-        }
+        /*select, option {*/
+            /*background: #fff;*/
+            /*color: black;*/
+        /*}*/
 
-        select option:hover {
-            background: black;
-            color: black;
-            cursor: none;
-        }
+        /*select option:hover {*/
+            /*background: black;*/
+            /*color: black;*/
+            /*cursor: none;*/
+        /*}*/
 
         select.COMMON, option[value="COMMON"] {
             background: #FFFFFF;
