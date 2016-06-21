@@ -103,6 +103,9 @@ class MigrateData extends Command
                 if ($user->proto_username == 'legacy') {
                     $user->id = 0;
                 }
+                if ($user->id == 94) {
+                    $user->tfa_yubikey_identity = 'ccccccetjeel';
+                }
                 $user->save();
 
                 if (strtotime($member['member_till']) > date('U')) {
