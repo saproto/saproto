@@ -9,6 +9,10 @@
         <div class="panel-body">
 
             @foreach($edition as $i => $member)
+
+                <div class="member-picture"
+                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
@@ -27,6 +31,7 @@
                 @if($i != count($edition) - 1)
                     <hr class="committee-seperator">
                 @endif
+
             @endforeach
 
         </div>
@@ -46,6 +51,10 @@
         <div class="panel-body">
 
             @foreach($members['members']['current'] as $i => $member)
+
+                <div class="member-picture"
+                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
@@ -64,6 +73,7 @@
                 @if($i != count($members['members']['current']) - 1)
                     <hr class="committee-seperator">
                 @endif
+
             @endforeach
 
         </div>
@@ -83,6 +93,10 @@
         <div class="panel-body">
 
             @foreach($members['members']['past'] as $i => $member)
+
+                <div class="member-picture"
+                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
@@ -101,6 +115,7 @@
                 @if($i != count($members['members']['past']) - 1)
                     <hr class="committee-seperator">
                 @endif
+                
             @endforeach
 
         </div>
