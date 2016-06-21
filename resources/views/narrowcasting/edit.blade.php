@@ -48,7 +48,7 @@
         @if($item != null)
 
             <label>Current image:</label>
-            <img src="{{ route("file::get", ['id' => $item->image->id]) }}" style="width: 100%">
+            <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
 
         @endif
 

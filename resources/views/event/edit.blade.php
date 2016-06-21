@@ -121,7 +121,7 @@
                             <hr>
 
                             <label>Current image:</label>
-                            <img src="{{ route("file::get", ['id' => $event->image->id]) }}" style="width: 100%">
+                            <img src="{!! $event->image->generateImagePath(500,null) !!}" style="width: 100%">
 
                         @endif
 

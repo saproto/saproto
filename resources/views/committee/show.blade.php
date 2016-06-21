@@ -74,7 +74,7 @@
 
         @if($committee->image)
         #header {
-            background-image: url('{{ $committee->image->generatePath() }}');
+            background-image: url('{!! $committee->image->generateImagePath(2000,500) !!}');
         }
         @endif
 

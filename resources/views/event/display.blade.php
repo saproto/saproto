@@ -67,7 +67,7 @@
                                         @foreach($event->activity->helpingUsers($committee->pivot->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
-                                                     style="background-image:url('{{ route("file::get", ['id' => $participation->user->photo]) }}');">
+                                                     style="background-image:url('{!! ($participation->user->photo ? $participation->user->photo->generateImagePath(100, 100) : '') !!}}');">
                                                 </div>
                                                 <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
 
@@ -187,7 +187,7 @@
 
                             <div class="member">
                                 <div class="member-picture"
-                                     style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
+                                     style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                 @if(Auth::user()->can('board'))
@@ -214,7 +214,7 @@
 
                                 <div class="member">
                                     <div class="member-picture"
-                                         style="background-image:url('{{ route("file::get", ['id' => $user->photo]) }}');"></div>
+                                         style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
                                     <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                     @if(Auth::user()->can('board'))

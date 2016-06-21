@@ -154,7 +154,8 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Sichikawa\LaravelSendgridDriver\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
-        Bitbeans\Yubikey\YubikeyServiceProvider::class
+        Bitbeans\Yubikey\YubikeyServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
 
     ],
 
@@ -213,6 +214,8 @@ return [
         'ability'   => Zizaco\Entrust\Middleware\EntrustAbility::class,
 
         'Yubikey' => Bitbeans\Yubikey\YubikeyFacade::class,
+
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

@@ -109,8 +109,6 @@
     var campaigns = [];
     var currentcampaign = 0;
 
-    var imagepath = '{!! route("file::get", ["id" => "!!id!!"]) !!}';
-
     function updateCampaigns() {
 
         $.ajax({
@@ -141,7 +139,7 @@
             }
             campaign = campaigns[currentcampaign];
 
-            var campaignimage = imagepath.replace('!!id!!', campaign.image_id);
+            var campaignimage = campaign.image;
             console.log(campaignimage);
             $("#slideshow").append('<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaignimage + ');"></div>');
 
