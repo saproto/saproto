@@ -86,10 +86,15 @@ class Activity extends Validatable
      * @param User $user The user to check participation status for.
      * @return Model|null|static Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation(User $user)
+    public function getParticipation(User $user, HelpingCommittee $h = null)
     {
-        return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-            ->whereNull('committees_activities_id')->where('withdrawn', false)->first();
+        if ($h == null) {
+            return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
+                ->whereNull('committees_activities_id')->where('withdrawn', false)->first();
+        } else {
+            return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
+                ->where('committees_activities_id', $h->id)->where('withdrawn', false)->first();
+        }
     }
 
     /**
