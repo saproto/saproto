@@ -274,6 +274,7 @@ class MigrateData extends Command
             // Migrate activities, helping committees.
 
             Activity::truncate();
+            HelpingCommittee::truncate();
 
             if (!$this->legacydb->select_db("admin_wp")) {
                 $this->error("SWITCHTOWP: " . $this->legacydb->error);
