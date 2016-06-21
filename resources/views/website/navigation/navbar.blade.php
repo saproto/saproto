@@ -65,11 +65,17 @@
                     </ul>
                 </li>
             @else
+
+                <li>
+                    <a href="{{ route('login::register') }}" >New Account</a>
+                </li>
+
                 <form class="navbar-form navbar-right">
                     <a class="btn btn-success" href="{{ route('login::show') }}">
                         LOG-IN
                     </a>
                 </form>
+
             @endif
         </ul>
 

@@ -29,6 +29,9 @@ Route::group(['as' => 'login::'], function () {
 
     Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
     Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
+
+    Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
+    Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
 });
 
 /*

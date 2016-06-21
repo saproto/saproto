@@ -48,6 +48,6 @@ return [
     |
     */
 
-    'tfaroles' => ['admin', 'board'],
+    'tfaroles' => ['admin', 'board']
 
 ];
