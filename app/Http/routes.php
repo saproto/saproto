@@ -115,6 +115,9 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
 Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
     Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@get']);
 });
+Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
+    Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@getImage']);
+});
 
 /*
  * Routes related to committees.

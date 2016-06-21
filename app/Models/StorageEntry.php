@@ -44,4 +44,9 @@ class StorageEntry extends Model
     {
         return route('file::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename]);
     }
+
+    public function generateImagePath($w, $h)
+    {
+        return route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
+    }
 }
