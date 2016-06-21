@@ -15,6 +15,7 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\Member;
+use Proto\Models\Quote;
 use Proto\Models\Study;
 use Proto\Models\StudyEntry;
 use Proto\Models\User;
@@ -386,8 +387,8 @@ class MigrateData extends Command
                 $user = User::where('proto_username', $useractivity['proto_username'])->first();
 
                 if (!$user) {
-                    $this->error('No user found for ' . $useractivity['proto_username'] . '. Skipping.');
-                    continue;
+                    $this->error('No user found for ' . $useractivity['proto_username'] . '.');
+                    $user = User::find(0);
                 }
 
                 $cp = null;
@@ -406,6 +407,45 @@ class MigrateData extends Command
             }
 
             $this->info('Written ' . ActivityParticipation::count() . ' event activity participation to database.');
+
+            // Import quotes
+
+            Quote::truncate();
+
+            if (!$this->legacydb->select_db("admin_wp")) {
+                $this->error("SWITCHTOCOMMENT: " . $this->legacydb->error);
+            }
+
+            $quotes = $this->legacydb->query("SELECT * FROM wp_comments WHERE comment_post_ID = 342");
+
+            while ($quote = $quotes->fetch_assoc()) {
+
+                $q = Quote::create([
+                    'user_id' => 0,
+                    'quote' => $quote['comment_content'],
+                    'created_at' => $quote['comment_date']
+                ]);
+
+                // Jakkes. Waarom sloegen we dat niet fatsoenlijk op?
+                $u = User::where('email', $quote['comment_author_email'])->first();
+                if ($u === null) {
+                    $u = User::where('utwente_username', $quote['comment_author'])->first();
+                    if ($u === null) {
+                        $u = User::where('proto_username', $quote['comment_author'])->first();
+                    }
+                }
+
+                if ($u !== null) {
+                    $q->user()->associate($u);
+                } else {
+                    $this->error('Could not link a user to quote ' . $q->id . '.');
+                }
+
+                $q->save();
+
+            }
+
+            $this->info('Written ' . Quote::count() . ' quotes to database.');
 
             // We close the database connection.
             $this->legacydb->close();
