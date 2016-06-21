@@ -26,7 +26,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="{{ route("committee::list") }}">Committees</a></li>
                     <li><a href="{{ route("event::list") }}">Calendar</a></li>
-                    @if (Auth::check())
+                    @if (Auth::check() && Auth::user()->member)
                         <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
                     @endif
                 </ul>
@@ -55,7 +55,10 @@
                        aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('user::dashboard') }}">My Dashboard</a></li>
-                        <li><a href="{{ route('user::profile') }}">My Profile</a></li>
+
+                        @if(Auth::check() && Auth::user()->member)
+                            <li><a href="{{ route('user::profile') }}">My Profile</a></li>
+                        @endif
 
                         @if (Session::has('impersonator'))
                             <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>
@@ -65,11 +68,17 @@
                     </ul>
                 </li>
             @else
+
+                <li>
+                    <a href="{{ route('login::register') }}">New Account</a>
+                </li>
+
                 <form class="navbar-form navbar-right">
                     <a class="btn btn-success" href="{{ route('login::show') }}">
                         LOG-IN
                     </a>
                 </form>
+
             @endif
         </ul>
 

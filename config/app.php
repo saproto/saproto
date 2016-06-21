@@ -155,7 +155,8 @@ return [
         Sichikawa\LaravelSendgridDriver\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Bitbeans\Yubikey\YubikeyServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        Greggilbert\Recaptcha\RecaptchaServiceProvider::class
 
     ],
 
@@ -216,6 +217,8 @@ return [
         'Yubikey' => Bitbeans\Yubikey\YubikeyFacade::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
+
+        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class
 
     ],
 

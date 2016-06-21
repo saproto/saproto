@@ -29,6 +29,9 @@ Route::group(['as' => 'login::'], function () {
 
     Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
     Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
+
+    Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
+    Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
 });
 
 /*
@@ -168,21 +171,21 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
 Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 
     Route::get('/', ['as' => 'list', 'uses' => 'EventController@index']);
-    Route::get('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@create']);
-    Route::post('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@store']);
-    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@edit']);
-    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@update']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'EventController@destroy']);
+    Route::get('/add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
+    Route::post('/add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
+    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
+    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
     Route::get('/archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
     // Related to participation
-    Route::get('/participate/{id}', ['as' => 'addparticipation', 'uses' => 'ParticipationController@create']);
+    Route::get('/participate/{id}', ['as' => 'addparticipation', 'middleware' => ['member'], 'uses' => 'ParticipationController@create']);
     Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
 
     // Related to activities
-    Route::post('/signup/{id}', ['as'=>'addsignup', 'uses' => 'ActivityController@save']);
-    Route::get('/signup/{id}/delete', ['as'=>'deletesignup', 'uses' => 'ActivityController@delete']);
+    Route::post('/signup/{id}', ['as'=>'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
+    Route::get('/signup/{id}/delete', ['as'=>'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
 
     // Show event
     Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);
@@ -206,7 +209,7 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
 /**
  * Routes related to the Quote Corner.
  */
-Route::group(['prefix' => 'quotes', 'as' => 'quotes::'], function () {
+Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
     Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
     Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
     Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
