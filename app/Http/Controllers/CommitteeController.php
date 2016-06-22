@@ -146,26 +146,20 @@ class CommitteeController extends Controller
 
         }
 
-        $data = $request->all();
-
-        if ($data['role'] == "") $data["role"] = null;
-        if ($data['edition'] == "") $data["edition"] = null;
-        if ($data['end'] == "") {
-            $data["end"] = null;
-        } else {
-            if (($data["end"] = strtotime($data["end"])) === false) {
-                abort(500);
-            }
-        }
-        if (($data["start"] = strtotime($data["start"])) === false) {
-            abort(500);
-        }
-
         $membership = new CommitteeMembership();
-        if (!$membership->validate($data)) {
-            return Redirect::route('committee::edit', ['id' => $request->committee_id])->withErrors($membership->errors());
+
+        $membership->role = $request->role;
+        $membership->edition = $request->edition;
+        $membership->user_id = $request->user_id;
+        $membership->committee_id = $request->committee_id;
+        if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+            Session::flash("flash_message", "Ill-formatted start date.");
+            return Redirect::back();
         }
-        $membership->fill($data);
+        if ($request->end != "" && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+            Session::flash("flash_message", "Ill-formatted end date.");
+            return Redirect::back();
+        }
 
         $membership->save();
 
@@ -197,11 +191,11 @@ class CommitteeController extends Controller
 
         $membership->role = $request->role;
         $membership->edition = $request->edition;
-        if (($membership->start = strtotime($request->start)) === false) {
+        if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
             Session::flash("flash_message", "Ill-formatted start date.");
             return Redirect::back();
         }
-        if ($request->end != "" && ($membership->end = strtotime($request->end)) === false) {
+        if ($request->end != "" && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
         }
@@ -215,10 +209,7 @@ class CommitteeController extends Controller
     public function deleteMembership($id)
     {
 
-        $membership = CommitteeMembership::find($id);
-        if ($membership == null) {
-            abort(404);
-        }
+        $membership = CommitteeMembership::findOrFail($id);
 
         if ($membership->committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
 
@@ -240,7 +231,7 @@ class CommitteeController extends Controller
 
         $committee_id = $membership->committee->id;
 
-        $membership->delete();
+        $membership->forceDelete();
 
         return Redirect::route("committee::edit", ["id" => $committee_id]);
 

@@ -4,6 +4,7 @@ namespace Proto\Models;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -32,7 +33,8 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 class User extends Model implements AuthenticatableContract,
     CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, EntrustUserTrait;
+    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes;
+    protected $dates = ['deleted_at'];
 
     /**
      * The database table used by the model.
@@ -108,51 +110,12 @@ class User extends Model implements AuthenticatableContract,
      */
     public function studies()
     {
-        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('start', 'end', 'id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('id'))->withTimestamps();
     }
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('start', 'end', 'role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_start', 'asc');
-    }
-
-    public function committeesFilter($filter = null)
-    {
-        $d = $this->committees;
-        $r = array();
-        switch ($filter) {
-            case null:
-                // No filter, so no operation.
-                break;
-            case 'past':
-                // Committees the user has been a member of in the past, but not anymore.
-                foreach ($d as $k => $c) {
-                    if ($c->pivot->end != null && $c->pivot->end < date('U')) {
-                        $r[] = $d[$k];
-                    }
-                }
-                break;
-            case 'current':
-                // Committees the user is currently a member of.
-                foreach ($d as $k => $c) {
-                    if ($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U'))) {
-                        $r[] = $d[$k];
-                    }
-                }
-                break;
-            case 'future':
-                // Committees the user is going to be a member of.
-                foreach ($d as $k => $c) {
-                    if (($c->pivot->start < date('U') && ($c->pivot->end == null || $c->pivot->end > date('U')))) {
-                        $r[] = $d[$k];
-                    }
-                }
-                break;
-            default:
-                throw new \InvalidArgumentException("Invalid filter. Possible values are null (default), 'past', 'current' and 'future'");
-                break;
-        }
-        return $r;
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_start', 'asc');
     }
 
     /**
@@ -169,12 +132,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->where('start', '<=', date('U'))->get();
-        foreach ($p as $participation) {
-            if (!$participation->end || $participation->end > date('U')) {
-                return true;
-            }
-        }
-        return false;
+        $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->get();
+        return $p !== null;
     }
 }

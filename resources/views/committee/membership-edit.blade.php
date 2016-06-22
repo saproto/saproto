@@ -36,7 +36,7 @@
             <label for="start" class="col-sm-2 control-label">Since</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control datetime-picker" id="start" name="start"
-                       value="{{ date("d-m-Y", $membership->start) }}" required>
+                       value="{{ date("d-m-Y", strtotime($membership->start)) }}" required>
             </div>
         </div>
 
@@ -44,7 +44,7 @@
             <label for="end" class="col-sm-2 control-label">Till</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control datetime-picker" id="end" name="end"
-                       value="{{ ($membership->end == null ? "" : date("d-m-Y", $membership->end)) }}">
+                       value="{{ ($membership->end == null ? "" : date("d-m-Y", strtotime($membership->end))) }}">
             </div>
         </div>
 
