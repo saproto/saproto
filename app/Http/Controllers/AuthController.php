@@ -14,6 +14,8 @@ use Proto\Models\User;
 use Auth;
 use Redirect;
 use Yubikey;
+use Hash;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -92,7 +94,7 @@ class AuthController extends Controller
                 $user = User::where('email', $username)->first();
 
                 // See if we can authenticate the user ourselves.
-                if ($user && Auth::validate($user, $request->all())) {
+                if ($user && Hash::check($password, $user->password)) {
 
                     // Catch users that have 2FA enabled.
                     if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
@@ -166,11 +168,57 @@ class AuthController extends Controller
 
     }
 
-    public
-    function getLogout()
+    public function getLogout()
     {
         Auth::logout();
         return Redirect::route('homepage');
+    }
+
+    public function getRegister(Request $request)
+    {
+        if (Auth::check()) {
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
+            return Redirect::route('user::dashboard');
+        }
+        return view('users.register');
+    }
+
+    public function postRegister(Request $request)
+    {
+        if (Auth::check()) {
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
+            return Redirect::route('user::dashboard');
+        }
+
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+            'name_first' => 'required|string',
+            'name_last' => 'required|string',
+            'name_initials' => 'required|regex:(([A-Za-z]\.)+)',
+            'birthdate' => 'required|date_format:Y-m-d',
+            'gender' => 'required|in:1,2,9',
+            'nationality' => 'required|string',
+            'phone' => 'required|regex:(\+[0-9]{1,16})',
+            'g-recaptcha-response' => 'required|recaptcha'
+        ]);
+
+        $user = User::create($request->except('g-recaptcha-response'));
+
+        $password = str_random(16);
+        $user->password = Hash::make($password);
+
+        $user->save();
+        
+        Mail::send('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($user) {
+            $m->replyTo('haveyoutriedturningitoffandonagain@proto.utwente.nl', 'Have You Tried Turning It Off And On Again committee');
+            $m->to($user->email, $user->name);
+            $m->subject('Account registration at Study Association Proto');
+        });
+
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with your password shortly.');
+            return Redirect::route('homepage');
+        }
     }
 
 }

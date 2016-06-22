@@ -24,7 +24,7 @@ class ParticipationController extends Controller
         $event = Event::findOrFail($id);
         if (!$event->activity) {
             abort(500, "You cannot subscribe for " . $event->title . ".");
-        } elseif ($event->activity->getParticipation(Auth::user()) !== null) {
+        } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(500, "You are already subscribed for " . $event->title . ".");
         } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id')) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");

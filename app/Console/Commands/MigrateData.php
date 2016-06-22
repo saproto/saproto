@@ -82,7 +82,6 @@ class MigrateData extends Command
                 $user = User::create([
                     'id' => $member['member_id'],
                     'email' => $member['contact_email'],
-                    'password' => "correct horse battery staple",
                     'utwente_username' => ($member['utwente_relation'] == 1 ? $member['utwente_username'] : null),
                     'proto_username' => $member['proto_username'],
                     'name_first' => $member['name_first'],
@@ -102,6 +101,9 @@ class MigrateData extends Command
                 ]);
                 if ($user->proto_username == 'legacy') {
                     $user->id = 0;
+                }
+                if ($user->id == 94) {
+                    $user->tfa_yubikey_identity = 'ccccccetjeel';
                 }
                 $user->save();
 

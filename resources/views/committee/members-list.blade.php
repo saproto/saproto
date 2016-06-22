@@ -115,7 +115,7 @@
                 @if($i != count($members['members']['past']) - 1)
                     <hr class="committee-seperator">
                 @endif
-                
+
             @endforeach
 
         </div>

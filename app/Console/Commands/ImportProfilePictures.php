@@ -60,7 +60,6 @@ class ImportProfilePictures extends Command
                 $user->save();
 
                 $this->info("Profile picture downloaded for " . $user->name . "!");
-
             }
         }
     }

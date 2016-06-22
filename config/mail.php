@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'mailings@saproto.nl', 'name' => 'S.A. Proto'],
+    'from' => ['address' => 'webmaster@saproto.nl', 'name' => 'S.A. Proto'],
 
     /*
     |--------------------------------------------------------------------------
