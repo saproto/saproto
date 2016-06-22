@@ -3,9 +3,13 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class StudyEntry extends Validatable
+class StudyEntry extends Model
 {
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+
     /**
      * The database table used by the model.
      *
@@ -28,11 +32,4 @@ class StudyEntry extends Validatable
     }
 
     protected $guarded = ['id'];
-
-    protected $rules = array(
-        'user_id' => 'required|integer',
-        'study' => 'required|integer',
-        'start' => 'required|integer',
-        'end' => 'integer'
-    );
 }

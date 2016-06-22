@@ -107,19 +107,14 @@ class MigrateData extends Command
                 }
                 $user->save();
 
-                if (strtotime($member['member_till']) > date('U')) {
-                    $m = Member::create([
-                        'is_lifelong' => ($member['fee_cycle'] == 'FULLTIME'),
-                        'is_honorary' => ($member['member_type'] == 'HONORARY'),
-                        'is_donator' => ($member['member_type'] == 'DONATOR'),
-                        'is_associate' => ($member['association_primary'] != null),
-                        'since' => strtotime($member['member_since']),
-                        'till' => ($member['member_till'] == '2099-01-01' ? null : strtotime($member['member_till'])),
-                        'proto_mail' => ($member['proto_mail_enabled'] ? $member['proto_mail'] : null)
-                    ]);
-                    $m->user_id = $member['member_id'];
-                    $m->save();
-                }
+                $m = Member::create([
+                    'is_associate' => ($member['utwente_study'] != 'Creative Technology'),
+                    'created_at' => $member['member_since'],
+                    'deleted_at' => ($member['member_till'] == '2099-01-01' ? null : date('Y-m-d H:i:s', strtotime($member['member_till']))),
+                    'proto_mail' => ($member['proto_mail_enabled'] ? $member['proto_mail'] : null)
+                ]);
+                $m->user_id = $member['member_id'];
+                $m->save();
 
                 $address = Address::create([
                     'user_id' => $member['member_id'],
@@ -139,7 +134,7 @@ class MigrateData extends Command
                     if (!$study) {
                         $study = Study::create([
                             'name' => $member['utwente_study'],
-                            'faculty' => "'University of Twente'"
+                            'faculty' => "University of Twente"
                         ]);
                         $study->save();
                     }
@@ -147,7 +142,7 @@ class MigrateData extends Command
                     $studyEntry = StudyEntry::create([
                         'study_id' => $study->id,
                         'user_id' => $user->id,
-                        'start' => strtotime($member['utwente_study_since'] . '-09-01')
+                        'created_at' => date('Y-m-d H:i:s', strtotime($member['utwente_study_since'] . '-09-01'))
                     ]);
                     $studyEntry->save();
 
@@ -211,8 +206,8 @@ class MigrateData extends Command
                     'committee_id' => $participation['wordpress_id'],
                     'role' => ($participation['role'] == '' ? null : $participation['role']),
                     'edition' => ($participation['edition'] == '' ? null : $participation['edition']),
-                    'start' => strtotime($participation['enroll_start']),
-                    'end' => ($participation['enroll_end'] == '2999-12-31' ? null : strtotime($participation['enroll_end']))
+                    'created_at' => date('Y-m-d H:i:s', strtotime($participation['enroll_start'])),
+                    'deleted_at' => ($participation['enroll_end'] == '2999-12-31' ? null : date('Y-m-d H:i:s', strtotime($participation['enroll_end'])))
                 ]);
                 $p->save();
             }
@@ -225,8 +220,8 @@ class MigrateData extends Command
                     'committee_id' => $participation['wordpress_id'],
                     'role' => ($participation['role'] == '' ? null : $participation['role']),
                     'edition' => ($participation['edition'] == '' ? null : $participation['edition']),
-                    'start' => strtotime($participation['enroll_start']),
-                    'end' => ($participation['enroll_end'] == '2999-12-31' ? null : strtotime($participation['enroll_end']))
+                    'created_at' => date('Y-m-d H:i:s', strtotime($participation['enroll_start'])),
+                    'deleted_at' => ($participation['enroll_end'] == '2999-12-31' ? null : date('Y-m-d H:i:s', strtotime($participation['enroll_end'])))
                 ]);
                 $p->save();
             }
@@ -435,13 +430,23 @@ class MigrateData extends Command
                     $u = User::where('utwente_username', $quote['comment_author'])->first();
                     if ($u === null) {
                         $u = User::where('proto_username', $quote['comment_author'])->first();
+                        if ($u === null) {
+                            $u = User::where('name_first', $quote['comment_author'])->first();
+                            if ($u === null) {
+                                foreach (User::all() as $user) {
+                                    if ($user->name == $quote['comment_author']) {
+                                        $u = $user;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
                 if ($u !== null) {
                     $q->user()->associate($u);
                 } else {
-                    $this->error('Could not link a user to quote ' . $q->id . '.');
+                    $this->error('Could not link a user to quote ' . $q->id . '. (' . $quote['comment_author_email'] . ':' . $quote['comment_author'] . ')');
                 }
 
                 $q->save();

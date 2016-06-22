@@ -3,7 +3,7 @@
 @if(count($user->committees) > 0)
 
     <ul class="list-group">
-        @foreach($user->committeesFilter('current') as $committee)
+        @foreach($user->committees as $committee)
             <li class="list-group-item">
                 {!! ($committee->public ? '<a href="' . route("committee::show", ["id" => $committee->id]) . '">' : '') !!}
                 <strong>
@@ -14,7 +14,7 @@
 
                 ({{ ($committee->pivot->role ? $committee->pivot->role : 'General Member') }})
                 <br>
-                <sub>Since {{date('j F Y', $committee->pivot->start)}}.</sub>
+                <sub>Since {{date('j F Y', strtotime($committee->pivot->created_at))}}.</sub>
             </li>
         @endforeach
     </ul>

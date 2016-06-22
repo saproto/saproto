@@ -35,9 +35,10 @@
                                 (
                                 {{ date('M \'y',strtotime($study->pivot->created_at)) }}
                                 -
-                                {{ ($study->pivot->till == null ? 'now' : date('M \'y',strtotime($study->pivot->till))) }}
+                                {{ ($study->pivot->deleted_at == null ? 'now' : date('M \'y',strtotime($study->pivot->deleted_at))) }}
                                 )
                             </span>
+                            <br>
                         @endforeach
                     </td>
                 </tr>

@@ -22,11 +22,11 @@
 
                             <br>
 
-                            @if($study->pivot->end == null)
-                                Since {{ date('d-m-Y',$study->pivot->start) }}
+                            @if($study->pivot->deleted_at == null)
+                                Since {{ date('F \'y', strtotime($study->pivot->created_at)) }}
                             @else
-                                Between {{ date('d-m-Y',$study->pivot->start) }}
-                                and {{ date('d-m-Y',$study->pivot->end) }}
+                                Between {{ date('M \'y', strtotime($study->pivot->created_at)) }}
+                                and {{ date('M \'y', strtotime($study->pivot->deleted_at)) }}
                             @endif
 
                         </p>

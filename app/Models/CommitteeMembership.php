@@ -3,9 +3,13 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CommitteeMembership extends Validatable
+class CommitteeMembership extends Model
 {
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
+
     /**
      * The database table used by the model.
      *
@@ -28,13 +32,4 @@ class CommitteeMembership extends Validatable
     }
     
     protected $guarded = ['id'];
-
-    protected $rules = array(
-        'user_id' => 'required|integer',
-        'committee_id' => 'required|integer',
-        'start' => 'required|integer',
-        'end' => 'integer',
-        'role' => 'string',
-        'edition' => 'string'
-    );
 }

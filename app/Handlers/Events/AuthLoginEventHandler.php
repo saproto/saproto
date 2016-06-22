@@ -36,11 +36,19 @@ class AuthLoginEventHandler
             if (!$user->hasRole('admin')) {
                 $user->attachRole(Role::where('name', '=', 'admin')->first());
             }
+        } else {
+            if ($user->hasRole('admin')) {
+                $user->detachRole(Role::where('name', '=', 'admin')->first());
+            }
         }
 
         if($user->isInCommittee($boardcommittee)) {
             if (!$user->hasRole('board')) {
                 $user->attachRole(Role::where('name', '=', 'board')->first());
+            }
+        } else {
+            if ($user->hasRole('board')) {
+                $user->detachRole(Role::where('name', '=', 'board')->first());
             }
         }
     }

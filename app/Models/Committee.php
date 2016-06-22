@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Committee extends Model
 {
+    
     /**
      * The database table used by the model.
      *
@@ -34,7 +35,7 @@ class Committee extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'start', 'end', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
     }
 
     public function image()
@@ -47,14 +48,14 @@ class Committee extends Model
 
         $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
 
-        foreach ($this->users as $user) {
-            if ($user->pivot->edition) {
-                $members['editions'][$user->pivot->edition][] = $user;
+        foreach (CommitteeMembership::withTrashed()->where('committee_id', $this->id)->orderBy('created_at', 'desc')->get() as $membership) {
+            if ($membership->edition) {
+                $members['editions'][$membership->edition][] = $membership;
             } else {
-                if (!$user->pivot->end || date('U', strtotime($user->pivot->end)) > date('U')) {
-                    $members['members']['current'][] = $user;
+                if ($membership->trashed()) {
+                    $members['members']['past'][] = $membership;
                 } else {
-                    $members['members']['past'][] = $user;
+                    $members['members']['current'][] = $membership;
                 }
             }
         }
@@ -69,13 +70,7 @@ class Committee extends Model
      */
     public function isMember(User $user)
     {
-        $p = CommitteeMembership::where('user_id', $user->id)->where('committee_id', $this->id)->where('start', '<=', date('U'))->get();
-        foreach($p as $participation) {
-            if (!$participation->end || $participation->end > date('U')) {
-                return true;
-            }
-        }
-        return false;
+        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $user->id)->where('committee_id', $this->id)->get()) > 0;
     }
 
     protected $guarded = [];

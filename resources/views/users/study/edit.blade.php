@@ -40,7 +40,7 @@
 
             <div class="col-sm-10">
                 <input type="text" class="form-control datetime-picker" id="start" name="start"
-                       value="{{ ($link ? date('d-m-Y H:i', $link->start) : '') }}" required>
+                       value="{{ ($link ? date('d-m-Y', strtotime($link->created_at)) : '') }}" required>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
 
             <div class="col-sm-10">
                 <input type="text" class="form-control datetime-picker" id="end" name="end"
-                       value="{{ ($link && $link->end ? date('d-m-Y H:i', $link->end) : '') }}">
+                       value="{{ ($link && $link->deleted_at ? date('d-m-Y', strtotime($link->deleted_at)) : '') }}">
             </div>
         </div>
 
