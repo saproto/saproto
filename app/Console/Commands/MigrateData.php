@@ -108,10 +108,7 @@ class MigrateData extends Command
                 $user->save();
 
                 $m = Member::create([
-                    'is_lifelong' => ($member['fee_cycle'] == 'FULLTIME'),
-                    'is_honorary' => ($member['member_type'] == 'HONORARY'),
-                    'is_donator' => ($member['member_type'] == 'DONATOR'),
-                    'is_associate' => ($member['association_primary'] != null),
+                    'is_associate' => ($member['utwente_study'] != 'Creative Technology'),
                     'created_at' => $member['member_since'],
                     'deleted_at' => ($member['member_till'] == '2099-01-01' ? null : date('Y-m-d H:i:s', strtotime($member['member_till']))),
                     'proto_mail' => ($member['proto_mail_enabled'] ? $member['proto_mail'] : null)
