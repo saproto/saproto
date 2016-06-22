@@ -70,7 +70,7 @@ class Committee extends Model
      */
     public function isMember(User $user)
     {
-        return CommitteeMembership::where('user_id', $user->id)->where('committee_id', $this->id)->get() !== null;
+        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $user->id)->where('committee_id', $this->id)->get()) > 0;
     }
 
     protected $guarded = [];
