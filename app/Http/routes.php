@@ -214,6 +214,7 @@ Route::group(['prefix' => 'quotes', 'middleware' => ['auth'], 'as' => 'quotes::'
     Route::post('/add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
     Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
 });
+
 /*
  * Routes related to the API.
  */
@@ -236,4 +237,6 @@ Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:bo
     Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
     Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
     Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
+    Route::get('/give/{id}', ['as' => 'give', 'uses' => 'AchievementController@wrap']);
+    Route::post('/give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
 });

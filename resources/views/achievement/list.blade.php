@@ -33,8 +33,12 @@
                     <td><img src="{{ $achievement->img_file_id }}" alt=""></td>
                     <td>{{ $achievement->name }}</td>
                     <td>{{ $achievement->desc }}</td>
-                    <td>{{ $achievement->tier }}</td>
+                    <td class="{{ $achievement->tier }}">{{ $achievement->tier }}</td>
                     <td>
+                        <a class="btn btn-xs btn-default"
+                           href="{{ route('achievement::give', ['id' => $achievement->id]) }}" role="button">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        </a>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('achievement::edit', ['id' => $achievement->id]) }}" role="button">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -63,5 +67,40 @@
         </p>
 
     @endif
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+
+        .COMMON {
+            background: #FFFFFF;
+            color: black;
+        }
+
+        .UNCOMMON {
+            background: #1E90FF;
+            color: white;
+        }
+
+        .RARE {
+            background: #9932CC;
+            color: white;
+        }
+
+        .EPIC {
+            background: #333333;
+            color: white;
+        }
+
+        .LEGENDARY {
+            background: #C1FF00;
+            color: black;
+        }
+
+    </style>
 
 @endsection

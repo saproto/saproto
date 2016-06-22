@@ -29,7 +29,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
-class User extends Model implements AuthenticatableContract,
+class User extends Validatable implements AuthenticatableContract,
     CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, EntrustUserTrait;
@@ -42,6 +42,16 @@ class User extends Model implements AuthenticatableContract,
     protected $table = 'users';
 
     protected $guarded = ['password', 'remember_token'];
+
+    /**
+     * The rules for validation.
+     *
+     * @var array
+     */
+    protected $rules = array(
+        'email' => 'required|email',
+        'phone' => 'regex:(\+[0-9]{1,16})'
+    );
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -170,7 +180,7 @@ class User extends Model implements AuthenticatableContract,
     {
         $achievements = $this->achievements;
         $r = array();
-        foreach ($achievements as $key => $achievement) {
+        foreach ($achievements as $achievement) {
             $r[] = $achievement;
         }
         return $r;
@@ -178,7 +188,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function achievements()
     {
-        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id', 'created_at'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @param User $user

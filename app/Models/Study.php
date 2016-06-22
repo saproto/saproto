@@ -50,6 +50,6 @@ class Study extends Model
         return $users;
     }
 
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'faculty', 'type', 'utwente'];
 
 }

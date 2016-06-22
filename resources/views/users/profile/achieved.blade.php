@@ -12,7 +12,7 @@
                 <div>
                     <strong>{{ $achievement->name }}</strong>
                     <p>{{ $achievement->desc }}</p>
-                    <sub>Aquired on {{ $achievement->pivot->created_at->format('m/d/Y') }}.</sub>
+                    <sub>Acquired on {{ $achievement->pivot->created_at->format('m/d/Y') }}.</sub>
                 </div>
 
             </li>
@@ -28,10 +28,6 @@
     </p>
 
 @endif
-
-
-
-
 
 @section('stylesheet')
 
