@@ -110,7 +110,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function studies()
     {
-        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('id', 'deleted_at'))->withTimestamps();
     }
 
     public function committees()

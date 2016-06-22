@@ -100,10 +100,7 @@ class StudyController extends Controller
 
     public function editLinkForm($user_id, $link_id)
     {
-        $link = StudyEntry::find($link_id);
-        if ($link == null) {
-            abort(404);
-        }
+        $link = StudyEntry::withTrashed()->findOrFail($link_id);
         if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
@@ -113,65 +110,48 @@ class StudyController extends Controller
     public function link($user_id, Request $request)
     {
 
-        $user = User::find($user_id);
-        if ($user == null) {
-            abort(404);
-        }
+        $user = User::findOrFail($user_id);
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+        $study = Study::findOrFail($request->study);
 
-        $start = null;
-        if (($time = strtotime($request->input("start"))) === false) {
-            abort(500);
-        } else {
-            $start = $time;
+        $link = new StudyEntry();
+        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+            Session::flash("flash_message", "Ill-formatted start date.");
+            return Redirect::back();
+        }
+        if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+            Session::flash("flash_message", "Ill-formatted end date.");
+            return Redirect::back();
         }
 
-        $end = null;
-        if ($request->input('end') != "" && strtotime($request->input("end")) === false) {
-            abort(500);
-        } else {
-            $time = strtotime($request->input("end"));
-            $end = $time;
-        }
+        $link->user()->associate($user);
+        $link->study()->associate($study);
 
-        $study = Study::find($request->input("study"));
-        if ($study == null) {
-            abort(404);
-        }
+        $link->save();
 
-        $user->studies()->attach($study->id, ['end' => $end, 'start' => $start, 'user_id' => $user->id, 'study_id' => $study->id]);
         return Redirect::route('user::dashboard', ['id' => $user->id]);
     }
 
     public function editLink($user_id, $link_id, Request $request)
     {
-        $link = StudyEntry::find($link_id);
-        if (!$link) {
-            abort(404);
-        }
+        $link = StudyEntry::withTrashed()->findOrFail($link_id);
         if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
 
-        $start = null;
-        if (($time = strtotime($request->input("start"))) === false) {
-            abort(500);
-        } else {
-            $start = $time;
+        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+            Session::flash("flash_message", "Ill-formatted start date.");
+            return Redirect::back();
+        }
+        
+        $link->deleted_at = null;
+        if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+            Session::flash("flash_message", "Ill-formatted end date.");
+            return Redirect::back();
         }
 
-        $end = null;
-        if ($request->input('end') != "" && strtotime($request->input("end")) === false) {
-            abort(500);
-        } else {
-            $time = strtotime($request->input("end"));
-            $end = $time;
-        }
-
-        $link->start = $start;
-        $link->end = $end;
         $link->save();
 
         return Redirect::route('user::dashboard', ['id' => $link->user->id]);
@@ -179,14 +159,11 @@ class StudyController extends Controller
 
     public function unlink($user_id, $link_id)
     {
-        $link = StudyEntry::find($link_id);
-        if ($link == null) {
-            abort(404);
-        }
+        $link = StudyEntry::withTrashed()->findOrFail($link_id);
         if (($link->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
-        $link->delete();
+        $link->forceDelete();
         return Redirect::route('user::dashboard', ['id' => $link->user->id]);
     }
 

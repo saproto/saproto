@@ -134,7 +134,7 @@ class MigrateData extends Command
                     if (!$study) {
                         $study = Study::create([
                             'name' => $member['utwente_study'],
-                            'faculty' => "'University of Twente'"
+                            'faculty' => "University of Twente"
                         ]);
                         $study->save();
                     }
