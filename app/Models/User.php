@@ -132,7 +132,6 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        $p = CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->get();
-        return $p !== null;
+        return CommitteeMembership::where('user_id', $this->id)->where('committee_id', $committee->id)->get() !== null;
     }
 }
