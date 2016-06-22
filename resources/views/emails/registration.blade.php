@@ -28,7 +28,7 @@
     <p>
         Kind regards,
         <br>
-        The Have You Tried Turning It Off And On Again committee
+        The board of Study Association Proto
     </p>
 
 @endsection

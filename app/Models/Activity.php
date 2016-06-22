@@ -38,7 +38,7 @@ class Activity extends Validatable
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->where('withdrawn', false)->where('backup', false)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->get();
     }
 
     /**
@@ -47,7 +47,7 @@ class Activity extends Validatable
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->where('withdrawn', false)->where('backup', true)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps()->get();
     }
 
     /**
@@ -64,7 +64,7 @@ class Activity extends Validatable
      */
     public function helpingUsers($helpid)
     {
-        return ActivityParticipation::where('committees_activities_id', $helpid)->where('withdrawn', false)->get();
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->get();
     }
 
     /**
@@ -78,7 +78,7 @@ class Activity extends Validatable
         if ($h === null) return null;
 
         $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-            ->where('withdrawn', false)->where('committees_activities_id', $h->id)->first();
+            ->where('committees_activities_id', $h->id)->first();
         return $p;
     }
 
@@ -90,10 +90,10 @@ class Activity extends Validatable
     {
         if ($h == null) {
             return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-                ->whereNull('committees_activities_id')->where('withdrawn', false)->first();
+                ->whereNull('committees_activities_id')->first();
         } else {
             return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-                ->where('committees_activities_id', $h->id)->where('withdrawn', false)->first();
+                ->where('committees_activities_id', $h->id)->first();
         }
     }
 
