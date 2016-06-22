@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Proto\Models\CommitteeMembership;
 use Redirect;
 use Hash;
 
@@ -43,7 +44,9 @@ class UserProfileController extends Controller
             }
         }
 
-        return view('users.profile.profile', ['user' => $user, 'ldap' => $ldap]);
+        $pastCommittees = CommitteeMembership::onlyTrashed()->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+        return view('users.profile.profile', ['user' => $user, 'ldap' => $ldap, 'pastcommittees' => $pastCommittees]);
     }
 
 }
