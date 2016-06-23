@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use DB;
 
+use Proto\Account;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Address;
@@ -19,6 +20,11 @@ use Proto\Models\Quote;
 use Proto\Models\Study;
 use Proto\Models\StudyEntry;
 use Proto\Models\User;
+use Proto\Models\OrderLine;
+use Proto\Models\Product;
+use Proto\Models\ProductCategory;
+use Proto\Models\Withdrawal;
+use Proto\Models\FinancialAccount;
 
 class MigrateData extends Command
 {
@@ -76,7 +82,16 @@ class MigrateData extends Command
             $this->legacydb->select_db("admin_members");
             $membersquery = $this->legacydb->query("SELECT * FROM members");
 
+            $c = 0;
+
+            $this->info('| Writing Users, this can take a while.');
+
             while ($member = $membersquery->fetch_assoc()) {
+
+                $c++;
+                if ($c % 100 == 0) {
+                    $this->info('|-- User ' . $c . '.');
+                }
 
                 // Create user.
                 $user = User::create([
@@ -266,7 +281,7 @@ class MigrateData extends Command
 
             }
 
-            $this->info('Written ' . Event::count() . ' events to database.');
+            $this->info('Written ' . Event::count() . ' events to database. ');
 
             // Migrate activities, helping committees.
 
@@ -380,12 +395,21 @@ class MigrateData extends Command
 
             $usersactivitiesquery = $this->legacydb->query("SELECT * FROM activities");
 
+            $c = 0;
+
+            $this->info("| Writing ActivityParticipation. This takes a while.");
+
             while ($useractivity = $usersactivitiesquery->fetch_assoc()) {
 
-                $user = User::where('proto_username', $useractivity['proto_username'])->first();
+                $c++;
+                if ($c % 500 == 0) {
+                    $this->info(' | --ActivityParticipation ' . $c . '.');
+                }
+
+                $user = User::where('proto_username', $useractivity['proto_username'])->orWhere('utwente_username', $useractivity['proto_username'])->first();
 
                 if (!$user) {
-                    $this->error('No user found for ' . $useractivity['proto_username'] . '.');
+                    $this->error('No user found for ' . $useractivity['proto_username'] . '. ');
                     $user = User::find(0);
                 }
 
@@ -404,7 +428,7 @@ class MigrateData extends Command
 
             }
 
-            $this->info('Written ' . ActivityParticipation::count() . ' event activity participation to database.');
+            $this->info('Written ' . ActivityParticipation::count() . ' event activity participation to database. ');
 
             // Import quotes
 
@@ -446,14 +470,139 @@ class MigrateData extends Command
                 if ($u !== null) {
                     $q->user()->associate($u);
                 } else {
-                    $this->error('Could not link a user to quote ' . $q->id . '. (' . $quote['comment_author_email'] . ':' . $quote['comment_author'] . ')');
+                    $this->error('Could not link a user to quote ' . $q->id . ' . (' . $quote['comment_author_email'] . ':' . $quote['comment_author'] . ')');
                 }
 
                 $q->save();
 
             }
 
-            $this->info('Written ' . Quote::count() . ' quotes to database.');
+            $this->info('Written ' . Quote::count() . ' quotes to database. ');
+
+            // Migrating the OmNomCom
+
+            ProductCategory::truncate();
+            Product::truncate();
+            FinancialAccount::truncate();
+            OrderLine::truncate();
+            Withdrawal::truncate();
+
+            if (!$this->legacydb->select_db("admin_food")) {
+                $this->error("SWITCHTOOMNOMCOM: " . $this->legacydb->error);
+            }
+
+            $categories = $this->legacydb->query("SELECT * FROM categories");
+
+            while ($category = $categories->fetch_assoc()) {
+                $cat = ProductCategory::create([
+                    'id' => $category['category_id'],
+                    'name' => $category['name']
+                ]);
+                $cat->save();
+            }
+
+            $this->info('Written ' . ProductCategory::count() . ' product categories to the database.');
+
+            $products = $this->legacydb->query("SELECT * FROM products");
+
+            $c = 0;
+
+            $this->info('| Writing Products. This can take a while.');
+
+            while ($product = $products->fetch_assoc()) {
+
+                $c++;
+                if ($c % 100 == 0) {
+                    $this->info('|-- Product ' . $c . '.');
+                }
+
+                $prod = Product::create([
+                    'id' => $product['product_id'],
+                    'name' => $product['name'],
+                    'nicename' => $product['nicename'],
+                    'price' => $product['price'],
+                    'stock' => $product['available'],
+                    'preferred_stock' => ($product['preferred_stock'] ? $product['preferred_stock'] : 0),
+                    'max_stock' => ($product['max_stock'] ? $product['max_stock'] : 0),
+                    'supplier_collo' => ($product['makro_units'] ? $product['makro_units'] : 0),
+                    'is_visible' => $product['visibility'],
+                    'is_alcoholic' => $product['alcoholic'],
+                    'is_visible_when_no_stock' => $product['default_in_stock']
+                ]);
+
+                $acc = FinancialAccount::where('account_number', $product['account'])->first();
+
+                if ($acc == null) {
+                    $acc = FinancialAccount::create([
+                        'account_number' => $product['account'],
+                        'name' => 'Account ' . $product['account']
+                    ]);
+                    $acc->save();
+                }
+
+                $prod->account()->associate($acc);
+
+                $cat = ProductCategory::find($product['category_id']);
+
+                if ($cat == null) {
+                    $cat = ProductCategory::create([
+                        'id' => $product['category_id'],
+                        'name' => 'Unknown category'
+                    ]);
+                    $cat->save();
+                }
+
+                $prod->categories()->attach($cat);
+
+                $prod->save();
+
+            }
+
+            $this->info('Written ' . Product::count() . ' products to the database . ');
+
+            $withdrawal = Withdrawal::create([
+                'date' => '1970-01-01'
+            ]);
+            $withdrawal->save();
+
+            $orderlines = $this->legacydb->query("SELECT * FROM orders ORDER BY order_id DESC LIMIT 1,5000");
+
+            $c = 0;
+
+            $this->info('| Writing OrderLines. This can take a while.');
+
+            while ($orderline = $orderlines->fetch_assoc()) {
+
+                $c++;
+                if ($c % 1000 == 0) {
+                    $this->info('|-- OrderLine ' . $c . '.');
+                }
+
+                $p = Product::find($orderline['product_id']);
+                if ($p == null) {
+                    $this->error('Could not find product ' . $orderline['product_id'] . ' . ');
+                }
+
+                $u = User::find($orderline['member_id']);
+                if ($u == null) {
+                    $this->error('Could not find user ' . $orderline['member_id'] . ' . ');
+                }
+
+                $o = OrderLine::create([
+                    'original_unit_price' => $p->price,
+                    'units' => $orderline['amount'],
+                    'total_price' => $orderline['total']
+                ]);
+
+                $o->user()->associate($u);
+                $o->product()->associate($p);
+                $o->withdrawal()->associate($withdrawal);
+
+                $o->save();
+
+            }
+
+            $this->info('Written ' . OrderLine::count() . ' orderlines to the database . ');
 
             // We close the database connection.
             $this->legacydb->close();
