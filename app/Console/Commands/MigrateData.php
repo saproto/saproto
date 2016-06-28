@@ -591,7 +591,8 @@ class MigrateData extends Command
                 $o = OrderLine::create([
                     'original_unit_price' => $p->price,
                     'units' => $orderline['amount'],
-                    'total_price' => $orderline['total']
+                    'total_price' => $orderline['total'],
+                    'created_at' => $orderline['date']
                 ]);
 
                 $o->user()->associate($u);
