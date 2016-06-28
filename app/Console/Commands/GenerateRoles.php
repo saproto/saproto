@@ -61,11 +61,11 @@ class GenerateRoles extends Command
             $permissions['board']->save();
             $this->info('Added board permission.');
         }
-        $permissions['bigbrother'] = Permission::where('name', '=', 'bigbrother')->first();
-        if ($permissions['bigbrother'] == null) {
-            $permissions['bigbrother'] = new Permission(array('name' => 'bigbrother', 'display_name' => 'Big Brother', 'description' => 'Allows to see any privacy-protected information.'));
-            $permissions['bigbrother']->save();
-            $this->info('Added bigbrother permission.');
+        $permissions['omnomcom'] = Permission::where('name', '=', 'omnomcom')->first();
+        if ($permissions['omnomcom'] == null) {
+            $permissions['omnomcom'] = new Permission(array('name' => 'omnomcom', 'display_name' => 'OmNomCom', 'description' => 'Allows access to the OmNomCom administration.'));
+            $permissions['omnomcom']->save();
+            $this->info('Added omnomcom permission.');
         }
 
         $roles['admin'] = Role::where('name', '=', 'admin')->first();
@@ -80,13 +80,21 @@ class GenerateRoles extends Command
             $roles['board']->save();
             $this->info('Added board role.');
         }
+        $roles['omnomcom'] = Role::where('name', '=', 'omnomcom')->first();
+        if ($roles['omnomcom'] == null) {
+            $roles['omnomcom'] = new Role(array('name' => 'omnomcom', 'display_name' => 'OmNomCom', 'description' => 'Members of the OmNomCom.'));
+            $roles['omnomcom']->save();
+            $this->info('Added omnomcom role.');
+        }
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['bigbrother']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['bigbrother']->id));
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id));
         $this->info('Synced board role with permissions.');
+        $roles['omnomcom']->perms()->sync(array($permissions['omnomcom']->id));
+        $this->info('Synced omnomcom role with permissions.');
 
         $this->info('Fixed required permissions and roles.');
 
