@@ -258,6 +258,17 @@ Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes:
     Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
 });
 
+/**
+ * Routes related to the OmNomCom.
+ */
+Route::group(['prefix' => 'omnomcom', 'middleware' => ['auth'], 'as' => 'omnomcom::'], function () {
+
+    Route::group(['prefix' => 'orders', 'as' => 'orders::'], function () {
+        Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
+    });
+
+});
+
 /*
  * Routes related to the API.
  */
