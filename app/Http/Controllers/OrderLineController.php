@@ -53,7 +53,7 @@ class OrderLineController extends Controller
             'user' => $user,
             'available_months' => $available_months,
             'selected_month' => $selected_month,
-            'orderlines' => (array_key_exists($selected_month, $orderlines) ? $orderlines[$selected_month] : []),
+            'orderlines' => ($orderlines->has($selected_month) ? $orderlines[$selected_month] : []),
             'all_time_total' => $all_time_total,
             'next_withdrawal' => $next_withdrawal
         ]);

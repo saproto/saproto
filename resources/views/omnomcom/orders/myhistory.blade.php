@@ -19,7 +19,7 @@
 
                 <div class="list-group">
 
-                    <li class="list-group-item list-group-item-success">Today</li>
+                    <li class="list-group-item list-group-item-success">{{ date('l F jS', strtotime($current_date)) }}</li>
 
                     @foreach($orderlines as $orderline)
 
@@ -61,7 +61,7 @@
                 </div>
 
             @else
-                
+
                 <?php
                 $total = 0;
                 ?>
