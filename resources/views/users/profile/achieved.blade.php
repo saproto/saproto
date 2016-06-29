@@ -10,7 +10,13 @@
 
                 <a class="del" href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}">Remove</a>
 
-                <img src="{{ $achievement->img_file_id }}" alt="{{ $achievement->name }} icon"/>
+                <div class="achievement-icon">
+                    @if($achievement->image)
+                        <img src="{!! $achievement->image->generateImagePath(700,null) !!}" alt="">
+                    @else
+                        No icon available
+                    @endif
+                </div>
                 <div>
                     <strong>{{ $achievement->name }}</strong>
                     <p>{{ $achievement->desc }}</p>
@@ -37,20 +43,42 @@
 
     <style type="text/css">
 
-        .achievement img, .achievement div {
-            float: left;
+        .achievement div {
+            float: right;
             width: 50%;
             padding: 10px;
+            padding-bottom: 0;
         }
 
-        .list-group .achievement {
+        .achievement .achievement-icon {
+            padding:0;
+            text-align:center;
+            max-width:calc(50% - 20px);
+            height:calc(100% - 20px);
+            top:50%;
+            position: absolute;
+            transform:translate(0, -50%);
+        }
+
+        .list-group {
+            margin-bottom:0;
+        }
+
+        .achievement-icon img {
+            height: 100px;
+            max-width: 100%;
+            top:50%;
+            left:50%;
+            position: absolute;
+            transform:translate(-50%, -50%);
+        }
+
+        .achievement {
+            margin-top:5px;
             overflow: hidden;
             word-wrap: break-word;
             border-width: 5px;
-            /*border-top-left-radius: 5px;*/
-            /*border-top-right-radius: 5px;*/
-            /*border-bottom-right-radius: 5px;*/
-            /*border-bottom-left-radius: 5px;*/
+            position: relative;
         }
 
         .del {
@@ -61,7 +89,7 @@
         }
 
         .COMMON {
-            border-color: #FFFFFF;
+            border-color: #DDDDDD;
         }
 
         .UNCOMMON {

@@ -3,16 +3,15 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Proto\Models\StorageEntry;
 use Proto\Http\Requests;
 
+use Proto\Models\StorageEntry;
 use Proto\Models\User;
 use Proto\Models\Achievement;
 use Proto\Models\AchievementOwnership;
 
-use Auth;
 use Session;
+use Auth;
 use Redirect;
 
 class AchievementController extends Controller
@@ -20,7 +19,7 @@ class AchievementController extends Controller
 
     public function overview()
     {
-        return view('achievement.list', ['achievements' => Achievement::orderBy('created_at', 'desc')->get()]);
+        return view('achievement.list', ['achievements' => Achievement::orderBy('created_at', 'asc')->get()]);
     }
 
     public function create()
@@ -114,12 +113,13 @@ class AchievementController extends Controller
 
     public function image($id, Request $request)
     {
+
         $achievement = Achievement::find($id);
 
         $image = $request->file('image');
         if ($image) {
             $file = new StorageEntry();
-            $file->createFrom($image);
+            $file->createFromFile($image);
 
             $achievement->image()->associate($file);
             $achievement->save();
@@ -128,6 +128,7 @@ class AchievementController extends Controller
             $achievement->save();
         }
 
-        return Redirect::route('achievement::show', ['id' => $id]);
+        return Redirect::route('achievement::list', ['id' => $id]);
+
     }
 }

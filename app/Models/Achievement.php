@@ -15,6 +15,11 @@ class Achievement extends Model
         return $this->belongsToMany('Proto\Models\User', 'achievements_users');
     }
 
+    public function image()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'img_file_id');
+    }
+
     public function achievementOwnership()
     {
         return $this->hasMany('Proto\Models\AchievementOwnership');

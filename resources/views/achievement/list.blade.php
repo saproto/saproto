@@ -30,7 +30,13 @@
                 <tr>
 
                     <td>{{ $achievement->id }}</td>
-                    <td><img src="{{ $achievement->img_file_id }}" alt=""></td>
+                    <td>
+                        @if($achievement->image)
+                            <img src="{!! $achievement->image->generateImagePath(700,null) !!}" alt="">
+                        @else
+                            No icon available
+                        @endif
+                    </td>
                     <td>{{ $achievement->name }}</td>
                     <td>{{ $achievement->desc }}</td>
                     <td class="{{ $achievement->tier }}">{{ $achievement->tier }}</td>
@@ -76,29 +82,30 @@
 
     <style type="text/css">
 
+        tr * {
+            max-height: 50px !important;
+            max-width:150px;
+            vertical-align: middle !important;
+        }
+
         .COMMON {
-            background: #FFFFFF;
-            color: black;
+            color: #DDDDDD;
         }
 
         .UNCOMMON {
-            background: #1E90FF;
-            color: white;
+            color: #1E90FF;
         }
 
         .RARE {
-            background: #9932CC;
-            color: white;
+            color: #9932CC;
         }
 
         .EPIC {
-            background: #333333;
-            color: white;
+            color: #333333;
         }
 
         .LEGENDARY {
-            background: #C1FF00;
-            color: black;
+            color: #C1FF00;
         }
 
     </style>

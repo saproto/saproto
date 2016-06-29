@@ -113,9 +113,9 @@
 
                 <div class="panel-body">
 
-                    @if($achievement->img_file_id)
+                    @if($achievement->image)
 
-                        <img src="{{ route('file::get', $achievement->img_file_id) }}" width="100%;">
+                        <img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">
 
                     @else
                         <p>
@@ -175,28 +175,23 @@
         /*}*/
 
         select.COMMON, option[value="COMMON"] {
-            background: #FFFFFF;
-            color: black;
+            color: #DDDDDD;
         }
 
         select.UNCOMMON, option[value="UNCOMMON"] {
-            background: #1E90FF;
-            color: white;
+            color: #1E90FF;
         }
 
         select.RARE, option[value="RARE"] {
-            background: #9932CC;
-            color: white;
+            color: #9932CC;
         }
 
         select.EPIC, option[value="EPIC"] {
-            background: #333333;
-            color: white;
+            color: #333333;
         }
 
         select.LEGENDARY, option[value="LEGENDARY"] {
-            background: #C1FF00;
-            color: black;
+            color: #C1FF00;
         }
 
         /********** ONLY FIREFOX **********/
