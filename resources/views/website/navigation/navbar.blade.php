@@ -65,6 +65,16 @@
                 </ul>
             </li>
 
+            @if (Auth::check() && Auth::user()->can("omnomcom"))
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">OmNomCom <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
+                    </ul>
+                </li>
+            @endif
+
             @if (Auth::check() && Auth::user()->can("board"))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

@@ -19,6 +19,37 @@
 .member:hover .activity__admin-controls {
   display: block;
 }
+.product {
+
+  &__edit {
+
+    &__image {
+
+      height: 200px;
+      width: 200px;
+
+      padding: 25px;
+      margin: 20px auto 10px;
+
+      border-radius: 100px;
+      background-color: #333;
+
+    }
+
+    &__image__inner {
+
+      height: 150px;
+      width: 150px;
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+    }
+
+  }
+
+}
 .page-show__content {
   width: 100%;
   background-color: #fff;
