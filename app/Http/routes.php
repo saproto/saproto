@@ -224,6 +224,16 @@ Route::group(['prefix' => 'omnomcom', 'middleware' => ['auth'], 'as' => 'omnomco
         Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
     });
 
+    Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'ProductController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'ProductController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'ProductController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'ProductController@show']);
+    });
+
 });
 
 /*

@@ -28,6 +28,7 @@ class OmnomcomMigration extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('account_id');
+            $table->integer('image_id')->nullable()->default(null);
             $table->string('name');
             $table->string('nicename');
             $table->float('price');

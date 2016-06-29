@@ -22,7 +22,12 @@ class Product extends Model
 
     public function orderlines()
     {
-        return $this->hasMany('Proto\Models\OrderLine', 'order_id');
+        return $this->hasMany('Proto\Models\OrderLine');
+    }
+
+    public function image()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
 }
