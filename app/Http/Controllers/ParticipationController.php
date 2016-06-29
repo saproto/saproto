@@ -11,6 +11,7 @@ use Proto\Models\HelpingCommittee;
 
 use Redirect;
 use Auth;
+use Mail;
 
 class ParticipationController extends Controller
 {
@@ -42,7 +43,10 @@ class ParticipationController extends Controller
             $data['committees_activities_id'] = $helping->id;
         } else {
             if ($event->activity->isFull()) {
+                $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
+            } else {
+                $request->session()->flash('flash_message', 'You claimed a spot for ' . $event->title . '.');
             }
         }
 
@@ -60,8 +64,7 @@ class ParticipationController extends Controller
      * @param  int $id The id of the participation to be removed.
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy($participation_id, Request $request)
+    public function destroy($participation_id, Request $request)
     {
         $participation = ActivityParticipation::findOrFail($participation_id);
 
@@ -77,18 +80,25 @@ class ParticipationController extends Controller
                     abort(500, "You cannot unsubscribe for this event at this time.");
                 } else {
                     $backupparticipation = ActivityParticipation::where('activity_id', $participation->activity->id)
-                        ->whereNull('committees_activities_id')->where('withdrawn', false)->where('backup', true)
+                        ->whereNull('committees_activities_id')->where('backup', true)
                         ->first();
                     if ($backupparticipation !== null) {
                         $backupparticipation->backup = false;
                         $backupparticipation->save();
+                        
+                        Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
+                            $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                            $m->to($backupparticipation->user->email, $backupparticipation->user->name);
+                            $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title);
+                        });
                     }
                 }
 
             }
 
-            $participation->withdrawn = true;
-            $participation->save();
+            $request->session()->flash('flash_message', 'You are not attending ' . $participation->activity->event->title . ' anymore.');
+
+            $participation->delete();
 
             return Redirect::back();
 

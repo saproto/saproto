@@ -1,34 +1,34 @@
-@foreach($members['editions'] as $edition)
+@foreach($members['editions'] as $edition => $memberships)
 
     <div class="panel panel-default members">
 
         <div class="panel-heading">{{ $committee->name }}
-            <strong>{{ $edition[0]->pivot->edition }}</strong>
+            <strong>{{ $edition }}</strong>
         </div>
 
         <div class="panel-body">
 
-            @foreach($edition as $i => $member)
+            @foreach($memberships as $i => $membership)
 
                 <div class="member-picture"
-                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                     style="background-image:url('{!! ($membership->user->photo ? $membership->user->photo->generateImagePath(100, 100) : '') !!}');"></div>
 
                 @if(Route::current()->getName() == "committee::edit")
-                    <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
+                    <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
-                ({{ ($member->pivot->role ? $member->pivot->role : 'General Member') }})
+                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
-                @if ($member->pivot->end)
-                    Between {{ date('j F Y', $member->pivot->start) }}
-                    and {{ date('j F Y',$member->pivot->end) }}.
+                @if ($membership->trashed())
+                    Between {{ date('j F Y', strtotime($membership->created_at)) }}
+                    and {{ date('j F Y', strtotime($membership->deleted_at)) }}.
                 @else
-                    Since {{ date('j F Y',$member->pivot->start) }}.
+                    Since {{ date('j F Y', strtotime($membership->created_at)) }}.
                 @endif
-                @if($i != count($edition) - 1)
+                @if($i != count($memberships) - 1)
                     <hr class="committee-seperator">
                 @endif
 
@@ -50,25 +50,25 @@
 
         <div class="panel-body">
 
-            @foreach($members['members']['current'] as $i => $member)
+            @foreach($members['members']['current'] as $i => $membership)
 
                 <div class="member-picture"
-                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                     style="background-image:url('{!! ($membership->user->photo ? $membership->user->photo->generateImagePath(100, 100) : '') !!}');"></div>
 
                 @if(Route::current()->getName() == "committee::edit")
-                    <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
+                    <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
-                ({{ ($member->pivot->role ? $member->pivot->role : 'General Member') }})
+                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
-                @if ($member->pivot->end)
-                    Between {{ date('j F Y',$member->pivot->start) }}
-                    and {{ date('j F Y',$member->pivot->end) }}.
+                @if ($membership->trashed())
+                    Between {{ date('j F Y', strtotime($membership->created_at)) }}
+                    and {{ date('j F Y', strtotime($membership->deleted_at)) }}.
                 @else
-                    Since {{ date('j F Y',$member->pivot->start) }}.
+                    Since {{ date('j F Y', strtotime($membeship->created_at)) }}.
                 @endif
                 @if($i != count($members['members']['current']) - 1)
                     <hr class="committee-seperator">
@@ -92,25 +92,25 @@
 
         <div class="panel-body">
 
-            @foreach($members['members']['past'] as $i => $member)
+            @foreach($members['members']['past'] as $i => $membership)
 
                 <div class="member-picture"
-                     style="background-image:url('{!! ($member->photo ? $member->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                     style="background-image:url('{!! ($membership->user->photo ? $membership->user->photo->generateImagePath(100, 100) : '') !!}');"></div>
 
                 @if(Route::current()->getName() == "committee::edit")
-                    <a href="{{ route("committee::membership::edit", ['id' => $member->pivot->id]) }}">
+                    <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $member->id]) }}">{{ $member->name }}</a>
-                ({{ ($member->pivot->role ? $member->pivot->role : 'General Member') }})
+                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
-                @if ($member->pivot->end)
-                    Between {{ date('j F Y',$member->pivot->start) }}
-                    and {{ date('j F Y',$member->pivot->end) }}.
+                @if ($membership->trashed())
+                    Between {{ date('j F Y', strtotime($membership->created_at)) }}
+                    and {{ date('j F Y', strtotime($membership->deleted_at)) }}.
                 @else
-                    Since {{ date('j F Y',$member->pivot->start) }}.
+                    Since {{ date('j F Y', strtotime($membership->created_at)) }}.
                 @endif
                 @if($i != count($members['members']['past']) - 1)
                     <hr class="committee-seperator">

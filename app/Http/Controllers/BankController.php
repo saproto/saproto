@@ -47,8 +47,7 @@ class BankController extends Controller
         if ($user->bank == null) {
             abort(500);
         }
-        $user->bank->user_id = null;
-        $user->bank->save();
+        $user->bank->delete();
 
         Session::flash("flash_message", "Deleted bank account.");
         return Redirect::route('user::dashboard', ['id' => $id]);
@@ -67,22 +66,18 @@ class BankController extends Controller
             abort(403);
         }
 
-        // Establish new bank
-        $new = array(
-            'iban' => strtoupper($request->input("iban")),
-            'bic' => strtoupper($request->input("bic")),
-            'machtigingid' => "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0"),
-            'withdrawal_type' => "FRST",
-            'user_id' => $user->id
-        );
+        // Sanitize input
+        $request->request->add(['iban' => strtoupper($request->input("iban")), 'bic' => strtoupper($request->input("bic")), 'machtigingid' => "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0")]);
 
-        $bank = new Bank();
-        if (!$bank->validate($new)) {
-            return Redirect::route('user::bank::add', ['id' => $id])->withErrors($bank->errors());
-        }
+        $this->validate($request, [
+            'iban' => 'required|regex:([A-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16})',
+            'bic' => 'required|regex:([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)',
+            'machtigingid' => 'required|unique:bankaccounts,machtigingid|regex:((PROTO)(X)([0-9]{5})(X)([0-9]{5}))',
+        ]);
 
         // Save it baby!
-        $bank->fill($new);
+        $bank = Bank::create($request->all());
+        $bank->user()->associate($user);
         $bank->save();
 
         Session::flash("flash_message", "New withdrawal authorization added.");

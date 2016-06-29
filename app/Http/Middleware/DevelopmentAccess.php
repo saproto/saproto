@@ -30,7 +30,7 @@ class DevelopmentAccess
     {
         $this->ipWhitelist = explode(',', getenv('DEV_ALLOWED'));
 
-        if (app()->environment() != 'production' && app()->environment() != 'staging' && $this->clientNotAllowed()) {
+        if (app()->environment() != 'production' && $this->clientNotAllowed()) {
             config(['app.debug' => false]);
             return abort(403);
         }
