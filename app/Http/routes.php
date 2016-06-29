@@ -239,4 +239,6 @@ Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:bo
     Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
     Route::get('/give/{id}', ['as' => 'give', 'uses' => 'AchievementController@wrap']);
     Route::post('/give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+    Route::get('/take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
+    Route::post('{id}/image', ['as' => 'image', 'uses' => 'AchievementController@image']);
 });

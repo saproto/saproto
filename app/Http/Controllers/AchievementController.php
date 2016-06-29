@@ -76,7 +76,7 @@ class AchievementController extends Controller
     public function give($achievement_id, Request $request)
     {
         $achievement = Achievement::find($achievement_id);
-        $user = User::find($request->id);
+        $user = User::find($request->user_id);
         if (!$user || !$achievement) abort(404);
         $achieved = $user->achieved();
         $hasAchievement = false;
@@ -85,15 +85,49 @@ class AchievementController extends Controller
         }
         if (!$hasAchievement) {
             $new = array(
-                'user_id' => $request->id,
+                'user_id' => $request->user_id,
                 'achievement_id' => $achievement_id
             );
             $relation = new AchievementOwnership($new);
             $relation->save();
-            Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been given to " . $user->name);
+            Session::flash('flash_message', "Achievement $achievement->name has been given to $user->name.");
         } else {
             Session::flash('flash_message', "This user already has this achievement");
         }
         return Redirect::route("achievement::list");
+    }
+
+    public function take($achievement_id, $user_id)
+    {
+        $achievement = Achievement::find($achievement_id);
+        $user = User::find($user_id);
+        if (!$user || !$achievement) abort(404);
+        $achieved = AchievementOwnership::all();
+        foreach ($achieved as $entry) {
+            if ($entry->achievement_id == $achievement_id && $entry->user_id == $user_id) {
+                $entry->delete();
+                Session::flash('flash_message', "Achievement $achievement->name taken from $user->name.");
+            }
+        }
+        return Redirect::route("user::profile", ['id' => $user_id]);
+    }
+
+    public function image($id, Request $request)
+    {
+        $achievement = Achievement::find($id);
+
+        $image = $request->file('image');
+        if ($image) {
+            $file = new StorageEntry();
+            $file->createFrom($image);
+
+            $achievement->image()->associate($file);
+            $achievement->save();
+        } else {
+            $achievement->image()->dissociate();
+            $achievement->save();
+        }
+
+        return Redirect::route('achievement::show', ['id' => $id]);
     }
 }
