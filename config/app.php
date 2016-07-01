@@ -158,6 +158,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
 
     ],
 
@@ -222,7 +223,9 @@ return [
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
 
         'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'Image'     => Barryvdh\Snappy\Facades\SnappyImage::class,
+
+        'DNS1D'     => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D'     => Milon\Barcode\Facades\DNS2DFacade::class,
 
     ],
 

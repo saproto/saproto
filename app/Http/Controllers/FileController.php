@@ -33,25 +33,18 @@ class FileController extends Controller
 
     }
 
-    public function getImage($id, $hash, Request $request)
-    {
-
-        $entry = StorageEntry::findOrFail($id);
-        
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
+    public static function makeImage(StorageEntry $entry, $w, $h) {
 
         $storage = config('filesystems.disks');
 
         $opts = [
-            'w' => ($request->has('w') ? $request->input('w') : null),
-            'h' => ($request->has('h') ? $request->input('h') : null)
+            'w' => $w,
+            'h' => $h
         ];
 
         ini_set('memory_limit', '256M');
 
-        $img = Image::cache(function ($image) use ($storage, $entry, $opts) {
+        return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
                 $image->make($storage['local']['root'] . '/' . $entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {
                     $constraint->upsize();
@@ -66,7 +59,22 @@ class FileController extends Controller
             }
         });
 
-        $response = new Response($img, 200);
+    }
+
+    public function getImage($id, $hash, Request $request)
+    {
+
+        $entry = StorageEntry::findOrFail($id);
+        
+        if ($hash != $entry->hash) {
+            abort(404);
+        }
+
+        $response = new Response($this->makeImage(
+            $entry,
+            ( $request->has('w') ? $request->input('w') : null ),
+            ( $request->has('h') ? $request->input('h') : null )
+        ), 200);
         $response->header('Content-Type', $entry->mime);
 
         return $response;

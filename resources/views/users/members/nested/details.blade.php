@@ -175,15 +175,20 @@
 
         <div class="col-md-4 col-xs-4">
             <div class="btn-group btn-group-justified" role="group">
+                <a class="btn btn-default" target="_blank" href="{{ route('user::membercard::download', ['id' => $user->id]) }}">
+                    Print Card
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xs-4">
+            <div class="btn-group btn-group-justified" role="group">
                 @if(!$user->member) <a class="btn btn-primary" data-toggle="modal" data-target="#addMembership">
                     Make member
                 </a>
-                @elseif($user->member && !$user->member->till) <a class="btn btn-danger" data-toggle="modal"
+                @else <a class="btn btn-danger" data-toggle="modal"
                                                                   data-target="#removeMembership">
                     End membership
-                </a>
-                @else <a class="btn btn-danger" href="{{ route("user::member::remove", ['id' => $user->id]) }}">
-                    Reinstate membership
                 </a>
                 @endif
             </div>

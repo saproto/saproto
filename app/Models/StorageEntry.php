@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
+use Proto\Http\Controllers\FileController;
+
 class StorageEntry extends Model
 {
     /**
@@ -64,5 +66,9 @@ class StorageEntry extends Model
     public function generateImagePath($w, $h)
     {
         return route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
+    }
+    
+    public function getBase64($w = null, $h = null) {
+        return base64_encode(FileController::makeImage($this, $w, $h));
     }
 }
