@@ -72,7 +72,9 @@
         <div class="heading">Card validity</div>
         <div>{{ date('M Y') }} - {{ date('M Y', strtotime('+2 years')) }}</div>
     </div>
-    <img id="photo" src="data:{{ $user->photo->mime }};base64,{{ $user->photo->getBase64(450,600) }}">
+    @if($user->photo)
+        <img id="photo" src="data:{{ $user->photo->mime }};base64,{{ $user->photo->getBase64(450,600) }}">
+    @endif
     <img id="barcode" src="data:image/png;base64,{!! DNS1D::getBarcodePNG($user->id, "CODABAR", 500) !!}">
 </div>
 </body>
