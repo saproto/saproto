@@ -156,7 +156,8 @@ return [
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Bitbeans\Yubikey\YubikeyServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Greggilbert\Recaptcha\RecaptchaServiceProvider::class
+        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
 
     ],
 
@@ -214,11 +215,14 @@ return [
         'permission'=> Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability'   => Zizaco\Entrust\Middleware\EntrustAbility::class,
 
-        'Yubikey' => Bitbeans\Yubikey\YubikeyFacade::class,
+        'Yubikey'   => Bitbeans\Yubikey\YubikeyFacade::class,
 
-        'Image' => Intervention\Image\Facades\Image::class,
+        'Image'     => Intervention\Image\Facades\Image::class,
 
-        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class
+        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
+
+        'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'Image'     => Barryvdh\Snappy\Facades\SnappyImage::class,
 
     ],
 
