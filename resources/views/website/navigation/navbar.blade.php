@@ -51,6 +51,12 @@
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
+                        @if (Auth::check() && Auth::user()->can("board"))
+                            <li role="separator" class="divider"></li>
+                            <li><a class="navbar-title">Financial:</a></li>
+                            <li><a href="#">Accounts</a></li>
+                            <li><a href="#">Withdrawals</a></li>
+                        @endif
                         <li role="separator" class="divider"></li>
                         <li><a class="navbar-title">Create new:</a></li>
                         <li><a href="{{ route("committee::add") }}">Committee</a></li>

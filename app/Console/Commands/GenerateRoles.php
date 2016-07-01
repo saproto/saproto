@@ -67,6 +67,12 @@ class GenerateRoles extends Command
             $permissions['omnomcom']->save();
             $this->info('Added omnomcom permission.');
         }
+        $permissions['finadmin'] = Permission::where('name', '=', 'finadmin')->first();
+        if ($permissions['finadmin'] == null) {
+            $permissions['finadmin'] = new Permission(array('name' => 'finadmin', 'display_name' => 'Financial Administration', 'description' => 'Allows access to the financial administration.'));
+            $permissions['finadmin']->save();
+            $this->info('Added finadmin permission.');
+        }
 
         $roles['admin'] = Role::where('name', '=', 'admin')->first();
         if ($roles['admin'] == null) {
@@ -89,7 +95,7 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id));
         $this->info('Synced admin role with permissions.');
         $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id));
         $this->info('Synced board role with permissions.');
