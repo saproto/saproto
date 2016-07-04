@@ -481,6 +481,7 @@ class MigrateData extends Command
 
             // Migrating the OmNomCom
 
+            DB::table('products_categories')->truncate();
             ProductCategory::truncate();
             Product::truncate();
             FinancialAccount::truncate();

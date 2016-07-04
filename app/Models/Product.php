@@ -12,7 +12,7 @@ class Product extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'category_id', 'product_id');
+        return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
     }
 
     public function account()
