@@ -71,6 +71,12 @@
                        aria-expanded="false">OmNomCom <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
+                        @if (Auth::check() && Auth::user()->can("finadmin"))
+                            <li role="separator" class="divider"></li>
+                            <li><a class="navbar-title">Financial:</a></li>
+                            <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
+                            <li><a href="#">Withdrawals</a></li>
+                        @endif
                     </ul>
                 </li>
             @endif

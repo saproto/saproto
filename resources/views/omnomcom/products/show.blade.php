@@ -12,10 +12,6 @@
 
             <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">
 
-                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                </a>
-                &nbsp;
                 {{ $product->name }}
 
             </h3>
