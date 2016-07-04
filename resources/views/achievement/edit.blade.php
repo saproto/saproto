@@ -163,17 +163,6 @@
 
     <style type="text/css">
 
-        /*select, option {*/
-        /*background: #fff;*/
-        /*color: black;*/
-        /*}*/
-
-        /*select option:hover {*/
-        /*background: black;*/
-        /*color: black;*/
-        /*cursor: none;*/
-        /*}*/
-
         select.COMMON, option[value="COMMON"] {
             color: #DDDDDD;
         }
@@ -193,11 +182,6 @@
         select.LEGENDARY, option[value="LEGENDARY"] {
             color: #C1FF00;
         }
-
-        /********** ONLY FIREFOX **********/
-        /*select option:checked {*/
-        /*box-shadow: 0 0 10px 100px #555 inset;*/
-        /*}*/
 
     </style>
 
