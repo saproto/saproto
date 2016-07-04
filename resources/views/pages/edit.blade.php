@@ -19,7 +19,7 @@
         <div class="form-group">
             <label for="title">Page:</label>
             <input type="text" class="form-control" id="title" name="title"
-                   placeholder="About Proto" value="{{ $item->name or '' }}" required>
+                   placeholder="About Proto" value="{{ $item->title or '' }}" required>
         </div>
 
         <div class="form-group">
@@ -30,9 +30,19 @@
 
         <div class="checkbox">
             <label>
-                <input type="checkbox" name="members_only" @if(isset($item->members_only) && $item->members_only) checked @endif>
+                <input type="checkbox" name="is_member_only" @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
                 This page is for members only.
             </label>
+        </div>
+
+        <div class="form-group">
+            <label for="editor">Content</label>
+            @if ($item == null)
+                <textarea id="editor" name="content"
+                          placeholder="Enter page content here..."></textarea>
+            @else
+                <textarea id="editor" name="content">{{ $item->content }}</textarea>
+            @endif
         </div>
 
         @endsection
@@ -51,6 +61,12 @@
 
     @parent
 
-
+    <script>
+        var simplemde = new SimpleMDE({
+            element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+    </script>
 
 @endsection
