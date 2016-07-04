@@ -195,6 +195,24 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 });
 
 /*
+ * Routes related to pages.
+ */
+Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
+
+    Route::group(['middleware' => ['auth', 'permission:board']], function() {
+        Route::get('/', ['as' => 'list', 'uses' => 'PageController@index']);
+        Route::get('/add', ['as' => 'add', 'uses' => 'PageController@create']);
+        Route::post('/add', ['as' => 'add', 'uses' => 'PageController@store']);
+        Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@edit']);
+        Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@update']);
+        Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'PageController@destroy']);
+    });
+
+    Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);
+    
+});
+
+/*
  * Routes related to studies.
  */
 Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
