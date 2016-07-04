@@ -25,7 +25,7 @@ class Achievement extends Model
         return $this->hasMany('Proto\Models\AchievementOwnership');
     }
 
-    public function current($ismember = true)
+    public function currentOwners($ismember = true)
     {
         $users = array();
         foreach ($this->users as $user) {

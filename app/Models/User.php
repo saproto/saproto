@@ -30,7 +30,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
  * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
  */
-class User extends Validatable implements AuthenticatableContract,
+class User extends Model implements AuthenticatableContract,
     CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes;
@@ -44,16 +44,6 @@ class User extends Validatable implements AuthenticatableContract,
     protected $table = 'users';
 
     protected $guarded = ['password', 'remember_token'];
-
-    /**
-     * The rules for validation.
-     *
-     * @var array
-     */
-    protected $rules = array(
-        'email' => 'required|email',
-        'phone' => 'regex:(\+[0-9]{1,16})'
-    );
 
     /**
      * The attributes excluded from the model's JSON form.
