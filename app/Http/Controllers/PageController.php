@@ -73,7 +73,7 @@ class PageController extends Controller
         }
 
         if($page->is_member_only && !(Auth::check() && Auth::user()->member != null)) {
-            abort(500, "You need to be a member of S.A. Proto to see this page.");
+            abort(403, "You need to be a member of S.A. Proto to see this page.");
         }
 
         return view('pages.show', ['page' => $page]);
