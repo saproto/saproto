@@ -8,7 +8,9 @@
 
             <li class="list-group-item achievement {{ $achievement->tier }}">
 
-                <a class="del" href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}">Remove</a>
+                @if(Auth::check() && Auth::user()->can("board"))
+                    <a class="del" href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}">Remove</a>
+                @endif
 
                 <div class="achievement-icon">
                     @if($achievement->image)
@@ -47,7 +49,6 @@
             float: right;
             width: 50%;
             padding: 10px;
-            padding-bottom: 0;
         }
 
         .achievement .achievement-icon {
