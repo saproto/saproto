@@ -10,4 +10,6 @@ class Page extends Model
     use SoftDeletes;
 
     protected $table = 'pages';
+
+    protected $guarded = ['id'];
 }
