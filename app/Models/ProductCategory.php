@@ -16,7 +16,7 @@ class ProductCategory extends Model
 
     public function products()
     {
-        return $this->hasMany('Proto\Models\Product', 'products_categories', 'product_id', 'category_id');
+        return $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id');
     }
 
 }

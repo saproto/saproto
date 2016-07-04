@@ -9,6 +9,7 @@ use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Account;
 use Proto\Models\Product;
+use Proto\Models\ProductCategory;
 use Proto\Models\StorageEntry;
 
 use Redirect;
@@ -57,7 +58,11 @@ class ProductController extends Controller
     public function create()
     {
 
-        return view('omnomcom.products.edit', ['product' => null]);
+        return view('omnomcom.products.edit', [
+            'product' => null,
+            'accounts' => Account::orderBy('account_number', 'asc')->get(),
+            'categories' => ProductCategory::all()
+        ]);
 
     }
 
@@ -112,7 +117,11 @@ class ProductController extends Controller
     public function edit($id)
     {
 
-        return view('omnomcom.products.edit', ['product' => Product::findOrFail($id), 'accounts' => Account::orderBy('account_number', 'asc')->get()]);
+        return view('omnomcom.products.edit', [
+            'product' => Product::findOrFail($id),
+            'accounts' => Account::orderBy('account_number', 'asc')->get(),
+            'categories' => ProductCategory::all()
+        ]);
 
     }
 
@@ -127,7 +136,7 @@ class ProductController extends Controller
     {
 
         $product = Product::findOrFail($id);
-        $product->fill($request->except('image'));
+        $product->fill($request->except('image', 'product_categories'));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
@@ -140,6 +149,15 @@ class ProductController extends Controller
         }
 
         $product->account()->associate(Account::findOrFail($request->input('account_id')));
+
+        $categories = [];
+        foreach($request->input('product_categories') as $category) {
+            $category = ProductCategory::find($category);
+            if ($category != null) {
+                $categories[] = $category->id;
+            }
+        }
+        $product->categories()->sync($categories);
 
         $product->save();
 

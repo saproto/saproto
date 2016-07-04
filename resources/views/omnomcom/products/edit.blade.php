@@ -136,13 +136,31 @@
 
             <div class="col-md-6">
 
+                <label for="max_stock">Product categories:</label>
+
+                <select multiple name="product_categories[]" class="form-control" required>
+
+                    @foreach($categories as $catogory)
+
+                        <option value="{{ $catogory->id }}" {{ ($product != null && $product->categories->contains($catogory) ? 'selected' : '') }}>
+                            {{ $catogory->name }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            <div class="col-md-6">
+
                 <label for="max_stock">Financial account:</label>
 
                 <select name="account_id" class="form-control" required>
 
                     @foreach($accounts as $account)
 
-                        <option value="{{ $account->id }}" {{ ($account->id == $product->account_id ? 'selected' : '') }}>
+                        <option value="{{ $account->id }}" {{ ($product != null && $account->id == $product->account_id ? 'selected' : '') }}>
                             {{ $account->name }} ({{ $account->account_number }})
                         </option>
 
