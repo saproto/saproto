@@ -5,7 +5,7 @@
 @endsection
 
 @section('panel-title')
-    {{ ($item == null ? "Create new page." : "Edit page " . $item->title .".") }}
+    {{ ($item == null ? "Create new page." : "Edit page " . $item->title) }}
 @endsection
 
 @section('panel-body')
@@ -17,15 +17,18 @@
         {!! csrf_field() !!}
 
         <div class="form-group">
-            <label for="title">Page:</label>
+            <label for="title">Title:</label>
             <input type="text" class="form-control" id="title" name="title"
                    placeholder="About Proto" value="{{ $item->title or '' }}" required>
         </div>
 
         <div class="form-group">
             <label for="slug">Slug:</label>
-            <input type="text" class="form-control datetime-picker" id="slug" name="slug" placeholder="about-proto"
+            <div class="input-group">
+                <div class="input-group-addon">{{ route('page::show', '') }}/</div>
+                <input type="text" class="form-control datetime-picker" id="slug" name="slug" placeholder="about-proto"
                    value="{{ $item->slug or '' }}" required>
+            </div>
         </div>
 
         <div class="checkbox">

@@ -15,7 +15,7 @@
             <tr>
 
                 <th>Title</th>
-                <th>Slug</th>
+                <th>URL</th>
                 <th>Member only</th>
                 <th>Controls</th>
 
@@ -28,13 +28,14 @@
                 <tr {!! ($page->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
 
                     <td>{{ $page->title }}</td>
-                    <td>{{ $page->slug }}</td>
-                    <td>@if($page->is_member_only) yes @else no @endif</td>
+                    <td><a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a></td>
+                    <td>@if($page->is_member_only) Member only @else Public @endif</td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('page::edit', ['id' => $page->id]) }}" role="button">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
+
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('page::delete', ['id' => $page->id]) }}" role="button">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
