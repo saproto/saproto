@@ -21,6 +21,57 @@
 }
 .product {
 
+  &__account {
+
+    padding: 5px;
+
+    &__name {
+
+      float: left;
+
+      height: 76px;
+      line-height: 76px;
+
+      margin-left: 20px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      width: 140px;
+
+    }
+
+    &__image {
+
+      float: left;
+
+      height: 76px;
+      width: 76px;
+
+      padding: 12px;
+
+      border-radius: 38px;
+      background-color: #333;
+
+    }
+
+    &__image__inner {
+
+      height: 52px;
+      width: 52px;
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+    }
+
+  }
+
+}
+.product {
+
   &__edit {
 
     &__image {
