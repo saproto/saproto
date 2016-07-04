@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\Account;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 
@@ -111,7 +112,7 @@ class ProductController extends Controller
     public function edit($id)
     {
 
-        return view('omnomcom.products.edit', ['product' => Product::findOrFail($id)]);
+        return view('omnomcom.products.edit', ['product' => Product::findOrFail($id), 'accounts' => Account::orderBy('account_number', 'asc')->get()]);
 
     }
 
@@ -124,7 +125,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $product = Product::findOrFail($id);
         $product->fill($request->except('image'));
         $product->is_visible = $request->has('is_visible');
@@ -137,6 +138,8 @@ class ProductController extends Controller
 
             $product->image()->associate($file);
         }
+
+        $product->account()->associate(Account::findOrFail($request->input('account_id')));
 
         $product->save();
 
@@ -165,7 +168,7 @@ class ProductController extends Controller
         $product->delete();
 
         $request->session()->flash('flash_message', "The product has been deleted.");
-        return Redirect::back();        
+        return Redirect::back();
 
     }
 }

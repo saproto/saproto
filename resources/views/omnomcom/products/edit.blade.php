@@ -132,6 +132,30 @@
 
         <hr>
 
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <label for="max_stock">Financial account:</label>
+
+                <select name="account_id" class="form-control" required>
+
+                    @foreach($accounts as $account)
+
+                        <option value="{{ $account->id }}" {{ ($account->id == $product->account_id ? 'selected' : '') }}>
+                            {{ $account->name }} ({{ $account->account_number }})
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <hr>
+
         <div class="form-group">
             <label for="image">Product image:</label>
             <input type="file" class="form-control" id="image" name="image">
