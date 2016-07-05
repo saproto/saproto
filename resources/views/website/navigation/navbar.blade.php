@@ -37,6 +37,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">OmNomCom <span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
                         <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
                         <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
                         @if (Auth::check() && Auth::user()->can("finadmin"))

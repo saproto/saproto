@@ -32,7 +32,7 @@ class OrderLine extends Model
 
     public function isPayed()
     {
-        return ($this->payed_with_cash || $this->payed_with_mollie || $this->payed_with_withdrawal);
+        return ($this->payed_with_cash != null || $this->payed_with_mollie != null || $this->payed_with_withdrawal != null);
     }
 
 }

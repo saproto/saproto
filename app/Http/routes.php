@@ -218,10 +218,14 @@ Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes:
 /**
  * Routes related to the OmNomCom.
  */
-Route::group(['prefix' => 'omnomcom', 'middleware' => ['auth'], 'as' => 'omnomcom::'], function () {
-
-    Route::group(['prefix' => 'orders', 'as' => 'orders::'], function () {
+Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
+    
+    Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
+        Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
         Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
+
+        Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
     });
 
     Route::group(['prefix' => 'accounts', 'middleware' => ['permission:finadmin'], 'as' => 'accounts::'], function () {
