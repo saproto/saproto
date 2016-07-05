@@ -15,6 +15,8 @@ use Session;
 
 class PageController extends Controller
 {
+    protected $reservedSlugs = array('add', 'edit', 'delete');
+
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +35,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view("pages.edit", ['item' => null]);
+        return view("pages.edit", ['item' => null, 'new' => true]);
     }
 
     /**
@@ -46,10 +48,22 @@ class PageController extends Controller
     {
         $page = new Page($request->all());
 
-        if ($request->has('is_member_only')) {
+        if($request->has('is_member_only')) {
             $page->is_member_only = true;
         } else {
             $page->is_member_only = false;
+        }
+
+        if(in_array($request->slug, $this->reservedSlugs)) {
+            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
+            return view('pages.edit', ['item' => $page, 'new' => true]);
+        }
+
+        if(Page::where('slug', $page->slug)->get()->count() > 0) {
+            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
+            return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
         $page->save();
@@ -87,9 +101,9 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        $page = Page::find($id);
+        $page = Page::findOrFail($id);
 
-        return view('pages.edit', ['item' => $page]);
+        return view('pages.edit', ['item' => $page, 'new' => false]);
     }
 
     /**
@@ -101,13 +115,26 @@ class PageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $page = Page::find($id);
+        $page = Page::findOrFail($id);
+
+        if(($request->slug != $page->slug) && Page::where('slug', $page->slug)->get()->count() > 0) {
+            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
+            return view('pages.edit', ['item' => $request, 'new' => false]);
+        }
+
         $page->fill($request->all());
 
-        if ($request->has('is_member_only')) {
+        if($request->has('is_member_only')) {
             $page->is_member_only = true;
         } else {
             $page->is_member_only = false;
+        }
+
+        if(in_array($request->slug, $this->reservedSlugs)) {
+            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+
+            return view('pages.edit', ['item' => $page, 'new' => false]);
         }
 
         $page->save();
@@ -124,7 +151,7 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        $page = Page::find($id);
+        $page = Page::findOrfail($id);
 
         Session::flash('flash_message', 'Page ' . $page->title . ' has been removed.');
 

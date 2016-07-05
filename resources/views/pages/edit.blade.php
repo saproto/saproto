@@ -5,13 +5,13 @@
 @endsection
 
 @section('panel-title')
-    {{ ($item == null ? "Create new page." : "Edit page " . $item->title) }}
+    @if($new) Create new page @else Edit page {{ $item->title }} @endif
 @endsection
 
 @section('panel-body')
 
     <form method="post"
-          action="{{ ($item == null ? route("page::add") : route("page::edit", ['id' => $item->id])) }}"
+          action="@if($new) {{ route("page::add") }} @else {{ route("page::edit", ['id' => $item->id]) }} @endif"
           enctype="multipart/form-data">
 
         {!! csrf_field() !!}
@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group">
-            <label for="slug">Slug:</label>
+            <label for="slug">URL:</label>
             <div class="input-group">
                 <div class="input-group-addon">{{ route('page::show', '') }}/</div>
                 <input type="text" class="form-control datetime-picker" id="slug" name="slug" placeholder="about-proto"
@@ -34,7 +34,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="is_member_only" @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
-                This page is for members only.
+                <i class="fa fa-lock" aria-hidden="true"></i> Members only
             </label>
         </div>
 
