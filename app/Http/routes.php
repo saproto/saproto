@@ -246,6 +246,8 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductController@show']);
+
+        Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
     });
 
     Route::group(['prefix' => 'categories', 'middleware' => ['permission:omnomcom'], 'as' => 'categories::'], function () {

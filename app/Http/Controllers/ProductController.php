@@ -151,7 +151,7 @@ class ProductController extends Controller
         $product->account()->associate(Account::findOrFail($request->input('account_id')));
 
         $categories = [];
-        foreach($request->input('product_categories') as $category) {
+        foreach ($request->input('product_categories') as $category) {
             $category = ProductCategory::find($category);
             if ($category != null) {
                 $categories[] = $category->id;
@@ -165,6 +165,29 @@ class ProductController extends Controller
 
         return Redirect::route('omnomcom::products::edit', ['id' => $product->id]);
 
+    }
+
+    public function bulkUpdate(Request $request)
+    {
+        $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
+
+        $feedback = "";
+        foreach ($input as $line) {
+            $line = explode(',', $line);
+            $product = Product::find($line[0]);
+            if ($product) {
+                $oldstock = $product->stock;
+                $newstock = $oldstock + $line[1];
+                $product->stock = $newstock;
+                $feedback .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
+                $product->save();
+            } else {
+                $feedback .= "Product ID <strong>" . $line[0] . "</strong> not recognized.<br>";
+            }
+        }
+        $request->session()->flash('flash_message', $feedback);
+
+        return Redirect::back();
     }
 
     /**
