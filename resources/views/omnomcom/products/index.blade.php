@@ -29,6 +29,23 @@
 
             </div>
 
+            <hr>
+
+            <form method="post" action="{{ route("omnomcom::products::bulkupdate") }}">
+
+                {!! csrf_field() !!}
+
+                <p>
+                    Bulk update stock by inserting a comma-seperated list of product_id's and the amount you want to
+                    add.
+                </p>
+
+                <textarea name="update" style="width: 100%;" rows="7"></textarea>
+
+                <input type="submit" class="btn btn-success" value="Bulk update stock" style="width: 100%;">
+
+            </form>
+
         </div>
 
         <div class="col-md-8 col-md-offset-1">

@@ -87,7 +87,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel">
-        <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
@@ -95,7 +95,7 @@
                     <h4 class="modal-title" id="flashModalLabel">Attention</h4>
                 </div>
                 <div class="modal-body">
-                    {{ Session::get('flash_message') }}
+                    {!! Session::get('flash_message') !!}
                 </div>
             </div>
         </div>
