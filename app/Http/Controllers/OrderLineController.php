@@ -10,7 +10,10 @@ use Proto\Http\Controllers\Controller;
 
 use Auth;
 use Proto\Models\OrderLine;
+use Proto\Models\Product;
 use Proto\Models\User;
+
+use Redirect;
 
 class OrderLineController extends Controller
 {
@@ -32,7 +35,6 @@ class OrderLineController extends Controller
             abort(403);
         }
 
-        $all_time_total = $orderlines = OrderLine::where('user_id', $user->id)->sum('total_price');
         $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
         $orderlines = OrderLine::where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->groupBy(function ($date) {
@@ -54,65 +56,65 @@ class OrderLineController extends Controller
             'available_months' => $available_months,
             'selected_month' => $selected_month,
             'orderlines' => ($orderlines->has($selected_month) ? $orderlines[$selected_month] : []),
-            'all_time_total' => $all_time_total,
             'next_withdrawal' => $next_withdrawal
         ]);
 
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function adminindex(Request $request)
     {
-        //
+
+        $date = ($request->has('date') ? $request->input('date') : null);
+
+        $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
+
+        if ($date != null) {
+            $orderlines = $orderlines->where('created_at', '<=', Carbon::parse($date . ' 23:59:59')->format('Y-m-d H:i:s'));
+        }
+
+        $orderlines = $orderlines->orderBy('created_at', 'desc')->get();
+
+        return view('omnomcom.orders.adminhistory', [
+            'date' => $date,
+            'orderlines' => ($orderlines ? $orderlines : [])
+        ]);
+
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Bulk store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function bulkStore(Request $request)
     {
-        //
-    }
+        for ($i = 0; $i < count($request->input('user')); $i++) {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            $user = User::findOrFail($request->input('user')[$i]);
+            $product = Product::findOrFail($request->input('product')[$i]);
+            $price = ($request->has('price') ? $request->input('price')[$i] : $product->price);
+            $units = $request->input('units')[$i];
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            $order = OrderLine::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'original_unit_price' => $product->price,
+                'units' => $units,
+                'total_price' => $price * $units
+            ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+            $order->save();
+
+        }
+
+        $request->session()->flash('flash_message', 'Your manual orders have been added.');
+        return Redirect::back();
     }
 
     /**
@@ -121,8 +123,18 @@ class OrderLineController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $order = OrderLine::findOrFail($id);
+
+        if ($order->isPayed()) {
+            $request->session()->flash('flash_message', 'The orderline cannot be deleted, as it has already been paid for.');
+            return Redirect::back();
+        }
+
+        $order->delete();
+
+        $request->session()->flash('flash_message', 'The orderline was deleted.');
+        return Redirect::back();
     }
 }
