@@ -73,6 +73,12 @@ class GenerateRoles extends Command
             $permissions['finadmin']->save();
             $this->info('Added finadmin permission.');
         }
+        $permissions['pilscie'] = Permission::where('name', '=', 'pilscie')->first();
+        if ($permissions['pilscie'] == null) {
+            $permissions['pilscie'] = new Permission(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'Allows access to the PilsCie tools.'));
+            $permissions['pilscie']->save();
+            $this->info('Added pilscie permission.');
+        }
 
         $roles['admin'] = Role::where('name', '=', 'admin')->first();
         if ($roles['admin'] == null) {
@@ -92,15 +98,23 @@ class GenerateRoles extends Command
             $roles['omnomcom']->save();
             $this->info('Added omnomcom role.');
         }
+        $roles['pilscie'] = Role::where('name', '=', 'pilscie')->first();
+        if ($roles['pilscie'] == null) {
+            $roles['pilscie'] = new Role(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'Members of the PilsCie.'));
+            $roles['pilscie']->save();
+            $this->info('Added pilscie role.');
+        }
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id));
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id));
         $this->info('Synced board role with permissions.');
         $roles['omnomcom']->perms()->sync(array($permissions['omnomcom']->id));
         $this->info('Synced omnomcom role with permissions.');
+        $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id));
+        $this->info('Synced pilscie role with permissions.');
 
         $this->info('Fixed required permissions and roles.');
 

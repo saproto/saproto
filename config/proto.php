@@ -42,6 +42,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PilsCie Committee
+    |--------------------------------------------------------------------------
+    |
+    | The slug of the committee that is considered to be the PilsCie of the application.
+    | Members of this committee will always get the 'pilscie' role when successfully logging in.
+    |
+    */
+
+    'pilscie' => 'pilscie',
+
+    /*
+    |--------------------------------------------------------------------------
     | Primary e-mail domain
     |--------------------------------------------------------------------------
     |
