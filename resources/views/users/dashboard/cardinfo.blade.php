@@ -15,6 +15,12 @@
                     <div class="panel-body">
                         <strong>{{ $rfid->name or 'No name' }}</strong>
                         <span class="pull-right">{{ $rfid->card_id }}</span>
+                        <br>
+                        <span style="color: #aaa;">
+                            <sub>
+                                Last used: {{ $rfid->updated_at }}
+                            </sub>
+                        </span>
                     </div>
                     <div class="panel-footer">
                         <div class="row">
