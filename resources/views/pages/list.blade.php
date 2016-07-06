@@ -25,7 +25,7 @@
 
             @foreach($pages as $page)
 
-                <tr {!! ($page->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
+                <tr>
 
                     <td>{{ $page->title }}</td>
                     <td><a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a></td>

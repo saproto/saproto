@@ -12,4 +12,14 @@ class Page extends Model
     protected $table = 'pages';
 
     protected $guarded = ['id'];
+
+    public function featuredImage()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'featured_image_id');
+    }
+
+    public function files()
+    {
+        return $this->belongsToMany('Proto\Models\StorageEntry', 'pages_files', 'page_id', 'file_id');
+    }
 }

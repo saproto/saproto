@@ -205,7 +205,14 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
         Route::post('/add', ['as' => 'add', 'uses' => 'PageController@store']);
         Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@edit']);
         Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@update']);
+        Route::post('/edit/{id}/image', ['as' => 'image', 'uses' => 'PageController@featuredImage']);
         Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'PageController@destroy']);
+
+        Route::group(['prefix' => '/edit/{id}/file', 'as' => 'file::'], function() {
+            Route::post('/add', ['as' => 'add', 'uses' => 'PageController@addFile']);
+            Route::get('/{file_id}/delete', ['as' => 'delete', 'uses' => 'PageController@deleteFile']);
+        });
+
     });
 
     Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);

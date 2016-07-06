@@ -9,6 +9,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Page;
+use Proto\Models\StorageEntry;
 
 use Auth;
 use Session;
@@ -91,6 +92,59 @@ class PageController extends Controller
         }
 
         return view('pages.show', ['page' => $page]);
+    }
+
+    /**
+     * Change the featured image of the page.
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function featuredImage(Request $request, $id) {
+        $page = Page::find($id);
+
+        $image = $request->file('image');
+        if ($image) {
+            $file = new StorageEntry();
+            $file->createFromFile($image);
+
+            $page->featuredImage()->associate($file);
+            $page->save();
+        } else {
+            $page->featuredImage()->dissociate();
+            $page->save();
+        }
+
+        return Redirect::route('page::edit', ['id' => $id]);
+    }
+
+    /**
+     * Adds file to page.
+     *
+     * @param Request $request
+     * @param $id
+     * @return mixed
+     */
+    public function addFile(Request $request, $id) {
+        $page = Page::find($id);
+
+        $file = new StorageEntry();
+        $file->createFromFile($request->file('file'));
+
+        $page->files()->attach($file);
+        $page->save();
+
+        return Redirect::route('page::edit', ['id' => $id]);
+    }
+
+    public function deleteFile($id, $file_id) {
+        $page = Page::find($id);
+
+        $page->files()->detach($file_id);
+        $page->save();
+
+        return Redirect::route('page::edit', ['id' => $id]);
     }
 
     /**
