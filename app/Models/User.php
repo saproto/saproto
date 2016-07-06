@@ -127,6 +127,14 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed Any cards linked to this account
+     */
+    public function rfid()
+    {
+        return $this->hasMany('Proto\Models\RfidCard');
+    }
+
+    /**
      * @param User $user
      * @return bool Whether the user is currently in the specified committee.
      */
