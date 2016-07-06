@@ -182,6 +182,8 @@
 
                         @endif
 
+                            <hr>
+
                             <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}" enctype="multipart/form-data">
 
                                 {!! csrf_field() !!}
