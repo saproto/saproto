@@ -68,7 +68,7 @@
                     Between {{ date('j F Y', strtotime($membership->created_at)) }}
                     and {{ date('j F Y', strtotime($membership->deleted_at)) }}.
                 @else
-                    Since {{ date('j F Y', strtotime($membeship->created_at)) }}.
+                    Since {{ date('j F Y', strtotime($membership->created_at)) }}.
                 @endif
                 @if($i != count($members['members']['current']) - 1)
                     <hr class="committee-seperator">
