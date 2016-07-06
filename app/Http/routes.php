@@ -94,6 +94,15 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     /*
      * Routes related to bank accounts
      */
+    Route::group(['prefix' => 'rfidcard/{id}', 'as' => 'rfid::'], function () {
+        Route::get('delete', ['as' => 'delete', 'uses' => 'RfidCardController@destroy']);
+        Route::get('edit', ['as' => 'edit', 'uses' => 'RfidCardController@edit']);
+        Route::post('edit', ['as' => 'edit', 'uses' => 'RfidCardController@update']);
+    });
+
+    /*
+     * Routes related to bank accounts
+     */
     Route::group(['prefix' => '{user_id}/study', 'as' => 'study::'], function () {
         Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
         Route::post('link', ['as' => 'add', 'uses' => 'StudyController@link']);

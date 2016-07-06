@@ -109,7 +109,7 @@
 
         <div class="col-md-3">
 
-            <form method="post" action="{{ route('omnomcom::orders::adminlist') }}">
+            <form method="get" action="{{ route('omnomcom::orders::adminlist') }}">
 
                 <div class="panel panel-default">
 
