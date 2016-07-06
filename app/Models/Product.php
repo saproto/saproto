@@ -30,4 +30,12 @@ class Product extends Model
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
+    public function isVisible()
+    {
+        if (!$this->is_visible) return false;
+        if ($this->stock <= 0 && !$this->is_visible_when_no_stock) return false;
+        
+        return true;
+    }
+
 }

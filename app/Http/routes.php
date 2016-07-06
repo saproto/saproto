@@ -230,7 +230,11 @@ Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes:
  * Routes related to the OmNomCom.
  */
 Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
-    
+
+    Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
+        Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
+    });
+
     Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
         Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
         Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
