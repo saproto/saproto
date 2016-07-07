@@ -10,8 +10,8 @@
 
         <div class="@if($page->featuredImage || $page->files->count() > 0) col-md-8 @else col-md-12 @endif">
 
-                <div style="width: 100%; background-color: #fff; padding: 50px; box-shadow: 0 0 20px;">
-                    {{ $page->content }}
+                <div class="page-show__content">
+                    {!! $parsedContent !!}
                 </div>
 
             </div>

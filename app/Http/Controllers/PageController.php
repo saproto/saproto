@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use GrahamCampbell\Markdown\Facades\Markdown;
+
 use Proto\Models\Page;
 use Proto\Models\StorageEntry;
 
@@ -16,6 +18,10 @@ use Session;
 
 class PageController extends Controller
 {
+    /**
+     * These slugs can't be used for pages, as they are used by the app.
+     * @var array
+     */
     protected $reservedSlugs = array('add', 'edit', 'delete');
 
     /**
@@ -91,7 +97,7 @@ class PageController extends Controller
             abort(403, "You need to be a member of S.A. Proto to see this page.");
         }
 
-        return view('pages.show', ['page' => $page]);
+        return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convertToHtml($page->content)]);
     }
 
     /**
@@ -138,6 +144,12 @@ class PageController extends Controller
         return Redirect::route('page::edit', ['id' => $id]);
     }
 
+    /**
+     * Deletes file from page.
+     * @param $id
+     * @param $file_id
+     * @return mixed
+     */
     public function deleteFile($id, $file_id) {
         $page = Page::find($id);
 
