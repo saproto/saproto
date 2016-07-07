@@ -20,9 +20,11 @@
 
             <div class="col-md-4">
 
-                <div class="panel panel-default" style="box-shadow: 0 0 20px;">
-                    <img src="{{ $page->featuredImage->generateImagePath('600', null) }}" class="img-responsive" />
-                </div>
+                @if($page->featuredImage)
+                    <div class="panel panel-default" style="box-shadow: 0 0 20px;">
+                        <img src="{{ $page->featuredImage->generateImagePath('600', null) }}" class="img-responsive" />
+                    </div>
+                @endif
 
                     @if($page->files->count() > 0)
 
