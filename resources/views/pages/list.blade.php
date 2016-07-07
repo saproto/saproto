@@ -16,7 +16,7 @@
 
                 <th>Title</th>
                 <th>URL</th>
-                <th>Member only</th>
+                <th>Visibility</th>
                 <th>Controls</th>
 
             </tr>

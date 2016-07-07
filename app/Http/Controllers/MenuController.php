@@ -1,0 +1,89 @@
+<?php
+
+namespace Proto\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use Proto\Http\Requests;
+use Proto\Http\Controllers\Controller;
+use Proto\Models\MenuItem;
+use Proto\Models\Page;
+
+class MenuController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $menuItems = MenuItem::where('parent', null)->with('children', 'page')->orderBy('order')->get();
+
+        $pages = Page::all();
+
+        return view("menu.list", ['menuItems' => $menuItems, 'pages' => $pages]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $menuItem = new MenuItem($request->all());
+
+        if($request->has('is_member_only')) {
+            $menuItem->is_member_only = true;
+        } else {
+            $menuItem->is_member_only = false;
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

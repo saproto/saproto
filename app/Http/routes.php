@@ -220,6 +220,14 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
 });
 
 /*
+ * Routes related to menu.
+ */
+Route::group(['prefix' => 'menu', 'middleware' => ['auth', 'permission:board']], function() {
+    Route::get('/', ['as' => 'list', 'uses' => 'MenuController@index']);
+});
+
+
+/*
  * Routes related to studies.
  */
 Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
