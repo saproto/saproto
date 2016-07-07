@@ -162,6 +162,17 @@
 
                                         <td><a href="{{ $file->generatePath() }}" target="_blank">{{ $file->original_filename }}</a></td>
                                         <td>
+                                            @if(substr($file->mime, 0, 5) == 'image')
+                                                <a class="btn btn-xs btn-default pageEdit_insertImage"
+                                               href="#" role="button" rel="{{ $file->generateImagePath(1000, null) }}">
+                                                    <i class="fa fa-image" aria-hidden="true"></i>
+                                                </a>
+                                            @else
+                                                <a class="btn btn-xs btn-default pageEdit_insertLink"
+                                                   href="#" role="button" rel="{{ $file->generatePath() }}">
+                                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                                </a>
+                                            @endif
                                             <a class="btn btn-xs btn-danger"
                                                href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}" role="button">
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
@@ -214,6 +225,12 @@
 
     </div>
 
+        <style type="text/css">
+            .CodeMirror img {
+                width: 100%;
+            }
+        </style>
+
 
 
 @endsection
@@ -225,8 +242,34 @@
     <script>
         var simplemde = new SimpleMDE({
             element: $("#editor")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
             spellChecker: false
+        });
+
+
+        // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
+        function insertLineAtCursor(data){
+            var cm = $('.CodeMirror')[0].CodeMirror;
+            var doc = cm.getDoc();
+            var cursor = doc.getCursor(); // gets the line number in the cursor position
+            var line = doc.getLine(cursor.line); // get the line contents
+            var pos = { // create a new object to avoid mutation of the original selection
+                line: cursor.line,
+                ch: line.length - 1 // set the character position to the end of the line
+            };
+            doc.replaceRange('\n'+data+'\n', pos); // adds a new line
+        }
+
+        $(".pageEdit_insertLink").click(function(e) {
+            e.preventDefault();
+            var linkUrl = $(this).attr('rel');
+            insertLineAtCursor("[Link text](" + linkUrl + ")");
+        });
+
+        $(".pageEdit_insertImage").click(function(e) {
+            e.preventDefault();
+            var linkUrl = $(this).attr('rel');
+            insertLineAtCursor("![Alt text](" + linkUrl + ")");
         });
     </script>
 
