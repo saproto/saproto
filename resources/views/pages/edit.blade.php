@@ -164,7 +164,7 @@
                                         <td>
                                             @if(substr($file->mime, 0, 5) == 'image')
                                                 <a class="btn btn-xs btn-default pageEdit_insertImage"
-                                               href="#" role="button" rel="{{ $file->generateImagePath(1000, null) }}">
+                                                   href="#" role="button" rel="{{ $file->generateImagePath(1000, null) }}">
                                                     <i class="fa fa-image" aria-hidden="true"></i>
                                                 </a>
                                             @else
@@ -193,84 +193,85 @@
 
                         @endif
 
-                            <hr>
+                        <hr>
 
-                            <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}" enctype="multipart/form-data">
+                        <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}" enctype="multipart/form-data">
 
-                                {!! csrf_field() !!}
+                            {!! csrf_field() !!}
 
-                                <div class="form-horizontal">
+                            <div class="form-horizontal">
 
-                                    <div class="form-group">
-                                        <label for="image" class="col-sm-4 control-label">New file</label>
-                                        <div class="col-sm-8">
-                                            <input class="form-control" id="file" type="file" name="file">
-                                        </div>
+                                <div class="form-group">
+                                    <label for="image" class="col-sm-4 control-label">New file</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="file" type="file" name="file">
                                     </div>
-
                                 </div>
 
-                                <button type="submit" class="btn btn-success pull-right">
-                                    Upload file
-                                </button>
+                            </div>
 
-                            </form>
+                            <button type="submit" class="btn btn-success pull-right">
+                                Upload file
+                            </button>
+
+                        </form>
 
                     </div>
 
 
+                </div>
+
+                @endif
+
             </div>
 
-        @endif
+        </div>
 
-    </div>
-
-        <style type="text/css">
-            .CodeMirror img {
-                width: 100%;
-            }
-        </style>
+            <style type="text/css">
+                .CodeMirror img {
+                    width: 100%;
+                }
+            </style>
 
 
 
-@endsection
+            @endsection
 
-@section('javascript')
+        @section('javascript')
 
-    @parent
+            @parent
 
-    <script>
-        var simplemde = new SimpleMDE({
-            element: $("#editor")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
-            spellChecker: false
-        });
+            <script>
+                var simplemde = new SimpleMDE({
+                    element: $("#editor")[0],
+                    toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
+                    spellChecker: false
+                });
 
 
-        // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
-        function insertLineAtCursor(data){
-            var cm = $('.CodeMirror')[0].CodeMirror;
-            var doc = cm.getDoc();
-            var cursor = doc.getCursor(); // gets the line number in the cursor position
-            var line = doc.getLine(cursor.line); // get the line contents
-            var pos = { // create a new object to avoid mutation of the original selection
-                line: cursor.line,
-                ch: line.length - 1 // set the character position to the end of the line
-            };
-            doc.replaceRange('\n'+data+'\n', pos); // adds a new line
-        }
+                // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
+                function insertLineAtCursor(data){
+                    var cm = $('.CodeMirror')[0].CodeMirror;
+                    var doc = cm.getDoc();
+                    var cursor = doc.getCursor(); // gets the line number in the cursor position
+                    var line = doc.getLine(cursor.line); // get the line contents
+                    var pos = { // create a new object to avoid mutation of the original selection
+                        line: cursor.line,                ch: line.length - 1 // set the character position to the end of the line
+                    };
+                    doc.replaceRange('\n'+data+'\n', pos); // adds a new line
+                }
 
-        $(".pageEdit_insertLink").click(function(e) {
-            e.preventDefault();
-            var linkUrl = $(this).attr('rel');
-            insertLineAtCursor("[Link text](" + linkUrl + ")");
-        });
+                $(".pageEdit_insertLink").click(function(e) {
+                    e.preventDefault();
+                    var linkUrl = $(this).attr('rel');
+                    insertLineAtCursor("[Link text](" + linkUrl + ")");
+                });
 
-        $(".pageEdit_insertImage").click(function(e) {
-            e.preventDefault();
-            var linkUrl = $(this).attr('rel');
-            insertLineAtCursor("![Alt text](" + linkUrl + ")");
-        });
-    </script>
+                $(".pageEdit_insertImage").click(function(e) {
+                    e.preventDefault();
+                    var linkUrl = $(this).attr('rel');
+                    insertLineAtCursor("![Alt text](" + linkUrl + ")");
+                });
+            </script>
 
 @endsection
