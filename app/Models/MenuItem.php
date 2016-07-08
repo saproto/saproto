@@ -24,7 +24,9 @@ class MenuItem extends Model
         if($this->page_id == null) {
             return $this->url;
         }else{
-            return Page::find($this->page_id)->getUrl();
+            $page = Page::find($this->page_id);
+            if($page) return $page->getUrl();
+            return "#";
         }
     }
 }
