@@ -222,8 +222,16 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
 /*
  * Routes related to menu.
  */
-Route::group(['prefix' => 'menu', 'middleware' => ['auth', 'permission:board']], function() {
+Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function() {
     Route::get('/', ['as' => 'list', 'uses' => 'MenuController@index']);
+    Route::get('/add', ['as' => 'add', 'uses' => 'MenuController@create']);
+    Route::post('/add', ['as' => 'add', 'uses' => 'MenuController@store']);
+
+    Route::get('/up/{id}',  ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
+    Route::get('/down/{id}',  ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
+    
+    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
+    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
 });
 
 

@@ -1,4 +1,4 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.default')
 
 @section('page-title')
     Menu Admin
@@ -6,19 +6,6 @@
 
 @section('content')
 
-    <div class="row">
-
-        <div class="col-md-8">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-
-                    Menu items
-
-                </div>
-
-                <div class="panel-body">
 
                     @if (count($menuItems) > 0)
 
@@ -43,16 +30,64 @@
                                 <td>{{ $menuItem->menuname }}</td>
                                 <td>@if($menuItem->page) {{ $menuItem->page->getUrl() }} @else {{ $menuItem->url }} @endif</td>
                                 <td>@if($menuItem->is_member_only) Member only @else Public @endif</td>
-                                <td>&nbsp;</td>
+                                <td>
+                                    <a class="btn btn-xs btn-default"
+                                        href="{{ route('menu::edit', ['id' => $menuItem->id]) }}" role="button">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    </a>
+
+                                    <a class="btn btn-xs btn-danger"
+                                       href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" role="button">
+                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    </a>
+
+                                    @if($menuItem->order > 0)
+                                        <a class="btn btn-xs btn-default"
+                                       href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}" role="button">
+                                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                        </a>
+                                    @endif
+
+                                    @if($menuItem->order != $menuItems->count() - 1)
+                                        <a class="btn btn-xs btn-default"
+                                           href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}" role="button">
+                                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                        </a>
+                                    @endif
+                                </td>
                             </tr>
                             @if($menuItem->children->count() > 0)
 
                                 @foreach($menuItem->children()->orderBy('order')->get() as $childItem)
                                         <tr>
-                                            <td>&mdash;{{ $menuItem->menuname }}</td>
-                                            <td>@if($menuItem->page) {{ $menuItem->page->getUrl() }} @else {{ $menuItem->url }} @endif</td>
-                                            <td>@if($menuItem->is_member_only) Member only @else Public @endif</td>
-                                            <td>&nbsp;</td>
+                                            <td>&mdash;{{ $childItem->menuname }}</td>
+                                            <td>@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
+                                            <td>@if($childItem->is_member_only) Member only @else Public @endif</td>
+                                            <td>
+                                                <a class="btn btn-xs btn-default"
+                                                   href="{{ route('menu::edit', ['id' => $childItem->id]) }}" role="button">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                </a>
+
+                                                <a class="btn btn-xs btn-danger"
+                                                   href="{{ route('menu::delete', ['id' => $childItem->id]) }}" role="button">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                </a>
+
+                                                @if($childItem->order > 0)
+                                                    <a class="btn btn-xs btn-default"
+                                                       href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}" role="button">
+                                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                                    </a>
+                                                @endif
+
+                                                @if($childItem->order != $menuItem->children()->orderBy('order')->get()->count() - 1)
+                                                    <a class="btn btn-xs btn-default"
+                                                       href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}" role="button">
+                                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                                    </a>
+                                                @endif
+                                            </td>
                                         </tr>
                                 @endforeach
 
@@ -62,35 +97,13 @@
 
                             </table>
 
+                            <p style="text-align: center;"><a href="{{ route('menu::add') }}">Create a new menu item.</a></p>
+
                     @else
 
-                        <p style="text-align: center;">There are no menu items.</p>
+                        <p style="text-align: center;">There are no menu items. <a href="{{ route('menu::add') }}">Create a new menu item.</a></p>
 
                     @endif
 
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-
-                    Add menu item
-
-                </div>
-
-                <div class="panel-body">
-
-                    @foreach($pages as $page)
-                        <p>{{ $page->title }}</p>
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    </div>
 
 @endsection

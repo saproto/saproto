@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Proto\Models\Page;
 
 class MenuItem extends Model
 {
@@ -17,5 +18,13 @@ class MenuItem extends Model
     public function page()
     {
         return $this->belongsTo('Proto\Models\Page', 'page_id', 'id');
+    }
+
+    public function getUrl() {
+        if($this->page_id == null) {
+            return $this->url;
+        }else{
+            return Page::find($this->page_id)->getUrl();
+        }
     }
 }
