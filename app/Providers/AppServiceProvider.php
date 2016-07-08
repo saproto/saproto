@@ -3,6 +3,7 @@
 namespace Proto\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Proto\Models\MenuItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('website.navigation.navbar', function($view) {
+            $menuItems = MenuItem::where('parent', null)->orderBy('order')->get();
+            $view->with('menuItems', $menuItems);
+        });
     }
 
     /**

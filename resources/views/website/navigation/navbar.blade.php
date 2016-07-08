@@ -20,6 +20,39 @@
         //-->
         <ul class="nav navbar-nav navbar-right">
 
+            @foreach($menuItems as $menuItem)
+
+                @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->member()))
+
+                    @if($menuItem->children->count() > 0)
+
+                    <li class="dropdown">
+                        <a href="{{ $menuItem->getUrl()  }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">{{ $menuItem->menuname }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            @foreach($menuItem->children->sortBy('order') as $childItem)
+                                @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->member()))
+                                    <li><a href="{{ $childItem->getUrl()  }}">{{ $childItem->menuname }}</a></li>
+                                @endif
+                            @endforeach
+
+                        </ul>
+                    </li>
+
+                    @else
+
+                    <li>
+                        <a href="{{ $menuItem->getUrl() }}" role="button" aria-haspopup="false"
+                            aria-expanded="false">{{ $menuItem->menuname }}</a>
+                    </li>
+
+                    @endif
+
+                @endif
+
+            @endforeach
+
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                    aria-expanded="false">Association <span class="caret"></span></a>
@@ -41,6 +74,8 @@
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
+                        <li><a href="{{ route("menu::list") }}">Menu</a></li>
+                        <li><a href="{{ route("page::list") }}">Pages</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a class="navbar-title">Create new:</a></li>
                         <li><a href="{{ route("committee::add") }}">Committee</a></li>

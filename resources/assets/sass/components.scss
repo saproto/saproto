@@ -19,6 +19,16 @@
 .member:hover .activity__admin-controls {
   display: block;
 }
+.page-show__content {
+  width: 100%;
+  background-color: #fff;
+  padding: 50px;
+  box-shadow: 0 0 20px;
+}
+
+.page-show__content img {
+  width: 100%;
+}
 /*!
  * Datetimepicker for Bootstrap 3
  * version : 4.17.37
