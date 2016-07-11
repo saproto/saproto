@@ -360,7 +360,7 @@
 
         .modal {
             width: 700px;
-            margin: 270px auto;
+            margin: 150px auto;
 
             text-align: center;
 
@@ -411,6 +411,22 @@
             text-align: center;
             color: #fff;
             font-size: 20px;
+        }
+
+        .modal .modal-toggle {
+            margin: 10px auto 0 auto;
+
+            background-color: #111111;
+
+            padding: 20px 50px;
+
+            text-align: center;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .modal .modal-toggle.modal-toggle-true {
+            background-color: green;
         }
 
         .modal hr {
@@ -534,6 +550,7 @@
         <input class="modal-input" id="purchase-password" type="password" placeholder="correct horse battery staple">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
+        <div class="modal-input modal-toggle" id="purchase-cash">Pay with Cash</div>
 
         <hr>
 
@@ -591,6 +608,10 @@
         window.location.reload();
     });
 
+    $('.modal-toggle').on('click', function () {
+        $(this).toggleClass('modal-toggle-true');
+    });
+
     $('.category_button').on('click', function () {
         $('.category_button').addClass('inactive');
         $('.category_button[data-id=' + $(this).attr('data-id') + ']').removeClass('inactive');
@@ -628,6 +649,41 @@
         update();
 
     });
+
+    $("#purchase-button").on("click", function () {
+
+        $("#rfid-modal .modal-status").html("<span style='color: orange;'>Working on your purchase...<span>");
+        purchase(null);
+
+    });
+
+    /*
+     Purchase logic.
+     */
+
+    function purchase(card) {
+
+        $.ajax({
+            url: '{{ route('omnomcom::store::buy', ['store' => $store]) }}',
+            method: 'post',
+            data: {
+                _token: '{{ csrf_token() }}',
+                credentialtype: (card !== null ? 'card' : 'account'),
+                credentials: (card !== null ? card : {
+                    username: $("#purchase-username").val(),
+                    password: $("#purchase-password").val()
+                }),
+                cash: $("#purchase-cash").hasClass('modal-toggle-true'),
+                cart: cart
+            },
+            dataType: 'html',
+            success: function (data) {
+                $("#purchase-modal .modal-status").html(data);
+            }
+        })
+        ;
+
+    }
 
     /*
      Cart logic.
@@ -698,10 +754,13 @@
 
             }
 
+        } else if (modal_status == 'purchase') {
+
+            purchase(data);
+
         }
 
-    })
-    ;
+    });
 
     server.on("error", function (data) {
         alert("Card could not be read. Try again or try another card.");

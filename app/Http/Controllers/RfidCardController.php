@@ -14,16 +14,6 @@ use Auth;
 class RfidCardController extends Controller
 {
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      * This method returns raw HTML and is intended to be used via AJAX!
      *
@@ -33,6 +23,11 @@ class RfidCardController extends Controller
     public function store(Request $request)
     {
         $user = AuthController::verifyCredentials($request->input('username'), $request->input('password'));
+
+        if (!$user->member) {
+            return "<span style='color: red;'>You must be a member to use the OmNomCom.</span>";
+        }
+        
         if ($user) {
             $uid = $request->input('card');
             $card = RfidCard::where('card_id', $uid)->first();
