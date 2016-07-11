@@ -35,6 +35,11 @@
             background-color: #555;
         }
 
+        #reload-button {
+            margin-top: 70px;
+            opacity: 0;
+        }
+
         #category_nav {
             position: absolute;
 
@@ -429,6 +434,10 @@
 
     @endforeach
 
+    <div class="category_button inactive" id="reload-button">
+        RELOAD BUTTON
+    </div>
+
 </div>
 
 <div id="product_nav">
@@ -577,6 +586,10 @@
     /*
      Registering button handlers
      */
+
+    $('#reload-button').on('click', function () {
+        window.location.reload();
+    });
 
     $('.category_button').on('click', function () {
         $('.category_button').addClass('inactive');
