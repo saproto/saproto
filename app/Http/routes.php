@@ -195,8 +195,8 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
     Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
 
     // Related to activities
-    Route::post('/signup/{id}', ['as'=>'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
-    Route::get('/signup/{id}/delete', ['as'=>'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
+    Route::post('/signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
+    Route::get('/signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
 
     // Show event
     Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);
@@ -208,7 +208,7 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
  */
 Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
 
-    Route::group(['middleware' => ['auth', 'permission:board']], function() {
+    Route::group(['middleware' => ['auth', 'permission:board']], function () {
         Route::get('/', ['as' => 'list', 'uses' => 'PageController@index']);
         Route::get('/add', ['as' => 'add', 'uses' => 'PageController@create']);
         Route::post('/add', ['as' => 'add', 'uses' => 'PageController@store']);
@@ -217,7 +217,7 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
         Route::post('/edit/{id}/image', ['as' => 'image', 'uses' => 'PageController@featuredImage']);
         Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'PageController@destroy']);
 
-        Route::group(['prefix' => '/edit/{id}/file', 'as' => 'file::'], function() {
+        Route::group(['prefix' => '/edit/{id}/file', 'as' => 'file::'], function () {
             Route::post('/add', ['as' => 'add', 'uses' => 'PageController@addFile']);
             Route::get('/{file_id}/delete', ['as' => 'delete', 'uses' => 'PageController@deleteFile']);
         });
@@ -225,20 +225,20 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
     });
 
     Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);
-    
+
 });
 
 /*
  * Routes related to menu.
  */
-Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function() {
+Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function () {
     Route::get('/', ['as' => 'list', 'uses' => 'MenuController@index']);
     Route::get('/add', ['as' => 'add', 'uses' => 'MenuController@create']);
     Route::post('/add', ['as' => 'add', 'uses' => 'MenuController@store']);
 
-    Route::get('/up/{id}',  ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
-    Route::get('/down/{id}',  ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
-    
+    Route::get('/up/{id}', ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
+    Route::get('/down/{id}', ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
+
     Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
     Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
 });
@@ -274,6 +274,8 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
 
     Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
         Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
+        Route::post('rfid/add', ['as' => 'rfidadd', 'uses' => 'RfidCardController@store']);
+        Route::post('{store}/buy', ['as' => 'buy', 'uses' => 'OmNomController@buy']);
     });
 
     Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {

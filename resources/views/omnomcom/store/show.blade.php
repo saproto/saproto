@@ -60,7 +60,8 @@
 
             margin-bottom: 20px;
 
-            font-size: 20px;
+            text-transform: uppercase;
+            font-size: 18px;
 
             color: #333;
 
@@ -277,6 +278,140 @@
             background-color: #C1FF00;
         }
 
+        #buttons {
+            position: absolute;
+
+            overflow: hidden;
+
+            top: 10px;
+            right: 0;
+            bottom: 10px;
+
+            padding-right: 10px;
+
+            width: 100%;
+        }
+
+        .button {
+            height: 50px;
+            margin-right: 20px;
+
+            line-height: 50px;
+
+            padding-right: 15px;
+            padding-left: 15px;
+
+            float: right;
+
+            font-size: 20px;
+
+            background-color: #333;
+            color: #fff;
+        }
+
+        #purchase {
+            transition: all 0.5s;
+            transform: translate(0, 0);
+            opacity: 1;
+        }
+
+        #purchase.inactive {
+            transform: translate(200px, 0);
+            opacity: 0;
+        }
+
+        .info {
+            height: 50px;
+            margin-right: 20px;
+
+            line-height: 50px;
+
+            float: right;
+
+            font-size: 20px;
+
+            transition: all 0.5s;
+            opacity: 1;
+        }
+
+        .info.inactive {
+            opacity: 0.5;
+        }
+
+        #modal-overlay {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            background-color: rgba(0, 0, 0, 0.8);
+
+            overflow: hidden;
+
+            display: none;
+        }
+
+        .modal {
+            width: 700px;
+            margin: 270px auto;
+
+            text-align: center;
+
+            overflow: auto;
+
+            padding: 50px;
+
+            background-color: #333;
+
+            display: block;
+
+            box-shadow: 0 0 20px -7px #000;
+        }
+
+        .modal.inactive {
+            display: none;
+        }
+
+        .modal h1 {
+            color: #fff;
+            font-size: 25px;
+            margin-bottom: 50px;
+        }
+
+        .modal .modal-status {
+            margin-bottom: 50px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .modal .modal-input {
+            padding: 10px;
+            width: 290px;
+
+            border: none;
+
+            font-size: 15px;
+            margin-bottom: 50px;
+        }
+
+        .modal .modal-button {
+            margin: -40px auto 0 auto;
+
+            background-color: #111111;
+
+            padding: 20px 50px;
+
+            text-align: center;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .modal hr {
+            margin: 40px 0;
+        }
+
     </style>
 
 </head>
@@ -354,9 +489,54 @@
 
     <div id="buttons">
 
+        <span id="purchase" class="button inactive">Complete order</span>
+        <span id="rfid" class="button">Link RFID card</span>
+        <span class="info" style="font-weight: bold;">Order total: &euro;<span id="total">0.00</span></span>
+        <span id="status" class="info inactive">RFID Service: Disconnected</span>
+
     </div>
 
     <div id="cart">
+
+    </div>
+
+</div>
+
+<div id="modal-overlay">
+
+    <div id="rfid-modal" class="modal inactive">
+
+        <h1>Link an RFID card to your account.</h1>
+
+        <input class="modal-input" id="rfid-username" type="text" placeholder="member@proto.utwente.nl">
+        <input class="modal-input" id="rfid-password" type="password" placeholder="correct horse battery staple">
+
+        <span class="modal-status">
+            First enter your username and password, then present an RFID card.
+        </span>
+
+    </div>
+
+    <div id="purchase-modal" class="modal inactive">
+
+        <h1>Complete your purchase.</h1>
+
+        <input class="modal-input" id="purchase-username" type="text" placeholder="member@proto.utwente.nl">
+        <input class="modal-input" id="purchase-password" type="password" placeholder="correct horse battery staple">
+
+        <div class="modal-input modal-button" id="purchase-button">Complete order</div>
+
+        <hr>
+
+        <span class="modal-status">
+            Enter your credentials above, or present an RFID card.
+        </span>
+
+    </div>
+
+    <div id="outofstock-modal" class="modal inactive">
+
+        <h1>The product you selected is out of stock.</h1>
 
     </div>
 
@@ -368,21 +548,37 @@
 
 <script type="text/javascript">
 
+    var modal_status = null;
+
+    /*
+     Loading the necessary data.
+     */
+
     var images = [];
     var cart = [];
     var stock = [];
+    var price = [];
 
+    //--formatter:off
     @foreach($categories as $category)
             @foreach($category->products as $product)
-            @if($product->isVisible() && $product->image)
-            images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-    cart[{{ $product->id }}] = 0;
-    stock[{{ $product->id }}] = {{ $product->stock }};
-    @endif
+                @if($product->isVisible() && $product->image)
+                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+                @endif
+                @if($product->isVisible() && $product->image)
+                    cart[{{ $product->id }}] = 0;
+                    stock[{{ $product->id }}] = {{ $product->stock }};
+                    price[{{ $product->id }}] = {{ $product->price }};
+                @endif
+        @endforeach
     @endforeach
-    @endforeach
+    //--formatter:on
 
-$('.category_button').on('click', function () {
+    /*
+     Registering button handlers
+     */
+
+    $('.category_button').on('click', function () {
         $('.category_button').addClass('inactive');
         $('.category_button[data-id=' + $(this).attr('data-id') + ']').removeClass('inactive');
         $('.category_view').addClass('inactive');
@@ -392,7 +588,10 @@ $('.category_button').on('click', function () {
     $('.product').on('click', function () {
 
         if (stock[$(this).attr('data-id')] <= 0) {
-            alert('This product is out of stock!');
+
+            $("#modal-overlay").show();
+            $("#outofstock-modal").removeClass('inactive');
+
         } else {
 
             cart[$(this).attr('data-id')]++;
@@ -417,14 +616,111 @@ $('.category_button').on('click', function () {
 
     });
 
+    /*
+     Cart logic.
+     */
+
     function update() {
         $("#cart").html("");
+        var anythingincart = false;
+        var ordertotal = 0;
         for (id in cart) {
             if (cart[id] > 0) {
+                ordertotal += price[id] * cart[id];
+                anythingincart = true;
                 $("#cart").append('<div class="cart-product" data-id="' + id + '"><div class="cart-product-image"><div class="cart-product-image-inner" style="background-image: url(\'' + images[id] + '\');"></div></div><div class="cart-product-count">' + cart[id] + 'x</div></div>');
             }
         }
+        if (anythingincart) {
+            $("#purchase").removeClass("inactive");
+        } else {
+            $("#purchase").addClass("inactive");
+        }
+        $("#total").html(ordertotal.toFixed(2));
     }
+
+    /*
+     RFID scanner integration
+     */
+    var server = io.connect('https://localhost:36152', {
+        'reconnect': true,
+        'reconnection_delay': 500,
+        'max_reconnection_attempts': 9999,
+        'secure': true
+    });
+
+    server.on("connect", function (data) {
+        $("#status").removeClass("inactive").html("RFID Service: Connected");
+    });
+
+    server.on("disconnect", function (data) {
+        $("#status").addClass("inactive").html("RFID Service: Reconnecting");
+    });
+
+    server.on("rfid", function (data) {
+        console.log('Received card input: ' + data);
+
+        if (modal_status == 'rfid') {
+
+            if ($("#rfid-username").val() == '' || $("#rfid-password").val() == '') {
+                $("#rfid-modal .modal-status").html("<span style='color: red;'>Enter your account details before presenting an RFID card.<span>");
+            } else {
+
+                $("#rfid-modal .modal-status").html("<span style='color: orange;'>Trying to register your card...<span>");
+
+                $.ajax({
+                    url: '{{ route('omnomcom::store::rfidadd') }}',
+                    method: 'post',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        card: data,
+                        username: $("#rfid-username").val(),
+                        password: $("#rfid-password").val()
+                    },
+                    dataType: 'html',
+                    success: function (data) {
+                        $("#rfid-modal .modal-status").html(data);
+                    }
+                });
+
+            }
+
+        }
+
+    })
+    ;
+
+    server.on("error", function (data) {
+        alert("Card could not be read. Try again or try another card.");
+    });
+
+    /*
+     Modal handlers
+     */
+
+    $(".modal").on("click", function (e) {
+        return false;
+    });
+
+    $("#modal-overlay").on("click", function () {
+        $(".modal").addClass('inactive');
+        $("#modal-overlay").hide();
+        $(".modal-input").val('');
+        modal_status = null;
+    });
+
+    $("#rfid").on("click", function () {
+        $("#modal-overlay").show();
+        $("#rfid-modal").removeClass('inactive');
+        modal_status = 'rfid';
+    });
+
+    $("#purchase").on("click", function () {
+        $("#modal-overlay").show();
+        $("#purchase-modal").removeClass('inactive');
+        modal_status = 'purchase';
+    });
+
 
 </script>
 

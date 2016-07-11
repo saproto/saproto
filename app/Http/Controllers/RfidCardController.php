@@ -25,13 +25,34 @@ class RfidCardController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * This method returns raw HTML and is intended to be used via AJAX!
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $user = AuthController::verifyCredentials($request->input('username'), $request->input('password'));
+        if ($user) {
+            $uid = $request->input('card');
+            $card = RfidCard::where('card_id', $uid)->first();
+            if ($card) {
+                if ($card->user->id == $user->id) {
+                    return "<span style='color: red;'>This card is already registered to you!</span>";
+                } else {
+                    return "<span style='color: red;'>This card is already registered to someone.</span>";
+                }
+            } else {
+                $card = RfidCard::create([
+                    'user_id' => $user->id,
+                    'card_id' => $uid
+                ]);
+                $card->save();
+                return "<span style='color: green;'>This card has been successfully registered to " . $user->name . ".</span>";
+            }
+        } else {
+            return "<span style='color: red;'>Invalid credentials.</span>";
+        }
     }
 
     /**

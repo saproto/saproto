@@ -607,37 +607,6 @@ class MigrateData extends Command
 
             $this->info('Written ' . OrderLine::count() . ' orderlines to the database . ');
 
-            // We migrate the RFID cards.
-
-            RfidCard::truncate();
-
-            if (!$this->legacydb->select_db("admin_members")) {
-                $this->error("SWITCHTOMEMBERS: " . $this->legacydb->error);
-            }
-
-            $rfid = $this->legacydb->query("SELECT * FROM rfid");
-
-            while ($card = $rfid->fetch_assoc()) {
-
-                $u = User::find($card['member_id']);
-                if($u == null) {
-                    $this->error('Could not find user ' . $card['member_id'] . ' . ');
-                    continue;
-                }
-
-                $c = RfidCard::create([
-                    'user_id' => $card['member_id'],
-                    'card_id' => $card['card_id'],
-                    'name' => $card['comment'],
-                    'created_at' => $card['added'],
-                    'updated_at' => $card['added']
-                ]);
-                $c->save();
-
-            }
-
-            $this->info('Written ' . RfidCard::count() . ' rfid cards to the database . ');
-
             // We close the database connection.
             $this->legacydb->close();
 
