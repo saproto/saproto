@@ -94,7 +94,7 @@ class OmNomController extends Controller
 
         $withCash = $request->input('cash');
 
-        if ($withCash && !$storedata->cash_allowed) {
+        if ($withCash == "true" && !$storedata->cash_allowed) {
             return "<span style='color: red;'>You cannot use cash in this store.</span>";
         }
 
