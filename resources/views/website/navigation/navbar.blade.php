@@ -65,6 +65,24 @@
                 </ul>
             </li>
 
+            @if (Auth::check() && Auth::user()->can("omnomcom"))
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">OmNomCom <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
+                        <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
+                        <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
+                        @if (Auth::check() && Auth::user()->can("finadmin"))
+                            <li role="separator" class="divider"></li>
+                            <li><a class="navbar-title">Financial:</a></li>
+                            <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
+                            <li><a href="#">Withdrawals</a></li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
+
             @if (Auth::check() && Auth::user()->can("board"))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -76,6 +94,14 @@
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
+
+                        @if (Auth::check() && Auth::user()->can("board"))
+                            <li role="separator" class="divider"></li>
+                            <li><a class="navbar-title">Financial:</a></li>
+                            <li><a href="#">Accounts</a></li>
+                            <li><a href="#">Withdrawals</a></li>
+                        @endif
+                        
                         <li role="separator" class="divider"></li>
                         <li><a class="navbar-title">Create new:</a></li>
                         <li><a href="{{ route("committee::add") }}">Committee</a></li>
@@ -89,11 +115,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ route('user::dashboard') }}">My Dashboard</a></li>
+                        <li><a href="{{ route('user::dashboard') }}">Dashboard</a></li>
 
                         @if(Auth::check() && Auth::user()->member)
                             <li><a href="{{ route('user::profile') }}">My Profile</a></li>
                         @endif
+
+                        <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>
 
                         @if (Session::has('impersonator'))
                             <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>

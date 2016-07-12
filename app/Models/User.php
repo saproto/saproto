@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use DateTime;
+use Carbon\Carbon;
+
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -124,6 +127,22 @@ class User extends Model implements AuthenticatableContract,
     public function quotes()
     {
         return $this->hasMany('Proto\Models\Quote');
+    }
+
+    /**
+     * @return mixed Any cards linked to this account
+     */
+    public function rfid()
+    {
+        return $this->hasMany('Proto\Models\RfidCard');
+    }
+
+    /**
+     * @return mixed The age in years of a user.
+     */
+    public function age()
+    {
+        return Carbon::instance(new DateTime($this->birthdate))->age;
     }
 
     /**

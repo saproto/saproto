@@ -31,6 +31,8 @@ class AuthLoginEventHandler
         // We will grant the user all roles to which he is entitled!
         $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
         $boardcommittee = Committee::where('slug', config('proto.boardcommittee'))->first();
+        $omnomcom = Committee::where('slug', config('proto.omnomcom'))->first();
+        $pilscie = Committee::where('slug', config('proto.pilscie'))->first();
 
         if($user->isInCommittee($rootcommittee)) {
             if (!$user->hasRole('admin')) {
@@ -49,6 +51,26 @@ class AuthLoginEventHandler
         } else {
             if ($user->hasRole('board')) {
                 $user->detachRole(Role::where('name', '=', 'board')->first());
+            }
+        }
+
+        if($user->isInCommittee($omnomcom)) {
+            if (!$user->hasRole('omnomcom')) {
+                $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
+            }
+        } else {
+            if ($user->hasRole('omnomcom')) {
+                $user->detachRole(Role::where('name', '=', 'omnomcom')->first());
+            }
+        }
+
+        if($user->isInCommittee($pilscie)) {
+            if (!$user->hasRole('pilscie')) {
+                $user->attachRole(Role::where('name', '=', 'pilscie')->first());
+            }
+        } else {
+            if ($user->hasRole('pilscie')) {
+                $user->detachRole(Role::where('name', '=', 'pilscie')->first());
             }
         }
     }

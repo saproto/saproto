@@ -19,6 +19,88 @@
 .member:hover .activity__admin-controls {
   display: block;
 }
+.product {
+
+  &__account {
+
+    padding: 5px;
+
+    &__name {
+
+      float: left;
+
+      height: 76px;
+      line-height: 76px;
+
+      margin-left: 20px;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      width: 140px;
+
+    }
+
+    &__image {
+
+      float: left;
+
+      height: 76px;
+      width: 76px;
+
+      padding: 12px;
+
+      border-radius: 38px;
+      background-color: #333;
+
+    }
+
+    &__image__inner {
+
+      height: 52px;
+      width: 52px;
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+    }
+
+  }
+
+}
+.product {
+
+  &__edit {
+
+    &__image {
+
+      height: 200px;
+      width: 200px;
+
+      padding: 25px;
+      margin: 20px auto 10px;
+
+      border-radius: 100px;
+      background-color: #333;
+
+    }
+
+    &__image__inner {
+
+      height: 150px;
+      width: 150px;
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+    }
+
+  }
+
+}
 .page-show__content {
   width: 100%;
   background-color: #fff;
