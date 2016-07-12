@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\OrderLine;
 use Proto\Models\RfidCard;
+use Proto\Models\Product;
 
 use Auth;
 use Proto\Models\ProductCategory;
@@ -39,7 +41,7 @@ class OmNomController extends Controller
                 }
             }
 
-            return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store]);
+            return view('omnomcom.store.show', ['categories' => $categories, 'store' => $storedata, 'storeslug' => $store]);
 
         } else {
             return view('omnomcom.store.pick', ['stores' => $stores]);
@@ -48,6 +50,17 @@ class OmNomController extends Controller
 
     public function buy(Request $request, $store)
     {
+
+        $stores = config('omnomcom.stores');
+
+        if (array_key_exists($store, $stores)) {
+            $storedata = $stores[$store];
+            if (!in_array($request->ip(), $storedata->addresses) && !Auth::user()->can($storedata->roles)) {
+                return "<span style='color: red;'>You are not authorized to do this.</span>";
+            }
+        } else {
+            return "<span style='color: red;'>This store doesn't exist.</span>";
+        }
 
         switch ($request->input('credentialtype')) {
             case 'account':
@@ -63,6 +76,7 @@ class OmNomController extends Controller
                 if (!$card) {
                     return "<span style='color: red;'>Unknown card.</span>";
                 }
+                $card->touch();
                 $user = $card->user;
                 if (!$user) {
                     return "<span style='color: red;'>Unknown user.</span>";
@@ -75,10 +89,56 @@ class OmNomController extends Controller
         }
 
         if (!$user->member) {
-            return "<span style='color: red;'>You must be a member to use the OmNomCom.</span>";
+            return "<span style='color: red;'>Only members can use the OmNomCom.</span>";
         }
 
-        return "<span style='color: orange;'>Work in progress...</span>";
+        $withCash = $request->input('cash');
+
+        if ($withCash && !$storedata->cash_allowed) {
+            return "<span style='color: red;'>You cannot use cash in this store.</span>";
+        }
+
+        $cart = $request->input('cart');
+
+        foreach ($cart as $id => $amount) {
+            if ($amount > 0) {
+                $product = Product::find($id);
+                if (!$product) {
+                    return "<span style='color: red;'>You tried to buy a product that didn't exist!</span>";
+                }
+                if (!$product->isVisible()) {
+                    return "<span style='color: red;'>You tried to buy a product that is not available!</span>";
+                }
+                if ($product->stock < $amount) {
+                    return "<span style='color: red;'>You tried to buy more of a product than was in stock!</span>";
+                }
+                if ($product->is_alcoholic && $user->age() < 18) {
+                    return "<span style='color: red;'>You tried to buy alcohol, youngster!</span>";
+                }
+            }
+        }
+
+        foreach ($cart as $id => $amount) {
+            if ($amount > 0) {
+                $product = Product::find($id);
+
+                $orderline = OrderLine::create([
+                    'user_id' => ($withCash == "true" ? null : $user->id),
+                    'cashier_id' => ($withCash == "true" ? $user->id : null),
+                    'product_id' => $product->id,
+                    'original_unit_price' => $product->price,
+                    'units' => $amount,
+                    'total_price' => $amount * $product->price,
+                    'payed_with_cash' => ($withCash == "true" ? date('Y-m-d H:i:s') : null)
+                ]);
+                $orderline->save();
+
+                $product->stock -= $amount;
+                $product->save();
+            }
+        }
+
+        return "OK";
 
     }
 }

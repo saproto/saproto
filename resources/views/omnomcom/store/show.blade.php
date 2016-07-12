@@ -35,6 +35,12 @@
             background-color: #555;
         }
 
+        body {
+            background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+            background-position: center 115%;
+            background-repeat: no-repeat;
+        }
+
         #reload-button {
             margin-top: 70px;
             opacity: 0;
@@ -68,9 +74,9 @@
             text-transform: uppercase;
             font-size: 18px;
 
-            color: #333;
+            color: #fff;
 
-            background-color: #C1FF00;
+            background-color: #26ADE4;
 
             box-shadow: 0 0 20px -7px #000;
 
@@ -158,11 +164,11 @@
             left: -50px;
             padding: 10px;
 
-            color: #333;
+            color: #fff;
 
             font-weight: bold;
 
-            background-color: #C1FF00;
+            background-color: #26ADE4;
         }
 
         .product-stock {
@@ -218,7 +224,7 @@
 
             box-shadow: 0 0 20px -7px #000;
 
-            background-color: #C1FF00;
+            background-color: #26ADE4;
         }
 
         #cart {
@@ -243,7 +249,7 @@
 
             background-color: #111;
 
-            border: 10px solid #C1FF00;
+            border: 10px solid #26ADE4;
         }
 
         .cart-product-image {
@@ -280,7 +286,7 @@
 
             box-shadow: 0 0 20px -5px #000;
 
-            background-color: #C1FF00;
+            background-color: #26ADE4;
         }
 
         #buttons {
@@ -325,6 +331,15 @@
             opacity: 0;
         }
 
+        #logout-button {
+            margin-top: 50px;
+        }
+
+        #purchase-movie {
+            margin-top: 50px;
+            margin-bottom: -57px;
+        }
+
         .info {
             height: 50px;
             margin-right: 20px;
@@ -332,6 +347,8 @@
             line-height: 50px;
 
             float: right;
+
+            color: #fff;
 
             font-size: 20px;
 
@@ -343,7 +360,7 @@
             opacity: 0.5;
         }
 
-        #modal-overlay {
+        .modal-overlay {
             position: absolute;
 
             top: 0;
@@ -364,7 +381,7 @@
 
             text-align: center;
 
-            overflow: auto;
+            overflow: hidden;
 
             padding: 50px;
 
@@ -527,7 +544,23 @@
 
 </div>
 
-<div id="modal-overlay">
+<div id="finished-overlay" class="modal-overlay">
+
+    <div id="finished-modal" class="modal inactive">
+
+        <h1>Your purchase has completed.</h1>
+
+        <div class="modal-input modal-button" id="logout-button">CONTINUE</div>
+
+        <video id="purchase-movie" width="473" height="260">
+            <source src="https://food.saproto.nl/v2/video/monster.webm" type="video/webm">
+        </video>
+
+    </div>
+
+</div>
+
+<div id="modal-overlay" class="modal-overlay">
 
     <div id="rfid-modal" class="modal inactive">
 
@@ -550,8 +583,9 @@
         <input class="modal-input" id="purchase-password" type="password" placeholder="correct horse battery staple">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
-        <div class="modal-input modal-toggle" id="purchase-cash">Pay with Cash</div>
-
+        @if($store->cash_allowed)
+            <div class="modal-input modal-toggle" id="purchase-cash">Pay with Cash</div>
+        @endif
         <hr>
 
         <span class="modal-status">
@@ -587,15 +621,15 @@
 
     //--formatter:off
     @foreach($categories as $category)
-            @foreach($category->products as $product)
-                @if($product->isVisible() && $product->image)
-                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-                @endif
-                @if($product->isVisible() && $product->image)
-                    cart[{{ $product->id }}] = 0;
-                    stock[{{ $product->id }}] = {{ $product->stock }};
-                    price[{{ $product->id }}] = {{ $product->price }};
-                @endif
+        @foreach($category->products as $product)
+            @if($product->isVisible() && $product->image)
+                images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+            @endif
+            @if($product->isVisible() && $product->image)
+                cart[{{ $product->id }}] = 0;
+                stock[{{ $product->id }}] = {{ $product->stock }};
+                price[{{ $product->id }}] = {{ $product->price }};
+            @endif
         @endforeach
     @endforeach
     //--formatter:on
@@ -664,7 +698,7 @@
     function purchase(card) {
 
         $.ajax({
-            url: '{{ route('omnomcom::store::buy', ['store' => $store]) }}',
+            url: '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}',
             method: 'post',
             data: {
                 _token: '{{ csrf_token() }}',
@@ -673,16 +707,34 @@
                     username: $("#purchase-username").val(),
                     password: $("#purchase-password").val()
                 }),
-                cash: $("#purchase-cash").hasClass('modal-toggle-true'),
+                cash: {!! ($store->cash_allowed ? "$('#purchase-cash').hasClass('modal-toggle-true')" : "false") !!},
                 cart: cart
             },
             dataType: 'html',
             success: function (data) {
-                $("#purchase-modal .modal-status").html(data);
+                if (data == "OK") {
+                    finishPurchase();
+                } else {
+                    $("#purchase-modal .modal-status").html(data);
+                }
             }
         })
         ;
 
+    }
+
+    $('#logout-button').on('click', function () {
+        window.location.reload();
+    });
+
+    function finishPurchase() {
+        $('#modal-overlay').trigger('click');
+        $("#finished-overlay").show();
+        $("#finished-modal").removeClass('inactive');
+        document.getElementById("purchase-movie").play();
+        setTimeout(function () {
+            window.location.reload();
+        }, 7000);
     }
 
     /*

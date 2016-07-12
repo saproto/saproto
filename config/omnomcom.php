@@ -27,6 +27,13 @@ return [
             'roles' => ['pilscie'],
             'cash_allowed' => true
         ],
+        'test' => (object)[
+            'name' => 'Test',
+            'categories' => [9],
+            'addresses' => [],
+            'roles' => ['admin'],
+            'cash_allowed' => true
+        ]
     ]
 
 ];
