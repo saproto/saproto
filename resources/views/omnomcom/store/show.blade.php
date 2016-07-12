@@ -810,6 +810,11 @@
 
             purchase(data);
 
+        } else {
+
+            $("#purchase").trigger('click');
+            purchase(data);
+
         }
 
     });
