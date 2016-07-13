@@ -61,8 +61,6 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     Route::get('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
     Route::post('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
 
-    Route::get('membercard/{id}/download', ['as' => 'membercard::download', 'middleware' => ['auth', 'permission:admin'], 'uses' => 'MemberCardController@download']);
-
     Route::get('{id?}', ['as' => 'profile', 'middleware' => ['member'], 'uses' => 'UserProfileController@show']);
 
     /*
@@ -123,6 +121,9 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('deleteyubikey', ['as' => 'deleteyubikey', 'uses' => 'TFAController@yubikeyDelete']);
     });
 });
+Route::post('membercard/print', ['as' => 'membercard::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
+Route::get('membercard/{id}', ['as' => 'membercard::download', 'uses' => 'MemberCardController@download']);
+
 /**
  * Routes related to files.
  */

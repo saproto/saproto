@@ -108,4 +108,30 @@
         doSearch("", 0); // Start with an empty search, so list will be loaded with all members.
     </script>
 
+    <script type="text/javascript">
+
+        $('body').delegate('#print-card', 'click', function () {
+
+            if (confirm("Please confirm you want to print a membership card.")) {
+                $.ajax({
+                    url: '{{ route('membercard::print') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
+    </script>
+
 @endsection
