@@ -14086,4 +14086,151 @@ span.CodeMirror-selectedtext {
   clip: auto;
 }
 
+/*-----[Keyboard structure]---------------------------------------------------*/
+/* line 2328, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container {
+  visibility: hidden;
+  position: fixed;
+  overflow: hidden;
+  padding: 1%;
+  margin: 0;
+  z-index: 100;
+}
+
+/* line 2337, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > li {
+  float: left;
+  width: 5.81395349%;
+  height: 3em;
+  margin: 0 0.726744186% 5px 0;
+  line-height: 3em;
+  text-align: center;
+  list-style-type: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* line 2353, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-capslock,
+#osk-container > .osk-tab,
+#osk-container > .osk-shift {
+  clear: left;
+}
+
+/* line 2359, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-dragger {
+  display: none;
+  width: 100%;
+  cursor: move;
+}
+
+/* line 2365, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-dragger:hover {
+  position: static;
+}
+
+/* line 2369, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-tab,
+#osk-container > .osk-backspace {
+  width: 14.9709302%;
+}
+
+/* line 2374, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-capslock {
+  width: 13.6337209%;
+}
+
+/* line 2378, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-return {
+  width: 13.6918605%;
+}
+
+/* line 2382, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-shift {
+  width: 16.2381395%;
+}
+
+/* line 2386, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-hide {
+  width: 17.5581396%;
+}
+
+/* line 2390, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-space {
+  clear: left;
+  width: 100%;
+  margin: 0;
+}
+
+/* line 2396, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-last-item {
+  margin-right: 0 !important;
+}
+
+/* line 2400, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container .osk-on {
+  display: none;
+}
+
+/* line 2404, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-uppercase {
+  text-transform: uppercase;
+}
+
+/* line 2408, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-disabled {
+  cursor: default;
+}
+
+/* line 2412, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-disabled:hover {
+  position: static;
+}
+
+/* line 2416, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > li:hover {
+  position: relative;
+  top: 1px;
+}
+
+/*-----[Customisable styles]--------------------------------------------------*/
+/* line 2423, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container {
+  width: 47%;
+  /* Account for 2% padding and a vertical scroll bar */
+  min-width: 500px;
+  max-width: 1200px;
+  background: #EEE;
+  border-radius: 5%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* line 2432, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > li {
+  background: #DDD;
+  border-radius: 10%;
+  -moz-transition: 0.5s;
+}
+
+/* line 2438, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-dragger {
+  background: transparent;
+  color: #AAA;
+}
+
+/* line 2443, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+#osk-container > .osk-disabled {
+  background: #E5E5E5;
+  color: #CCC;
+}
+
+/* line 2448, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.osk-focused {
+  background: #FAFAFA !important;
+}
+
 /*# sourceMappingURL=application.css.map */

@@ -11,9 +11,9 @@
 
     <title>OmNomCom Store</title>
 
-    <style type="text/css">
+    @include('website.layouts.assets.stylesheets')
 
-        @import url(https://fonts.googleapis.com/css?family=Lato);
+    <style type="text/css">
 
         * {
             box-sizing: border-box;
@@ -379,6 +379,9 @@
             width: 700px;
             margin: 150px auto;
 
+            /* This overrides bootstrap */
+            bottom: auto !important;
+
             text-align: center;
 
             overflow: hidden;
@@ -448,6 +451,15 @@
 
         .modal hr {
             margin: 40px 0;
+        }
+
+    </style>
+
+    <style type="text/css">
+
+        #osk-container {
+            z-index: 2000 !important;
+            width: 50% !important;
         }
 
     </style>
@@ -566,8 +578,11 @@
 
         <h1>Link an RFID card to your account.</h1>
 
-        <input class="modal-input" id="rfid-username" type="text" placeholder="member@proto.utwente.nl">
-        <input class="modal-input" id="rfid-password" type="password" placeholder="correct horse battery staple">
+        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
+               type="text" placeholder="member@proto.utwente.nl">
+        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
+               type="password"
+               placeholder="correct horse battery staple">
 
         <span class="modal-status">
             First enter your username and password, then present an RFID card.
@@ -579,8 +594,12 @@
 
         <h1>Complete your purchase.</h1>
 
-        <input class="modal-input" id="purchase-username" type="text" placeholder="member@proto.utwente.nl">
-        <input class="modal-input" id="purchase-password" type="password" placeholder="correct horse battery staple">
+        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-username"
+               type="text"
+               placeholder="member@proto.utwente.nl">
+        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-password"
+               type="password"
+               placeholder="correct horse battery staple">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
         @if($store->cash_allowed)
@@ -607,6 +626,11 @@
 @show
 
 <script type="text/javascript">
+
+    $('.with-keyboard').onScreenKeyboard({
+        'topPosition': '50%',
+        'leftPosition': '25%'
+    });
 
     var modal_status = null;
 
@@ -764,57 +788,61 @@
      RFID scanner integration
      */
 
-    var server = new WebSocket("ws://localhost:3000", "nfc");
+    function initializeRfid() {
 
-    server.onopen = function () {
-        $("#status").removeClass("inactive").html("RFID Service: Connected");
-    };
+        var server = new WebSocket("ws://localhost:3000", "nfc");
 
-    server.onclose = function () {
-        $("#status").addClass("inactive").html("RFID Service: Reconnecting");
-    };
+        server.onopen = function () {
+            $("#status").removeClass("inactive").html("RFID Service: Connected");
+        };
 
-    server.onmessage = function (raw) {
-        data = JSON.parse(raw.data).uid;
-        console.log('Received card input: ' + data);
+        server.onclose = function () {
+            $("#status").addClass("inactive").html("RFID Service: Reconnecting");
+        };
 
-        if (modal_status == 'rfid') {
+        server.onmessage = function (raw) {
+            data = JSON.parse(raw.data).uid;
+            console.log('Received card input: ' + data);
 
-            if ($("#rfid-username").val() == '' || $("#rfid-password").val() == '') {
-                $("#rfid-modal .modal-status").html("<span style='color: red;'>Enter your account details before presenting an RFID card.<span>");
+            if (modal_status == 'rfid') {
+
+                if ($("#rfid-username").val() == '' || $("#rfid-password").val() == '') {
+                    $("#rfid-modal .modal-status").html("<span style='color: red;'>Enter your account details before presenting an RFID card.<span>");
+                } else {
+
+                    $("#rfid-modal .modal-status").html("<span style='color: orange;'>Trying to register your card...<span>");
+
+                    $.ajax({
+                        url: '{{ route('omnomcom::store::rfidadd') }}',
+                        method: 'post',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            card: data,
+                            username: $("#rfid-username").val(),
+                            password: $("#rfid-password").val()
+                        },
+                        dataType: 'html',
+                        success: function (data) {
+                            $("#rfid-modal .modal-status").html(data);
+                        }
+                    });
+
+                }
+
+            } else if (modal_status == 'purchase') {
+
+                purchase(data);
+
             } else {
 
-                $("#rfid-modal .modal-status").html("<span style='color: orange;'>Trying to register your card...<span>");
-
-                $.ajax({
-                    url: '{{ route('omnomcom::store::rfidadd') }}',
-                    method: 'post',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        card: data,
-                        username: $("#rfid-username").val(),
-                        password: $("#rfid-password").val()
-                    },
-                    dataType: 'html',
-                    success: function (data) {
-                        $("#rfid-modal .modal-status").html(data);
-                    }
-                });
+                $("#purchase").trigger('click');
+                purchase(data);
 
             }
 
-        } else if (modal_status == 'purchase') {
+        };
 
-            purchase(data);
-
-        } else {
-
-            $("#purchase").trigger('click');
-            purchase(data);
-
-        }
-
-    };
+    }
 
     /*
      Modal handlers
@@ -828,6 +856,7 @@
         $(".modal").addClass('inactive');
         $("#modal-overlay").hide();
         $(".modal-input").val('');
+        $("#osk-container .osk-hide").trigger('click');
         modal_status = null;
     });
 
