@@ -26,26 +26,27 @@
 
                     @if($menuItem->children->count() > 0)
 
-                    <li class="dropdown">
-                        <a href="{{ $menuItem->getUrl()  }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                            aria-expanded="false">{{ $menuItem->menuname }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                        <li class="dropdown">
+                            <a href="{{ $menuItem->getUrl()  }}" class="dropdown-toggle" data-toggle="dropdown"
+                               role="button" aria-haspopup="true"
+                               aria-expanded="false">{{ $menuItem->menuname }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
 
-                            @foreach($menuItem->children->sortBy('order') as $childItem)
-                                @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->member()))
-                                    <li><a href="{{ $childItem->getUrl()  }}">{{ $childItem->menuname }}</a></li>
-                                @endif
-                            @endforeach
+                                @foreach($menuItem->children->sortBy('order') as $childItem)
+                                    @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->member()))
+                                        <li><a href="{{ $childItem->getUrl()  }}">{{ $childItem->menuname }}</a></li>
+                                    @endif
+                                @endforeach
 
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
 
                     @else
 
-                    <li>
-                        <a href="{{ $menuItem->getUrl() }}" role="button" aria-haspopup="false"
-                            aria-expanded="false">{{ $menuItem->menuname }}</a>
-                    </li>
+                        <li>
+                            <a href="{{ $menuItem->getUrl() }}" role="button" aria-haspopup="false"
+                               aria-expanded="false">{{ $menuItem->menuname }}</a>
+                        </li>
 
                     @endif
 
@@ -65,14 +66,19 @@
                 </ul>
             </li>
 
-            @if (Auth::check() && Auth::user()->can("omnomcom"))
+            @if (Auth::check() && Auth::user()->can("omnomcom","pilscie"))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">OmNomCom <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
-                        <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
-                        <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
+                        <li><a href="{{ route("omnomcom::store::show") }}">Application</a></li>
+                        <li role="separator" class="divider"></li>
+                        @if (Auth::check() && Auth::user()->can("omnomcom"))
+                            <li><a class="navbar-title">Administration:</a></li>
+                            <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
+                            <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
+                            <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
+                        @endif
                         @if (Auth::check() && Auth::user()->can("finadmin"))
                             <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Financial:</a></li>
@@ -88,9 +94,15 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Administration <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="navbar-title">Administration:</a></li>
+                        <li><a class="navbar-title">Association:</a></li>
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
+                        <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
+                        <li><a href="{{ route("event::add") }}">Add Event</a></li>
+
+                        <li role="separator" class="divider"></li>
+
+                        <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
@@ -101,11 +113,6 @@
                             <li><a href="#">Accounts</a></li>
                             <li><a href="#">Withdrawals</a></li>
                         @endif
-                        
-                        <li role="separator" class="divider"></li>
-                        <li><a class="navbar-title">Create new:</a></li>
-                        <li><a href="{{ route("committee::add") }}">Committee</a></li>
-                        <li><a href="{{ route("event::add") }}">Event</a></li>
                     </ul>
                 </li>
             @endif

@@ -5,7 +5,7 @@
 @endsection
 
 @section('panel-title')
-    Pick the store you want to open
+    Which store would you like to open?
 @endsection
 
 @section('panel-body')

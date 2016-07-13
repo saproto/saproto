@@ -553,7 +553,7 @@
         <div class="modal-input modal-button" id="logout-button">CONTINUE</div>
 
         <video id="purchase-movie" width="473" height="260">
-            <source src="https://food.saproto.nl/v2/video/monster.webm" type="video/webm">
+            <source src="{{ asset('videos/omnomcom.webm') }}" type="video/webm">
         </video>
 
     </div>
@@ -763,22 +763,19 @@
     /*
      RFID scanner integration
      */
-    var server = io.connect('https://localhost:36152', {
-        'reconnect': true,
-        'reconnection_delay': 500,
-        'max_reconnection_attempts': 9999,
-        'secure': true
-    });
 
-    server.on("connect", function (data) {
+    var server = new WebSocket("ws://localhost:3000", "nfc");
+
+    server.onopen = function () {
         $("#status").removeClass("inactive").html("RFID Service: Connected");
-    });
+    };
 
-    server.on("disconnect", function (data) {
+    server.onclose = function () {
         $("#status").addClass("inactive").html("RFID Service: Reconnecting");
-    });
+    };
 
-    server.on("rfid", function (data) {
+    server.onmessage = function (raw) {
+        data = JSON.parse(raw.data).uid;
         console.log('Received card input: ' + data);
 
         if (modal_status == 'rfid') {
@@ -817,11 +814,7 @@
 
         }
 
-    });
-
-    server.on("error", function (data) {
-        alert("Card could not be read. Try again or try another card.");
-    });
+    };
 
     /*
      Modal handlers

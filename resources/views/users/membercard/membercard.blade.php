@@ -70,7 +70,7 @@
         <div class="heading">Member since</div>
         <div>{{ ($user->member->created_at->timestamp < 0 ? 'Before we kept track!' : date('F j, Y', strtotime($user->member->created_at))) }}</div>
         <div class="heading">Card validity</div>
-        <div>{{ date('M Y') }} - {{ date('M Y', strtotime('+2 years')) }}</div>
+        <div>{{ date('M Y') }} - {{ date('M Y', strtotime('+3 years')) }}</div>
     </div>
     @if($user->photo)
         <img id="photo" src="data:{{ $user->photo->mime }};base64,{{ $user->photo->getBase64(450,600) }}">

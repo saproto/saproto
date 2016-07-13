@@ -24,7 +24,7 @@ class OmNomController extends Controller
 
             $storedata = $stores[$store];
 
-            if (!in_array($request->ip(), $storedata->addresses) && !Auth::user()->can($storedata->roles)) {
+            if (!in_array($request->ip(), $storedata->addresses) && (!Auth::check() || !Auth::user()->can($storedata->roles))) {
                 abort(403);
             }
 
