@@ -788,7 +788,7 @@
      RFID scanner integration
      */
 
-    function initializeRfid() {
+    if (navigator.userAgent.indexOf('Electron') >= 0) {
 
         var server = new WebSocket("ws://localhost:3000", "nfc");
 
