@@ -166,13 +166,13 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
 Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
 
     Route::get('/', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
-    Route::get('/list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
-    Route::get('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
-    Route::post('/add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
-    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@edit']);
-    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
-    Route::get('/clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
+    Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
+    Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
+    Route::get('clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
 
 });
 
@@ -182,25 +182,30 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
  */
 Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 
-    Route::get('/', ['as' => 'list', 'uses' => 'EventController@index']);
-    Route::get('/add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
-    Route::post('/add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
-    Route::get('/edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
-    Route::post('/edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
+    Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:finadmin']], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'EventController@finindex']);
+        Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
+    });
 
-    Route::get('/archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
+    Route::get('', ['as' => 'list', 'uses' => 'EventController@index']);
+    Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
+
+    Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
     // Related to participation
-    Route::get('/participate/{id}', ['as' => 'addparticipation', 'middleware' => ['member'], 'uses' => 'ParticipationController@create']);
-    Route::get('/unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
+    Route::get('participate/{id}', ['as' => 'addparticipation', 'middleware' => ['member'], 'uses' => 'ParticipationController@create']);
+    Route::get('unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);
 
     // Related to activities
-    Route::post('/signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
-    Route::get('/signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
+    Route::post('signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
+    Route::get('signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
 
     // Show event
-    Route::get('/{id}', ['as' => 'show', 'uses' => 'EventController@show']);
+    Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
 });
 
@@ -210,17 +215,17 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
 
     Route::group(['middleware' => ['auth', 'permission:board']], function () {
-        Route::get('/', ['as' => 'list', 'uses' => 'PageController@index']);
-        Route::get('/add', ['as' => 'add', 'uses' => 'PageController@create']);
-        Route::post('/add', ['as' => 'add', 'uses' => 'PageController@store']);
-        Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@edit']);
-        Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'PageController@update']);
-        Route::post('/edit/{id}/image', ['as' => 'image', 'uses' => 'PageController@featuredImage']);
-        Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'PageController@destroy']);
+        Route::get('', ['as' => 'list', 'uses' => 'PageController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'PageController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'PageController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PageController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'PageController@update']);
+        Route::post('edit/{id}/image', ['as' => 'image', 'uses' => 'PageController@featuredImage']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PageController@destroy']);
 
         Route::group(['prefix' => '/edit/{id}/file', 'as' => 'file::'], function () {
-            Route::post('/add', ['as' => 'add', 'uses' => 'PageController@addFile']);
-            Route::get('/{file_id}/delete', ['as' => 'delete', 'uses' => 'PageController@deleteFile']);
+            Route::post('add', ['as' => 'add', 'uses' => 'PageController@addFile']);
+            Route::get('{file_id}/delete', ['as' => 'delete', 'uses' => 'PageController@deleteFile']);
         });
 
     });
@@ -233,15 +238,15 @@ Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
  * Routes related to menu.
  */
 Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function () {
-    Route::get('/', ['as' => 'list', 'uses' => 'MenuController@index']);
-    Route::get('/add', ['as' => 'add', 'uses' => 'MenuController@create']);
-    Route::post('/add', ['as' => 'add', 'uses' => 'MenuController@store']);
+    Route::get('', ['as' => 'list', 'uses' => 'MenuController@index']);
+    Route::get('add', ['as' => 'add', 'uses' => 'MenuController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'MenuController@store']);
 
-    Route::get('/up/{id}', ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
-    Route::get('/down/{id}', ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
+    Route::get('up/{id}', ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
+    Route::get('down/{id}', ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
 
-    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
 });
 
 
@@ -250,12 +255,12 @@ Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'pe
  */
 Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
 
-    Route::get('/', ['as' => 'list', 'uses' => 'StudyController@index']);
-    Route::get('/add', ['as' => 'add', 'uses' => 'StudyController@create']);
-    Route::post('/add', ['as' => 'add', 'uses' => 'StudyController@store']);
-    Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
-    Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
-    Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
+    Route::get('', ['as' => 'list', 'uses' => 'StudyController@index']);
+    Route::get('add', ['as' => 'add', 'uses' => 'StudyController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'StudyController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
 
 });
 

@@ -68,44 +68,48 @@ class ParticipationController extends Controller
     {
         $participation = ActivityParticipation::findOrFail($participation_id);
 
-        if ($participation->user->id == Auth::id() || Auth::user()->can('board')) {
+        if ($participation->user->id != Auth::id() && Auth::user()->can('board')) {
+            abort(403);
+        }
 
-            if ($participation->committees_activities_id === null) {
 
-                if ($participation->activity->closed) {
-                    abort(500, "This activity is closed, you cannot change participation anymore.");
-                }
+        if ($participation->committees_activities_id === null) {
 
-                if (!$participation->activity->canUnsubscribe() && !Auth::user()->can('board')) {
-                    abort(500, "You cannot unsubscribe for this event at this time.");
-                } else {
-                    $backupparticipation = ActivityParticipation::where('activity_id', $participation->activity->id)
-                        ->whereNull('committees_activities_id')->where('backup', true)
-                        ->first();
-                    if ($backupparticipation !== null) {
-                        $backupparticipation->backup = false;
-                        $backupparticipation->save();
-                        
-                        Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
-                            $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                            $m->to($backupparticipation->user->email, $backupparticipation->user->name);
-                            $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title);
-                        });
-                    }
-                }
+            if ($participation->activity->closed) {
+                abort(500, "This activity is closed, you cannot change participation anymore.");
+            }
 
+            if (!$participation->activity->canUnsubscribe() && !Auth::user()->can('board')) {
+                abort(500, "You cannot unsubscribe for this event at this time.");
+            }
+
+            $backupparticipation = ActivityParticipation::where('activity_id', $participation->activity->id)
+                ->whereNull('committees_activities_id')->where('backup', true)
+                ->first();
+            if ($backupparticipation !== null) {
+                $backupparticipation->backup = false;
+                $backupparticipation->save();
+
+                Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
+                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($backupparticipation->user->email, $backupparticipation->user->name);
+                    $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title);
+                });
             }
 
             $request->session()->flash('flash_message', 'You are not attending ' . $participation->activity->event->title . ' anymore.');
 
             $participation->delete();
 
-            return Redirect::back();
-
         } else {
 
-            abort(403);
+            $request->session()->flash('flash_message', 'You are not helping with ' . $participation->activity->event->title . ' anymore.');
+
+            $participation->delete();
 
         }
+
+        return Redirect::back();
+
     }
 }

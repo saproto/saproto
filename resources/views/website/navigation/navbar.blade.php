@@ -79,12 +79,6 @@
                             <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
                             <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
                         @endif
-                        @if (Auth::check() && Auth::user()->can("finadmin"))
-                            <li role="separator" class="divider"></li>
-                            <li><a class="navbar-title">Financial:</a></li>
-                            <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
-                            <li><a href="#">Withdrawals</a></li>
-                        @endif
                     </ul>
                 </li>
             @endif
@@ -107,10 +101,11 @@
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
 
-                        @if (Auth::check() && Auth::user()->can("board"))
+                        @if (Auth::check() && Auth::user()->can("finadmin"))
                             <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Financial:</a></li>
-                            <li><a href="#">Accounts</a></li>
+                            <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
+                            <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                             <li><a href="#">Withdrawals</a></li>
                         @endif
                     </ul>

@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
+use Proto\Models\Account;
+use Proto\Models\Activity;
 use Proto\Models\Event;
+use Proto\Models\OrderLine;
+use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 
 use Session;
@@ -47,6 +51,18 @@ class EventController extends Controller
         }
 
         return view('event.calendar', ['events' => $data, 'years' => $years]);
+    }
+
+    /**
+     * Display a listing of all activities that still have to be closed.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function finindex()
+    {
+
+        $activities = Activity::where('closed', false)->get();
+        return view('event.notclosed', ['activities' => $activities]);
     }
 
     /**
@@ -192,6 +208,52 @@ class EventController extends Controller
         $event->delete();
 
         return Redirect::route('event::list');
+    }
+
+    public function finclose(Request $request, $id)
+    {
+
+        $activity = Activity::findOrFail($id);
+
+        if ($activity->closed) {
+            Session::flash("flash_message", "This activity is already closed.");
+            return Redirect::back();
+        }
+
+        if (count($activity->users()) == 0 || $activity->price == 0) {
+            $activity->closed = true;
+            $activity->save();
+            Session::flash("flash_message", "This activity is now closed. It either was free or had no participants, so no orderlines or products were created.");
+            return Redirect::back();
+        }
+
+        $account = Account::findOrFail($request->input('account'));
+
+        $product = Product::create([
+            'account_id' => $account->id,
+            'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
+            'nicename' => 'activity',
+            'price' => $activity->price
+        ]);
+        $product->save();
+
+        foreach ($activity->users() as $user) {
+            $order = OrderLine::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'original_unit_price' => $product->price,
+                'units' => 1,
+                'total_price' => $product->price
+            ]);
+            $order->save();
+        }
+
+        $activity->closed = true;
+        $activity->save();
+
+        Session::flash("flash_message", "This activity has been closed and the relevant orderlines were added.");
+        return Redirect::back();
+
     }
 
 

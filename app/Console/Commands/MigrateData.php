@@ -306,13 +306,10 @@ class MigrateData extends Command
                     'registration_end' => 'NULL',
                     'closed' => 'FALSE',
                     'created_at' => $activity['post_date_gmt'],
-                    'updated_at' => $activity['post_modified_gmt']
+                    'updated_at' => $activity['post_modified_gmt'],
+                    'comment' => $activity['post_title']
                 ]);
                 $a->save();
-
-                if (!$a->event_id) {
-                    $this->error('No event found for activity ' . $activity['post_title'] . '. Orphaned.');
-                }
 
                 if ($a->event) {
                     $a->event->description = nl2br(preg_replace("/[\r\n]+/", "\n", $activity['post_content']));
@@ -410,7 +407,7 @@ class MigrateData extends Command
                 $user = User::where('proto_username', $useractivity['proto_username'])->orWhere('utwente_username', $useractivity['proto_username'])->first();
 
                 if (!$user) {
-                    $this->error('No user found for ' . $useractivity['proto_username'] . '. ');
+                    $this->error('No user found for ' . $useractivity['proto_username'] . '. Not importing this participation.');
                     $user = User::find(0);
                 }
 
@@ -567,7 +564,7 @@ class MigrateData extends Command
             ]);
             $withdrawal->save();
 
-            $orderlines = $this->legacydb->query("SELECT * FROM orders ORDER BY order_id DESC LIMIT 1,5000");
+            $orderlines = $this->legacydb->query("SELECT * FROM orders WHERE price != 0 ORDER BY order_id DESC LIMIT 1,5000");
 
             $c = 0;
 
