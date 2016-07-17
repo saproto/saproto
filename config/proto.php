@@ -72,6 +72,17 @@ return [
     |
     */
 
-    'tfaroles' => ['admin', 'board']
+    'tfaroles' => ['admin', 'board'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Print product
+    |--------------------------------------------------------------------------
+    |
+    | The product that should be used for printing documents on the site.
+    |
+    */
+
+    'printproduct' => 17,
 
 ];

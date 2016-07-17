@@ -85,13 +85,14 @@ class FileController extends Controller
     /**
      * This static function sends a print request to
      */
-    public static function requestPrint($printer, $url)
+    public static function requestPrint($printer, $url, $copies = 1)
     {
 
         $payload = base64_encode(json_encode((object)[
             'secret' => env('PRINTER_SECRET'),
             'url' => $url,
-            'printer' => $printer
+            'printer' => $printer,
+            'copies' => $copies
         ]));
 
         $result = null;

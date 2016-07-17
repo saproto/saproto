@@ -329,6 +329,14 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
 
 });
 
+/**
+ * Routes related to the Quote Corner.
+ */
+Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'], function () {
+    Route::get('', ['as' => 'form', 'uses' => 'PrintController@form']);
+    Route::post('', ['as' => 'print', 'uses' => 'PrintController@doPrint']);
+});
+
 /*
  * Routes related to the API.
  */

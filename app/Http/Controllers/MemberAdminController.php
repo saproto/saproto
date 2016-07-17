@@ -146,4 +146,23 @@ class MemberAdminController extends Controller
 
     }
 
+    public function printForm(Request $request)
+    {
+
+        $user = User::find($request->input('id'));
+
+        if (!$user) {
+            return "This user could not be found!";
+        }
+
+        $result = FileController::requestPrint('document', route('memberform::download', ['id' => $user->id]));
+
+        if ($result === false) {
+            return "Something went wrong trying to reach the printer service.";
+        }
+
+        return "The printer service responded: " . $result;
+
+    }
+
 }

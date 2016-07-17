@@ -118,12 +118,12 @@
                        aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('user::dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>
 
                         @if(Auth::check() && Auth::user()->member)
                             <li><a href="{{ route('user::profile') }}">My Profile</a></li>
+                            <li><a href="{{ route('print::form') }}">Print Something</a></li>
                         @endif
-
-                        <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>
 
                         @if (Session::has('impersonator'))
                             <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>
