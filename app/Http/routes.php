@@ -124,6 +124,9 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
 Route::post('membercard/print', ['as' => 'membercard::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
 Route::get('membercard/{id}', ['as' => 'membercard::download', 'uses' => 'MemberCardController@download']);
 
+Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@printForm']);
+Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'MemberAdminController@showForm']);
+
 /**
  * Routes related to files.
  */

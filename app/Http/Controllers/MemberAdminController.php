@@ -11,6 +11,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\Member;
 use Proto\Models\User;
 
+use PDF;
 use Auth;
 use Entrust;
 use Session;
@@ -122,6 +123,27 @@ class MemberAdminController extends Controller
         Session::flash("flash_message", "Membership of " . $user->name . " has been termindated.");
 
         return redirect()->route('user::member::list');
+    }
+
+    public function showForm(Request $request, $id)
+    {
+
+        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != env('PRINTER_HOST')) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+
+        $form = PDF::loadView('users.members.membershipform', ['user' => $user]);
+
+        $form = $form->setPaper('a4');
+
+        if ($request->ip() != env('PRINTER_HOST')) {
+            return $form->stream();
+        } else {
+            return $form->download();
+        }
+
     }
 
 }

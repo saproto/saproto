@@ -130,6 +130,9 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
+        if ($this->closed) {
+            return false;
+        }
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
     }
 
@@ -138,6 +141,9 @@ class Activity extends Validatable
      */
     public function canUnsubscribe()
     {
+        if ($this->closed) {
+            return false;
+        }
         return $this->deregistration_end === null || date('U') < $this->deregistration_end;
     }
 }

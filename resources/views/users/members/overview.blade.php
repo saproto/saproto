@@ -1,7 +1,7 @@
 @extends('website.layouts.default')
 
 @section('page-title')
-    Member Administration
+    User Administration
 @endsection
 
 @section('content')
@@ -31,7 +31,7 @@
     <div class="col-md-7 col-xs-12">
         <div class="panel panel-default" id="memberDetail">
             <div class="panel-body">
-                <p>Choose a member</p>
+                <p>Choose a user</p>
             </div>
         </div>
     </div>
@@ -115,6 +115,28 @@
             if (confirm("Please confirm you want to print a membership card.")) {
                 $.ajax({
                     url: '{{ route('membercard::print') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
+        $('body').delegate('#print-form', 'click', function () {
+
+            if (confirm("Please confirm you want to print a membership document.")) {
+                $.ajax({
+                    url: '{{ route('memberform::print') }}',
                     data: {
                         '_token': '{!! csrf_token() !!}',
                         'id': $(this).attr('data-id')

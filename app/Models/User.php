@@ -109,6 +109,14 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed The associated primary addresses, if any.
+     */
+    public function primary_address()
+    {
+        return $this->address()->where('is_primary', true)->get()->first();
+    }
+
+    /**
      * @return mixed All associated studies, if any.
      */
     public function studies()

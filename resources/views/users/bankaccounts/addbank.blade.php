@@ -17,8 +17,7 @@
             <p>
                 Sorry, but due to accountability issues you can only add authorizations for yourself.
                 If {{ $user->name }} really wants to pay via automatic withdrawal, they should configure
-                so
-                themselves.
+                so themselves.
             </p>
 
         @else
@@ -36,13 +35,27 @@
 
             <p>
 
-                <strong>Important stuff</strong>
+                <strong>Authorization Statement</strong>
 
             </p>
 
             <p>
 
-                << Insert all kinds of important stuff. >>
+                You hereby legally authorize Study Association Proto until further notice to charge to your bank account
+                any costs you incur with the association. These include but are not limited to:
+
+            </p>
+
+            <ul>
+                <li>Orders from the OmNomCom store</li>
+                <li>Participation in activities</li>
+                <li>Other Proto related activities and products such as merchandise and printing</li>
+                <li>Your membership fee</li>
+            </ul>
+
+            <p>
+
+                (Some of these are only applicable to members of the association.)
 
             </p>
 
@@ -57,7 +70,7 @@
                     disabled
                     @endif
             >
-                I have read all the important stuff and agree with it.
+                I have read the authorization statement and agree with it.
             </button>
 
             <button type="button" class="btn btn-default pull-right" data-dismiss="modal">

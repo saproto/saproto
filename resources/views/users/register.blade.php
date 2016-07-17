@@ -66,7 +66,7 @@
                            placeholder="2011-04-20" required>
                 </div>
                 <div class="col-md-5">
-                    <label for="gender" class="control-label">Biological gender</label>
+                    <label for="gender" class="control-label">Gender</label>
                     <select id="gender" name="gender" class="form-control" required>
                         <option value="1">Male</option>
                         <option value="2">Female</option>

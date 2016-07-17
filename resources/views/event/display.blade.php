@@ -136,6 +136,12 @@
 
                     <div class="panel-body" id="event-description">
 
+                        @if ($event->activity->closed)
+                            <p style="text-align: center;">
+                                This activity is closed and cannot be changed anymore.
+                            </p>
+                        @endif
+
                         <p style="text-align: center;">
                             @if($event->activity->getParticipation(Auth::user()) !== null)
                                 @if ($event->activity->getParticipation(Auth::user())->backup)
@@ -190,7 +196,7 @@
                                      style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
-                                @if(Auth::user()->can('board'))
+                                @if(Auth::user()->can('board') && !$event->activity->closed)
                                     <p class="pull-right activity__admin-controls">
                                         <a class="activity__admin-controls__button--delete"
                                            href="{{ route('event::deleteparticipation', ['participation_id' => $user->pivot->id]) }}">

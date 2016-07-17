@@ -73,7 +73,7 @@
 
 <div class="panel-footer">
 
-    <div class="col clearfix">
+    <div class="row clearfix">
 
         <div class="col-md-4 col-xs-4">
             <div class="btn-group btn-group-justified" role="group">
@@ -102,25 +102,13 @@
             </div>
         @endif
 
-        <hr>
+    </div>
 
-        <div class="col-md-3 col-xs-6">
-            <div class="btn-group btn-group-justified" role="group">
-                <a href="{{ route('membercard::download', ['id' => $user->id]) }}" class="btn btn-default" target="_blank">
-                    Preview Card
-                </a>
-            </div>
-        </div>
+    <hr>
 
-        <div class="col-md-5 col-xs-6">
-            <div class="btn-group btn-group-justified" role="group">
-                <a id="print-card" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
-                    Print Card ({{ $user->member->card_printed_on or 'First' }})
-                </a>
-            </div>
-        </div>
+    <div class="row clearfix">
 
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-4">
             <div class="btn-group btn-group-justified" role="group">
                 @if(!$user->member) <a class="btn btn-primary" data-toggle="modal" data-target="#addMembership">
                     Make member
@@ -133,7 +121,51 @@
             </div>
         </div>
 
+        <div class="col-md-4 col-xs-4">
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="{{ route('memberform::download', ['id' => $user->id]) }}" class="btn btn-default"
+                   target="_blank">
+                    Show Member Form
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xs-6">
+            <div class="btn-group btn-group-justified" role="group">
+                <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                    Print Member Form
+                </a>
+            </div>
+        </div>
+
     </div>
+
+    @if($user->member)
+
+        <hr>
+
+        <div class="row clearfix">
+
+            <div class="col-md-6 col-xs-6">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a href="{{ route('membercard::download', ['id' => $user->id]) }}" class="btn btn-default"
+                       target="_blank">
+                        Preview Card
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xs-6">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-card" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Card ({{ $user->member->card_printed_on or 'First' }})
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    @endif
 
 </div>
 
