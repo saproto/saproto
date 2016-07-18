@@ -646,13 +646,11 @@
     //--formatter:off
     @foreach($categories as $category)
         @foreach($category->products as $product)
-            @if($product->isVisible() && $product->image)
-                images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-            @endif
-            @if($product->isVisible() && $product->image)
-                cart[{{ $product->id }}] = 0;
-                stock[{{ $product->id }}] = {{ $product->stock }};
-                price[{{ $product->id }}] = {{ $product->price }};
+            @if($product->isVisible())
+                @if($product->image)
+                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+                @endif
+                cart[{{ $product->id }}] = 0; stock[{{ $product->id }}] = {{ $product->stock }}; price[{{ $product->id }}] = {{ $product->price }};
             @endif
         @endforeach
     @endforeach
