@@ -360,7 +360,7 @@
                     $(element).html('');
                     console.log(data);
                     for (i in data) {
-                        $(element).append('<div class="busentry">' + data[i].time + ' ' + data[i].mode.name + ' ' + data[i].service + ' <span style="color: #c1ff00;">' + (data[i].realtimeText !== null ? data[i].realtimeText + ' (' + data[i].realtimeState + ')' : '(' + data[i].realtimeState) + ')</span><br>Towards ' + data[i].destinationName + '</div>');
+                        $(element).append('<div class="busentry">' + data[i].time + ' ' + data[i].mode.name + ' ' + data[i].service + ' <span style="color: #c1ff00;">' + (data[i].realtimeText !== null ? data[i].realtimeText + ' (' + data[i].realtimeState + ')' : '(' + data[i].realtimeState + ')') + '</span><br>Towards ' + data[i].destinationName + '</div>');
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');
@@ -373,7 +373,7 @@
     }
 
     updateBuses();
-
+    setInterval(updateBuses, 60000);
 
 </script>
 
