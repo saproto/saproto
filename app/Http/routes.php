@@ -338,6 +338,17 @@ Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'
 });
 
 /*
+ * Routes related to Flickr photos.
+ */
+Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
+    Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
+
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
+        Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
+    });
+});
+
+/*
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
