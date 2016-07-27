@@ -85,4 +85,15 @@ return [
 
     'printproduct' => 17,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Public Timetable Calendar
+    |--------------------------------------------------------------------------
+    |
+    | The Google calendar ID for the imported timetable.
+    |
+    */
+
+    'google-timetable-id' => '55pq1udukakaeg9ouc56utojmuqiap80@import.calendar.google.com',
+
 ];

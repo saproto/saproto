@@ -257,6 +257,16 @@ class EventController extends Controller
     }
 
 
+    public function apiUpcomingEvents($limit = 20)
+    {
+
+        $events = Event::where('secret', 0)->where('start', '>', date('U'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+
+        return $events;
+
+    }
+
+
     public function apiEvents(Request $request)
     {
 

@@ -14,7 +14,7 @@
 /*
  * The main route for the frontpage.
  */
-Route::get('/', ['as' => 'homepage', 'uses' => 'HomeController@show']);
+Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
 
 /*
  * Routes related to authentication.
@@ -349,16 +349,28 @@ Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
 });
 
 /*
+ * The route for the SmartXp Screen.
+ */
+Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
+
+/*
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
-    Route::get('events', ['as' => 'list', 'uses' => 'EventController@apiEvents']);
-    Route::get('events/{id}', ['as' => 'get', 'uses' => 'EventController@apiEventsSingle']);
-    Route::get('events/{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
 
     Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
     Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
 
+    Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
+        Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
+        Route::get('', ['as' => 'list', 'uses' => 'EventController@apiEvents']);
+        Route::get('{id}', ['as' => 'get', 'uses' => 'EventController@apiEventsSingle']);
+        Route::get('{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
+    });
+
+    Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
+    Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
+
 });
