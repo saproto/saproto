@@ -338,6 +338,17 @@ Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'
 });
 
 /*
+ * Routes related to Flickr photos.
+ */
+Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
+    Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
+
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
+        Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
+    });
+});
+
+/*
  * The route for the SmartXp Screen.
  */
 Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
@@ -346,6 +357,9 @@ Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@sho
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
+
+    Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
+    Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
 
     Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
         Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
