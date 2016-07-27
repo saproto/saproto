@@ -20,6 +20,13 @@ class PhotoController extends Controller
         return $albums;
     }
 
+    /**
+     * Returns photos for given album.
+     * Checks whether album is owned by Flickr user.
+     *
+     * @param $albumId
+     * @return null
+     */
     private function getPhotos($albumId) {
         $photos = json_decode(file_get_contents('https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=' . env('FLICKR_KEY') . '&photoset_id=' . $albumId . '&format=json&extras=url_o,url_m,url_l&nojsoncallback=1'));
 
@@ -44,26 +51,6 @@ class PhotoController extends Controller
         return view('photos.list', ['albums' => $albums]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -81,36 +68,25 @@ class PhotoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Return JSON for a listing of the resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return string
      */
-    public function edit($id)
-    {
-        //
+    public function apiIndex() {
+        $albums = $this->getAlbums();
+        return json_encode($albums);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Return JSON for the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return string
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function apiShow($id) {
+        $photos = $this->getPhotos($id);
+        return json_encode($photos);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }

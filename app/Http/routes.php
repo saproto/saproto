@@ -356,6 +356,9 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('events/{id}', ['as' => 'get', 'uses' => 'EventController@apiEventsSingle']);
     Route::get('events/{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
 
+    Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
+    Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
+
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 });
