@@ -341,11 +341,11 @@ Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'
  * Routes related to Flickr photos.
  */
 Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
-    route::get('', ['as' => 'albums', 'uses' => 'photocontroller@index']);
-    route::get('slideshow', ['as' => 'slideshow', 'uses' => 'photocontroller@slideshow']);
+    Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
+    Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
-    route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
-        route::get('', ['as' => 'list', 'uses' => 'photocontroller@show']);
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
+        Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
     });
 });
 
