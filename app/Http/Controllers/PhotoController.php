@@ -88,5 +88,9 @@ class PhotoController extends Controller
         return json_encode($photos);
     }
 
+    public function slideshow() {
+        return view('photos.slideshow');
+    }
+
 
 }
