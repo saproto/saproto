@@ -4,6 +4,8 @@
     <title>Flickr Slideshow</title>
 
     <style type="text/css">
+        @import url('https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300,100italic,100');
+
         body, html {
             height: 100%;
             width: 100%;
@@ -100,7 +102,7 @@
             background: rgba(0,0,0,0.8);
             color: #FFFFFF;
             text-shadow: 0 1px 1px rgba(255,255,255,0.2);
-            font: 26px Arial;
+            font: 26px 'Roboto';
             border: 1px solid #c1ff00;
         }
     </style>
