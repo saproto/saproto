@@ -60,6 +60,7 @@ class MigrateData extends Command
      */
     public function handle()
     {
+
         if ($this->option('no-confirmation') != null || ($this->confirm("Would you like to migrate data from the old website?") && $this->confirm("Are you sure? This will overwrite all data in your database!"))) {
 
             $this->info('Preparing databases...');
@@ -564,7 +565,7 @@ class MigrateData extends Command
             ]);
             $withdrawal->save();
 
-            $orderlines = $this->legacydb->query("SELECT * FROM orders WHERE price != 0 ORDER BY order_id DESC LIMIT 1,5000");
+            $orderlines = $this->legacydb->query("SELECT * FROM orders WHERE total != 0 ORDER BY order_id DESC LIMIT 1,5000");
 
             $c = 0;
 
