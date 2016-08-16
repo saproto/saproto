@@ -27,7 +27,6 @@ fi
 
 # Do migrations.
 php artisan migrate
-php artisan proto:migrate --no-confirmation
 
 # Add necessary roles.
 php artisan proto:generateroles
