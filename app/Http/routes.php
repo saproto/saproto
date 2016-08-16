@@ -374,4 +374,8 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
+    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+        Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
+    });
+
 });

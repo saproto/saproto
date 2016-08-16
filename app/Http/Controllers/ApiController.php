@@ -11,6 +11,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\User;
 use Proto\Models\Event;
 use Proto\Models\Activity;
+use Proto\Models\Token;
 
 use Auth;
 
@@ -44,6 +45,19 @@ class ApiController extends Controller
 
         return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=".$_GET['station']));
 
+    }
+    
+    public function protubeAdmin($token) {
+        $token = Token::where('token', $token)->first();
+
+        if(!$token) return("{\"is_admin\":false}");
+
+        $user = $token->user()->first();
+
+        $adminInfo = new \stdClass();
+        $adminInfo->is_admin = $user->can('board');
+
+        return(json_encode($adminInfo));
     }
 
 }
