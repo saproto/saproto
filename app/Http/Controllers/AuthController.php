@@ -204,6 +204,8 @@ class AuthController extends Controller
             return Redirect::route('user::dashboard');
         }
 
+        $request->session()->flash('register_persist', $request->all());
+
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'name_first' => 'required|string',
