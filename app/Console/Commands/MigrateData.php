@@ -565,7 +565,7 @@ class MigrateData extends Command
             ]);
             $withdrawal->save();
 
-            $orderlines = $this->legacydb->query("SELECT * FROM orders WHERE total != 0 ORDER BY order_id DESC LIMIT 1,5000");
+            $orderlines = $this->legacydb->query("SELECT * FROM orders WHERE total != 0");
 
             $c = 0;
 
