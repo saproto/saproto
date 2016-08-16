@@ -146,6 +146,13 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed Any tokens the user has
+     */
+    public function tokens() {
+        return $this->hasMany('Proto\Models\Token');
+    }
+
+    /**
      * @return mixed The age in years of a user.
      */
     public function age()
