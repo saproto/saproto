@@ -258,6 +258,11 @@
                     admin.emit("reload");
                 });
 
+                $(".soundboard").click(function(e) {
+                    e.preventDefault();
+                    admin.emit("soundboard", $(this).attr("rel"));
+                });
+
                 admin.on("volume", function(data) {
                     $("#youtubeV").slider('setValue', data.youtube);
                     $("#radioV").slider('setValue', data.radio);
@@ -352,35 +357,35 @@
         <div class="panel panel-default">
             <div class="panel-heading">Soundboard</div>
             <div class="panel-body">
-                <button type="button" class="btn btn-default" rel="airhorn">Horn</button>
-                <button type="button" class="btn btn-default" rel="rimshot">Rimshot</button>
-                <button type="button" class="btn btn-default" rel="baby">Huil Baby</button>
-                <button type="button" class="btn btn-default" rel="mickey">Mickey Mouse</button>
-                <button type="button" class="btn btn-default" rel="drama">Drama</button>
-                <button type="button" class="btn btn-default" rel="sad-trombone">Fail</button>
-                <button type="button" class="btn btn-default" rel="gay">Hah... Gay!</button>
-                <button type="button" class="btn btn-default" rel="zoenen">Zoenen!</button>
-                <button type="button" class="btn btn-default" rel="tongen">Lekker tongen</button>
-                <button type="button" class="btn btn-default" rel="raar">RAARRR</button>
-                <button type="button" class="btn btn-default" rel="ovation">Applaus</button>
-                <button type="button" class="btn btn-default" rel="slowclap">Slow clap</button>
-                <button type="button" class="btn btn-default" rel="fluitje">NS</button>
-                <button type="button" class="btn btn-default" rel="porno">Porno</button>
-                <button type="button" class="btn btn-default" rel="keiharde_porno">Keiharde porno</button>
-                <button type="button" class="btn btn-default" rel="laura">Laura</button>
-                <button type="button" class="btn btn-default" rel="jammer_joh">Jammer joh</button>
-                <button type="button" class="btn btn-default" rel="groen">GROEN!!!</button>
-                <button type="button" class="btn btn-default" rel="moan">Moan</button>
-                <button type="button" class="btn btn-default" rel="doodle">Doodle?</button>
-                <button type="button" class="btn btn-default" rel="wat-ik-voor-je-kan-doen">Zoek het maar uit</button>
-                <button type="button" class="btn btn-default" rel="tanman">Tan man!</button>
-                <button type="button" class="btn btn-default" rel="inception">BRAAAAAAM</button>
-                <button type="button" class="btn btn-default" rel="nooo">NOOOOO</button>
-                <button type="button" class="btn btn-default" rel="evil">MUHAHAHA</button>
-                <button type="button" class="btn btn-default" rel="boo">BOOOOOO</button>
-                <button type="button" class="btn btn-default" rel="chewbacca">Chewie</button>
-                <button type="button" class="btn btn-default" rel="batman">Batman</button>
-                <button type="button" class="btn btn-default" rel="bestuuuuuuuuur">Bestuuuuur!</button>
+                <button type="button" class="btn btn-default soundboard" rel="airhorn">Horn</button>
+                <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
+                <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>
+                <button type="button" class="btn btn-default soundboard" rel="mickey">Mickey Mouse</button>
+                <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
+                <button type="button" class="btn btn-default soundboard" rel="sad-trombone">Fail</button>
+                <button type="button" class="btn btn-default soundboard" rel="gay">Hah... Gay!</button>
+                <button type="button" class="btn btn-default soundboard" rel="zoenen">Zoenen!</button>
+                <button type="button" class="btn btn-default soundboard" rel="tongen">Lekker tongen</button>
+                <button type="button" class="btn btn-default soundboard" rel="raar">RAARRR</button>
+                <button type="button" class="btn btn-default soundboard" rel="ovation">Applaus</button>
+                <button type="button" class="btn btn-default soundboard" rel="slowclap">Slow clap</button>
+                <button type="button" class="btn btn-default soundboard" rel="fluitje">NS</button>
+                <button type="button" class="btn btn-default soundboard" rel="porno">Porno</button>
+                <button type="button" class="btn btn-default soundboard" rel="keiharde_porno">Keiharde porno</button>
+                <button type="button" class="btn btn-default soundboard" rel="laura">Laura</button>
+                <button type="button" class="btn btn-default soundboard" rel="jammer_joh">Jammer joh</button>
+                <button type="button" class="btn btn-default soundboard" rel="groen">GROEN!!!</button>
+                <button type="button" class="btn btn-default soundboard" rel="moan">Moan</button>
+                <button type="button" class="btn btn-default soundboard" rel="doodle">Doodle?</button>
+                <button type="button" class="btn btn-default soundboard" rel="wat-ik-voor-je-kan-doen">Zoek het maar uit</button>
+                <button type="button" class="btn btn-default soundboard" rel="tanman">Tan man!</button>
+                <button type="button" class="btn btn-default soundboard" rel="inception">BRAAAAAAM</button>
+                <button type="button" class="btn btn-default soundboard" rel="nooo">NOOOOO</button>
+                <button type="button" class="btn btn-default soundboard" rel="evil">MUHAHAHA</button>
+                <button type="button" class="btn btn-default soundboard" rel="boo">BOOOOOO</button>
+                <button type="button" class="btn btn-default soundboard" rel="chewbacca">Chewie</button>
+                <button type="button" class="btn btn-default soundboard" rel="batman">Batman</button>
+                <button type="button" class="btn btn-default soundboard" rel="bestuuuuuuuuur">Bestuuuuur!</button>
             </div>
         </div>
 
