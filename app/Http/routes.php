@@ -355,6 +355,15 @@ Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
 Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
 
 /*
+ * The routes for Protube.
+ */
+Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+    Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
+    Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
+    Route::get('admin', ['as' => 'admin', 'uses' => 'ProtubeController@admin']);
+});
+
+/*
  * Routes related to the API.
  */
 Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
