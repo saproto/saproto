@@ -33,7 +33,7 @@
 
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input class="form-control" type="number" name="copies" value="1">
+                            <input class="form-control" type="number" name="copies" value="1" min="1">
                             <span class="input-group-addon">copies</span>
                         </div>
                     </div>
