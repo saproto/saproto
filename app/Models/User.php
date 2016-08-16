@@ -84,6 +84,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('Proto\Models\Member');
     }
 
+    public function orderlines()
+    {
+        return $this->hasMany('Proto\Models\OrderLine');
+    }
+
     /**
      * @return mixed The associated bank authorization, if any.
      */
@@ -148,7 +153,8 @@ class User extends Model implements AuthenticatableContract,
     /**
      * @return mixed Any tokens the user has
      */
-    public function tokens() {
+    public function tokens()
+    {
         return $this->hasMany('Proto\Models\Token');
     }
 
