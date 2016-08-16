@@ -41,6 +41,11 @@ class PrintController extends Controller
 
         $copies = $request->input('copies');
 
+        if ($copies < 1) {
+            $request->session()->flash('flash_message', "You cannot print nothing.");
+            return Redirect::back();
+        }
+
         $result = FileController::requestPrint('document', $file->generatePath(), $copies);
         
         if ($result === false) {
