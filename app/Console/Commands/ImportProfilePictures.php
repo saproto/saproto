@@ -46,7 +46,7 @@ class ImportProfilePictures extends Command
 
                 $this->info("Trying to download profile picture for " . $user->name . ". (" . $user->proto_username . ")");
 
-                $url = "https://www.saproto.nl/wordpress/wp-content/uploads/userphoto/" . $user->proto_username;
+                $url = "http://utils.saproto.nl/static-legacy/uploads/userphoto/" . $user->proto_username;
                 $headers = get_headers($url);
                 if (substr($headers[0], 9, 3) != "200") {
                     $this->error("Could not fetch profile picture for " . $user->name . ".");

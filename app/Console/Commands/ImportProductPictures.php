@@ -46,7 +46,7 @@ class ImportProductPictures extends Command
 
             $this->info("Trying to download profile picture for " . $product->name . ".");
 
-            $url = "https://food.saproto.nl/v2/food/" . $product->nicename . ".png";
+            $url = "http://utils.saproto.nl/static-legacy/food/" . $product->nicename . ".png";
             $headers = get_headers($url);
             if (substr($headers[0], 9, 3) != "200") {
                 $this->error("Could not fetch profile picture for " . $product->name . ".");
