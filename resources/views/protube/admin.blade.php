@@ -258,6 +258,11 @@
                     admin.emit("reload");
                 });
 
+                $("#protubeToggle").click(function(e) {
+                    e.preventDefault();
+                    admin.emit("protubeToggle");
+                });
+
                 $(".soundboard").click(function(e) {
                     e.preventDefault();
                     admin.emit("soundboard", $(this).attr("rel"));
@@ -319,7 +324,7 @@
     <div class="col-md-4">
 
         <div class="panel panel-default">
-            <div class="panel-heading">Volume control</div>
+            <div class="panel-heading">ProTube control</div>
             <div class="panel-body">
                 <table class="table">
                     <tr>
@@ -331,6 +336,9 @@
                         <td><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" /></td>
                     </tr>
                 </table>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
+                </div>
             </div>
         </div>
 
