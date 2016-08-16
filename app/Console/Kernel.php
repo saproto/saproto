@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
         Commands\GenerateRoles::class,
-        Commands\MigrateData::class,
         Commands\ImportProfilePictures::class,
         Commands\ImportProductPictures::class,
         Commands\TestEmail::class
