@@ -360,7 +360,7 @@ Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@sho
 Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
     Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
-    Route::get('admin', ['as' => 'admin', 'uses' => 'ProtubeController@admin']);
+    Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
 });
 
 /*

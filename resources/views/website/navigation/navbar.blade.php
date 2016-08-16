@@ -61,6 +61,7 @@
                     <li><a href="{{ route("committee::list") }}">Committees</a></li>
                     <li><a href="{{ route("event::list") }}">Calendar</a></li>
                     <li><a href="{{ route("photo::albums") }}">Photos</a></li>
+                    <li><a href="{{ route("protube::remote") }}">Protube</a></li>
                     @if (Auth::check() && Auth::user()->member)
                         <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
                     @endif
@@ -92,6 +93,7 @@
                         <li><a class="navbar-title">Association:</a></li>
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
+                        <li><a href="{{ route("protube::admin") }}">Protube admin</a></li>
                         <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                         <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
