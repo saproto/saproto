@@ -168,7 +168,7 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
  */
 Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
 
-    Route::get('/', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
+    Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
     Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
     Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
     Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
@@ -176,6 +176,23 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
     Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
     Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
     Route::get('clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
+
+});
+
+/*
+ * Routes related to companies.
+ */
+Route::group(['prefix' => 'companies', 'as' => 'companies::'], function () {
+
+    Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@adminIndex']);
+    Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@create']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@destroy']);
+
+    Route::get('', ['as' => 'index', 'uses' => 'CompanyController@index']);
+    Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@show']);
 
 });
 
