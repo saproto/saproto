@@ -128,7 +128,7 @@ class NarrowcastingController extends Controller
 
         if ($request->file('image')) {
             $file = new StorageEntry();
-            $file->createFrom($request->file('image'));
+            $file->createFromFile($request->file('image'));
 
             $narrowcasting->image()->associate($file);
         }
