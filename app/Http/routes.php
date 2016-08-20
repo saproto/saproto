@@ -87,6 +87,8 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
         Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
         Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
+        Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@editForm']);
+        Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
     });
 
     /*
@@ -357,11 +359,11 @@ Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'
 /*
  * Routes related to Flickr photos.
  */
-Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
+Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
     Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
     Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
-    Route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
         Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
     });
 });
@@ -374,7 +376,7 @@ Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@sho
 /*
  * The routes for Protube.
  */
-Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
     Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
     Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
@@ -401,7 +403,7 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
-    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
     });
 
