@@ -16,3 +16,11 @@
     </div>
 
 @endsection
+
+@section('javascript')
+
+    @parent
+
+    @include('users.addresses.js')
+
+@endsection
