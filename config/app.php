@@ -231,7 +231,8 @@ return [
         'Markdown'  => GrahamCampbell\Markdown\Facades\Markdown::class,
 
         'Flickr'    => Proto\Models\Flickr::class,
-        'Committee'    => Proto\Models\Committee::class
+        'Committee'    => Proto\Models\Committee::class,
+        'User'    => Proto\Models\User::class
 
     ],
 

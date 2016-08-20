@@ -112,13 +112,17 @@
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
 
+                        @if(Auth::user()->can('admin'))
+                            <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
+                        @endif
+
                         <li role="separator" class="divider"></li>
 
                         <li><a class="navbar-title">External Affairs:</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                         <li><a href="{{ route("companies::admin") }}">Companies</a></li>
 
-                        @if (Auth::check() && Auth::user()->can("finadmin"))
+                        @if (Auth::user()->can("finadmin"))
                             <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Financial:</a></li>
                             <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>

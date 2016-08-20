@@ -125,7 +125,7 @@
 
                         </div>
 
-                        @if($i % 2 == 1)
+                        @if($i % 2 == 1 || $i == count($developers['current']) - 1)
 
                     </div>
 

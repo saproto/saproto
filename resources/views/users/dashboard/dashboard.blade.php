@@ -8,8 +8,8 @@
 
     <div class="row">
         <div class="col-md-5 col-xs-12">
-            @include('users.dashboard.account')
             @include('users.dashboard.2fa')
+            @include('users.dashboard.account')
         </div>
         <div class="col-md-4 col-xs-12">
             @include('users.dashboard.addressinfo')

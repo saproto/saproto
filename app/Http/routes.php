@@ -358,10 +358,6 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
     });
 
-    Route::group(['prefix' => 'withdrawals', 'middleware' => ['permission:finadmin'], 'as' => 'categories::'], function () {
-
-    });
-
     Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
 
 });
@@ -384,6 +380,15 @@ Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
     Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
         Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
     });
+});
+
+/*
+ * Routes related to Flickr photos.
+ */
+Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:admin'], 'as' => 'authorization::'], function () {
+    Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
+    Route::post('{id}/grant', ['as' => 'grant', 'uses' => 'AuthorizationController@grant']);
+    Route::get('{id}/revoke/{user}', ['as' => 'revoke', 'uses' => 'AuthorizationController@revoke']);
 });
 
 /*
