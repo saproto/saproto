@@ -24,7 +24,10 @@
                     <select name="study" id="study" class="form-control">
                         <option selected disabled>Select your study</option>
                         @foreach($studies as $study)
-                            <option value="{{ $study->id }}">{{ $study->name }} ({{ $study->faculty }})</option>
+                            <option value="{{ $study->id }}">
+                                {{ $study->name }} ({{ $study->type }}), {{ $study->faculty }}
+                                ({{ $study->utwente ? 'UT' : 'Non-UT' }})
+                            </option>
                         @endforeach
                     </select>
                 @else

@@ -17,8 +17,8 @@
 
                         <p style="text-align: center">
 
-                            <strong>{{ $study->name }}</strong><br>
-                            {{ $study->faculty }}
+                            <strong>{{ $study->type }} {{ $study->name }}</strong><br>
+                            <sup>{{ $study->faculty }}, {{ $study->utwente ? 'UTwente' : 'Non-UT' }}</sup>
 
                             <br>
 
