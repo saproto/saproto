@@ -73,22 +73,27 @@ class EventController extends Controller
     public function archive($year)
     {
         if (Auth::check() && Auth::user()->can('board')) {
-            $events = Event::where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+            $events = Event::orderBy('start')->get();
         } else {
-            $events = Event::where('secret', false)->where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+            $events = Event::where('secret', false)->orderBy('start')->get();
         }
+
         $months = [];
+        $years = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
         foreach ($events as $event) {
-            if (!$event->activity || !$event->activity->secret) {
+            if ($event->start > strtotime($year . "-01-01 00:00:01") && $event->end < strtotime($year . "-12-31 23:59:59")) {
                 $months[intval(date('n', $event->start))][] = $event;
+            }
+            if (!in_array(date('Y', $event->start), $years)) {
+                $years[] = date('Y', $event->start);
             }
         }
 
-        return view('event.archive', ['year' => $year, 'months' => $months]);
+        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months]);
     }
 
     /**

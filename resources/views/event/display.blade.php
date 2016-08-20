@@ -23,7 +23,7 @@
                         [ Hidden! ]
                     @endif
 
-                    From {{ date('l j F, H:i', $event->start) }} till
+                    From {{ date('l j F Y, H:i', $event->start) }} till
 
                     @if (($event->end - $event->start) < 3600 * 24)
                         {{ date('H:i', $event->end) }}
