@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ (Auth::check() ? '7' : '6 col-md-offset-3') }}">
+        <div class="col-md-{{ (Auth::check() && Auth::user()->member ? '7' : '6 col-md-offset-3') }}">
 
             @if($committee->image)
                 <img src="{{ $committee->image->generateImagePath(800,300) }}"
@@ -44,7 +44,7 @@
 
         </div>
 
-        @if(Auth::check())
+        @if(Auth::check() && Auth::user()->member)
 
             <div class="col-md-5">
 
