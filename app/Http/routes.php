@@ -378,6 +378,7 @@ Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
     Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
     Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
+    Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
 });
 
 /*
