@@ -89,8 +89,8 @@
         }
 
         .COMMON {
-            color: #DDDDDD;
-        }
+             color: #DDDDDD;
+         }
 
         .UNCOMMON {
             color: #1E90FF;
