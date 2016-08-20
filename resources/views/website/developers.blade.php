@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ (Auth::check() ? '7' : '6 col-md-offset-3') }}">
+        <div class="col-md-7">
 
             <div class="panel panel-default container-panel">
 
@@ -113,7 +113,7 @@
                         <div class="col-md-6">
 
                             <div class="developer__list__entry"
-                                 style="background-image: url('{!! ($dev->user->photo ? $dev->user->photo->generateImagePath(100, 100) : '') !!}');">
+                                 style="background-image: url('{!! ($dev->user->photo ? $dev->user->photo->generateImagePath(250, 250) : '') !!}');">
 
                                 <span>
                                     <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">
