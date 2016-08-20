@@ -98,6 +98,12 @@ class GenerateRoles extends Command
             $roles['omnomcom']->save();
             $this->info('Added omnomcom role.');
         }
+        $roles['finadmin'] = Role::where('name', '=', 'finadmin')->first();
+        if ($roles['finadmin'] == null) {
+            $roles['finadmin'] = new Role(array('name' => 'finadmin', 'display_name' => 'Financial Administrator', 'description' => 'Those responsible for the financial administration.'));
+            $roles['finadmin']->save();
+            $this->info('Added finadmin role.');
+        }
         $roles['pilscie'] = Role::where('name', '=', 'pilscie')->first();
         if ($roles['pilscie'] == null) {
             $roles['pilscie'] = new Role(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'Members of the PilsCie.'));
@@ -111,6 +117,8 @@ class GenerateRoles extends Command
         $this->info('Synced admin role with permissions.');
         $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id));
         $this->info('Synced board role with permissions.');
+        $roles['finadmin']->perms()->sync(array($permissions['finadmin']->id));
+        $this->info('Synced finadmin role with permissions.');
         $roles['omnomcom']->perms()->sync(array($permissions['omnomcom']->id));
         $this->info('Synced omnomcom role with permissions.');
         $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id));

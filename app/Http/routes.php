@@ -333,6 +333,7 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AccountController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AccountController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'AccountController@show']);
+        Route::post('aggregate/{account}', ['as' => 'aggregate', 'uses' => 'AccountController@showAggregation']);
     });
 
     Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
@@ -355,6 +356,10 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductCategoryController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductCategoryController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
+    });
+
+    Route::group(['prefix' => 'withdrawals', 'middleware' => ['permission:finadmin'], 'as' => 'categories::'], function () {
+
     });
 
     Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
