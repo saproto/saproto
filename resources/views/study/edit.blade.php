@@ -59,16 +59,10 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>Members only</td>
+                    <td>Members</td>
                     <td>{{ count($study->current()) }}</td>
                     <td>{{ count($study->past()) }}</td>
                     <td>{{ count($study->future()) }}</td>
-                </tr>
-                <tr>
-                    <td>All users</td>
-                    <td>{{ count($study->current(false)) }}</td>
-                    <td>{{ count($study->past(false)) }}</td>
-                    <td>{{ count($study->future(false)) }}</td>
                 </tr>
                 </tbody>
             </table>

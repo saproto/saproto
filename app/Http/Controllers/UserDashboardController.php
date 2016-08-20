@@ -48,7 +48,15 @@ class UserDashboardController extends Controller
             $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $request->session()->get('2fa_secret'));
         }
 
-        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode]);
+        $utwente = null;
+        if ($user->utwente_username) {
+            $data = json_decode(file_get_contents(getenv("LDAP_URL") . "?query=uid=" . md5($user->utwente_username)));
+            if ($data->count > 0) {
+                $utwente = $data->entries[0];
+            }
+        }
+
+        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'utwente' => $utwente]);
     }
 
     public function update($id = null, Request $request)

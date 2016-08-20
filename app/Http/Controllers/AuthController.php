@@ -54,38 +54,8 @@ class AuthController extends Controller
 
             if ($user) {
 
-                // Do weird escape character stuff, because DotEnv doesn't support newlines :(
-                $publicKey = str_replace('_!n_', "\n", env('UTWENTEAUTH_KEY'));
-
-                $token = md5(rand()); // Generate random token
-
-                // Store userdata in array to create JSON later on
-                $userData = array(
-                    'user' => $user->utwente_username,
-                    'password' => $password,
-                    'token' => $token
-                );
-
-                // Encrypt userData in JSON with public key
-                openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
-
-                // Start CURL to secureAuth on WESP
-                $ch = curl_init(env('UTWENTEAUTH_SRV'));
-
-                // Tell CURL to post encrypted userData in base64
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "challenge=" . urlencode(base64_encode($userDataEncrypted)));
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                // Execute CURL, store response
-                $response = curl_exec($ch);
-                curl_close($ch);
-
-                // If response matches token, user is verified.
-                if ($response == $token) {
-
+                if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
                     return $user;
-
                 }
 
             }
@@ -93,6 +63,46 @@ class AuthController extends Controller
         }
 
         return null;
+
+    }
+
+
+    public static function verifyUtwenteCredentials($username, $password)
+    {
+
+        // Do weird escape character stuff, because DotEnv doesn't support newlines :(
+        $publicKey = str_replace('_!n_', "\n", env('UTWENTEAUTH_KEY'));
+
+        $token = md5(rand()); // Generate random token
+
+        // Store userdata in array to create JSON later on
+        $userData = array(
+            'user' => $username,
+            'password' => $password,
+            'token' => $token
+        );
+
+        // Encrypt userData in JSON with public key
+        openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
+
+        // Start CURL to secureAuth on WESP
+        $ch = curl_init(env('UTWENTEAUTH_SRV'));
+
+        // Tell CURL to post encrypted userData in base64
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "challenge=" . urlencode(base64_encode($userDataEncrypted)));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute CURL, store response
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // If response matches token, user is verified.
+        if ($response == $token) {
+            return true;
+        }
+
+        return false;
 
     }
 

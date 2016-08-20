@@ -93,12 +93,22 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     });
 
     /*
-     * Routes related to bank accounts
+     * Routes related to RFID cards
      */
     Route::group(['prefix' => 'rfidcard/{id}', 'as' => 'rfid::'], function () {
         Route::get('delete', ['as' => 'delete', 'uses' => 'RfidCardController@destroy']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'RfidCardController@edit']);
         Route::post('edit', ['as' => 'edit', 'uses' => 'RfidCardController@update']);
+    });
+
+
+    /*
+     * Routes related to UT accounts
+     */
+    Route::group(['prefix' => '{id}/utwente', 'as' => 'utwente::'], function () {
+        Route::get('delete', ['as' => 'delete', 'uses' => 'UtwenteController@destroy']);
+        Route::get('add', ['as' => 'add', 'uses' => 'UtwenteController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'UtwenteController@store']);
     });
 
     /*
