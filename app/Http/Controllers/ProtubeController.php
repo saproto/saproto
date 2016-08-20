@@ -19,6 +19,11 @@ class ProtubeController extends Controller
         return view('protube.screen');
     }
 
+    public function offline()
+    {
+        return view('protube.offline');
+    }
+
     public function remote()
     {
         return view('protube.remote');
