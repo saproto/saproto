@@ -62,9 +62,7 @@
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.<br>
                 <sub>
                     This website has been created with ♥ by the folks of the <a
-                            href="https://www.saproto.nl/developers" class="green" target="_blank">Have You Tried
-                        Turning It Off And
-                        On Again committee</a> of Study Association Proto. The source is available on <a
+                            href="{{ route('developers') }}" class="green">{{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}</a> of Study Association Proto. The source is available on <a
                             href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
                 </sub>
             </div>
