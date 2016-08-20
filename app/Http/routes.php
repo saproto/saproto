@@ -347,6 +347,8 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
     });
 
+    Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
+
 });
 
 /**

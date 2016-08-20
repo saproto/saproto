@@ -88,6 +88,7 @@
                             <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
                             <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
                             <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
+                            <li><a href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a></li>
                         @endif
                     </ul>
                 </li>
