@@ -29,6 +29,7 @@
         <div class="form-group">
             <label for="email" class="control-label">Your e-mail address:</label>
             <input type="text" class="form-control" id="email" name="email" placeholder="j.doe@student.utwente.nl"
+                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['email'] : '') }}"
                    required>
             <p class="help-block">
                 Your e-mail address will also be your username. Please enter a valid e-mail address as your password
@@ -44,15 +45,19 @@
                 <div class="col-md-5">
                     <label for="name_first" class="control-label">First name</label>
                     <input type="text" class="form-control" id="name_first" name="name_first" placeholder="John"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_first'] : '') }}"
                            required>
                 </div>
                 <div class="col-md-5">
                     <label for="name_last" class="control-label">Last name</label>
-                    <input type="text" class="form-control" id="name_last" name="name_last" placeholder="Doe" required>
+                    <input type="text" class="form-control" id="name_last" name="name_last" placeholder="Doe"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_last'] : '') }}"
+                           required>
                 </div>
                 <div class="col-md-2">
                     <label for="name_initials" class="control-label">Initials</label>
                     <input type="text" class="form-control" id="name_initials" name="name_initials" placeholder="J."
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_initials'] : '') }}"
                            required>
                 </div>
             </div>
@@ -63,10 +68,12 @@
                 <div class="col-md-5">
                     <label for="birthdate" class="control-label">Birthdate</label>
                     <input type="text" class="form-control datetime-picker" id="birthdate" name="birthdate"
-                           placeholder="2011-04-20" required>
+                           placeholder="2011-04-20"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['birthdate'] : '') }}"
+                           required>
                 </div>
                 <div class="col-md-5">
-                    <label for="gender" class="control-label">Biological gender</label>
+                    <label for="gender" class="control-label">Gender</label>
                     <select id="gender" name="gender" class="form-control" required>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
@@ -81,11 +88,14 @@
                 <div class="col-md-5">
                     <label for="nationality" class="control-label">Nationality</label>
                     <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Dutch"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['nationality'] : '') }}"
                            required>
                 </div>
                 <div class="col-md-5">
                     <label for="phone" class="control-label">Phone</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="+31534894423" required>
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="+31534894423"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['phone'] : '') }}"
+                           required>
                 </div>
             </div>
         </div>

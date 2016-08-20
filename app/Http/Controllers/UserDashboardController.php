@@ -45,7 +45,7 @@ class UserDashboardController extends Controller
         if (!$user->tfa_totp_key) {
             $google2fa = new Google2FA();
             $request->session()->flash('2fa_secret', ($request->session()->has('2fa_secret') ? $request->session()->get('2fa_secret') : $google2fa->generateSecretKey(32)));
-            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A. Proto', $user->name, $request->session()->get('2fa_secret'));
+            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $request->session()->get('2fa_secret'));
         }
 
         return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode]);

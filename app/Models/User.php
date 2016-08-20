@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+use DateTime;
+use Carbon\Carbon;
+
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -81,6 +84,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('Proto\Models\Member');
     }
 
+    public function orderlines()
+    {
+        return $this->hasMany('Proto\Models\OrderLine');
+    }
+
     /**
      * @return mixed The associated bank authorization, if any.
      */
@@ -103,6 +111,14 @@ class User extends Model implements AuthenticatableContract,
     public function address()
     {
         return $this->hasMany('Proto\Models\Address');
+    }
+
+    /**
+     * @return mixed The associated primary addresses, if any.
+     */
+    public function primary_address()
+    {
+        return $this->address()->where('is_primary', true)->get()->first();
     }
 
     /**
@@ -145,6 +161,31 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /** @param User $user
+     * @return mixed Any cards linked to this account
+     */
+    public function rfid()
+    {
+        return $this->hasMany('Proto\Models\RfidCard');
+    }
+
+    /**
+     * @return mixed Any tokens the user has
+     */
+    public function tokens()
+    {
+        return $this->hasMany('Proto\Models\Token');
+    }
+
+    /**
+     * @return mixed The age in years of a user.
+     */
+    public function age()
+    {
+        return Carbon::instance(new DateTime($this->birthdate))->age;
+    }
+
+    /**
+     * @param User $user
      * @return bool Whether the user is currently in the specified committee.
      */
     public function isInCommittee(Committee $committee)

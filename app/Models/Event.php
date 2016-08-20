@@ -9,6 +9,7 @@ class Event extends Model
 {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at'];
 
     /**
      * The database table used by the model.
@@ -20,17 +21,19 @@ class Event extends Model
     /**
      * @return mixed The activity associated with this event, if any.
      */
-    public function activity() {
+    public function activity()
+    {
         return $this->hasOne('Proto\Models\Activity');
     }
 
     /**
      * @return mixed The image associated with this event, if any.
      */
-    public function image() {
+    public function image()
+    {
         return $this->belongsTo('Proto\Models\StorageEntry');
     }
 
     protected $guarded = ['id'];
-    
+
 }

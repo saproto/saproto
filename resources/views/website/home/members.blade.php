@@ -1,43 +1,32 @@
-@extends('website.layouts.content')
+@extends('website.home.shared')
 
-@section('header')
+@section('greeting')
 
-    <div id="header">
-
-        <div class="container">
-
-            <h1>
-                <strong>Hi, {{ Auth::user()->name_first }}</strong>
-            </h1>
-            <h3>
-                Nice to see you back!
-            </h3>
-
-        </div>
-
-    </div>
+    <h1>
+        <strong>Hi, {{ Auth::user()->name_first }}</strong>
+    </h1>
+    <h3>
+        Nice to see you back!
+    </h3>
 
 @endsection
 
-@section('container')
+@section('visitor-specific')
 
-    <div id="container" class="container home-container">
+    <div class="col-md-8">
 
-        @if (Session::has('flash_message'))
-            <div class="alert alert-info alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ Session::get('flash_message') }}
+        <div class="panel panel-default">
+
+            <div class="panel-body" style="padding: 30px;">
+
+                <p>
+                    Welcome to the new Proto website. You should find most of what you had on the old website around
+                    here somewhere, and the final missing features are coming soon. Should you miss something, do let us
+                    know!
+                </p>
+
             </div>
-        @endif
-
-        @foreach($errors->all() as $e)
-            <div class="alert alert-danger alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ $e }}
-            </div>
-        @endforeach
-
-        This is the landing page for members!
+        </div>
 
     </div>
 

@@ -8,13 +8,18 @@
 
     <div class="row">
 
-        <div class="col-md-{{ (Auth::check() ? '7' : '6 col-md-offset-6') }}">
+        <div class="col-md-{{ (Auth::check() ? '7' : '6 col-md-offset-3') }}">
+
+            @if($committee->image)
+                <img src="{{ $committee->image->generateImagePath(800,300) }}"
+                     style="width: 100%; margin-bottom: 30px; box-shadow: 0 0 20px -7px #000;">
+            @endif
 
             <div class="panel panel-default container-panel">
 
                 <div class="panel-body">
 
-                    {!! $committee->description !!}
+                    {!! Markdown::convertToHtml($committee->description) !!}
 
                     <hr>
 
@@ -71,12 +76,6 @@
         .committee-seperator {
             margin: 10px 0;
         }
-
-        @if($committee->image)
-        #header {
-            background-image: url('{!! $committee->image->generateImagePath(2000,500) !!}');
-        }
-        @endif
 
     </style>
 

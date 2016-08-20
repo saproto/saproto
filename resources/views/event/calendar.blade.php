@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="row">
+    <div class="row calendar">
 
         @foreach($events as $key => $section)
 
@@ -103,45 +103,5 @@
         </div>
 
     </div>
-
-@endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style>
-
-        a.activity, a.activity:hover, a.activity:active {
-            color: #000;
-            text-decoration: none;
-        }
-
-        div.activity {
-            padding: 10px 20px;
-            transition: all 0.2s;
-        }
-
-        div.activity.odd {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-
-        div.activity:hover {
-            transform: scale(1.05);
-            color: #fff;
-            background-color: #333;
-        }
-
-        div.activity p {
-            margin: 0;
-            margin: 5px 0;
-        }
-
-        div.activity .fa {
-            width: 15px;
-            text-align: center;
-        }
-
-    </style>
 
 @endsection

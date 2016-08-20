@@ -29,16 +29,36 @@
     </div>
 
     <div class="panel-footer">
+
+        @if($user->bank)
+
+            <div class="btn-group btn-group-justified" role="group">
+
+                <a type="submit" class="btn btn-success"
+                   href="{{ route("user::bank::edit", ["id"=>$user->id]) }}">
+                    Update your bank authorization.
+                </a>
+
+            </div>
+
+        @endif
+
         <div class="btn-group btn-group-justified" role="group">
 
-            @if($user->bank != null)
+            @if($user->bank)
 
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-danger" data-toggle="modal"
-                            data-target="#bank-modal-cancel">
-                        Cancel authorization
-                    </button>
-                </div>
+                @if(!$user->member)
+
+                    <hr>
+
+                    <div class="btn-group" role="group">
+                        <button type="submit" class="btn btn-danger" data-toggle="modal"
+                                data-target="#bank-modal-cancel">
+                            Cancel authorization
+                        </button>
+                    </div>
+
+                @endif
 
             @else
 

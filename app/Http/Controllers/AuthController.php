@@ -29,6 +29,73 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * This static function takes a supplied username and password, and returns the associated user if the combination is valid. Accepts either e-mail / password or UTwente credentials.
+     *
+     * @param $username The e-mail address or UTwente username.
+     * @param $password The password or UTwente password.
+     * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
+     */
+    public static function verifyCredentials($username, $password)
+    {
+
+        // First, we try matching our own records.
+        $user = User::where('email', $username)->first();
+
+        // See if we can authenticate the user ourselves.
+        if ($user && Hash::check($password, $user->password)) {
+
+            return $user;
+
+        } else {
+
+            // We cannot authenticate to our own records. Try RADIUS.
+            $user = User::where('utwente_username', $username)->first();
+
+            if ($user) {
+
+                // Do weird escape character stuff, because DotEnv doesn't support newlines :(
+                $publicKey = str_replace('_!n_', "\n", env('UTWENTEAUTH_KEY'));
+
+                $token = md5(rand()); // Generate random token
+
+                // Store userdata in array to create JSON later on
+                $userData = array(
+                    'user' => $user->utwente_username,
+                    'password' => $password,
+                    'token' => $token
+                );
+
+                // Encrypt userData in JSON with public key
+                openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
+
+                // Start CURL to secureAuth on WESP
+                $ch = curl_init(env('UTWENTEAUTH_SRV'));
+
+                // Tell CURL to post encrypted userData in base64
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "challenge=" . urlencode(base64_encode($userDataEncrypted)));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+                // Execute CURL, store response
+                $response = curl_exec($ch);
+                curl_close($ch);
+
+                // If response matches token, user is verified.
+                if ($response == $token) {
+
+                    return $user;
+
+                }
+
+            }
+
+        }
+
+        return null;
+
+    }
+
     public function postLogin(Request $request, Google2FA $google2fa)
     {
 
@@ -90,11 +157,9 @@ class AuthController extends Controller
                 $password = $request->input('password');
                 $remember = $request->input('remember');
 
-                // First, we try matching our own records.
-                $user = User::where('email', $username)->first();
+                $user = AuthController::verifyCredentials($username, $password);
 
-                // See if we can authenticate the user ourselves.
-                if ($user && Hash::check($password, $user->password)) {
+                if ($user) {
 
                     // Catch users that have 2FA enabled.
                     if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
@@ -104,57 +169,6 @@ class AuthController extends Controller
                     } else {
                         Auth::login($user, $remember);
                         return Redirect::intended(route('homepage'));
-                    }
-
-                } else {
-
-                    // We cannot authenticate to our own records. Try RADIUS.
-                    $user = User::where('utwente_username', $username)->first();
-
-                    if ($user) {
-
-                        // Do weird escape character stuff, because DotEnv doesn't support newlines :(
-                        $publicKey = str_replace('_!n_', "\n", env('UTWENTEAUTH_KEY'));
-
-                        $token = md5(rand()); // Generate random token
-
-                        // Store userdata in array to create JSON later on
-                        $userData = array(
-                            'user' => $user->utwente_username,
-                            'password' => $password,
-                            'token' => $token
-                        );
-
-                        // Encrypt userData in JSON with public key
-                        openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
-
-                        // Start CURL to secureAuth on WESP
-                        $ch = curl_init(env('UTWENTEAUTH_SRV'));
-
-                        // Tell CURL to post encrypted userData in base64
-                        curl_setopt($ch, CURLOPT_POST, 1);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, "challenge=" . urlencode(base64_encode($userDataEncrypted)));
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-                        // Execute CURL, store response
-                        $response = curl_exec($ch);
-                        curl_close($ch);
-
-                        // If response matches token, user is verified.
-                        if ($response == $token) {
-
-                            // Catch users that have 2FA enabled.
-                            if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
-                                $request->session()->flash('2fa_user', $user);
-                                $request->session()->flash('2fa_remember', $remember);
-                                return view('auth.2fa');
-                            } else {
-                                Auth::login($user, $remember);
-                                return Redirect::intended(route('homepage'));
-                            }
-
-                        }
-
                     }
 
                 }
@@ -190,6 +204,8 @@ class AuthController extends Controller
             return Redirect::route('user::dashboard');
         }
 
+        $request->session()->flash('register_persist', $request->all());
+
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'name_first' => 'required|string',
@@ -208,7 +224,7 @@ class AuthController extends Controller
         $user->password = Hash::make($password);
 
         $user->save();
-        
+
         Mail::send('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($user) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
             $m->to($user->email, $user->name);

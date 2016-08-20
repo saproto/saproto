@@ -11,9 +11,11 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\Member;
 use Proto\Models\User;
 
+use PDF;
 use Auth;
 use Entrust;
 use Session;
+use Redirect;
 
 class MemberAdminController extends Controller
 {
@@ -95,6 +97,11 @@ class MemberAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
+        if (!($user->primary_address() && $user->bank)) {
+            Session::flash("flash_message", "This user really needs a bank account and address. Don't bypass the system!");
+            return Redirect::back();
+        }
+
         $member = Member::create();
         $member->is_associate = !$request->input('is_primary');
         $member->user()->associate($user);
@@ -122,6 +129,46 @@ class MemberAdminController extends Controller
         Session::flash("flash_message", "Membership of " . $user->name . " has been termindated.");
 
         return redirect()->route('user::member::list');
+    }
+
+    public function showForm(Request $request, $id)
+    {
+
+        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != env('PRINTER_HOST')) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+
+        $form = PDF::loadView('users.members.membershipform', ['user' => $user]);
+
+        $form = $form->setPaper('a4');
+
+        if ($request->ip() != env('PRINTER_HOST')) {
+            return $form->stream();
+        } else {
+            return $form->download();
+        }
+
+    }
+
+    public function printForm(Request $request)
+    {
+
+        $user = User::find($request->input('id'));
+
+        if (!$user) {
+            return "This user could not be found!";
+        }
+
+        $result = FileController::requestPrint('document', route('memberform::download', ['id' => $user->id]));
+
+        if ($result === false) {
+            return "Something went wrong trying to reach the printer service.";
+        }
+
+        return "The printer service responded: " . $result;
+
     }
 
 }

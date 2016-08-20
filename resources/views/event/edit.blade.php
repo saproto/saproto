@@ -116,7 +116,7 @@
 
                         </div>
 
-                        @if($event->image)
+                        @if($event && $event->image)
 
                             <hr>
 
