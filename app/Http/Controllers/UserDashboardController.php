@@ -15,6 +15,7 @@ use Proto\Models\User;
 
 use Auth;
 use Session;
+use Validator;
 
 class UserDashboardController extends Controller
 {
@@ -94,14 +95,19 @@ class UserDashboardController extends Controller
             }
         }
 
-        $userdata['phone'] = $request->input('phone');
+        $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
         $userdata['receive_newsletter'] = $request->has('receive_newsletter');
         $userdata['receive_sms'] = $request->has('receive_sms');
 
-        if (!$user->validate($userdata)) {
-            return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($user->errors());
+        $validator = Validator::make($userdata, [
+            'email' => 'required|email',
+            'phone' => 'required|regex:(\+[0-9]{8,16})'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
         }
 
         $user->fill($userdata);
