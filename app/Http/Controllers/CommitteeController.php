@@ -172,10 +172,7 @@ class CommitteeController extends Controller
     public function editMembershipForm($id)
     {
 
-        $membership = CommitteeMembership::find($id);
-        if (!$membership) {
-            abort(404);
-        }
+        $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         return view("committee.membership-edit", ["membership" => $membership]);
 
@@ -184,10 +181,7 @@ class CommitteeController extends Controller
     public function editMembership($id, Request $request)
     {
 
-        $membership = CommitteeMembership::find($id);
-        if (!$membership) {
-            abort(404);
-        }
+        $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         $membership->role = $request->role;
         $membership->edition = $request->edition;
@@ -209,7 +203,7 @@ class CommitteeController extends Controller
     public function deleteMembership($id)
     {
 
-        $membership = CommitteeMembership::findOrFail($id);
+        $membership = CommitteeMembership::withTrashed()->findOrFail($id);
 
         if ($membership->committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
 
