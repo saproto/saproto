@@ -50,7 +50,8 @@
     "h4cc/wkhtmltoimage-amd64": "0.12.x",
     "barryvdh/laravel-snappy": "^0.3.0",
     "milon/barcode": "^5.2",
-    "graham-campbell/markdown": "^6.1"
+    "graham-campbell/markdown": "^6.1",
+    "directadmin/directadmin": "dev-master"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
