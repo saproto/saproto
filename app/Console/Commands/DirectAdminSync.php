@@ -9,6 +9,8 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
 
+use App;
+
 /**
  * TODO
  * Autorelate permissions to roles.
@@ -222,15 +224,24 @@ class DirectAdminSync extends Command
             ]);
         }
 
+        if (!App::environment('production')) {
+            $this->error('Application is not in production mode. Not running sync.');
+        }
+
         foreach ($queries as $i => $query) {
 
-            $da->set_method('get');
-            $da->query($query);
-
-            $response = $this->decodeResponse($da->fetch_body());
             $this->info('Query ' . $i . '/' . count($queries) . ': ' . $query);
-            if ($response['error'] == 1) {
-                $this->info('Error: ' . $response['text'] . PHP_EOL);
+
+            if (App::environment('production')) {
+
+                $da->set_method('get');
+                $da->query($query);
+
+                $response = $this->decodeResponse($da->fetch_body());
+                if ($response['error'] == 1) {
+                    $this->info('Error: ' . $response['text'] . PHP_EOL);
+                }
+
             }
 
         }
