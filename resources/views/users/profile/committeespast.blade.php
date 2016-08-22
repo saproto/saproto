@@ -21,4 +21,6 @@
         @endforeach
     </ul>
 
+    <hr class="line">
+
 @endif

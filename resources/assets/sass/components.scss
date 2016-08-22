@@ -240,6 +240,19 @@
 .chocolat-wrapper {
   z-index: 10000;
 }
+.profile__photo {
+    border-radius: 50%;
+    width: 128px;
+    height: 128px;
+    display: inline-block;
+    text-align: center;
+}
+
+.profile__photo-wrapper {
+    text-align: center;
+    display: block;
+}
+
 /*!
  * Datetimepicker for Bootstrap 3
  * version : 4.17.37
@@ -2450,4 +2463,496 @@
   margin: 0;
   overflow: visible;
   clip: auto;
+}
+
+/*-----[Keyboard structure]---------------------------------------------------*/
+
+#osk-container {
+	visibility: hidden;
+	position: fixed;
+	overflow: hidden;
+	padding: 1%;
+	margin: 0;
+	z-index: 100;
+}
+
+	#osk-container > li {
+		float: left;
+		width: 5.81395349%;
+		height: 3em;
+		margin: 0 0.726744186% 5px 0;
+		line-height: 3em;
+		text-align: center;
+		list-style-type: none;
+		cursor: pointer;
+		-webkit-user-select: none;
+		 -khtml-user-select: none;
+		   -moz-user-select: -moz-none;
+			-ms-user-select: none;
+				user-select: none;
+	}
+
+	#osk-container > .osk-capslock,
+	#osk-container > .osk-tab,
+	#osk-container > .osk-shift {
+		clear: left;
+	}
+
+	#osk-container > .osk-dragger {
+		display: none;
+		width: 100%;
+		cursor: move;
+	}
+
+		#osk-container > .osk-dragger:hover {
+			position: static;
+		}
+
+	#osk-container > .osk-tab,
+	#osk-container > .osk-backspace {
+		width: 14.9709302%;
+	}
+
+	#osk-container > .osk-capslock {
+		width: 13.6337209%;
+	}
+
+	#osk-container > .osk-return {
+		width: 13.6918605%;
+	}
+
+	#osk-container > .osk-shift {
+		width: 16.2381395%;
+	}
+
+	#osk-container > .osk-hide {
+		width: 17.5581396%;
+	}
+
+	#osk-container > .osk-space {
+		clear: left;
+		width: 100%;
+		margin: 0;
+	}
+
+	#osk-container > .osk-last-item {
+		margin-right: 0 !important;
+	}
+
+	#osk-container .osk-on {
+		display: none;
+	}
+
+	#osk-container > .osk-uppercase {
+		text-transform: uppercase;
+	}
+
+	#osk-container > .osk-disabled {
+		cursor: default;
+	}
+
+	#osk-container > .osk-disabled:hover {
+		position: static;
+	}
+
+	#osk-container > li:hover {
+		position: relative;
+		top: 1px;
+	}
+
+/*-----[Customisable styles]--------------------------------------------------*/
+
+#osk-container {
+	width: 47%;     /* Account for 2% padding and a vertical scroll bar */
+	min-width: 500px;
+	max-width: 1200px;
+	background: #EEE;
+	border-radius: 5%;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#osk-container > li {
+	background: #DDD;
+	border-radius: 10%;
+	-moz-transition: 0.5s;
+}
+
+#osk-container > .osk-dragger {
+	background: transparent;
+	color: #AAA;
+}
+
+#osk-container > .osk-disabled {
+	background: #E5E5E5;
+	color: #CCC;
+}
+
+.osk-focused {
+	background: #FAFAFA !important;
+}
+
+.chocolat-zoomable.chocolat-zoomed .chocolat-img{
+    cursor : zoom-out;
+}
+.chocolat-open{
+    overflow: hidden;
+}
+.chocolat-overlay{
+    height:100%;
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+    background-color:#fff;
+    display:none;
+    opacity: 0.8;
+}
+.chocolat-wrapper{
+    height:100%;
+    width:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:16;
+    color: #fff;
+}
+.chocolat-zoomable .chocolat-img{
+    cursor : zoom-in;
+}
+.chocolat-loader{
+    height:32px;
+    width:32px;
+    position:absolute;
+    left:50%;
+    top:50% ;
+    margin-left:-16px;
+    margin-top:-16px;
+    z-index:11;
+    background:url(../images/loader.gif);
+    display:none;
+}
+.chocolat-content{
+    position:fixed;
+    width:0px;
+    height:0px;
+    left:50%;
+    top:50%;
+    z-index:14;
+    text-align: left;
+}
+
+.chocolat-content .chocolat-img{
+    position:absolute;
+    width:100%;
+    height:100%;
+}
+.chocolat-wrapper .chocolat-left{
+    position:absolute;
+    left:0;
+    width:50px;
+    height:100px;
+    top: 50%;
+    margin-top: -50px;
+    cursor:pointer;
+    background:url(../images/left.png) 50% 50% no-repeat;
+    z-index: 17;
+    display: none;
+
+}
+.chocolat-wrapper .chocolat-right{
+    position:absolute;
+    right:0;
+    width:50px;
+    height:100px;
+    top: 50%;
+    margin-top: -50px;
+    cursor:pointer;
+    background:url(../images/right.png)  50% 50% no-repeat;
+    z-index: 17;
+    display: none;
+}
+.chocolat-wrapper .chocolat-right.active{
+    display: block;
+}
+.chocolat-wrapper .chocolat-left.active{
+    display: block;
+}
+.chocolat-wrapper .chocolat-top{
+    position:absolute;
+    top:0px;
+    right: 0;
+    left: 0;
+    line-height:50px;
+    height:50px;
+    overflow: hidden;
+    z-index: 17;
+    margin-bottom: 10px;
+}
+.chocolat-wrapper .chocolat-close{
+    width:50px;
+    height:50px;
+    cursor:pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background:url(../images/close.png) 50% 50% no-repeat;
+}
+.chocolat-wrapper .chocolat-bottom{
+    position:absolute;
+    bottom:0;
+    left: 0;
+    right: 0;
+    line-height:40px;
+    height:40px;
+    font-size:12px;
+    z-index: 17;
+    padding-left: 15px;
+    padding-right: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    text-align: right;
+    margin-top: 10px;
+}
+.chocolat-wrapper .chocolat-set-title{
+    display: inline-block;
+    padding-right: 15px;
+    line-height: 1;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.chocolat-wrapper .chocolat-pagination{
+    float: right;
+    display: inline-block;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-right: 15px;
+    /*border-right: 1px solid rgba(255, 255, 255, 0.2);*/
+}
+.chocolat-wrapper .chocolat-fullscreen{
+    width: 16px;
+    height: 40px;
+    background: url(../images/fullscreen.png) 50% 50% no-repeat;
+    display: block;
+    margin:auto;
+    cursor: pointer;
+    float: right;
+}
+.chocolat-wrapper .chocolat-description{
+    display: inline-block;
+    float: left;
+}
+
+/* no container mode*/
+body.chocolat-open>.chocolat-overlay{
+    z-index:15;
+}
+body.chocolat-open>.chocolat-loader{
+    z-index:15;
+}
+body.chocolat-open>.chocolat-content{
+    z-index:17;
+}
+
+/* container mode*/
+.chocolat-in-container .chocolat-wrapper,
+.chocolat-in-container .chocolat-content,
+.chocolat-in-container .chocolat-overlay{
+    position: absolute;
+}
+.chocolat-in-container{
+    position: relative;
+}
+
+/* uncomment to hide controls when zoomed-in*/
+/*
+.chocolat-zoomable .chocolat-top,
+.chocolat-zoomable .chocolat-bottom,
+.chocolat-zoomable .chocolat-right,
+.chocolat-zoomable .chocolat-left {
+    transition: opacity .3s ease, visibility 0s .3s;
+   opacity: 1;
+}
+
+.chocolat-zoomable.chocolat-zoomed .chocolat-top,
+.chocolat-zoomable.chocolat-zoomed .chocolat-bottom,
+.chocolat-zoomable.chocolat-zoomed .chocolat-right,
+.chocolat-zoomable.chocolat-zoomed .chocolat-left {
+    visibility: hidden;
+    opacity: 0;
+}
+*/
+
+.croppie-container {
+	padding: 30px;
+}
+.croppie-container .cr-image {
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform-origin: 0 0;
+    max-width: none;
+}
+
+.croppie-container .cr-boundary {
+	position: relative;
+	overflow: hidden;
+	margin: 0 auto;
+	z-index: 1;
+}
+
+.croppie-container .cr-viewport {
+	position: absolute;
+	border: 2px solid #fff;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+    box-shadow: 0 0 2000px 2000px rgba(0, 0, 0, 0.5);
+	z-index: 0;
+}
+.croppie-container .cr-vp-circle {
+	border-radius: 50%;
+}
+.croppie-container .cr-overlay {
+	z-index: 1;
+	position: absolute;
+	cursor: move;
+}
+.croppie-container .cr-slider-wrap {
+	width: 75%;
+	margin: 0 auto;
+	margin-top: 25px;
+	text-align: center;
+}
+.croppie-result {
+	position: relative; 
+	overflow: hidden;
+}
+.croppie-result img {
+	position: absolute;
+}
+.croppie-container .cr-image,
+.croppie-container .cr-overlay, 
+.croppie-container .cr-viewport {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/*************************************/
+/***** STYLING RANGE INPUT ***********/
+/*************************************/
+/*http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
+/*************************************/
+
+.cr-slider {
+    -webkit-appearance: none;/*removes default webkit styles*/
+    /*border: 1px solid white; *//*fix for FF unable to apply focus style bug */
+    width: 300px;/*required for proper track sizing in FF*/
+    max-width: 100%;
+}
+.cr-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 0;
+    border-radius: 3px;
+}
+.cr-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ddd;
+    margin-top: -6px;
+}
+.cr-slider:focus {
+    outline: none;
+}
+/*
+.cr-slider:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+*/
+
+.cr-slider::-moz-range-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 0;
+    border-radius: 3px;
+}
+.cr-slider::-moz-range-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ddd;
+    margin-top: -6px;
+}
+
+/*hide the outline behind the border*/
+.cr-slider:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+.cr-slider::-ms-track {
+    width: 300px;
+    height: 5px;
+    background: transparent;/*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+    border-color: transparent;/*leave room for the larger thumb to overflow with a transparent border */
+    border-width: 6px 0;
+    color: transparent;/*remove default tick marks*/
+}
+.cr-slider::-ms-fill-lower {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+.cr-slider::-ms-fill-upper {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+.cr-slider::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #ddd;
+}
+.cr-slider:focus::-ms-fill-lower {
+    background: rgba(0, 0, 0, 0.5);
+}
+.cr-slider:focus::-ms-fill-upper {
+    background: rgba(0, 0, 0, 0.5);
+}
+/*******************************************/
+
+/***********************************/
+/* Rotation Tools */
+/***********************************/
+.cr-rotate-controls {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    z-index: 1;
+}
+.cr-rotate-controls button {
+    border: 0;
+    background: none;
+}
+.cr-rotate-controls i:before {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 22px;
+}
+.cr-rotate-l i:before {
+    content: '↺';
+}
+.cr-rotate-r i:before {
+    content: '↻';
 }

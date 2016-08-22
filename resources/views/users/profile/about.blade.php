@@ -6,6 +6,11 @@
 
         <table class="table borderless">
             <tr>
+                <td colspan="2">
+                    @include('users.profile.photo')
+                </td>
+            </tr>
+            <tr>
                 <td style="text-align: right;"><strong>E-mail</strong></td>
                 <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
             </tr>
@@ -43,10 +48,28 @@
                     </td>
                 </tr>
             @endif
+            <tr>
+                <td colspan="2">
+                @if($user->member == null)
+                    <span class="text-info">
+                        {{ $user->name_first }} is not a member of S.A. Proto.
+                    </span>
+                @else
+                    <span class="text-success">
+                        {{ $user->name_first }} is a member
+                        @if(date('U', strtotime($user->member->created_at)) > 0)
+                            as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                        @else
+                            since <strong>ancient times</strong>!
+                        @endif
+                    </span>
+                @endif
+                </td>
+            </tr>
         </table>
 
     </div>
-    <div class="panel-footer">
+    <!-- <div class="panel-footer">
         <div class="btn-group btn-group-justified">
             @if($user->member == null)
                 <a class="btn btn-info">
@@ -63,7 +86,7 @@
                 </a>
             @endif
         </div>
-    </div>
+    </div> -->
 </div>
 
 @if($ldap)
