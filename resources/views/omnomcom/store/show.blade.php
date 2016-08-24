@@ -579,10 +579,10 @@
         <h1>Link an RFID card to your account.</h1>
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
-               type="text" placeholder="member@proto.utwente.nl">
+               type="text" placeholder="S1234567">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
                type="password"
-               placeholder="correct horse battery staple">
+               placeholder="Password">
 
         <span class="modal-status">
             First enter your username and password, then present an RFID card.
