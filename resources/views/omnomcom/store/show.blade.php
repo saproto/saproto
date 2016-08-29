@@ -519,9 +519,11 @@
                                     &euro; {{ number_format($product->price, 2, '.', '') }}
                                 </div>
 
-                                <div class="product-stock">
-                                    {{ $product->stock }} x
-                                </div>
+                                @if ($product->stock < 1000)
+                                    <div class="product-stock">
+                                        {{ $product->stock }} x
+                                    </div>
+                                @endif
 
                             </div>
 
@@ -687,7 +689,8 @@
             cart[$(this).attr('data-id')]++;
             stock[$(this).attr('data-id')]--;
 
-            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+            var s = stock[$(this).attr('data-id')];
+            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
             update();
 
@@ -700,7 +703,8 @@
         cart[$(this).attr('data-id')]--;
         stock[$(this).attr('data-id')]++;
 
-        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+        var s = stock[$(this).attr('data-id')];
+        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
         update();
 
