@@ -16,6 +16,7 @@ use Auth;
 use Entrust;
 use Session;
 use Redirect;
+use Mail;
 
 class MemberAdminController extends Controller
 {
@@ -108,6 +109,12 @@ class MemberAdminController extends Controller
 
         $member->save();
 
+        Mail::send('emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($user) {
+            $m->replyTo('internal@proto.utwente.nl', config('proto.internal') . ' (Officer Internal Affairs)');
+            $m->to($user->email, $user->name);
+            $m->subject('Start of your membership of Study Association Proto');
+        });
+
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
         return redirect()->route('user::member::list');
@@ -124,7 +131,13 @@ class MemberAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->member->delete();
+        $user->member()->delete();
+
+        Mail::send('emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($user) {
+            $m->replyTo('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)');
+            $m->to($user->email, $user->name);
+            $m->subject('Termination of your membership of Study Association Proto');
+        });
 
         Session::flash("flash_message", "Membership of " . $user->name . " has been termindated.");
 
