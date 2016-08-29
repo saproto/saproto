@@ -1,15 +1,9 @@
+@include('users.profile.photo')
+
 <div class="panel panel-default">
-    <div class="panel-heading">
-        About {{ $user->name_first }}
-    </div>
     <div class="panel-body">
 
         <table class="table borderless">
-            <tr>
-                <td colspan="2">
-                    @include('users.profile.photo')
-                </td>
-            </tr>
             <tr>
                 <td style="text-align: right;"><strong>E-mail</strong></td>
                 <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
@@ -69,24 +63,6 @@
         </table>
 
     </div>
-    <!-- <div class="panel-footer">
-        <div class="btn-group btn-group-justified">
-            @if($user->member == null)
-                <a class="btn btn-info">
-                    {{ $user->name_first }} is not a member of S.A. Proto.
-                </a>
-            @else
-                <a class="btn btn-success">
-                    {{ $user->name_first }} is a member
-                    @if(date('U', strtotime($user->member->created_at)) > 0)
-                        as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
-                    @else
-                        since <strong>ancient times</strong>!
-                    @endif
-                </a>
-            @endif
-        </div>
-    </div> -->
 </div>
 
 @if($ldap)

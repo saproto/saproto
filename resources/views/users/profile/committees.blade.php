@@ -26,5 +26,3 @@
     </p>
 
 @endif
-
-<hr class="line">
