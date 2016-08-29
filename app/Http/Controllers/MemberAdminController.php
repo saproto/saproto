@@ -15,6 +15,7 @@ use PDF;
 use Auth;
 use Entrust;
 use Session;
+use Redirect;
 
 class MemberAdminController extends Controller
 {
@@ -95,6 +96,11 @@ class MemberAdminController extends Controller
     public function addMembership($id, Request $request)
     {
         $user = User::findOrFail($id);
+
+        if (!($user->primary_address() && $user->bank)) {
+            Session::flash("flash_message", "This user really needs a bank account and address. Don't bypass the system!");
+            return Redirect::back();
+        }
 
         $member = Member::create();
         $member->is_associate = !$request->input('is_primary');

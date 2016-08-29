@@ -8,11 +8,18 @@
                     <h4 class="modal-title" id="addMembershipLabel">Make member</h4>
                 </div>
                 <div class="modal-body">
-                    @if ($user->primary_address() == null)
+                    @if (!$user->primary_address())
                         <p>
                             <strong>
                                 This user does not have an address linked to their account. Please ask them to register
                                 an address before making them a member.
+                            </strong>
+                        </p>
+                    @elseif ($user->bank()->count() == 0)
+                        <p>
+                            <strong>
+                                This user does not have a current bank authorization. This is required for membership.
+                                Please ask them to enter a bank authorization before making them a member.
                             </strong>
                         </p>
                     @else
@@ -35,9 +42,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    @if ($user->primary_address() != null)
+                    @if ($user->primary_address() && $user->bank)
                         <button type="submit" class="btn btn-primary"
-                                onClick="confirm('Did this user sign the membership form?')">Make member
+                                onClick="return confirm('Did this user sign the membership form?')">Make member
                         </button>
                     @endif
                 </div>

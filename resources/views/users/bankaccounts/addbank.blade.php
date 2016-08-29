@@ -5,22 +5,62 @@
 @endsection
 
 @section('panel-title')
-    Add a withdrawal authorization for {{ $user->name }}
+    {{ ($new ? 'Add' : 'Update') }} a withdrawal authorization for {{ $user->name }}
 @endsection
 
 @section('panel-body')
 
-    <form method="POST" action="{{ route('user::bank::add', ['id' => $user->id]) }}">
+    <form method="POST"
+          action="{{ ($new ? route('user::bank::add', ['id' => $user->id]) : route('user::bank::edit', ['id' => $user->id])) }}">
 
         @if($user->id != Auth::id())
 
             <p>
                 Sorry, but due to accountability issues you can only add authorizations for yourself.
-                If {{ $user->name }} really wants to pay via automatic withdrawal, they should configure
+                If {{ $user->name }} really wants to pay via automatic withdrawal, they should authorize
                 so themselves.
             </p>
 
         @else
+
+            @if (!$new)
+
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>Your current authorization</strong></div>
+                    <div class="panel-body">
+
+                        <p style="text-align: center">
+                            <strong>{{ $user->bank->iban }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $user->bank->bic }}<br>
+                        </p>
+
+                        <p style="text-align: center">
+                            <sub>
+                                {{ ($user->bank->is_first ? "First time" : "Recurring") }}
+                                authorization issued on {{ $user->bank->created_at }}.<br>
+                                Authorization ID: {{ $user->bank->machtigingid }}
+                            </sub>
+                        </p>
+
+                    </div>
+                </div>
+
+                <p>
+
+                    <strong>Attention!</strong>
+
+                </p>
+
+                <p>
+
+                    You already have a bank authorization active. Updating your authorization
+                    will remove this authorization from the system. If an automatic withdrawal is already being
+                    processed right now, it may still be withdrawn using this authorization.
+
+                </p>
+
+                <hr>
+
+            @endif
 
             {!! csrf_field() !!}
             <div class="form-group">
@@ -55,7 +95,7 @@
 
             <p>
 
-                (Some of these are only applicable to members of the association.)
+                (Some of these may only applicable to members of the association.)
 
             </p>
 
@@ -73,9 +113,11 @@
                 I have read the authorization statement and agree with it.
             </button>
 
-            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">
+            <a href="{{ route('user::dashboard', ['id' => $user->id]) }}" type="button"
+               class="btn btn-default pull-right"
+               data-dismiss="modal">
                 Cancel
-            </button>
+            </a>
 
     </form>
 

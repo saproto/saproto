@@ -15,6 +15,7 @@
  * The main route for the frontpage.
  */
 Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
+Route::get('developers', ['as' => 'developers', 'uses' => 'HomeController@developers']);
 
 /*
  * Routes related to authentication.
@@ -87,15 +88,27 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
         Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
         Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
+        Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@editForm']);
+        Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
     });
 
     /*
-     * Routes related to bank accounts
+     * Routes related to RFID cards
      */
     Route::group(['prefix' => 'rfidcard/{id}', 'as' => 'rfid::'], function () {
         Route::get('delete', ['as' => 'delete', 'uses' => 'RfidCardController@destroy']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'RfidCardController@edit']);
         Route::post('edit', ['as' => 'edit', 'uses' => 'RfidCardController@update']);
+    });
+
+
+    /*
+     * Routes related to UT accounts
+     */
+    Route::group(['prefix' => '{id}/utwente', 'as' => 'utwente::'], function () {
+        Route::get('delete', ['as' => 'delete', 'uses' => 'UtwenteController@destroy']);
+        Route::get('add', ['as' => 'add', 'uses' => 'UtwenteController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'UtwenteController@store']);
     });
 
     /*
@@ -168,7 +181,7 @@ Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
  */
 Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
 
-    Route::get('/', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
+    Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
     Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
     Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
     Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@store']);
@@ -176,6 +189,23 @@ Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function 
     Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
     Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
     Route::get('clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
+
+});
+
+/*
+ * Routes related to companies.
+ */
+Route::group(['prefix' => 'companies', 'as' => 'companies::'], function () {
+
+    Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@adminIndex']);
+    Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@create']);
+    Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@destroy']);
+
+    Route::get('', ['as' => 'index', 'uses' => 'CompanyController@index']);
+    Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@show']);
 
 });
 
@@ -303,6 +333,7 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AccountController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AccountController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'AccountController@show']);
+        Route::post('aggregate/{account}', ['as' => 'aggregate', 'uses' => 'AccountController@showAggregation']);
     });
 
     Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
@@ -327,6 +358,8 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
     });
 
+    Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
+
 });
 
 /**
@@ -340,13 +373,22 @@ Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'
 /*
  * Routes related to Flickr photos.
  */
-Route::group(['prefix' => 'photos', 'as' => 'photo::'], function() {
+Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
     Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
     Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
-    Route::group(['prefix' => '{id}', 'as' => 'album::'], function() {
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
         Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
     });
+});
+
+/*
+ * Routes related to Flickr photos.
+ */
+Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:admin'], 'as' => 'authorization::'], function () {
+    Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
+    Route::post('{id}/grant', ['as' => 'grant', 'uses' => 'AuthorizationController@grant']);
+    Route::get('{id}/revoke/{user}', ['as' => 'revoke', 'uses' => 'AuthorizationController@revoke']);
 });
 
 /*
@@ -357,10 +399,11 @@ Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@sho
 /*
  * The routes for Protube.
  */
-Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
     Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
     Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
+    Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
 });
 
 /*
@@ -383,7 +426,7 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
-    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function() {
+    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
     });
 

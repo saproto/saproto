@@ -15,6 +15,7 @@ use Proto\Models\User;
 
 use Auth;
 use Session;
+use Validator;
 
 class UserDashboardController extends Controller
 {
@@ -45,10 +46,18 @@ class UserDashboardController extends Controller
         if (!$user->tfa_totp_key) {
             $google2fa = new Google2FA();
             $request->session()->flash('2fa_secret', ($request->session()->has('2fa_secret') ? $request->session()->get('2fa_secret') : $google2fa->generateSecretKey(32)));
-            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A. Proto', $user->name, $request->session()->get('2fa_secret'));
+            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $request->session()->get('2fa_secret'));
         }
 
-        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode]);
+        $utwente = null;
+        if ($user->utwente_username) {
+            $data = json_decode(file_get_contents(getenv("LDAP_URL") . "?query=uid=" . md5($user->utwente_username)));
+            if ($data->count > 0) {
+                $utwente = $data->entries[0];
+            }
+        }
+
+        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'utwente' => $utwente]);
     }
 
     public function update($id = null, Request $request)
@@ -86,14 +95,19 @@ class UserDashboardController extends Controller
             }
         }
 
-        $userdata['phone'] = $request->input('phone');
+        $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
         $userdata['receive_newsletter'] = $request->has('receive_newsletter');
         $userdata['receive_sms'] = $request->has('receive_sms');
 
-        if (!$user->validate($userdata)) {
-            return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($user->errors());
+        $validator = Validator::make($userdata, [
+            'email' => 'required|email',
+            'phone' => 'required|regex:(\+[0-9]{8,16})'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
         }
 
         $user->fill($userdata);

@@ -55,6 +55,11 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    public function roles()
+    {
+        return $this->belongsToMany('Proto\Models\Role', 'role_user');
+    }
+
     /**
      * @return string The full name of the user.
      */

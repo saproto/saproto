@@ -8,16 +8,6 @@
                 <h4 class="modal-title">Cancel withdrawal authorization</h4>
             </div>
             <div class="modal-body">
-                @if($user->member != null)
-
-                    <p>
-                        <strong>
-                            Deleting your authorization means you won't be able to attend activities, buy stuff and
-                            otherwise do anything that costs money. You can always add a new authorization.
-                        </strong>
-                    </p>
-
-                @endif
 
                 <p>
                     This action will cancel your current automatic withdrawal authorization. Everything bought

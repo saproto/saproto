@@ -75,7 +75,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $product = Product::create($request->except('image'));
+        $product = Product::create($request->except('image', 'product_categories'));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
@@ -86,6 +86,15 @@ class ProductController extends Controller
 
             $product->image()->associate($file);
         }
+
+        $categories = [];
+        foreach ($request->input('product_categories') as $category) {
+            $category = ProductCategory::find($category);
+            if ($category != null) {
+                $categories[] = $category->id;
+            }
+        }
+        $product->categories()->sync($categories);
 
         $product->save();
 

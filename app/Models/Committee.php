@@ -35,7 +35,7 @@ class Committee extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'role', 'edition'))->withTimestamps()->orderBy('pivot_start', 'desc');
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'role', 'edition'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     public function image()

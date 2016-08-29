@@ -10,6 +10,11 @@
 
         <div class="col-md-{{ ($event->activity && $event->activity->participants && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
 
+            @if($event->image)
+                <img src="{{ $event->image->generateImagePath(800,300) }}"
+                     style="width: 100%; margin-bottom: 30px; box-shadow: 0 0 20px -7px #000;">
+            @endif
+
             <div class="panel panel-default">
 
                 <div class="panel-heading" style="text-align: center;">
@@ -18,7 +23,7 @@
                         [ Hidden! ]
                     @endif
 
-                    From {{ date('l j F, H:i', $event->start) }} till
+                    From {{ date('l j F Y, H:i', $event->start) }} till
 
                     @if (($event->end - $event->start) < 3600 * 24)
                         {{ date('H:i', $event->end) }}

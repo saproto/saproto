@@ -17,6 +17,31 @@
 
 @section('container')
 
+    @if(count($companies) > 0)
+
+        <div class="row homepage__companyrow">
+
+            <div class="container">
+
+                @foreach($companies as $company)
+
+                    <div class="col-md-3 homepage__companyentry">
+
+                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                            <img class="homepage__companyimage"
+                                 src="{{ $company->image->generateImagePath(null, 50) }}">
+                        </a>
+
+                    </div>
+
+                @endforeach
+
+            </div>
+
+        </div>
+
+    @endif
+
     <div class="container" style="margin-top: 30px;">
 
         <div class="row">
@@ -26,7 +51,7 @@
 
             <div class="col-md-4">
 
-                <div class="panel panel-default calendar__homepage">
+                <div class="panel panel-default homepage__calendar">
 
                     <div class="panel-body calendar">
 
@@ -104,25 +129,5 @@
         </div>
 
     </div>
-
-@endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        .calendar__homepage {
-            min-height: 300px;
-            max-height: 300px;
-            overflow: hidden;
-        }
-
-        .calendar__homepage:hover {
-            max-height: none;
-        }
-
-    </style>
 
 @endsection
