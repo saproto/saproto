@@ -68,4 +68,8 @@
 
     </div>
 
+    <div class="panel-footer">
+
+    </div>
+
 </div>

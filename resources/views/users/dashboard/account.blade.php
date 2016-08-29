@@ -46,6 +46,11 @@
         </div>
 
     </div>
+
+    <div class="panel-footer">
+
+    </div>
+
 </div>
 
 <form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
@@ -141,6 +146,8 @@
 
 </form>
 
+@include('users.dashboard.memberinfo')
+
 @if (count($user->roles) > 0)
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -160,6 +167,8 @@
                     @endforeach
                 </div>
             @endforeach
+        </div>
+        <div class="panel-footer">
         </div>
     </div>
 @endif

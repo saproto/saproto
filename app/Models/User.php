@@ -136,7 +136,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->whereNull('committees_users.deleted_at')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_created_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_created_at', 'asc');
     }
 
     /**
@@ -177,6 +177,26 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $this->id)->where('committee_id', $committee->id)->get()) > 0;
+        return count(CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('committee_id', $committee->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })->get()
+        ) > 0;
+    }
+
+    public function isActiveMember()
+    {
+        return count(CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })->get()
+        ) > 0;
     }
 }
