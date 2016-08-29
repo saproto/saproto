@@ -109,6 +109,14 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
         Route::get('delete', ['as' => 'delete', 'uses' => 'ProfilePictureController@destroy']);
     });
 
+    /*
+     * Routes related to profile pictures
+     */
+    Route::group(['prefix' => '{id}/alias', 'as' => 'alias::'], function () {
+        Route::get('update', ['as' => 'update', 'uses' => 'AliasController@createFor']);
+        Route::get('delete', ['as' => 'delete', 'uses' => 'AliasController@deleteFor']);
+    });
+
 
     /*
      * Routes related to UT accounts
