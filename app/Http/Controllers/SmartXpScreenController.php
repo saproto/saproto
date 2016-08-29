@@ -27,7 +27,7 @@ class SmartXpScreenController extends Controller
 
         $data = json_decode(str_replace("$", "", file_get_contents($url)));
 
-        $roster;
+        $roster = [];
 
         foreach ($data->items as $entry) {
 
