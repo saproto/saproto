@@ -39,6 +39,7 @@ class UserProfileController extends Controller
         $ldap = null;
         if ($user->utwente_username) {
             $data = json_decode(file_get_contents(getenv("LDAP_URL") . "?query=uid=" . md5($user->utwente_username)));
+
             if ($data->count > 0) {
                 $ldap = $data->entries[0];
             }
