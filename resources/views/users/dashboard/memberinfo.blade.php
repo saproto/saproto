@@ -61,9 +61,9 @@
                             @if($user->member->proto_mail)
                                 {{ $user->member->proto_mail }} @ {{ config('proto.emaildomain') }}
                                 <br>
-                                <a href="#">Drop</a>
+                                <a href="{{ route("user::alias::delete", ['id' => $user->id]) }}">Drop</a>
                             @else
-                                <a href="#">Claim your own!</a>
+                                <a href="{{ route("user::alias::update", ['id' => $user->id]) }}">Claim your own!</a>
                             @endif
                         </div>
                     </div>
