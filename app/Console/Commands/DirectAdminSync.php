@@ -5,6 +5,7 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use DirectAdmin\DirectAdmin;
 
+use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
@@ -135,8 +136,19 @@ class DirectAdminSync extends Command
 
             if (count($destinations) > 0) {
                 $data[$committee->slug] = $destinations;
+                $data['committees'][] = $committee->slug . '@' . config('proto.emaildomain');
             }
 
+        }
+
+        // Constructing manual aliases.
+        $aliases = Alias::all();
+        foreach ($aliases as $alias) {
+            if ($alias->destination) {
+                $data[$alias->alias][] = $alias->destination;
+            } else {
+                $data[$alias->alias][] = $alias->user->email;
+            }
         }
 
         return $data;
