@@ -100,10 +100,16 @@
 
             transition: all 0.5s;
             transform: translate(0, 0);
+            opacity: 1;
+
+            z-index: 100;
         }
 
         .category_view.inactive {
             transform: translate(0, -100%);
+            opacity: 0;
+
+            z-index: 0;
         }
 
         #product_nav {
@@ -155,6 +161,10 @@
             margin: 10px;
             text-align: right;
             font-size: 20px;
+            max-height: 56px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .product-price {
