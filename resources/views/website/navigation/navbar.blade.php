@@ -102,7 +102,7 @@
                         <li><a class="navbar-title">Association:</a></li>
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
-                        <li><a href="{{ route("protube::admin") }}">Protube admin</a></li>
+                        <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
                         <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                         <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
@@ -111,6 +111,7 @@
                         <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
+                        <li><a href="{{ route("alias::index") }}">Aliases</a></li>
 
                         @if(Auth::user()->can('admin'))
                             <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>

@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\Alias;
 use Proto\Models\User;
 use Proto\Models\Member;
 
 use Auth;
 use Redirect;
 use Session;
+use DB;
 
 class AliasController extends Controller
 {
@@ -23,7 +25,23 @@ class AliasController extends Controller
      */
     public function index()
     {
-        //
+        $aliases = Alias::orderBy('alias', 'asc')->get();
+
+        if ($aliases->count() > 0) {
+
+            $data = [];
+            foreach ($aliases as $alias) {
+                $data[$alias->alias][] = $alias;
+            }
+
+            return view('aliases.index', ['aliases' => $data]);
+
+        } else {
+
+            return Redirect::route('alias::add');
+
+        }
+
     }
 
     /**
@@ -33,7 +51,34 @@ class AliasController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('aliases.add');
+
+    }
+
+    /**
+     * Update resource.
+     *
+     * @return mixed
+     */
+    public function update(Request $request)
+    {
+
+        $from = $request->input('from');
+        $into = $request->input('into');
+
+        $affected = DB::table('alias')->where('alias', $from)->update([
+            'alias' => $into,
+        ]);
+
+        if ($affected > 0) {
+            $request->session()->flash('flash_message', 'Renamed ' . $from . ' into ' . $into . '.');
+            return Redirect::back();
+        } else {
+            $request->session()->flash('flash_message', 'No such alias (' . $from . ').');
+            return Redirect::back();
+        }
+
     }
 
     /**
@@ -44,41 +89,39 @@ class AliasController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if ($request->input('destination') != '') {
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            $alias = Alias::create([
+                'alias' => $request->input('alias'),
+                'destination' => $request->input('destination')
+            ]);
+            $alias->save();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+            $request->session()->flash('flash_message', 'Destination added to alias.');
+            return Redirect::route('alias::index');
+
+
+        } elseif ($request->input('user') != 'off') {
+
+            $user = User::findOrFail($request->input('user'));
+
+            $alias = Alias::create([
+                'alias' => $request->input('alias'),
+                'user_id' => $user->id
+            ]);
+            $alias->save();
+
+            $request->session()->flash('flash_message', 'User added to alias.');
+            return Redirect::route('alias::index');
+
+        } else {
+
+            $request->session()->flash('flash_message', 'No action performed.');
+            return Redirect::route('alias::index');
+
+        }
+
     }
 
     /**
@@ -87,9 +130,25 @@ class AliasController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $idOrAlias)
     {
-        //
+        $alias = Alias::find($idOrAlias);
+
+        if ($alias) {
+            $alias->delete();
+            $request->session()->flash('flash_message', 'Entry deleted.');
+            return Redirect::back();
+        }
+
+        $affected = DB::table('alias')->where('alias', $idOrAlias)->delete();
+        if ($affected > 0) {
+            $request->session()->flash('flash_message', 'Deleted alias <strong>' . $idOrAlias . '</strong> with ' . $affected . ' destinations.');
+            return Redirect::back();
+        } else {
+            $request->session()->flash('flash_message', 'No such alias (' . $idOrAlias . ').');
+            return Redirect::back();
+        }
+
     }
 
     /**
