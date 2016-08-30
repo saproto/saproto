@@ -130,13 +130,17 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-xs-6">
-            <div class="btn-group btn-group-justified" role="group">
-                <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
-                    Print Member Form
-                </a>
+        @if($user->address->count() > 0)
+
+            <div class="col-md-4 col-xs-6">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Member Form
+                    </a>
+                </div>
             </div>
-        </div>
+
+        @endif
 
     </div>
 

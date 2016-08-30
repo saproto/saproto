@@ -67,7 +67,7 @@ class StorageEntry extends Model
     {
         return route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
     }
-    
+
     public function getBase64($w = null, $h = null) {
         return base64_encode(FileController::makeImage($this, $w, $h));
     }
