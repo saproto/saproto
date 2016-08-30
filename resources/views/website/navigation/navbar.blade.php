@@ -114,6 +114,7 @@
                         <li><a href="{{ route("alias::index") }}">Aliases</a></li>
 
                         @if(Auth::user()->can('admin'))
+                            <li><a href="{{ route("alias::index") }}">Aliases</a></li>
                             <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
                         @endif
 

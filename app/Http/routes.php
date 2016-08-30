@@ -399,7 +399,7 @@ Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
 });
 
 /*
- * Routes related to roles and permissions photos.
+ * Routes related to roles and permissions.
  */
 Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:admin'], 'as' => 'authorization::'], function () {
     Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
@@ -408,7 +408,7 @@ Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:
 });
 
 /*
- * Routes related to roles and permissions photos.
+ * Routes related to e-mail aliases.
  */
 Route::group(['prefix' => 'alias', 'middleware' => ['auth', 'permission:admin'], 'as' => 'alias::'], function () {
     Route::get('', ['as' => 'index', 'uses' => 'AliasController@index']);
