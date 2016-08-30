@@ -43,10 +43,11 @@ class UserDashboardController extends Controller
         }
 
         $qrcode = null;
+        $tfakey = null;
         if (!$user->tfa_totp_key) {
             $google2fa = new Google2FA();
-            $request->session()->flash('2fa_secret', ($request->session()->has('2fa_secret') ? $request->session()->get('2fa_secret') : $google2fa->generateSecretKey(32)));
-            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $request->session()->get('2fa_secret'));
+            $tfakey = $google2fa->generateSecretKey(32);
+            $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
         }
 
         $utwente = null;
@@ -57,7 +58,7 @@ class UserDashboardController extends Controller
             }
         }
 
-        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'utwente' => $utwente]);
+        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey, 'utwente' => $utwente]);
     }
 
     public function update($id = null, Request $request)
