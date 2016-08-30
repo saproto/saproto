@@ -16,12 +16,12 @@
 
         <div class="form-group">
             <label for="recipient-name" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="username" name="email" placeholder="s1234567">
+            <input type="text" class="form-control" id="username" name="email" placeholder="E-mail address or UTwente username">
         </div>
         <div class="form-group">
             <label for="message-text" class="control-label">Password:</label>
             <input type="password" class="form-control" id="password" name="password"
-                   placeholder="correct horse battery staple">
+                   placeholder="Proto password or UTwente password">
         </div>
 
         <div class="checkbox">
