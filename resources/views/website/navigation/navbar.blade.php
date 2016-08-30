@@ -111,7 +111,6 @@
                         <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
-                        <li><a href="{{ route("alias::index") }}">Aliases</a></li>
 
                         @if(Auth::user()->can('admin'))
                             <li><a href="{{ route("alias::index") }}">Aliases</a></li>
