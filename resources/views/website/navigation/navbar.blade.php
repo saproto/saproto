@@ -76,14 +76,14 @@
                 </ul>
             </li>
 
-            @if (Auth::check() && Auth::user()->can("omnomcom","pilscie"))
+            @if (Auth::check() && Auth::user()->can(["omnomcom","pilscie"]))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">OmNomCom <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route("omnomcom::store::show") }}">Application</a></li>
-                        <li role="separator" class="divider"></li>
                         @if (Auth::check() && Auth::user()->can("omnomcom"))
+                            <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Administration:</a></li>
                             <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
                             <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
