@@ -33,9 +33,11 @@
 
                     @ {{ $event->location }}
 
-                    <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
-                        <span class="label label-success pull-right">Edit</span>
-                    </a>
+                    @if(Auth::check() && Auth::user()->can('board'))
+                            <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
+                                <span class="label label-success pull-right">Edit</span>
+                            </a>
+                    @endif
 
                 </div>
 
