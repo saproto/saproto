@@ -112,166 +112,162 @@
 
             var admin = io(server + '/protube-admin');
 
-            admin.emit("authenticate", token);
+            admin.on("connect", function() {
+                admin.emit("authenticate", token);
+            });
 
+            // On disconnect, hide admin and show connecting screen
+            admin.on("disconnect", function() {
+                $("#connected").hide(0);
+                $("#connecting").show(0);
+            });
+
+            // On connect, hide connecting screen and show admin
             admin.on("authenticated", function(data) {
-                // Initialize volume sliders.
-                $("#youtubeV").slider().on("slideStop", function(event) {
-                    admin.emit("setYoutubeVolume", event.value);
-                });
-                $("#radioV").slider().on("slideStop", function(event) {
-                    admin.emit("setRadioVolume", event.value);
-                });
-
-                // On connect, hide connecting screen and show admin
                 $("#connecting").hide(0);
                 $("#connected").show(0);
+            });
 
-                // On reconnect, hide connecting screen and show admin
-                admin.on("reconnect", function() {
-                    $("#connecting").hide(0);
-                    $("#connected").show(0);
-                });
+            // Initialize volume sliders.
+            $("#youtubeV").slider().on("slideStop", function(event) {
+                admin.emit("setYoutubeVolume", event.value);
+            });
+            $("#radioV").slider().on("slideStop", function(event) {
+                admin.emit("setRadioVolume", event.value);
+            });
 
-                // On disconnect, hide admin and show connecting screen
-                admin.on("disconnect", function() {
-                    $("#connected").hide(0);
-                    $("#connecting").show(0);
-                });
+            admin.on("queue", function(data) {
+                var queue = $("#queue");
+                queue.html("");
 
-                admin.on("queue", function(data) {
-                    var queue = $("#queue");
-                    queue.html("");
+                for(var i in data) {
+                    var controls = "";
+                    if(i > 0) controls += '<span class="up" data-index="' + i + '"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></span>';
+                    if(i < data.length-1) controls += '<span class="down" data-index="' + i + '"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>';
+                    controls += '<span class="veto" data-index="' + i + '"><i class="fa fa-minus-circle" aria-hidden="true"></i></span>';
 
-                    for(var i in data) {
-                        var controls = "";
-                        if(i > 0) controls += '<span class="up" data-index="' + i + '"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></span>';
-                        if(i < data.length-1) controls += '<span class="down" data-index="' + i + '"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>';
-                        controls += '<span class="veto" data-index="' + i + '"><i class="fa fa-minus-circle" aria-hidden="true"></i></span>';
-
-                        queue.append('<div class="item" data-ytId="' + data[i].id + '">' +
-                                '<img src="http://img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
-                                '<div>' +
-                                '<h1>' + data[i].title + '</h1>' +
-                                '<h2>' + prettifyDuration(data[i].duration ) + '</h2>' +
-                                '<h3>' + controls + '</h3>' +
-                                '</div>' +
-                                '<div style="clear: both;"></div>' +
-                                '</div>');
-                    }
-
-                    $(".up").click(function(e) {
-                        e.preventDefault();
-                        moveQueueItem($(this).attr("data-index"), 'up');
-                    });
-
-                    $(".down").click(function(e) {
-                        e.preventDefault();
-                        moveQueueItem($(this).attr("data-index"), 'down');
-                    });
-
-                    $(".veto").click(function(e) {
-                        e.preventDefault();
-                        admin.emit("veto", $(this).attr("data-index"));
-                    });
-                });
-
-                function moveQueueItem(index, direction) {
-
-                    var data = {
-                        'index' : index,
-                        'direction' : direction
-                    };
-
-                    admin.emit("move", data);
+                    queue.append('<div class="item" data-ytId="' + data[i].id + '">' +
+                            '<img src="http://img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
+                            '<div>' +
+                            '<h1>' + data[i].title + '</h1>' +
+                            '<h2>' + prettifyDuration(data[i].duration ) + '</h2>' +
+                            '<h3>' + controls + '</h3>' +
+                            '</div>' +
+                            '<div style="clear: both;"></div>' +
+                            '</div>');
                 }
 
-                admin.on("ytInfo", function(data) {
-                    if(!$.isEmptyObject(data)) {
-                        $("#nowPlaying").html('<img src="http://img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
-                                '<h1>' + data.title + '</h1>' +
-                                '<strong>0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
-                                '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>'+ prettifyDuration(data.duration) +'</strong>');
-                        $("#progress").slider({
-                            formatter: function(value) {
-                                return prettifyDuration(value);
-                            }
-                        }).on("slideStop", function(event) {
-                            admin.emit("setTime", event.value);
-                        });
-                    }else{
-                        $("#nowPlaying").html("");
-                    }
-                });
-
-                admin.on("progress", function(data) {
-                    $("#progress").slider('setValue', data);
-                });
-
-                $('#searchForm').bind('submit', function(e){
+                $(".up").click(function(e) {
                     e.preventDefault();
-                    admin.emit("search", $("#searchBox").val());
-                    $("#results").html("Loading...");
+                    moveQueueItem($(this).attr("data-index"), 'up');
                 });
 
-                admin.on("searchResults", function(data) {
-                    var results = $("#searchResults");
+                $(".down").click(function(e) {
+                    e.preventDefault();
+                    moveQueueItem($(this).attr("data-index"), 'down');
+                });
 
-                    results.html("");
+                $(".veto").click(function(e) {
+                    e.preventDefault();
+                    admin.emit("veto", $(this).attr("data-index"));
+                });
+            });
 
-                    for(var i in data) {
-                        results.append(generateResult(data[i]));
-                    }
+            function moveQueueItem(index, direction) {
 
-                    $(".result").each(function(i) {
-                        var current = $(this);
-                        current.click(function(e) {
-                            e.preventDefault();
-                            admin.emit("add", {
-                                id: current.attr("ytId"),
-                                showVideo: ($("#showVideo").prop("checked") ? true : false)
-                            });
+                var data = {
+                    'index' : index,
+                    'direction' : direction
+                };
+
+                admin.emit("move", data);
+            }
+
+            admin.on("ytInfo", function(data) {
+                if(!$.isEmptyObject(data)) {
+                    $("#nowPlaying").html('<img src="http://img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
+                            '<h1>' + data.title + '</h1>' +
+                            '<strong>0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
+                            '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>'+ prettifyDuration(data.duration) +'</strong>');
+                    $("#progress").slider({
+                        formatter: function(value) {
+                            return prettifyDuration(value);
+                        }
+                    }).on("slideStop", function(event) {
+                        admin.emit("setTime", event.value);
+                    });
+                }else{
+                    $("#nowPlaying").html("");
+                }
+            });
+
+            admin.on("progress", function(data) {
+                $("#progress").slider('setValue', data);
+            });
+
+            $('#searchForm').bind('submit', function(e){
+                e.preventDefault();
+                admin.emit("search", $("#searchBox").val());
+                $("#results").html("Loading...");
+            });
+
+            admin.on("searchResults", function(data) {
+                var results = $("#searchResults");
+
+                results.html("");
+
+                for(var i in data) {
+                    results.append(generateResult(data[i]));
+                }
+
+                $(".result").each(function(i) {
+                    var current = $(this);
+                    current.click(function(e) {
+                        e.preventDefault();
+                        admin.emit("add", {
+                            id: current.attr("ytId"),
+                            showVideo: ($("#showVideo").prop("checked") ? true : false)
                         });
                     });
-
-                    results.show(100);
                 });
 
-                $("#clearSearch").click(function(e) {
-                    e.preventDefault();
-                    $("#searchResults").hide(0);
-                    $("#searchBox").val("");
-                });
+                results.show(100);
+            });
 
-                $("#playpause").click(function(e) {
-                    e.preventDefault();
-                    admin.emit("pause");
-                });
+            $("#clearSearch").click(function(e) {
+                e.preventDefault();
+                $("#searchResults").hide(0);
+                $("#searchBox").val("");
+            });
 
-                $("#skip").click(function(e) {
-                    e.preventDefault();
-                    admin.emit("skip");
-                });
+            $("#playpause").click(function(e) {
+                e.preventDefault();
+                admin.emit("pause");
+            });
 
-                $("#reload").click(function(e) {
-                    e.preventDefault();
-                    admin.emit("reload");
-                });
+            $("#skip").click(function(e) {
+                e.preventDefault();
+                admin.emit("skip");
+            });
 
-                $("#protubeToggle").click(function(e) {
-                    e.preventDefault();
-                    admin.emit("protubeToggle");
-                });
+            $("#reload").click(function(e) {
+                e.preventDefault();
+                admin.emit("reload");
+            });
 
-                $(".soundboard").click(function(e) {
-                    e.preventDefault();
-                    admin.emit("soundboard", $(this).attr("rel"));
-                });
+            $("#protubeToggle").click(function(e) {
+                e.preventDefault();
+                admin.emit("protubeToggle");
+            });
 
-                admin.on("volume", function(data) {
-                    $("#youtubeV").slider('setValue', data.youtube);
-                    $("#radioV").slider('setValue', data.radio);
-                });
+            $(".soundboard").click(function(e) {
+                e.preventDefault();
+                admin.emit("soundboard", $(this).attr("rel"));
+            });
+
+            admin.on("volume", function(data) {
+                $("#youtubeV").slider('setValue', data.youtube);
+                $("#radioV").slider('setValue', data.radio);
             });
         });
 
