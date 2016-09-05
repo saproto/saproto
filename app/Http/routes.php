@@ -301,6 +301,7 @@ Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'pe
     Route::get('down/{id}', ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
 
     Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@update']);
     Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
 });
 
