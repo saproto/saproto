@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity && $event->activity->participants && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ ($event->activity && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
 
             @if($event->image)
                 <img src="{{ $event->image->generateImagePath(800,300) }}"
@@ -34,9 +34,9 @@
                     @ {{ $event->location }}
 
                     @if(Auth::check() && Auth::user()->can('board'))
-                            <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
-                                <span class="label label-success pull-right">Edit</span>
-                            </a>
+                        <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
+                            <span class="label label-success pull-right">Edit</span>
+                        </a>
                     @endif
 
                 </div>
@@ -44,6 +44,17 @@
                 <div class="panel-body" id="event-description">
 
                     {!! $event->description !!}
+
+                    @if($event->committee)
+
+                        <hr>
+
+                        This activity is brought to you by the
+                        <a href="{{ route('committee::show', ['id' => $event->committee->id]) }}">
+                            {{ $event->committee->name }}
+                        </a>.
+
+                    @endif
 
                 </div>
 
@@ -70,6 +81,12 @@
                                     </div>
 
                                     <div class="panel-body">
+
+                                        @if ($event->activity->helpingUsers($committee->pivot->id)->count() < 1)
+                                            <p style="text-align: center;">
+                                                No people are currently helping.
+                                            </p>
+                                        @endif
 
                                         @foreach($event->activity->helpingUsers($committee->pivot->id) as $participation)
                                             <div class="member">
@@ -128,7 +145,7 @@
 
         </div>
 
-        @if($event->activity && $event->activity->participants && Auth::check() && Auth::user()->member)
+        @if($event->activity && Auth::check() && Auth::user()->member)
 
             <div class="col-md-4">
 
@@ -196,7 +213,7 @@
 
                         <hr>
 
-                        @foreach($event->activity->users() as $user)
+                        @foreach($event->activity->users as $user)
 
                             <div class="member">
                                 <div class="member-picture"
@@ -215,7 +232,7 @@
 
                         @endforeach
 
-                        @if (count($event->activity->backupUsers()) > 0)
+                        @if ($event->activity->backupUsers->count() > 0)
 
                             <hr>
 
@@ -223,7 +240,7 @@
                                 Back-up list:
                             </p>
 
-                            @foreach($event->activity->backupUsers() as $user)
+                            @foreach($event->activity->backupUsers as $user)
 
                                 <div class="member">
                                     <div class="member-picture"

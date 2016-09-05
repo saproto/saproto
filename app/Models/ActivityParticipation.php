@@ -20,15 +20,22 @@ class ActivityParticipation extends Model
     /**
      * @return mixed The user this association is for.
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Proto\Models\User');
     }
 
     /**
      * @return mixed The activity this association is for.
      */
-    public function activity() {
+    public function activity()
+    {
         return $this->belongsTo('Proto\Models\Activity');
+    }
+
+    public function help()
+    {
+        return $this->belongsTo('Proto\Models\HelpingCommittee', 'committees_activities_id');
     }
 
     protected $guarded = ['id'];

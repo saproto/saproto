@@ -68,8 +68,13 @@ class ParticipationController extends Controller
     {
         $participation = ActivityParticipation::findOrFail($participation_id);
 
-        if ($participation->user->id != Auth::id() && Auth::user()->can('board')) {
-            abort(403);
+        $notify = false;
+
+        if ($participation->user->id != Auth::id()) {
+            if (!Auth::user()->can('board')) {
+                abort(403);
+            }
+            $notify = true;
         }
 
 
@@ -93,17 +98,33 @@ class ParticipationController extends Controller
                 Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($backupparticipation->user->email, $backupparticipation->user->name);
-                    $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title);
+                    $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title . '.');
                 });
             }
 
-            $request->session()->flash('flash_message', 'You are not attending ' . $participation->activity->event->title . ' anymore.');
+            if ($notify) {
+                Mail::send('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($participation) {
+                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($participation->user->email, $participation->user->name);
+                    $m->subject('You have been signed out for ' . $participation->activity->event->title . '.');
+                });
+            }
+
+            $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
 
             $participation->delete();
 
         } else {
 
-            $request->session()->flash('flash_message', 'You are not helping with ' . $participation->activity->event->title . ' anymore.');
+            $request->session()->flash('flash_message', $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.');
+
+            if ($notify) {
+                Mail::send('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($participation) {
+                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($participation->user->email, $participation->user->name);
+                    $m->subject('You don\'t help with ' . $participation->activity->event->title . ' anymore.');
+                });
+            }
 
             $participation->delete();
 

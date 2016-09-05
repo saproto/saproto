@@ -136,7 +136,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_created_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id', 'created_at', 'deleted_at'))->whereNull('committees_users.deleted_at')->withTimestamps()->orderBy('pivot_created_at', 'asc');
     }
 
     /**

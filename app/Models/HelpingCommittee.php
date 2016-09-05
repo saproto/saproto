@@ -16,15 +16,26 @@ class HelpingCommittee extends Validatable
     /**
      * @return mixed The user this association is for.
      */
-    public function activity() {
+    public function activity()
+    {
         return $this->belongsTo('Proto\Models\Activity');
     }
 
     /**
      * @return mixed The committee this association is for.
      */
-    public function committee() {
+    public function committee()
+    {
         return $this->belongsTo('Proto\Models\Committee');
+    }
+
+    /**
+     * @return mixed A list of participants helping this activity for this committee.
+     */
+    public function users()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users', 'committees_activities_id')
+            ->whereNull('activities_users.deleted_at');
     }
 
     protected $guarded = ['id'];

@@ -8,6 +8,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Activity;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -115,6 +116,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
+
         $event = new Event();
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -129,6 +131,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 
@@ -172,6 +177,7 @@ class EventController extends Controller
     {
 
         $event = Event::findOrFail($id);
+
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -185,6 +191,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 

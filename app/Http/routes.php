@@ -253,6 +253,10 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
     Route::post('signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
     Route::get('signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
 
+    // Related to helping committees
+    Route::post('addhelp/{id}', ['as' => 'addhelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@addHelp']);
+    Route::get('deletehelp/{id}', ['as' => 'deletehelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@deleteHelp']);
+
     // Show event
     Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
