@@ -5,10 +5,13 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
+use Carbon\Carbon;
+
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Member;
+use Proto\Models\Tempadmin;
 use Proto\Models\User;
 
 use PDF;
@@ -191,6 +194,34 @@ class MemberAdminController extends Controller
 
         return "The printer service responded: " . $result;
 
+    }
+
+    public function makeTempAdmin($id) {
+        $user = User::findOrFail($id);
+
+        $tempAdmin = new Tempadmin;
+
+        $tempAdmin->created_by = Auth::user()->id;
+        $tempAdmin->start_at = Carbon::today();
+        $tempAdmin->end_at = Carbon::tomorrow();
+        $tempAdmin->user()->associate($user);
+
+        $tempAdmin->save();
+        
+        return redirect()->route('user::member::list');
+    }
+
+    public function endTempAdmin($id) {
+        $user = User::findOrFail($id);
+
+        foreach($user->tempadmin as $tempadmin) {
+            if(Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                $tempadmin->end_at = Carbon::now();
+                $tempadmin->save();
+            }
+        }
+
+        return redirect()->route('user::member::list');
     }
 
 }
