@@ -46,6 +46,8 @@ Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], f
     Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
         Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:admin'], 'uses' => 'MemberAdminController@impersonate']);
+        Route::get('maketempadmin', ['as' => 'maketempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@makeTempAdmin']);
+        Route::get('endtempadmin', ['as' => 'endtempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@endTempAdmin']);
 
         Route::post('add', ['as' => 'add', 'uses' => 'MemberAdminController@addMembership']);
         Route::post('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
@@ -429,7 +431,7 @@ Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@sho
 Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
     Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
-    Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
+    Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
     Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
 });
 
