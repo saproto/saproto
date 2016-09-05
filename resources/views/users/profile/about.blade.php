@@ -71,12 +71,11 @@
             From the University of Twente address book
         </div>
         <div class="panel-body">
-
             <table class="table borderless">
                 @if($ldap->description == "Student")
                     <tr>
                         <td style="text-align: right;"><strong>Name</strong></td>
-                        <td>{{ $ldap->givenname }} {{ $ldap->sn }}</td>
+                        <td>{{ $ldap->cn }}</td>
                     </tr>
                     <tr>
                         <td style="text-align: right;"><strong>E-mail</strong></td>
