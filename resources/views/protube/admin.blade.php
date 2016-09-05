@@ -389,6 +389,8 @@
                 <button type="button" class="btn btn-default soundboard" rel="boo">BOOOOOO</button>
                 <button type="button" class="btn btn-default soundboard" rel="chewbacca">Chewie</button>
                 <button type="button" class="btn btn-default soundboard" rel="batman">Batman</button>
+                <button type="button" class="btn btn-default soundboard" rel="IK_BEN_REINIER">IK BEN REINIER!!!</button>
+                <button type="button" class="btn btn-default soundboard" rel="Liefje_aandacht">Aandacht!</button>
                 <button type="button" class="btn btn-default soundboard" rel="bestuuuuuuuuur">Bestuuuuur!</button>
             </div>
         </div>
