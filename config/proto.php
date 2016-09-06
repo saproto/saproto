@@ -94,7 +94,7 @@ return [
     |
     */
 
-    'google-timetable-id' => '55pq1udukakaeg9ouc56utojmuqiap80@import.calendar.google.com',
+    'google-timetable-id' => 'ldce9tj137p1q56i64bht9d53od36ist@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
