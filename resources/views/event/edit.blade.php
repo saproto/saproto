@@ -153,7 +153,7 @@
                                class="btn btn-danger pull-left">Delete</a>
                         @endif
 
-                        <a href="{{ route('event::show', ['id' => $event->id]) }}" class="btn btn-default pull-right">Cancel</a>
+                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}" class="btn btn-default pull-right">Cancel</a>
 
                     </div>
 
@@ -263,62 +263,66 @@
 
             </div>
 
-            @if($event->activity)
+            @if($event)
 
-                <div class="panel panel-default">
+                @if($event->activity)
 
-                    <div class="panel-heading">
-                        Edit helping committees
-                    </div>
+                    <div class="panel panel-default">
 
-                    <form method="post" action="{{ route('event::addhelp', ['id'=>$event->id]) }}">
-
-                        {!! csrf_field() !!}
-
-                        <div class="panel-body">
-
-                            <div class="form-group">
-                                <select class="form-control" name="committee">
-                                    <option disabled selected>Select a committee below:</option>
-                                    @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
-                                        <option value="{{ $committee->id }}">{{ $committee->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" name="amount" placeholder="15"
-                                               min="1" required>
-                                        <span class="input-group-addon">people</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="submit" class="btn btn-success pull-right" value="Add">
-                                </div>
-                            </div>
-
-                            @if($event->activity->helpingCommittees->count() > 0)
-                                <hr>
-                                @foreach($event->activity->helpingCommittees as $committee)
-                                    <p>
-                                        <strong>{{ $committee->name }}</strong><br>
-                                        Helps with
-                                        {{ $event->activity->helpingUsers($committee->pivot->id)->count() }} people.
-                                        {{ $committee->pivot->amount }} are needed.
-                                        <a href="{{ route('event::deletehelp', ['id'=>$committee->pivot->id]) }}">
-                                            Delete.
-                                        </a>
-                                    </p>
-                                @endforeach
-                            @endif
-
+                        <div class="panel-heading">
+                            Edit helping committees
                         </div>
 
-                    </form>
+                        <form method="post" action="{{ route('event::addhelp', ['id'=>$event->id]) }}">
 
-                </div>
+                            {!! csrf_field() !!}
+
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <select class="form-control" name="committee">
+                                        <option disabled selected>Select a committee below:</option>
+                                        @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
+                                            <option value="{{ $committee->id }}">{{ $committee->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="amount" placeholder="15"
+                                                   min="1" required>
+                                            <span class="input-group-addon">people</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="submit" class="btn btn-success pull-right" value="Add">
+                                    </div>
+                                </div>
+
+                                @if($event->activity->helpingCommittees->count() > 0)
+                                    <hr>
+                                    @foreach($event->activity->helpingCommittees as $committee)
+                                        <p>
+                                            <strong>{{ $committee->name }}</strong><br>
+                                            Helps with
+                                            {{ $event->activity->helpingUsers($committee->pivot->id)->count() }} people.
+                                            {{ $committee->pivot->amount }} are needed.
+                                            <a href="{{ route('event::deletehelp', ['id'=>$committee->pivot->id]) }}">
+                                                Delete.
+                                            </a>
+                                        </p>
+                                    @endforeach
+                                @endif
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                @endif
 
             @endif
 
