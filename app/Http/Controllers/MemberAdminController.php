@@ -221,6 +221,10 @@ class MemberAdminController extends Controller
             }
         }
 
+        // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
+        // temporary adminpowers were removed.
+        file_get_contents(env('HERBERT_SERVER') . "/adminCheck");
+
         return redirect()->route('user::member::list');
     }
 
