@@ -171,7 +171,7 @@
         }
 
         #protube.inactive {
-            background-image: url('{{ getenv('FISHCAM_URL') }}');
+            background-image: url('{{ getenv('FISHCAM_URL') }}') !important;
         }
 
         #protube-title {
@@ -415,13 +415,13 @@
     var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
     var nowplaying;
 
-    screen.on("connected", function () {
+    screen.on("connect", function () {
 
         screen.emit("screenReady");
 
         $("#protube-title").removeClass('active').html("ProTube connected");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").addClass('inactive').css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
@@ -438,7 +438,7 @@
         if (typeof data.title == "undefined") {
             $("#protube-title").html("ProTube Idle");
             $("#protube-ticker").css("width", "100%");
-            $("#protube").addClass('inactive').css("background-image", "none");
+            $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
             var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
             $("#protube-ticker").css("width", "0%");
@@ -452,7 +452,7 @@
 
         $("#protube-title").html("Connection lost");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").addClass('inactive').css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
@@ -462,7 +462,7 @@
 
         $("#protube-title").html("ProTube connected");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").addClass('inactive').css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
