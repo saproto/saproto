@@ -160,7 +160,7 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @param User $user
+    /**
      * @return mixed Any cards linked to this account
      */
     public function rfid()
@@ -185,7 +185,6 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @param User $user
      * @return bool Whether the user is currently in the specified committee.
      */
     public function isInCommittee(Committee $committee)

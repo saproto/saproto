@@ -101,7 +101,6 @@
                         <li><a class="navbar-title">Association:</a></li>
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
-                        <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                         <li><a href="{{ route("protube::admin") }}">Protube admin</a></li>
                         <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                         <li><a href="{{ route("event::add") }}">Add Event</a></li>
@@ -111,7 +110,8 @@
                         <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
-
+                        <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
+s
                         <li role="separator" class="divider"></li>
 
                         <li><a class="navbar-title">External Affairs:</a></li>
