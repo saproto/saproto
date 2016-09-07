@@ -6,11 +6,39 @@
 
 @section('content')
 
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+
+                    <span style="font-weight: 700; margin: 0 15px;">Archive</span>
+
+                    @foreach($years as $y)
+
+                        <span style="padding: 5px 15px; background-color: rgba(0,0,0,0.05); margin-right: 15px;">
+                        <a href="{{ route('event::archive', ['year'=>$y]) }}" style="text-decoration: none;">
+                            {{ $y }}
+                        </a>
+                        </span>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     @foreach($months as $key => $month)
 
         @if($key % 3 == 1)
 
-            <div class="row">
+            <div class="row calendar">
 
                 @endif
 
@@ -77,45 +105,5 @@
         @endif
 
     @endforeach
-
-@endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style>
-
-        a.activity, a.activity:hover, a.activity:active {
-            color: #000;
-            text-decoration: none;
-        }
-
-        div.activity {
-            padding: 10px 20px;
-            transition: all 0.2s;
-        }
-
-        div.activity.odd {
-            background-color: rgba(0, 0, 0, 0.04);
-        }
-
-        div.activity:hover {
-            transform: scale(1.05);
-            color: #fff;
-            background-color: #333;
-        }
-
-        div.activity p {
-            margin: 0;
-            margin: 5px 0;
-        }
-
-        div.activity .fa {
-            width: 15px;
-            text-align: center;
-        }
-
-    </style>
 
 @endsection

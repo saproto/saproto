@@ -25,6 +25,7 @@
 
                     <p style="text-align: center; padding: 0 150px;">
                         <input class="form-control" name="2facode" placeholder="Your six digit code.">
+                        <input type="hidden" name="2fakey" value="{{ $tfa_key }}">
                     </p>
 
                     <p style="text-align: center;">

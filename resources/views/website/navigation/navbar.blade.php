@@ -76,18 +76,19 @@
                 </ul>
             </li>
 
-            @if (Auth::check() && Auth::user()->can("omnomcom","pilscie"))
+            @if (Auth::check() && Auth::user()->can(["omnomcom","pilscie"]))
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">OmNomCom <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route("omnomcom::store::show") }}">Application</a></li>
-                        <li role="separator" class="divider"></li>
                         @if (Auth::check() && Auth::user()->can("omnomcom"))
+                            <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Administration:</a></li>
                             <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
                             <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
                             <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
+                            <li><a href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a></li>
                         @endif
                     </ul>
                 </li>
@@ -101,7 +102,7 @@
                         <li><a class="navbar-title">Association:</a></li>
                         <li><a href="{{ route("user::member::list") }}">Users</a></li>
                         <li><a href="{{ route("study::list") }}">Studies</a></li>
-                        <li><a href="{{ route("protube::admin") }}">Protube admin</a></li>
+                        <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
                         <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                         <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
@@ -110,15 +111,20 @@
                         <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
-                        <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
-s
+
+                        @if(Auth::user()->can('admin'))
+                            <li><a href="{{ route("alias::index") }}">Aliases</a></li>
+                            <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
+                            <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
+                        @endif
+
                         <li role="separator" class="divider"></li>
 
                         <li><a class="navbar-title">External Affairs:</a></li>
                         <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                         <li><a href="{{ route("companies::admin") }}">Companies</a></li>
 
-                        @if (Auth::check() && Auth::user()->can("finadmin"))
+                        @if (Auth::user()->can("finadmin"))
                             <li role="separator" class="divider"></li>
                             <li><a class="navbar-title">Financial:</a></li>
                             <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
@@ -130,6 +136,14 @@ s
             @endif
 
             @if (Auth::check())
+
+                @if(Auth::user()->isTempadmin())
+                        <li>
+                            <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
+                               aria-expanded="false">ProTube Admin</a>
+                        </li>
+                @endif
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>

@@ -58,7 +58,7 @@
 
                     </thead>
 
-                    @foreach($product->orderlines->slice(0, 15)->all() as $orderline)
+                    @foreach($product->orderlines()->orderBy('created_at', "DESC")->get()->slice(0, 15)->all() as $orderline)
 
                         <tr>
 

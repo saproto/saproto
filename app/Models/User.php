@@ -55,6 +55,11 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    public function roles()
+    {
+        return $this->belongsToMany('Proto\Models\Role', 'role_user');
+    }
+
     /**
      * @return string The full name of the user.
      */
@@ -87,6 +92,18 @@ class User extends Model implements AuthenticatableContract,
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');
+    }
+
+    public function tempadmin() {
+        return $this->hasMany('Proto\Models\Tempadmin');
+    }
+
+    public function isTempadmin() {
+        foreach($this->tempadmin as $tempadmin) {
+            if(Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -131,7 +148,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->whereNull('committees_users.deleted_at')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_created_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id', 'created_at', 'deleted_at'))->whereNull('committees_users.deleted_at')->withTimestamps()->orderBy('pivot_created_at', 'asc');
     }
 
     /**
@@ -189,6 +206,26 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $this->id)->where('committee_id', $committee->id)->get()) > 0;
+        return count(CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('committee_id', $committee->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })->get()
+        ) > 0;
+    }
+
+    public function isActiveMember()
+    {
+        return count(CommitteeMembership::withTrashed()
+            ->where('user_id', $this->id)
+            ->where('created_at', '<', date('Y-m-d H:i:s'))
+            ->where(function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+            })->get()
+        ) > 0;
     }
 }

@@ -48,7 +48,7 @@
                     <label for="price">Unit price:</label>
                     <div class="input-group">
                         <span class="input-group-addon">&euro;</span>
-                        <input type="number" class="form-control" id="price" name="price"
+                        <input type="text" class="form-control" id="price" name="price"
                                placeholder="0" value="{{ $product->price or '' }}" required>
                     </div>
                 </div>

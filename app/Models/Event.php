@@ -27,6 +27,14 @@ class Event extends Model
     }
 
     /**
+     * @return mixed The committee associated with this event, if any.
+     */
+    public function committee()
+    {
+        return $this->belongsTo('Proto\Models\Committee');
+    }
+
+    /**
      * @return mixed The image associated with this event, if any.
      */
     public function image()

@@ -213,7 +213,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon">&euro;</span>
-                                    <input type="number" name="price[]" placeholder="Price"
+                                    <input type="text" name="price[]" placeholder="Price"
                                            class="orderlineprice form-control">
                                 </div>
 

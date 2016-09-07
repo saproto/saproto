@@ -10,7 +10,10 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Product;
+use Proto\Models\OrderLine;
+
 use Redirect;
+use Carbon\Carbon;
 
 class AccountController extends Controller
 {
@@ -60,6 +63,36 @@ class AccountController extends Controller
     {
         $account = Account::findOrFail($id);
         return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::where('account_id', $account->id)->paginate(30)]);
+    }
+
+    /**
+     * Display aggregated results of sales. Per product to value that has been sold in the specified period.
+     *
+     * @param Request $request
+     * @param $id
+     */
+    public function showAggregation(Request $request, $account)
+    {
+        $account = Account::findOrFail($account);
+
+        $orderlines = OrderLine::where('created_at', '>=', Carbon::parse($request->start)->format('Y-m-d H:i:s'))
+            ->where('created_at', '<', Carbon::parse($request->end)->format('Y-m-d H:i:s'))->get();
+
+        $products = [];
+        $totals = [];
+
+        foreach ($orderlines as $orderline) {
+            if ($orderline->product->account->account_number == $account->account_number) {
+                $p = $orderline->product;
+                if (!array_key_exists($p->id, $products)) {
+                    $products[$p->id] = $p;
+                    $totals[$p->id] = 0;
+                }
+                $totals[$p->id] += $orderline->total_price;
+            }
+        }
+
+        return view('omnomcom.accounts.aggregation', ['account' => $account, 'products' => $products, 'totals' => $totals, 'start' => $request->start, 'end' => $request->end]);
     }
 
     /**

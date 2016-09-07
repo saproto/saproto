@@ -141,4 +141,11 @@ class OmNomController extends Controller
         return "OK";
 
     }
+
+    public function generateOrder()
+    {
+
+        $products = Product::where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
+        return view('omnomcom.products.generateorder', ['products' => $products]);
+    }
 }

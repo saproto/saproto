@@ -30,46 +30,39 @@
 
     <div class="panel-footer">
 
-        @if($user->bank)
-
-            <div class="btn-group btn-group-justified" role="group">
-
-                <a type="submit" class="btn btn-success"
-                   href="{{ route("user::bank::edit", ["id"=>$user->id]) }}">
-                    Update your bank authorization.
-                </a>
-
-            </div>
-
-        @endif
-
         <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
 
-            @if($user->bank)
+                @if(!$user->bank)
 
-                @if(!$user->member)
+                    <a type="submit" class="btn btn-success"
+                       href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
+                        Authorize for automatic withdrawal
+                    </a>
 
-                    <hr>
+                @else
 
-                    <div class="btn-group" role="group">
+                    @if(!$user->member)
+
                         <button type="submit" class="btn btn-danger" data-toggle="modal"
                                 data-target="#bank-modal-cancel">
                             Cancel authorization
                         </button>
-                    </div>
+
+                    @else
+
+                        <a type="submit" class="btn btn-success"
+                           href="{{ route("user::bank::edit", ["id"=>$user->id]) }}">
+                            Update your bank authorization.
+                        </a>
+
+                    @endif
 
                 @endif
 
-            @else
-
-                <a type="submit" class="btn btn-success"
-                   href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
-                    Authorize for automatic withdrawal
-                </a>
-
-            @endif
-
+            </div>
         </div>
+
     </div>
 
 </div>

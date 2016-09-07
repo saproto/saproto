@@ -96,9 +96,11 @@ class OrderLineController extends Controller
     {
         for ($i = 0; $i < count($request->input('user')); $i++) {
 
+            //dd($request);
+
             $user = User::findOrFail($request->input('user')[$i]);
             $product = Product::findOrFail($request->input('product')[$i]);
-            $price = ($request->has('price') ? $request->input('price')[$i] : $product->price);
+            $price = ($request->input('price')[$i] != "" ? $request->input('price')[$i] : $product->price);
             $units = $request->input('units')[$i];
 
             $order = OrderLine::create([

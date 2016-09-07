@@ -18,12 +18,37 @@
 
             <p style="text-align: center;">Account number: <strong>{{ $account->account_number }}</strong></p>
 
+            <hr>
+
+            <form method="post" action="{{ route('omnomcom::accounts::aggregate', ['account' => $account->id]) }}">
+
+                {!! csrf_field() !!}
+
+                <p><strong>Aggregated sales overview</strong></p>
+
+                <div class="form-group">
+                    <label for="start">Start</label>
+                    <input type="text" class="form-control datetime-picker" id="start" name="start" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="end">End</label>
+                    <input type="text" class="form-control datetime-picker" id="end" name="end" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Generate</button>
+
+            </form>
 
         </div>
 
         <div class="col-md-9">
 
             <h3>Products linked to this account</h3>
+
+            <p><strong>{{ $products->count() }}</strong> products</p>
+
+            <hr>
 
             @if ($products->count() > 0)
 
@@ -72,5 +97,26 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+        // Initializes datetimepickers for consistent options
+        $('.datetime-picker').datetimepicker({
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-arrow-up",
+                down: "fa fa-arrow-down",
+                next: "fa fa-chevron-right",
+                previous: "fa fa-chevron-left"
+            },
+            format: 'DD-MM-YYYY HH:mm'
+        });
+    </script>
 
 @endsection

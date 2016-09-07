@@ -27,7 +27,7 @@ class SmartXpScreenController extends Controller
 
         $data = json_decode(str_replace("$", "", file_get_contents($url)));
 
-        $roster;
+        $roster = [];
 
         foreach ($data->items as $entry) {
 
@@ -48,7 +48,7 @@ class SmartXpScreenController extends Controller
 
             $roster[] = array(
                 'title' => $name,
-                'place' => $entry->location,
+                'place' => isset($entry->location) ? $entry->location : "somewhere",
                 'start' => strtotime($starttime),
                 'end' => strtotime($endtime),
                 'type' => $type[1],

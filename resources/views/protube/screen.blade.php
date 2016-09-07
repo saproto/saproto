@@ -140,7 +140,7 @@
 
         #pin h1 {
             color: #c1ff00;
-            font-size: 12px;
+            font-size: 16px;
 
             margin: 0;
             padding: 0;
@@ -433,7 +433,7 @@
 
 <div id="bottomBar">
     <div id="pin">
-        <h1>https://protube.saproto.nl/</h1>
+        <h1>saproto.nl/protube</h1>
         <p id="pinCode">...</p>
     </div>
     <div id="queue">

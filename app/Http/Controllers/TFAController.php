@@ -17,7 +17,7 @@ use Redirect;
 class TFAController extends Controller
 {
 
-    public function timebasedPost($user_id, Request $request, Google2FA $google2fa)
+    public function timebasedPost(Request $request, $user_id, Google2FA $google2fa)
     {
 
         $user = User::findOrFail($user_id);
@@ -26,12 +26,8 @@ class TFAController extends Controller
             abort(403);
         }
 
-        if (!$request->session()->has('2fa_secret')) {
-            return Redirect::route('user::2fa::addtimebased', ['user_id' => $user->id]);
-        }
-
         $code = $request->input('2facode');
-        $secret = $request->session()->get('2fa_secret');
+        $secret = $request->input('2fakey');
 
         if ($google2fa->verifyKey($secret, $code)) {
 
@@ -43,9 +39,8 @@ class TFAController extends Controller
 
         } else {
 
-            $request->session()->reflash();
-            $request->session()->flash('flash_message', 'The code you entered is not correct. Try again.');
-            return Redirect::route('user::2fa::addtimebased', ['user_id' => $user->id]);
+            $request->session()->flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
+            return Redirect::route('user::dashboard', ['id' => $user->id]);
 
         }
 
@@ -70,7 +65,7 @@ class TFAController extends Controller
 
     }
 
-    public function yubikeyPost($user_id, Request $request)
+    public function yubikeyPost(Request $request, $user_id)
     {
 
         $user = User::findOrFail($user_id);

@@ -95,7 +95,7 @@ class StudyController extends Controller
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
-        return view('users.study.edit', ['link' => null, 'user' => $user, 'studies' => Study::all()]);
+        return view('users.study.edit', ['link' => null, 'user' => $user, 'studies' => Study::orderBy('name', 'asc')->get()]);
     }
 
     public function editLinkForm($user_id, $link_id)

@@ -38,7 +38,7 @@ class Activity extends Validatable
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps();
     }
 
     /**
@@ -47,7 +47,7 @@ class Activity extends Validatable
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
     /**
@@ -70,7 +70,7 @@ class Activity extends Validatable
     /**
      * @param Committee $committee The committee for which the user should be helping.
      * @param User $user The user to check helping status for.
-     * @return bool Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
+     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation(Committee $committee, User $user)
     {
@@ -84,7 +84,7 @@ class Activity extends Validatable
 
     /**
      * @param User $user The user to check participation status for.
-     * @return Model|null|static Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
+     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation(User $user, HelpingCommittee $h = null)
     {

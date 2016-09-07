@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Two Factor Authentication</strong>
+        <strong>Two factor authentication</strong>
     </div>
     <div class="panel-body">
 
@@ -65,6 +65,10 @@
             </div>
 
         </div>
+
+    </div>
+
+    <div class="panel-footer">
 
     </div>
 

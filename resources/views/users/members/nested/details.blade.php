@@ -130,13 +130,17 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-xs-6">
-            <div class="btn-group btn-group-justified" role="group">
-                <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
-                    Print Member Form
-                </a>
+        @if($user->address->count() > 0)
+
+            <div class="col-md-4 col-xs-6">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Member Form
+                    </a>
+                </div>
             </div>
-        </div>
+
+        @endif
 
     </div>
 
@@ -160,6 +164,26 @@
                     <a id="print-card" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
                         Print Card ({{ $user->member->card_printed_on or 'First' }})
                     </a>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row clearfix">
+
+            <div class="col-md-12 col-xs-12">
+                <div class="btn-group btn-group-justified" role="group">
+                    @if($user->isTempadmin())
+                        <a href="{{ route('user::member::endtempadmin', ['id' => $user->id]) }}" class="btn btn-default">
+                            End temporary admin
+                        </a>
+                    @else
+                        <a href="{{ route('user::member::maketempadmin', ['id' => $user->id]) }}" class="btn btn-default">
+                            Make temporary admin
+                        </a>
+                    @endif
                 </div>
             </div>
 

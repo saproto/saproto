@@ -1,7 +1,6 @@
+@include('users.profile.photo')
+
 <div class="panel panel-default">
-    <div class="panel-heading">
-        About {{ $user->name_first }}
-    </div>
     <div class="panel-body">
 
         <table class="table borderless">
@@ -43,26 +42,26 @@
                     </td>
                 </tr>
             @endif
+            <tr>
+                <td colspan="2">
+                @if($user->member == null)
+                    <span class="text-info">
+                        {{ $user->name_first }} is not a member of S.A. Proto.
+                    </span>
+                @else
+                    <span class="text-success">
+                        {{ $user->name_first }} is a member
+                        @if(date('U', strtotime($user->member->created_at)) > 0)
+                            as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                        @else
+                            since <strong>ancient times</strong>!
+                        @endif
+                    </span>
+                @endif
+                </td>
+            </tr>
         </table>
 
-    </div>
-    <div class="panel-footer">
-        <div class="btn-group btn-group-justified">
-            @if($user->member == null)
-                <a class="btn btn-info">
-                    {{ $user->name_first }} is not a member of S.A. Proto.
-                </a>
-            @else
-                <a class="btn btn-success">
-                    {{ $user->name_first }} is a member
-                    @if(date('U', strtotime($user->member->created_at)) > 0)
-                        as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
-                    @else
-                        since <strong>ancient times</strong>!
-                    @endif
-                </a>
-            @endif
-        </div>
     </div>
 </div>
 
@@ -72,12 +71,11 @@
             From the University of Twente address book
         </div>
         <div class="panel-body">
-
             <table class="table borderless">
                 @if($ldap->description == "Student")
                     <tr>
                         <td style="text-align: right;"><strong>Name</strong></td>
-                        <td>{{ $ldap->givenname }} {{ $ldap->sn }}</td>
+                        <td>{{ $ldap->cn }}</td>
                     </tr>
                     <tr>
                         <td style="text-align: right;"><strong>E-mail</strong></td>

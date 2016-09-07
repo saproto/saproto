@@ -6,6 +6,34 @@
 
 @section('content')
 
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+
+                    <span style="font-weight: 700; margin: 0 15px;">Archive</span>
+
+                    @foreach($years as $year)
+
+                        <span style="padding: 5px 15px; background-color: rgba(0,0,0,0.05); margin-right: 15px;">
+                        <a href="{{ route('event::archive', ['year'=>$year]) }}" style="text-decoration: none;">
+                            {{ $year }}
+                        </a>
+                        </span>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <div class="row calendar">
 
         @foreach($events as $key => $section)
@@ -73,34 +101,6 @@
             </div>
 
         @endforeach
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-12">
-
-            <div class="panel panel-default">
-
-                <div class="panel-body">
-
-                    <span style="font-weight: 700; margin: 0 15px;">Archive</span>
-
-                    @foreach($years as $year)
-
-                        <span style="padding: 5px 15px; background-color: rgba(0,0,0,0.05); margin-right: 15px;">
-                        <a href="{{ route('event::archive', ['year'=>$year]) }}" style="text-decoration: none;">
-                            {{ $year }}
-                        </a>
-                        </span>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        </div>
 
     </div>
 

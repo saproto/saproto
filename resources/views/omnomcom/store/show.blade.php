@@ -100,10 +100,16 @@
 
             transition: all 0.5s;
             transform: translate(0, 0);
+            opacity: 1;
+
+            z-index: 100;
         }
 
         .category_view.inactive {
             transform: translate(0, -100%);
+            opacity: 0;
+
+            z-index: 0;
         }
 
         #product_nav {
@@ -155,6 +161,10 @@
             margin: 10px;
             text-align: right;
             font-size: 20px;
+            max-height: 56px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .product-price {
@@ -370,6 +380,8 @@
 
             background-color: rgba(0, 0, 0, 0.8);
 
+            z-index: 200;
+
             overflow: hidden;
 
             display: none;
@@ -519,9 +531,11 @@
                                     &euro; {{ number_format($product->price, 2, '.', '') }}
                                 </div>
 
-                                <div class="product-stock">
-                                    {{ $product->stock }} x
-                                </div>
+                                @if ($product->stock < 1000)
+                                    <div class="product-stock">
+                                        {{ $product->stock }} x
+                                    </div>
+                                @endif
 
                             </div>
 
@@ -579,10 +593,10 @@
         <h1>Link an RFID card to your account.</h1>
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
-               type="text" placeholder="member@proto.utwente.nl">
+               type="text" placeholder="E-mail address or UTwente username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
                type="password"
-               placeholder="correct horse battery staple">
+               placeholder="Proto password or UTwente password">
 
         <span class="modal-status">
             First enter your username and password, then present an RFID card.
@@ -596,10 +610,10 @@
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-username"
                type="text"
-               placeholder="member@proto.utwente.nl">
+               placeholder="E-mail address or UTwente username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-password"
                type="password"
-               placeholder="correct horse battery staple">
+               placeholder="Proto password or UTwente password">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
         @if($store->cash_allowed)
@@ -687,7 +701,8 @@
             cart[$(this).attr('data-id')]++;
             stock[$(this).attr('data-id')]--;
 
-            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+            var s = stock[$(this).attr('data-id')];
+            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
             update();
 
@@ -700,7 +715,8 @@
         cart[$(this).attr('data-id')]--;
         stock[$(this).attr('data-id')]++;
 
-        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+        var s = stock[$(this).attr('data-id')];
+        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
         update();
 

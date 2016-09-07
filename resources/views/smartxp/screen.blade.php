@@ -160,6 +160,39 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        #protube {
+            position: relative;
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            border-bottom: none;
+        }
+
+        #protube-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #protube-title.active {
+            text-shadow: 0 0 5px #000;
+            border: none;
+        }
+
+        #protube-ticker {
+            position: absolute;
+
+            bottom: 0;
+            left: 0;
+
+            height: 5px;
+            width: 100%;
+
+            background-color: #c1ff00;
+        }
+
     </style>
 
 </head>
@@ -210,8 +243,10 @@
                 <div id="protube" class="box" style="height: 100%;">
 
                     <div id="protube-title" class="box-header">
-                        ProTube coming soon
+                        Connecting to ProTube...
                     </div>
+
+                    <div id="protube-ticker"></div>
 
                 </div>
 
@@ -326,7 +361,7 @@
                     for (i in data) {
                         var start = moment.unix(data[i].start);
                         var end = moment.unix(data[i].end);
-                        if (start.format('DD-MM') != end.format('DD-MM')) {
+                        if (start.format('DD-MM') == end.format('DD-MM')) {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
                         } else {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
@@ -374,6 +409,62 @@
 
     updateBuses();
     setInterval(updateBuses, 60000);
+
+    // ProTube
+    var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
+    var nowplaying;
+
+    screen.on("connected", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").removeClass('active').html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").css("background-image", "none");
+
+    });
+
+    screen.on("progress", function (data) {
+
+        var progress = parseInt(data);
+        $("#protube-ticker").css("width", (data.duration / progress) + "%");
+
+    });
+
+    screen.on("ytInfo", function (data) {
+
+        nowplaying = data;
+        if (typeof data.title == "undefined") {
+            $("#protube-title").removeClass('active').html("ProTube Idle");
+            $("#protube-ticker").css("width", "100%");
+            $("#protube").css("background-image", "none");
+        } else {
+            var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
+            $("#protube-ticker").css("width", "0%");
+            $("#protube-title").addClass('active').html(data.title);
+            $("#protube").css("background-image", url);
+        }
+
+    });
+
+    screen.on("disconnect", function () {
+
+        $("#protube-title").removeClass('active').html("Connection lost");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").css("background-image", "none");
+
+    });
+
+    screen.on("reconnect", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").removeClass('active').html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").css("background-image", "none");
+
+    });
+
 
 </script>
 

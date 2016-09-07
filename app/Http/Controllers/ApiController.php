@@ -55,7 +55,13 @@ class ApiController extends Controller
         $user = $token->user()->first();
 
         $adminInfo = new \stdClass();
-        $adminInfo->is_admin = $user->can('board');
+        
+        if($user->can('board') || $user->isTempadmin()) {
+            $adminInfo->is_admin = true;
+        }else{
+            $adminInfo->is_admin = false;
+        }
+
 
         return(json_encode($adminInfo));
     }

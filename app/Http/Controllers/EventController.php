@@ -8,6 +8,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Activity;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -73,22 +74,27 @@ class EventController extends Controller
     public function archive($year)
     {
         if (Auth::check() && Auth::user()->can('board')) {
-            $events = Event::where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+            $events = Event::orderBy('start')->get();
         } else {
-            $events = Event::where('secret', false)->where('start', '>', strtotime($year . "-01-01 00:00:01"))->where('start', '<', strtotime($year . "-12-31 23:59:59"))->get();
+            $events = Event::where('secret', false)->orderBy('start')->get();
         }
+
         $months = [];
+        $years = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
         foreach ($events as $event) {
-            if (!$event->activity || !$event->activity->secret) {
+            if ($event->start > strtotime($year . "-01-01 00:00:01") && $event->end < strtotime($year . "-12-31 23:59:59")) {
                 $months[intval(date('n', $event->start))][] = $event;
+            }
+            if (!in_array(date('Y', $event->start), $years)) {
+                $years[] = date('Y', $event->start);
             }
         }
 
-        return view('event.archive', ['year' => $year, 'months' => $months]);
+        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months]);
     }
 
     /**
@@ -110,6 +116,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
+
         $event = new Event();
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -124,6 +131,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 
@@ -167,6 +177,7 @@ class EventController extends Controller
     {
 
         $event = Event::findOrFail($id);
+
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -180,6 +191,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 
