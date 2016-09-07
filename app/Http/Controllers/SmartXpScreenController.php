@@ -48,7 +48,7 @@ class SmartXpScreenController extends Controller
 
             $roster[] = array(
                 'title' => $name,
-                'place' => $entry->location,
+                'place' => isset($entry->location) ? $entry->location : "somewhere",
                 'start' => strtotime($starttime),
                 'end' => strtotime($endtime),
                 'type' => $type[1],
