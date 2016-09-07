@@ -1,5 +1,9 @@
 @extends('website.layouts.content')
 
+@section('page-title')
+    Homepage
+@endsection
+
 @section('header')
 
     <div id="header">
@@ -21,18 +25,14 @@
 
         <div class="row homepage__companyrow">
 
-            <div class="container">
+            <div class="homepage__companyrow__inner">
 
                 @foreach($companies as $company)
 
-                    <div class="col-md-3 homepage__companyentry">
-
-                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                            <img class="homepage__companyimage"
-                                 src="{{ $company->image->generateImagePath(null, 50) }}">
-                        </a>
-
-                    </div>
+                    <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                        <img class="homepage__companyimage"
+                             src="{{ $company->image->generateImagePath(null, 50) }}">
+                    </a>
 
                 @endforeach
 
@@ -129,5 +129,54 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="application/javascript">
+
+        var sliderDelta = 0;
+        var oneWayOrTheOther = true;
+
+        $(document).ready(function () {
+
+            setTimeout(function () {
+
+                updateSlider();
+
+                setInterval(doSlide, 10000);
+
+                doSlide();
+
+            }, 2500);
+
+        });
+
+        $(window).resize(updateSlider);
+
+        function doSlide() {
+
+            if (sliderDelta < 0) {
+                if (oneWayOrTheOther) {
+                    $(".homepage__companyrow__inner").css('left', sliderDelta + 'px');
+                } else {
+                    $(".homepage__companyrow__inner").css('left', '0px');
+                }
+            }
+
+            oneWayOrTheOther = !oneWayOrTheOther;
+
+        }
+
+        setInterval(updateSlider, 1);
+
+        function updateSlider() {
+            sliderDelta = $(".homepage__companyrow").width() - $(".homepage__companyrow__inner").width() - 40;
+        }
+
+    </script>
 
 @endsection
