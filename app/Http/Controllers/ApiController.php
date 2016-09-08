@@ -66,4 +66,8 @@ class ApiController extends Controller
         return(json_encode($adminInfo));
     }
 
+    public function protubePlayed(Request $request) {
+        
+    }
+
 }
