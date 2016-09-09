@@ -51,7 +51,8 @@
     "barryvdh/laravel-snappy": "^0.3.0",
     "milon/barcode": "^5.2",
     "graham-campbell/markdown": "^6.1",
-    "directadmin/directadmin": "dev-master"
+    "directadmin/directadmin": "dev-master",
+    "sentry/sentry-laravel": "^0.3.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
