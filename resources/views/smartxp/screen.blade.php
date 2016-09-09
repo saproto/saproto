@@ -170,13 +170,14 @@
             border-bottom: none;
         }
 
+        #protube.inactive {
+            background-image: url('{{ getenv('FISHCAM_URL') }}') !important;
+        }
+
         #protube-title {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        #protube-title.active {
             text-shadow: 0 0 5px #000;
             border: none;
         }
@@ -240,7 +241,7 @@
 
             <div class="box-partial" style="height: 33.33%;">
 
-                <div id="protube" class="box" style="height: 100%;">
+                <div id="protube" class="box inactive" style="height: 100%;">
 
                     <div id="protube-title" class="box-header">
                         Connecting to ProTube...
@@ -414,13 +415,13 @@
     var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
     var nowplaying;
 
-    screen.on("connected", function () {
+    screen.on("connect", function () {
 
         screen.emit("screenReady");
 
         $("#protube-title").removeClass('active').html("ProTube connected");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
@@ -435,23 +436,23 @@
 
         nowplaying = data;
         if (typeof data.title == "undefined") {
-            $("#protube-title").removeClass('active').html("ProTube Idle");
+            $("#protube-title").html("ProTube Idle");
             $("#protube-ticker").css("width", "100%");
-            $("#protube").css("background-image", "none");
+            $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
             var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
             $("#protube-ticker").css("width", "0%");
-            $("#protube-title").addClass('active').html(data.title);
-            $("#protube").css("background-image", url);
+            $("#protube-title").html(data.title);
+            $("#protube").removeClass('inactive').css("background-image", url);
         }
 
     });
 
     screen.on("disconnect", function () {
 
-        $("#protube-title").removeClass('active').html("Connection lost");
+        $("#protube-title").html("Connection lost");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
@@ -459,9 +460,9 @@
 
         screen.emit("screenReady");
 
-        $("#protube-title").removeClass('active').html("ProTube connected");
+        $("#protube-title").html("ProTube connected");
         $("#protube-ticker").css("width", "100%");
-        $("#protube").css("background-image", "none");
+        $("#protube").addClass('inactive').css("background-image", "auto");
 
     });
 
