@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    // This is handled in the Handler class. On production, a nice page is shown. On other environments (which should always be well protected!) the stacktrace is shown.
+    'debug' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -159,7 +160,8 @@ return [
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
-        GrahamCampbell\Markdown\MarkdownServiceProvider::class
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
 
     ],
 
@@ -176,63 +178,69 @@ return [
 
     'aliases' => [
 
-        'App'       => Illuminate\Support\Facades\App::class,
-        'Artisan'   => Illuminate\Support\Facades\Artisan::class,
-        'Auth'      => Illuminate\Support\Facades\Auth::class,
-        'Blade'     => Illuminate\Support\Facades\Blade::class,
-        'Bus'       => Illuminate\Support\Facades\Bus::class,
-        'Cache'     => Illuminate\Support\Facades\Cache::class,
-        'Config'    => Illuminate\Support\Facades\Config::class,
-        'Cookie'    => Illuminate\Support\Facades\Cookie::class,
-        'Crypt'     => Illuminate\Support\Facades\Crypt::class,
-        'DB'        => Illuminate\Support\Facades\DB::class,
-        'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
-        'Event'     => Illuminate\Support\Facades\Event::class,
-        'File'      => Illuminate\Support\Facades\File::class,
-        'Gate'      => Illuminate\Support\Facades\Gate::class,
-        'Hash'      => Illuminate\Support\Facades\Hash::class,
-        'Input'     => Illuminate\Support\Facades\Input::class,
-        'Lang'      => Illuminate\Support\Facades\Lang::class,
-        'Log'       => Illuminate\Support\Facades\Log::class,
-        'Mail'      => Illuminate\Support\Facades\Mail::class,
-        'Password'  => Illuminate\Support\Facades\Password::class,
-        'Queue'     => Illuminate\Support\Facades\Queue::class,
-        'Redirect'  => Illuminate\Support\Facades\Redirect::class,
-        'Redis'     => Illuminate\Support\Facades\Redis::class,
-        'Request'   => Illuminate\Support\Facades\Request::class,
-        'Response'  => Illuminate\Support\Facades\Response::class,
-        'Route'     => Illuminate\Support\Facades\Route::class,
-        'Schema'    => Illuminate\Support\Facades\Schema::class,
-        'Session'   => Illuminate\Support\Facades\Session::class,
-        'Storage'   => Illuminate\Support\Facades\Storage::class,
-        'URL'       => Illuminate\Support\Facades\URL::class,
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Bus' => Illuminate\Support\Facades\Bus::class,
+        'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Config' => Illuminate\Support\Facades\Config::class,
+        'Cookie' => Illuminate\Support\Facades\Cookie::class,
+        'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+        'Event' => Illuminate\Support\Facades\Event::class,
+        'File' => Illuminate\Support\Facades\File::class,
+        'Gate' => Illuminate\Support\Facades\Gate::class,
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+        'Input' => Illuminate\Support\Facades\Input::class,
+        'Lang' => Illuminate\Support\Facades\Lang::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Password' => Illuminate\Support\Facades\Password::class,
+        'Queue' => Illuminate\Support\Facades\Queue::class,
+        'Redirect' => Illuminate\Support\Facades\Redirect::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Request' => Illuminate\Support\Facades\Request::class,
+        'Response' => Illuminate\Support\Facades\Response::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View'      => Illuminate\Support\Facades\View::class,
+        'View' => Illuminate\Support\Facades\View::class,
 
-        'Entrust'   => Zizaco\Entrust\EntrustServiceProvider::class,
-        'Form'      => Collective\Html\FormFacade::class,
-        'Html'      => Collective\Html\HtmlFacade::class,
+        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
 
-        'role'      => Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission'=> Zizaco\Entrust\Middleware\EntrustPermission::class,
-        'ability'   => Zizaco\Entrust\Middleware\EntrustAbility::class,
+        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
 
-        'Yubikey'   => Bitbeans\Yubikey\YubikeyFacade::class,
+        'role' => Zizaco\Entrust\Middleware\EntrustRole::class,
+        'permission' => Zizaco\Entrust\Middleware\EntrustPermission::class,
+        'ability' => Zizaco\Entrust\Middleware\EntrustAbility::class,
 
-        'Image'     => Intervention\Image\Facades\Image::class,
+        'Yubikey' => Bitbeans\Yubikey\YubikeyFacade::class,
+
+        'Image' => Intervention\Image\Facades\Image::class,
 
         'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
 
-        'PDF'       => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
 
-        'DNS1D'     => Milon\Barcode\Facades\DNS1DFacade::class,
-        'DNS2D'     => Milon\Barcode\Facades\DNS2DFacade::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 
-        'Markdown'  => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
-        'Flickr'    => Proto\Models\Flickr::class,
-        'Committee'    => Proto\Models\Committee::class,
-        'User'    => Proto\Models\User::class
+        'Flickr' => Proto\Models\Flickr::class,
+        'Committee' => Proto\Models\Committee::class,
+        'User' => Proto\Models\User::class,
+        'Member' => Proto\Models\Member::class,
+        'EmailList' => \Proto\Models\EmailList::class,
+        'Email' => \Proto\Models\Email::class,
+        'Event' => \Proto\Models\Event::class,
 
     ],
 

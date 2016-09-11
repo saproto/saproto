@@ -159,6 +159,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('Proto\Models\Quote');
     }
 
+    public function lists()
+    {
+        return $this->belongsToMany('Proto\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
+    }
+
     /**
      * @return mixed Any cards linked to this account
      */
