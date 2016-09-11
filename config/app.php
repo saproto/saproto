@@ -239,6 +239,7 @@ return [
         'User' => Proto\Models\User::class,
         'Member' => Proto\Models\Member::class,
         'EmailList' => \Proto\Models\EmailList::class,
+        'Email' => \Proto\Models\Email::class,
 
     ],
 

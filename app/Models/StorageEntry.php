@@ -68,7 +68,35 @@ class StorageEntry extends Model
         return route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
     }
 
-    public function getBase64($w = null, $h = null) {
+    public function getBase64($w = null, $h = null)
+    {
         return base64_encode(FileController::makeImage($this, $w, $h));
+    }
+
+    public function getFileSize($human = true)
+    {
+        $size = File::size($this->generateLocalPath());
+        if ($human) {
+            if ($size < 1024) {
+                return $size . ' bytes';
+            } elseif ($size < pow(1024, 2)) {
+                return round($size / pow(1024, 1), 1) . ' kilobytes';
+            } elseif ($size < pow(1024, 3)) {
+                return round($size / pow(1024, 2), 1) . ' megabytes';
+            } else {
+                return round($size / pow(1024, 3), 1) . ' gigabytes';
+            }
+        } else {
+            return $size;
+        }
+    }
+
+    public function generateLocalPath() {
+        return storage_path('app/' . $this->filename);
+    }
+
+    public function getFileHash($algo = 'md5')
+    {
+        return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
     }
 }

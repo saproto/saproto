@@ -11,10 +11,10 @@
                     </strong>
 
                     @if($list->isSubscribed($user))
-                        <a href="{{ route('email::list::toggle', ['id'=>$list->id, 'user_id' => $user->id ]) }}"
+                        <a href="{{ route('togglelist', ['id'=>$list->id, 'user_id' => $user->id ]) }}"
                            class="label label-danger pull-right">Unsubscribe</a>
                     @elseif(!$list->is_member_only || $user->member)
-                        <a href="{{ route('email::list::toggle', ['id'=>$list->id, 'user_id' => $user->id ]) }}"
+                        <a href="{{ route('togglelist', ['id'=>$list->id, 'user_id' => $user->id ]) }}"
                            class="label label-success pull-right">Subscribe</a>
                     @else
                         <span class="label label-info pull-right">Members only</span>
