@@ -187,7 +187,7 @@
                 if(!$.isEmptyObject(data)) {
                     $("#nowPlaying").html('<img src="http://img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
                             '<h1>' + data.title + '</h1>' +
-                            '<strong>0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
+                            '<strong id="current_time">0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
                             '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>'+ prettifyDuration(data.duration) +'</strong>');
                     $("#progress").slider({
                         formatter: function(value) {
@@ -203,6 +203,7 @@
 
             admin.on("progress", function(data) {
                 $("#progress").slider('setValue', data);
+                $("#current_time").html(prettifyDuration(data));
             });
 
             $('#searchForm').bind('submit', function(e){
