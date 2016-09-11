@@ -11,19 +11,11 @@ php artisan cache:clear
 # Pull the new data.
 git pull
 
-# By default we update dependencies, but we can disable them.
-if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
-  echo "Not updateing dependencies.";
-else
-  composer install
-fi
+# Updating composer dependencies.
+composer install
 
-# Should we update permissions?
-if [ "$1" == --no-permissions ] || [ "$2" == --no-permissions ]; then
-  echo "Not fixing permissions.";
-else
-  chmod -R ug+rwx storage bootstrap/cache
-fi
+# Update permissions?
+chmod -R ug+rwx storage bootstrap/cache
 
 # Do migrations.
 php artisan migrate
@@ -31,11 +23,15 @@ php artisan migrate
 # Add necessary roles.
 php artisan proto:generateroles
 
-# Fancy artisan stuff for the IDE.
-rm .phpstorm.meta.php
-rm _ide_helper.php
-rm _ide_helper_models.php
+# Update bower dependencies.
+if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
+  echo "Not updating bower dependencies.";
+else
+  bower install
+fi
 
+# Fancy artisan stuff for the IDE.
+php artisan clear-compiled
 php artisan ide-helper:generate
 php artisan ide-helper:models --nowrite
 php artisan ide-helper:meta
