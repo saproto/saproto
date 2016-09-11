@@ -5,6 +5,7 @@
 
     <script>
         var server = "{!! env('HERBERT_SERVER') !!}";
+        @if(Auth::check()) var token = "{!! Session::get('token') !!}"; @else var token; @endif
 
         $(document).ready(function() {
             var errorElement = $("body");
@@ -14,6 +15,7 @@
             remote.on("connect", function() {
                 $("#connecting").hide(0);
                 $("#connected").show(0);
+                if(token) remote.emit("token", token);
             });
 
             remote.on("reconnect", function() {
