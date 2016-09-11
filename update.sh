@@ -14,10 +14,6 @@ git pull
 # Updating composer dependencies.
 composer install
 
-# Update permissions?
-chgrp -R www-data storage bootstrap/cache
-chmod -R ug+rwx storage bootstrap/cache
-
 # Do migrations.
 php artisan migrate
 
