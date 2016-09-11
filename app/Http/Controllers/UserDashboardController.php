@@ -99,7 +99,6 @@ class UserDashboardController extends Controller
         $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
-        $userdata['receive_newsletter'] = $request->has('receive_newsletter');
         $userdata['receive_sms'] = $request->has('receive_sms');
 
         $validator = Validator::make($userdata, [

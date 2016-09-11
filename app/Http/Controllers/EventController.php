@@ -124,6 +124,7 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->summary = $request->summary;
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -184,6 +185,7 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->summary = $request->summary;
 
         if ($request->file('image')) {
             $file = new StorageEntry();

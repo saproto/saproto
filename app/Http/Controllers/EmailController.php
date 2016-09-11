@@ -74,6 +74,11 @@ class EmailController extends Controller
         return view('emails.manualemail', ['body' => $email->parseBodyFor(Auth::user()), 'attachments' => $email->attachments, 'destination' => $email->destinationForBody()]);
     }
 
+    public function newsletterPreview()
+    {
+        return view('emails.newsletter', ['user' => Auth::user()]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

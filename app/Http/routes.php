@@ -323,6 +323,7 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
  * Routes related to e-mail.
  */
 Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
+Route::get('newsletter', ['as' => 'newsletter', 'middleware' => ['auth'], 'uses' => 'EmailController@newsletterPreview']);
 Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
 
     Route::get('', ['as' => 'admin', 'uses' => 'EmailController@index']);
@@ -494,7 +495,6 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
 
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
-        Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
     });
 
 });

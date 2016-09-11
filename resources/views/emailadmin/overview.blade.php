@@ -58,6 +58,7 @@
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-xs btn-danger"
+                               onclick="return confirm('Delete e-mail list {{ $list->name }}?');"
                                href="{{ route('email::list::delete', ['id' => $list->id]) }}" role="button">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>

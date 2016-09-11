@@ -15,14 +15,6 @@
                 <div class="col-sm-8">
                     <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}"
                            required>
-
-                    <div class="checkbox">
-                        <label>
-                            <input name="receive_newsletter"
-                                   type="checkbox" {{ ($user->receive_newsletter == 1 ? 'checked' : '') }}>
-                            Receive the weekly newsletter
-                        </label>
-                    </div>
                 </div>
             </div>
 

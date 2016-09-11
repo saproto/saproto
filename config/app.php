@@ -240,6 +240,7 @@ return [
         'Member' => Proto\Models\Member::class,
         'EmailList' => \Proto\Models\EmailList::class,
         'Email' => \Proto\Models\Email::class,
+        'Event' => \Proto\Models\Event::class,
 
     ],
 
