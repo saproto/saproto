@@ -494,6 +494,7 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
 
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
+        Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
     });
 
 });

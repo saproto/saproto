@@ -181,6 +181,14 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed Any videos played by the user.
+     */
+    public function playedVideos()
+    {
+        return $this->hasMany('Proto\Models\PlayedVideo');
+    }
+
+    /**
      * @return mixed The age in years of a user.
      */
     public function age()
@@ -205,6 +213,9 @@ class User extends Model implements AuthenticatableContract,
         ) > 0;
     }
 
+    /**
+     * @return bool Whether the user is an active member of the association.
+     */
     public function isActiveMember()
     {
         return count(CommitteeMembership::withTrashed()

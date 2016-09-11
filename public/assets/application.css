@@ -14457,4 +14457,464 @@ span.CodeMirror-selectedtext {
   background: #FAFAFA !important;
 }
 
+/* line 2681, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-zoomable.chocolat-zoomed .chocolat-img {
+  cursor: zoom-out;
+}
+
+/* line 2684, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-open {
+  overflow: hidden;
+}
+
+/* line 2687, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+  display: none;
+  opacity: 0.8;
+}
+
+/* line 2698, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 16;
+  color: #fff;
+}
+
+/* line 2707, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-zoomable .chocolat-img {
+  cursor: zoom-in;
+}
+
+/* line 2710, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-loader {
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -16px;
+  margin-top: -16px;
+  z-index: 11;
+  background: url(../images/loader.gif);
+  display: none;
+}
+
+/* line 2722, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-content {
+  position: fixed;
+  width: 0px;
+  height: 0px;
+  left: 50%;
+  top: 50%;
+  z-index: 14;
+  text-align: left;
+}
+
+/* line 2732, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-content .chocolat-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 2737, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-left {
+  position: absolute;
+  left: 0;
+  width: 50px;
+  height: 100px;
+  top: 50%;
+  margin-top: -50px;
+  cursor: pointer;
+  background: url(../images/left.png) 50% 50% no-repeat;
+  z-index: 17;
+  display: none;
+}
+
+/* line 2750, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-right {
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 100px;
+  top: 50%;
+  margin-top: -50px;
+  cursor: pointer;
+  background: url(../images/right.png) 50% 50% no-repeat;
+  z-index: 17;
+  display: none;
+}
+
+/* line 2762, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-right.active {
+  display: block;
+}
+
+/* line 2765, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-left.active {
+  display: block;
+}
+
+/* line 2768, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-top {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  left: 0;
+  line-height: 50px;
+  height: 50px;
+  overflow: hidden;
+  z-index: 17;
+  margin-bottom: 10px;
+}
+
+/* line 2779, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-close {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: url(../images/close.png) 50% 50% no-repeat;
+}
+
+/* line 2788, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  line-height: 40px;
+  height: 40px;
+  font-size: 12px;
+  z-index: 17;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  text-align: right;
+  margin-top: 10px;
+}
+
+/* line 2803, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-set-title {
+  display: inline-block;
+  padding-right: 15px;
+  line-height: 1;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* line 2809, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-pagination {
+  float: right;
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: 15px;
+  /*border-right: 1px solid rgba(255, 255, 255, 0.2);*/
+}
+
+/* line 2817, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-fullscreen {
+  width: 16px;
+  height: 40px;
+  background: url(../images/fullscreen.png) 50% 50% no-repeat;
+  display: block;
+  margin: auto;
+  cursor: pointer;
+  float: right;
+}
+
+/* line 2826, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-wrapper .chocolat-description {
+  display: inline-block;
+  float: left;
+}
+
+/* no container mode*/
+/* line 2832, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+body.chocolat-open > .chocolat-overlay {
+  z-index: 15;
+}
+
+/* line 2835, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+body.chocolat-open > .chocolat-loader {
+  z-index: 15;
+}
+
+/* line 2838, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+body.chocolat-open > .chocolat-content {
+  z-index: 17;
+}
+
+/* container mode*/
+/* line 2843, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-in-container .chocolat-wrapper,
+.chocolat-in-container .chocolat-content,
+.chocolat-in-container .chocolat-overlay {
+  position: absolute;
+}
+
+/* line 2848, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.chocolat-in-container {
+  position: relative;
+}
+
+/* uncomment to hide controls when zoomed-in*/
+/*
+.chocolat-zoomable .chocolat-top,
+.chocolat-zoomable .chocolat-bottom,
+.chocolat-zoomable .chocolat-right,
+.chocolat-zoomable .chocolat-left {
+    transition: opacity .3s ease, visibility 0s .3s;
+   opacity: 1;
+}
+
+.chocolat-zoomable.chocolat-zoomed .chocolat-top,
+.chocolat-zoomable.chocolat-zoomed .chocolat-bottom,
+.chocolat-zoomable.chocolat-zoomed .chocolat-right,
+.chocolat-zoomable.chocolat-zoomed .chocolat-left {
+    visibility: hidden;
+    opacity: 0;
+}
+*/
+/* line 2871, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container {
+  padding: 30px;
+}
+
+/* line 2874, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-image {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-transform-origin: 0 0;
+          transform-origin: 0 0;
+  max-width: none;
+}
+
+/* line 2883, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-boundary {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+/* line 2890, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-viewport {
+  position: absolute;
+  border: 2px solid #fff;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  box-shadow: 0 0 2000px 2000px rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+/* line 2901, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-vp-circle {
+  border-radius: 50%;
+}
+
+/* line 2904, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-overlay {
+  z-index: 1;
+  position: absolute;
+  cursor: move;
+}
+
+/* line 2909, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-slider-wrap {
+  width: 75%;
+  margin: 0 auto;
+  margin-top: 25px;
+  text-align: center;
+}
+
+/* line 2915, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-result {
+  position: relative;
+  overflow: hidden;
+}
+
+/* line 2919, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-result img {
+  position: absolute;
+}
+
+/* line 2922, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.croppie-container .cr-image,
+.croppie-container .cr-overlay,
+.croppie-container .cr-viewport {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/*************************************/
+/***** STYLING RANGE INPUT ***********/
+/*************************************/
+/*http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
+/*************************************/
+/* line 2937, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider {
+  -webkit-appearance: none;
+  /*removes default webkit styles*/
+  /*border: 1px solid white; */
+  /*fix for FF unable to apply focus style bug */
+  width: 300px;
+  /*required for proper track sizing in FF*/
+  max-width: 100%;
+}
+
+/* line 2943, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 0;
+  border-radius: 3px;
+}
+
+/* line 2950, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #ddd;
+  margin-top: -6px;
+}
+
+/* line 2959, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider:focus {
+  outline: none;
+}
+
+/*
+.cr-slider:focus::-webkit-slider-runnable-track {
+    background: #ccc;
+}
+*/
+/* line 2968, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-moz-range-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 0;
+  border-radius: 3px;
+}
+
+/* line 2975, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-moz-range-thumb {
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #ddd;
+  margin-top: -6px;
+}
+
+/*hide the outline behind the border*/
+/* line 2985, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider:-moz-focusring {
+  outline: 1px solid white;
+  outline-offset: -1px;
+}
+
+/* line 2990, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-ms-track {
+  width: 300px;
+  height: 5px;
+  background: transparent;
+  /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+  border-color: transparent;
+  /*leave room for the larger thumb to overflow with a transparent border */
+  border-width: 6px 0;
+  color: transparent;
+  /*remove default tick marks*/
+}
+
+/* line 2998, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+/* line 3002, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+/* line 3006, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider::-ms-thumb {
+  border: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #ddd;
+}
+
+/* line 3013, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider:focus::-ms-fill-lower {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* line 3016, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-slider:focus::-ms-fill-upper {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/*******************************************/
+/***********************************/
+/* Rotation Tools */
+/***********************************/
+/* line 3024, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-rotate-controls {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 1;
+}
+
+/* line 3030, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-rotate-controls button {
+  border: 0;
+  background: none;
+}
+
+/* line 3034, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-rotate-controls i:before {
+  display: inline-block;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 22px;
+}
+
+/* line 3040, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-rotate-l i:before {
+  content: '↺';
+}
+
+/* line 3043, /home/jonathanj/domains/jonathan.dev.saproto.nl/saproto/resources/assets/sass/components.scss */
+.cr-rotate-r i:before {
+  content: '↻';
+}
+
 /*# sourceMappingURL=application.css.map */

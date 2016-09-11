@@ -110,7 +110,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return count($this->users()) >= $this->participants;
+        return count($this->users) >= $this->participants;
     }
 
     /**
@@ -121,7 +121,7 @@ class Activity extends Validatable
         if ($this->participants == null) {
             return null;
         } else {
-            return ($this->participants - count($this->users()));
+            return ($this->participants - count($this->users));
         }
     }
 
