@@ -121,7 +121,7 @@ class Activity extends Validatable
         if ($this->participants == null) {
             return null;
         } else {
-            return ($this->participants - count($this->users()));
+            return ($this->participants - count($this->users));
         }
     }
 
