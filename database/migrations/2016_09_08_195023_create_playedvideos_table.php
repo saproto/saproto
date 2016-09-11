@@ -28,6 +28,6 @@ class CreatePlayedvideosTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('playedvideos');
     }
 }

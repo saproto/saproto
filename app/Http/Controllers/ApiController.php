@@ -12,6 +12,7 @@ use Proto\Models\User;
 use Proto\Models\Event;
 use Proto\Models\Activity;
 use Proto\Models\Token;
+use Proto\Models\PlayedVideo;
 
 use Auth;
 
@@ -67,7 +68,21 @@ class ApiController extends Controller
     }
 
     public function protubePlayed(Request $request) {
-        
+        if($request->secret != env('HERBERT_SECRET')) abort(403);
+
+        $playedVideo = new PlayedVideo();
+
+        $token = Token::where('token', $request->token)->first();
+
+        if($token) {
+            $user = $token->user()->first();
+            $playedVideo->user()->associate($user);
+        }
+
+        $playedVideo->video_id = $request->video_id;
+        $playedVideo->video_title = $request->video_title;
+
+        $playedVideo->save();
     }
 
 }
