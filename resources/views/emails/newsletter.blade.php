@@ -16,55 +16,51 @@
         &nbsp;
     </p>
 
-    <table style="margin: 0 -40px; padding: 0;">
+    <table style="margin: 0 -40px; padding: 0; border: none; width: 100%;">
 
-        @foreach(Event::where('secret', false)->where('start', '>', date('U'))->where('start', '<', strtotime('+4 weeks'))->orderBy('start')->get() as $i => $event)
+        @foreach($events as $i => $event)
 
-            @if(strlen($event->summary) > 10)
+            <tr style="margin: 0; padding: 0; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};">
 
-                <tr style="margin: 0; padding: 0; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};">
+                <td style="margin: 0; padding: 20px 40px;">
 
-                    <td style="margin: 0; padding: 20px 40px;">
+                    <p>
+                        <strong>{{ $event->title }}</strong> @ {{ $event->location }}<br>
+                        {{ date('l d F, H:i', $event->start) }}
+                        - {{ ($event->end - $event->start >= 3600*24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end)) }}
+                    </p>
 
-                        <p>
-                            <strong>{{ $event->title }}</strong> @ {{ $event->location }}<br>
-                            {{ date('l d F, H:i', $event->start) }}
-                            - {{ ($event->end - $event->start >= 3600*24 ? date('l d F, H:i', $event->end) : date('H:i', $event->end)) }}
-                        </p>
+                    <p>
 
-                        <p>
+                        {!! Markdown::convertToHtml($event->summary) !!}
 
-                            {!! Markdown::convertToHtml($event->summary) !!}
+                    </p>
 
-                        </p>
-
-                        @if($event->activity)
-
-                            <p>
-                                <strong>Sign-up required!</strong><br>
-                                <i>Places available:</i>
-                                {{ $event->activity->participants }}<br>
-                                <i>Sign-up before:</i>
-                                {{ date('l d F, H:i', $event->activity->registration_end) }}<br>
-                                <i>Participation:</i>
-                                {!! $event->activity->price > 0 ? '&euro;' . number_format($event->activity->price, 2) : 'Free!' !!}
-                                <br>
-
-                            </p>
-
-                        @endif
+                    @if($event->activity)
 
                         <p>
-                            <a style="color: #000;" href="{{ route('event::show', ['id' => $event->id]) }}">
-                                Learn more! >>
-                            </a>
+                            <strong>Sign-up required!</strong><br>
+                            <i>Places available:</i>
+                            {{ $event->activity->participants }}<br>
+                            <i>Sign-up before:</i>
+                            {{ date('l d F, H:i', $event->activity->registration_end) }}<br>
+                            <i>Participation:</i>
+                            {!! $event->activity->price > 0 ? '&euro;' . number_format($event->activity->price, 2) : 'Free!' !!}
+                            <br>
+
                         </p>
 
-                    </td>
+                    @endif
 
-                </tr>
+                    <p>
+                        <a style="color: #000;" href="{{ route('event::show', ['id' => $event->id]) }}">
+                            Learn more! >>
+                        </a>
+                    </p>
 
-            @endif
+                </td>
+
+            </tr>
 
         @endforeach
 

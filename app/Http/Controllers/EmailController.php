@@ -9,6 +9,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\Email;
 use Proto\Models\EmailList;
 use Proto\Models\StorageEntry;
+use Proto\Models\Event;
 
 use Auth;
 use Redirect;
@@ -76,7 +77,7 @@ class EmailController extends Controller
 
     public function newsletterPreview()
     {
-        return view('emails.newsletter', ['user' => Auth::user()]);
+        return view('emails.newsletter', ['user' => Auth::user(), 'events' => Event::getEventsForNewsletter()]);
     }
 
     /**

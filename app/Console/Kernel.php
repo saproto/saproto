@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\TestEmail::class,
         Commands\DirectAdminSync::class,
         Commands\EmailCron::class,
+        Commands\NewsletterCron::class,
     ];
 
     /**
@@ -29,5 +30,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('proto:dasync')->everyMinute();
         $schedule->command('proto:emailcron')->everyMinute();
+        $schedule->command('proto:newslettercron')->weekly()->mondays()->at('11:00');
     }
 }

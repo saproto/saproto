@@ -11,7 +11,7 @@
 
 <br><br><br>
 
-<table style="background-color: #fff; width: 90%; max-width: 800px; margin: 0 auto; padding: 0;">
+<table style="background-color: #fff; width: 90%; max-width: 800px; margin: 0 auto; padding: 0; border: none;">
     <tr style="padding: 0; margin: 0;">
         <td style="padding: 20px 40px; text-align: justify;">
             @yield('body')

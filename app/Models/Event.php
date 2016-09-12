@@ -42,6 +42,14 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\StorageEntry');
     }
 
+    /**
+     * @return Event A collection of events for the weekly newsletter.
+     */
+    public static function getEventsForNewsletter()
+    {
+        return Event::where('secret', false)->where('start', '>', date('U'))->where('start', '<', strtotime('+4 weeks'))->orderBy('start')->get();
+    }
+
     protected $guarded = ['id'];
 
 }
