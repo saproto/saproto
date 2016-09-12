@@ -19,7 +19,7 @@
     </tr>
 </table>
 
-<table style="background-color: #111; width: 600px; margin: 0px auto 40px auto; padding: 20px 40px; border-bottom: 5px solid #c1ff00;">
+<table style="background-color: #111; width: 600px; margin: 0px auto 40px auto; padding: 20px 40px; border: none; border-bottom: 5px solid #c1ff00;">
     <tr style="padding: 0; margin: 0;">
         <td style="color: #fff; margin: 0; padding: 0;" width="50%">
             <strong>
