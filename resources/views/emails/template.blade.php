@@ -11,7 +11,7 @@
 
 <br><br><br>
 
-<table style="background-color: #fff; width: 600px; margin: 0 auto; padding: 0; border: none;">
+<table style="background-color: #fff; width: 700px; margin: 0 auto; padding: 0; border: none;">
     <tr style="padding: 0; margin: 0;">
         <td style="padding: 20px 40px; text-align: justify;">
             @yield('body')
@@ -19,7 +19,7 @@
     </tr>
 </table>
 
-<table style="background-color: #111; width: 600px; margin: 0px auto 40px auto; padding: 20px 40px; border: none; border-bottom: 5px solid #c1ff00;">
+<table style="background-color: #111; width: 700px; margin: 0px auto 40px auto; padding: 20px 40px; border: none; border-bottom: 5px solid #c1ff00;">
     <tr style="padding: 0; margin: 0;">
         <td style="color: #fff; margin: 0; padding: 0;" width="50%">
             <strong>
