@@ -16,13 +16,13 @@
         &nbsp;
     </p>
 
-    <table style="margin: 0 -40px; padding: 0; border: none; width: 100%;">
+    @foreach($events as $i => $event)
 
-        @foreach($events as $i => $event)
+        <table style="margin: 0 -40px; padding: 0; border: none; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};" width="600px">
 
-            <tr style="margin: 0; padding: 0; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};">
+            <tr style="margin: 0; padding: 0;" width="100%">
 
-                <td style="margin: 0; padding: 20px 40px;">
+                <td style="margin: 0; padding: 20px 40px;" width="100%">
 
                     <p>
                         <strong>{{ $event->title }}</strong> @ {{ $event->location }}<br>
@@ -62,9 +62,9 @@
 
             </tr>
 
-        @endforeach
+        </table>
 
-    </table>
+    @endforeach
 
     <p>
         &nbsp;
