@@ -18,6 +18,13 @@ Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
 Route::get('developers', ['as' => 'developers', 'uses' => 'HomeController@developers']);
 
 /*
+ * Routes for the search function.
+ */
+Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+Route::get('opensearch', ['as' => 'search::opensearch', 'uses' => 'SearchController@openSearch']);
+
+/*
  * Routes related to authentication.
  */
 Route::group(['as' => 'login::'], function () {
@@ -495,7 +502,6 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
 
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
-        Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
     });
 
 });

@@ -7,7 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
+    <meta name="theme-color" content="#C1FF00">
+
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
+    <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto"
+          href="{{ route('search::opensearch') }}"/>
 
     <title>S.A. Proto | @yield('page-title','Default Page Title')</title>
 

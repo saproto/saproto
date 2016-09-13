@@ -13,12 +13,14 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\Company;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
+use Proto\Models\Page;
+use Proto\Models\User;
 
 use Auth;
-use DB;
 
 class HomeController extends Controller
 {
+
     /**
      * Display the homepage.
      */
@@ -48,4 +50,5 @@ class HomeController extends Controller
         ];
         return view('website.developers', ['developers' => $developers, 'committee' => $committee]);
     }
+
 }

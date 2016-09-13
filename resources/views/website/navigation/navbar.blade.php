@@ -135,13 +135,17 @@
                 </li>
             @endif
 
+                <li>
+                    <a href="{{ route('search') }}">Search</a>
+                </li>
+
             @if (Auth::check())
 
                 @if(Auth::user()->isTempadmin())
-                        <li>
-                            <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
-                               aria-expanded="false">ProTube Admin</a>
-                        </li>
+                    <li>
+                        <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
+                           aria-expanded="false">ProTube Admin</a>
+                    </li>
                 @endif
 
                 <li class="dropdown">
@@ -176,6 +180,7 @@
                 </form>
 
             @endif
+
         </ul>
 
     </div>
