@@ -1,0 +1,25 @@
+.navbar {
+    transition: all 0.5s;
+    text-shadow: 0 0 5px #000;
+
+    .dropdown-menu {
+        text-shadow: none;
+    }
+}
+
+$navbar-dark: rgba(0,0,0,.85);
+
+.navbar-scroll {
+    background-color: $navbar-dark;
+}
+
+@media only screen and (max-width : 768px) {
+    .navbar {
+        background-color: $navbar-dark;
+    }
+}
+
+.navbar-title, .navbar-title:hover, .navbar-title:active {
+    background-color: transparent !important;
+    font-style: italic;
+}

@@ -16,23 +16,6 @@
         padding-bottom: 120px; /* this needs to be bigger than footer height*/
     }
 
-    #navbar {
-        transition: all 0.5s;
-
-    }
-
-    .navbar-scroll {
-        background-color: #222;
-    }
-
-    #navbar {
-        text-shadow: 0 0 5px #000;
-    }
-
-    #navbar .dropdown-menu {
-        text-shadow: none;
-    }
-
     #header {
         background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
         background-size: cover;
@@ -142,11 +125,6 @@
 
     .container-panel .panel-body {
         padding: 50px;
-    }
-
-    .navbar-title, .navbar-title:hover, .navbar-title:active {
-        background-color: transparent !important;
-        font-style: italic;
     }
 
 </style>
