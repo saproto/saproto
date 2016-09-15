@@ -340,6 +340,30 @@
     max-height: none;
   }
 }
+#container {
+    background-color: #fff;
+    margin-top: -200px;
+    padding: 50px;
+    box-shadow: 0 0 20px;
+}
+
+#container.home-container {
+    margin-top: 50px;
+}
+
+#container.container-nobg {
+    background-color: transparent;
+    box-shadow: none;
+    padding-top: 15px;
+}
+
+@media only screen and (max-width : 768px) {
+    #container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
 .navbar {
     transition: all 0.5s;
     text-shadow: 0 0 5px #000;
