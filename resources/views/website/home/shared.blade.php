@@ -61,7 +61,7 @@
 
                         <hr>
 
-                        <? $week = date('W', $events[0]->start); ?>
+                        <?php $week = date('W', $events[0]->start); ?>
 
                         @foreach($events as $key => $event)
 
@@ -87,7 +87,7 @@
                                 </div>
                             </a>
 
-                            <? $week = date('W', $event->start); ?>
+                            <?php$week = date('W', $event->start); ?>
 
                         @endforeach
 
