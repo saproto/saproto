@@ -53,6 +53,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                  aria-expanded="false">Association <span class="caret"></span></a>
               <ul class="dropdown-menu">
+                  <li><a href="{{ route("page::show", ["slug" => "board"]) }}">Board</a></li>
                   <li><a href="{{ route("committee::list") }}">Committees</a></li>
                   <li><a href="{{ route("event::list") }}">Calendar</a></li>
                   <li><a href="{{ route("photo::albums") }}">Photos</a></li>
