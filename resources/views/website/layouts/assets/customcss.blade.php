@@ -30,17 +30,6 @@
         text-align: center;
     }
 
-    #footer {
-        position: relative;
-        margin-top: -120px;
-        height: 120px;
-        clear: both;
-        padding-top: 20px;
-
-        background-color: #111;
-        color: #fff;
-    }
-
     .green {
         color: #C1FF00 !important;
     }
