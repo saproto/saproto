@@ -14,7 +14,6 @@ use Auth;
 use Session;
 use Redirect;
 
-
 class QuoteCornerController extends Controller
 {
 

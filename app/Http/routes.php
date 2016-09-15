@@ -268,8 +268,23 @@ Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
 
     // Show event
     Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
-
 });
+
+/*
+ * Routes related to menu.
+ */
+Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function () {
+    Route::get('', ['as' => 'list', 'uses' => 'MenuController@index']);
+    Route::get('add', ['as' => 'add', 'uses' => 'MenuController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'MenuController@store']);
+
+    Route::get('up/{id}', ['as' => 'orderUp', 'uses' => 'MenuController@orderUp']);
+    Route::get('down/{id}', ['as' => 'orderDown', 'uses' => 'MenuController@orderDown']);
+
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
+});
+
 
 /*
  * Routes related to pages.
@@ -364,9 +379,97 @@ Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'],
  * Routes related to the Quote Corner.
  */
 Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
-    Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
-    Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
-    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
+    Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
+    Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
+});
+
+/**
+ * Routes related to the OmNomCom.
+ */
+Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
+
+    Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
+        Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
+        Route::post('rfid/add', ['as' => 'rfidadd', 'uses' => 'RfidCardController@store']);
+        Route::post('{store}/buy', ['as' => 'buy', 'uses' => 'OmNomController@buy']);
+    });
+
+    Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
+        Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
+        Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
+
+        Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
+    });
+
+    Route::group(['prefix' => 'accounts', 'middleware' => ['permission:finadmin'], 'as' => 'accounts::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'AccountController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'AccountController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'AccountController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'AccountController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AccountController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AccountController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'AccountController@show']);
+    });
+
+    Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'ProductController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'ProductController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'ProductController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'ProductController@show']);
+
+        Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
+    });
+
+    Route::group(['prefix' => 'categories', 'middleware' => ['permission:omnomcom'], 'as' => 'categories::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'ProductCategoryController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'ProductCategoryController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'ProductCategoryController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ProductCategoryController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductCategoryController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductCategoryController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
+    });
+
+});
+
+/**
+ * Routes related to printing.
+ */
+Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'], function () {
+    Route::get('', ['as' => 'form', 'uses' => 'PrintController@form']);
+    Route::post('', ['as' => 'print', 'uses' => 'PrintController@doPrint']);
+});
+
+/*
+ * Routes related to Flickr photos.
+ */
+Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
+    Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
+    Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
+
+    Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
+    });
+});
+
+/*
+ * The route for the SmartXp Screen.
+ */
+Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
+
+/*
+ * The routes for Protube.
+ */
+Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
+    Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
+    Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
+    Route::get('admin', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'ProtubeController@admin']);
+    Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
 });
 
 /**
@@ -499,9 +602,20 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
     Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
     Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
+});
 
-    Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
-        Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
-    });
-
+/**
+ * Routes related to the Achievement system.
+ */
+Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:board'], 'as' => 'achievement::'], function() {
+    Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
+    Route::get('add', ['as' => 'add', 'uses' => 'AchievementController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'AchievementController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
+    Route::get('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@wrap']);
+    Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+    Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
+    Route::post('{id}/image', ['as' => 'image', 'uses' => 'AchievementController@image']);
 });
