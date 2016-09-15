@@ -75,39 +75,3 @@
     @endif
 
 @endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        tr * {
-            max-height: 50px !important;
-            max-width:150px;
-            vertical-align: middle !important;
-        }
-
-        .COMMON {
-             color: #DDDDDD;
-         }
-
-        .UNCOMMON {
-            color: #1E90FF;
-        }
-
-        .RARE {
-            color: #9932CC;
-        }
-
-        .EPIC {
-            color: #333333;
-        }
-
-        .LEGENDARY {
-            color: #C1FF00;
-        }
-
-    </style>
-
-@endsection

@@ -157,36 +157,6 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        select.COMMON, option[value="COMMON"] {
-            color: #DDDDDD;
-        }
-
-        select.UNCOMMON, option[value="UNCOMMON"] {
-            color: #1E90FF;
-        }
-
-        select.RARE, option[value="RARE"] {
-            color: #9932CC;
-        }
-
-        select.EPIC, option[value="EPIC"] {
-            color: #333333;
-        }
-
-        select.LEGENDARY, option[value="LEGENDARY"] {
-            color: #C1FF00;
-        }
-
-    </style>
-
-@endsection
-
 @section('javascript')
 
     @parent
