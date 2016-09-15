@@ -91,16 +91,6 @@
 
                         </div>
 
-                        <div class="form-group">
-                            <label for="editor">Description</label>
-                            @if (!$event)
-                                <textarea id="editor" name="description"
-                                          placeholder="Please elaborate on why this event is awesome."></textarea>
-                            @else
-                                <textarea id="editor" name="description">{{ $event->description }}</textarea>
-                            @endif
-                        </div>
-
                         <div class="row">
 
                             <div class="col-md-6">
@@ -132,6 +122,26 @@
 
                         </div>
 
+                        <div class="form-group">
+                            <label for="editor">Description</label>
+                            @if (!$event)
+                                <textarea id="editor" name="description"
+                                          placeholder="Please elaborate on why this event is awesome."></textarea>
+                            @else
+                                <textarea id="editor" name="description">{{ $event->description }}</textarea>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editor-summary">Summary</label>
+                            @if (!$event)
+                                <textarea id="editor-summary" name="summary"
+                                          placeholder="A summary (used in the newsletter for example). Only a description, all other data (date, time, location, costs, sign-up info) will be added automaticall where needed."></textarea>
+                            @else
+                                <textarea id="editor-summary" name="summary">{{ $event->summary or '' }}</textarea>
+                            @endif
+                        </div>
+
                         @if($event && $event->image)
 
                             <hr>
@@ -153,7 +163,8 @@
                                class="btn btn-danger pull-left">Delete</a>
                         @endif
 
-                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}" class="btn btn-default pull-right">Cancel</a>
+                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}"
+                           class="btn btn-default pull-right">Cancel</a>
 
                     </div>
 
@@ -341,6 +352,12 @@
 
         var simplemde = new SimpleMDE({
             element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+
+        var simplemde = new SimpleMDE({
+            element: $("#editor-summary")[0],
             toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
             spellChecker: false
         });

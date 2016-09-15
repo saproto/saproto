@@ -5,6 +5,7 @@
 
     <script>
         var server = "{!! env('HERBERT_SERVER') !!}";
+        @if(Auth::check()) var token = "{!! Session::get('token') !!}"; @else var token; @endif
 
         $(document).ready(function() {
             var errorElement = $("body");
@@ -14,6 +15,7 @@
             remote.on("connect", function() {
                 $("#connecting").hide(0);
                 $("#connected").show(0);
+                if(token) remote.emit("token", token);
             });
 
             remote.on("reconnect", function() {
@@ -192,22 +194,10 @@
             display: none;
         }
 
-        #searchBox {
-            position: absolute;
-            top: 120px;
-            left: 0px;
-            right: 0;
-        }
-
-        #showVideo {
-            position: absolute;
-            top: 120px;
-            right: 0px;
-        }
 
         #results {
             position: absolute;
-            top: 200px;
+            top: 75px;
 
             width: 100%;
         }
@@ -389,10 +379,6 @@
 </div>
 
 <div id="connected">
-    <div id="queue">
-        <!-- Filled by JS -->
-    </div>
-
     <div id="login">
         <div id="pincode">
             <!-- Filled by JS -->
@@ -422,8 +408,12 @@
     <div id="loggedIn">
         <div id="search">
             <form action="" method="get">
-                <input type="text" id="searchBox" placeholder="Search" autocomplete="off" />
-                <input type="checkbox" checked="checked" id="showVideo" />
+                <table width="100%">
+                    <tr>
+                        <td><input type="text" id="searchBox" placeholder="Search" autocomplete="off" style="width: 100%;" /></td>
+                        <td style="width: 130px; text-align: right;"><label for="showVideo">Show video</label> <input type="checkbox" checked="checked" id="showVideo" /></td>
+                    </tr>
+                </table>
             </form>
             <div id="results">
                 <!-- Filled by JS -->

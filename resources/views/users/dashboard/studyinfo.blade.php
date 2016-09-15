@@ -1,40 +1,5 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <strong>Your UTwente account</strong>
-    </div>
-    <div class="panel-body">
-        <p style="text-align: center;">
-            You can link your UTwente account to use it for authentication.
-        </p>
-        @if ($user->utwente_username)
-            <hr>
-            <p style="text-align: center;">
-                {{ $utwente->cn or 'Unknown UT Account' }}<br>
-                {{ $user->utwente_username }}
-            </p>
-        @endif
-    </div>
-    <div class="panel-footer">
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                @if ($user->utwente_username)
-                    <a type="button" class="btn btn-danger"
-                       href="{{ route('user::utwente::delete', ['id' => $user->id]) }}">
-                        Unlink your account
-                    </a>
-                @else
-                    <a type="button" class="btn btn-success"
-                       href="{{ route('user::utwente::add', ['id' => $user->id]) }}">
-                        Link a UT account
-                    </a>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="panel panel-default">
-    <div class="panel-heading">
         <strong>Your study history</strong>
     </div>
     <div class="panel-body">
@@ -46,53 +11,58 @@
                 </strong>
             </p>
         @else
-            @foreach($user->studies as $study)
-                <div class="panel panel-default">
-                    <div class="panel-body">
+            <div class="row">
+                @foreach($user->studies as $study)
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
 
-                        <p style="text-align: center">
+                                <p style="text-align: center">
 
-                            <strong>{{ $study->type }} {{ $study->name }}</strong><br>
-                            <sup>{{ $study->faculty }}, {{ $study->utwente ? 'UTwente' : 'Non-UT' }}</sup>
+                                    <strong>{{ $study->type }} {{ $study->name }}</strong><br>
+                                    <sup>{{ $study->faculty }}</sup><br>
+                                    {{ $study->utwente ? 'University of Twente' : 'External Institution' }}
 
-                            <br>
+                                    <br><br>
 
-                            @if($study->pivot->deleted_at == null)
-                                Since {{ date('F \'y', strtotime($study->pivot->created_at)) }}
-                            @else
-                                Between {{ date('M \'y', strtotime($study->pivot->created_at)) }}
-                                and {{ date('M \'y', strtotime($study->pivot->deleted_at)) }}
-                            @endif
+                                    @if($study->pivot->deleted_at == null)
+                                        Since {{ date('F \'y', strtotime($study->pivot->created_at)) }}
+                                    @else
+                                        Between {{ date('M \'y', strtotime($study->pivot->created_at)) }}
+                                        and {{ date('M \'y', strtotime($study->pivot->deleted_at)) }}
+                                    @endif
 
-                        </p>
+                                </p>
 
-                    </div>
-
-                    <div class="panel-footer">
-
-                        <div class="row">
-
-                            <div class="col-md-6">
-                                <div class="btn-group-justified btn-group" role="group">
-                                    <a type="button" class="btn btn-default"
-                                       href="{{ route("user::study::edit", ["user_id" =>$user->id ,"link_id" => $study->pivot->id]) }}"><i
-                                                class="fa fa-pencil"></i></a>
-                                </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="btn-group btn-group-justified" role="group">
-                                    <a type="button" class="btn btn-danger"
-                                       href="{{ route('user::study::delete', ['link_id' => $study->pivot->id, 'user_id' => $user->id]) }}"><i
-                                                class="fa fa-trash-o"></i></a>
-                                </div>
-                            </div>
+                            <div class="panel-footer">
 
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <div class="btn-group-justified btn-group" role="group">
+                                            <a type="button" class="btn btn-default"
+                                               href="{{ route("user::study::edit", ["user_id" =>$user->id ,"link_id" => $study->pivot->id]) }}"><i
+                                                        class="fa fa-pencil"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="btn-group btn-group-justified" role="group">
+                                            <a type="button" class="btn btn-danger"
+                                               href="{{ route('user::study::delete', ['link_id' => $study->pivot->id, 'user_id' => $user->id]) }}"><i
+                                                        class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
                         </div>
-
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         @endif
     </div>
     <div class="panel-footer">

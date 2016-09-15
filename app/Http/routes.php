@@ -18,6 +18,13 @@ Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
 Route::get('developers', ['as' => 'developers', 'uses' => 'HomeController@developers']);
 
 /*
+ * Routes for the search function.
+ */
+Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+Route::get('opensearch', ['as' => 'search::opensearch', 'uses' => 'SearchController@openSearch']);
+
+/*
  * Routes related to authentication.
  */
 Route::group(['as' => 'login::'], function () {
@@ -320,7 +327,6 @@ Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'pe
     Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
 });
 
-
 /*
  * Routes related to studies.
  */
@@ -332,6 +338,40 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
     Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
     Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
     Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
+
+});
+
+/*
+ * Routes related to e-mail.
+ */
+Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
+Route::get('newsletter', ['as' => 'newsletter', 'middleware' => ['auth'], 'uses' => 'EmailController@newsletterPreview']);
+Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
+
+    Route::get('', ['as' => 'admin', 'uses' => 'EmailController@index']);
+
+    Route::group(['prefix' => 'list', 'as' => 'list::'], function () {
+
+        Route::get('add', ['as' => 'add', 'uses' => 'EmailListController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'EmailListController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'EmailListController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'EmailListController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'EmailListController@destroy']);
+
+    });
+
+    Route::get('add', ['as' => 'add', 'uses' => 'EmailController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'EmailController@store']);
+    Route::get('preview/{id}', ['as' => 'show', 'uses' => 'EmailController@show']);
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'EmailController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'EmailController@update']);
+    Route::get('toggleready/{id}', ['as' => 'toggleready', 'uses' => 'EmailController@toggleReady']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'EmailController@destroy']);
+
+    Route::group(['prefix' => '{id}/attachment', 'as' => 'attachment::'], function () {
+        Route::post('add', ['as' => 'add', 'uses' => 'EmailController@addAttachment']);
+        Route::get('delete/{file_id}', ['as' => 'delete', 'uses' => 'EmailController@deleteAttachment']);
+    });
 
 });
 

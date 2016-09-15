@@ -11,15 +11,15 @@
 
 <br><br><br>
 
-<table style="background-color: #fff; width: 90%; max-width: 800px; margin: 0 auto; padding: 0;">
+<table style="background-color: #fff; width: 700px; margin: 0 auto; padding: 0; border: none;">
     <tr style="padding: 0; margin: 0;">
-        <td style="padding: 20px 40px;">
+        <td style="padding: 20px 40px; text-align: justify;">
             @yield('body')
         </td>
     </tr>
 </table>
 
-<table style="background-color: #111; width: 90%; max-width: 800px; margin: 0px auto 40px auto; padding: 20px 40px; border-bottom: 5px solid #c1ff00;">
+<table style="background-color: #111; width: 700px; margin: 0px auto 40px auto; padding: 20px 40px; border: none; border-bottom: 5px solid #c1ff00;">
     <tr style="padding: 0; margin: 0;">
         <td style="color: #fff; margin: 0; padding: 0;" width="50%">
             <strong>
@@ -37,6 +37,15 @@
             <a style="color: #fff; text-decoration: none;" href="mailto:board@proto.utwente.nl">
                 board@proto.utwente.nl
             </a>
+        </td>
+    </tr>
+    <tr style="padding: 0; margin: 0;">
+        <td style="color: #fff; margin: 0; padding: 0;" colspan="2">
+            <br>
+            <sub>
+                If you feel this e-mail violates the Dutch laws for electronic communication, please contact
+                <a href="mailto:abuse@saproto.nl" style="color: #c1ff00; text-decoration: none;">abuse@saproto.nl</a>.
+            </sub>
         </td>
     </tr>
 </table>

@@ -111,6 +111,7 @@
                         <li><a class="navbar-title">Website:</a></li>
                         <li><a href="{{ route("menu::list") }}">Menu</a></li>
                         <li><a href="{{ route("page::list") }}">Pages</a></li>
+                        <li><a href="{{ route("email::admin") }}">Email</a></li>
 
                         @if(Auth::user()->can('admin'))
                             <li><a href="{{ route("alias::index") }}">Aliases</a></li>
@@ -135,13 +136,17 @@
                 </li>
             @endif
 
+                <li>
+                    <a href="{{ route('search') }}">Search</a>
+                </li>
+
             @if (Auth::check())
 
                 @if(Auth::user()->isTempadmin())
-                        <li>
-                            <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
-                               aria-expanded="false">ProTube Admin</a>
-                        </li>
+                    <li>
+                        <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
+                           aria-expanded="false">ProTube Admin</a>
+                    </li>
                 @endif
 
                 <li class="dropdown">
@@ -176,6 +181,7 @@
                 </form>
 
             @endif
+
         </ul>
 
     </div>

@@ -6,77 +6,83 @@
 
         @if(count($user->address) > 0)
 
-            @foreach($user->address as $address)
-                <div class="panel panel-default">
+            <div class="row">
 
-                    <div class="panel-body">
+                @foreach($user->address as $address)
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
 
-                        <p>
-                            <strong>{{ $address->street }} {{ $address->number }}</strong>
-                            <br>
-                            {{ $address->zipcode }} {{ $address->city }} ({{ $address->country }})
-                        </p>
+                            <div class="panel-body">
 
-                    </div>
-                    <div class="panel-footer">
+                                <p>
+                                    <strong>{{ $address->street }} {{ $address->number }}</strong>
+                                    <br>
+                                    {{ $address->zipcode }} {{ $address->city }} ({{ $address->country }})
+                                </p>
 
-                        @if((Auth::user()->can('board') || Auth::id() == $user->id))
-                            <div class="row">
-                                <div class="col-md-4 col-xs-4">
-                                    <div class="btn-group btn-group-justified" role="group">
-                                        <a class="btn btn-default"
-                                           href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                @if ($address->is_primary == true)
-                                    <div class="col-md-4 col-xs-4">
-                                        <div class="btn-group btn-group-justified" role="group">
-                                            <div class="btn-group" role="group">
-                                                <button class="btn btn-success" disabled>
-                                                    <i class="fa fa-star"></i>
-                                                </button>
+                            </div>
+                            <div class="panel-footer">
+
+                                @if((Auth::user()->can('board') || Auth::id() == $user->id))
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-4">
+                                            <div class="btn-group btn-group-justified" role="group">
+                                                <a class="btn btn-default"
+                                                   href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
                                             </div>
                                         </div>
-                                    </div>
-                                @endif
-                                @if ($address->is_primary == false)
-                                    <div class="col-md-4 col-xs-4">
-                                        <form method="POST"
-                                              action="{{ route('user::address::primary', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                            {!! csrf_field() !!}
-                                            <div class="btn-group btn-group-justified" role="group">
-                                                <div class="btn-group" role="group">
-                                                    <button type="submit" class="btn btn-default">
-                                                        <i class="fa fa-star"></i>
-                                                    </button>
+                                        @if ($address->is_primary == true)
+                                            <div class="col-md-4 col-xs-4">
+                                                <div class="btn-group btn-group-justified" role="group">
+                                                    <div class="btn-group" role="group">
+                                                        <button class="btn btn-success" disabled>
+                                                            <i class="fa fa-star"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
-                                @endif
-                                @if ($address->is_primary == false || $user->member == null)
-                                    <div class="col-md-4 col-xs-4">
-                                        <form method="POST"
-                                              action="{{ route('user::address::delete', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                            {!! csrf_field() !!}
-                                            <div class="btn-group btn-group-justified" role="group">
-                                                <div class="btn-group" role="group">
-                                                    <button type="submit" class="btn btn-danger">
-                                                        <i class="fa fa-trash-o"></i>
-                                                    </button>
-                                                </div>
+                                        @endif
+                                        @if ($address->is_primary == false)
+                                            <div class="col-md-4 col-xs-4">
+                                                <form method="POST"
+                                                      action="{{ route('user::address::primary', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                                    {!! csrf_field() !!}
+                                                    <div class="btn-group btn-group-justified" role="group">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="submit" class="btn btn-default">
+                                                                <i class="fa fa-star"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
-                                        </form>
+                                        @endif
+                                        @if ($address->is_primary == false || $user->member == null)
+                                            <div class="col-md-4 col-xs-4">
+                                                <form method="POST"
+                                                      action="{{ route('user::address::delete', ['address_id' => $address->id, 'id' => $user->id]) }}">
+                                                    {!! csrf_field() !!}
+                                                    <div class="btn-group btn-group-justified" role="group">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="fa fa-trash-o"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </div>
                                 @endif
-                            </div>
-                        @endif
 
+                            </div>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+
+            </div>
 
         @else
 
