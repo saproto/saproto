@@ -58,7 +58,7 @@
 
                         @if(count($section) > 0)
 
-                            <?php$week = date('W', $section[0]->start); ?>
+                            <?php $week = date('W', $section[0]->start); ?>
 
                             @foreach($section as $key => $event)
 
@@ -84,7 +84,7 @@
                                     </div>
                                 </a>
 
-                                <?php$week = date('W', $event->start); ?>
+                                <?php $week = date('W', $event->start); ?>
 
                             @endforeach
 

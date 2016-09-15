@@ -87,7 +87,7 @@
                                 </div>
                             </a>
 
-                            <?php$week = date('W', $event->start); ?>
+                            <?php $week = date('W', $event->start); ?>
 
                         @endforeach
 
