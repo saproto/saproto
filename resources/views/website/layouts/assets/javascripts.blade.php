@@ -13,9 +13,9 @@
             var scroll = $(window).scrollTop();
 
             if (scroll >= 100) {
-                $("#navbar").addClass("navbar-scroll");
+                $("#nav").addClass("navbar-scroll");
             } else {
-                $("#navbar").removeClass("navbar-scroll");
+                $("#nav").removeClass("navbar-scroll");
             }
         });
 
