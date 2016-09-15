@@ -35,7 +35,7 @@
 
 </div>
 
-<footer id="footer">
+<footer class="main-footer" id="footer">
     <div class="container">
         <div class="row vcard">
             <div class="col-md-2 col-xs-6">
@@ -72,7 +72,7 @@
                             href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
                 </sub>
             </div>
-            <div class="col-md-3 col-xs-6" style="text-align: right;">
+            <div class="col-md-3 col-xs-6 footer__logo">
                 <img src="{{ asset('images/logo/inverse.png') }}" width="57%">
             </div>
         </div>
