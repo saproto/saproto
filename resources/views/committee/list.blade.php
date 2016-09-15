@@ -7,32 +7,23 @@
 @section('content')
 
     @foreach($data as $key => $committee)
+        <div class="col-md-4 col-xs-6">
 
-        @if($key % 3 == 0)
-            <div class="row">
-                @endif
-
-                <div class="col-md-4 col-xs-6">
-
-                    <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
-                        <div class="committee"
-                             style="{{ ($committee->image ? "background-image: url(".$committee->image->generateImagePath(450, 300).");" : '') }}">
-                            <div class="committee-name">
-                                {{ $committee->name }}
-                            </div>
-                            @if(!$committee->public)
-                                <div class="committee-hidden">
-                                    <i class="fa fa-eye-slash"></i>
-                                </div>
-                            @endif
+            <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
+                <div class="committee"
+                     style="{{ ($committee->image ? "background-image: url(".$committee->image->generateImagePath(450, 300).");" : '') }}">
+                    <div class="committee-name">
+                        {{ $committee->name }}
+                    </div>
+                    @if(!$committee->public)
+                        <div class="committee-hidden">
+                            <i class="fa fa-eye-slash"></i>
                         </div>
-                    </a>
-
+                    @endif
                 </div>
+            </a>
 
-                @if($key % 3 == 2)
-            </div>
-        @endif
+        </div>
 
     @endforeach
 

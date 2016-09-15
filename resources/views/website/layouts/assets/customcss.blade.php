@@ -30,23 +30,6 @@
         text-align: center;
     }
 
-    #container {
-        background-color: #fff;
-        margin-top: -200px;
-        padding: 50px;
-        box-shadow: 0 0 20px;
-    }
-
-    #container.home-container {
-        margin-top: 50px;
-    }
-
-    #container.container-nobg {
-        background-color: transparent;
-        box-shadow: none;
-        padding: 15px 0;
-    }
-
     #footer {
         position: relative;
         margin-top: -120px;
