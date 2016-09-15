@@ -72,11 +72,11 @@
                             <tbody>
                             <tr>
                                 <td>Members only</td>
-                                <td>{{ count($achievement->current(true)) }}</td>
+                                <td>{{ count($achievement->currentOwners(true)) }}</td>
                             </tr>
                             <tr>
                                 <td>All users</td>
-                                <td>{{ count($achievement->current(false)) }}</td>
+                                <td>{{ count($achievement->currentOwners(false)) }}</td>
                             </tr>
                             </tbody>
                         </table>

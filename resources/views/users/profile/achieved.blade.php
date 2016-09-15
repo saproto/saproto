@@ -1,4 +1,4 @@
-<h3>Achievements</h3>
+<h3 style="text-align:center;">Achievements</h3>
 
 @if(count($user->achieved()) > 0)
 
@@ -76,10 +76,13 @@
 
         .achievement {
             margin-top:5px;
+            margin-left:auto;
+            margin-right:auto;
             overflow: hidden;
             word-wrap: break-word;
             border-width: 5px;
             position: relative;
+            width: 70%;
         }
 
         .del {
