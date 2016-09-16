@@ -58,11 +58,11 @@
                             <div class="col-md-2"
                                  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 @if($orderline->isPayed())
-                                    @if($orderline->payed_with_withdrawal)
+                                    @if($orderline->payed_with_withdrawal !== null)
                                         Withdrawal #{{ $orderline->payed_with_withdrawal }}
-                                    @elseif($orderline->payed_with_cash)
+                                    @elseif($orderline->payed_with_cash !== null)
                                         Cash
-                                    @elseif($orderline->payed_with_mollie)
+                                    @elseif($orderline->payed_with_mollie !== null)
                                         Mollie #{{ $orderline->payed_with_mollie }}
                                     @endif
                                 @else

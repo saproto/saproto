@@ -421,6 +421,16 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
     });
 
+    Route::group(['prefix' => 'withdrawals', 'middleware' => ['permission:finadmin'], 'as' => 'withdrawal::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'WithdrawalController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'WithdrawalController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WithdrawalController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WithdrawalController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WithdrawalController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WithdrawalController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'WithdrawalController@show']);
+    });
+
     Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
 
 });

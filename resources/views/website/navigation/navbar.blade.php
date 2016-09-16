@@ -129,7 +129,7 @@
                             <li><a class="navbar-title">Financial:</a></li>
                             <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                             <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
-                            <li><a href="#">Withdrawals</a></li>
+                            <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
                         @endif
                     </ul>
                 </li>
