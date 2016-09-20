@@ -88,10 +88,12 @@ class ProductController extends Controller
         }
 
         $categories = [];
-        foreach ($request->input('product_categories') as $category) {
-            $category = ProductCategory::find($category);
-            if ($category != null) {
-                $categories[] = $category->id;
+        if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
+            foreach ($request->input('product_categories') as $category) {
+                $category = ProductCategory::find($category);
+                if ($category != null) {
+                    $categories[] = $category->id;
+                }
             }
         }
         $product->categories()->sync($categories);
@@ -160,10 +162,12 @@ class ProductController extends Controller
         $product->account()->associate(Account::findOrFail($request->input('account_id')));
 
         $categories = [];
-        foreach ($request->input('product_categories') as $category) {
-            $category = ProductCategory::find($category);
-            if ($category != null) {
-                $categories[] = $category->id;
+        if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
+            foreach ($request->input('product_categories') as $category) {
+                $category = ProductCategory::find($category);
+                if ($category != null) {
+                    $categories[] = $category->id;
+                }
             }
         }
         $product->categories()->sync($categories);
