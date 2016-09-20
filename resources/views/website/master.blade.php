@@ -21,6 +21,17 @@
         @include('website.layouts.assets.customcss')
     @show
 
+    @section('opengraph')
+        <meta property="og:url" content="{{ Request::url() }}"/>
+        <meta property="og:type" content="website"/>
+        <meta property="fb:app_id" content="145272648862427"/>
+        <meta property="og:title" content="@yield('page-title','Website')"/>
+        <meta property="og:description"
+              content="@yield('og-description','S.A. Proto is the study association for Creative Technology at the University of Twente.')"/>
+        <meta property="og:image"
+              content="@yield('og-image',asset('images/logo/og-image.png'))"/>
+    @show
+
 </head>
 
 <body ng-controller="AppController as app" style="display: block;">
@@ -34,6 +45,8 @@
     </div>
 
 </div>
+
+@include('website.navigation.navbar')
 
 <footer class="main-footer" id="footer">
     <div class="container">

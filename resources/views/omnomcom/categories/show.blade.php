@@ -44,7 +44,13 @@
 
                             <div class="product__account__name">
 
-                                <a href="{{ route("omnomcom::products::show",['id' => $product->id]) }}">{{ $product->name }}</a>
+                                <a href="{{ route("omnomcom::products::edit",['id' => $product->id]) }}">
+                                    <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                </a>
+                                <a href="{{ route("omnomcom::products::show",['id' => $product->id]) }}">
+                                    {{ $product->name }}
+                                </a>
+
 
                             </div>
 
