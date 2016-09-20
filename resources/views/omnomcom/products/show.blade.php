@@ -27,6 +27,14 @@
 
             @endif
 
+            <hr>
+
+            <div class="btn-group-justified">
+                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}" class="btn btn-success">
+                    Edit
+                </a>
+            </div>
+
 
         </div>
 
