@@ -2,8 +2,6 @@
 
 @section('page-title')
     {{ $user->name }}
-
-
 @endsection
 
 @section('content')
