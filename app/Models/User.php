@@ -227,4 +227,22 @@ class User extends Model implements AuthenticatableContract,
             })->get()
         ) > 0;
     }
+
+    /**
+     * @return mixed Any Achievements the user aquired
+     */
+    public function achieved()
+    {
+        $achievements = $this->achievements;
+        $r = array();
+        foreach ($achievements as $achievement) {
+            $r[] = $achievement;
+        }
+        return $r;
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+    }
 }
