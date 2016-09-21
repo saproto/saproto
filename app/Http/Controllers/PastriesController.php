@@ -38,7 +38,10 @@ class PastriesController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request);
+        if ($request->user_a == "") {
+            Session::flash('flash_message', "Person A has to be a member of Proto!");
+            return Redirect::route("pastries::list");
+        }
         $pastry = new Pastry();
         $pastry->user_id_a = $request->user_a;
         if ($request->user_b != "") {
