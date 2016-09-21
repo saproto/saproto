@@ -8,6 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Intervention\Image\Exception\NotReadableException;
 
 use App;
 use Auth;
@@ -22,7 +23,8 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         HttpException::class,
         NotFoundHttpException::class,
-        HttpException::class
+        HttpException::class,
+        NotReadableException::class
     ];
 
     /**
@@ -91,7 +93,11 @@ class Handler extends ExceptionHandler
         $message = "Something is wrong with the website.";
         $statuscode = 500;
 
-        if ($e instanceof NotFoundHttpException) {
+        if ($e instanceof HttpException) {
+            $reported = false;
+            $message = $e->getMessage();
+            $statuscode = $e->getStatusCode();
+        } elseif ($e instanceof NotFoundHttpException) {
             $reported = false;
             $message = "The page you requested does not exist.";
             $statuscode = 404;
@@ -99,10 +105,10 @@ class Handler extends ExceptionHandler
             $reported = false;
             $message = "You requested an database entry that does not exist.";
             $statuscode = 404;
-        } elseif ($e instanceof HttpException) {
+        } elseif ($e instanceof NotReadableException) {
             $reported = false;
-            $message = $e->getMessage();
-            $statuscode = $e->getStatusCode();
+            $message = "Unable to read the requested file from disk.";
+            $statuscode = 500;
         }
 
 
