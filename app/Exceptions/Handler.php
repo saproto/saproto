@@ -22,7 +22,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         HttpException::class,
         NotFoundHttpException::class,
-        ModelNotFoundException::class
+        HttpException::class
     ];
 
     /**
@@ -36,7 +36,8 @@ class Handler extends ExceptionHandler
     public function report(Exception $e)
     {
 
-        if (App::environment('production')) {
+        if ($this->shouldReport($e) && App::environment('production')) {
+
             $sentry = app('sentry');
 
             $context = null;
@@ -69,9 +70,11 @@ class Handler extends ExceptionHandler
             ]);
 
             $sentry->captureException($e);
+
         } else {
             return parent::report($e);
         }
+
     }
 
     /**
