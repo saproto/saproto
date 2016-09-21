@@ -29,7 +29,7 @@
                 @elseif($statuscode == 404)
                     It appears you have been trying to access a page and/or database entry that did not exist. If you
                     typed in the URL manually chances are you made a mistake. If you were redirected here from another
-                    webiste, the website you came from is probably outdated. If the latter is the case, please do notify
+                    website, the website you came from is probably outdated. If the latter is the case, please do notify
                     the owner of that website of the issue. If you see this page while navigation this website, please
                     try to do again whatever you did that got you here. <strong>If the problem persists, please notify
                         the <a href="{{ route('developers') }}">developers</a> of this website and tell them what went
