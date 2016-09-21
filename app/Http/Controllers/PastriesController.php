@@ -53,7 +53,11 @@ class PastriesController extends Controller
         $pastry->pastry = $request->pastry;
 
         $pastry->save();
-        Session::flash('flash_message', "Pastry has been baked.");
+        if ($request->user_a == $request->user_b) {
+            Session::flash('flash_message', "Ehr, okay. Enjoy alone-time. Entry added...");
+        } else {
+            Session::flash('flash_message', "Pastry has been baked.");
+        }
         return Redirect::route("pastries::list");
     }
 
