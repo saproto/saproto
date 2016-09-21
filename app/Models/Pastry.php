@@ -33,4 +33,39 @@ class Pastry extends Model
         'person_b' => 'string',
         'pastry' => 'required|integer'
     );
+
+    public function user_a()
+    {
+        return $this->belongsTo('Proto\Models\User', 'user_id_a');
+    }
+
+    public function user_b()
+    {
+        if ($this->user_id_b != null) {
+            return User::find($this->user_id_b);
+        } else {
+            $user = new \stdClass();
+            $user->id = "";
+            $user->name = $this->person_b;
+            return $user;
+        }
+    }
+
+    public function type()
+    {
+        switch ($this->pastry) {
+            case 0:
+                return "Cookies";
+                break;
+            case 1:
+                return "Cake";
+                break;
+            case 2:
+                return "Pie";
+                break;
+            default:
+                return "Unknown";
+                break;
+        }
+    }
 }
