@@ -6,7 +6,7 @@
 
 @section('content')
 
-<div id="connecting" class="container">
+<div id="connecting">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
             <div class="panel-body">Connecting...</div>
@@ -15,7 +15,7 @@
 </div>
 
 
-<div id="connected" class="container">
+<div id="connected">
 
     <div class="col-md-4">
 
