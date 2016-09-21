@@ -505,3 +505,19 @@ Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
     });
 
 });
+
+/**
+ * Routes related to the Achievement system.
+ */
+Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:board'], 'as' => 'achievement::'], function() {
+    Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
+    Route::get('add', ['as' => 'add', 'uses' => 'AchievementController@create']);
+    Route::post('add', ['as' => 'add', 'uses' => 'AchievementController@store']);
+    Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
+    Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
+    Route::get('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@wrap']);
+    Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+    Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
+    Route::post('{id}/image', ['as' => 'image', 'uses' => 'AchievementController@image']);
+});
