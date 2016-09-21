@@ -55,6 +55,8 @@ class ApiController extends Controller
 
         $user = $token->user()->first();
 
+        if(!$user) return("{\"is_admin\":false}");
+
         $adminInfo = new \stdClass();
         
         if($user->can('board') || $user->isTempadmin()) {
@@ -62,7 +64,6 @@ class ApiController extends Controller
         }else{
             $adminInfo->is_admin = false;
         }
-
 
         return(json_encode($adminInfo));
     }
