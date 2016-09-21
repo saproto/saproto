@@ -364,9 +364,9 @@ Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'],
  * Routes related to the Quote Corner.
  */
 Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
-    Route::get('', ['as' => 'list', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@overview']);
-    Route::post('add', ['as' => 'add', 'middleware' => ['auth'], 'uses' => 'QuoteCornerController@add']);
-    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'QuoteCornerController@delete']);
+    Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
+    Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
+    Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
 });
 
 /**
@@ -426,7 +426,7 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
 });
 
 /**
- * Routes related to the Quote Corner.
+ * Routes related to printing.
  */
 Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'], function () {
     Route::get('', ['as' => 'form', 'uses' => 'PrintController@form']);
@@ -520,4 +520,13 @@ Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:bo
     Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
     Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
     Route::post('{id}/image', ['as' => 'image', 'uses' => 'AchievementController@image']);
+});
+
+/**
+ * Routes related to the pastries system.
+ */
+Route::group(['prefix' => 'pastries', 'middleware' => ['auth', 'permission:board'], 'as' => 'pastries::'], function() {
+    Route::get('', ['as' => 'list', 'uses' => 'PastriesController@overview']);
+    Route::post('add', ['as' => 'add', 'uses' => 'PastriesController@store']);
+    Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PastriesController@destroy']);
 });
