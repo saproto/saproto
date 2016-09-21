@@ -43,7 +43,7 @@
 
                 <div class="panel-body" id="event-description">
 
-                    {!! $event->description !!}
+                    {!! Markdown::convertToHtml($event->description) !!}
 
                     @if($event->committee)
 

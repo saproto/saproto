@@ -56,7 +56,7 @@
 
                             @if(count($month) > 0)
 
-                                <? $week = date('W', $month[0]->start); ?>
+                                <?php $week = date('W', $month[0]->start); ?>
 
                                 @foreach($month as $i => $event)
 
@@ -82,7 +82,7 @@
                                         </div>
                                     </a>
 
-                                    <? $week = date('W', $event->start); ?>
+                                    <?php $week = date('W', $event->start); ?>
 
                                 @endforeach
 

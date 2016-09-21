@@ -1,0 +1,18 @@
+.main-footer {
+    position: relative;
+    margin-top: -120px;
+    min-height: 120px;
+    clear: both;
+    background-color: #111;
+    color: #fff;
+
+    @media only screen and (min-width : 768px) {
+        .footer__logo {
+            text-align: right;
+        }
+    }
+
+    .row > * {
+        padding-top: 20px;
+    }
+}

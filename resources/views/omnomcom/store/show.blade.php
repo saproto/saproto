@@ -604,6 +604,12 @@
 
     </div>
 
+    <div id="outofstock-modal" class="modal inactive">
+
+        <h1>The product you selected is out of stock.</h1>
+
+    </div>
+
     <div id="purchase-modal" class="modal inactive">
 
         <h1>Complete your purchase.</h1>
@@ -624,12 +630,6 @@
         <span class="modal-status">
             Enter your credentials above, or present an RFID card.
         </span>
-
-    </div>
-
-    <div id="outofstock-modal" class="modal inactive">
-
-        <h1>The product you selected is out of stock.</h1>
 
     </div>
 
@@ -754,6 +754,13 @@
                     finishPurchase();
                 } else {
                     $("#purchase-modal .modal-status").html(data);
+                }
+            },
+            error: function (xhr, status) {
+                if (xhr.status == 503) {
+                    $("#purchase-modal .modal-status").html("The website is currently in maintenance. Please try again in 30 seconds.");
+                } else {
+                    $("#purchase-modal .modal-status").html("There is something wrong with the website, call someone to help!");
                 }
             }
         })
