@@ -12,7 +12,7 @@ class UpdateAchievementImgIdNullable extends Migration
      */
     public function up()
     {
-        Schema::table('achievements', function ($table) {
+        Schema::table('achievement', function ($table) {
             $table->integer('img_file_id')->nullable()->change();
         });
     }
@@ -24,7 +24,7 @@ class UpdateAchievementImgIdNullable extends Migration
      */
     public function down()
     {
-        Schema::table('achievements', function ($table) {
+        Schema::table('achievement', function ($table) {
             $table->integer('img_file_id')->nullable(false)->change();
         });
     }
