@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Exception;
+
 class SmartXpScreenController extends Controller
 {
 
@@ -62,7 +64,20 @@ class SmartXpScreenController extends Controller
 
     public function bus($stop)
     {
-        $departures = json_decode(stripslashes(file_get_contents("https://api.9292.nl/0.1/locations/enschede/$stop/departure-times?lang=en-GB")));
-        return $departures->tabs[0]->departures;
+        try {
+            $departures = json_decode(stripslashes(file_get_contents("https://api.9292.nl/0.1/locations/enschede/$stop/departure-times?lang=en-GB")));
+            return $departures->tabs[0]->departures;
+        } catch (Exception $e) {
+            return [(object)[
+                'time' => '00:00',
+                'service' => '',
+                'mode' => (object)[
+                    'name' => 'Error in API!'
+                ],
+                'realtimeText' => '',
+                'realtimeState' => '9292',
+                'destinationName' => 'who knows?'
+            ]];
+        }
     }
 }
