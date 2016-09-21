@@ -120,6 +120,11 @@
                       <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                       <li><a href="{{ route("companies::admin") }}">Companies</a></li>
 
+                      <li role="separator" class="divider"></li>
+
+                      <li><a class="navbar-title">Other Affairs: ( ͡° ͜ʖ ͡°)</a></li>
+                      <li><a href="{{ route("pastries::list") }}">Pastries</a></li>
+
                       @if (Auth::user()->can("finadmin"))
                           <li role="separator" class="divider"></li>
                           <li><a class="navbar-title">Financial:</a></li>
