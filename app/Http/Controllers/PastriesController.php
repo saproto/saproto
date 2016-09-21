@@ -17,23 +17,7 @@ class PastriesController extends Controller
 
     public function overview()
     {
-        $pastries = Pastry::orderBy('created_at', 'desc')->get();
-        foreach ($pastries as $pastry) {
-            $pastry->user_id_a = User::find($pastry->user_id_a);
-            $pastry->user_id_b = User::find($pastry->user_id_b);
-            switch ($pastry->pastry) {
-                default:
-                    $pastry->pastry = "Cookies";
-                    break;
-                case 1:
-                    $pastry->pastry = "Cake";
-                    break;
-                case 2:
-                    $pastry->pastry = "Pie";
-                    break;
-            }
-        }
-        return view('pastries.list', ['pastries' => $pastries]);
+        return view('pastries.list', ['pastries' => Pastry::orderBy('created_at', 'desc')->get()]);
     }
 
     public function store(Request $request)

@@ -34,18 +34,15 @@
                 <tr>
 
                     <td>{{ $pastry->id }}</td>
-                    <td><a href="{{ route('user::profile', ['id' => $pastry->user_id_a->id]) }}">{{ $pastry->user_id_a->name }}</a></td>
+                    <td><a href="{{ route('user::profile', ['id' => $pastry->user_a->id]) }}">{{ $pastry->user_a->name }}</a></td>
 
-                    @if ($pastry->user_id_b == "")
-                        <td>{{ $pastry->person_b }}</td>
+                    @if ($pastry->user_b()->id == "")
+                        <td>{{ $pastry->user_b()->name }}</td>
                     @else
-                        <td><a href="{{ route('user::profile', ['id' => $pastry->user_id_b->id]) }}">{{ $pastry->user_id_b->name }}</a></td>
+                        <td><a href="{{ route('user::profile', ['id' => $pastry->user_b()->id]) }}">{{ $pastry->user_b()->name }}</a></td>
                     @endif
 
-{{--                    {{ '<a href="' . route('user::profile', ['id' => $pastry->user_id_b->name]) . '"><td>' . $pastry->user_id_b->name . '</td></a>' or '<td>' . $pastry->person_b . '</td>' }}--}}
-{{--                    {{ '<a href=""><td>' . $pastry->user_id_b->name . '</td></a>' or '<td>' . $pastry->person_b . '</td>' }}--}}
-
-                    <td>{{ $pastry->pastry }}</td>
+                    <td>{{ $pastry->type() }}</td>
 
                     <td>{{ $pastry->created_at->format('d/m/Y') }}</td>
 
