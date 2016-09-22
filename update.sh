@@ -36,6 +36,9 @@ php artisan ide-helper:meta
 # Optimize application.
 php artisan optimize
 
+# Reload worker queues.
+php artisan queue:restart
+
 # Disable maintenance mode.
 php artisan up
 
