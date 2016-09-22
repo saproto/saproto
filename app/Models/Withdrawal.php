@@ -41,4 +41,9 @@ class Withdrawal extends Model
         return OrderLine::where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
+    public function withdrawalId()
+    {
+        return 'PROTO-' . $this->id . '-' . date('dmY', strtotime($this->date));
+    }
+
 }
