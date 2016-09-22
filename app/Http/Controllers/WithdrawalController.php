@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\OrderLine;
+use Proto\Models\User;
 use Proto\Models\Withdrawal;
 
 use Redirect;
+use Response;
+use Mail;
 
 class WithdrawalController extends Controller
 {
@@ -96,17 +99,6 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -115,7 +107,24 @@ class WithdrawalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            return Redirect::back();
+        }
+
+        $date = strtotime($request->input('date'));
+        if ($date === false) {
+            $request->session()->flash('flash_message', 'Invalid date.');
+            return Redirect::back();
+        }
+
+        $withdrawal->date = date('Y-m-d', $date);
+        $withdrawal->save();
+
+        $request->session()->flash('flash_message', 'Withdrawal updated.');
+        return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
     /**
@@ -141,9 +150,134 @@ class WithdrawalController extends Controller
         $withdrawal->delete();
 
         $request->session()->flash('flash_message', 'Withdrawal deleted.');
+        return Redirect::route('omnomcom::withdrawal::list');
+    }
+
+    /**
+     * Delete a user from the specified withdrawal.
+     *
+     * @param $id Withdrawal id.
+     * @param $user_id User id.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public static function deleteFrom(Request $request, $id, $user_id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            return Redirect::back();
+        }
+
+        $user = User::findOrFail($user_id);
+
+        foreach ($withdrawal->orderlinesForUseR($user) as $orderline) {
+            $orderline->withdrawal()->dissociate();
+            $orderline->save();
+        }
+
+        $request->session()->flash('flash_message', 'Orderlines for ' . $user->name . ' removed from this withdrawal.');
         return Redirect::back();
     }
 
+    /**
+     * Generates a CSV file for the withdrawal and returns a download.
+     *
+     * @param $id Withdrawal id.
+     * @return \Illuminate\Http\Response
+     */
+    public static function export(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        $seperator = ',';
+        $response = implode(',', ['withdrawal_type', 'total', 'bank_machtigingid', 'signature_date', 'bank_bic', 'name', 'bank_iban', 'email']) . "\n";
+
+        foreach ($withdrawal->users() as $user) {
+            $response .= implode(',', [
+                    ($user->bank->is_first ? 'FRST' : 'RCUR'),
+                    number_format($withdrawal->totalForUser($user), 2, '.', ''),
+                    $user->bank->machtigingid,
+                    date('Y-m-d', strtotime($user->bank->created_at)),
+                    $user->bank->bic,
+                    $user->name,
+                    $user->bank->iban,
+                    $user->email
+                ]) . "\n";
+        }
+
+        $headers = [
+            'Content-Encoding' => 'UTF-8',
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="withdrawal-' . $withdrawal->id . '.csv"'
+        ];
+
+        return Response::make($response, 200, $headers);
+    }
+
+    /**
+     * Close a withdrawal so no more changes can be made.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public static function close(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            return Redirect::back();
+        }
+
+        foreach ($withdrawal->users() as $user) {
+            $user->bank->is_first = false;
+            $user->bank->save();
+        }
+
+        $withdrawal->closed = true;
+        $withdrawal->save();
+
+        $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
+        return Redirect::back();
+    }
+
+    /**
+     * Send an e-mail to all users in the withdrawal to notice them.
+     *
+     * @param $id Withdrawal id.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public static function email(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            $request->session()->flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
+            return Redirect::back();
+        }
+
+        foreach ($withdrawal->users() as $user) {
+            $data = [
+                'name' => $user->name,
+                'email' => $user->email,
+                'date' => $withdrawal->date
+            ];
+            Mail::queue('emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
+                $message
+                    ->to($data['email'], $data['name'])
+                    ->from('treasurer@' . config('proto.emaildomain'), config('proto.treasurer'))
+                    ->subject('S.A. Proto Withdrawal Announcement for ' . date('d-m-Y', strtotime($data['date'])));
+            });
+        }
+
+        $request->session()->flash('flash_message', 'All e-mails have been queued.');
+        return Redirect::back();
+    }
+
+    /**
+     * @return int The current sum of orderlines that are open.
+     */
     public static function openOrderlinesSum()
     {
         $sum = 0;
@@ -154,6 +288,9 @@ class WithdrawalController extends Controller
         return $sum;
     }
 
+    /**
+     * @return int The total number of orderlines that are open.
+     */
     public static function openOrderlinesTotal()
     {
         $total = 0;

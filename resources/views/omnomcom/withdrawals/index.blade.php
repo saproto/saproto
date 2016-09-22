@@ -32,12 +32,12 @@
                     <tr>
 
                         <th>#</th>
+                        <th>ID</th>
                         <th>Withdrawal Date</th>
                         <th>Users</th>
                         <th>Orderlines</th>
                         <th>Sum</th>
                         <th>Status</th>
-                        <th>Controls</th>
 
                     </tr>
 
@@ -52,18 +52,12 @@
                                     {{ $withdrawal->id }}
                                 </a>
                             </td>
+                            <td>{{ $withdrawal->withdrawalId() }}</td>
                             <td>{{ $withdrawal->date }}</td>
                             <td>{{ $withdrawal->users()->count() }}</td>
                             <td>{{ $withdrawal->orderlines->count() }}</td>
                             <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
                             <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
-                            <td>
-                                @if(!$withdrawal->closed)
-                                    <a href="{{ route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]) }}">
-                                        Delete
-                                    </a>
-                                @endif
-                            </td>
 
                         </tr>
 
