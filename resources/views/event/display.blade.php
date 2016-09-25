@@ -265,7 +265,26 @@
 
                 </div>
 
+
+            @if(Auth::user()->can('board'))
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        Contact details participants
+                    </div>
+
+                    <div class="panel-body">
+                        <p>Please remember to always use the BCC field (not the to or CC field) when sending emails to participants!</p>
+                        <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }},@endforeach</textarea>
+                    </div>
+
+                </div>
+
+            @endif
+
             </div>
+
 
         @endif
 
