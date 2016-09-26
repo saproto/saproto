@@ -186,10 +186,10 @@
         #pin-input {
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
-            margin: 0 auto;
-            padding-bottom: 8rem;
             display: block;
             text-align: center;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         @keyframes shake {
@@ -248,9 +248,15 @@
         }
 
         #login {
-            display: block;
+            display: table;
+            position: absolute;
+            height: 100%;
             width: 100%;
-            margin-top: 120px;
+        }
+
+        .input-box {
+            display: table-cell;
+            vertical-align: middle;
         }
 
         #loggedIn {
@@ -325,11 +331,14 @@
 
 <div id="connected">
     <div id="login">
-        <form id="pin-input">
-            <input name="pin-a" class="pin pin--a" type="number" maxlength="1" />
-            <input name="pin-b" class="pin pin--b" type="number" maxlength="1" />
-            <input name="pin-c" class="pin pin--c" type="number" maxlength="1" />
-        </form>
+        <section class="input-box">
+            <form id="pin-input">
+                <input name="pin-a" class="pin pin--a" type="number" pattern="[0-9]*" inputmode="numeric" maxlength="1" />
+                <input name="pin-b" class="pin pin--b" type="number" pattern="[0-9]*" inputmode="numeric" maxlength="1" />
+                <input name="pin-c" class="pin pin--c" type="number" pattern="[0-9]*" inputmode="numeric" maxlength="1" />
+            </form>
+        </section>
+
     </div>
 
     <div id="loggedIn">
