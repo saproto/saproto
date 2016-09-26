@@ -117,11 +117,11 @@ class StudyController extends Controller
         $study = Study::findOrFail($request->study);
 
         $link = new StudyEntry();
-        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false || $request->start == "") {
             Session::flash("flash_message", "Ill-formatted start date.");
             return Redirect::back();
         }
-        if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+        if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false || $request->end == "") {
             Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
         }
