@@ -243,6 +243,17 @@ class User extends Model implements AuthenticatableContract,
         return $r;
     }
 
+    public function withdrawals()
+    {
+        $withdrawals = [];
+        foreach (Withdrawal::all() as $withdrawal) {
+            if ($withdrawal->orderlinesForUser($this)->count() > 0) {
+                $withdrawals[] = $withdrawal;
+            }
+        }
+        return $withdrawals;
+    }
+
     public function achievements()
     {
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
