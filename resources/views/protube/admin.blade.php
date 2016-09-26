@@ -1,107 +1,146 @@
-<html>
-<head>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+@extends('website.layouts.default')
 
-    @include('website.layouts.assets.stylesheets')
+@section('page-title')
+    Protube Admin
+@endsection
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.1/css/bootstrap-slider.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+@section('content')
 
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<div id="connecting">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-body">Connecting...</div>
+        </div>
+    </div>
+</div>
 
-    @include('website.layouts.assets.javascripts')
+<div id="connected">
 
+    <div class="col-md-4">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">ProTube control</div>
+            <div class="panel-body">
+                <table class="table">
+                    <tr>
+                        <td>YouTube</td>
+                        <td><input class="slider" id="youtubeV" data-slider-id="youtubeVSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" /></td>
+                    </tr>
+                    <tr>
+                        <td>Radio</td>
+                        <td><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" /></td>
+                    </tr>
+                </table>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">ProTube</div>
+            <div class="panel-body">
+                <div class="btn-group btn-group-justified" role="group" aria-label="ProTube controls">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" id="skip">Skip</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" id="playpause">Play / Pause</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" id="reload">Reload</button>
+                    </div>
+                </div>
+                <div id="nowPlaying">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Soundboard</div>
+            <div class="panel-body">
+
+
+                <button type="button" class="btn btn-default soundboard" rel="airhorn">Horn</button>
+                <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
+                <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>
+                <button type="button" class="btn btn-default soundboard" rel="mickey">Mickey Mouse</button>
+                <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
+                <button type="button" class="btn btn-default soundboard" rel="sad-trombone">Fail</button>
+                <button type="button" class="btn btn-default soundboard" rel="gay">Hah... Gay!</button>
+                <button type="button" class="btn btn-default soundboard" rel="zoenen">Zoenen!</button>
+                <button type="button" class="btn btn-default soundboard" rel="tongen">Lekker tongen</button>
+                <button type="button" class="btn btn-default soundboard" rel="raar">RAARRR</button>
+                <button type="button" class="btn btn-default soundboard" rel="ovation">Applaus</button>
+                <button type="button" class="btn btn-default soundboard" rel="slowclap">Slow clap</button>
+                <button type="button" class="btn btn-default soundboard" rel="fluitje">NS</button>
+                <button type="button" class="btn btn-default soundboard" rel="porno">Porno</button>
+                <button type="button" class="btn btn-default soundboard" rel="keiharde_porno">Keiharde porno</button>
+                <button type="button" class="btn btn-default soundboard" rel="laura">Laura</button>
+                <button type="button" class="btn btn-default soundboard" rel="jammer_joh">Jammer joh</button>
+                <button type="button" class="btn btn-default soundboard" rel="groen">GROEN!!!</button>
+                <button type="button" class="btn btn-default soundboard" rel="moan">Moan</button>
+                <button type="button" class="btn btn-default soundboard" rel="doodle">Doodle?</button>
+                <button type="button" class="btn btn-default soundboard" rel="wat-ik-voor-je-kan-doen">Zoek het maar uit</button>
+                <button type="button" class="btn btn-default soundboard" rel="tanman">Tan man!</button>
+                <button type="button" class="btn btn-default soundboard" rel="inception">BRAAAAAAM</button>
+                <button type="button" class="btn btn-default soundboard" rel="nooo">NOOOOO</button>
+                <button type="button" class="btn btn-default soundboard" rel="evil">MUHAHAHA</button>
+                <button type="button" class="btn btn-default soundboard" rel="boo">BOOOOOO</button>
+                <button type="button" class="btn btn-default soundboard" rel="chewbacca">Chewie</button>
+                <button type="button" class="btn btn-default soundboard" rel="batman">Batman</button>
+                <button type="button" class="btn btn-default soundboard" rel="IK_BEN_REINIER">IK BEN REINIER!!!</button>
+                <button type="button" class="btn btn-default soundboard" rel="Liefje_aandacht">Aandacht!</button>
+                <button type="button" class="btn btn-default soundboard" rel="bestuuuuuuuuur">Bestuuuuur!</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Search</div>
+            <div class="panel-body">
+                <form id="searchForm">
+                    <div class="form-group" width="100%">
+                        <div class="input-group">
+                            <div class="input-group-addon"><label for="showVideo"><i class="fa fa-eye" aria-hidden="true"></i></label>
+                                <input type="checkbox" id="showVideo" checked="checked"></div>
+                            <input type="text" class="form-control" id="searchBox" placeholder="Search YouTube...">
+                            <div class="input-group-addon" id="clearSearch">x</div>
+                        </div>
+                    </div>
+                </form>
+                <div id="searchResults"></div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Queue</div>
+            <div class="panel-body">
+                <div id="queue"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Active sessions</div>
+            <div class="panel-body">...</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Omnomcom</div>
+            <div class="panel-body">...</div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('javascript')
+
+    @parent
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.1/bootstrap-slider.min.js"></script>
-
-    <style>
-        body {
-            background: #eee;
-        }
-
-        #connected {
-            display: none;
-            margin-top: 20px;
-        }
-
-        #progressSlider .slider-selection {
-            background: #BABABA;
-        }
-
-        #nowPlaying {
-            margin-top: 10px;
-        }
-
-        #nowPlaying h1 {
-            padding: 0;
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        #nowPlaying img {
-            margin-right: 10px;
-        }
-
-        #clearSearch:hover {
-            background-color: #ddd;
-            cursor: pointer;
-        }
-
-        #searchResults {
-            display: none;
-            height: 200px;
-            overflow-y: scroll;
-        }
-
-        #searchResults .result:hover {
-            cursor: pointer;
-            background-color: #eee;
-        }
-
-        #searchResults .result img {
-            width: 100px;
-            float: left;
-            margin-right: 10px;
-        }
-
-        #searchResults .result h1 {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        #searchResults .result h2 {
-            font-size: 12px;
-            margin: 2px 0;
-        }
-
-        #searchResults .result h3 {
-            font-size: 10px;
-            margin: 0;
-        }
-
-        #queue {
-        }
-
-        #queue .item:hover {
-            cursor: pointer;
-            background-color: #eee;
-        }
-
-        #queue .item img {
-            width: 100px;
-            float: left;
-            margin-right: 10px;
-        }
-
-        #queue .item h1 {
-            font-size: 16px;
-            margin: 5px 0;
-        }
-
-        #queue .item h2 {
-            font-size: 12px;
-            margin: 2px 0;
-        }
-    </style>
 
     <script>
         var server = "{!! env('HERBERT_SERVER') !!}";
@@ -300,141 +339,96 @@
             return finalTime;
         }
     </script>
+@endsection
 
+@section('stylesheet')
 
-    <title>Admin</title>
-</head>
+    @parent
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.1/css/bootstrap-slider.min.css">
 
-<body>
+    <style>
+        #connected {
+            display: none;
+            margin-top: 20px;
+        }
 
-<div id="connecting" class="container">
-    <div class="col-md-6 col-md-offset-3">
-        <div class="panel panel-default">
-            <div class="panel-body">Connecting...</div>
-        </div>
-    </div>
-</div>
+        #progressSlider .slider-selection {
+            background: #BABABA;
+        }
 
+        #nowPlaying {
+            margin-top: 10px;
+        }
 
-<div id="connected" class="container">
+        #nowPlaying h1 {
+            padding: 0;
+            margin: 10px 0;
+            font-size: 18px;
+        }
 
-    <div class="col-md-4">
+        #nowPlaying img {
+            margin-right: 10px;
+        }
 
-        <div class="panel panel-default">
-            <div class="panel-heading">ProTube control</div>
-            <div class="panel-body">
-                <table class="table">
-                    <tr>
-                        <td>YouTube</td>
-                        <td><input class="slider" id="youtubeV" data-slider-id="youtubeVSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" /></td>
-                    </tr>
-                    <tr>
-                        <td>Radio</td>
-                        <td><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" /></td>
-                    </tr>
-                </table>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
-                </div>
-            </div>
-        </div>
+        #clearSearch:hover {
+            background-color: #ddd;
+            cursor: pointer;
+        }
 
-        <div class="panel panel-default">
-            <div class="panel-heading">ProTube</div>
-            <div class="panel-body">
-                <div class="btn-group btn-group-justified" role="group" aria-label="ProTube controls">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="skip">Skip</button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="playpause">Play / Pause</button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="reload">Reload</button>
-                    </div>
-                </div>
-                <div id="nowPlaying">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-        </div>
+        #searchResults {
+            display: none;
+            height: 200px;
+            overflow-y: scroll;
+        }
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Soundboard</div>
-            <div class="panel-body">
-                <button type="button" class="btn btn-default soundboard" rel="airhorn">Horn</button>
-                <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
-                <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>
-                <button type="button" class="btn btn-default soundboard" rel="mickey">Mickey Mouse</button>
-                <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
-                <button type="button" class="btn btn-default soundboard" rel="sad-trombone">Fail</button>
-                <button type="button" class="btn btn-default soundboard" rel="gay">Hah... Gay!</button>
-                <button type="button" class="btn btn-default soundboard" rel="zoenen">Zoenen!</button>
-                <button type="button" class="btn btn-default soundboard" rel="tongen">Lekker tongen</button>
-                <button type="button" class="btn btn-default soundboard" rel="raar">RAARRR</button>
-                <button type="button" class="btn btn-default soundboard" rel="ovation">Applaus</button>
-                <button type="button" class="btn btn-default soundboard" rel="slowclap">Slow clap</button>
-                <button type="button" class="btn btn-default soundboard" rel="fluitje">NS</button>
-                <button type="button" class="btn btn-default soundboard" rel="porno">Porno</button>
-                <button type="button" class="btn btn-default soundboard" rel="keiharde_porno">Keiharde porno</button>
-                <button type="button" class="btn btn-default soundboard" rel="laura">Laura</button>
-                <button type="button" class="btn btn-default soundboard" rel="jammer_joh">Jammer joh</button>
-                <button type="button" class="btn btn-default soundboard" rel="groen">GROEN!!!</button>
-                <button type="button" class="btn btn-default soundboard" rel="moan">Moan</button>
-                <button type="button" class="btn btn-default soundboard" rel="doodle">Doodle?</button>
-                <button type="button" class="btn btn-default soundboard" rel="wat-ik-voor-je-kan-doen">Zoek het maar uit</button>
-                <button type="button" class="btn btn-default soundboard" rel="tanman">Tan man!</button>
-                <button type="button" class="btn btn-default soundboard" rel="inception">BRAAAAAAM</button>
-                <button type="button" class="btn btn-default soundboard" rel="nooo">NOOOOO</button>
-                <button type="button" class="btn btn-default soundboard" rel="evil">MUHAHAHA</button>
-                <button type="button" class="btn btn-default soundboard" rel="boo">BOOOOOO</button>
-                <button type="button" class="btn btn-default soundboard" rel="chewbacca">Chewie</button>
-                <button type="button" class="btn btn-default soundboard" rel="batman">Batman</button>
-                <button type="button" class="btn btn-default soundboard" rel="IK_BEN_REINIER">IK BEN REINIER!!!</button>
-                <button type="button" class="btn btn-default soundboard" rel="Liefje_aandacht">Aandacht!</button>
-                <button type="button" class="btn btn-default soundboard" rel="bestuuuuuuuuur">Bestuuuuur!</button>
-            </div>
-        </div>
+        #searchResults .result:hover {
+            cursor: pointer;
+            background-color: #eee;
+        }
 
-    </div>
+        #searchResults .result img {
+            width: 100px;
+            float: left;
+            margin-right: 10px;
+        }
 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">Search</div>
-            <div class="panel-body">
-                <form id="searchForm">
-                    <div class="form-group" width="100%">
-                        <div class="input-group">
-                            <div class="input-group-addon"><label for="showVideo"><i class="fa fa-eye" aria-hidden="true"></i></label>
-                                <input type="checkbox" id="showVideo" checked="checked"></div>
-                            <input type="text" class="form-control" id="searchBox" placeholder="Search YouTube...">
-                            <div class="input-group-addon" id="clearSearch">x</div>
-                        </div>
-                    </div>
-                </form>
-                <div id="searchResults"></div>
-            </div>
-        </div>
+        #searchResults .result h1 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Queue</div>
-            <div class="panel-body">
-                <div id="queue"></div>
-            </div>
-        </div>
-    </div>
+        #searchResults .result h2 {
+            font-size: 12px;
+            margin: 2px 0;
+        }
 
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">Active sessions</div>
-            <div class="panel-body">...</div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">Omnomcom</div>
-            <div class="panel-body">...</div>
-        </div>
-    </div>
-</div>
+        #searchResults .result h3 {
+            font-size: 10px;
+            margin: 0;
+        }
 
-</body>
-</html>
+        #queue {
+        }
+
+        #queue .item:hover {
+            cursor: pointer;
+            background-color: #eee;
+        }
+
+        #queue .item img {
+            width: 100px;
+            float: left;
+            margin-right: 10px;
+        }
+
+        #queue .item h1 {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        #queue .item h2 {
+            font-size: 12px;
+            margin: 2px 0;
+        }
+    </style>
+@endsection
