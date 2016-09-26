@@ -29,7 +29,7 @@ class Email extends Model
         } elseif ($this->to_member) {
             return 'members';
         } elseif ($this->to_list) {
-            return $this->lists->lists('name')->toArray();
+            return $this->lists->toArray();
         }
     }
 

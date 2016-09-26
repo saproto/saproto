@@ -331,6 +331,8 @@ Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'],
  */
 Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
 Route::get('newsletter', ['as' => 'newsletter', 'middleware' => ['auth'], 'uses' => 'EmailController@newsletterPreview']);
+Route::get('unsubscribe/{hash}', ['as' => 'unsubscribefromlist', 'uses' => 'EmailController@unsubscribeLink']);
+
 Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
 
     Route::get('', ['as' => 'admin', 'uses' => 'EmailController@index']);
