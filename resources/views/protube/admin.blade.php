@@ -14,7 +14,6 @@
     </div>
 </div>
 
-
 <div id="connected">
 
     <div class="col-md-4">
@@ -61,6 +60,8 @@
         <div class="panel panel-default">
             <div class="panel-heading">Soundboard</div>
             <div class="panel-body">
+
+
                 <button type="button" class="btn btn-default soundboard" rel="airhorn">Horn</button>
                 <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
                 <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>

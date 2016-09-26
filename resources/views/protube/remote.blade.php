@@ -12,10 +12,25 @@
 
             var remote = io(server + '/protube-remote');
 
+            function focusOnPin() {
+                var input_flds = $('#pin-input').find(':input');
+
+                for(var i = 0; i < 3; i++) {
+                    input_flds.eq(i).val('');
+                }
+                input_flds.eq(0).focus();
+            }
+
             remote.on("connect", function() {
                 $("#connecting").hide(0);
                 $("#connected").show(0);
                 if(token) remote.emit("token", token);
+
+                focusOnPin();
+            });
+
+            $('#login').click(function(){
+                focusOnPin();
             });
 
             remote.on("reconnect", function() {
@@ -41,29 +56,28 @@
                 $("#results").html("Loading...");
             });
 
-            $("#pincode").html("");
+            $(".pin").keyup(function(e) {
+                console.log('log');
 
-            $('.keyboard-key').on('click', function(){
-                errorElement.css({
-                    "-moz-animation": "none",
-                    "-webkit-animation": "none",
-                    "animation": "none"
-                });
+                var input_flds = $('#pin-input').find(':input');
 
-                var pincode = $("#pincode");
+                if(e.keyCode == 8 && input_flds.index(this) > 0) {
+                    input_flds.eq(input_flds.index(this) - 1).focus();
+                }
+                else if($(this).val().length == 1) {
+                  input_flds.eq(input_flds.index(this) + 1).focus();
+                }
+                else if($(this).val().length > 1) {
+                    $(this).val($(this).val()[0]);
+                }
 
-                if($(this).hasClass('back')) {
-                    pincode.html( pincode.html().substring(0, pincode.html().length-1) );
-                } else {
-                    if(pincode.html().length < 3) {
-                        pincode.html( pincode.html() + $(this).html() );
+                if(input_flds.index(this) >= 2) {
+                    var pincode = '';
+                    for(var i = 0; i < 3; i++) {
+                        pincode += input_flds.eq(i).val().toString();
                     }
+                    remote.emit("authenticate", { 'pin' : pincode });
                 }
-
-                if( pincode.html().length == 3 ) {
-                    remote.emit("authenticate", { 'pin' : pincode.html() });
-                }
-
             });
 
             $('body').on('keydown', function(event){
@@ -82,13 +96,19 @@
                 if(correct) {
                     $("#login").hide(0);
                     $("#loggedIn").show(0);
-                }else{
-                    $(errorElement).css({
-                        "-moz-animation": "error 0.5s",
-                        "-webkit-animation": "error 0.5s",
-                        "animation": "error 0.5s"
+                }
+                else{
+                    $("#pin-input").css({
+                        "animation": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both"
                     });
-                    $("#pincode").html("");
+
+                    setTimeout(function() {
+                        $("#pin-input").css({
+                            "animation": "none"
+                        });
+                    }, 1000);
+
+                    focusOnPin();
                 }
             });
 
@@ -147,6 +167,49 @@
             font-family: 'Roboto', sans-serif;
         }
 
+        input[type=number] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 30px;
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        }
+
+        #pin-input {
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            margin: 0 auto;
+            padding-bottom: 8rem;
+            display: block;
+            text-align: center;
+        }
+
+        @keyframes shake {
+          10%, 90% {
+            transform: translate3d(-2px, 0, 0);
+          }
+
+          20%, 80% {
+            transform: translate3d(4px, 0, 0);
+          }
+
+          30%, 50%, 70% {
+            transform: translate3d(-8px, 0, 0);
+          }
+
+          40%, 60% {
+            transform: translate3d(8px, 0, 0);
+          }
+        }
+
         input {
             background-color: #000;
             color: #fff;
@@ -193,7 +256,6 @@
         #loggedIn {
             display: none;
         }
-
 
         #results {
             position: absolute;
@@ -250,123 +312,6 @@
         .result:hover {
             background-color: #444;
         }
-
-        /*** Keypad ***/
-        #keypad {
-            display: none;
-        }
-
-        #keypad p {
-            text-align: center;
-            color: #FFFFFF;
-            font-size: 14px;
-            margin: 20px 0;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-        }
-
-        #pincode {
-            text-align: center;
-            color: #FFFFFF;
-            font-size: 20px;
-            background: #222;
-            box-shadow: inset 1px 1px 1px #000;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-            padding: 5px 0;
-            width: 186px !important;
-            margin: 10px auto 20px auto;
-            height: 25px;
-            line-height: 25px;
-        }
-
-        .keyboard-row {
-            overflow: hidden;
-            width: 196px;
-            margin: 10px auto;
-        }
-
-        .keyboard-key {
-            padding: 0 20px;
-            background: #474747;
-            border-top: 1px solid #858585;
-            border-bottom: 1px solid #343434;
-            border-left: 1px solid #424242;
-            border-right: 1px solid #424242;
-            margin: 0 5px;
-            color: #FFF;
-            cursor: pointer;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
-            float: left;
-            width: 13px;
-            height: 45px;
-            line-height: 45px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .keyboard-key:first-child:last-child {
-            margin-left: 70px;
-        }
-
-        .keyboard-key:hover {
-            -webkit-animation: touched 0.5s;
-            -moz-animation: touched 0.5s;
-            animation: touched 0.5s;
-        }
-
-        .keyboard-key.invisible {
-            visibility: hidden;
-        }
-
-        .keyboard-key.back {
-            background-image: url("http://protube.saproto.nl/remote/img/backspace.png");
-            background-repeat: no-repeat;
-            background-position: center center;
-        }
-
-        @-webkit-keyframes touched {
-            0%, 100%  {
-                background-color: #474747;
-            }
-            10% {
-                background-color: #9C0;
-            }
-        }
-
-        @-moz-keyframes touched {
-            0%, 100% {
-                background-color: #474747;
-            }
-            10% {
-                background-color: #9C0;
-            }
-        }
-
-        @keyframes touched {
-            0%, 100% {
-                background-color: #474747;
-            }
-            10% {
-                background-color: #9C0;
-            }
-        }
-
-        @-moz-keyframes error {
-            0%,
-            100% { background: #111; }
-            10% { background: #C00; }
-        }
-
-        @-webkit-keyframes error {
-            0%,
-            100% { background: #111; }
-            10% { background: #C00; }
-        }
-
-        @keyframes error {
-            0%,
-            100% { background: #111; }
-            10% { background: #C00; }
-        }
     </style>
 
     <title>Remote</title>
@@ -380,29 +325,11 @@
 
 <div id="connected">
     <div id="login">
-        <div id="pincode">
-            <!-- Filled by JS -->
-        </div>
-        <div class="keyboard-row">
-            <div class="keyboard-key">7</div>
-            <div class="keyboard-key">8</div>
-            <div class="keyboard-key">9</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="keyboard-key">4</div>
-            <div class="keyboard-key">5</div>
-            <div class="keyboard-key">6</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="keyboard-key">1</div>
-            <div class="keyboard-key">2</div>
-            <div class="keyboard-key">3</div>
-        </div>
-        <div class="keyboard-row">
-            <div class="keyboard-key invisible"></div>
-            <div class="keyboard-key">0</div>
-            <div class="keyboard-key back"></div>
-        </div>
+        <form id="pin-input">
+            <input name="pin-a" class="pin pin--a" type="number" maxlength="1" />
+            <input name="pin-b" class="pin pin--b" type="number" maxlength="1" />
+            <input name="pin-c" class="pin pin--c" type="number" maxlength="1" />
+        </form>
     </div>
 
     <div id="loggedIn">
