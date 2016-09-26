@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Exception\NotReadableException;
+use Illuminate\Session\TokenMismatchException;
 
 use App;
 use Auth;
@@ -23,6 +24,8 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         HttpException::class,
         NotFoundHttpException::class,
+        ModelNotFoundException::class,
+        TokenMismatchException::class,
         HttpException::class,
         NotReadableException::class
     ];
@@ -109,6 +112,10 @@ class Handler extends ExceptionHandler
             $reported = false;
             $message = "Unable to read the requested file from disk.";
             $statuscode = 500;
+        } elseif ($e instanceof TokenMismatchException) {
+            $reported = false;
+            $message = "Token does not match. O behave, you cross-site scripter!";
+            $statuscode = 403;
         }
 
 
