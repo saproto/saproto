@@ -27,7 +27,7 @@ class ParticipationController extends Controller
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(500, "You are already subscribed for " . $event->title . ".");
-        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id')) {
+        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id') && $event->activity->hasStarted()) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");
         } elseif ($event->activity->closed) {
             abort(500, "This activity is closed, you cannot change participation anymore.");
@@ -42,7 +42,7 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if ($event->activity->isFull()) {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
@@ -84,13 +84,13 @@ class ParticipationController extends Controller
                 abort(500, "This activity is closed, you cannot change participation anymore.");
             }
 
-            if (!$participation->activity->canUnsubscribe() && !Auth::user()->can('board')) {
+            if (!$participation->activity->canUnsubscribe() && !$participation->backup && !Auth::user()->can('board')) {
                 abort(500, "You cannot unsubscribe for this event at this time.");
             }
 
-            $backupparticipation = ActivityParticipation::where('activity_id', $participation->activity->id)
+            $backupparticipation = ($participation->backup ? null : ActivityParticipation::where('activity_id', $participation->activity->id)
                 ->whereNull('committees_activities_id')->where('backup', true)
-                ->first();
+                ->first());
             if ($backupparticipation !== null) {
                 $backupparticipation->backup = false;
                 $backupparticipation->save();

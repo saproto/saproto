@@ -8,7 +8,50 @@
 
     <div class="row">
 
-        <div class="col-md-5 col-md-offset-2">
+        <div class="col-md-3">
+
+            <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: #222;">
+                Overview for {{ $user->name }}
+            </p>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    History
+                </div>
+
+                <div class="panel-body">
+
+                    @foreach($available_months as $year => $months)
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{{ $year }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($months as $month)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
+                                            {{ date('F Y', strtotime($month)) }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
 
             @if(count($orderlines) > 0)
 
@@ -80,10 +123,6 @@
 
         <div class="col-md-3">
 
-            <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: #222;">
-                Overview for {{ $user->name }}
-            </p>
-
             <div class="panel panel-default">
 
                 <div class="panel-heading">
@@ -119,33 +158,27 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    History
+                    Withdrawals
                 </div>
 
                 <div class="panel-body">
 
-                    @foreach($available_months as $year => $months)
-
-                        <table class="table">
-                            <thead>
+                    <table class="table">
+                        <tbody>
+                        @foreach($user->withdrawals() as $withdrawal)
                             <tr>
-                                <th>{{ $year }}</th>
+                                <td>
+                                    <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
+                                        {{ date('d-m-Y', strtotime($withdrawal->date)) }}
+                                    </a>
+                                </td>
+                                <td style="text-align: right;">
+                                    &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($months as $month)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
-                                            {{ date('F Y', strtotime($month)) }}
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
-                    @endforeach
+                        @endforeach
+                        </tbody>
+                    </table>
 
                 </div>
 

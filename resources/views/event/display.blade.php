@@ -180,7 +180,7 @@
 
                         <p>
                             @if($event->activity->getParticipation(Auth::user()) !== null)
-                                @if($event->activity->canUnsubscribe())
+                                @if($event->activity->canUnsubscribe() || $event->activity->getParticipation(Auth::user())->backup)
                                     <a class="btn btn-warning" style="width: 100%;"
                                        href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}">
                                         @if ($event->activity->getParticipation(Auth::user())->backup)
@@ -191,12 +191,14 @@
                                     </a>
                                 @endif
                             @else
-                                @if($event->activity->canSubscribe())
+                                @if($event->activity->canSubscribe() || !$event->activity->hasStarted())
                                     <a class="btn btn-{{ ($event->activity->isFull() ? 'warning' : 'success') }}"
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
-                                        @if ($event->activity->isFull())
-                                            Activity is full. Sign me up for the back-up list.
+                                        @if ($event->activity->isFull() || !$event->activity->canSubscribe())
+
+                                            {{ ($event->activity->isFull() ? 'Activity is full.' : 'Sign-up closed.') }}
+                                            Sign me up for the back-up list.
                                         @else
                                             Sign me up!
                                         @endif
@@ -209,6 +211,12 @@
                             Sign up is possible between {{ date('F j, H:i', $event->activity->registration_start) }}
                             and {{ date('F j, H:i', $event->activity->registration_end) }}. You can sign out
                             untill {{ date('F j, H:i', $event->activity->deregistration_end) }}.
+                        </p>
+
+                        <p style="text-align: center">
+                            <strong>
+                                Participation fee &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
+                            </strong>
                         </p>
 
                         <hr>
@@ -266,22 +274,24 @@
                 </div>
 
 
-            @if(Auth::user()->can('board'))
+                @if(Auth::user()->can('board'))
 
-                <div class="panel panel-default">
+                    <div class="panel panel-default">
 
-                    <div class="panel-heading">
-                        Contact details participants
+                        <div class="panel-heading">
+                            Contact details participants
+                        </div>
+
+                        <div class="panel-body">
+                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
+                                to participants!</p>
+                            <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }}
+                                ,@endforeach</textarea>
+                        </div>
+
                     </div>
 
-                    <div class="panel-body">
-                        <p>Please remember to always use the BCC field (not the to or CC field) when sending emails to participants!</p>
-                        <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }},@endforeach</textarea>
-                    </div>
-
-                </div>
-
-            @endif
+                @endif
 
             </div>
 

@@ -13,6 +13,7 @@ use Proto\Models\Withdrawal;
 use Redirect;
 use Response;
 use Mail;
+use Auth;
 
 class WithdrawalController extends Controller
 {
@@ -242,13 +243,19 @@ class WithdrawalController extends Controller
         return Redirect::back();
     }
 
+    public function showForUser(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+        return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
+    }
+
     /**
      * Send an e-mail to all users in the withdrawal to notice them.
      *
      * @param $id Withdrawal id.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function email(Request $request, $id)
+    public function email(Request $request, $id)
     {
         $withdrawal = Withdrawal::findOrFail($id);
 

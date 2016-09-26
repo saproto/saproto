@@ -130,17 +130,9 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        if ($committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
+        if (($committee->slug == config('proto.rootcommittee') || $committee->slug == config('proto.boardcommittee')) && !Auth::user()->can('admin')) {
 
-            Session::flash("flash_message", "This committee is protected. You cannot add members to this committee if you are not in it.");
-
-            return Redirect::back();
-
-        }
-
-        if ($user->id == Auth::id() && !Auth::user()->can('admin')) {
-
-            Session::flash("flash_message", "You cannot add yourself to a committee. Please ask someone else to do so.");
+            Session::flash("flash_message", "This committee is protected. Only the Have You Tried Turning It Off And On Again committee can change this committee.");
 
             return Redirect::back();
 

@@ -146,4 +146,9 @@ class Activity extends Validatable
         }
         return $this->deregistration_end === null || date('U') < $this->deregistration_end;
     }
+
+    public function hasStarted()
+    {
+        return $this->event->start < date('U');
+    }
 }

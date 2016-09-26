@@ -20,6 +20,11 @@
     </p>
 
     <p>
+        If you would like to know which purchases, activities et cetera are included in this withdrawal, please click <a
+                href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">here</a>.
+    </p>
+
+    <p>
         I hope to have informed you well via this e-mail, but should you have any questions left you can always send me
         an e-mail.
     </p>
