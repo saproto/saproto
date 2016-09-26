@@ -94,13 +94,15 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('Proto\Models\OrderLine');
     }
 
-    public function tempadmin() {
+    public function tempadmin()
+    {
         return $this->hasMany('Proto\Models\Tempadmin');
     }
 
-    public function isTempadmin() {
-        foreach($this->tempadmin as $tempadmin) {
-            if(Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
+    public function isTempadmin()
+    {
+        foreach ($this->tempadmin as $tempadmin) {
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
         }
 
         return false;
@@ -239,6 +241,17 @@ class User extends Model implements AuthenticatableContract,
             $r[] = $achievement;
         }
         return $r;
+    }
+
+    public function withdrawals()
+    {
+        $withdrawals = [];
+        foreach (Withdrawal::all() as $withdrawal) {
+            if ($withdrawal->orderlinesForUser($this)->count() > 0) {
+                $withdrawals[] = $withdrawal;
+            }
+        }
+        return $withdrawals;
     }
 
     public function achievements()

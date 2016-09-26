@@ -421,7 +421,24 @@ Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
     });
 
-    Route::get('supplier', ['as' => 'generateorder', 'uses' => 'OmNomController@generateOrder']);
+    Route::group(['prefix' => 'withdrawals', 'middleware' => ['permission:finadmin'], 'as' => 'withdrawal::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'WithdrawalController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'WithdrawalController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WithdrawalController@store']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WithdrawalController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WithdrawalController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'WithdrawalController@show']);
+
+        Route::get('export/{id}', ['as' => 'export', 'uses' => 'WithdrawalController@export']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'WithdrawalController@close']);
+        Route::get('email/{id}', ['as' => 'email', 'uses' => 'WithdrawalController@email']);
+
+        Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
+    });
+
+    Route::get('mywithdrawal/{id}', ['as' => 'mywithdrawal', 'middleware' => ['auth'], 'uses' => 'WithdrawalController@showForUser']);
+
+    Route::get('supplier', ['as' => 'generateorder', 'middleware' => ['permission:omnomcom'], 'uses' => 'OmNomController@generateOrder']);
 
 });
 

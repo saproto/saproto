@@ -1,4 +1,4 @@
-<h3 style="text-align:center;">Achievements</h3>
+<h3>Achievements</h3>
 
 @if(count($user->achieved()) > 0)
 
@@ -34,7 +34,7 @@
 @else
 
     <p>
-        Didn't achieve a single thing.
+        Working on their first achievement!
     </p>
 
 @endif

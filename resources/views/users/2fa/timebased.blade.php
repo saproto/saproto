@@ -30,7 +30,7 @@
 
                     <p style="text-align: center;">
                         You can also enter the below secret key manually.<br>
-                        <strong>{{ Session::get('2fa_secret') }}</strong>
+                        <strong>{{ $tfa_key }}</strong>
                     </p>
 
                 </div>

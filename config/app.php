@@ -242,6 +242,8 @@ return [
         'Email' => \Proto\Models\Email::class,
         'Event' => \Proto\Models\Event::class,
 
+        'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
+
     ],
 
 ];
