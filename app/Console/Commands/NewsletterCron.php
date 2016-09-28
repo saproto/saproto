@@ -53,7 +53,11 @@ class NewsletterCron extends Command
 
             foreach ($newsletterlist->users as $user) {
 
-                Mail::send('emails.newsletter', ['user' => $user, 'events' => $events], function ($message) use ($user) {
+                Mail::send('emails.newsletter', [
+                    'user' => $user,
+                    'list' => $newsletterlist,
+                    'events' => $events
+                ], function ($message) use ($user) {
 
                     $message
                         ->to($user->email, $user->name)

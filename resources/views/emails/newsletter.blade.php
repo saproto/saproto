@@ -90,9 +90,7 @@
     <p>
         <sub>
             You receive this e-mail because you subscribed to the weekly newsletter of S.A. Proto. If you would like to
-            stop receiving this e-mail, please visit your
-            <a style="color: #000;" href="{{ route('user::dashboard') }}">dashboard</a>
-            on the S.A. Proto website.
+            stop receiving this e-mail, please click <a href="{{ route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user->id, $list->id)]) }}">here</a>.
         </sub>
     </p>
 
