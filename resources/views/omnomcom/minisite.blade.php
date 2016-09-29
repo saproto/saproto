@@ -6,12 +6,16 @@
 
     <title>OmNomCom Inventory Viewer</title>
 
+    <meta name="theme-color" content="#0089FA">
+
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="OmNomCom Inventory Viewer"/>
     <meta property="og:description"
           content="The OmNomCom Inventory Viewer can tell you if your favourite nom is available in the Protopolis. Give it a try!"/>
     <meta property="og:url" content="https://www.omnomcom.nl/"/>
     <meta property="og:image" content="{{ asset('images/subsites/omnomcom.jpg') }}"/>
+
+    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript">
@@ -200,7 +204,7 @@
         @endforeach
     </div>
 
-    <a href="{{ route('homepage') }}">
+    <a href="https://www.proto.utwente.nl/">
         <img src="{{ asset('images/logo/inverse.png') }}" style="width: 400px;">
     </a>
 

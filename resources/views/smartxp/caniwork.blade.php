@@ -7,9 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
+    <meta name="theme-color" content="#C1FF00">
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Can you work in the SmartXP?"/>
+    <meta property="og:description"
+          content="Do you want to know if the SmartXP is available for working? Check the SmartXP timetable here!"/>
+    <meta property="og:url" content="https://www.caniworkintheSmartXP.nl/"/>
+    <meta property="og:image" content="{{ asset('images/subsites/SmartXP.jpg') }}"/>
+
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <title>Can I work in teh SmartXp?</title>
+    <title>Can I work in the SmartXP?</title>
 
     @include('website.layouts.assets.stylesheets')
 
@@ -108,7 +117,7 @@
     <div class="row" style="height: 10%;">
 
         <div class="box-header">
-            The SmartXp timetable for this week:
+            The SmartXP timetable for this week:
         </div>
 
     </div>
@@ -154,7 +163,7 @@
 
         <div class="col-md-12" style="text-align: center;">
 
-            <a href="{{ route('homepage') }}">
+            <a href="https://www.proto.utwente.nl/">
                 <img src="{{ asset('images/logo/inverse.png') }}" style="max-height: 50%; margin-top: 80px;">
             </a>
 

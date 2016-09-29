@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <title>SmartXp Screen v3</title>
+    <title>SmartXP Screen v3</title>
 
     @include('website.layouts.assets.stylesheets')
 
