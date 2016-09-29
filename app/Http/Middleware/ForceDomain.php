@@ -20,7 +20,7 @@ class ForceDomain
         $force = env('FORCE_DOMAIN', null);
 
         if ($force != null && $request->getHttpHost() != $force) {
-            return redirect()->to(env('APP_URL') . '/' . $request->path());
+            return redirect()->to(env('APP_URL') . '/' . ($request->path() == '/' ? '' : $request->path()));
         }
 
         return $next($request);
