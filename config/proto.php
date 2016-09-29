@@ -173,20 +173,20 @@ return [
 
     'domains' => [
         'protube' => [
-            'www.protube.nl',
-            'protube.nl'
+            'protube.nl',
+            'www.protube.nl'
         ],
         'omnomcom' => [
-            'www.omnomcom.nl',
-            'omnomcom.nl'
+            'omnomcom.nl',
+            'www.omnomcom.nl'
         ],
         'smartxp' => [
-            'www.caniworkinthesmartxp.nl',
-            'caniworkinthesmartxp.nl'
+            'caniworkinthesmartxp.nl',
+            'www.caniworkinthesmartxp.nl'
         ],
         'developers' => [
-            'www.haveyoutriedturningitoffandonagain.nl',
-            'haveyoutriedturningitoffandonagain.nl'
+            'haveyoutriedturningitoffandonagain.nl',
+            'www.haveyoutriedturningitoffandonagain.nl'
         ]
     ]
 

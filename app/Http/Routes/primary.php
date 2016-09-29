@@ -6,7 +6,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * The main route for the frontpage.
      */
     Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
-    Route::get('developers', ['as' => 'developers', 'uses' => 'HomeController@developers']);
+    Route::get('developers', ['uses' => 'HomeController@developers']);
 
     /*
      * Routes for the search function.

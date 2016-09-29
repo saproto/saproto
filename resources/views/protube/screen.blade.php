@@ -433,7 +433,7 @@
 
 <div id="bottomBar">
     <div id="pin">
-        <h1>saproto.nl/protube</h1>
+        <h1>www.protube.nl</h1>
         <p id="pinCode">...</p>
     </div>
     <div id="queue">

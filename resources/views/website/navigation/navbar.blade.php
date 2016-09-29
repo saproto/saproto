@@ -58,7 +58,7 @@
                         <li><a href="{{ route("committee::list") }}">Committees</a></li>
                         <li><a href="{{ route("event::list") }}">Calendar</a></li>
                         <li><a href="{{ route("photo::albums") }}">Photos</a></li>
-                        <li><a href="{{ route("protube::remote") }}">Protube</a></li>
+                        <li><a href="{{ route("protube.nl::remote") }}">ProTube</a></li>
                         @if (Auth::check() && Auth::user()->member)
                             <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
                         @endif
