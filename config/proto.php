@@ -105,7 +105,18 @@ return [
     |
     */
 
-    'google-timetable-id' => 'ldce9tj137p1q56i64bht9d53od36ist@import.calendar.google.com',
+    'google-timetable-id' => '76ambpj6tq40mlht0ok7ibonori7dliv@import.calendar.google.com',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SmartXp Timetable Calendar
+    |--------------------------------------------------------------------------
+    |
+    | The Google calendar ID for the imported timetable.
+    |
+    */
+
+    'smartxp-google-timetable-id' => 'sk5jps5kgrmvq5gp6oc20qfrmsvdfin7@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -150,5 +161,33 @@ return [
     */
 
     'secretary' => 'Dennis Vinke',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Domain Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Domains that are linked to various routes.
+    |
+    */
+
+    'domains' => [
+        'protube' => [
+            'www.protube.nl',
+            'protube.nl'
+        ],
+        'omnomcom' => [
+            'www.omnomcom.nl',
+            'omnomcom.nl'
+        ],
+        'smartxp' => [
+            'www.caniworkinthesmartxp.nl',
+            'caniworkinthesmartxp.nl'
+        ],
+        'developers' => [
+            'www.haveyoutriedturningitoffandonagain.nl',
+            'haveyoutriedturningitoffandonagain.nl'
+        ]
+    ]
 
 ];

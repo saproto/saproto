@@ -241,6 +241,7 @@ return [
         'EmailList' => \Proto\Models\EmailList::class,
         'Email' => \Proto\Models\Email::class,
         'Event' => \Proto\Models\Event::class,
+        'Product' => \Proto\Models\Product::class,
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 

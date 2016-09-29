@@ -11,6 +11,10 @@
 |
 */
 
+$routesdir = __DIR__ . '/Routes';
+
+require $routesdir . '/otherdomains.php';
+
 Route::group(['middleware' => ['forcedomain']], function () {
 
     /*
@@ -378,6 +382,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
 
+        Route::get('minisite', ['uses' => 'OmNomController@miniSite']);
+
         Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
             Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
             Route::post('rfid/add', ['as' => 'rfidadd', 'uses' => 'RfidCardController@store']);
@@ -490,6 +496,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * The route for the SmartXp Screen.
      */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
+    Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
 
     /*
      * The routes for Protube.
@@ -518,6 +525,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
+        Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
         Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 

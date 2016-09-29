@@ -143,6 +143,10 @@
             opacity: 0.5;
         }
 
+        .activity.current {
+            background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, #333 10px, #333 20px);
+        }
+
         .busentry {
             padding: 5px 10px 5px 10px;
             color: #fff;
@@ -336,7 +340,7 @@
                         var start = moment.unix(data[i].start);
                         var end = moment.unix(data[i].end);
                         var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                        $("#timetable").append('<div class="activity ' + (data[i].over ? "past" : "") + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
+                        $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
                     }
                 } else {
                     $("#timetable").html('<div class="notice">No lectures today!</div>');
