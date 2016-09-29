@@ -34,6 +34,7 @@ class Kernel extends HttpKernel
         'auth' => \Proto\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Proto\Http\Middleware\RedirectIfAuthenticated::class,
-        'member' => \Proto\Http\Middleware\Member::class
+        'member' => \Proto\Http\Middleware\Member::class,
+        'forcedomain' => \Proto\Http\Middleware\ForceDomain::class
     ];
 }
