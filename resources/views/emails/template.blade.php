@@ -44,7 +44,7 @@
             <br>
             <sub>
                 If you feel this e-mail violates the Dutch laws for electronic communication, please contact
-                <a href="mailto:abuse@saproto.nl" style="color: #c1ff00; text-decoration: none;">abuse@saproto.nl</a>.
+                <a href="mailto:abuse@proto.utwente.nl" style="color: #c1ff00; text-decoration: none;">abuse@proto.utwente.nl</a>.
             </sub>
         </td>
     </tr>
