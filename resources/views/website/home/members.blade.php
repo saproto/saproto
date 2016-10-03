@@ -15,6 +15,20 @@
 
     <div class="col-md-8">
 
+        @if($message != null)
+
+        <div class="panel panel-default">
+
+            <div class="panel-body" style="padding: 30px;">
+
+                <h3>{{ $message->message }}</h3>
+
+            </div>
+
+        </div>
+
+        @endif
+
         <div class="panel panel-default">
 
             <div class="panel-body" style="padding: 30px;">
@@ -26,6 +40,7 @@
                 </p>
 
             </div>
+
         </div>
 
     </div>
