@@ -186,7 +186,7 @@
                     controls += '<span class="veto" data-index="' + i + '"><i class="fa fa-minus-circle" aria-hidden="true"></i></span>';
 
                     queue.append('<div class="item" data-ytId="' + data[i].id + '">' +
-                            '<img src="http://img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
+                            '<img src="//img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
                             '<div>' +
                             '<h1>' + data[i].title + '</h1>' +
                             '<h2>' + prettifyDuration(data[i].duration ) + '</h2>' +
@@ -224,7 +224,7 @@
 
             admin.on("ytInfo", function(data) {
                 if(!$.isEmptyObject(data)) {
-                    $("#nowPlaying").html('<img src="http://img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
+                    $("#nowPlaying").html('<img src="//img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
                             '<h1>' + data.title + '</h1>' +
                             '<strong id="current_time">0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
                             '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>'+ prettifyDuration(data.duration) +'</strong>');
@@ -313,7 +313,7 @@
 
         function generateResult(item) {
             var result = '<div class="result" ytId="' + item.id + '">' +
-                    '<img src="http://img.youtube.com/vi/' + item.id + '/0.jpg" />' +
+                    '<img src="//img.youtube.com/vi/' + item.id + '/0.jpg" />' +
                     '<div>' +
                     '<h1>' + item.title + '</h1>' +
                     '<h2>' + item.channelTitle +  '</h2>' +
@@ -325,7 +325,7 @@
             return result;
         }
 
-        // Based on http://stackoverflow.com/questions/3733227/javascript-seconds-to-minutes-and-seconds
+        // Based on //stackoverflow.com/questions/3733227/javascript-seconds-to-minutes-and-seconds
         function prettifyDuration(time) {
             var minutes = Math.floor(time / 60);
             var seconds = time - minutes * 60;
