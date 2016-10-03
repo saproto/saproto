@@ -3,7 +3,7 @@
 @section('greeting')
 
     <h1>
-        <strong>Hi, {{ Auth::user()->name_first }}</strong>
+        <strong>Hi, {{ Auth::user()->calling_name }}</strong>
     </h1>
     <h3>
         @if($message != null) {{ $message->message }} @else Nice to see you back! @endif

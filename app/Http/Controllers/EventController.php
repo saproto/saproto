@@ -356,9 +356,7 @@ class EventController extends Controller
             $item = new \stdClass();
             $item->id = $activity->id;
             $item->email = $activity->email;
-            $item->name_first = $activity->name_first;
-            $item->name_last = $activity->name_last;
-            $item->name_initials = $activity->name_initials;
+            $item->name = $activity->name;
             $item->birthdate = $activity->birthdate;
             $item->gender = $activity->gender;
             $data[] = $item;

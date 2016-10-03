@@ -101,7 +101,7 @@ class SearchController extends Controller
                 if (
                     (
                         (strlen($string) >= 3 && strpos(strtolower($user->name), $string) > -1)
-                        || strtolower($user->name_first) == $string
+                        || strtolower($user->calling_name) == $string
                         || ($user->utwente_username && strlen($string) >= 5 && strpos(strtolower($user->utwente_username), $string) > -1)
                         || (intval($string) > 0 && $user->id == $string)
                     ) && $user->member && Auth::check() && Auth::user()->member

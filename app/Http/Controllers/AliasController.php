@@ -175,7 +175,8 @@ class AliasController extends Controller
             return Redirect::back();
         }
 
-        $aliasbase = strtolower(substr($user->name_first, 0, 1) . '.' . str_replace(' ', '', $user->name_last));
+        $name = explode(" ", $user->name);
+        $aliasbase = strtolower(substr($name[0], 0, 1) . '.' . str_replace(' ', '', implode("", array_slice($name, 1))));
         $alias = $aliasbase;
         $i = 0;
 

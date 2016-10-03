@@ -130,7 +130,7 @@
             </div>
         </div>
 
-        @if($user->address->count() > 0)
+        @if($user->address)
 
             <div class="col-md-4 col-xs-6">
                 <div class="btn-group btn-group-justified" role="group">

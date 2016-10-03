@@ -38,6 +38,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
 
+        Route::post('delete/{id}', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
+
         /*
          * Routes related to members.
          */
@@ -70,14 +72,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => '{id}/address', 'as' => 'address::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
-
-            Route::post('delete/{address_id}', ['as' => 'delete', 'uses' => 'AddressController@delete']);
-
-            Route::post('primary/{address_id}', ['as' => 'primary', 'uses' => 'AddressController@makePrimary']);
-
-            Route::get('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@editForm']);
-            Route::post('edit/{address_id}', ['as' => 'edit', 'uses' => 'AddressController@edit']);
-
+            Route::get('delete', ['as' => 'delete', 'uses' => 'AddressController@delete']);
+            Route::get('edit', ['as' => 'edit', 'uses' => 'AddressController@editForm']);
+            Route::post('edit', ['as' => 'edit', 'uses' => 'AddressController@edit']);
             Route::get('togglehidden', ['as' => 'togglehidden', 'uses' => 'AddressController@toggleHidden']);
         });
 

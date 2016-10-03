@@ -3,7 +3,7 @@
 @section('body')
 
     <p>
-        Dear {{ $user->name_first }},
+        Dear {{ $user->calling_name }},
     </p>
 
     <p>

@@ -18,7 +18,7 @@
                         </p>
                     @endif
 
-                    @if (!$user->primary_address())
+                    @if (!$user->address)
                         <p>
                             <strong>
                                 This user does not have an address linked to their account. Please ask them to register
@@ -54,7 +54,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    @if ($user->primary_address() && $user->bank)
+                    @if ($user->address && $user->bank)
                         <button type="submit" class="btn btn-primary"
                                 onClick="return confirm('Did this user sign the membership form?')">Make member
                         </button>

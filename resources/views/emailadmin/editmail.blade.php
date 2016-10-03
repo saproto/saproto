@@ -185,8 +185,8 @@
                     </p>
 
                     <p>
-                        <i>$name_first</i> - The first name of the recipient.
-                        <i>$name_last</i> - The last name of the recipient.
+                        <i>$name</i> - The name of the recipient.
+                        <i>$calling_name</i> - The calling name of the recipient.
                     </p>
 
                 </div>

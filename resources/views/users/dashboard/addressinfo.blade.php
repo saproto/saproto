@@ -4,124 +4,85 @@
     </div>
     <div class="panel-body">
 
-        @if(count($user->address) > 0)
+        @if($user->address)
 
-            <div class="row">
+            <p style="text-align: center;">
+                <strong>{{ $user->address->street }} {{ $user->address->number }}</strong>
+                <br>
+                {{ $user->address->zipcode }} {{ $user->address->city }} ({{ $user->address->country }})
+            </p>
 
-                @foreach($user->address as $address)
-                    <div class="col-md-6">
-                        <div class="panel panel-default">
+            <p style="text-align: center;">
+                <sub>
+                    Currently other members are
 
-                            <div class="panel-body">
+                    <strong>
+                        @if(!$user->address_visible)
+                            not
+                        @endif
+                        able
+                    </strong>
 
-                                <p>
-                                    <strong>{{ $address->street }} {{ $address->number }}</strong>
-                                    <br>
-                                    {{ $address->zipcode }} {{ $address->city }} ({{ $address->country }})
-                                </p>
+                    to see your address.
+                    <br>
+                    Click
 
-                            </div>
-                            <div class="panel-footer">
+                    <a href="{{ route('user::address::togglehidden', ['id' => $user->id]) }}">
+                        here
+                    </a>
 
-                                @if((Auth::user()->can('board') || Auth::id() == $user->id))
-                                    <div class="row">
-                                        <div class="col-md-4 col-xs-4">
-                                            <div class="btn-group btn-group-justified" role="group">
-                                                <a class="btn btn-default"
-                                                   href="{{ route('user::address::edit', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        @if ($address->is_primary == true)
-                                            <div class="col-md-4 col-xs-4">
-                                                <div class="btn-group btn-group-justified" role="group">
-                                                    <div class="btn-group" role="group">
-                                                        <button class="btn btn-success" disabled>
-                                                            <i class="fa fa-star"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        @if ($address->is_primary == false)
-                                            <div class="col-md-4 col-xs-4">
-                                                <form method="POST"
-                                                      action="{{ route('user::address::primary', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                                    {!! csrf_field() !!}
-                                                    <div class="btn-group btn-group-justified" role="group">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="submit" class="btn btn-default">
-                                                                <i class="fa fa-star"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        @endif
-                                        @if ($address->is_primary == false || $user->member == null)
-                                            <div class="col-md-4 col-xs-4">
-                                                <form method="POST"
-                                                      action="{{ route('user::address::delete', ['address_id' => $address->id, 'id' => $user->id]) }}">
-                                                    {!! csrf_field() !!}
-                                                    <div class="btn-group btn-group-justified" role="group">
-                                                        <div class="btn-group" role="group">
-                                                            <button type="submit" class="btn btn-danger">
-                                                                <i class="fa fa-trash-o"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endif
-
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-
-            </div>
+                    to toggle this.
+                </sub>
+            </p>
 
         @else
 
             <p style="text-align: center; font-weight: bold;">
-                There are currently no addresses linked to your account.
+                We don't have an address for you.
             </p>
 
         @endif
 
-        <hr>
-
-        <p style="text-align: center;">
-            Currently other members are
-
-            <strong>
-                @if(!$user->address_visible)
-                    not
-                @endif
-                able
-            </strong>
-
-            to see your <strong>primary</strong> address. Click
-
-            <a href="{{ route('user::address::togglehidden', ['id' => $user->id]) }}">
-                here
-            </a>
-
-            to toggle this behaviour. Your
-            secondary addresses are always hidden.
-        </p>
-
     </div>
+
     <div class="panel-footer">
-        <div class="btn-group btn-group-justified" role="group">
-            <div class="btn-group" role="group">
-                <a type="button" class="btn btn-success" href="{{ route('user::address::add', ['id' => $user->id]) }}">
-                    Add another address
-                </a>
+        @if(!$user->address)
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <a type="button" class="btn btn-success"
+                       href="{{ route('user::address::add', ['id' => $user->id]) }}">
+                        Add your address
+                    </a>
+                </div>
             </div>
-        </div>
+        @else
+            @if($user->member)
+                <div class="btn-group btn-group-justified" role="group">
+                    <a class="btn btn-success"
+                       href="{{ route('user::address::edit', ['id' => $user->id]) }}">
+                        Update your address
+                    </a>
+                </div>
+            @else
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-success"
+                               href="{{ route('user::address::edit', ['id' => $user->id]) }}">
+                                Update
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-danger"
+                               href="{{ route('user::address::delete', ['id' => $user->id]) }}">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
     </div>
 </div>

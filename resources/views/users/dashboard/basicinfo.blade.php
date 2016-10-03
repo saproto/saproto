@@ -7,13 +7,13 @@
         <div class="form-horizontal">
 
             <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Name</label>
+                <label for="name" class="col-sm-4 control-label">Name</label>
 
                 <div class="col-sm-8 control-label" style="text-align: left;">{{ $user->name }}</div>
             </div>
 
             <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Bio Gender</label>
+                <label for="gender" class="col-sm-4 control-label">Bio Gender</label>
 
                 <div class="col-sm-8 control-label" style="text-align: left;">
                     @if($user->gender == 1)
@@ -31,14 +31,14 @@
             </div>
 
             <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Birthday</label>
+                <label for="birthdate" class="col-sm-4 control-label">Birthday</label>
 
                 <div class="col-sm-8 control-label"
                      style="text-align: left;">{{ date('F j, Y', strtotime($user->birthdate)) }}</div>
             </div>
 
             <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Nationality</label>
+                <label for="nationality" class="col-sm-4 control-label">Nationality</label>
 
                 <div class="col-sm-8 control-label" style="text-align: left;">{{ $user->nationality }}</div>
             </div>

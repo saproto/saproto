@@ -114,10 +114,10 @@
                 <td>{{ $user->name }}</td>
                 @if(!$withdrawal->closed)
                     <td>
-                        <strong>{{ $user->bank->iban }}</strong>
-                        / {{ $user->bank->bic }}
+                        <strong>{{ $user->bank->iban or $user->backupBank->iban }}</strong>
+                        / {{ $user->bank->bic or $user->backupBank->bic }}
                     </td>
-                    <td>{{ $user->bank->machtigingid }}</td>
+                    <td>{{ $user->bank->machtigingid or $user->backupBank->machtigingid }}</td>
                 @endif
                 <td>{{ $withdrawal->orderlinesForUser($user)->count() }}</td>
                 <td>&euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '.') }}</td>

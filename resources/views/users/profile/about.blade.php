@@ -14,13 +14,13 @@
                     <td><a href="tel:{{ $user->phone }}">{{ $user->phone }}</a></td>
                 </tr>
             @endif
-            @if($user->address_visible && $user->getPrimaryAddress() != null)
+            @if($user->address_visible && $user->address != null)
                 <tr>
                     <td style="text-align: right;"><strong>Address</strong></td>
                     <td>
-                        {{ $user->getPrimaryAddress()->street }} {{ $user->getPrimaryAddress()->number }}<br>
-                        {{ $user->getPrimaryAddress()->zipcode }}, {{ $user->getPrimaryAddress()->city }}<br>
-                        {{ $user->getPrimaryAddress()->country }}
+                        {{ $user->address->street }} {{ $user->address->number }}<br>
+                        {{ $user->address->zipcode }}, {{ $user->address->city }}<br>
+                        {{ $user->address->country }}
                     </td>
                 </tr>
             @endif
@@ -46,11 +46,11 @@
                 <td colspan="2">
                 @if($user->member == null)
                     <span class="text-info">
-                        {{ $user->name_first }} is not a member of S.A. Proto.
+                        {{ $user->calling_name }} is not a member of S.A. Proto.
                     </span>
                 @else
                     <span class="text-success">
-                        {{ $user->name_first }} is a member
+                        {{ $user->calling_name }} is a member
                         @if(date('U', strtotime($user->member->created_at)) > 0)
                             as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
                         @else

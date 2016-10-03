@@ -3,7 +3,7 @@
 @section('body')
 
     <p>
-        Hey {{ $participation->user->name_first }},
+        Hey {{ $participation->user->calling_name }},
     </p>
 
     <p>

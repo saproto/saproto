@@ -36,15 +36,15 @@ class Email extends Model
     public function recipients()
     {
         if ($this->to_user) {
-            return User::orderBy('name_first', 'asc')->get();
+            return User::orderBy('name', 'asc')->get();
         } elseif ($this->to_member) {
-            return User::has('member')->orderBy('name_first', 'asc')->get();
+            return User::has('member')->orderBy('name', 'asc')->get();
         } elseif ($this->to_list) {
             $userids = [];
             foreach ($this->lists as $list) {
                 $userids = array_merge($userids, $list->users->lists('id')->toArray());
             }
-            return User::whereIn('id', $userids)->orderBy('name_first', 'asc')->get();
+            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
         }
     }
 
@@ -55,8 +55,8 @@ class Email extends Model
 
     public function parseBodyFor(User $user)
     {
-        $variable_from = ['$name_first', '$name_last'];
-        $variable_to = [$user->name_first, $user->name_last];
+        $variable_from = ['$calling_name', '$name'];
+        $variable_to = [$user->calling_name, $user->name];
         return str_replace($variable_from, $variable_to, $this->body);
     }
 

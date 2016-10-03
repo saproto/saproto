@@ -13,10 +13,10 @@ class Bank extends Model
     protected $table = 'bankaccounts';
 
     protected $guarded = ['id'];
-    
+
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
 }

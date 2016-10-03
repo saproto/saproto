@@ -7,12 +7,12 @@
             @if($user->member)
 
                 <div class="form-group">
-                    <label for="name_first" class="col-sm-4 control-label">Member</label>
+                    <label for="member" class="col-sm-4 control-label">Member</label>
                     <div class="col-sm-8 control-label" style="text-align: left;">Yes!</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="name_first" class="col-sm-4 control-label">Since</label>
+                    <label for="member_since" class="col-sm-4 control-label">Since</label>
                     <div class="col-sm-8 control-label" style="text-align: left;">
                         @if(date('U', strtotime($user->member->created_at)) > 0)
                             {{ date('F j, Y', strtotime($user->member->created_at)) }}
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="name_first" class="col-sm-4 control-label">Modifiers</label>
+                    <label for="member_mods" class="col-sm-4 control-label">Modifiers</label>
                     <div class="col-sm-8 control-label" style="text-align: left;">
 
                         @if($user->member->is_honorary)
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="name_first" class="col-sm-4 control-label">Active</label>
+                    <label for="member_isactive" class="col-sm-4 control-label">Active</label>
                     <div class="col-sm-8 control-label"
                          style="text-align: left;">{{ ($user->isActiveMember() ? 'Yes!' : 'No. :(') }}</div>
                 </div>
@@ -55,7 +55,7 @@
                 @if($user->isActiveMember())
 
                     <div class="form-group">
-                        <label for="name_first" class="col-sm-4 control-label">Proto E-mail</label>
+                        <label for="member_proto_mail" class="col-sm-4 control-label">Proto E-mail</label>
                         <div class="col-sm-8 control-label" style="text-align: left;">
 
                             @if($user->member->proto_mail)
@@ -73,7 +73,7 @@
             @else
 
                 <div class="form-group">
-                    <label for="name_first" class="col-sm-4 control-label">Member</label>
+                    <label for="member_ismember" class="col-sm-4 control-label">Member</label>
                     <div class="col-sm-8 control-label" style="text-align: left;">Nope</div>
                 </div>
 

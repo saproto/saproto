@@ -11,7 +11,7 @@
         <div class="col-md-8">
 
             <h3>
-                Hey {{ (Auth::check() ? Auth::user()->name_first : 'there') }}!
+                Hey {{ (Auth::check() ? Auth::user()->calling_name : 'there') }}!
             </h3>
 
             <p>

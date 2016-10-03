@@ -28,7 +28,7 @@
         <select class="form-control" id="user" name="user">
             <option value="off">Forward to e-mail</option>
             <option value="off" disabled>-- Select a user below --</option>
-            @foreach(User::orderBy('name_first', 'asc')->get() as $user)
+            @foreach(User::orderBy('name', 'asc')->get() as $user)
                 <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
             @endforeach
         </select>

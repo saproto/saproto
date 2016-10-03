@@ -33,7 +33,7 @@ class Withdrawal extends Model
                 $ids[] = $orderline->user->id;
             }
         }
-        return User::whereIn('id', $ids)->orderBy('id', 'asc')->get();
+        return User::withTrashed()->whereIn('id', $ids)->orderBy('id', 'asc')->get();
     }
 
     public function total()

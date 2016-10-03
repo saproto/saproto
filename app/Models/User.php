@@ -61,27 +61,6 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
-     * @return string The full name of the user.
-     */
-    public function getNameAttribute()
-    {
-        return $this->name_first . " " . $this->name_last;
-    }
-
-    /**
-     * @return null|Address The primary address of the user, if any.
-     */
-    public function getPrimaryAddress()
-    {
-        foreach ($this->address as $address) {
-            if ($address->is_primary) {
-                return $address;
-            }
-        }
-        return null;
-    }
-
-    /**
      * @return mixed The associated membership details, if any.
      */
     public function member()
@@ -92,6 +71,15 @@ class User extends Model implements AuthenticatableContract,
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');
+    }
+
+    public function hasUnpaidOrderlines()
+    {
+        foreach ($this->orderlines as $orderline) {
+            if (!$orderline->isPayed()) return true;
+            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) return true;
+        }
+        return false;
     }
 
     public function tempadmin()
@@ -116,6 +104,11 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('Proto\Models\Bank');
     }
 
+    public function backupBank()
+    {
+        return $this->hasOne('Proto\Models\Bank')->withTrashed();
+    }
+
     /**
      * @return mixed The profile picture of this user.
      */
@@ -129,15 +122,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function address()
     {
-        return $this->hasMany('Proto\Models\Address');
-    }
-
-    /**
-     * @return mixed The associated primary addresses, if any.
-     */
-    public function primary_address()
-    {
-        return $this->address()->where('is_primary', true)->get()->first();
+        return $this->hasOne('Proto\Models\Address');
     }
 
     /**

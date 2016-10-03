@@ -180,7 +180,7 @@
                             <div class="col-md-3">
 
                                 <select name="user[]" class="form-control orderlineuser">
-                                    @foreach(Proto\Models\User::orderBy('name_first', 'asc')->get() as $user)
+                                    @foreach(Proto\Models\User::orderBy('name', 'asc')->get() as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
                                     @endforeach
                                 </select>

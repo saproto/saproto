@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
+use Proto\Models\Bank;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
 use Proto\Models\Withdrawal;
@@ -65,7 +66,7 @@ class WithdrawalController extends Controller
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
 
             if ($orderline->isPayed()) continue;
-            if ($orderline->user->bank == null) continue;
+            if ($orderline->user->bank == null && $orderline->user->backupBank == null) continue;
 
             if ($max != null) {
                 if (!array_key_exists($orderline->user->id, $totalPerUser)) {
@@ -192,17 +193,17 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         $seperator = ',';
-        $response = implode(',', ['withdrawal_type', 'total', 'bank_machtigingid', 'signature_date', 'bank_bic', 'name', 'bank_iban', 'email']) . "\n";
+        $response = implode($seperator, ['withdrawal_type', 'total', 'bank_machtigingid', 'signature_date', 'bank_bic', 'name', 'bank_iban', 'email']) . "\n";
 
         foreach ($withdrawal->users() as $user) {
-            $response .= implode(',', [
-                    ($user->bank->is_first ? 'FRST' : 'RCUR'),
+            $response .= implode($seperator, [
+                    (($user->bank ? $user->bank->is_first : $user->backupBank->is_first) ? 'FRST' : 'RCUR'),
                     number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                    $user->bank->machtigingid,
-                    date('Y-m-d', strtotime($user->bank->created_at)),
-                    $user->bank->bic,
+                    ($user->bank ? $user->bank->machtigingid : $user->backupBank->machtigingid),
+                    date('Y-m-d', strtotime(($user->bank ? $user->bank->created_at : $user->backupBank->created_at))),
+                    ($user->bank ? $user->bank->bic : $user->backupBank->bic),
                     $user->name,
-                    $user->bank->iban,
+                    ($user->bank ? $user->bank->iban : $user->backupBank->iban),
                     $user->email
                 ]) . "\n";
         }
@@ -232,12 +233,23 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            $user->bank->is_first = false;
-            $user->bank->save();
+            if ($user->bank) {
+                $user->bank->is_first = false;
+                $user->bank->save();
+            } else {
+                $user->backupBank->is_first = false;
+                $user->backupBank->save();
+            }
         }
 
         $withdrawal->closed = true;
         $withdrawal->save();
+
+        foreach (Bank::onlyTrashed()->get() as $trashedBank) {
+            if (!$trashedBank->user->hasUnpaidOrderlines()) {
+                $trashedBank->forceDelete();
+            }
+        }
 
         $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
         return Redirect::back();
