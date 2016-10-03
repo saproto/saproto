@@ -17,6 +17,7 @@ use Proto\Models\Page;
 use Proto\Models\User;
 
 use Auth;
+use Proto\Models\WelcomeMessage;
 
 class HomeController extends Controller
 {
@@ -31,7 +32,8 @@ class HomeController extends Controller
         $companies = Company::where('in_logo_bar', true)->get();
 
         if (Auth::check()) {
-            return view('website.home.members', ['events' => $events, 'companies' => $companies]);
+            $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
+            return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message]);
         } else {
             return view('website.home.external', ['events' => $events, 'companies' => $companies]);
         }
