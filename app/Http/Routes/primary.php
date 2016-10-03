@@ -546,4 +546,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PastriesController@destroy']);
     });
 
+    /**
+     * Routes related to the welcome message system.
+     */
+    Route::group(['prefix' => 'welcomeMessages', 'middleware' => ['auth', 'permission:board'], 'as' => 'welcomeMessages::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'WelcomeController@overview']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WelcomeController@store']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WelcomeController@destroy']);
+    });
+
 });

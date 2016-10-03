@@ -6,7 +6,7 @@
         <strong>Hi, {{ Auth::user()->name_first }}</strong>
     </h1>
     <h3>
-        Nice to see you back!
+        @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
     </h3>
 
 @endsection
@@ -26,6 +26,7 @@
                 </p>
 
             </div>
+
         </div>
 
     </div>
