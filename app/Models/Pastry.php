@@ -36,13 +36,13 @@ class Pastry extends Model
 
     public function user_a()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id_a');
+        return $this->belongsTo('Proto\Models\User', 'user_id_a')->withTrashed();
     }
 
     public function user_b()
     {
         if ($this->user_id_b != null) {
-            return User::find($this->user_id_b);
+            return User::find($this->user_id_b)->withTrashed();
         } else {
             $user = new \stdClass();
             $user->id = "";
