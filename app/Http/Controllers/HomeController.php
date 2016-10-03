@@ -30,9 +30,9 @@ class HomeController extends Controller
 
         $events = Event::where('secret', false)->where('start', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
-        $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
 
         if (Auth::check()) {
+            $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
             return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message]);
         } else {
             return view('website.home.external', ['events' => $events, 'companies' => $companies]);

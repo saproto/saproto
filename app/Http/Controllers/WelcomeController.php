@@ -21,7 +21,7 @@ class WelcomeController extends Controller
      */
     public function overview()
     {
-        return view('welcomeMessages.list', ['welcomeMessages' => WelcomeMessage::orderBy('created_at', 'desc')->get()]);
+        return view('welcomemessages.list', ['messages' => WelcomeMessage::orderBy('created_at', 'desc')->get()]);
     }
 
     /**
