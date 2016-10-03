@@ -6,7 +6,7 @@
         <strong>Hi, {{ Auth::user()->name_first }}</strong>
     </h1>
     <h3>
-        Nice to see you back!
+        @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
     </h3>
 
 @endsection
@@ -14,20 +14,6 @@
 @section('visitor-specific')
 
     <div class="col-md-8">
-
-        @if($message != null)
-
-        <div class="panel panel-default">
-
-            <div class="panel-body" style="padding: 30px;">
-
-                <h3>{{ $message->message }}</h3>
-
-            </div>
-
-        </div>
-
-        @endif
 
         <div class="panel panel-default">
 
