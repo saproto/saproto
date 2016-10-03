@@ -32,14 +32,23 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
-        $message = new WelcomeMessage();
+        $message = WelcomeMessage::where('user_id', $request->user_id)->first();
+        if (!$message) {
+            $message = new WelcomeMessage();
 
-        $message->user_id = $request->user_id;
-        $message->message = $request->message;
+            $message->user_id = $request->user_id;
+            $message->message = $request->message;
 
-        $message->save();
+            $message->save();
 
-        Session::flash('flash_message', "Welcome Message set");
+            Session::flash('flash_message', "Welcome Message set");
+        } else {
+            $message->message = $request->message;
+
+            $message->save();
+
+            Session::flash('flash_message', "Welcome Message updated");
+        }
         return Redirect::route("welcomeMessages::list");
     }
 
