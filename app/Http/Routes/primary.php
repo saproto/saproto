@@ -128,7 +128,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         /*
-         * Routes related to bank accounts
+         * Routes related to studies
          */
         Route::group(['prefix' => '{user_id}/study', 'as' => 'study::'], function () {
             Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
@@ -315,6 +315,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
 
+    });
+
+    /*
+     * Routes related to courses
+     */
+    Route::group(['prefix' => 'course', 'as' => 'course::'], function () {
+        Route::get('', ['as' => 'list', 'uses' => 'CourseController@index']);
+
+        Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
+
+        Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CourseController@destroy']);
     });
 
     /*
