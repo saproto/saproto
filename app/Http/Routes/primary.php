@@ -317,13 +317,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to courses
      */
-    Route::group(['prefix' => 'course', 'as' => 'course::'], function () {
+    Route::group(['prefix' => 'course', 'as' => 'course::', 'middleware' => ['auth']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'CourseController@index']);
 
-        Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
-        Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
+        Route::group(['middleware' => ['permission:board']], function() {
+            Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
 
-        Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CourseController@destroy']);
+            Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CourseController@destroy']);
+        });
     });
 
     /*
