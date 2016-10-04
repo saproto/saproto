@@ -113,6 +113,9 @@ class OrderLineController extends Controller
 
             $order->save();
 
+            $product->stock -= $units;
+            $product->save();
+
         }
 
         $request->session()->flash('flash_message', 'Your manual orders have been added.');
@@ -134,6 +137,9 @@ class OrderLineController extends Controller
             return Redirect::back();
         }
 
+        $order->product->stock += $order->units;
+        $order->product->save();
+        
         $order->delete();
 
         $request->session()->flash('flash_message', 'The orderline was deleted.');
