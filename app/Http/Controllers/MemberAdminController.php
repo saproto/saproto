@@ -101,7 +101,7 @@ class MemberAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (!($user->address() && $user->bank)) {
+        if (!($user->address && $user->bank)) {
             Session::flash("flash_message", "This user really needs a bank account and address. Don't bypass the system!");
             return Redirect::back();
         }
@@ -156,7 +156,7 @@ class MemberAdminController extends Controller
 
         $user = User::findOrFail($id);
 
-        if ($user->address->count() === 0) {
+        if ($user->address === null) {
             Session::flash("flash_message", "This user has no address!");
             return Redirect::back();
         }
