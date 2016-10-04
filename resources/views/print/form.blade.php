@@ -18,8 +18,17 @@
 
             <div class="col-md-12">
 
+                @if($print->stock <= 0)
+                    <p style="color: red;">
+                        It is currently not possible to print anything. The reason for this is that either the paper or
+                        the toner is empty, or there is a technical difficulty. If you wish to know what is wrong and
+                        when you can print again, please ask in the Protopolis.
+                    </p>
+                @endif
+
                 <p>
-                    Here you can upload something to print. Printing something costs €{{ number_format($price, 2) }} per
+                    Here you can upload something to print. Printing something costs
+                    €{{ number_format($print->price, 2) }} per
                     page. Prints are printed single-sided, on A4 paper, in black. You can collect your prints in the
                     Protopolis. <strong>Only PDF files can be submitted for printing.</strong> Documents uploaded using
                     this form are deleted every night.
@@ -54,7 +63,9 @@
                 </div>
             @endif
 
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
+            @if($print->stock > 0)
+                <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
+            @endif
 
             <a href="#" onclick="javascript:history.go(-1)" class="btn btn-default pull-right">Cancel</a>
 

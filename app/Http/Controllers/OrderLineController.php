@@ -139,7 +139,7 @@ class OrderLineController extends Controller
 
         $order->product->stock += $order->units;
         $order->product->save();
-        
+
         $order->delete();
 
         $request->session()->flash('flash_message', 'The orderline was deleted.');

@@ -19,12 +19,16 @@ class PrintController extends Controller
     public function form()
     {
         $print = Product::findOrFail(config('proto.printproduct'));
-        return view('print.form', ['price' => $print->price]);
+        return view('print.form', ['print' => $print]);
     }
 
     public function doPrint(Request $request)
     {
         $print = Product::findOrFail(config('proto.printproduct'));
+        if ($print->stock <= 0) {
+            $request->session()->flash('flash_message', 'You cannot print at this time. Either the paper or the toner are empty or something is broken.');
+            return Redirect::back();
+        }
 
         $upload = $request->file('file');
 
@@ -47,7 +51,7 @@ class PrintController extends Controller
         }
 
         $result = FileController::requestPrint('document', $file->generatePath(), $copies);
-        
+
         if ($result === false) {
             $request->session()->flash('flash_message', "Something went wrong trying to reach the printer service.");
             return Redirect::back();
