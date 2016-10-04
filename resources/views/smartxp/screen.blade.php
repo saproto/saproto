@@ -345,7 +345,7 @@
                 } else {
                     $("#timetable").html('<div class="notice">No lectures today!</div>');
                 }
-                setTimeout(updateTimetable, 300000);
+                setTimeout(updateTimetable, 60000);
             },
             error: function () {
                 $("#timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
@@ -376,11 +376,11 @@
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
                 }
-                setTimeout(updateTimetable, 300000);
+                setTimeout(updateActivities, 60000);
             },
             error: function () {
                 $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
-                setTimeout(updateTimetable, 5000);
+                setTimeout(updateActivities, 5000);
             }
         })
     }
