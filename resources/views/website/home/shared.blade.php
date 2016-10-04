@@ -115,9 +115,9 @@
 
                     <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
                         <div class="album"
-                             style="background-image: url('{!! $album->primary_photo_extras->url_m !!}')">
+                             style="background-image: url('{!! $album->thumb !!}')">
                             <div class="album-name">
-                                {{ $album->title->_content }}
+                                {{ $album->name }}
                             </div>
                         </div>
                     </a>
