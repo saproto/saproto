@@ -41,10 +41,6 @@
             background-color: #555;
         }
 
-        .container-fluid, .row, .col-md-2, .col-md-12 {
-            height: 100%;
-        }
-
         .box {
             position: relative;
 
@@ -103,7 +99,7 @@
         }
 
         .activity.current {
-            background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, #333 10px, #333 20px);
+            color: #c1ff00;
         }
 
     </style>
@@ -114,7 +110,7 @@
 
 <div class="container-fluid">
 
-    <div class="row" style="height: 10%;">
+    <div class="row" style="margin-bottom: 50px;">
 
         <div class="box-header">
             The SmartXP timetable for this week:
@@ -122,13 +118,13 @@
 
     </div>
 
-    <div class="row" style="height: 60%;">
+    <div class="row">
 
         @foreach($timetable as $dayname => $day)
 
             <div class="col-md-2">
 
-                <div class="box" style="height: 100%;">
+                <div class="box">
 
                     <div class="box-header">
 
@@ -146,7 +142,7 @@
                                 </div>
                             @endforeach
                         @else
-                            <div class="notice">Nothing!</div>
+                            <div class="notice" style="margin-bottom: 25px;">Nothing!</div>
                         @endif
 
                     </div>
@@ -159,12 +155,12 @@
 
     </div>
 
-    <div class="row" style="height: 30%;">
+    <div class="row">
 
         <div class="col-md-12" style="text-align: center;">
 
             <a href="https://www.proto.utwente.nl/">
-                <img src="{{ asset('images/logo/inverse.png') }}" style="max-height: 50%; margin-top: 80px;">
+                <img src="{{ asset('images/logo/inverse.png') }}" style="width: 300px; margin: 40px;">
             </a>
 
         </div>

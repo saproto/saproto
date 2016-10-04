@@ -144,7 +144,7 @@
         }
 
         .activity.current {
-            background-image: repeating-linear-gradient(-45deg, transparent, transparent 10px, #333 10px, #333 20px);
+            color: #c1ff00;
         }
 
         .busentry {
@@ -371,7 +371,7 @@
                         } else {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].over ? "past" : "") + '">' + time + ' @ ' + data[i].location + '<br><strong>' + data[i].title + '</strong></div>');
+                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' @ ' + data[i].location + '<br><strong>' + data[i].title + '</strong></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');

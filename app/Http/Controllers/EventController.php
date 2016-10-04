@@ -276,9 +276,24 @@ class EventController extends Controller
     public function apiUpcomingEvents($limit = 20)
     {
 
-        $events = Event::where('secret', 0)->where('start', '>', date('U'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::where('secret', 0)->where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
 
-        return $events;
+        $data = [];
+
+        foreach ($events as $event) {
+            $data[] = (object)[
+                'id' => $event->id,
+                'title' => $event->title,
+                'description' => $event->description,
+                'start' => $event->start,
+                'end' => $event->end,
+                'location' => $event->location,
+                'current' => $event->current(),
+                'over' => $event->over()
+            ];
+        }
+
+        return $data;
 
     }
 

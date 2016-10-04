@@ -50,6 +50,16 @@ class Event extends Model
         return Event::where('secret', false)->where('start', '>', date('U'))->where('start', '<', strtotime('+4 weeks'))->orderBy('start')->get();
     }
 
+    public function current()
+    {
+        return ($this->start < date('U') && $this->end > date('U'));
+    }
+
+    public function over()
+    {
+        return ($this->end < date('U'));
+    }
+
     protected $guarded = ['id'];
 
 }
