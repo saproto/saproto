@@ -14,14 +14,6 @@ class Pastry extends Model
     protected $table = 'pastries';
 
     /**
-     * @return mixed The user owning the achievement.
-     */
-    public function users()
-    {
-        return $this->belongsToMany('Proto\Models\User');
-    }
-
-    /**
      * @return mixed The achievement this association is for.
      */
 
@@ -41,14 +33,7 @@ class Pastry extends Model
 
     public function user_b()
     {
-        if ($this->user_id_b != null) {
-            return User::find($this->user_id_b)->withTrashed();
-        } else {
-            $user = new \stdClass();
-            $user->id = "";
-            $user->name = $this->person_b;
-            return $user;
-        }
+        return $this->belongsTo('Proto\Models\User', 'user_id_b')->withTrashed();
     }
 
     public function type()

@@ -32,7 +32,7 @@
 </p>
 
 <p>
-    <strong>{{ $user->name }}, {{ $user->name_initials }}</strong>, born on
+    <strong>{{ $user->name }}</strong>, born on
     <strong>{{ date('F j, Y', strtotime($user->birthdate)) }}</strong>
 </p>
 
@@ -62,10 +62,10 @@
 
 <p>
     <strong>
-        {{ $user->primary_address()->street }} {{ $user->primary_address()->number }}<br>
-        {{ $user->primary_address()->zipcode }}
-        <span style="text-transform: uppercase;">{{ $user->primary_address()->city }}</span><br>
-        {{ $user->primary_address()->country }}
+        {{ $user->address->street }} {{ $user->address->number }}<br>
+        {{ $user->address->zipcode }}
+        <span style="text-transform: uppercase;">{{ $user->address->city }}</span><br>
+        {{ $user->address->country }}
     </strong>
 </p>
 

@@ -34,12 +34,16 @@
                 <tr>
 
                     <td>{{ $pastry->id }}</td>
-                    <td><a href="{{ route('user::profile', ['id' => $pastry->user_a->id]) }}">{{ $pastry->user_a->name }}</a></td>
+                    <td>
+                        <a href="{{ route('user::profile', ['id' => $pastry->user_a->id]) }}">{{ $pastry->user_a->name }}</a>
+                    </td>
 
-                    @if ($pastry->user_b()->id == "")
-                        <td>{{ $pastry->user_b()->name }}</td>
+                    @if ($pastry->user_b)
+                        <td>
+                            <a href="{{ route('user::profile', ['id' => $pastry->user_b->id]) }}">{{ $pastry->user_b->name }}</a>
+                        </td>
                     @else
-                        <td><a href="{{ route('user::profile', ['id' => $pastry->user_b()->id]) }}">{{ $pastry->user_b()->name }}</a></td>
+                        <td>{{ $pastry->person_b }}</td>
                     @endif
 
                     <td>{{ $pastry->type() }}</td>
