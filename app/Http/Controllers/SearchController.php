@@ -145,7 +145,7 @@ class SearchController extends Controller
                     (
                         (strlen($string) >= 3 && strpos(strtolower($event->title), $string) > -1)
                         || (strlen($string) >= 3 && strpos(strtolower($event->description), $string) > -1)
-                    ) && (!$page->secret || Auth::check() && Auth::user()->can('board'))
+                    ) && (!$event->secret || Auth::check() && Auth::user()->can('board'))
                 ) {
 
                     if (array_key_exists($event->id, $data['events'])) {
