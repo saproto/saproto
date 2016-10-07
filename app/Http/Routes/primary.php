@@ -525,6 +525,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
+        Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
+
         Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
             Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);

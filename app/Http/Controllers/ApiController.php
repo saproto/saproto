@@ -15,6 +15,7 @@ use Proto\Models\Token;
 use Proto\Models\PlayedVideo;
 
 use Auth;
+use Session;
 
 class ApiController extends Controller
 {
@@ -84,6 +85,22 @@ class ApiController extends Controller
         $playedVideo->video_title = $request->video_title;
 
         $playedVideo->save();
+    }
+
+    public function getToken(Request $request) {
+        $response = new \stdClass();
+
+        if(Auth::check()) {
+            $response->token = Session::get('token');
+        }else{
+            $response->token = 0;
+        }
+
+        if($request->has('callback')) {
+            return $request->callback . "(" . json_encode($response) . ")";
+        }else{
+            return json_encode($response);
+        }
     }
 
 }

@@ -5,136 +5,147 @@
 
     <script>
         var server = "{!! env('HERBERT_SERVER') !!}";
-        @if(Auth::check()) var token = "{!! Session::get('token') !!}"; @else var token; @endif
+        var token = 0;
 
         $(document).ready(function() {
-            var errorElement = $("body");
+            $.ajax({
+                url: "{!! env('APP_URL') !!}/api/token",
+                dataType: "jsonp",
+                success: function(_token) {
 
-            var remote = io(server + '/protube-remote');
+                    token = _token;
 
-            function focusOnPin() {
-                var input_flds = $('#pin-input').find(':input');
+                    var errorElement = $("body");
 
-                for(var i = 0; i < 3; i++) {
-                    input_flds.eq(i).val('');
-                }
-                input_flds.eq(0).focus();
-            }
+                    var remote = io(server + '/protube-remote');
 
-            remote.on("connect", function() {
-                $("#connecting").hide(0);
-                $("#connected").show(0);
-                if(token) remote.emit("token", token);
+                    function focusOnPin() {
+                        var input_flds = $('#pin-input').find(':input');
 
-                focusOnPin();
-            });
-
-            $('#login').click(function(){
-                focusOnPin();
-            });
-
-            remote.on("reconnect", function() {
-                location.reload();
-            });
-
-            remote.on("disconnect", function() {
-                location.reload();
-            });
-
-            remote.on("queue", function(data) {
-                var queue = $("#queue");
-                queue.html("");
-
-                for(var i in data) {
-                    queue.append('<img src="http://img.youtube.com/vi/' + data[i].id + '/0.jpg" />');
-                }
-            });
-
-            $('form').bind('submit', function(e){
-                e.preventDefault();
-                remote.emit("search", $("#searchBox").val());
-                $("#results").html("Loading...");
-            });
-
-            $(".pin").keyup(function(e) {
-                console.log('log');
-
-                var input_flds = $('#pin-input').find(':input');
-
-                if(e.keyCode == 8 && input_flds.index(this) > 0) {
-                    input_flds.eq(input_flds.index(this) - 1).focus();
-                }
-                else if($(this).val().length == 1) {
-                  input_flds.eq(input_flds.index(this) + 1).focus();
-                }
-                else if($(this).val().length > 1) {
-                    $(this).val($(this).val()[0]);
-                }
-
-                if(input_flds.index(this) >= 2) {
-                    var pincode = '';
-                    for(var i = 0; i < 3; i++) {
-                        pincode += input_flds.eq(i).val().toString();
+                        for(var i = 0; i < 3; i++) {
+                            input_flds.eq(i).val('');
+                        }
+                        input_flds.eq(0).focus();
                     }
-                    remote.emit("authenticate", { 'pin' : pincode });
-                }
-            });
 
-            $('body').on('keydown', function(event){
-                if( $('#login').is(':visible') ) {
-                    if(event.keyCode >= 48 && event.keyCode <= 57 ) { // 0-9 normal
-                        $('.keyboard-key:contains("' + (event.keyCode - 48) + '")').click();
-                    } else if(event.keyCode >= 96 && event.keyCode <= 105 ) { // 0-9 normal
-                        $('.keyboard-key:contains("' + (event.keyCode - 96) + '")').click();
-                    } else if( event.keyCode == 8 ) { // backspace
-                        $('.keyboard-key.back').click();
-                    }
-                }
-            });
+                    remote.on("connect", function() {
+                        $("#connecting").hide(0);
+                        $("#connected").show(0);
+                        if(token) remote.emit("token", token);
 
-            remote.on("authenticated", function(correct) {
-                if(correct) {
-                    $("#login").hide(0);
-                    $("#loggedIn").show(0);
-                }
-                else{
-                    $("#pin-input").css({
-                        "animation": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both"
+                        focusOnPin();
                     });
 
-                    setTimeout(function() {
-                        $("#pin-input").css({
-                            "animation": "none"
-                        });
-                    }, 1000);
+                    $('#login').click(function(){
+                        focusOnPin();
+                    });
 
-                    focusOnPin();
-                }
-            });
+                    remote.on("reconnect", function() {
+                        location.reload();
+                    });
 
-            remote.on("searchResults", function(data) {
-                var results = $("#results");
+                    remote.on("disconnect", function() {
+                        location.reload();
+                    });
 
-                results.html("");
+                    remote.on("queue", function(data) {
+                        var queue = $("#queue");
+                        queue.html("");
 
-                for(var i in data) {
-                    results.append(generateResult(data[i]));
-                }
+                        for(var i in data) {
+                            queue.append('<img src="http://img.youtube.com/vi/' + data[i].id + '/0.jpg" />');
+                        }
+                    });
 
-                $(".result").each(function(i) {
-                    var current = $(this);
-                    current.click(function(e) {
+                    $('form').bind('submit', function(e){
                         e.preventDefault();
-                        console.log({
-                            id: current.attr("ytId"),
-                            showVideo: ($("#showVideo").prop("checked") ? true : false)
+                        remote.emit("search", $("#searchBox").val());
+                        $("#results").html("Loading...");
+                    });
+
+                    $(".pin").keyup(function(e) {
+                        console.log('log');
+
+                        var input_flds = $('#pin-input').find(':input');
+
+                        if(e.keyCode == 8 && input_flds.index(this) > 0) {
+                            input_flds.eq(input_flds.index(this) - 1).focus();
+                        }
+                        else if($(this).val().length == 1) {
+                            input_flds.eq(input_flds.index(this) + 1).focus();
+                        }
+                        else if($(this).val().length > 1) {
+                            $(this).val($(this).val()[0]);
+                        }
+
+                        if(input_flds.index(this) >= 2) {
+                            var pincode = '';
+                            for(var i = 0; i < 3; i++) {
+                                pincode += input_flds.eq(i).val().toString();
+                            }
+                            remote.emit("authenticate", { 'pin' : pincode });
+                        }
+                    });
+
+                    $('body').on('keydown', function(event){
+                        if( $('#login').is(':visible') ) {
+                            if(event.keyCode >= 48 && event.keyCode <= 57 ) { // 0-9 normal
+                                $('.keyboard-key:contains("' + (event.keyCode - 48) + '")').click();
+                            } else if(event.keyCode >= 96 && event.keyCode <= 105 ) { // 0-9 normal
+                                $('.keyboard-key:contains("' + (event.keyCode - 96) + '")').click();
+                            } else if( event.keyCode == 8 ) { // backspace
+                                $('.keyboard-key.back').click();
+                            }
+                        }
+                    });
+
+                    remote.on("authenticated", function(correct) {
+                        if(correct) {
+                            $("#login").hide(0);
+                            $("#loggedIn").show(0);
+                        }
+                        else{
+                            $("#pin-input").css({
+                                "animation": "shake 0.82s cubic-bezier(.36,.07,.19,.97) both"
+                            });
+
+                            setTimeout(function() {
+                                $("#pin-input").css({
+                                    "animation": "none"
+                                });
+                            }, 1000);
+
+                            focusOnPin();
+                        }
+                    });
+
+                    remote.on("searchResults", function(data) {
+                        var results = $("#results");
+
+                        results.html("");
+
+                        for(var i in data) {
+                            results.append(generateResult(data[i]));
+                        }
+
+                        $(".result").each(function(i) {
+                            var current = $(this);
+                            current.click(function(e) {
+                                e.preventDefault();
+                                console.log({
+                                    id: current.attr("ytId"),
+                                    showVideo: ($("#showVideo").prop("checked") ? true : false)
+                                });
+                                remote.emit("add", {
+                                    id: current.attr("ytId"),
+                                    showVideo: ($("#showVideo").prop("checked") ? true : false)
+                                });
+                            })
                         });
-                        remote.emit("add", {
-                            id: current.attr("ytId"),
-                            showVideo: ($("#showVideo").prop("checked") ? true : false)
-                        });
-                    })
-                });
+                    });
+
+
+                }
             });
         });
 
