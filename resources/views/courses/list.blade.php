@@ -19,7 +19,7 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
-                        Year {{ ceil($key/4) }}, quartile {{ $key % 4 }}
+                        Year {{ ceil($key/4) }}, quartile {{ (($key - 1) % 4) + 1 }}
                     </div>
 
                     <div class="panel-body">
