@@ -38,7 +38,7 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading">ProTube</div>
+            <div class="panel-heading">ProTube<span id="currentPin" style="float: right;">...</span></div>
             <div class="panel-body">
                 <div class="btn-group btn-group-justified" role="group" aria-label="ProTube controls">
                     <div class="btn-group" role="group">
@@ -243,6 +243,10 @@
             admin.on("progress", function(data) {
                 $("#progress").slider('setValue', data);
                 $("#current_time").html(prettifyDuration(data));
+            });
+
+            admin.on("pin", function(data) {
+                $("#currentPin").html("PIN: " + data);
             });
 
             $('#searchForm').bind('submit', function(e){
