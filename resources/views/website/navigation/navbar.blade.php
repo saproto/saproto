@@ -109,12 +109,12 @@
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
                             <li><a href="{{ route("page::list") }}">Pages</a></li>
                             <li><a href="{{ route("email::admin") }}">Email</a></li>
+                            <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
+                            <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
 
                             @if(Auth::user()->can('admin'))
                                 <li><a href="{{ route("alias::index") }}">Aliases</a></li>
                                 <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
-                                <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
-                                <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
                             @endif
 
                             <li role="separator" class="divider"></li>
