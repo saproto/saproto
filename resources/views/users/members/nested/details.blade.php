@@ -150,7 +150,7 @@
 
         <div class="row clearfix">
 
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-4 col-xs-4">
                 <div class="btn-group btn-group-justified" role="group">
                     <a href="{{ route('membercard::download', ['id' => $user->id]) }}" class="btn btn-default"
                        target="_blank">
@@ -159,10 +159,18 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-4 col-xs-4">
                 <div class="btn-group btn-group-justified" role="group">
                     <a id="print-card" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
                         Print Card ({{ $user->member->card_printed_on or 'First' }})
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xs-4">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-card-overlay" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Overlay
                     </a>
                 </div>
             </div>

@@ -27,7 +27,7 @@ class MemberCardController extends Controller
             abort(500, "Only members can have a member card printed.");
         }
 
-        $card = PDF::loadView('users.membercard.membercard', ['user' => $user]);
+        $card = PDF::loadView('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]);
 
         $card = $card
             ->setOption('page-width', 86)->setOption('page-height', 54)
@@ -62,6 +62,29 @@ class MemberCardController extends Controller
 
         $user->member->card_printed_on = date('Y-m-d');
         $user->member->save();
+
+        return "The printer service responded: " . $result;
+
+    }
+
+    public function startoverlayprint(Request $request)
+    {
+
+        $user = User::find($request->input('id'));
+
+        if (!$user) {
+            return "This user could not be found!";
+        }
+
+        if (!$user->member) {
+            return "Only members can have their card printed!";
+        }
+
+        $result = FileController::requestPrint('card', route('membercard::download', ['id' => $user->id, 'overlayonly' => 1]));
+
+        if ($result === false) {
+            return "Something went wrong trying to reach the printer service.";
+        }
 
         return "The printer service responded: " . $result;
 

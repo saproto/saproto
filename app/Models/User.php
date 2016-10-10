@@ -200,6 +200,12 @@ class User extends Model implements AuthenticatableContract,
         ) > 0;
     }
 
+    public function isInCommitteeBySlug($slug)
+    {
+        $committee = Committee::where('slug', $slug)->first();
+        return $committee && $this->isInCommittee($committee);
+    }
+
     /**
      * @return bool Whether the user is an active member of the association.
      */

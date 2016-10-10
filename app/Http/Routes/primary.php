@@ -148,6 +148,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
     Route::post('membercard/print', ['as' => 'membercard::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
+    Route::post('membercard/printoverlay', ['as' => 'membercard::printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startoverlayprint']);
     Route::get('membercard/{id}', ['as' => 'membercard::download', 'uses' => 'MemberCardController@download']);
 
     Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@printForm']);
