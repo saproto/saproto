@@ -42,12 +42,8 @@
                     <td class="{{ $achievement->tier }}">{{ $achievement->tier }}</td>
                     <td>
                         <a class="btn btn-xs btn-default"
-                           href="{{ route('achievement::give', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('achievement::edit', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                           href="{{ route('achievement::manage', ['id' => $achievement->id]) }}" role="button">
+                            <i class="fa fa-bars" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('achievement::delete', ['id' => $achievement->id]) }}" role="button">

@@ -24,7 +24,7 @@ class AchievementController extends Controller
 
     public function create()
     {
-        return view('achievement.edit', ['new' => true]);
+        return view('achievement.manage', ['new' => true]);
     }
 
     public function store(Request $request)
@@ -32,7 +32,7 @@ class AchievementController extends Controller
         $achievement = new Achievement($request->all());
         $achievement->save();
         Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been created.");
-        return Redirect::route("achievement::list");
+        return Redirect::route("achievement::manage", ['id' => $achievement->id]);
     }
 
     public function update($id, Request $request)
@@ -42,14 +42,14 @@ class AchievementController extends Controller
         $achievement->fill($request->all());
         $achievement->save();
         Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been updated.");
-        return Redirect::route("achievement::list");
+        return Redirect::back();
     }
 
-    public function edit($id)
+    public function manage($id)
     {
         $achievement = Achievement::find($id);
         if (!$achievement) abort(404);
-        return view('achievement.edit', ['new' => false, 'achievement' => $achievement]);
+        return view('achievement.manage', ['new' => false, 'achievement' => $achievement]);
     }
 
     public function destroy($id)
@@ -63,13 +63,6 @@ class AchievementController extends Controller
         $achievement->delete();
         Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been removed.");
         return Redirect::route("achievement::list");
-    }
-
-    public function wrap($id)
-    {
-        $achievement = Achievement::find($id);
-        if (!$achievement) abort(404);
-        return view("achievement.give", ['achievement' => $achievement]);
     }
 
     public function give($achievement_id, Request $request)
@@ -93,7 +86,7 @@ class AchievementController extends Controller
         } else {
             Session::flash('flash_message', "This user already has this achievement");
         }
-        return Redirect::route("achievement::list");
+        return Redirect::back();
     }
 
     public function take($achievement_id, $user_id)
@@ -108,7 +101,7 @@ class AchievementController extends Controller
                 Session::flash('flash_message', "Achievement $achievement->name taken from $user->name.");
             }
         }
-        return Redirect::route("user::profile", ['id' => $user_id]);
+        return Redirect::back();
     }
 
     public function image($id, Request $request)
@@ -127,8 +120,8 @@ class AchievementController extends Controller
             $achievement->image()->dissociate();
             $achievement->save();
         }
-
-        return Redirect::route('achievement::list', ['id' => $id]);
+        Session::flash('flash_message', "Achievement Icon set");
+        return Redirect::route('achievement::manage', ['id' => $id]);
 
     }
 }
