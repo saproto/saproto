@@ -237,6 +237,8 @@ return [
         'Flickr' => Proto\Models\Flickr::class,
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
+        'Role' => Proto\Models\Role::class,
+        'Permission' => Proto\Models\Permission::class,
         'Member' => Proto\Models\Member::class,
         'EmailList' => \Proto\Models\EmailList::class,
         'Email' => \Proto\Models\Email::class,

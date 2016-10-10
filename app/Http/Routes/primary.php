@@ -321,7 +321,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'course', 'as' => 'course::', 'middleware' => ['auth']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'CourseController@index']);
 
-        Route::group(['middleware' => ['permission:board']], function() {
+        Route::group(['middleware' => ['permission:board']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
 
@@ -476,6 +476,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
         Route::post('{id}/grant', ['as' => 'grant', 'uses' => 'AuthorizationController@grant']);
         Route::get('{id}/revoke/{user}', ['as' => 'revoke', 'uses' => 'AuthorizationController@revoke']);
+    });
+
+    /*
+     * Routes related to the password manager.
+     */
+    Route::group(['prefix' => 'passwordstore', 'middleware' => ['auth'], 'as' => 'passwordstore::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'PasswordController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'PasswordController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'PasswordController@store']);
+        Route::get('show/{id}', ['as' => 'show', 'uses' => 'PasswordController@show']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PasswordController@destroy']);
     });
 
     /*
