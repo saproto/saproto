@@ -73,7 +73,7 @@ class UserDashboardController extends Controller
             abort(404);
         }
 
-        if ($user->id != Auth::id() && !User::can('board')) {
+        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
             abort(403);
         }
 
