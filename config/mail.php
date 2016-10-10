@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'webmaster@saproto.nl', 'name' => 'S.A. Proto'],
+    'from' => ['address' => 'noreply@proto.utwente.nl', 'name' => 'S.A. Proto'],
 
     /*
     |--------------------------------------------------------------------------
