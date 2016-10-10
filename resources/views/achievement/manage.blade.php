@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6">
 
         <form method="post"
               action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
@@ -152,6 +152,14 @@
 
             </form>
 
+        @endif
+
+    </div>
+
+    @if(!$new)
+
+        <div class="col-md-6">
+
             <div class="panel panel-default">
 
                 <div class="panel-heading">
@@ -166,14 +174,13 @@
                         {!! csrf_field() !!}
 
                         <div class="form-group">
-                            <label for="id">Member</label>
                             <div id="user-select">
-                                <div class="col-sm-10">
+                                <div class="col-sm-9">
                                     <input type="text" class="form-control" id="member-name" placeholder="John Doe"
                                            required>
                                     <input type="hidden" id="member-id" name="user_id" required>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <input type="button" class="form-control btn btn-success" id="member-clear"
                                            value="Clear">
                                 </div>
@@ -192,8 +199,6 @@
                 </div>
 
             </div>
-
-
 
             <div class="panel panel-default">
 
@@ -232,9 +237,9 @@
 
             </div>
 
-        @endif
+            @endif
 
-    </div>
+        </div>
 
 @endsection
 
