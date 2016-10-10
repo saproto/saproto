@@ -20,7 +20,6 @@
 
                 <th>#</th>
                 <th>Event</th>
-                <th>Comment</th>
                 <th>Fee</th>
                 <th>Participants</th>
                 <th>Registration period</th>
@@ -43,21 +42,16 @@
 
                         @if ($activity->event)
                             <td>
-                                <a href="{{ route("event::show", ['id' => $activity->event->id]) }}">{{ $activity->event->name }}</a>
+                                <a href="{{ route("event::show", ['id' => $activity->event->id]) }}">{{ $activity->event->title }}</a><br>
+                                {{ date('D j F Y', $activity->event->start) }}
                             </td>
                         @else
                             <td>-</td>
                         @endif
 
-                        @if ($activity->event)
-                            <td>-</td>
-                        @else
-                            <td>{{ $activity->comment }}</td>
-                        @endif
-
                         <td>&euro; {{ number_format($activity->price, 2) }}</td>
 
-                        <td>{{ count($activity->users()) }}</td>
+                        <td>{{ $activity->users->count() }}</td>
 
                         <td>
                             {{ date('d-m-Y H:i:s', $activity->registration_start) }}
@@ -74,13 +68,18 @@
                         <td>
                             <select name="account" class="form-control">
                                 @foreach(\Proto\Models\Account::orderBy('account_number', 'asc')->get() as $account)
-                                    <option value="{{ $account->id }}">({{ $account->account_number }}) {{ $account->name }}</option>
+                                    <option value="{{ $account->id }}">({{ $account->account_number }}
+                                        ) {{ $account->name }}</option>
                                 @endforeach
                             </select>
                         </td>
 
                         <td>
-                            <button type="submit" class="btn btn-warning">Close</button>
+                            @if($activity->event && !$activity->event->over())
+                                <button class="btn btn-info" disabled>Not ended yet.</button>
+                            @else
+                                <button type="submit" class="btn btn-warning">Close</button>
+                            @endif
                         </td>
 
                     </tr>

@@ -62,7 +62,7 @@ class EventController extends Controller
     public function finindex()
     {
 
-        $activities = Activity::where('closed', false)->get();
+        $activities = Activity::where('closed', false)->orderBy('registration_end', 'asc')->get();
         return view('event.notclosed', ['activities' => $activities]);
     }
 
@@ -231,12 +231,17 @@ class EventController extends Controller
 
         $activity = Activity::findOrFail($id);
 
+        if ($activity->event && !$activity->event->over()) {
+            Session::flash("flash_message", "You cannot close an activity before it has finished.");
+            return Redirect::back();
+        }
+
         if ($activity->closed) {
             Session::flash("flash_message", "This activity is already closed.");
             return Redirect::back();
         }
 
-        if (count($activity->users()) == 0 || $activity->price == 0) {
+        if (count($activity->users) == 0 || $activity->price == 0) {
             $activity->closed = true;
             $activity->save();
             Session::flash("flash_message", "This activity is now closed. It either was free or had no participants, so no orderlines or products were created.");
@@ -248,12 +253,12 @@ class EventController extends Controller
         $product = Product::create([
             'account_id' => $account->id,
             'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
-            'nicename' => 'activity',
+            'nicename' => 'activity-' . $activity->id,
             'price' => $activity->price
         ]);
         $product->save();
 
-        foreach ($activity->users() as $user) {
+        foreach ($activity->users as $user) {
             $order = OrderLine::create([
                 'user_id' => $user->id,
                 'product_id' => $product->id,
