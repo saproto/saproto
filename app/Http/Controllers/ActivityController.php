@@ -73,12 +73,14 @@ class ActivityController extends Controller
         if (!$event->activity) {
             $request->session()->flash('flash_message', "There is no participation data to delete.");
             return Redirect::back();
-        } elseif (count($event->activity->users()) > 0) {
+        } elseif (count($event->activity->users) > 0) {
             $request->session()->flash('flash_message', "You cannot delete participation data because there are still participants to this activity.");
             return Redirect::back();
         }
 
-        $event->activity()->delete();
+        ActivityParticipation::withTrashed()->where('activity_id', $event->activity->id)->forceDelete();
+
+        $event->activity->delete();
 
         $request->session()->flash('flash_message', 'Participation data deleted.');
 
