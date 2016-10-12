@@ -321,7 +321,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'course', 'as' => 'course::', 'middleware' => ['auth']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'CourseController@index']);
 
-        Route::group(['middleware' => ['permission:board']], function() {
+        Route::group(['middleware' => ['permission:board']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
 
@@ -533,6 +533,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
         });
 
+    });
+
+    /*
+     * Routes related to calendars.
+     */
+    Route::group(['prefix' => 'ical', 'as' => 'ical::'], function () {
+        Route::get('calendar', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
     });
 
     /**
