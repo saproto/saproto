@@ -193,7 +193,9 @@ return [
         ],
         'smartxp' => [
             'caniworkinthesmartxp.nl',
-            'www.caniworkinthesmartxp.nl'
+            'www.caniworkinthesmartxp.nl',
+            'smartxp.nl',
+            'www.smartxp.nl'
         ],
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
