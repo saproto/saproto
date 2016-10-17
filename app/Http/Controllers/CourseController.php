@@ -21,7 +21,7 @@ class CourseController extends Controller
     public function index()
     {
         $mainCourses = Course::where('study_id', config('proto.mainstudy'))->orderBy('quartile')->get()->groupBy('quartile');
-        $otherCourses = Course::where('study_id', '!=', config('proto.mainstudy'))->get();
+        $otherCourses = Course::where('study_id', '!=', config('proto.mainstudy'))->get()->groupBy('study_id');
         
         return view('courses.list', ['mainCourses' => $mainCourses, 'otherCourses' => $otherCourses]);
     }
