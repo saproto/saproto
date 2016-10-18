@@ -114,8 +114,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-
-        return view('omnomcom.products.show', ['product' => Product::findOrFail($id)]);
+        $product = Product::findOrFail($id);
+        $orderlines = $product->orderlines()->orderBy('created_at', "DESC")->paginate(15);
+        return view('omnomcom.products.show', ['product' => $product, 'orderlines' => $orderlines]);
 
     }
 
