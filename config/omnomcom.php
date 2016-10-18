@@ -27,6 +27,17 @@ return [
             'roles' => ['pilscie'],
             'cash_allowed' => true
         ]
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Alfred Account
+    |--------------------------------------------------------------------------
+    |
+    | Defines the the financial account ID for Alfred's products.
+    |
+    */
+
+    'alfred-account' => 43,
 
 ];
