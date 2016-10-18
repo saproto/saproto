@@ -42,14 +42,6 @@
 
             <h3>Most recent orders for this product</h3>
 
-            @if ($product->orderlines->count() > 15)
-
-                <p>
-                    Only showing the last 15 out of {{ $product->orderlines->count() }} orders.
-                </p>
-
-            @endif
-
             @if ($product->orderlines->count() > 0)
 
                 <table class="table">
@@ -66,7 +58,7 @@
 
                     </thead>
 
-                    @foreach($product->orderlines()->orderBy('created_at', "DESC")->get()->slice(0, 15)->all() as $orderline)
+                    @foreach($orderlines as $orderline)
 
                         <tr>
 
@@ -83,6 +75,8 @@
                     @endforeach
 
                 </table>
+
+                <div style="text-align: center;">{!! $orderlines->render() !!}</div>
 
             @else
 
