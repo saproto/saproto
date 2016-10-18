@@ -15,6 +15,8 @@
 
         </div>
 
+        <div class="greeting">Proto is <span id="greeting" ></span></div>
+
     </div>
 
 @endsection
@@ -152,6 +154,28 @@
                 doSlide();
 
             }, 2500);
+
+            var theater = theaterJS()
+
+            theater
+            .on('type:start, erase:start', function () {
+              // add a class to actor's dom element when he starts typing/erasing
+              var actor = theater.getCurrentActor()
+              actor.$element.classList.add('is-typing')
+            })
+            .on('type:end, erase:end', function () {
+              // and then remove it when he's done
+              var actor = theater.getCurrentActor()
+              actor.$element.classList.remove('is-typing')
+            })
+
+            theater
+                .addActor('greeting')
+
+            theater
+                .addScene('greeting:Lorem Ipsum...', 400)
+                .addScene('greeting:Dolor sit amet?', 400)
+                .addScene(theater.replay)
 
         });
 

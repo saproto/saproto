@@ -20,7 +20,18 @@
         background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
         background-size: cover;
         height: 400px;
-        border-bottom: 5px solid #C1FF00;
+        /*border-bottom: 5px solid #C1FF00;*/
+        position: relative;
+    }
+
+    #header .greeting {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        background: #7FBA00;
+        color: white;
+        padding: 2rem;
+        text-align: center;
     }
 
     #header .container {
