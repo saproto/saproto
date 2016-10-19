@@ -53,6 +53,7 @@
                         <th>Order time</th>
                         <th>User</th>
                         <th>Quantity</th>
+                        <th>Total price</th>
 
                     </tr>
 
@@ -69,6 +70,7 @@
                                 </a>
                             </td>
                             <td>{{ $orderline->units }}x</td>
+                            <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>
 
                         </tr>
 
