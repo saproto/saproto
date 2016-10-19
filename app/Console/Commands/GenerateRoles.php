@@ -79,6 +79,12 @@ class GenerateRoles extends Command
             $permissions['pilscie']->save();
             $this->info('Added pilscie permission.');
         }
+        $permissions['alfred'] = Permission::where('name', '=', 'alfred')->first();
+        if ($permissions['alfred'] == null) {
+            $permissions['alfred'] = new Permission(array('name' => 'alfred', 'display_name' => 'Alfred\'s Workshop', 'description' => 'Manages access to the OmNomCom for workshop functions.'));
+            $permissions['alfred']->save();
+            $this->info('Added alfred permission.');
+        }
 
         $roles['admin'] = Role::where('name', '=', 'admin')->first();
         if ($roles['admin'] == null) {
@@ -110,6 +116,18 @@ class GenerateRoles extends Command
             $roles['pilscie']->save();
             $this->info('Added pilscie role.');
         }
+        $roles['pilscie'] = Role::where('name', '=', 'pilscie')->first();
+        if ($roles['pilscie'] == null) {
+            $roles['pilscie'] = new Role(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'PilsCie member'));
+            $roles['pilscie']->save();
+            $this->info('Added pilscie role.');
+        }
+        $roles['alfred'] = Role::where('name', '=', 'alfred')->first();
+        if ($roles['alfred'] == null) {
+            $roles['alfred'] = new Role(array('name' => 'alfred', 'display_name' => 'Alfred', 'description' => 'This person is Alfred'));
+            $roles['alfred']->save();
+            $this->info('Added alfred role.');
+        }
 
         $this->info('Now all roles and permissions exist.');
 
@@ -123,6 +141,8 @@ class GenerateRoles extends Command
         $this->info('Synced omnomcom role with permissions.');
         $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id));
         $this->info('Synced pilscie role with permissions.');
+        $roles['alfred']->perms()->sync(array($permissions['alfred']->id, $permissions['omnomcom']->id));
+        $this->info('Synced alfred role with permissions.');
 
         $this->info('Fixed required permissions and roles.');
 
