@@ -192,6 +192,8 @@ return [
             'www.omnomcom.nl'
         ],
         'smartxp' => [
+            'smartxp.nl',
+            'www.smartxp.nl',
             'caniworkinthesmartxp.nl',
             'www.caniworkinthesmartxp.nl'
         ],

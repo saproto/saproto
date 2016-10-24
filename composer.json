@@ -52,7 +52,8 @@
     "milon/barcode": "^5.2",
     "graham-campbell/markdown": "^6.1",
     "directadmin/directadmin": "dev-master",
-    "sentry/sentry-laravel": "^0.3.0"
+    "sentry/sentry-laravel": "^0.3.0",
+    "eluceo/ical": "^0.11.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

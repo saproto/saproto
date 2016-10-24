@@ -43,6 +43,17 @@
 
                     <div class="panel-body">
 
+                        @if($key == 0)
+
+                            <div class="btn-group btn-lg btn-group-justified">
+                                <div class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
+                                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                    Connect via iCal!
+                                </div>
+                            </div>
+
+                        @endif
+
                         <h3 style="text-align: center;">
                             @if($key == 0)
                                 Soon
@@ -101,6 +112,37 @@
 
         @endforeach
 
+    </div>
+
+    <!-- Modal for deleting automatic withdrawal. //-->
+    <div id="calendar-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Import our calendar into yours!</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>
+                        If you want to, you can import our calendar into yours. This can be easily done by going to your
+                        favorite calendar application and looking for an option similar to <i>Import calendar by URL</i>.
+                        You can then copy and paste the link below. For Google Calendar users, you should be able to
+                        click
+                        <a target="_blank"
+                           href="https://calendar.google.com/calendar/render?cid={{ urlencode(route("ical::calendar")) }}">
+                            here
+                        </a>.
+                    </p>
+
+                    <p style="text-align: center;">
+                        <strong>{{ route("ical::calendar") }}</strong>
+                    </p>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

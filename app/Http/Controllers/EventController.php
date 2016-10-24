@@ -17,6 +17,13 @@ use Proto\Models\StorageEntry;
 use Session;
 use Redirect;
 use Auth;
+use Response;
+use Markdown;
+
+use IcalCalendar;
+use IcalEvent;
+use IcalOrganizer;
+use DateTime;
 
 class EventController extends Controller
 {
@@ -384,6 +391,48 @@ class EventController extends Controller
 
         return $data;
 
+    }
+
+    public function icalCalendar(Request $request)
+    {
+        $calendar = new IcalCalendar('-//HYTTIOAOAc//S.A. Proto Calendar//EN');
+        $calendar->setName('S.A. Proto Calendar');
+        $calendar->setDescription('All of Proto\'s events and happenings, straight from the website!');
+        $calendar->setCalendarColor('#C1FF00');
+        $calendar->setCalendarScale('GREGORIAN');
+        $calendar->setMethod('PUBLISH');
+
+        foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            $infotext = '';
+            if ($event->over()) {
+                $infotext = 'This activity is over.';
+            } elseif ($event->activity !== null && $event->activity->participants === null) {
+                $infotext = 'Sign-up required, but no participant limit.';
+            } elseif ($event->activity !== null && $event->activity->participants !== null) {
+                $infotext = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
+            } else {
+                $infotext = 'No sign-up necessary.';
+            }
+
+            $component = (new IcalEvent())
+                ->setDtStart(new DateTime(date('d-m-Y H:i:s', $event->start)))
+                ->setDtEnd(new DateTime(date('d-m-Y H:i:s', $event->end)))
+                ->setSummary($event->title)
+                ->setDescription($infotext . ' More information: ' . route("event::show", ['id' => $event->id]))
+                ->setUseTimezone(true)
+                ->setLocation($event->location);
+
+            if ($event->committee !== null) {
+                $component->setOrganizer(new IcalOrganizer($event->committee->name));
+            }
+
+            $calendar->addComponent($component);
+        }
+
+        return Response::make($calendar->render())
+            ->header('Content-Type', 'text/calendar; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
     }
 
 }

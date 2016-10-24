@@ -94,7 +94,7 @@
                 @elseif($ldap->description == "Employee")
                     <tr>
                         <td style="text-align: right;"><strong>Name</strong></td>
-                        <td>{{ $ldap->title }} {{ $ldap->givenname }} {{ $ldap->sn }}</td>
+                        <td>{{ $ldap->title or '' }} {{ $ldap->givenname }} {{ $ldap->sn }}</td>
                     </tr>
                     <tr>
                         <td style="text-align: right;"><strong>E-mail</strong></td>
@@ -106,8 +106,6 @@
                     </tr>
                     <tr>
                         <td style="text-align: right;"><strong>Phone</strong></td>
-                        <td
-                        {{ $ldap->telephonenumber }}</a></td>
                         <td>
                             <a href="tel:{!! property_exists($ldap, 'telephonenumber') ? $ldap->telephonenumber : '???' !!}">{!! property_exists($ldap, 'telephonenumber') ? $ldap->telephonenumber : '<i>unknown</i>' !!}</a>
                         </td>

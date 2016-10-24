@@ -48,6 +48,8 @@
 
             @endforeach
 
+            @if($i < 4) </div> @endif
+
         @else
 
             <div class="row">
@@ -74,5 +76,53 @@
         @endif
 
     </div>
+
+    @if (count($otherCourses) > 0)
+
+    <h2 class="courses__title">Other studies @if(Auth::user()->can('board')) <a href="{{ route("course::add") }}">(add)</a> @endif</h2>
+
+    <div class="courses__container">
+
+            <?php $i = 0; ?>
+
+            @foreach($otherCourses as $key=>$courses)
+
+                @if($i % 4 == 0) <div class="row courses__row-eq-height"> @endif
+
+                    <div class="col-md-3 col-xs-12">
+
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                {{ Proto\Models\Study::find($key)->name }}
+                            </div>
+
+                            <div class="panel-body">
+                                @foreach($courses as $course)
+                                    <p>
+                                        <a href="{!! $course->page->getUrl() !!}">{{ $course->page->title }}</a>
+
+                                        @if(Auth::user()->can('board'))
+                                            <a href="{{ route('course::delete', ['id' => $course->id]) }}">(delete)</a>
+                                        @endif
+                                    </p>
+                                @endforeach
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    @if($i % 4 == 3) </div> @endif
+
+                <?php $i++; ?>
+
+            @endforeach
+
+                @if($i < 4) </div> @endif
+
+            </div>
+
+    @endif
 
 @endsection

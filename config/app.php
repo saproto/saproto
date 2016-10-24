@@ -232,6 +232,10 @@ return [
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 
+        'IcalCalendar' => Eluceo\iCal\Component\Calendar::class,
+        'IcalEvent' => Eluceo\iCal\Component\Event::class,
+        'IcalOrganizer' => Eluceo\iCal\Property\Event\Organizer::class,
+
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
         'Flickr' => Proto\Models\Flickr::class,

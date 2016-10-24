@@ -510,10 +510,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * The routes for Protube.
      */
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
-        Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
         Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
         Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
+        Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     });
 
     /*
@@ -546,6 +546,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+    /*
+     * Routes related to calendars.
+     */
+    Route::group(['prefix' => 'ical', 'as' => 'ical::'], function () {
+        Route::get('calendar', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
+    });
+
     /**
      * Routes related to the Achievement system.
      */
@@ -553,10 +560,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
         Route::get('add', ['as' => 'add', 'uses' => 'AchievementController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'AchievementController@store']);
-        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@edit']);
-        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AchievementController@update']);
+        Route::get('manage/{id}', ['as' => 'manage', 'uses' => 'AchievementController@manage']);
+        Route::post('update/{id}', ['as' => 'update', 'uses' => 'AchievementController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
-        Route::get('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@wrap']);
         Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
         Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
         Route::post('{id}/image', ['as' => 'image', 'uses' => 'AchievementController@image']);
