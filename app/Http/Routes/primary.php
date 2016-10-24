@@ -479,6 +479,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to the password manager.
+     */
+    Route::group(['prefix' => 'passwordstore', 'middleware' => ['auth'], 'as' => 'passwordstore::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'PasswordController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'PasswordController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'PasswordController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PasswordController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'PasswordController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PasswordController@destroy']);
+    });
+
+    /*
      * Routes related to e-mail aliases.
      */
     Route::group(['prefix' => 'alias', 'middleware' => ['auth', 'permission:admin'], 'as' => 'alias::'], function () {
