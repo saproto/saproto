@@ -483,6 +483,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['prefix' => 'passwordstore', 'middleware' => ['auth'], 'as' => 'passwordstore::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'PasswordController@index']);
+        Route::get('auth', ['as' => 'auth', 'uses' => 'PasswordController@getAuth']);
+        Route::post('auth', ['as' => 'auth', 'uses' => 'PasswordController@postAuth']);
         Route::get('add', ['as' => 'add', 'uses' => 'PasswordController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'PasswordController@store']);
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PasswordController@edit']);

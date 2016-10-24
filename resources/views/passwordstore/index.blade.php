@@ -1,20 +1,8 @@
 @extends('website.layouts.default')
 
-@section('stylesheet')
-
+@section('head')
     @parent
-
-    <style type="text/css">
-
-        .passwordmanager__password {
-            filter: blur(5px);
-        }
-
-        .passwordmanager__shownote {
-            cursor: pointer;
-        }
-
-    </style>
+    <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}">
 @endsection
 
 @section('page-title')

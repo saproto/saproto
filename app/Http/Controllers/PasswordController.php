@@ -17,13 +17,35 @@ use Auth;
 
 class PasswordController extends Controller
 {
+    public function getAuth()
+    {
+        return view('passwordstore.reauth');
+    }
+
+    public function postAuth(Request $request)
+    {
+        if (
+            AuthController::verifyCredentials(Auth::user()->email, $request->password) ||
+            (Auth::user()->utwente_username && AuthController::verifyUtwenteCredentials(Auth::user()->utwente_username, $request->password))
+        ) {
+            $request->session()->put('passwordstore-verify', strtotime('+10 minutes'));
+            $request->session()->flash('flash_message', 'You can access this tool for 10 minutes.');
+            return Redirect::route('passwordstore::index');
+        } else {
+            $request->session()->flash('flash_message', 'Wrong password.');
+            return Redirect::route('passwordstore::auth');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
+
         return view('passwordstore.index', ['passwords' => PasswordEntry::orderBy('permission_id', 'asc')->orderBy('description', 'asc')->get()]);
     }
 
@@ -34,6 +56,8 @@ class PasswordController extends Controller
      */
     public function create(Request $request)
     {
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
+
         return view('passwordstore.edit', ['password' => null, 'type' => $request->get('type')]);
     }
 
@@ -45,6 +69,8 @@ class PasswordController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
 
         $permission = Permission::findOrFail($request->get('permission_id'));
 
@@ -96,6 +122,8 @@ class PasswordController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
+
         $password = PasswordEntry::findOrFail($id);
         if (!$password->canAccess(Auth::user())) {
             $request->session()->flash('flash_message', 'You are not allowed to edit this entry.');
@@ -113,6 +141,8 @@ class PasswordController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
 
         $password = PasswordEntry::findOrFail($id);
 
@@ -175,6 +205,8 @@ class PasswordController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        if (!$this->extraVerficiation($request)) return $this->forwardToAuth($request);
+
         $password = PasswordEntry::findOrFail($id);
         if (!$password->canAccess(Auth::user())) {
             $request->session()->flash('flash_message', 'You are not allowed to delete this entry.');
@@ -183,5 +215,22 @@ class PasswordController extends Controller
         $password->delete();
         $request->session()->flash('flash_message', 'Password entry deleted.');
         return Redirect::route('passwordstore::index');
+    }
+
+    private function extraVerficiation(Request $request)
+    {
+        if (!$request->session()->has('passwordstore-verify')) return false;
+        $verify = $request->session()->get('passwordstore-verify');
+        if ($verify < date('U')) {
+            $request->session()->forget('passwordstore-verify');
+            return false;
+        }
+        return true;
+    }
+
+    private function forwardToAuth(Request $request)
+    {
+        $request->session()->flash('flash_message', 'You need to enter your password again, in order to access this feature.');
+        return Redirect::route('passwordstore::auth');
     }
 }

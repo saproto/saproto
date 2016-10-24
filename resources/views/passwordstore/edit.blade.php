@@ -1,5 +1,10 @@
 @extends('website.layouts.panel')
 
+@section('head')
+    @parent
+    <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}">
+@endsection
+
 @section('page-title')
     Password Store
 @endsection
