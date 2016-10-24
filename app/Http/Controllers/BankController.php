@@ -21,7 +21,7 @@ use Validator;
 class BankController extends Controller
 {
 
-    public function addForm($id)
+    public function addForm($id, Request $request)
     {
         $user = User::findOrFail($id);
 
@@ -32,6 +32,8 @@ class BankController extends Controller
             Session::flash("flash_message", "You already have a bank authorization. Please use the update form.");
             return Redirect::route('user::dashboard', ['id' => $id]);
         }
+
+        if($request->wizard > 0) Session::flash("wizard", true);
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => true]);
     }
@@ -82,6 +84,8 @@ class BankController extends Controller
         $bank->save();
 
         Session::flash("flash_message", "New withdrawal authorization added.");
+
+        if(Session::get('wizard')) return Redirect::route('becomeamember');
 
         return Redirect::route('user::dashboard', ['id' => $id]);
 
