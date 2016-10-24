@@ -499,10 +499,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * The routes for Protube.
      */
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
-        Route::get('', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
         Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
         Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
+        Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
     });
 
     /*

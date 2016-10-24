@@ -79,6 +79,16 @@ class OrderLineController extends Controller
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->get();
 
+        if (Auth::user()->can('alfred')) {
+            $neworderlines = [];
+            foreach ($orderlines as $orderline) {
+                if ($orderline->product->account->id == config('omnomcom.alfred-account')) {
+                    $neworderlines[] = $orderline;
+                }
+            }
+            $orderlines = collect($neworderlines);
+        }
+
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
             'orderlines' => ($orderlines ? $orderlines : [])

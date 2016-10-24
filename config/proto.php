@@ -192,10 +192,10 @@ return [
             'www.omnomcom.nl'
         ],
         'smartxp' => [
-            'caniworkinthesmartxp.nl',
-            'www.caniworkinthesmartxp.nl',
             'smartxp.nl',
-            'www.smartxp.nl'
+            'www.smartxp.nl',
+            'caniworkinthesmartxp.nl',
+            'www.caniworkinthesmartxp.nl'
         ],
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
