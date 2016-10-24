@@ -46,10 +46,10 @@
 
     <div class="container" style="margin-top: 30px;">
 
-        <div class="row">
+        @section('visitor-specific')
+        @show
 
-            @section('visitor-specific')
-            @show
+        <div class="row">
 
             <div class="col-md-4">
 

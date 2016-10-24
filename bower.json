@@ -28,7 +28,7 @@
     "Croppie": "croppie#^2.3.0"
   },
   "devDependencies": {
-    "font-awesome": "^4.6.3",
+    "font-awesome": "latest",
     "jquery": "^2.2.4",
     "bootstrap": "^3.3.6",
     "js-cookie": "^2.1.2",
