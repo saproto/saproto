@@ -25,6 +25,11 @@ class AuthorizationController extends Controller
 
     public function grant(Request $request, $id)
     {
+        if ($id == config('proto.rootrole')) {
+            $request->session()->flash('flash_message', 'This role can only be manually added in the database.');
+            return Redirect::back();
+        }
+
         $role = Role::findOrFail($id);
         $user = User::findOrFail($request->user);
         $user->roles()->attach($role->id);
@@ -35,6 +40,11 @@ class AuthorizationController extends Controller
 
     public function revoke(Request $request, $id, $user)
     {
+        if ($id == config('proto.rootrole')) {
+            $request->session()->flash('flash_message', 'This role can only be manually removed in the database.');
+            return Redirect::back();
+        }
+
         $role = Role::findOrFail($id);
         $user = User::findOrFail($user);
         $user->roles()->detach($role->id);

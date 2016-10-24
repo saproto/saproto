@@ -143,7 +143,7 @@
                             <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                             <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
 
-                            @if(Auth::user()->can('admin'))
+                            @if(Auth::user()->can('sysadmin'))
                                 <li><a href="{{ route("alias::index") }}">Aliases</a></li>
                                 <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
                             @endif

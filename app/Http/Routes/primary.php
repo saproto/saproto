@@ -472,7 +472,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to roles and permissions.
      */
-    Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:admin'], 'as' => 'authorization::'], function () {
+    Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'authorization::'], function () {
         Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
         Route::post('{id}/grant', ['as' => 'grant', 'uses' => 'AuthorizationController@grant']);
         Route::get('{id}/revoke/{user}', ['as' => 'revoke', 'uses' => 'AuthorizationController@revoke']);
@@ -495,7 +495,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to e-mail aliases.
      */
-    Route::group(['prefix' => 'alias', 'middleware' => ['auth', 'permission:admin'], 'as' => 'alias::'], function () {
+    Route::group(['prefix' => 'alias', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'alias::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'AliasController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'AliasController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'AliasController@store']);
