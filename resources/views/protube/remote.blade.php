@@ -34,6 +34,12 @@
                         $("#connected").show(0);
                         if(token) remote.emit("token", token);
 
+                        var pincode = window.location.href.split('/');
+                        pincode = pincode[ pincode.length-1 ];
+                        if( pincode.length == 3 ) {
+                            remote.emit("authenticate", { "pin" : pincode });
+                        }
+
                         focusOnPin();
                     });
 
