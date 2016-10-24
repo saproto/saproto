@@ -21,7 +21,7 @@ use Redirect;
 class AddressController extends Controller
 {
 
-    public function addForm($id)
+    public function addForm($id, Request $request)
     {
         $user = User::find($id);
         if ($user == null) {
@@ -30,6 +30,9 @@ class AddressController extends Controller
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+
+        if($request->wizard > 0) Session::flash("wizard", true);
+
         return view('users.addresses.add', ['user' => $user]);
     }
 
@@ -79,6 +82,8 @@ class AddressController extends Controller
         $address->save();
 
         Session::flash("flash_message", "The address has been added.");
+
+        if(Session::get('wizard')) return Redirect::route('becomeamember');
 
         return Redirect::route('user::dashboard', ['id' => $id]);
 

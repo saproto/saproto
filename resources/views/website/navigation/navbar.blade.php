@@ -180,6 +180,8 @@
                             @if(Auth::check() && Auth::user()->member)
                                 <li><a href="{{ route('user::profile') }}">My Profile</a></li>
                                 <li><a href="{{ route('print::form') }}">Print Something</a></li>
+                            @else
+                                <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
                             @endif
 
                             @if (Session::has('impersonator'))

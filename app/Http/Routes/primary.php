@@ -7,6 +7,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
     Route::get('developers', ['uses' => 'HomeController@developers']);
+    Route::get('becomeamember', ['as' => 'becomeamember', 'uses' => 'UserDashboardController@becomeAMemberOf']);
 
     /*
      * Routes for the search function.

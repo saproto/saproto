@@ -234,8 +234,8 @@ class AuthController extends Controller
             'birthdate' => 'required|date_format:Y-m-d',
             'gender' => 'required|in:1,2,9',
             'nationality' => 'required|string',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
-            'g-recaptcha-response' => 'required|recaptcha'
+            'phone' => 'required|regex:(\+[0-9]{8,16})'/*,
+            'g-recaptcha-response' => 'required|recaptcha'*/
         ]);
 
         $user = User::create($request->except('g-recaptcha-response'));
