@@ -236,6 +236,8 @@ return [
         'IcalEvent' => Eluceo\iCal\Component\Event::class,
         'IcalOrganizer' => Eluceo\iCal\Property\Event\Organizer::class,
 
+        'Carbon' => Carbon\Carbon::class,
+
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
         'Flickr' => Proto\Models\Flickr::class,

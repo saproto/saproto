@@ -87,6 +87,11 @@
                                 <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
                                 <li><a href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a></li>
                             @endif
+
+                            <li role="separator" class="divider"></li>
+
+                            <li><a class="navbar-title">Utilities:</a></li>
+                            <li><a href="{{ route("passwordstore::index") }}">Password Store</a></li>
                         </ul>
                     </li>
                 @endif

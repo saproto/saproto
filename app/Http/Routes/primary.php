@@ -485,7 +485,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'PasswordController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'PasswordController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'PasswordController@store']);
-        Route::get('show/{id}', ['as' => 'show', 'uses' => 'PasswordController@show']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PasswordController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'PasswordController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PasswordController@destroy']);
     });
 

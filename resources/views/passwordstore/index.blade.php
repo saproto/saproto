@@ -1,5 +1,22 @@
 @extends('website.layouts.default')
 
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+
+        .passwordmanager__password {
+            filter: blur(5px);
+        }
+
+        .passwordmanager__shownote {
+            cursor: pointer;
+        }
+
+    </style>
+@endsection
+
 @section('page-title')
     Password Store
 @endsection
@@ -26,11 +43,15 @@
             <tr>
 
                 <th>#</th>
+                <th>&nbsp;</th>
                 <th>Description</th>
                 <th>Access</th>
                 <th>URL</th>
                 <th>Username</th>
-                <th>Updated</th>
+                <th>Password</th>
+                <th>Age</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
 
             </tr>
 
@@ -43,16 +64,28 @@
                     <tr>
 
                         <td>{{ $password->id }}</td>
+
                         <td>
-                            <a href="{{ route('passwordstore::show', ['id' => $password->id]) }}">
-                                {{ $password->description }}
-                            </a>
+                            @if($password->isNote())
+                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                            @else
+                                <i class="fa fa-key" aria-hidden="true"></i>
+                            @endif
+                        </td>
+
+                        <td>
+                            {{ $password->description }}
                         </td>
                         <td>{{ $password->permission->display_name }}</td>
 
                         @if($password->isNote())
 
-                            <td colspan="2"></td>
+                            <td colspan="3">
+                                <span class="passwordmanager__shownote" data-toggle="modal"
+                                      data-target="#passwordmodal-{{ $password->id }}">
+                                    Click here to view this secure note.
+                                </span>
+                            </td>
 
                         @else
 
@@ -62,10 +95,21 @@
                                 @endif
                             </td>
                             <td>{{ Crypt::decrypt($password->username) }}</td>
+                            <td class="passwordmanager__password">{{ Crypt::decrypt($password->password) }}</td>
 
                         @endif
 
-                        <td>{{ date('d-m-Y', strtotime($password->updated_at)) }}</td>
+                        <td style="color: {{ ($password->age() > 12 ? '#ff0000' : '#00ff00') }};">
+                            {{ $password->age() }} months
+                        </td>
+
+                        <td>
+                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}">Edit</a>
+                        </td>
+
+                        <td>
+                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}">Delete</a>
+                        </td>
 
                     </tr>
 
@@ -82,5 +126,31 @@
         </p>
 
     @endif
+
+    @foreach($passwords as $password)
+
+        @if($password->isNote())
+
+            <div class="modal fade" id="passwordmodal-{{ $password->id }}" tabindex="-1" role="dialog"
+                 aria-labelledby="passwordmodal-label-{{ $password->id }}">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title"
+                                id="passwordmodal-label-{{ $password->id }}">{{ $password->description }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control" rows="30"
+                                      readonly>{{ Crypt::decrypt($password->note) }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @endif
+
+    @endforeach
 
 @endsection

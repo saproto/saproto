@@ -10,20 +10,25 @@
 
 @section('panel-body')
 
-    <form method="post" action="{{ route('passwordstore::add') }}">
+    <form method="post"
+          action="{{ $password ? route('passwordstore::edit', ['id'=>$password->id]) : route('passwordstore::add') }}">
 
         {!! csrf_field() !!}
 
         <div class="form-group">
             <label>Resource description:</label>
-            <input class="form-control" type="text" name="description">
+            <input class="form-control" type="text" name="description" value="{{ $password->description or '' }}">
         </div>
 
         <div class="form-group">
             <label>Authorized users:</label>
-            <select name="permission_id" class="form-control">
+            <select name="permission_id" class="form-control" required>
                 @foreach(Permission::all() as $permission)
-                    <option value="{{ $permission->id }}">{{ $permission->display_name }}</option>
+                    @if(Auth::user()->can($permission->name))
+                        <option value="{{ $permission->id }}" {{ ($password && $permission->id == $password->permission_id ? 'selected' : '') }}>
+                            {{ $permission->display_name }}
+                        </option>
+                    @endif
                 @endforeach
             </select>
         </div>
@@ -36,17 +41,19 @@
 
             <div class="form-group">
                 <label>Username:</label>
-                <input class="form-control" type="text" name="username">
+                <input class="form-control" type="text" name="username"
+                       value="{{ $password ? Crypt::decrypt($password->username) : '' }}">
             </div>
 
             <div class="form-group">
                 <label>Password:</label>
-                <input class="form-control" type="password" name="password">
+                <input class="form-control" type="password" name="password"
+                       value="{{ $password ? Crypt::decrypt($password->password) : '' }}">
             </div>
 
             <div class="form-group">
                 <label>Website URI:</label>
-                <input class="form-control" type="text" name="url">
+                <input class="form-control" type="text" name="url" value="{{ $password->url or '' }}">
             </div>
 
         @else
@@ -56,7 +63,7 @@
             <div class="form-group">
 
                 <textarea class="form-control" name="note" rows="10"
-                          placeholder="The content for this note."></textarea>
+                          placeholder="The content for this note.">{{ $password ? Crypt::decrypt($password->note) : '' }}</textarea>
 
             </div>
 

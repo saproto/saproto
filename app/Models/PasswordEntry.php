@@ -4,6 +4,9 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Carbon\Carbon;
+use DateTime;
+
 class PasswordEntry extends Model
 {
 
@@ -25,6 +28,11 @@ class PasswordEntry extends Model
     public function permission()
     {
         return $this->belongsTo('Proto\Models\Permission', 'permission_id');
+    }
+
+    public function age()
+    {
+        return Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now());
     }
 
 }
