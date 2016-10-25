@@ -225,6 +225,36 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to membercard.
+     */
+    Route::group(['prefix' => 'membercard', 'as' => 'membercard::'], function () {
+
+        Route::get('', ['as' => 'index', 'uses' => 'CompanyController@indexmembercard']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@showmembercard']);
+
+    });
+
+    /*
+     * Routes related to joboffers.
+     */
+    Route::group(['prefix' => 'joboffers', 'as' => 'joboffers::'], function () {
+
+        Route::get('', ['as' => 'index', 'uses' => 'JobofferController@index']);
+        Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@adminIndex']);
+
+        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@create']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@store']);
+
+        Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@update']);
+
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@destroy']);
+
+        Route::get('{id}', ['as' => 'show', 'uses' => 'JobofferController@show']);
+
+    });
+
+    /*
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevent other ID. activity_id is in principle never used.
      */

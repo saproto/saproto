@@ -36,6 +36,22 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function indexMembercard()
+    {
+        $companies = Company::where('on_membercard', true)->get();
+        if (count($companies) > 0) {
+            return view('companies.listmembercard', ['companies' => $companies]);
+        } else {
+            Session::flash("flash_message", "There are currently no companies on our membercard, but please check back real soon!");
+            return Redirect::back();
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function adminIndex()
     {
         return view('companies.adminlist', ['companies' => Company::all()]);
@@ -67,6 +83,9 @@ class CompanyController extends Controller
         $company->description = $request->description;
         $company->on_carreer_page = $request->has('on_carreer_page');
         $company->in_logo_bar = $request->has('in_logo_bar');
+        $company->membercard_excerpt = $request->membercard_excerpt;
+        $company->membercard_long = $request->membercard_long;
+        $company->on_membercard = $request->has('membercard_excerpt');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -90,6 +109,17 @@ class CompanyController extends Controller
     public function show($id)
     {
         return view('companies.show', ['company' => Company::findOrFail($id)]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showMembercard($id)
+    {
+        return view('companies.showmembercard', ['company' => Company::findOrFail($id)]);
     }
 
     /**
@@ -121,6 +151,9 @@ class CompanyController extends Controller
         $company->description = $request->description;
         $company->on_carreer_page = $request->has('on_carreer_page');
         $company->in_logo_bar = $request->has('in_logo_bar');
+        $company->membercard_excerpt = $request->membercard_excerpt;
+        $company->membercard_long = $request->membercard_long;
+        $company->on_membercard = $request->has('membercard_excerpt');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
