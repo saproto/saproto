@@ -3,7 +3,7 @@
 @section('body')
 
     <p>
-        Hey there!
+        Hey {{ $name }}!
     </p>
 
     <p>
