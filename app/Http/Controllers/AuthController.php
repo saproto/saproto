@@ -27,6 +27,7 @@ use Redirect;
 use Yubikey;
 use Hash;
 use Mail;
+use Session;
 
 class AuthController extends Controller
 {
@@ -215,6 +216,9 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
             return Redirect::route('user::dashboard');
         }
+
+        if ($request->wizard) Session::flash('wizard', true);
+
         return view('users.register');
     }
 
@@ -234,11 +238,13 @@ class AuthController extends Controller
             'birthdate' => 'required|date_format:Y-m-d',
             'gender' => 'required|in:1,2,9',
             'nationality' => 'required|string',
-            'phone' => 'required|regex:(\+[0-9]{8,16})'/*,
-            'g-recaptcha-response' => 'required|recaptcha'*/
+            'phone' => 'required|regex:(\+[0-9]{8,16})',
+            'g-recaptcha-response' => 'required|recaptcha'
         ]);
 
         $user = User::create($request->except('g-recaptcha-response'));
+
+        if(Session::get('wizard')) $user->wizard = true;
 
         $password = str_random(16);
         $user->password = Hash::make($password);
