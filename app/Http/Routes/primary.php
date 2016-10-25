@@ -24,11 +24,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('auth/login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
         Route::get('auth/logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
-        Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'Auth\PasswordController@getReset']);
-        Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'Auth\PasswordController@postReset']);
+        Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getReset']);
+        Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'AuthController@postReset']);
 
-        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'Auth\PasswordController@getEmail']);
-        Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'Auth\PasswordController@postEmail']);
+        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getEmail']);
+        Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'AuthController@postEmail']);
 
         Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
         Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);

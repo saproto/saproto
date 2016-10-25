@@ -17,6 +17,7 @@ use Proto\Models\Alias;
 use Proto\Models\Bank;
 use Proto\Models\EmailList;
 use Proto\Models\EmailListSubscription;
+use Proto\Models\PasswordReset;
 use Proto\Models\Quote;
 use Proto\Models\RfidCard;
 use Proto\Models\StudyEntry;
@@ -244,7 +245,7 @@ class AuthController extends Controller
 
         $user = User::create($request->except('g-recaptcha-response'));
 
-        if(Session::get('wizard')) $user->wizard = true;
+        if (Session::get('wizard')) $user->wizard = true;
 
         $password = str_random(16);
         $user->password = Hash::make($password);
@@ -306,6 +307,78 @@ class AuthController extends Controller
 
         $request->session()->flash('flash_message', 'Your account has been deleted.');
         return Redirect::route('homepage');
+    }
+
+    public function getEmail()
+    {
+        return view('auth.password');
+    }
+
+    public function getReset(Request $request, $token)
+    {
+        PasswordReset::where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::where('token', $token)->first();
+        if ($reset !== null) {
+            return view('auth.reset', ['reset' => $reset]);
+        } else {
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
+            return Redirect::route('login::resetpass');
+        }
+    }
+
+    public function postReset(Request $request)
+    {
+        PasswordReset::where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::where('token', $request->token)->first();
+        if ($reset !== null) {
+
+            if ($request->password !== $request->password_confirmation) {
+                $request->session()->flash('flash_message', 'Your passwords don\'t match.');
+                return Redirect::back();
+            }
+
+            $reset->user->password = Hash::make($request->password);
+            $reset->user->save();
+
+            PasswordReset::where('token', $request->token)->delete();
+
+            $request->session()->flash('flash_message', 'Your password has been changed.');
+            return Redirect::route('login::show');
+
+        } else {
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
+            return Redirect::route('login::resetpass');
+        }
+    }
+
+    public function postEmail(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user !== null) {
+
+            $reset = PasswordReset::create([
+                'email' => $user->email,
+                'token' => str_random(128),
+                'valid_to' => strtotime('+1 hour')
+            ]);
+
+            $name = $user->name;
+            $email = $user->email;
+
+            Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+                $message
+                    ->to($email, $name)
+                    ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                    ->subject('Your password reset request for S.A. Proto.');
+            });
+
+            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
+            return Redirect::route('homepage');
+
+        } else {
+            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
+            return Redirect::back();
+        }
     }
 
 }
