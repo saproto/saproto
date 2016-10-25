@@ -53,14 +53,17 @@ class NewsletterCron extends Command
 
             foreach ($newsletterlist->users as $user) {
 
-                Mail::send('emails.newsletter', [
+                $email = $user->email;
+                $name = $user->name;
+
+                Mail::queue('emails.newsletter', [
                     'user' => $user,
                     'list' => $newsletterlist,
                     'events' => $events
-                ], function ($message) use ($user) {
+                ], function ($message) use ($email, $name) {
 
                     $message
-                        ->to($user->email, $user->name)
+                        ->to($email, $name)
                         ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
                         ->subject('S.A. Proto Weekly Newsletter (Week ' . date("W") . ')');
 

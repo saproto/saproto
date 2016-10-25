@@ -45,7 +45,7 @@ class TestEmail extends Command
 
         $email = $this->ask('What is the destination for this e-mail?');
 
-        Mail::send('emails.test', [], function ($message) use ($email) {
+        Mail::queue('emails.test', [], function ($message) use ($email) {
             $message->to($email, 'S.A. Proto Test Message');
         });
 

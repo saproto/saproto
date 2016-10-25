@@ -95,19 +95,29 @@ class ParticipationController extends Controller
                 $backupparticipation->backup = false;
                 $backupparticipation->save();
 
-                Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
+                $name = $backupparticipation->user->name;
+                $email = $backupparticipation->user->email;
+                $activitytitle = $backupparticipation->activity->event->title;
+
+                Mail::queue('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($backupparticipation->user->email, $backupparticipation->user->name);
-                    $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title . '.');
+                    $m->to($email, $name);
+                    $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
                 });
             }
 
             if ($notify) {
-                Mail::send('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($participation) {
+
+                $name = $participation->user->name;
+                $email = $participation->user->email;
+                $activitytitle = $participation->activity->event->title;
+
+                Mail::queue('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($participation->user->email, $participation->user->name);
-                    $m->subject('You have been signed out for ' . $participation->activity->event->title . '.');
+                    $m->to($email, $name);
+                    $m->subject('You have been signed out for ' . $activitytitle . '.');
                 });
+
             }
 
             $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
@@ -119,11 +129,17 @@ class ParticipationController extends Controller
             $request->session()->flash('flash_message', $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.');
 
             if ($notify) {
-                Mail::send('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($participation) {
-                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($participation->user->email, $participation->user->name);
-                    $m->subject('You don\'t help with ' . $participation->activity->event->title . ' anymore.');
+
+                $name = $participation->user->name;
+                $email = $participation->user->email;
+                $activitytitle = $participation->activity->event->title;
+
+                Mail::queue('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                    $m->queue('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($email, $name);
+                    $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
                 });
+
             }
 
             $participation->delete();

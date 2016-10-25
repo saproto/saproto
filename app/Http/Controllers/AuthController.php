@@ -252,9 +252,12 @@ class AuthController extends Controller
 
         $user->save();
 
-        Mail::send('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($user) {
+        $email = $user->email;
+        $name = $user->mail;
+
+        Mail::queue('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($email, $name) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
-            $m->to($user->email, $user->name);
+            $m->to($email, $name);
             $m->subject('Account registration at Study Association Proto');
         });
 

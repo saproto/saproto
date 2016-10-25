@@ -50,7 +50,15 @@ class BirthdayCron extends Command
 
             $this->info('Sending birthday notification to ' . $users->count() . ' people.');
 
+            $adminoverview = [];
+
             foreach ($users as $user) {
+
+                $adminoverview[] = (object)[
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'age' => $user->age()
+                ];
 
                 $name = $user->name;
                 $email = $user->email;
@@ -64,7 +72,8 @@ class BirthdayCron extends Command
 
             }
 
-            Mail::send('emails.users.birthdaylist', ['users' => $users], function ($message) {
+            // For some super strange reason we cannot queue this e-mail... Well...
+            Mail::send('emails.users.birthdaylist', ['users' => $adminoverview], function ($message) {
                 $message
                     ->to('board@' . config('proto.emaildomain'), 'S.A. Proto Board')
                     ->subject('Birthdays of today!');
