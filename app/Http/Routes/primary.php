@@ -225,6 +225,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to membercard.
+     */
+    Route::group(['prefix' => 'membercard', 'as' => 'membercard::'], function () {
+
+        Route::get('', ['as' => 'index', 'uses' => 'CompanyController@indexmembercard']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@showmembercard']);
+
+    });
+
+    /*
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevent other ID. activity_id is in principle never used.
      */
