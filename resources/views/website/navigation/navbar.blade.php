@@ -70,6 +70,7 @@
                        aria-expanded="false">Career <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ route("companies::index") }}">Companies</a></li>
+                        <li><a href="{{ route("joboffers::index") }}">Job offers</a></li>
                     </ul>
                 </li>
 
@@ -113,6 +114,7 @@
                             <li><a class="navbar-title">External Affairs:</a></li>
                             <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
                             <li><a href="{{ route("companies::admin") }}">Companies</a></li>
+                            <li><a href="{{ route("joboffers::admin") }}">Job offers</a></li>
 
                             <li role="separator" class="divider"></li>
 
