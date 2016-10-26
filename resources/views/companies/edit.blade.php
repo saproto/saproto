@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label for="editor">Excerpt for membercard</label>
                                     <textarea id="editor-membercard_excerpt"
-                                              name="membercard_excerpt" placeholder="A small paragraph about what this company does on our membercard.">{{ $company->membercard_excerpt }}</textarea>
+                                              name="membercard_excerpt" placeholder="A small paragraph about what this company does on our membercard.">{{ $company->membercard_excerpt or '' }}</textarea>
                                 </div>
 
                             </div>
@@ -76,7 +76,7 @@
                                 <div class="form-group">
                                     <label for="editor">Long for membercard</label>
                                     <textarea id="editor-membercard_long"
-                                              name="membercard_long" placeholder="A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!">{{ $company->membercard_long }}</textarea>
+                                              name="membercard_long" placeholder="A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!">{{ $company->membercard_long or '' }}</textarea>
                                 </div>
 
                             </div>
