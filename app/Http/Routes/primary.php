@@ -148,9 +148,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('deleteyubikey', ['as' => 'deleteyubikey', 'uses' => 'TFAController@yubikeyDelete']);
         });
     });
-    Route::post('membercard/print', ['as' => 'membercard::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
-    Route::post('membercard/printoverlay', ['as' => 'membercard::printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startoverlayprint']);
-    Route::get('membercard/{id}', ['as' => 'membercard::download', 'uses' => 'MemberCardController@download']);
 
     Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@printForm']);
     Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'MemberAdminController@showForm']);
@@ -230,6 +227,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'membercard', 'as' => 'membercard::'], function () {
 
         Route::get('', ['as' => 'index', 'uses' => 'CompanyController@indexmembercard']);
+
+        Route::post('print', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
+        Route::post('printoverlay', ['as' => 'printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startoverlayprint']);
+        Route::get('download/{id}', ['as' => 'download', 'uses' => 'MemberCardController@download']);
+
         Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@showmembercard']);
 
     });
