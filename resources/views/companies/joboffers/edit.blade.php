@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label for="company">Company</label>
                             <select id="company" name="company_id" class="form-control" required>
-                                    <option @if($joboffer == null) selected @endif disabled>Select a company...</option>
+                                    <option value="" @if($joboffer == null) selected @endif disabled>Select a company...</option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}" @if($joboffer && $joboffer->company->id == $company->id) selected @endif>{{ $company->name }}</option>
                                 @endforeach
