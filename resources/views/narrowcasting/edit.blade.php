@@ -57,7 +57,7 @@
             <div class="row">
 
                 <div class="col-md-6">
-                    <img src="{!! $item->video()->snippet->thumbnails->maxres->url !!}" style="width: 100%">
+                    <img src="{!! $item->video()->snippet->thumbnails->high->url !!}" style="width: 100%">
                 </div>
                 <div class="col-md-6">
                     <strong><a href="https://youtu.be/{{ $item->video()->id }}"
