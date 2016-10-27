@@ -41,14 +41,50 @@
         </div>
 
         <div class="form-group">
-            <label for="image">Image file:</label>
-            <input type="file" class="form-control" id="image" name="image">
+            <label for="youtube_id">YouTube ID:</label>
+            <input type="text" class="form-control" id="youtube_id" name="youtube_id"
+                   placeholder="Only the ID!" value="{{ $item->youtube_id or '' }}">
         </div>
 
-        @if($item != null)
+        <p>
+            <sup><strong>Note:</strong> if a YouTube ID is present, the image file and slide duration field is ignored and hidden.</sup>
+        </p>
 
-            <label>Current image:</label>
-            <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
+        @if($item && $item->video())
+
+            <label>Current video:</label>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <img src="{!! $item->video()->snippet->thumbnails->maxres->url !!}" style="width: 100%">
+                </div>
+                <div class="col-md-6">
+                    <strong><a href="https://youtu.be/{{ $item->video()->id }}"
+                               target="_blank">{{ $item->video()->snippet->title }}</a></strong>
+                    <br>
+                    <strong>{{ $item->video()->snippet->channelTitle }}</strong>
+                </div>
+
+            </div>
+
+        @else
+
+            <div class="form-group">
+                <label for="image">Image file:</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+
+            <p>
+                <sup><strong>Screen resolution</strong> is 1680 x 1050 pixels.</sup>
+            </p>
+
+            @if($item && $item->image)
+
+                <label>Current image:</label>
+                <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
+
+            @endif
 
         @endif
 

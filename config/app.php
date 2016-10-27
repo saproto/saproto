@@ -162,6 +162,7 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+        Alaouy\Youtube\YoutubeServiceProvider::class
 
     ],
 
@@ -252,6 +253,8 @@ return [
         'Product' => \Proto\Models\Product::class,
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
+
+        'Youtube'=> Alaouy\Youtube\Facades\Youtube::class
 
     ],
 

@@ -53,7 +53,8 @@
     "graham-campbell/markdown": "^6.1",
     "directadmin/directadmin": "dev-master",
     "sentry/sentry-laravel": "^0.3.0",
-    "eluceo/ical": "^0.11.0"
+    "eluceo/ical": "^0.11.0",
+    "alaouy/youtube": "^1.2"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

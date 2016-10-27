@@ -15,6 +15,7 @@
             <tr>
 
                 <th>#</th>
+                <th></th>
                 <th>Campaign name</th>
                 <th>Start</th>
                 <th>End</th>
@@ -30,6 +31,7 @@
                 <tr {!! ($message->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
 
                     <td>{{ $message->id }}</td>
+                    <td>{!! $message->video() ? '<i class="fa fa-youtube-play" aria-hidden="true"></i>' : '<i class="fa fa-picture-o" aria-hidden="true"></i>' !!}</td>
                     <td>{{ $message->name }}</td>
                     <td>{{ date('l F j Y, H:i', $message->campaign_start) }}</td>
                     <td>{{ date('l F j Y, H:i', $message->campaign_end) }}</td>
@@ -52,7 +54,8 @@
         </table>
 
         <p style="text-align: center;">
-            <a href="{{ route('narrowcasting::add') }}">Create a new campaign</a> or <a href="{{ route('narrowcasting::clear') }}">delete all past campaigns</a>.
+            <a href="{{ route('narrowcasting::add') }}">Create a new campaign</a> or <a
+                    href="{{ route('narrowcasting::clear') }}">delete all past campaigns</a>.
         </p>
 
     @else
