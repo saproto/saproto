@@ -24,6 +24,7 @@ use Proto\Models\StudyEntry;
 use Proto\Models\User;
 
 use Auth;
+use Proto\Models\WelcomeMessage;
 use Redirect;
 use Yubikey;
 use Hash;
@@ -275,15 +276,18 @@ class AuthController extends Controller
             abort(403);
         }
 
+        if ($user->member) {
+            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            return Redirect::back();
+        }
+
         Address::where('user_id', $user->id)->delete();
         Bank::where('user_id', $user->id)->delete();
         EmailListSubscription::where('user_id', $user->id)->delete();
         AchievementOwnership::where('user_id', $user->id)->delete();
-        StudyEntry::where('user_id', $user->id)->forceDelete();
-        Member::where('user_id', $user->id)->forceDelete();
         Alias::where('user_id', $user->id)->delete();
-        Quote::where('user_id', $user->id)->delete();
         RfidCard::where('user_id', $user->id)->delete();
+        WelcomeMessage::where('user_id', $user->id)->delete();
 
         if ($user->photo) {
             $user->photo->delete();
