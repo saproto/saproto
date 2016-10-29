@@ -38,7 +38,7 @@ class Activity extends Validatable
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps();
+            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
     }
 
     /**
@@ -64,7 +64,7 @@ class Activity extends Validatable
      */
     public function helpingUsers($helpid)
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->get();
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->withTrashed()->get();
     }
 
     /**

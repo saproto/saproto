@@ -35,7 +35,7 @@ class HelpingCommittee extends Validatable
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users', 'committees_activities_id')
-            ->whereNull('activities_users.deleted_at');
+            ->whereNull('activities_users.deleted_at')->withTrashed();
     }
 
     protected $guarded = ['id'];
