@@ -270,11 +270,46 @@
                         @endif
 
                     </div>
-
                 </div>
 
 
                 @if(Auth::user()->can('board'))
+
+                    <form class="form-horizontal" action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}" method="post">
+
+                        {{ csrf_field() }}
+
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                Add participants
+                            </div>
+
+                            <div class="panel-body">
+                                 <div class="form-group">
+                                    <div id="user-select">
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="member-name" placeholder="John Doe"
+                                                   required>
+                                            <input type="hidden" id="member-id" name="user_id" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="button" class="form-control btn btn-success" id="member-clear"
+                                                   value="Clear">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer clearfix">
+                                <button type="submit" class="btn btn-success pull-right"> 
+                                    Add 
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
 
                     <div class="panel panel-default">
 
@@ -285,20 +320,46 @@
                         <div class="panel-body">
                             <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
                                 to participants!</p>
-                            <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }}
-                                ,@endforeach</textarea>
+                            <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }}, @endforeach</textarea>
                         </div>
 
                     </div>
 
                 @endif
 
+                @endif
+
             </div>
 
-
-        @endif
-
     </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script>
+        $("#member-name").autocomplete({
+            minLength: 3,
+            source: "{{ route("api::members") }}",
+            select: function (event, ui) {
+                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
+                ;
+                $("#member-id").val(ui.item.id);
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>").append(item.name).appendTo(ul);
+        };
+        $("#member-clear").click(function () {
+            $("#member-name").val("").prop('disabled', false);
+            ;
+            $("#member-id").val("");
+        });
+    </script>
 
 @endsection
 

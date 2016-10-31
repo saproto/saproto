@@ -8,6 +8,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
+use Proto\Models\User;
 
 use Redirect;
 use Auth;
@@ -52,6 +53,34 @@ class ParticipationController extends Controller
 
         $participation = new ActivityParticipation();
         $participation->fill($data);
+        $participation->save();
+
+        return Redirect::back();
+
+    }
+
+    /**
+     * Create a new participation for somebody else.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFor($id, Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        $event = Event::findOrFail($id);
+
+        if (!$event->activity) {
+            abort(500, "You cannot subscribe for " . $event->title . ".");
+        } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+            abort(500, "You are already subscribed for " . $event->title . ".");
+        } elseif ($event->activity->closed) {
+            abort(500, "This activity is closed, you cannot change participation anymore.");
+        }
+
+        $request->session()->flash('flash_message', 'You added ' . $user->name . ' as a participant for ' . $event->title . '.');
+
+        $participation = new ActivityParticipation();
+        $participation->fill(['activity_id' => $event->activity->id, 'user_id' => $user->id]);
         $participation->save();
 
         return Redirect::back();
