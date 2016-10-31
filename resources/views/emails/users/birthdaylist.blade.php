@@ -12,7 +12,7 @@
 
     <p>
         @foreach($users as $user)
-            <a href="{{ route('user::profile', ['id' => $user->id]) }}">{{ $user->name }}</a> turns {{ $user->age }}
+            <a href="{{ route('user::profile', ['id' => $user['id']]) }}">{{ $user['name'] }}</a> turns {{ $user['age'] }}
             <br>
         @endforeach
     </p>
