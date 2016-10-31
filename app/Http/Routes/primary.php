@@ -9,6 +9,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('developers', ['uses' => 'HomeController@developers']);
     Route::get('becomeamember', ['as' => 'becomeamember', 'uses' => 'UserDashboardController@becomeAMemberOf']);
 
+    Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'HomeController@fishcam']);
+
     /*
      * Routes for the search function.
      */

@@ -62,6 +62,7 @@
                         @if (Auth::check() && Auth::user()->member)
                             <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
                         @endif
+                        <li><a href="{{ route("fishcam") }}">FishCam</a></li>
                     </ul>
                 </li>
 
