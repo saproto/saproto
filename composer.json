@@ -54,7 +54,8 @@
     "directadmin/directadmin": "dev-master",
     "sentry/sentry-laravel": "^0.3.0",
     "eluceo/ical": "^0.11.0",
-    "alaouy/youtube": "^1.2"
+    "alaouy/youtube": "^1.2",
+    "webuni/commonmark-table-extension": "0.5.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
