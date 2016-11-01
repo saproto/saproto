@@ -945,7 +945,7 @@
     function timerIncrement() {
         idleTime = idleTime + 1;
 
-        if (idleTime > 6 && !idleWarning) { // 1 minutes
+        if (idleTime > 60 && !idleWarning) { // 1 minutes
             var anythingincart = false;
 
             for (id in cart) {
