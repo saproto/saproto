@@ -613,7 +613,7 @@
     <div id="idlewarning-modal" class="modal inactive">
 
         <h1>Timeout warning!</h1>
-        <p style="color: white;">If you want to continue using the OmNomCom, please touch the screen.</p>
+        <span class="modal-status">If you want to continue using the OmNomCom, please touch the screen.</span>
 
     </div>
 
@@ -955,6 +955,7 @@
             }
 
             if(anythingincart) {
+                idleWarning = true;
                 $("#modal-overlay").show();
                 $("#idlewarning-modal").removeClass('inactive');
 
