@@ -610,6 +610,12 @@
 
     </div>
 
+    <div id="emptycart-modal" class="modal inactive">
+
+        <h1>The cart is empty. Please fill the cart before scanning your card :)</h1>
+
+    </div>
+
     <div id="purchase-modal" class="modal inactive">
 
         <h1>Complete your purchase.</h1>
@@ -856,8 +862,20 @@
 
             } else {
 
-                $("#purchase").trigger('click');
-                purchase(data);
+                var anythingincart = false;
+
+                for (id in cart) {
+                    if (cart[id] > 0) {
+                        anythingincart = true;
+                    }
+                }
+
+                if(anythingincart) {
+                    $("#purchase").trigger('click');
+                    purchase(data);
+                }else{
+                    $("#emptycart-modal").removeClass('inactive');
+                }
 
             }
 
