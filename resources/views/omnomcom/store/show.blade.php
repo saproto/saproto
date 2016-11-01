@@ -610,6 +610,13 @@
 
     </div>
 
+    <div id="idlewarning-modal" class="modal inactive">
+
+        <h1>Timeout warning!</h1>
+        <p style="color: white;">If you want to continue using the OmNomCom, please touch the screen.</p>
+
+    </div>
+
     <div id="emptycart-modal" class="modal inactive">
 
         <h1>The cart is empty. Please fill the cart before scanning your card :)</h1>
@@ -911,6 +918,52 @@
         $("#purchase-modal").removeClass('inactive');
         modal_status = 'purchase';
     });
+
+
+    /*
+     Handle idle timeout
+     */
+
+    var idleTime = 0;
+    var idleWarning = false;
+
+    $(document).ready(function () {
+        //Increment the idle time counter every minute.
+        var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+
+        //Zero the idle timer on mouse movement.
+        $(this).mousemove(function (e) {
+            idleTime = 0;
+            idleWarning = false;
+        });
+        $(this).keypress(function (e) {
+            idleTime = 0;
+            idleWarning = false;
+        });
+    });
+
+    function timerIncrement() {
+        idleTime = idleTime + 1;
+
+        if (idleTime > 6 && !idleWarning) { // 1 minutes
+            var anythingincart = false;
+
+            for (id in cart) {
+                if (cart[id] > 0) {
+                    anythingincart = true;
+                }
+            }
+
+            if(anythingincart) {
+                $("#modal-overlay").show();
+                $("#idlewarning-modal").removeClass('inactive');
+
+                setTimeout(function() {
+                    if(idleWarning) window.location.reload();
+                }, 10000);
+            }
+        }
+    }
 
 
 </script>
