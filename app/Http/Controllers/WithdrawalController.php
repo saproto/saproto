@@ -101,6 +101,33 @@ class WithdrawalController extends Controller
     }
 
     /**
+     * Display the accounts associated with the withdrawal.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showAccounts($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        $accounts = [];
+
+        foreach ($withdrawal->orderlines as $orderline) {
+            if (isset($accounts[$orderline->product->account->account_number])) {
+                $accounts[$orderline->product->account->account_number]->total = $accounts[$orderline->product->account->account_number]->total + $orderline->total_price;
+            } else {
+                $accounts[$orderline->product->account->account_number] = new \stdClass();
+                $accounts[$orderline->product->account->account_number]->name = $orderline->product->account->name;
+                $accounts[$orderline->product->account->account_number]->total = $orderline->total_price;
+            }
+        }
+
+        ksort($accounts);
+
+        return view("omnomcom.withdrawals.show-accounts", ['accounts' => $accounts, 'withdrawal' => $withdrawal]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request

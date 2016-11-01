@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
 
             <p style="text-align: center;">
                 There are currently <strong>{{ WithdrawalController::openOrderlinesTotal() }}</strong> unpaid orderlines
@@ -38,6 +38,7 @@
                         <th>Orderlines</th>
                         <th>Sum</th>
                         <th>Status</th>
+                        <th>View</th>
 
                     </tr>
 
@@ -58,6 +59,17 @@
                             <td>{{ $withdrawal->orderlines->count() }}</td>
                             <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
                             <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
+                            <td>
+                                <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
+                                    Withdrawal
+                                </a>
+
+                                /
+
+                                <a href="">
+                                    Accounts
+                                </a>
+                            </td>
 
                         </tr>
 

@@ -472,6 +472,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WithdrawalController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WithdrawalController@destroy']);
             Route::get('{id}', ['as' => 'show', 'uses' => 'WithdrawalController@show']);
+            Route::get('accounts/{id}', ['as' => 'showAccounts', 'uses' => 'WithdrawalController@showAccounts']);
 
             Route::get('export/{id}', ['as' => 'export', 'uses' => 'WithdrawalController@export']);
             Route::get('close/{id}', ['as' => 'close', 'uses' => 'WithdrawalController@close']);
