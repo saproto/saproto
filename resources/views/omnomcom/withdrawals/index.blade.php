@@ -66,7 +66,7 @@
 
                                 /
 
-                                <a href="">
+                                <a href="{{ route('omnomcom::withdrawal::showAccounts', ['id' => $withdrawal->id]) }}">
                                     Accounts
                                 </a>
                             </td>
