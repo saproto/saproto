@@ -874,6 +874,7 @@
                     $("#purchase").trigger('click');
                     purchase(data);
                 }else{
+                    $("#modal-overlay").show();
                     $("#emptycart-modal").removeClass('inactive');
                 }
 
