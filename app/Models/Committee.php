@@ -17,9 +17,9 @@ class Committee extends Model
     /**
      * @return mixed All events organized by this committee.
      */
-    public function organizedActivities()
+    public function organizedEvents()
     {
-        return $this->hasMany('Proto\Models\Activity', 'organizing_committee');
+        return $this->hasMany('Proto\Models\Event', 'committee_id');
     }
 
     /**
