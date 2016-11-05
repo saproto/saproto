@@ -4,6 +4,8 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Committee extends Model
 {
 
@@ -17,9 +19,37 @@ class Committee extends Model
     /**
      * @return mixed All events organized by this committee.
      */
-    public function organizedActivities()
+    public function organizedEvents()
     {
-        return $this->hasMany('Proto\Models\Activity', 'organizing_committee');
+        return $this->hasMany('Proto\Models\Event', 'committee_id');
+    }
+
+    /**
+     * @return mixed All events organized by this committee in the past.
+     */
+    public function pastEvents()
+    {
+        $events = $this->organizedEvents()->where('end', '<', time())->get();
+
+        if(Auth::check() && Auth::user()->can('board')) {
+            return $events;
+        }else {
+            return $events->where('secret', '=' , 0);
+        }
+    }
+
+    /**
+     * @return mixed All upcoming events organized by this committee.
+     */
+    public function upcomingEvents()
+    {
+        $events = $this->organizedEvents()->where('end', '>', time())->get();
+
+        if(Auth::check() && Auth::user()->can('board')) {
+            return $events;
+        }else {
+            return $events->where('secret', '=' , 0);
+        }
     }
 
     /**
