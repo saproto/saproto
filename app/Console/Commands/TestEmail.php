@@ -47,6 +47,7 @@ class TestEmail extends Command
 
         Mail::queue('emails.test', [], function ($message) use ($email) {
             $message->to($email, 'S.A. Proto Test Message');
+            $message->subject("Verifying that the e-mailing service works.");
         });
 
         $this->info('Sent!');
