@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="col-md-6">
+    <div class="col-md-6 {{ ($new ? 'col-md-offset-3' : '') }}">
 
         <form method="post"
               action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
@@ -232,6 +232,23 @@
                         Nobody obtained this achievement yet
 
                     @endif
+
+                </div>
+
+                <div class="panel-footer clearfix">
+
+                    <div class="pull-right">
+
+                        <div class="btn-group" role="group">
+                            <div class="btn-group" role="group">
+                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}"
+                                   + class="btn btn-danger">
+                                    Take from everyone
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 
