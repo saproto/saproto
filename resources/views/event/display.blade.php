@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ ($event->activity ? '8' : '8 col-md-offset-2') }}">
 
             @if($event->image)
                 <img src="{{ $event->image->generateImagePath(800,300) }}"
@@ -145,9 +145,9 @@
 
         </div>
 
-        @if($event->activity && Auth::check() && Auth::user()->member)
+        <div class="col-md-4">
 
-            <div class="col-md-4">
+        @if($event->activity && Auth::check() && Auth::user()->member)
 
                 <div class="panel panel-default">
 
@@ -326,6 +326,22 @@
                     </div>
 
                 @endif
+
+                @elseif($event->activity)
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Activity Sign-up
+                        </div>
+
+                        <div class="panel-body" style="text-align: center;">
+                            <p>This activity requires you to sign-up. You can only sign-up when you are a member.</p>
+                            @if(!Auth::check()) <p>Please <a href="{{ route('login::show') }}">log-in</a> if you are already a member.</p> @endif
+                            @if(Auth::check() && !Auth::user()->member) <p>Please <a href="{{ route('becomeamember') }}">become a member</a> to sign-up for this activity.</p> @endif
+                        </div>
+
+                    </div>
 
                 @endif
 
