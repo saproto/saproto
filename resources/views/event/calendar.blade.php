@@ -39,20 +39,38 @@
 
             <div class="col-md-4">
 
-                <div class="panel panel-default">
+                @if($key == 1)
 
-                    <div class="panel-body">
+                    <div class="panel panel-default">
 
-                        @if($key == 0)
+                        <div class="panel-body">
+
+                            <div class="btn-group btn-lg btn-group-justified">
+                                <a class="btn btn-info" target="_blank"
+                                   href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar"))) }}">
+                                    <i class="fa fa-google" aria-hidden="true"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Google Calendar
+                                </a>
+                            </div>
 
                             <div class="btn-group btn-lg btn-group-justified">
                                 <div class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                    Connect via iCal!
+                                    <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Other Calendars
                                 </div>
                             </div>
 
-                        @endif
+                        </div>
+
+                    </div>
+
+                @endif
+
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
 
                         <h3 style="text-align: center;">
                             @if($key == 0)
@@ -128,12 +146,7 @@
                     <p>
                         If you want to, you can import our calendar into yours. This can be easily done by going to your
                         favorite calendar application and looking for an option similar to <i>Import calendar by URL</i>.
-                        You can then copy and paste the link below. For Google Calendar users, you should be able to
-                        click
-                        <a target="_blank"
-                           href="https://calendar.google.com/calendar/render?cid={{ urlencode(route("ical::calendar")) }}">
-                            here
-                        </a>.
+                        You can then copy and paste the link below.
                     </p>
 
                     <p style="text-align: center;">
