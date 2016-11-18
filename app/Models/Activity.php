@@ -127,7 +127,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return count($this->users) >= $this->participants;
+        return $this->participants != -1 && count($this->users) >= $this->participants;
     }
 
     /**
@@ -135,8 +135,8 @@ class Activity extends Validatable
      */
     public function freeSpots()
     {
-        if ($this->participants == null) {
-            return null;
+        if ($this->participants <= 0) {
+            return -1;
         } else {
             return ($this->participants - count($this->users));
         }
@@ -147,7 +147,7 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if ($this->closed) {
+        if ($this->closed || $this->freeSpots() !== 0) {
             return false;
         }
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
@@ -167,5 +167,10 @@ class Activity extends Validatable
     public function hasStarted()
     {
         return $this->event->start < date('U');
+    }
+
+    public function withParticipants()
+    {
+        return $this->participants !== 0;
     }
 }

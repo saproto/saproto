@@ -46,7 +46,9 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+            if($event->activity->participants == 0) {
+                abort(500, "You cannot subscribe to this activity!");
+            } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {

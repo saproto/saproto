@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ ($event->activity && $event->activity->withParticipants() ? '8' : '8 col-md-offset-2') }}">
 
             @if($event->image)
                 <img src="{{ $event->image->generateImagePath(800,300) }}"
@@ -147,14 +147,15 @@
 
         <div class="col-md-4">
 
-            @if($event->activity && Auth::check() && Auth::user()->member)
+            @if($event->activity && Auth::check() && Auth::user()->member && $event->activity->withParticipants())
 
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
                         Activity Sign-up
                         @if($event->activity->canSubscribe())
-                            ({{ $event->activity->freeSpots() }} places available)
+                            ({{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
+                            places available)
                         @endif
                     </div>
 
@@ -196,7 +197,6 @@
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
                                         @if ($event->activity->isFull() || !$event->activity->canSubscribe())
-
                                             {{ ($event->activity->isFull() ? 'Activity is full.' : 'Sign-up closed.') }}
                                             Sign me up for the back-up list.
                                         @else
@@ -314,25 +314,9 @@
 
                     </form>
 
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading">
-                            Contact details participants
-                        </div>
-
-                        <div class="panel-body">
-                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
-                                to participants!</p>
-                            <textarea
-                                    class="form-control">@foreach($event->activity->allUsers as $user){{ $user->email }}
-                                , @endforeach</textarea>
-                        </div>
-
-                    </div>
-
                 @endif
 
-            @elseif($event->activity)
+            @elseif($event->activity && $event->activity->withParticipants())
 
                 <div class="panel panel-default">
 
