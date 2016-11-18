@@ -41,6 +41,9 @@ class ParticipationController extends Controller
             if (!$helping->committee->isMember(Auth::user())) {
                 abort(500, "You are not a member of the " . $helping->committee . " and thus cannot help on behalf of it.");
             }
+            if ($helping->users->count() >= $helping->amount) {
+                abort(500, "There are already enough people of your committee helping, thanks though!");
+            }
             $data['committees_activities_id'] = $helping->id;
         } else {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {

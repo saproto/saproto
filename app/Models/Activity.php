@@ -68,12 +68,20 @@ class Activity extends Validatable
     }
 
     /**
+     * @return mixed A list of committees helping out at this activity.
+     */
+    public function helpingCommitteeInstances()
+    {
+        return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
+    }
+
+    /**
      * @param $helpid The committee-activity link for which helping users should be returned.
      * @return $this All associated ActivityParticipations.
      */
     public function helpingUsers($helpid)
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->withTrashed()->get();
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->get();
     }
 
     /**
