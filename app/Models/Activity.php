@@ -44,6 +44,15 @@ class Activity extends Validatable
     /**
      * @return mixed A list of participants to this activity.
      */
+    public function allUsers()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')
+            ->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
+    }
+
+    /**
+     * @return mixed A list of participants to this activity.
+     */
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')

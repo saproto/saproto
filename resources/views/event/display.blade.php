@@ -320,7 +320,7 @@
                         <div class="panel-body">
                             <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
                                 to participants!</p>
-                            <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }}, @endforeach</textarea>
+                            <textarea class="form-control">@foreach($event->activity->allUsers as $user){{ $user->email }}, @endforeach</textarea>
                         </div>
 
                     </div>
