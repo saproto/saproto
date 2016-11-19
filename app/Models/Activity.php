@@ -138,7 +138,7 @@ class Activity extends Validatable
         if ($this->participants <= 0) {
             return -1;
         } else {
-            return ($this->participants - count($this->users));
+            return max(($this->participants - count($this->users)), 0);
         }
     }
 
@@ -147,7 +147,7 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if ($this->closed || $this->freeSpots() !== 0) {
+        if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
