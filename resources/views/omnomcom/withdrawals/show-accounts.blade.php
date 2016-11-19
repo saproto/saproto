@@ -10,7 +10,7 @@
 
         <div class="col-md-8 col-md-offset-2">
 
-            <table class="table">
+            <table class="table table-hover">
 
                 <thead>
                 <tr>
@@ -23,12 +23,22 @@
                 <tbody>
 
                 @foreach($accounts as $key => $account)
-                    <tr>
-                        <td>{{ $key }}</td>
-                        <td>{{ $account->name }}</td>
-                        <td>&euro; {{ number_format($account->total, 2) }}</td>
+
+                    <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
+                        <th>{{ $key }}</th>
+                        <th>{{ $account->name }}</th>
+                        <th>&euro; {{ number_format($account->total, 2) }}</th>
 
                     </tr>
+
+                    @foreach($account->byDate as $date => $amount)
+                        <tr class="collapse {{ $key }}">
+                            <td></td>
+                            <td>{{ $date }}</td>
+                            <td>&euro; {{ number_format($amount, 2) }}</td>
+                        </tr>
+                    @endforeach
+
                 @endforeach
                 </tbody>
 
