@@ -41,9 +41,14 @@ class ParticipationController extends Controller
             if (!$helping->committee->isMember(Auth::user())) {
                 abort(500, "You are not a member of the " . $helping->committee . " and thus cannot help on behalf of it.");
             }
+            if ($helping->users->count() >= $helping->amount) {
+                abort(500, "There are already enough people of your committee helping, thanks though!");
+            }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+            if($event->activity->participants == 0) {
+                abort(500, "You cannot subscribe to this activity!");
+            } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {

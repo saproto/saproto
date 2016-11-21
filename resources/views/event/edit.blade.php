@@ -226,9 +226,8 @@
                                     <div class="form-group">
                                         <label for="participants">Participant limit:</label>
                                         <input type="number" class="form-control" id="participants"
-                                               name="participants" min="1"
-                                               value="{{ ($event->activity ? $event->activity->participants : '') }}"
-                                               placeholder="0 for no limit">
+                                               name="participants" min="-1"
+                                               value="{{ ($event->activity ? $event->activity->participants : '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -242,6 +241,12 @@
                                                    required>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <sub>-1 for no limit, 0 for only helpers</sub>
                                 </div>
                             </div>
 
@@ -330,6 +335,22 @@
                             </div>
 
                         </form>
+
+                    </div>
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Contact details participants
+                        </div>
+
+                        <div class="panel-body">
+                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
+                                to participants!</p>
+                            <textarea
+                                    class="form-control">@foreach($event->activity->allUsers as $user){{ $user->email }}
+                                , @endforeach</textarea>
+                        </div>
 
                     </div>
 

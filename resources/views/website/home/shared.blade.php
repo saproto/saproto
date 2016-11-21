@@ -61,7 +61,7 @@
 
                         <hr>
 
-                        <?php $week = date('W', $events[0]->start); ?>
+                        <?php if (isset($events[0])) $week = date('W', $events[0]->start); ?>
 
                         @foreach($events as $key => $event)
 

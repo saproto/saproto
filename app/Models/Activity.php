@@ -44,6 +44,15 @@ class Activity extends Validatable
     /**
      * @return mixed A list of participants to this activity.
      */
+    public function allUsers()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')
+            ->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
+    }
+
+    /**
+     * @return mixed A list of participants to this activity.
+     */
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
@@ -59,12 +68,20 @@ class Activity extends Validatable
     }
 
     /**
+     * @return mixed A list of committees helping out at this activity.
+     */
+    public function helpingCommitteeInstances()
+    {
+        return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
+    }
+
+    /**
      * @param $helpid The committee-activity link for which helping users should be returned.
      * @return $this All associated ActivityParticipations.
      */
     public function helpingUsers($helpid)
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->withTrashed()->get();
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->get();
     }
 
     /**
@@ -110,7 +127,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return count($this->users) >= $this->participants;
+        return $this->participants != -1 && count($this->users) >= $this->participants;
     }
 
     /**
@@ -118,10 +135,10 @@ class Activity extends Validatable
      */
     public function freeSpots()
     {
-        if ($this->participants == null) {
-            return null;
+        if ($this->participants <= 0) {
+            return -1;
         } else {
-            return ($this->participants - count($this->users));
+            return max(($this->participants - count($this->users)), 0);
         }
     }
 
@@ -130,7 +147,7 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if ($this->closed) {
+        if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
@@ -150,5 +167,10 @@ class Activity extends Validatable
     public function hasStarted()
     {
         return $this->event->start < date('U');
+    }
+
+    public function withParticipants()
+    {
+        return $this->participants !== 0;
     }
 }

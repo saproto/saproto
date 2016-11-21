@@ -37,7 +37,7 @@ class ActivityController extends Controller
             'registration_start' => strtotime($request->registration_start),
             'registration_end' => strtotime($request->registration_end),
             'deregistration_end' => strtotime($request->deregistration_end),
-            'participants' => ($request->participants == 0 ? null : $request->participants),
+            'participants' => $request->participants,
             'price' => $request->price
         ];
 
