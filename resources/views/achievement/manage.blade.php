@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="col-md-6 {{ ($new ? 'col-md-offset-3' : '') }}">
+    <div class="col-md-6">
 
         <form method="post"
               action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
@@ -114,31 +114,38 @@
 
                     <div class="panel-body">
 
-                        @if($achievement->image)
-
-                            <img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">
-
-                        @else
-                            <p>
-                                &nbsp;
-                            </p>
-                            <p style="text-align: center;">
-                                This achievement has no icon yet. Upload one now!
-                            </p>
-                        @endif
-
-                        <hr>
-
-                        <div class="form-horizontal">
-
-                            <div class="form-group">
-                                <label for="image" class="col-sm-4 control-label">New achievement icon</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="image" type="file" name="image">
-                                </div>
-                            </div>
-
+                        <div class="form-group">
+                            <label data-placement="inline" class="icp icp-auto"
+                                   data-selected="fa-align-justify"></label>
                         </div>
+
+                        <input type="hidden" name="icon" id="icon">
+
+                        {{--@if($achievement->image)--}}
+
+                        {{--<img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">--}}
+
+                        {{--@else--}}
+                        {{--<p>--}}
+                        {{--&nbsp;--}}
+                        {{--</p>--}}
+                        {{--<p style="text-align: center;">--}}
+                        {{--This achievement has no icon yet. Upload one now!--}}
+                        {{--</p>--}}
+                        {{--@endif--}}
+
+                        {{--<hr>--}}
+
+                        {{--<div class="form-horizontal">--}}
+
+                        {{--<div class="form-group">--}}
+                        {{--<label for="image" class="col-sm-4 control-label">New achievement icon</label>--}}
+                        {{--<div class="col-sm-8">--}}
+                        {{--<input class="form-control" id="image" type="file" name="image">--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--</div>--}}
 
                     </div>
 
@@ -235,23 +242,6 @@
 
                 </div>
 
-                <div class="panel-footer clearfix">
-
-                    <div class="pull-right">
-
-                        <div class="btn-group" role="group">
-                            <div class="btn-group" role="group">
-                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}"
-                                   + class="btn btn-danger">
-                                    Take from everyone
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
             </div>
 
             @endif
@@ -289,6 +279,18 @@
             $("#member-name").val("").prop('disabled', false);
             ;
             $("#member-id").val("");
+        });
+    </script>
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//itsjavi.com/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+    <link rel="stylesheet" href="//itsjavi.com/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
+
+    <script>
+        $('.icp-auto').iconpicker();
+
+        $('.icp').on('iconpickerSelected', function(e) {
+            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
     </script>
 

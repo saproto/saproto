@@ -44,8 +44,8 @@
                         </div>
 
                         <div class="achievement-data">
+                            <sub>Acquired on {{ $achievement->pivot->created_at->format('d/m/Y') }}.</sub>
                             @if(Auth::check() && Auth::user()->can("board"))
-                                <sub>Acquired on {{ $achievement->pivot->created_at->format('d/m/Y') }}.</sub>
                                 <a class="del"
                                    href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}">Remove</a>
                             @endif
@@ -63,8 +63,6 @@
 
 @else
 
-    <p>
-        Working on their first achievement!
-    </p>
+    <p>Working on their first achievement!</p>
 
 @endif

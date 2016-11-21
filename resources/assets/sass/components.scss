@@ -36,11 +36,27 @@ select.RARE, option[value="RARE"] {
 }
 
 select.EPIC, option[value="EPIC"] {
-  color: #EAA400;
+  color: #333333;
 }
 
 select.LEGENDARY, option[value="LEGENDARY"] {
   color: #C1FF00;
+}
+
+.iconpicker-container, .iconpicker-popover.popover, .popover-title {
+  border:none !important;
+  background:transparent !important;
+  width:100% !important;
+}
+
+.iconpicker-items {
+  min-height:0 !important;
+  max-height:none !important;
+  height:260px;
+}
+
+.iconpicker .iconpicker-item {
+  margin:0 11px 11px 0 !important;
 }
 .company {
 
