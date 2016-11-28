@@ -68,13 +68,19 @@ class MemberAdminController extends Controller
      */
     public function impersonate($id)
     {
-        if (Auth::user()->hasRole('admin')) {
-            Session::put("impersonator", Auth::user()->id);
-            Auth::loginUsingId($id);
-            return redirect('/');
-        } else {
-            return abort(403);
+        $user = User::findOrFail($id);
+
+        if (!Auth::user()->can('admin')) {
+            foreach($user->roles as $role) {
+                foreach ($role->permissions as $permission) {
+                    if (!Auth::user()->can($permission->name)) abort(403);
+                }
+            }
         }
+
+        Session::put("impersonator", Auth::user()->id);
+        Auth::login($user);
+        return redirect('/');
     }
 
     /**
@@ -85,8 +91,11 @@ class MemberAdminController extends Controller
     public function quitImpersonating()
     {
         if (Session::has("impersonator")) {
-            Auth::loginUsingId(Session::get("impersonator"));
+            $impersonator = User::findOrFail(Session::get("impersonator"));
             Session::pull("impersonator");
+
+            Auth::login($impersonator);
+
             return response()->redirectTo("/");
         }
     }

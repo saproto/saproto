@@ -93,6 +93,8 @@
 
                         <hr>
 
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
+
                     </div>
 
                 </div>

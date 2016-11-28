@@ -210,7 +210,7 @@
                         <p style="text-align: center;">
                             Sign up is possible between {{ date('F j, H:i', $event->activity->registration_start) }}
                             and {{ date('F j, H:i', $event->activity->registration_end) }}. You can sign out
-                            untill {{ date('F j, H:i', $event->activity->deregistration_end) }}.
+                            until {{ date('F j, H:i', $event->activity->deregistration_end) }}.
                         </p>
 
                         <p style="text-align: center">

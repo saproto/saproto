@@ -48,7 +48,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
          */
         Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:admin'], 'uses' => 'MemberAdminController@impersonate']);
+            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@impersonate']);
             Route::get('maketempadmin', ['as' => 'maketempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@makeTempAdmin']);
             Route::get('endtempadmin', ['as' => 'endtempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@endTempAdmin']);
 
