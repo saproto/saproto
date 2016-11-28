@@ -14,6 +14,7 @@ return [
     */
 
     'rootcommittee' => 'haveyoutriedturningitoffandonagain',
+    'rootrole' => 12,
 
     /*
     |--------------------------------------------------------------------------

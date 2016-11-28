@@ -13,6 +13,11 @@ use Auth;
 use Session;
 use Redirect;
 
+use Youtube;
+
+use Carbon\CarbonInterval;
+use DateInterval;
+
 use Proto\Models\Committee;
 use Proto\Models\NarrowcastingItem;
 use Proto\Models\StorageEntry;
@@ -37,11 +42,20 @@ class NarrowcastingController extends Controller
     public function indexApi()
     {
         $data = [];
-        foreach (NarrowcastingItem::where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get() as $item) {
-            $data[] = [
-                'slide_duration' => $item->slide_duration,
-                'image' => $item->image->generateImagePath(2000, 1200)
-            ];
+        foreach (
+            NarrowcastingItem::where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get() as $item) {
+            if ($item->video()) {
+                $data[] = [
+                    // Because this is the fucking only shortest way to convert an interval to seconds. Wtf.
+                    'slide_duration' => date_create('@0')->add(new DateInterval($item->video()->contentDetails->duration))->getTimestamp(),
+                    'video' => $item->video()->id
+                ];
+            } elseif ($item->image) {
+                $data[] = [
+                    'slide_duration' => $item->slide_duration,
+                    'image' => $item->image->generateImagePath(2000, 1200)
+                ];
+            }
         }
         return $data;
     }
@@ -65,8 +79,8 @@ class NarrowcastingController extends Controller
     public function store(Request $request)
     {
 
-        if (!$request->file('image')) {
-            Session::flash("flash_message", "Every campaign needs an image. Really!");
+        if (!$request->file('image') && !$request->has('youtube_id')) {
+            Session::flash("flash_message", "Every campaign needs either an image or a video!");
             return Redirect::back();
         }
 
@@ -76,10 +90,27 @@ class NarrowcastingController extends Controller
         $narrowcasting->campaign_end = strtotime($request->campaign_end);
         $narrowcasting->slide_duration = $request->slide_duration;
 
-        $file = new StorageEntry();
-        $file->createFromFile($request->file('image'));
+        if ($request->file('image')) {
 
-        $narrowcasting->image()->associate($file);
+            $file = new StorageEntry();
+            $file->createFromFile($request->file('image'));
+
+            $narrowcasting->image()->associate($file);
+
+        }
+
+        if ($request->has('youtube_id')) {
+
+            $video = Youtube::getVideoInfo($request->get('youtube_id'));
+
+            if (!$video) {
+                Session::flash("flash_message", "This is an invalid video ID!");
+                return Redirect::back();
+            }
+
+            $narrowcasting->youtube_id = $video->id;
+
+        }
 
         $narrowcasting->save();
 
@@ -131,6 +162,23 @@ class NarrowcastingController extends Controller
             $file->createFromFile($request->file('image'));
 
             $narrowcasting->image()->associate($file);
+        }
+
+        if ($request->has('youtube_id')) {
+
+            $video = Youtube::getVideoInfo($request->get('youtube_id'));
+
+            if (!$video) {
+                Session::flash("flash_message", "This is an invalid video ID!");
+                return Redirect::back();
+            }
+
+            $narrowcasting->youtube_id = $video->id;
+
+        } else {
+
+            $narrowcasting->youtube_id = null;
+
         }
 
         $narrowcasting->save();

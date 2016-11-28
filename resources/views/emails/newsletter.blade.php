@@ -16,7 +16,7 @@
         &nbsp;
     </p>
 
-    @foreach($events as $i => $event)
+    @foreach(Event::getEventsForNewsletter() as $i => $event)
 
         <table style="margin: 0; padding: 0; border: none; background-color: {{ ($i % 2 == 0 ? '#f0f0f0' : '#fff') }};" width="100%">
 

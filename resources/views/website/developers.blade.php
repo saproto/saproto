@@ -10,6 +10,14 @@
 
         <div class="col-md-7">
 
+            <div class="btn-group btn-group-justified" style="margin-bottom: 30px;">
+                <a class="btn btn-info btn-lg"
+                   href="https://github.com/saproto/saproto/wiki/Creating-Issues-101">
+                    <i class="fa fa-graduation-cap" aria-hidden="true" style="margin-right: 20px;"></i>
+                    Click here to learn how to report errors!
+                </a>
+            </div>
+
             <div class="panel panel-default container-panel">
 
                 <div class="panel-body">
@@ -17,10 +25,10 @@
                     <h3>About this website</h3>
 
                     <p>
-                        You are currently looking a the website of Study Association Proto, released in the summer of
-                        2016. For as far as you're interested, it is mostly custom-built on the Laravel framework. It is
-                        the successor of the horrible WordPress website we've been rocking since the association was
-                        founded in 2011.
+                        The <a href="{{ route("homepage") }}">website of Study Association Proto</a> was released in the
+                        summer of 2016. For as far as you're interested, it is mostly custom-built on the Laravel
+                        framework. It is the successor of the WordPress website we've been rocking since the association
+                        was founded in 2011.
                     </p>
 
                     <p>
@@ -40,12 +48,7 @@
                         possible.
                     </p>
 
-                    <h3>Questions and feedback</h3>
-
-                    <p>
-                        If you have questions and/or feedback regarding this website, you are very most welcome to
-                        submit it.
-                    </p>
+                    <h3>Reporting issues and giving feedback</h3>
 
                     <p>
                         If you have a problem with the content of the website, please contact <a
@@ -63,11 +66,16 @@
                     </p>
 
                     <p>
+                        If you have questions and/or feedback regarding this website, you are very most welcome to
+                        submit them.
+                    </p>
+
+                    <p>
                         If you feel the desire to contribute to the website directly, do not hestitate to fork our
                         repository and make a pull request with your changes. We welcome all input and be happy to help
-                        you get your idea integrated in the website! Alternatively, you can always <a
-                                href="mailto:{{ $committee->slug . "@" . config('proto.emaildomain') }}">send an e-mail
-                            directly</a>, though for issues we will usually redirect you to GitHub anyway.
+                        you get your idea integrated in the website! Just want to ask something? <a
+                                href="mailto:{{ $committee->slug . "@" . config('proto.emaildomain') }}">Shoot us an
+                            e-mail!</a>
                     </p>
 
                 </div>
@@ -145,37 +153,8 @@
 
     <style type="text/css">
 
-        .developer__list__entry {
-            position: relative;
-
-            width: 100%;
-            height: 200px;
-            margin-bottom: 15px;
-
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-
-            background-color: #222;
-            box-shadow: 0 0 20px -7px #000;
-        }
-
-        .developer__list__entry > span {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-
-            height: 30px;
-            line-height: 30px;
-
-            padding: 0 10px;
-
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .developer__list__entry > span > a {
-            color: #fff !important;
+        #nav {
+            display: none;
         }
 
     </style>

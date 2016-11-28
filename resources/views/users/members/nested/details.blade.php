@@ -91,16 +91,15 @@
             </div>
         </div>
 
-        @if(Auth::user()->hasRole('admin'))
-            <div class="col-md-4 col-xs-4">
-                <div class="btn-group btn-group-justified" role="group">
-                    <a class="btn btn-default" target="_blank"
-                       href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
-                        Impersonate
-                    </a>
-                </div>
+
+        <div class="col-md-4 col-xs-4">
+            <div class="btn-group btn-group-justified" role="group">
+                <a class="btn btn-default" target="_blank"
+                   href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
+                    Impersonate
+                </a>
             </div>
-        @endif
+        </div>
 
     </div>
 

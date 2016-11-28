@@ -49,9 +49,15 @@ class GenerateRoles extends Command
         $permissions = array();
         $roles = array();
 
+        $permissions['sysadmin'] = Permission::where('name', '=', 'sysadmin')->first();
+        if ($permissions['sysadmin'] == null) {
+            $permissions['sysadmin'] = new Permission(array('name' => 'sysadmin', 'display_name' => 'System Admin', 'description' => 'Gives root access to the application.'));
+            $permissions['sysadmin']->save();
+            $this->info('Added sysadmin permission.');
+        }
         $permissions['admin'] = Permission::where('name', '=', 'admin')->first();
         if ($permissions['admin'] == null) {
-            $permissions['admin'] = new Permission(array('name' => 'admin', 'display_name' => 'Root', 'description' => 'Gives root access to the application.'));
+            $permissions['admin'] = new Permission(array('name' => 'admin', 'display_name' => 'Admin', 'description' => 'Gives admin access to the application.'));
             $permissions['admin']->save();
             $this->info('Added admin permission.');
         }
@@ -86,6 +92,12 @@ class GenerateRoles extends Command
             $this->info('Added alfred permission.');
         }
 
+        $roles['sysadmin'] = Role::where('name', '=', 'sysadmin')->first();
+        if ($roles['sysadmin'] == null) {
+            $roles['sysadmin'] = new Role(array('name' => 'sysadmin', 'display_name' => 'System Administrator', 'description' => 'System administrator'));
+            $roles['sysadmin']->save();
+            $this->info('Added sysadmin role.');
+        }
         $roles['admin'] = Role::where('name', '=', 'admin')->first();
         if ($roles['admin'] == null) {
             $roles['admin'] = new Role(array('name' => 'admin', 'display_name' => 'Administrator', 'description' => 'Application administrator'));
@@ -131,6 +143,8 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id));
+        $this->info('Synced sysadmin role with permissions.');
         $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id));
         $this->info('Synced admin role with permissions.');
         $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id));

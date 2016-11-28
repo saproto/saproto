@@ -37,7 +37,7 @@ class ActivityController extends Controller
             'registration_start' => strtotime($request->registration_start),
             'registration_end' => strtotime($request->registration_end),
             'deregistration_end' => strtotime($request->deregistration_end),
-            'participants' => ($request->participants == 0 ? null : $request->participants),
+            'participants' => $request->participants,
             'price' => $request->price
         ];
 
@@ -110,10 +110,13 @@ class ActivityController extends Controller
         ]);
 
         foreach ($committee->users as $user) {
-            Mail::send('emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($user, $help) {
+            $name = $user->name;
+            $email = $user->email;
+            $helptitle = $help->activity->event->title;
+            Mail::queue('emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
                 $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                $m->to($user->email, $user->name);
-                $m->subject('The activity ' . $help->activity->event->title . ' needs your help.');
+                $m->to($email, $name);
+                $m->subject('The activity ' . $helptitle . ' needs your help.');
             });
         }
 
@@ -126,10 +129,13 @@ class ActivityController extends Controller
         $help = HelpingCommittee::findOrFail($id);
 
         foreach ($help->users as $user) {
-            Mail::send('emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($user, $help) {
+            $name = $user->name;
+            $email = $user->email;
+            $helptitle = $help->activity->event->title;
+            Mail::queue('emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
                 $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                $m->to($user->email, $user->name);
-                $m->subject('The activity ' . $help->activity->event->title . ' doesn\'t need your help anymore.');
+                $m->to($email, $name);
+                $m->subject('The activity ' . $helptitle . ' doesn\'t need your help anymore.');
             });
         }
 

@@ -407,9 +407,9 @@ class EventController extends Controller
             $infotext = '';
             if ($event->over()) {
                 $infotext = 'This activity is over.';
-            } elseif ($event->activity !== null && $event->activity->participants === null) {
+            } elseif ($event->activity !== null && $event->activity->participants == -1) {
                 $infotext = 'Sign-up required, but no participant limit.';
-            } elseif ($event->activity !== null && $event->activity->participants !== null) {
+            } elseif ($event->activity !== null && $event->activity->participants > 0) {
                 $infotext = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
             } else {
                 $infotext = 'No sign-up necessary.';

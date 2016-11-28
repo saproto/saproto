@@ -17,7 +17,7 @@ tr * {
 }
 
 .EPIC {
-  color: #333333;
+  color: #EAA400;
 }
 
 .LEGENDARY {
@@ -36,7 +36,7 @@ select.RARE, option[value="RARE"] {
 }
 
 select.EPIC, option[value="EPIC"] {
-  color: #333333;
+  color: #EAA400;
 }
 
 select.LEGENDARY, option[value="LEGENDARY"] {
@@ -156,6 +156,27 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   }
 
 }
+#fishcam {
+
+  margin: 0px auto;
+
+  width: 640px;
+  height: 480px;
+
+  background-color: #ff2222;
+
+  color: #ffffff;
+  text-shadow: 0 0 10px #333;
+
+  text-align: center;
+
+  padding: 100px 50px 0 50px;
+
+  text-align: justify;
+
+  box-shadow: 0 0 20px -7px #000;
+
+}
 .product {
 
   &__account {
@@ -247,6 +268,17 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
 .page-show__content img {
   width: 100%;
+}
+.passwordmanager {
+
+  &__password {
+    filter: blur(5px);
+  }
+
+  &__shownote {
+    cursor: pointer;
+  }
+
 }
 #addpastry .col-md-4 div {
   padding: 0 !important;
@@ -346,6 +378,29 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .chocolat-wrapper {
   z-index: 10000;
 }
+.becomeamember {
+  &__number {
+    font-size: 48px; text-align: center;
+  }
+  &__description {
+    padding: 15px 25px;
+  }
+  &__done {
+
+  }
+  &__done .becomeamember__number {
+    font-size: 32px;
+  }
+  &__done .becomeamember__description > p {
+    display: none;
+  }
+  &__future .becomeamember__number {
+    font-size: 32px;
+  }
+  &__future .becomeamember__description > p {
+    display: none;
+  }
+}
 .dashboard {
   &__divider {
     text-align: center;
@@ -424,7 +479,7 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 }
 
 .EPIC {
-  border-color: #333333;
+  border-color: #EAA400;
 }
 
 .LEGENDARY {
@@ -444,6 +499,42 @@ select.LEGENDARY, option[value="LEGENDARY"] {
     display: block;
 }
 
+.developer__list__entry {
+
+  position: relative;
+
+  width: 100%;
+  height: 200px;
+  margin-bottom: 15px;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  background-color: #222;
+  box-shadow: 0 0 20px -7px #000;
+
+  & > span {
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 30px;
+    line-height: 30px;
+
+    padding: 0 10px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+
+    & > a {
+      color: #fff !important;
+    }
+
+  }
+
+}
 .homepage {
 
   &__companyimage {

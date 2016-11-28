@@ -1,0 +1,11 @@
+.passwordmanager {
+
+  &__password {
+    filter: blur(5px);
+  }
+
+  &__shownote {
+    cursor: pointer;
+  }
+
+}

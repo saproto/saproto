@@ -14,4 +14,9 @@ class Company extends Model
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
+
+    public function joboffers()
+    {
+        return $this->hasMany('Proto\Models\Joboffer', 'company_id');
+    }
 }

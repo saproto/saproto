@@ -15,6 +15,9 @@
 
     <title>S.A. Proto | @yield('page-title','Default Page Title')</title>
 
+    @section('head')
+    @show
+
     @include('website.layouts.assets.stylesheets')
 
     @section('stylesheet')

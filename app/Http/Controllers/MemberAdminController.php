@@ -68,13 +68,19 @@ class MemberAdminController extends Controller
      */
     public function impersonate($id)
     {
-        if (Auth::user()->hasRole('admin')) {
-            Session::put("impersonator", Auth::user()->id);
-            Auth::loginUsingId($id);
-            return redirect('/');
-        } else {
-            return abort(403);
+        $user = User::findOrFail($id);
+
+        if (!Auth::user()->can('admin')) {
+            foreach($user->roles as $role) {
+                foreach ($role->permissions as $permission) {
+                    if (!Auth::user()->can($permission->name)) abort(403);
+                }
+            }
         }
+
+        Session::put("impersonator", Auth::user()->id);
+        Auth::login($user);
+        return redirect('/');
     }
 
     /**
@@ -85,8 +91,11 @@ class MemberAdminController extends Controller
     public function quitImpersonating()
     {
         if (Session::has("impersonator")) {
-            Auth::loginUsingId(Session::get("impersonator"));
+            $impersonator = User::findOrFail(Session::get("impersonator"));
             Session::pull("impersonator");
+
+            Auth::login($impersonator);
+
             return response()->redirectTo("/");
         }
     }
@@ -112,9 +121,12 @@ class MemberAdminController extends Controller
 
         $member->save();
 
-        Mail::send('emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($user) {
+        $name = $user->name;
+        $email = $user->email;
+
+        Mail::queue('emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
             $m->replyTo('internal@proto.utwente.nl', config('proto.internal') . ' (Officer Internal Affairs)');
-            $m->to($user->email, $user->name);
+            $m->to($email, $name);
             $m->subject('Start of your membership of Study Association Proto');
         });
 
@@ -136,9 +148,12 @@ class MemberAdminController extends Controller
 
         $user->member()->delete();
 
-        Mail::send('emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($user) {
+        $name = $user->name;
+        $email = $user->email;
+
+        Mail::queue('emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
             $m->replyTo('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)');
-            $m->to($user->email, $user->name);
+            $m->to($email, $name);
             $m->subject('Termination of your membership of Study Association Proto');
         });
 
@@ -196,7 +211,8 @@ class MemberAdminController extends Controller
 
     }
 
-    public function makeTempAdmin($id) {
+    public function makeTempAdmin($id)
+    {
         $user = User::findOrFail($id);
 
         $tempAdmin = new Tempadmin;
@@ -207,15 +223,16 @@ class MemberAdminController extends Controller
         $tempAdmin->user()->associate($user);
 
         $tempAdmin->save();
-        
+
         return redirect()->route('user::member::list');
     }
 
-    public function endTempAdmin($id) {
+    public function endTempAdmin($id)
+    {
         $user = User::findOrFail($id);
 
-        foreach($user->tempadmin as $tempadmin) {
-            if(Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+        foreach ($user->tempadmin as $tempadmin) {
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
                 $tempadmin->end_at = Carbon::now();
                 $tempadmin->save();
             }

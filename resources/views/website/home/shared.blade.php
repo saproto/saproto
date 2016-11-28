@@ -63,7 +63,7 @@
 
                         <hr>
 
-                        <?php $week = date('W', $events[0]->start); ?>
+                        <?php if (isset($events[0])) $week = date('W', $events[0]->start); ?>
 
                         @foreach($events as $key => $event)
 
@@ -94,6 +94,8 @@
                         @endforeach
 
                         <hr>
+
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
 
                     </div>
 

@@ -22,7 +22,7 @@ class OrderLine extends Model
 
     public function cashier()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
     public function withdrawal()

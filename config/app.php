@@ -162,6 +162,7 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
+        Alaouy\Youtube\YoutubeServiceProvider::class
 
     ],
 
@@ -236,11 +237,15 @@ return [
         'IcalEvent' => Eluceo\iCal\Component\Event::class,
         'IcalOrganizer' => Eluceo\iCal\Property\Event\Organizer::class,
 
+        'Carbon' => Carbon\Carbon::class,
+
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
         'Flickr' => Proto\Models\Flickr::class,
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
+        'Role' => Proto\Models\Role::class,
+        'Permission' => Proto\Models\Permission::class,
         'Member' => Proto\Models\Member::class,
         'EmailList' => \Proto\Models\EmailList::class,
         'Email' => \Proto\Models\Email::class,
@@ -248,6 +253,8 @@ return [
         'Product' => \Proto\Models\Product::class,
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
+
+        'Youtube'=> Alaouy\Youtube\Facades\Youtube::class
 
     ],
 

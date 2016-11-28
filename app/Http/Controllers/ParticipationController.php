@@ -8,6 +8,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
+use Proto\Models\User;
 
 use Redirect;
 use Auth;
@@ -40,9 +41,14 @@ class ParticipationController extends Controller
             if (!$helping->committee->isMember(Auth::user())) {
                 abort(500, "You are not a member of the " . $helping->committee . " and thus cannot help on behalf of it.");
             }
+            if ($helping->users->count() >= $helping->amount) {
+                abort(500, "There are already enough people of your committee helping, thanks though!");
+            }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+            if($event->activity->participants == 0) {
+                abort(500, "You cannot subscribe to this activity!");
+            } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
@@ -52,6 +58,34 @@ class ParticipationController extends Controller
 
         $participation = new ActivityParticipation();
         $participation->fill($data);
+        $participation->save();
+
+        return Redirect::back();
+
+    }
+
+    /**
+     * Create a new participation for somebody else.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFor($id, Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        $event = Event::findOrFail($id);
+
+        if (!$event->activity) {
+            abort(500, "You cannot subscribe for " . $event->title . ".");
+        } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
+            abort(500, "You are already subscribed for " . $event->title . ".");
+        } elseif ($event->activity->closed) {
+            abort(500, "This activity is closed, you cannot change participation anymore.");
+        }
+
+        $request->session()->flash('flash_message', 'You added ' . $user->name . ' as a participant for ' . $event->title . '.');
+
+        $participation = new ActivityParticipation();
+        $participation->fill(['activity_id' => $event->activity->id, 'user_id' => $user->id]);
         $participation->save();
 
         return Redirect::back();
@@ -95,19 +129,29 @@ class ParticipationController extends Controller
                 $backupparticipation->backup = false;
                 $backupparticipation->save();
 
-                Mail::send('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($backupparticipation) {
+                $name = $backupparticipation->user->name;
+                $email = $backupparticipation->user->email;
+                $activitytitle = $backupparticipation->activity->event->title;
+
+                Mail::queue('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($backupparticipation->user->email, $backupparticipation->user->name);
-                    $m->subject('Moved from back-up list to participants for ' . $backupparticipation->activity->event->title . '.');
+                    $m->to($email, $name);
+                    $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
                 });
             }
 
             if ($notify) {
-                Mail::send('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($participation) {
+
+                $name = $participation->user->name;
+                $email = $participation->user->email;
+                $activitytitle = $participation->activity->event->title;
+
+                Mail::queue('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($participation->user->email, $participation->user->name);
-                    $m->subject('You have been signed out for ' . $participation->activity->event->title . '.');
+                    $m->to($email, $name);
+                    $m->subject('You have been signed out for ' . $activitytitle . '.');
                 });
+
             }
 
             $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
@@ -119,11 +163,17 @@ class ParticipationController extends Controller
             $request->session()->flash('flash_message', $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.');
 
             if ($notify) {
-                Mail::send('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($participation) {
-                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($participation->user->email, $participation->user->name);
-                    $m->subject('You don\'t help with ' . $participation->activity->event->title . ' anymore.');
+
+                $name = $participation->user->name;
+                $email = $participation->user->email;
+                $activitytitle = $participation->activity->event->title;
+
+                Mail::queue('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                    $m->queue('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($email, $name);
+                    $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
                 });
+
             }
 
             $participation->delete();

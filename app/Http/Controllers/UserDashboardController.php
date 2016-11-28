@@ -117,4 +117,13 @@ class UserDashboardController extends Controller
 
     }
 
+    public function becomeAMemberOf() {
+        if(Auth::check()) {
+            $user = Auth::user();
+        }else{
+            $user = null;
+        }
+        return view("users.becomeamember", ['user' => $user]);
+    }
+
 }

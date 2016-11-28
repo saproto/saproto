@@ -15,6 +15,7 @@ use Redirect;
 use Response;
 use Mail;
 use Auth;
+use Carbon\Carbon;
 
 class WithdrawalController extends Controller
 {
@@ -98,6 +99,46 @@ class WithdrawalController extends Controller
     public function show($id)
     {
         return view("omnomcom.withdrawals.show", ['withdrawal' => Withdrawal::findOrFail($id)]);
+    }
+
+    /**
+     * Display the accounts associated with the withdrawal.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showAccounts($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        $accounts = [];
+
+        foreach ($withdrawal->orderlines as $orderline) {
+            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString(); // We sort by date, where a date goes from 6am - 6am.
+
+            if (isset($accounts[$orderline->product->account->account_number])) { // Check if this account has already been encountered
+                if(isset($accounts[$orderline->product->account->account_number]->byDate[$sortDate])) { // Check if orderlines on this date have already been encountered
+                    $accounts[$orderline->product->account->account_number]->byDate[$sortDate] += $orderline->total_price;
+                }else{
+                    $accounts[$orderline->product->account->account_number]->byDate[$sortDate] = $orderline->total_price;
+                }
+
+                $accounts[$orderline->product->account->account_number]->total = $accounts[$orderline->product->account->account_number]->total + $orderline->total_price;
+
+            } else { // First entry for this account, create account object.
+                $accounts[$orderline->product->account->account_number] = new \stdClass();
+
+                $accounts[$orderline->product->account->account_number]->byDate = [];
+                $accounts[$orderline->product->account->account_number]->byDate[$sortDate] = $orderline->total_price;
+
+                $accounts[$orderline->product->account->account_number]->name = $orderline->product->account->name;
+                $accounts[$orderline->product->account->account_number]->total = $orderline->total_price;
+            }
+        }
+
+        ksort($accounts);
+        
+        return view("omnomcom.withdrawals.show-accounts", ['accounts' => $accounts, 'withdrawal' => $withdrawal]);
     }
 
     /**

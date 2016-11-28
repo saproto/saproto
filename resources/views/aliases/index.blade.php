@@ -34,7 +34,7 @@
                             </a>
 
                             <strong>{{ $alias }}</strong> @ {{ config('proto.emaildomain') }}
-                            
+
                         </td>
                         <td>
 
@@ -44,7 +44,11 @@
                                     {{ $destination->destination }}
                                 @else
                                     <a href="{{ route('user::profile', ['id' => $destination->user->id]) }}">
-                                        {{ $destination->user->name }}
+                                        @if($destination->user->trashed())
+                                            <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
+                                        @else
+                                            {{ $destination->user->name }}
+                                        @endif
                                     </a>
                                 @endif
 

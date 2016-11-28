@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity && Auth::check() && Auth::user()->member ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ ($event->activity && $event->activity->withParticipants() ? '8' : '8 col-md-offset-2') }}">
 
             @if($event->image)
                 <img src="{{ $event->image->generateImagePath(800,300) }}"
@@ -62,7 +62,7 @@
 
             @if($event->activity && Auth::check() && Auth::user()->member)
 
-                @foreach($event->activity->helpingCommittees as $key => $committee)
+                @foreach($event->activity->helpingCommitteeInstances as $key => $instance)
 
                     @if($key % 2 == 1)
 
@@ -76,19 +76,19 @@
 
                                     <div class="panel-heading">
 
-                                        {{ $committee->name }}
+                                        {{ $instance->committee->name }}
 
                                     </div>
 
                                     <div class="panel-body">
 
-                                        @if ($event->activity->helpingUsers($committee->pivot->id)->count() < 1)
+                                        @if ($event->activity->helpingUsers($instance->id)->count() < 1)
                                             <p style="text-align: center;">
                                                 No people are currently helping.
                                             </p>
                                         @endif
 
-                                        @foreach($event->activity->helpingUsers($committee->pivot->id) as $participation)
+                                        @foreach($event->activity->helpingUsers($instance->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
                                                      style="background-image:url('{!! ($participation->user->photo ? $participation->user->photo->generateImagePath(100, 100) : '') !!}');">
@@ -109,18 +109,18 @@
 
                                     </div>
 
-                                    @if($committee->isMember(Auth::user()))
+                                    @if($instance->committee->isMember(Auth::user()))
 
                                         <div class="panel-footer">
 
-                                            @if($event->activity->getHelpingParticipation($committee, Auth::user()) !== null)
+                                            @if($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
                                                 <a class="btn btn-warning" style="width: 100%;"
-                                                   href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($committee, Auth::user())->id]) }}">
+                                                   href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($instance->committee, Auth::user())->id]) }}">
                                                     I won't help anymore.
                                                 </a>
-                                            @else
+                                            @elseif($instance->users->count() < $instance->amount)
                                                 <a class="btn btn-success" style="width: 100%;"
-                                                   href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $committee->pivot->id]) }}">
+                                                   href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}">
                                                     I'll help!
                                                 </a>
                                             @endif
@@ -145,16 +145,17 @@
 
         </div>
 
-        @if($event->activity && Auth::check() && Auth::user()->member)
+        <div class="col-md-4">
 
-            <div class="col-md-4">
+            @if($event->activity && Auth::check() && Auth::user()->member && $event->activity->withParticipants())
 
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
                         Activity Sign-up
                         @if($event->activity->canSubscribe())
-                            ({{ $event->activity->freeSpots() }} places available)
+                            ({{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
+                            places available)
                         @endif
                     </div>
 
@@ -196,7 +197,6 @@
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
                                         @if ($event->activity->isFull() || !$event->activity->canSubscribe())
-
                                             {{ ($event->activity->isFull() ? 'Activity is full.' : 'Sign-up closed.') }}
                                             Sign me up for the back-up list.
                                         @else
@@ -210,7 +210,7 @@
                         <p style="text-align: center;">
                             Sign up is possible between {{ date('F j, H:i', $event->activity->registration_start) }}
                             and {{ date('F j, H:i', $event->activity->registration_end) }}. You can sign out
-                            untill {{ date('F j, H:i', $event->activity->deregistration_end) }}.
+                            until {{ date('F j, H:i', $event->activity->deregistration_end) }}.
                         </p>
 
                         <p style="text-align: center">
@@ -270,35 +270,103 @@
                         @endif
 
                     </div>
-
                 </div>
 
 
                 @if(Auth::user()->can('board'))
 
-                    <div class="panel panel-default">
+                    <form class="form-horizontal"
+                          action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}" method="post">
 
-                        <div class="panel-heading">
-                            Contact details participants
+                        {{ csrf_field() }}
+
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                Add participants
+                            </div>
+
+                            <div class="panel-body">
+                                 
+                                <div class="form-group">
+                                    <div id="user-select">
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="member-name"
+                                                   placeholder="John Doe"
+                                                   required>
+                                            <input type="hidden" id="member-id" name="user_id" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="button" class="form-control btn btn-success" id="member-clear"
+                                                   value="Clear">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer clearfix">
+                                <button type="submit" class="btn btn-success pull-right"> 
+                                    Add 
+                                </button>
+                            </div>
+
                         </div>
 
-                        <div class="panel-body">
-                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
-                                to participants!</p>
-                            <textarea class="form-control">@foreach($event->activity->users as $user){{ $user->email }}
-                                ,@endforeach</textarea>
-                        </div>
-
-                    </div>
+                    </form>
 
                 @endif
 
-            </div>
+            @elseif($event->activity && $event->activity->withParticipants())
 
+                <div class="panel panel-default">
 
-        @endif
+                    <div class="panel-heading">
+                        Activity Sign-up
+                    </div>
+
+                    <div class="panel-body" style="text-align: center;">
+                        <p>This activity requires you to sign-up. You can only sign-up when you are a member.</p>
+                        @if(!Auth::check()) <p>Please <a href="{{ route('login::show') }}">log-in</a> if you are already
+                            a member.</p> @endif
+                        @if(Auth::check() && !Auth::user()->member) <p>Please <a href="{{ route('becomeamember') }}">become
+                                a member</a> to sign-up for this activity.</p> @endif
+                    </div>
+
+                </div>
+
+            @endif
+
+        </div>
 
     </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <script>
+        $("#member-name").autocomplete({
+            minLength: 3,
+            source: "{{ route("api::members") }}",
+            select: function (event, ui) {
+                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
+                ;
+                $("#member-id").val(ui.item.id);
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>").append(item.name).appendTo(ul);
+        };
+        $("#member-clear").click(function () {
+            $("#member-name").val("").prop('disabled', false);
+            ;
+            $("#member-id").val("");
+        });
+    </script>
 
 @endsection
 

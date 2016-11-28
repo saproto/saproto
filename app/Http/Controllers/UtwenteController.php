@@ -11,6 +11,7 @@ use Proto\Models\User;
 
 use Auth;
 use Redirect;
+use Session;
 
 class UtwenteController extends Controller
 {
@@ -20,13 +21,15 @@ class UtwenteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id, Request $request)
     {
         $user = User::findOrFail($id);
 
         if ($user->id != Auth::id() && !Auth::user()->can('board')) {
             abort(403);
         }
+
+        if($request->wizard > 0) Session::flash("wizard", true);
 
         return view('users.study.utwente', ['user' => $user]);
     }
@@ -50,6 +53,7 @@ class UtwenteController extends Controller
             $user->utwente_username = $request->username;
             $user->save();
             $request->session()->flash('flash_message', 'We have associated your UT account ' . $user->utwente_username . ' with your Proto account.');
+            if(Session::get('wizard')) return Redirect::route('becomeamember');
             return Redirect::route('user::dashboard', ['id' => $user->id]);
         }
 
