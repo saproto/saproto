@@ -253,7 +253,8 @@
                                     <input type="hidden" id="member-id" name="user_id" required>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="button" class="form-control btn btn-success" id="member-clear" value="Clear">
+                                    <input type="button" class="form-control btn btn-success" id="member-clear"
+                                           value="Clear">
                                 </div>
                             </div>
                         </div>
@@ -262,7 +263,8 @@
 
                     <div class="panel-footer clearfix">
 
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give</button>
+                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give
+                        </button>
 
                     </div>
 
@@ -302,6 +304,23 @@
                         Nobody obtained this achievement yet
 
                     @endif
+
+                </div>
+
+                <div class="panel-footer clearfix">
+
+                    <div class="pull-right">
+
+                        <div class="btn-group" role="group">
+                            <div class="btn-group" role="group">
+                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}" - +
+                                   class="btn btn-danger">
+                                    Take from everyone
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 

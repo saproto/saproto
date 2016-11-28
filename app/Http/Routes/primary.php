@@ -48,7 +48,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
          */
         Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@impersonate']);
+            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:admin'], 'uses' => 'MemberAdminController@impersonate']);
             Route::get('maketempadmin', ['as' => 'maketempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@makeTempAdmin']);
             Route::get('endtempadmin', ['as' => 'endtempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@endTempAdmin']);
 
@@ -606,6 +606,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
         Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
         Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
+        Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
         Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
     });
 

@@ -104,6 +104,20 @@ class AchievementController extends Controller
         return Redirect::back();
     }
 
+    public function takeAll($achievement_id)
+    {
+        $achievement = Achievement::find($achievement_id);
+        if (!$achievement) abort(404);
+        $achieved = AchievementOwnership::all();
+        foreach ($achieved as $entry) {
+            if ($entry->achievement_id == $achievement_id) {
+                $entry->delete();
+            }
+        }
+        Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
+        return Redirect::back();
+    }
+
     public function icon($id, Request $request)
     {
         $achievement = Achievement::find($id);
