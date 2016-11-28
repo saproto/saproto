@@ -19,7 +19,7 @@ class AchievementController extends Controller
 
     public function overview()
     {
-        return view('achievement.list', ['achievements' => Achievement::orderBy('created_at', 'asc')->get()]);
+        return view('achievement.list', ['achievement' => Achievement::orderBy('created_at', 'asc')->get()]);
     }
 
     public function create()
@@ -104,38 +104,14 @@ class AchievementController extends Controller
         return Redirect::back();
     }
 
-    public function takeAll($achievement_id)
+    public function icon($id, Request $request)
     {
-        $achievement = Achievement::find($achievement_id);
-        if (!$achievement) abort(404);
-        $achieved = AchievementOwnership::all();
-        foreach ($achieved as $entry) {
-            if ($entry->achievement_id == $achievement_id) {
-                $entry->delete();
-            }
-        }
-        Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
-        return Redirect::back();
-    }
-
-    public function image($id, Request $request)
-    {
-
         $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achievement->fa_icon = $request->fa_icon;
+        $achievement->save();
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry();
-            $file->createFromFile($image);
-
-            $achievement->image()->associate($file);
-            $achievement->save();
-        } else {
-            $achievement->image()->dissociate();
-            $achievement->save();
-        }
         Session::flash('flash_message', "Achievement Icon set");
         return Redirect::route('achievement::manage', ['id' => $id]);
-
     }
 }

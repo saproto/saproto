@@ -8,16 +8,11 @@ class Achievement extends Model
 {
     protected $table = 'achievement';
 
-    protected $fillable = ['name', 'desc', 'img_file_id', 'tier'];
+    protected $fillable = ['name', 'desc', 'fa_icon', 'img_file_id', 'tier'];
 
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'achievements_users');
-    }
-
-    public function image()
-    {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'img_file_id');
     }
 
     public function achievementOwnership()

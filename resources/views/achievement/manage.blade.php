@@ -101,7 +101,7 @@
 
         @if(!$new)
 
-            <form method="post" action="{{ route("achievement::image", ["id" => $achievement->id]) }}"
+            <form method="post" action="{{ route("achievement::icon", ["id" => $achievement->id]) }}"
                   enctype="multipart/form-data">
 
                 {!! csrf_field() !!}
@@ -115,11 +115,10 @@
                     <div class="panel-body">
 
                         <div class="form-group">
-                            <label data-placement="inline" class="icp icp-auto"
-                                   data-selected="fa-align-justify"></label>
+                            <label data-placement="inline" class="icp icp-auto" data-selected="{{  substr($achievement->fa_icon, 3) }}"></label>
                         </div>
 
-                        <input type="hidden" name="icon" id="icon">
+                        <input type="hidden" name="fa_icon" id="icon">
 
                         {{--@if($achievement->image)--}}
 
