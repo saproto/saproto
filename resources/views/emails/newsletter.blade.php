@@ -40,8 +40,13 @@
 
                         <p>
                             <strong>Sign-up required!</strong><br>
-                            <i>Places available:</i>
-                            {{ $event->activity->participants }}<br>
+                            @if($event->activity->participants > 0)
+                                <i>Places available:</i>
+                                {{ $event->activity->participants }}<br>
+                            @elseif($event->activity->participants == -1)
+                                <i>Places available:</i>
+                                unlimited<br>
+                            @endif
                             <i>Sign-up before:</i>
                             {{ date('l d F, H:i', $event->activity->registration_end) }}<br>
                             <i>Participation:</i>
