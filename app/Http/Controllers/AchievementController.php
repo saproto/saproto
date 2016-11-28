@@ -19,7 +19,7 @@ class AchievementController extends Controller
 
     public function overview()
     {
-        return view('achievement.list', ['achievement' => Achievement::orderBy('created_at', 'asc')->get()]);
+        return view('achievement.list', ['achievements' => Achievement::orderBy('created_at', 'asc')->get()]);
     }
 
     public function create()

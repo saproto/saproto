@@ -1,46 +1,86 @@
-tr * {
-  max-height: 50px !important;
-  max-width:150px;
-  vertical-align: middle !important;
-}
+.achievement-admin-list {
 
-.COMMON {
-  color: #DDDDDD;
-}
+  tr * {
+    max-height: 50px !important;
+    max-width:150px;
+    vertical-align: middle !important;
+  }
 
-.UNCOMMON {
-  color: #1E90FF;
-}
+  .COMMON {
+    color:#de843b;
+  }
 
-.RARE {
-  color: #9932CC;
-}
+  .UNCOMMON {
+    color:#999;
+  }
 
-.EPIC {
-  color: #EAA400;
-}
+  .RARE {
+    color:#c09c21;
+  }
 
-.LEGENDARY {
-  color: #C1FF00;
+  .EPIC {
+    color:#9db3b3;
+  }
+
+  .LEGENDARY {
+    color:#b7d8e8;
+  }
+
+  .COMMON div, .UNCOMMON div, .RARE div, .EPIC div, .LEGENDARY div {
+    border-radius:9001px;
+    padding:10px;
+    overflow:hidden;
+    display:inline-block;
+    width:40px;
+    height:40px;
+    text-align:center;
+    vertical-align:middle !important;
+    color:white;
+  }
+
+  .COMMON div i, .UNCOMMON div i, .RARE div i, .EPIC div i, .LEGENDARY div i {
+    display:inline-block;
+  }
+
+  .COMMON div{
+    background:#de843b;
+  }
+
+  .UNCOMMON div {
+    background:#999;
+  }
+
+  .RARE div {
+    background:#c09c21;
+  }
+
+  .EPIC div {
+    background:#9db3b3;
+  }
+
+  .LEGENDARY div {
+    background:#b7d8e8;
+  }
+
 }
 select.COMMON, option[value="COMMON"] {
-  color: #DDDDDD;
+  color:#de843b;
 }
 
 select.UNCOMMON, option[value="UNCOMMON"] {
-  color: #1E90FF;
+  color:#999;
 }
 
 select.RARE, option[value="RARE"] {
-  color: #9932CC;
+  color:#c09c21;
 }
 
 select.EPIC, option[value="EPIC"] {
-  color: #333333;
+  color:#9db3b3;
 }
 
 select.LEGENDARY, option[value="LEGENDARY"] {
-  color: #C1FF00;
+  color:#b7d8e8;
 }
 
 .iconpicker-container, .iconpicker-popover.popover, .popover-title {
@@ -57,6 +97,15 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
 .iconpicker .iconpicker-item {
   margin:0 11px 11px 0 !important;
+}
+
+.achievement-preview {
+  margin-left:-100px !important;
+  width:683px;
+
+  .achievement {
+    margin:0;
+  }
 }
 .company {
 
@@ -443,7 +492,7 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   margin-bottom:0;
 }
 
-.achievement-icon, .achievement-icon img {
+.achievement-icon {
   max-height: 88px;
   max-width: 88px;
   top:calc(50% + 0.5px);
@@ -505,13 +554,21 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   margin-bottom: -20px;
 }
 
-.EPIC .achievement-icon img {
-  top:50%;
-  left:calc(50% - 1px);
+//.EPIC .achievement-icon img {
+//  top:50%;
+//  left:calc(50% - 1px);
+//}
+//
+//.LEGENDARY .achievement-icon img {
+//  left:calc(50% - 1px);
+//}
+
+.achievement i {
+  font-size:65px;
 }
 
-.LEGENDARY .achievement-icon img {
-  left:calc(50% - 1px);
+.achievement-tooltip i {
+  font-size:100px;
 }
 
 .achievement-tooltip {
@@ -620,12 +677,12 @@ div .achievement-button {
   max-width:154px;
   max-height:154px;
 }
-
-.achievement-button-icon img {
-  max-width:138px;
-  max-height:150px;
-  border-radius:9001px;
-}
+//
+//.achievement-button-icon img {
+//  max-width:138px;
+//  max-height:150px;
+//  border-radius:9001px;
+//}
 .profile__photo {
     border-radius: 50%;
     width: 200px;

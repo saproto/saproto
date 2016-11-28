@@ -6,10 +6,9 @@
 
 @section('content')
 
-    <div class="col-md-6">
+    <div class="col-md-6 {{ $new ? "col-md-offset-3" : "" }}">
 
-        <form method="post"
-              action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
+        <form method="post" action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
 
             {!! csrf_field() !!}
 
@@ -58,8 +57,9 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        @if(!$new)
+                    @if(!$new)
+
+                        <div class="form-group">
 
                             <hr>
 
@@ -82,14 +82,16 @@
                                 </tbody>
                             </table>
 
-                        @endif
-                    </div>
+                        </div>
+
+                    @endif
 
                 </div>
 
                 <div class="panel-footer clearfix">
 
-                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
+                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
+                    </button>
 
                     <a href="{{ route("achievement::list") }}" class="btn btn-default pull-right">Cancel</a>
 
@@ -115,7 +117,8 @@
                     <div class="panel-body">
 
                         <div class="form-group">
-                            <label data-placement="inline" class="icp icp-auto" data-selected="{{  substr($achievement->fa_icon, 3) }}"></label>
+                            <label data-placement="inline" class="icp icp-auto"
+                                   data-selected="{{  substr($achievement->fa_icon, 3) }}"></label>
                         </div>
 
                         <input type="hidden" name="fa_icon" id="icon">
@@ -169,6 +172,65 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
+                    Preview
+                </div>
+
+                <div class="panel-body">
+
+                    <ul class="achievement-list achievement-preview">
+
+                        <li class="achievement {{ $achievement->tier }}">
+
+                            <div class="achievement-label">
+                                <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '.svg') }}" alt="">
+                            </div>
+
+                            <div class="achievement-icon">
+                                @if($achievement->fa_icon)
+                                    <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
+                                @else
+                                    No icon available
+                                @endif
+                            </div>
+
+                            <div class="achievement-tooltip">
+
+                                <div class="achievement-button">
+                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}" alt="">
+                                    <div class="achievement-button-icon">
+                                        @if($achievement->fa_icon)
+                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
+                                        @else
+                                            No icon available
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="achievement-text">
+
+                                    <div class="achievement-title">
+                                        <strong>{{ $achievement->name }}</strong>
+                                    </div>
+
+                                    <div class="achievement-desc">
+                                        <p>{{ $achievement->desc }}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
                     Gift this Achievement
                 </div>
 
@@ -182,7 +244,8 @@
                         <div class="form-group">
                             <div id="user-select">
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="member-name" placeholder="John Doe"
+                                    <input type="text" class="form-control" id="member-name"
+                                           placeholder="John Doe"
                                            required>
                                     <input type="hidden" id="member-id" name="user_id" required>
                                 </div>
@@ -288,7 +351,7 @@
     <script>
         $('.icp-auto').iconpicker();
 
-        $('.icp').on('iconpickerSelected', function(e) {
+        $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
     </script>

@@ -6,7 +6,7 @@
   margin-bottom:0;
 }
 
-.achievement-icon, .achievement-icon img {
+.achievement-icon {
   max-height: 88px;
   max-width: 88px;
   top:calc(50% + 0.5px);
@@ -68,13 +68,21 @@
   margin-bottom: -20px;
 }
 
-.EPIC .achievement-icon img {
-  top:50%;
-  left:calc(50% - 1px);
+//.EPIC .achievement-icon img {
+//  top:50%;
+//  left:calc(50% - 1px);
+//}
+//
+//.LEGENDARY .achievement-icon img {
+//  left:calc(50% - 1px);
+//}
+
+.achievement i {
+  font-size:65px;
 }
 
-.LEGENDARY .achievement-icon img {
-  left:calc(50% - 1px);
+.achievement-tooltip i {
+  font-size:100px;
 }
 
 .achievement-tooltip {
@@ -183,9 +191,9 @@ div .achievement-button {
   max-width:154px;
   max-height:154px;
 }
-
-.achievement-button-icon img {
-  max-width:138px;
-  max-height:150px;
-  border-radius:9001px;
-}
+//
+//.achievement-button-icon img {
+//  max-width:138px;
+//  max-height:150px;
+//  border-radius:9001px;
+//}

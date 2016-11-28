@@ -8,7 +8,7 @@
 
     @if (count($achievements) > 0)
 
-        <table class="table">
+        <table class="table achievement-admin-list">
 
             <thead>
 
@@ -30,9 +30,9 @@
                 <tr>
 
                     <td>{{ $achievement->id }}</td>
-                    <td>
-                        @if($achievement->image)
-                            <img src="{!! $achievement->image->generateImagePath(700,null) !!}" alt="">
+                    <td class="{{ $achievement->tier }}">
+                        @if($achievement->fa_icon)
+                            <div><i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i></div>
                         @else
                             No icon available
                         @endif

@@ -13,8 +13,8 @@
                 </div>
 
                 <div class="achievement-icon">
-                    @if($achievement->image)
-                        <img src="{!! $achievement->image->generateImagePath(700,null) !!}" alt="">
+                    @if($achievement->fa_icon)
+                        <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
                     @else
                         No icon available
                     @endif
@@ -25,8 +25,8 @@
                     <div class="achievement-button">
                         <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}" alt="">
                         <div class="achievement-button-icon">
-                            @if($achievement->image)
-                                <img src="{!! $achievement->image->generateImagePath(700,null) !!}" alt="">
+                            @if($achievement->fa_icon)
+                                <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
                             @else
                                 No icon available
                             @endif
