@@ -451,6 +451,8 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   position: absolute;
   transform:translate(-50%, -50%);
   border-radius:9001px;
+  text-align:center;
+  color:white;
 }
 
 .achievement-list {
@@ -598,10 +600,20 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   left:calc(50% - 20px);
 }
 
-.achievement-button {
+div .achievement-button {
   position:absolute;
   top:0;
   left:0;
+  width:154px;
+}
+
+.achievement-button-icon {
+  color:white;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  text-align:center;
 }
 
 .achievement-button img{
@@ -610,13 +622,9 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 }
 
 .achievement-button-icon img {
-  max-width:130px;
+  max-width:138px;
   max-height:150px;
   border-radius:9001px;
-  position:absolute;
-  left:77px;
-  top:77px;
-  transform:translate(-50%, -50%);
 }
 .profile__photo {
     border-radius: 50%;
