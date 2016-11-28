@@ -8,7 +8,8 @@
 
     <div class="col-md-6 {{ $new ? "col-md-offset-3" : "" }}">
 
-        <form method="post" action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
+        <form method="post"
+              action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
 
             {!! csrf_field() !!}
 
@@ -182,7 +183,8 @@
                         <li class="achievement {{ $achievement->tier }}">
 
                             <div class="achievement-label">
-                                <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '.svg') }}" alt="">
+                                <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '.svg') }}"
+                                     alt="">
                             </div>
 
                             <div class="achievement-icon">
@@ -196,7 +198,8 @@
                             <div class="achievement-tooltip">
 
                                 <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}" alt="">
+                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
+                                         alt="">
                                     <div class="achievement-button-icon">
                                         @if($achievement->fa_icon)
                                             <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
@@ -234,12 +237,12 @@
                     Gift this Achievement
                 </div>
 
-                <div class="panel-body">
+                <form method="post"
+                      action="{{ route("achievement::give", ['id' => $achievement->id]) }}">
 
-                    <form method="post"
-                          action="{{ route("achievement::give", ['id' => $achievement->id]) }}">
+                    {!! csrf_field() !!}
 
-                        {!! csrf_field() !!}
+                    <div class="panel-body">
 
                         <div class="form-group">
                             <div id="user-select">
@@ -250,22 +253,20 @@
                                     <input type="hidden" id="member-id" name="user_id" required>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="button" class="form-control btn btn-success" id="member-clear"
-                                           value="Clear">
+                                    <input type="button" class="form-control btn btn-success" id="member-clear" value="Clear">
                                 </div>
                             </div>
                         </div>
 
-                </div>
+                    </div>
 
-                <div class="panel-footer clearfix">
+                    <div class="panel-footer clearfix">
 
-                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give
-                    </button>
+                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give</button>
 
-                    </form>
+                    </div>
 
-                </div>
+                </form>
 
             </div>
 
@@ -344,7 +345,6 @@
         });
     </script>
 
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="//itsjavi.com/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
     <link rel="stylesheet" href="//itsjavi.com/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
 
