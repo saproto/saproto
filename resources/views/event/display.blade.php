@@ -221,6 +221,12 @@
 
                         <hr>
 
+                        @if($event->activity->users->count() > 0)
+                            <p style="text-align: center; padding-bottom: 5px;">
+                                {{ $event->activity->users->count() }} participants:
+                            </p>
+                        @endif
+
                         @foreach($event->activity->users as $user)
 
                             <div class="member">
@@ -244,8 +250,8 @@
 
                             <hr>
 
-                            <p style="text-align: center;">
-                                Back-up list:
+                            <p style="text-align: center; padding-bottom: 5px;">
+                                {{ $event->activity->backupUsers->count() }} people on back-up list:
                             </p>
 
                             @foreach($event->activity->backupUsers as $user)
