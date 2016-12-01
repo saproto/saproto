@@ -118,24 +118,14 @@ class AchievementController extends Controller
         return Redirect::back();
     }
 
-    public function image($id, Request $request)
+    public function icon($id, Request $request)
     {
-
         $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achievement->fa_icon = $request->fa_icon;
+        $achievement->save();
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry();
-            $file->createFromFile($image);
-
-            $achievement->image()->associate($file);
-            $achievement->save();
-        } else {
-            $achievement->image()->dissociate();
-            $achievement->save();
-        }
         Session::flash('flash_message', "Achievement Icon set");
         return Redirect::route('achievement::manage', ['id' => $id]);
-
     }
 }

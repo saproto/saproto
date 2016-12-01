@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="col-md-6 {{ ($new ? 'col-md-offset-3' : '') }}">
+    <div class="col-md-6 {{ $new ? "col-md-offset-3" : "" }}">
 
         <form method="post"
               action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
@@ -58,8 +58,9 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        @if(!$new)
+                    @if(!$new)
+
+                        <div class="form-group">
 
                             <hr>
 
@@ -82,14 +83,16 @@
                                 </tbody>
                             </table>
 
-                        @endif
-                    </div>
+                        </div>
+
+                    @endif
 
                 </div>
 
                 <div class="panel-footer clearfix">
 
-                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
+                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
+                    </button>
 
                     <a href="{{ route("achievement::list") }}" class="btn btn-default pull-right">Cancel</a>
 
@@ -101,7 +104,7 @@
 
         @if(!$new)
 
-            <form method="post" action="{{ route("achievement::image", ["id" => $achievement->id]) }}"
+            <form method="post" action="{{ route("achievement::icon", ["id" => $achievement->id]) }}"
                   enctype="multipart/form-data">
 
                 {!! csrf_field() !!}
@@ -114,31 +117,38 @@
 
                     <div class="panel-body">
 
-                        @if($achievement->image)
-
-                            <img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">
-
-                        @else
-                            <p>
-                                &nbsp;
-                            </p>
-                            <p style="text-align: center;">
-                                This achievement has no icon yet. Upload one now!
-                            </p>
-                        @endif
-
-                        <hr>
-
-                        <div class="form-horizontal">
-
-                            <div class="form-group">
-                                <label for="image" class="col-sm-4 control-label">New achievement icon</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="image" type="file" name="image">
-                                </div>
-                            </div>
-
+                        <div class="form-group">
+                            <label data-placement="inline" class="icp icp-auto"
+                                   data-selected="{{  substr($achievement->fa_icon, 3) }}"></label>
                         </div>
+
+                        <input type="hidden" name="fa_icon" id="icon">
+
+                        {{--@if($achievement->image)--}}
+
+                        {{--<img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">--}}
+
+                        {{--@else--}}
+                        {{--<p>--}}
+                        {{--&nbsp;--}}
+                        {{--</p>--}}
+                        {{--<p style="text-align: center;">--}}
+                        {{--This achievement has no icon yet. Upload one now!--}}
+                        {{--</p>--}}
+                        {{--@endif--}}
+
+                        {{--<hr>--}}
+
+                        {{--<div class="form-horizontal">--}}
+
+                        {{--<div class="form-group">--}}
+                        {{--<label for="image" class="col-sm-4 control-label">New achievement icon</label>--}}
+                        {{--<div class="col-sm-8">--}}
+                        {{--<input class="form-control" id="image" type="file" name="image">--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+
+                        {{--</div>--}}
 
                     </div>
 
@@ -163,20 +173,82 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    Gift this Achievement
+                    Preview
                 </div>
 
                 <div class="panel-body">
 
-                    <form method="post"
-                          action="{{ route("achievement::give", ['id' => $achievement->id]) }}">
+                    <ul class="achievement-list achievement-preview">
 
-                        {!! csrf_field() !!}
+                        <li class="achievement {{ $achievement->tier }}">
+
+                            <div class="achievement-label">
+                                <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '.svg') }}"
+                                     alt="">
+                            </div>
+
+                            <div class="achievement-icon">
+                                @if($achievement->fa_icon)
+                                    <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
+                                @else
+                                    No icon available
+                                @endif
+                            </div>
+
+                            <div class="achievement-tooltip">
+
+                                <div class="achievement-button">
+                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
+                                         alt="">
+                                    <div class="achievement-button-icon">
+                                        @if($achievement->fa_icon)
+                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
+                                        @else
+                                            No icon available
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="achievement-text">
+
+                                    <div class="achievement-title">
+                                        <strong>{{ $achievement->name }}</strong>
+                                    </div>
+
+                                    <div class="achievement-desc">
+                                        <p>{{ $achievement->desc }}</p>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    Gift this Achievement
+                </div>
+
+                <form method="post"
+                      action="{{ route("achievement::give", ['id' => $achievement->id]) }}">
+
+                    {!! csrf_field() !!}
+
+                    <div class="panel-body">
 
                         <div class="form-group">
                             <div id="user-select">
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="member-name" placeholder="John Doe"
+                                    <input type="text" class="form-control" id="member-name"
+                                           placeholder="John Doe"
                                            required>
                                     <input type="hidden" id="member-id" name="user_id" required>
                                 </div>
@@ -187,16 +259,16 @@
                             </div>
                         </div>
 
-                </div>
+                    </div>
 
-                <div class="panel-footer clearfix">
+                    <div class="panel-footer clearfix">
 
-                    <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give
-                    </button>
+                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Give
+                        </button>
 
-                    </form>
+                    </div>
 
-                </div>
+                </form>
 
             </div>
 
@@ -241,8 +313,8 @@
 
                         <div class="btn-group" role="group">
                             <div class="btn-group" role="group">
-                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}"
-                                   + class="btn btn-danger">
+                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}" - +
+                                   class="btn btn-danger">
                                     Take from everyone
                                 </a>
                             </div>
@@ -289,6 +361,17 @@
             $("#member-name").val("").prop('disabled', false);
             ;
             $("#member-id").val("");
+        });
+    </script>
+
+    <script src="//itsjavi.com/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+    <link rel="stylesheet" href="//itsjavi.com/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
+
+    <script>
+        $('.icp-auto').iconpicker();
+
+        $('.icp').on('iconpickerSelected', function (e) {
+            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
     </script>
 
