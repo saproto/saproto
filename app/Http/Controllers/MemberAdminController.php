@@ -119,6 +119,22 @@ class MemberAdminController extends Controller
         $member->is_associate = !$request->input('is_primary');
         $member->user()->associate($user);
 
+        /** Create member alias */
+
+        $name = explode(" ", $user->name);
+        $aliasbase = strtolower(substr($name[0], 0, 1) . '.' . str_replace(' ', '', implode("", array_slice($name, 1))));
+        $alias = $aliasbase;
+        $i = 0;
+
+        while (Member::where('proto_username', $alias)->withTrashed()->count() > 0) {
+            $i++;
+            $alias = $aliasbase . '-' . $i;
+        }
+
+        $member->proto_username = $alias;
+
+        /** End create member alias */
+
         $member->save();
 
         $name = $user->name;
