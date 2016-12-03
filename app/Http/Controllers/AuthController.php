@@ -4,24 +4,17 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Middleware\Member;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use PragmaRX\Google2FA\Google2FA;
 
-use Proto\Models\Achievement;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\Alias;
 use Proto\Models\Bank;
-use Proto\Models\EmailList;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\PasswordReset;
-use Proto\Models\Quote;
 use Proto\Models\RfidCard;
-use Proto\Models\StudyEntry;
 use Proto\Models\User;
+use Proto\Models\Member;
 
 use Auth;
 use Proto\Models\WelcomeMessage;
@@ -63,13 +56,25 @@ class AuthController extends Controller
 
         } else {
 
-            // We cannot authenticate to our own records. Try RADIUS.
-            $user = User::where('utwente_username', $username)->first();
+            // See if someone maybe used their Proto username.
+            $member = Member::where('proto_username', $username)->first();
 
-            if ($user) {
+            // Check password again.
+            if ($member && $member->user && Hash::check($password, $member->user->password)) {
 
-                if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
-                    return $user;
+                return $member->user;
+
+            } else {
+
+                // We cannot authenticate to our own records. Try RADIUS.
+                $user = User::where('utwente_username', $username)->first();
+
+                if ($user) {
+
+                    if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
+                        return $user;
+                    }
+
                 }
 
             }
@@ -203,6 +208,38 @@ class AuthController extends Controller
 
         $request->session()->flash('flash_message', 'Invalid username of password provided.');
         return Redirect::route('login::show');
+
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($user == null) {
+            abort(404);
+        }
+
+        if ($user->id != Auth::id()) {
+            $request->session()->flash('flash_message', 'Sorry! You cannot change another user their password. If a user forgot their password, please let them use the \'forgot password\' form on the login screen.');
+            return Redirect::back();
+        }
+
+        if (
+            AuthController::verifyCredentials($user->email, $request->oldpass)
+            || ($user->utwente_username && AuthController::verifyUtwenteCredentials($user->utwente_username, $request->oldpass))
+        ) {
+            if ($request->newpass1 === $request->newpass2) {
+                $user->setPassword($request->newpass1);
+                $request->session()->flash('flash_message', 'Your password has been changed.');
+                return Redirect::route('user::dashboard');
+            } else {
+                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
+                return Redirect::route('user::dashboard');
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Old password incorrect! Password not updated.');
+        return Redirect::route('user::dashboard');
 
     }
 
@@ -344,8 +381,7 @@ class AuthController extends Controller
                 return Redirect::back();
             }
 
-            $reset->user->password = Hash::make($request->password);
-            $reset->user->save();
+            $reset->user->setPassword($request->password);
 
             PasswordReset::where('token', $request->token)->delete();
 

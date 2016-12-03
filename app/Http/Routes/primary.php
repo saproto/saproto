@@ -42,6 +42,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
 
         Route::post('delete/{id}', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
+        Route::post('password', ['as' => 'changepassword', 'uses' => 'AuthController@updatePassword']);
 
         /*
          * Routes related to members.
@@ -107,14 +108,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => '{id}/profilepic', 'as' => 'pic::'], function () {
             Route::post('update', ['as' => 'update', 'uses' => 'ProfilePictureController@update']);
             Route::get('delete', ['as' => 'delete', 'uses' => 'ProfilePictureController@destroy']);
-        });
-
-        /*
-         * Routes related to profile pictures
-         */
-        Route::group(['prefix' => '{id}/alias', 'as' => 'alias::'], function () {
-            Route::get('update', ['as' => 'update', 'uses' => 'AliasController@createFor']);
-            Route::get('delete', ['as' => 'delete', 'uses' => 'AliasController@deleteFor']);
         });
 
 

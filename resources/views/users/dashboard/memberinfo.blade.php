@@ -52,21 +52,36 @@
                          style="text-align: left;">{{ ($user->isActiveMember() ? 'Yes!' : 'No. :(') }}</div>
                 </div>
 
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->member->proto_username }}
+                    </div>
+                </div>
+
+                <p>
+                    <sub>
+                        Your Proto username comes with your membership. You can use it instead of your e-mail address to
+                        sign in, and is sometimes even the only way to sign in.
+                    </sub>
+                </p>
+
                 @if($user->isActiveMember())
 
                     <div class="form-group">
                         <label for="member_proto_mail" class="col-sm-4 control-label">Proto E-mail</label>
                         <div class="col-sm-8 control-label" style="text-align: left;">
-
-                            @if($user->member->proto_mail)
-                                {{ $user->member->proto_mail }} @ {{ config('proto.emaildomain') }}
-                                <br>
-                                <a href="{{ route("user::alias::delete", ['id' => $user->id]) }}">Drop</a>
-                            @else
-                                <a href="{{ route("user::alias::update", ['id' => $user->id]) }}">Claim your own!</a>
-                            @endif
+                            <span style="margin-right: 5px;">{{ $user->member->proto_username }}</span>@<span
+                                    style="margin-left: 5px;">{{ config('proto.emaildomain') }}</span>
                         </div>
                     </div>
+
+                    <p>
+                        <sub>
+                            You are granted a Proto e-mail alias when you become an active member. Your e-mail alias is
+                            a forwarder to <strong>{{ $user->email }}</strong>.
+                        </sub>
+                    </p>
 
                 @endif
 

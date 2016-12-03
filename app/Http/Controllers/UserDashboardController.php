@@ -77,25 +77,8 @@ class UserDashboardController extends Controller
             abort(403);
         }
 
-        $userdata = array('email' => $user->email);
 
-        if (($user->email != $request->input('email')) || ($request->input('newpassword') != "")) {
-            if (!Hash::check($request->input('old_pass'), $user->password)) {
-                Session::flash("flash_message", "You need to enter your current password in order to change your e-mail or password. No changes made to e-mail or password.");
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
-            } else {
-                $userdata['email'] = $request->input('email');
-
-                if ($request->input('newpassword') != "") {
-                    if ($request->input('newpassword') != $request->input('newpassword2')) {
-                        Session::flash("flash_message", "The two new passwords weren't identical. Password not changed.");
-                    } else {
-                        $userdata['password'] = Hash::make($request->input('newpassword'));
-                    }
-                }
-            }
-        }
-
+        $userdata['email'] = $request->input('email');
         $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
@@ -117,10 +100,11 @@ class UserDashboardController extends Controller
 
     }
 
-    public function becomeAMemberOf() {
-        if(Auth::check()) {
+    public function becomeAMemberOf()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
-        }else{
+        } else {
             $user = null;
         }
         return view("users.becomeamember", ['user' => $user]);

@@ -31,10 +31,10 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '<', time())->get();
 
-        if(Auth::check() && Auth::user()->can('board')) {
+        if (Auth::check() && Auth::user()->can('board')) {
             return $events;
-        }else {
-            return $events->where('secret', '=' , 0);
+        } else {
+            return $events->where('secret', '=', 0);
         }
     }
 
@@ -45,10 +45,10 @@ class Committee extends Model
     {
         $events = $this->organizedEvents()->where('end', '>', time())->get();
 
-        if(Auth::check() && Auth::user()->can('board')) {
+        if (Auth::check() && Auth::user()->can('board')) {
             return $events;
-        }else {
-            return $events->where('secret', '=' , 0);
+        } else {
+            return $events->where('secret', '=', 0);
         }
     }
 

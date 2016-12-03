@@ -4,6 +4,7 @@ namespace Proto\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use MongoDB\Driver\Command;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,9 +17,11 @@ class Kernel extends ConsoleKernel
         Commands\GenerateRoles::class,
         Commands\TestEmail::class,
         Commands\DirectAdminSync::class,
+        Commands\ActiveDirectorySync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
-        Commands\BirthdayCron::class
+        Commands\BirthdayCron::class,
+        Commands\FillEmptyProtoUsernames::class
     ];
 
     /**
@@ -30,6 +33,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('proto:dasync')->everyMinute();
+        $schedule->command('proto:adsync')->everyTenMinutes();
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:newslettercron')->weekly()->mondays()->at('11:00');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');

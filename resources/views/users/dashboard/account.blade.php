@@ -50,23 +50,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="password" class="col-sm-4 control-label">New Password</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpassword" name="newpassword">
-                    <input type="password" class="form-control" id="newpassword2" name="newpassword2">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="old_pass" class="col-sm-4 control-label">Password</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="old_pass" name="old_pass"
-                           placeholder="For changing e-mail or password">
-                </div>
-            </div>
         </div>
 
         <div class="panel-footer">
@@ -74,6 +57,68 @@
                 <div class="btn-group" role="group">
                     <button type="submit" class="btn btn-success">
                         Update account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<form class="form-horizontal" method="post" action="{{ route("user::changepassword", ["id" => $user->id]) }}">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <strong>Change Proto password</strong>
+        </div>
+
+        <div class="panel-body">
+
+            <p>
+                This changes the password for your Proto account across al of our systems.
+                <i>This will not affect your UTwente password.</i>
+                You can change your UTwente password <a href="https://tap.utwente.nl/tap/">here</a>.
+            </p>
+
+            <hr>
+
+            {!! csrf_field() !!}
+
+            <div class="form-group">
+                <label for="oldpass" class="col-sm-4 control-label">Current</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="oldpass" name="oldpass" required>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label for="newpass1" class="col-sm-4 control-label">New</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="newpass1" name="newpass1" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="newpass2" class="col-sm-4 control-label">Repeat</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="newpass2" name="newpass2" required>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel-footer">
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-success">
+                        Update password
                     </button>
                 </div>
             </div>

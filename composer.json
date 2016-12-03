@@ -26,7 +26,6 @@
   "support": {
     "email": "haveyoutriedturningitoffandonagain@proto.utwente.nl",
     "issues": "https://github.com/saproto/saproto/issues",
-    "irc": "irc://irc.snt.utwente.nl/saproto",
     "source": "https://github.com/saproto/saproto"
   },
   "type": "project",
@@ -37,7 +36,6 @@
     "laravelcollective/html": "5.1.*",
     "doctrine/dbal": "^2.5",
     "zizaco/entrust": "dev-laravel-5",
-    "s-ichikawa/laravel-sendgrid-driver": "dev-master",
     "nesbot/carbon": "^1.21",
     "pragmarx/google2fa": "^0.7.1",
     "illuminate/html": "5.*",
@@ -55,13 +53,10 @@
     "sentry/sentry-laravel": "^0.3.0",
     "eluceo/ical": "^0.11.0",
     "alaouy/youtube": "^1.2",
-    "webuni/commonmark-table-extension": "0.5.0"
+    "webuni/commonmark-table-extension": "0.5.0",
+    "adldap2/adldap2": "6.1.*"
   },
   "require-dev": {
-    "fzaninotto/faker": "~1.4",
-    "mockery/mockery": "0.9.*",
-    "phpunit/phpunit": "~4.0",
-    "phpspec/phpspec": "~2.1"
   },
   "autoload": {
     "classmap": [

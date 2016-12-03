@@ -153,7 +153,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Bitbeans\Yubikey\YubikeyServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -254,7 +253,7 @@ return [
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 
-        'Youtube'=> Alaouy\Youtube\Facades\Youtube::class
+        'Youtube' => Alaouy\Youtube\Facades\Youtube::class
 
     ],
 

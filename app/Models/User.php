@@ -2,6 +2,9 @@
 
 namespace Proto\Models;
 
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +15,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use DateTime;
 use Carbon\Carbon;
+use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -58,6 +62,26 @@ class User extends Model implements AuthenticatableContract,
     public function roles()
     {
         return $this->belongsToMany('Proto\Models\Role', 'role_user');
+    }
+
+    public function setPassword($password)
+    {
+        // Update Laravel Password
+        $this->password = Hash::make($password);
+        $this->save();
+
+        // Update Active Directory Password
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
+        if ($ldapuser !== null) {
+            $ldapuser->setUserAccountControl(512);
+            $ldapuser->setPassword($password);
+            $ldapuser->save();
+        }
     }
 
     /**
@@ -190,14 +214,14 @@ class User extends Model implements AuthenticatableContract,
     public function isInCommittee(Committee $committee)
     {
         return count(CommitteeMembership::withTrashed()
-            ->where('user_id', $this->id)
-            ->where('committee_id', $committee->id)
-            ->where('created_at', '<', date('Y-m-d H:i:s'))
-            ->where(function ($q) {
-                $q->whereNull('deleted_at')
-                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-            })->get()
-        ) > 0;
+                ->where('user_id', $this->id)
+                ->where('committee_id', $committee->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
     }
 
     public function isInCommitteeBySlug($slug)
@@ -212,13 +236,13 @@ class User extends Model implements AuthenticatableContract,
     public function isActiveMember()
     {
         return count(CommitteeMembership::withTrashed()
-            ->where('user_id', $this->id)
-            ->where('created_at', '<', date('Y-m-d H:i:s'))
-            ->where(function ($q) {
-                $q->whereNull('deleted_at')
-                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-            })->get()
-        ) > 0;
+                ->where('user_id', $this->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
     }
 
     /**
