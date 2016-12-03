@@ -36,6 +36,7 @@
     "laravelcollective/html": "5.1.*",
     "doctrine/dbal": "^2.5",
     "zizaco/entrust": "dev-laravel-5",
+    "s-ichikawa/laravel-sendgrid-driver": "dev-master",
     "nesbot/carbon": "^1.21",
     "pragmarx/google2fa": "^0.7.1",
     "illuminate/html": "5.*",
