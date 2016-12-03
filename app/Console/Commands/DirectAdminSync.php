@@ -8,7 +8,7 @@ use DirectAdmin\DirectAdmin;
 use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
+use Proto\Models\User;
 
 use App;
 
