@@ -30,6 +30,8 @@ class Handler extends ExceptionHandler
         NotReadableException::class
     ];
 
+    private $sentryID;
+
     /**
      * Report or log an exception.
      *
@@ -74,7 +76,7 @@ class Handler extends ExceptionHandler
                 'user' => $context
             ]);
 
-            $sentry->captureException($e);
+            $this->sentryID = $sentry->captureException($e);
 
         } else {
             return parent::report($e);
@@ -124,7 +126,8 @@ class Handler extends ExceptionHandler
             return response()->view('errors.generic', [
                 'reported' => $reported,
                 'message' => $message,
-                'statuscode' => $statuscode
+                'statuscode' => $statuscode,
+                'sentryID' => $this->sentryID
             ], $statuscode);
 
         } else {
