@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\ActivityParticipation;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
@@ -74,6 +75,16 @@ class ParticipationController extends Controller
         $user = User::findOrFail($request->user_id);
         $event = Event::findOrFail($id);
 
+        $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
+
+        if($request->has('helping_committee_id')) {
+            $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
+            if (!$helping->committee->isMember($user)) {
+                abort(500, $user->name . " is not a member of the " . $helping->committee->name . " and thus cannot help on behalf of it.");
+            }
+            $data['committees_activities_id'] = $helping->id;
+        }
+
         if (!$event->activity) {
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
@@ -82,10 +93,10 @@ class ParticipationController extends Controller
             abort(500, "This activity is closed, you cannot change participation anymore.");
         }
 
-        $request->session()->flash('flash_message', 'You added ' . $user->name . ' as a participant for ' . $event->title . '.');
+        $request->session()->flash('flash_message', 'You added ' . $user->name . ' for ' . $event->title . '.');
 
         $participation = new ActivityParticipation();
-        $participation->fill(['activity_id' => $event->activity->id, 'user_id' => $user->id]);
+        $participation->fill($data);
         $participation->save();
 
         return Redirect::back();
