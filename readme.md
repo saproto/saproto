@@ -28,20 +28,6 @@ chmod +x update.sh
 
 This update utility will initialize the website for you. It can also be used to update to a newer version of our code.
 
-If you are developing for the site, but are not a part of the Have You Tried Turning It Off And On Again committee, you'll need to create your own copy of `update.sh` to use. In this copy, change this line:
-
-```
-php artisan app:migrate --no-confirmation
-```
-
-to look like this:
-
-```
-# php artisan app:migrate --no-confirmation
-```
-
-This is because this piece of code migrates data from the old site to you're installation. But since this includes a lot of personal data of members it is not availble to those outside the committee.
-
 Now you have set-up your website correctly. The only thing that remains is pointing your web directory to the `public` directory of the website. This is where the front-facing controllers reside. The rest of the project is then shielded from public access. You could do this using symlinks. An example command on a webserver running DirectAdmin could like like this:
 
 ```
