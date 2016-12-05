@@ -86,6 +86,8 @@ class CompanyController extends Controller
         $company->membercard_excerpt = $request->membercard_excerpt;
         $company->membercard_long = $request->membercard_long;
         $company->on_membercard = $request->has('membercard_excerpt');
+        $company->sort = Company::with('sort')->max('sort') + 1;
+
 
         if ($request->file('image')) {
             $file = new StorageEntry();
