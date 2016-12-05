@@ -44,7 +44,7 @@
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
-                           href="{{ route('companies::delete', ['id' => $company->id]) }}" role="button">
+                           href="{{ route('companies::delete', ['id' => $company->id]) }}" onclick="return confirm('Are you sure you want to delete this company?')" role="button">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </a>
                         @if($company->sort > 0)
