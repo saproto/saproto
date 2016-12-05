@@ -22,7 +22,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-     $companies = Company::where('on_carreer_page', true)->get();
+     $companies = Company::where('on_carreer_page', true)->orderBy('sort')->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         } else {
@@ -38,7 +38,7 @@ class CompanyController extends Controller
      */
     public function indexMembercard()
     {
-        $companies = Company::where('on_membercard', true)->get();
+        $companies = Company::where('on_membercard', true)->orderBy('sort')->get();
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
@@ -54,7 +54,7 @@ class CompanyController extends Controller
      */
     public function adminIndex()
     {
-        return view('companies.adminlist', ['companies' => Company::all()]);
+        return view('companies.adminlist', ['companies' => Company::orderBy('sort')->get()]);
     }
 
     /**
@@ -165,6 +165,38 @@ class CompanyController extends Controller
 
         Session::flash("flash_message", "Your company '" . $company->name . "' has been edited.");
         return Redirect::route('companies::admin');
+    }
+
+    public function orderUp($id) {
+        $company = Company::findOrFail($id);
+
+        if($company->sort <= 0) abort(500);
+
+        $companyAbove = Company::where('sort', $company->sort - 1)->first();
+
+        $companyAbove->sort++;
+        $companyAbove->save();
+
+        $company->sort--;
+        $company->save();
+
+        return Redirect::route("companies::admin");
+    }
+
+    public function orderDown($id) {
+        $company = Company::findOrFail($id);
+
+        if($company->sort >= Company::all()->count() - 1) abort(500);
+
+        $companyAbove = Company::where('sort', $company->sort + 1)->first();
+
+        $companyAbove->sort--;
+        $companyAbove->save();
+
+        $company->sort++;
+        $company->save();
+
+        return Redirect::route("companies::admin");
     }
 
     /**

@@ -47,6 +47,19 @@
                            href="{{ route('companies::delete', ['id' => $company->id]) }}" role="button">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </a>
+                        @if($company->sort > 0)
+                            <a class="btn btn-xs btn-default"
+                               href="{{ route('companies::orderUp', ['id' => $company->id]) }}" role="button">
+                                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                            </a>
+                        @endif
+
+                        @if($company->sort != $companies->count() - 1)
+                            <a class="btn btn-xs btn-default"
+                               href="{{ route('companies::orderDown', ['id' => $company->id]) }}" role="button">
+                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </a>
+                        @endif
                     </td>
 
                 </tr>
