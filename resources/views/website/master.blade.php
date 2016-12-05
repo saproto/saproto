@@ -49,8 +49,6 @@
 
 </div>
 
-@include('website.navigation.navbar')
-
 <footer class="main-footer" id="footer">
     <div class="container">
         <div class="row vcard">
