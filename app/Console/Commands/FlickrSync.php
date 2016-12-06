@@ -42,18 +42,39 @@ class FlickrSync extends Command
     public function handle()
     {
         $albums = Flickr::getAlbumsFromAPI();
+        $dbAlbums = FlickrAlbum::all();
+
+        // Album cleanup
+        foreach($dbAlbums as $dbAlbum) {
+            $found = false;
+
+            foreach($albums as $album) {
+                if($album->id == $dbAlbum->id) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if(!$found) {
+                $this->info('Deleted album ' . $dbAlbum->name . " from database.");
+                $dbAlbum->items()->delete();
+                $dbAlbum->delete();
+            }
+        }
 
         foreach($albums as $album) {
-            if(!FlickrAlbum::where('id', '=', $album->id)->exists()) {
+            $dbAlbum = FlickrAlbum::where('id', '=', $album->id)->first();
+
+            if(!$dbAlbum) {
                 $albumObject = new FlickrAlbum();
                 $albumObject->id = $album->id;
                 $albumObject->name = $album->name;
                 $albumObject->thumb = $album->thumb;
                 $albumObject->save();
                 $this->info("Added album " . $album->name . " to database.");
-            }
 
-            $this->info($album->id);
+                $dbAlbum = $albumObject;
+            }
 
             $items = Flickr::getPhotosFromAPI($album->id);
 
@@ -70,7 +91,26 @@ class FlickrSync extends Command
                 }
             }
 
-            $this->info("Added " . $count . " items to album.");
+            if($count > 0) $this->info("Added " . $count . " items to album.");
+
+            $dbItems = $dbAlbum->items;
+
+            // Item cleanup
+            foreach($dbItems as $dbItem) {
+                $found = false;
+
+                foreach ($items->photos as $item) {
+                    if ($item->url == $dbItem->url) {
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if(!$found) {
+                    $this->info('Deleted item from album ' . $dbAlbum->name . ' from database');
+                    $dbItem->delete();
+                }
+            }
         }
     }
 }

@@ -13,13 +13,13 @@ class AddFlickrAlbumsAndItems extends Migration
     public function up()
     {
         Schema::create('flickr_albums', function (Blueprint $table) {
-            $table->string('id');
+            $table->string('id')->primary();
             $table->string('name');
             $table->string('thumb');
         });
 
         Schema::create('flickr_items', function (Blueprint $table) {
-            $table->string('url');
+            $table->string('url')->primary();
             $table->string('thumb');
             $table->string('album_id');
         });
