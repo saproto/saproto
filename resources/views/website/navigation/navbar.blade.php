@@ -161,7 +161,8 @@
                 @endif
 
                 <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right">
-                    <input class="navbar-search" type="search" placeholder="Search">
+                    {{ csrf_field() }}
+                    <input class="navbar-search" type="search" name="query" placeholder="Search">
                 </form>
 
                 @if (Auth::check())
