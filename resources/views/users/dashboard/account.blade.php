@@ -100,7 +100,7 @@
                 <label for="newpass1" class="col-sm-4 control-label">New</label>
 
                 <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpass1" name="newpass1" required>
+                    <input type="password" class="form-control" id="newpass1" name="newpass1" required minlength="8">
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
                 <label for="newpass2" class="col-sm-4 control-label">Repeat</label>
 
                 <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpass2" name="newpass2" required>
+                    <input type="password" class="form-control" id="newpass2" name="newpass2" required minlength="8">
                 </div>
             </div>
 
