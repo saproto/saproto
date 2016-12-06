@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
+        Commands\FlickrSync::class,
     ];
 
     /**
