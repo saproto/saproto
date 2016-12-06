@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
+        Commands\FlickrSync::class,
     ];
 
     /**
@@ -36,5 +37,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:newslettercron')->weekly()->mondays()->at('11:00');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
+        $schedule->command('proto:flickrsync')->everyThirtyMinutes();
     }
 }

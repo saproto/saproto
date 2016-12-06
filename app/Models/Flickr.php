@@ -6,13 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flickr extends Model
 {
+    public static function getAlbums($max = null) {
+        $albums = ($max == null) ? FlickrAlbum::all() : $albums = FlickrAlbum::paginate($max);
+        return $albums;
+    }
+
+    public static function getPhotos($albumID) {
+        $items = FlickrItem::where("album_id", "=", $albumID)->get();
+        if(!$items) abort(404, "Album not found.");
+
+        $data = new \stdClass();
+        $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
+        $data->photos = $items;
+
+        return $data;
+    }
+
 
     /**
      * Returns Flickr albums
      *
      * @return mixed
      */
-    public static function getAlbums($max = null)
+    public static function getAlbumsFromAPI($max = null)
     {
         try {
 
@@ -42,7 +58,7 @@ class Flickr extends Model
      * @param $albumId
      * @return null
      */
-    public static function getPhotos($albumId)
+    public static function getPhotosFromAPI($albumId)
     {
         try {
 
