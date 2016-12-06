@@ -39,5 +39,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:newslettercron')->weekly()->mondays()->at('11:00');
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:flickrsync')->everyThirtyMinutes();
+        $schedule->command('proto:playsound ganaarjecollege')->daily()->at('13:37');
     }
 }
