@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Flickr extends Model
 {
     public static function getAlbums($max = null) {
-        $albums = ($max == null) ? FlickrAlbum::all() : $albums = FlickrAlbum::paginate($max);
+        $albums = ($max == null) ? FlickrAlbum::orderBy('id', 'desc')->all() : $albums = FlickrAlbum::orderBy('id', 'desc')->paginate($max);
         return $albums;
     }
 
