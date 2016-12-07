@@ -124,8 +124,18 @@ class AchievementController extends Controller
         if (!$achievement) abort(404);
         $achievement->fa_icon = $request->fa_icon;
         $achievement->save();
-
         Session::flash('flash_message', "Achievement Icon set");
+        return Redirect::route('achievement::manage', ['id' => $id]);
+    }
+
+    public function auto($id, Request $request)
+    {
+        $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achievement->automatic = $request->enabled;
+        $achievement->query = $request->sql;
+        $achievement->save();
+        Session::flash('flash_message', "Achievement automatic data set");
         return Redirect::route('achievement::manage', ['id' => $id]);
     }
 }

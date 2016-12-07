@@ -601,6 +601,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
         Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
         Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
+        Route::post('{id}/auto', ['as' => 'auto', 'uses' => 'AchievementController@auto']);
     });
 
     /**

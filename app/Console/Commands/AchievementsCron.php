@@ -52,7 +52,7 @@ class AchievementsCron extends Command
 
         foreach ($achievements as $achievement) {
 
-            if ($achievement->automatic) {
+            if ($achievement->automatic && $achievement->query != "") {
 
                 $users = DB::select($achievement->query);
 

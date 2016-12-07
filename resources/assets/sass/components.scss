@@ -107,6 +107,17 @@ select.LEGENDARY, option[value="LEGENDARY"] {
     margin:0;
   }
 }
+
+#queryaera {
+  width:100%;
+  height:100px;
+  padding:10px 15px;
+  border:1px solid rgb(204, 204, 204);
+  -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
+  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px inset;
+  resize:none;
+}
 .company {
 
   &__row {

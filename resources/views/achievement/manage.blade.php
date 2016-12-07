@@ -162,6 +162,67 @@
 
             </form>
 
+            <form method="post" action="{{ route("achievement::auto", ["id" => $achievement->id]) }}"
+                  enctype="multipart/form-data">
+
+                {!! csrf_field() !!}
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">Set automatic data</div>
+
+                    <div class="panel-body">
+
+                        @if (!Auth::user()->can("admin"))
+
+                            <div class="form-group">
+                                <div class="alert alert-info">
+                                You are not authorised to change these settings. Please ask a system
+                                administrator
+                                to
+                                help you out.
+                                </div>
+                            </div>
+
+                            <fieldset disabled>
+
+                                @endif
+                                <div class="form-group">
+                                    <label for="enabled" class="control-label">Enable automatic
+                                        gifting</label>
+                                    <select name="enabled" class="form-control">
+                                        <option value="0" {{ $achievement->automatic == "0" ? 'selected' : '' }}>Disabled</option>
+                                        <option value="1" {{ $achievement->automatic == "1" ? 'selected' : '' }} >Enabled</option>
+                                    </select>
+                                </div>
+
+                                <hr>
+
+                                <div class="form-group">
+                                    <label for="sql">SQL query to select users to give to:</label>
+                                    <br>
+                                    <textarea name="sql" id="queryaera" placeholder="SELECT user_id FROM members WHERE deleted_at IS NULL;">{{ $achievement->query }}</textarea>
+                                </div>
+
+                                @if (!Auth::user()->can("admin"))
+                            </fieldset>
+                        @endif
+
+                    </div>
+
+                    <div class="panel-footer clearfix">
+                        @if (Auth::user()->can("admin"))
+                            <button type="submit" class="btn btn-success pull-right">Set automatic data</button>
+                        @else
+                            <button type="submit" class="btn btn-success pull-right" disabled>Set automatic data
+                            </button>
+                        @endif
+                    </div>
+
+                </div>
+
+            </form>
+
         @endif
 
     </div>
