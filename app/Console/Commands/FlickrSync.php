@@ -95,8 +95,8 @@ class FlickrSync extends Command
 
             if($count > 0) {
                 $this->info("Added " . $count . " items to album.");
-                $albumObject->date_update = $album->date_update;
-                $albumObject->save();
+                $dbAlbum->date_update = $album->date_update;
+                $dbAlbum->save();
             }
 
             $dbItems = $dbAlbum->items;
