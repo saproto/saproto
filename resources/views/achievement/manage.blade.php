@@ -199,6 +199,8 @@
                                 <hr>
 
                                 <div class="form-group">
+                                    <label for="sql">The script will use the column 'user_id', and if it not exists will use 'id'.</label>
+                                    <br>
                                     <label for="sql">SQL query to select users to give to:</label>
                                     <br>
                                     <textarea name="sql" id="queryaera" placeholder="SELECT user_id FROM members WHERE deleted_at IS NULL;">{{ $achievement->query }}</textarea>
