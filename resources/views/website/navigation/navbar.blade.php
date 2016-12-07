@@ -160,9 +160,10 @@
                     </li>
                 @endif
 
-                <li>
-                    <a href="{{ route('search') }}">Search</a>
-                </li>
+                <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right">
+                    {{ csrf_field() }}
+                    <input class="navbar-search" type="search" name="query" placeholder="Search">
+                </form>
 
                 @if (Auth::check())
 
@@ -207,6 +208,8 @@
                     </form>
 
                 @endif
+
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

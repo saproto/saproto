@@ -228,12 +228,15 @@ class AuthController extends Controller
             AuthController::verifyCredentials($user->email, $request->oldpass)
             || ($user->utwente_username && AuthController::verifyUtwenteCredentials($user->utwente_username, $request->oldpass))
         ) {
-            if ($request->newpass1 === $request->newpass2) {
-                $user->setPassword($request->newpass1);
-                $request->session()->flash('flash_message', 'Your password has been changed.');
+            if ($request->newpass1 !== $request->newpass2) {
+                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
+                return Redirect::route('user::dashboard');
+            } elseif (strlen($request->newpass1) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
                 return Redirect::route('user::dashboard');
             } else {
-                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
+                $user->setPassword($request->newpass1);
+                $request->session()->flash('flash_message', 'Your password has been changed.');
                 return Redirect::route('user::dashboard');
             }
         }
@@ -379,6 +382,9 @@ class AuthController extends Controller
             if ($request->password !== $request->password_confirmation) {
                 $request->session()->flash('flash_message', 'Your passwords don\'t match.');
                 return Redirect::back();
+            } elseif (strlen($request->password) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
+                return Redirect::route('user::dashboard');
             }
 
             $reset->user->setPassword($request->password);

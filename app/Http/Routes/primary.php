@@ -211,6 +211,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@destroy']);
 
+        Route::get('up/{id}', ['as' => 'orderUp', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@orderUp']);
+        Route::get('down/{id}', ['as' => 'orderDown', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@orderDown']);
+
         Route::get('', ['as' => 'index', 'uses' => 'CompanyController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@show']);
 

@@ -19,14 +19,14 @@
         <div class="form-group">
             <label for="password" class="col-sm-3 control-label">New password</label>
             <div class="col-sm-9">
-                <input id="password" type="password" name="password" class="form-control">
+                <input id="password" type="password" name="password" class="form-control" minlength="8">
             </div>
         </div>
 
         <div class="form-group">
             <label for="password2" class="col-sm-3 control-label"></label>
             <div class="col-sm-9">
-                <input id="password2" type="password" name="password_confirmation" class="form-control">
+                <input id="password2" type="password" name="password_confirmation" class="form-control" minlength="8">
             </div>
         </div>
 

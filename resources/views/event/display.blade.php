@@ -109,20 +109,48 @@
 
                                     </div>
 
-                                    @if($instance->committee->isMember(Auth::user()))
+                                    @if($instance->committee->isMember(Auth::user()) || Auth::user()->can('board'))
 
                                         <div class="panel-footer">
 
-                                            @if($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
-                                                <a class="btn btn-warning" style="width: 100%;"
-                                                   href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($instance->committee, Auth::user())->id]) }}">
-                                                    I won't help anymore.
-                                                </a>
-                                            @elseif($instance->users->count() < $instance->amount)
-                                                <a class="btn btn-success" style="width: 100%;"
-                                                   href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}">
-                                                    I'll help!
-                                                </a>
+                                            @if($instance->committee->isMember(Auth::user()))
+
+                                                @if($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
+                                                    <a class="btn btn-warning" style="width: 100%;"
+                                                       href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($instance->committee, Auth::user())->id]) }}">
+                                                        I won't help anymore.
+                                                    </a>
+                                                @elseif($instance->users->count() < $instance->amount)
+                                                    <a class="btn btn-success" style="width: 100%;"
+                                                       href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}">
+                                                        I'll help!
+                                                    </a>
+                                                @endif
+
+                                            @endif
+
+                                            @if(Auth::user()->can('board'))
+                                                <form class="form-horizontal"
+                                                      action="{{ route("event::addparticipationfor", ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}" method="post">
+
+                                                    {{ csrf_field() }}
+
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control member-name"
+                                                               placeholder="John Doe"
+                                                               required>
+                                                        <input type="hidden" class="member-id" name="user_id" required>
+                                                        <span class="input-group-btn">
+                                                    <button class="btn btn-danger member-clear" disabled>
+                                                        <i class="fa fa-eraser" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
+                                                    </div>
+
+                                                </form>
                                             @endif
 
                                         </div>
@@ -276,51 +304,40 @@
                         @endif
 
                     </div>
-                </div>
 
+                    @if(Auth::user()->can('board'))
 
-                @if(Auth::user()->can('board'))
+                        <div class="panel-footer clearfix">
+                            <div class="form-group">
+                                <div id="user-select">
+                                    <form class="form-horizontal"
+                                          action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}" method="post">
 
-                    <form class="form-horizontal"
-                          action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}" method="post">
+                                        {{ csrf_field() }}
 
-                        {{ csrf_field() }}
-
-                        <div class="panel panel-default">
-
-                            <div class="panel-heading">
-                                Add participants
-                            </div>
-
-                            <div class="panel-body">
-                                 
-                                <div class="form-group">
-                                    <div id="user-select">
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="member-name"
+                                        <div class="input-group">
+                                            <input type="text" class="form-control member-name"
                                                    placeholder="John Doe"
                                                    required>
-                                            <input type="hidden" id="member-id" name="user_id" required>
+                                            <input type="hidden" class="member-id" name="user_id" required>
+                                            <span class="input-group-btn">
+                                                    <button class="btn btn-danger member-clear" disabled>
+                                                        <i class="fa fa-eraser" aria-hidden="true"></i>
+                                                    </button>
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </button>
+                                                </span>
                                         </div>
-                                        <div class="col-sm-3">
-                                            <input type="button" class="form-control btn btn-success" id="member-clear"
-                                                   value="Clear">
-                                        </div>
-                                    </div>
+
+                                    </form>
                                 </div>
                             </div>
-
-                            <div class="panel-footer clearfix">
-                                <button type="submit" class="btn btn-success pull-right"> 
-                                    Add 
-                                </button>
-                            </div>
-
                         </div>
 
-                    </form>
+                    @endif
 
-                @endif
+                </div>
 
             @elseif($event->activity && $event->activity->withParticipants())
 
@@ -355,23 +372,32 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <script>
-        $("#member-name").autocomplete({
-            minLength: 3,
-            source: "{{ route("api::members") }}",
-            select: function (event, ui) {
-                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
-                ;
-                $("#member-id").val(ui.item.id);
-                return false;
-            }
-        }).autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>").append(item.name).appendTo(ul);
-        };
-        $("#member-clear").click(function () {
-            $("#member-name").val("").prop('disabled', false);
-            ;
-            $("#member-id").val("");
+
+        $(".member-name").each(function() {
+            $(this).autocomplete({
+                minLength: 3,
+                source: "{{ route("api::members") }}",
+                select: function (event, ui) {
+                    $(this).val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
+                    $(this).next(".member-id").val(ui.item.id);
+                    $(this).parent().find(".member-clear").prop('disabled', false);
+                    return false;
+                }
+            }).autocomplete("instance")._renderItem = function (ul, item) {
+                console.log(ul);
+                return $("<li>").append(item.name).appendTo(ul);
+            };
         });
+
+        $(".member-clear").each(function() {
+            $(this).click(function (e) {
+                e.preventDefault();
+                $(this).parent().parent().find(".member-name").val("").prop('disabled', false);
+                $(this).prop('disabled', true);
+                $("#member-id").val("");
+            });
+        });
+
     </script>
 
 @endsection

@@ -195,7 +195,9 @@ class ActiveDirectorySync extends Command
 
                 }
 
-                $newmembers[] = $user2ldap[$user->id]->dn;
+                if (!in_array($user2ldap[$user->id]->dn, $newmembers)) {
+                    $newmembers[] = $user2ldap[$user->id]->dn;
+                }
 
             }
 
