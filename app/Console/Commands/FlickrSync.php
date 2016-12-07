@@ -70,6 +70,8 @@ class FlickrSync extends Command
                 $albumObject->id = $album->id;
                 $albumObject->name = $album->name;
                 $albumObject->thumb = $album->thumb;
+                $albumObject->date_create = $album->date_create;
+                $albumObject->date_update = $album->date_update;
                 $albumObject->save();
                 $this->info("Added album " . $album->name . " to database.");
 
@@ -91,7 +93,11 @@ class FlickrSync extends Command
                 }
             }
 
-            if($count > 0) $this->info("Added " . $count . " items to album.");
+            if($count > 0) {
+                $this->info("Added " . $count . " items to album.");
+                $albumObject->date_update = $album->date_update;
+                $albumObject->save();
+            }
 
             $dbItems = $dbAlbum->items;
 
