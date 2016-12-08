@@ -23,13 +23,7 @@
                         [ Hidden! ]
                     @endif
 
-                    From {{ date('l j F Y, H:i', $event->start) }} till
-
-                    @if (($event->end - $event->start) < 3600 * 24)
-                        {{ date('H:i', $event->end) }}
-                    @else
-                        {{ date('l j F, H:i', $event->end) }}
-                    @endif
+                    From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
 
                     @ {{ $event->location }}
 
@@ -131,7 +125,8 @@
 
                                             @if(Auth::user()->can('board'))
                                                 <form class="form-horizontal"
-                                                      action="{{ route("event::addparticipationfor", ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}" method="post">
+                                                      action="{{ route("event::addparticipationfor", ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}"
+                                                      method="post">
 
                                                     {{ csrf_field() }}
 
@@ -311,7 +306,8 @@
                             <div class="form-group">
                                 <div id="user-select">
                                     <form class="form-horizontal"
-                                          action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}" method="post">
+                                          action="{{ route("event::addparticipationfor", ['id' => $event->id]) }}"
+                                          method="post">
 
                                         {{ csrf_field() }}
 
@@ -373,7 +369,7 @@
 
     <script>
 
-        $(".member-name").each(function() {
+        $(".member-name").each(function () {
             $(this).autocomplete({
                 minLength: 3,
                 source: "{{ route("api::members") }}",
@@ -389,7 +385,7 @@
             };
         });
 
-        $(".member-clear").each(function() {
+        $(".member-clear").each(function () {
             $(this).click(function (e) {
                 e.preventDefault();
                 $(this).parent().parent().find(".member-name").val("").prop('disabled', false);

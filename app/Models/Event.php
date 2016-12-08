@@ -60,6 +60,17 @@ class Event extends Model
         return ($this->end < date('U'));
     }
 
+    public function generateTimespanText($long_format, $short_format, $combiner)
+    {
+        return date($long_format, $this->start) . " " . $combiner . " " . (
+            (($this->end - $this->start) < 3600 * 24)
+                ?
+                date($short_format, $this->end)
+                :
+                date($long_format, $this->end)
+            );
+    }
+
     protected $guarded = ['id'];
 
 }

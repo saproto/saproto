@@ -15,6 +15,12 @@
     </p>
 
     <p>
+        <strong>Activity information:</strong><br>
+        Location: {{ $help->activity->event->location }}
+        Date & time: {{ $help->activity->event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
+    </p>
+
+    <p>
         Kind regards,
         <br>
         The board of Study Association Proto
