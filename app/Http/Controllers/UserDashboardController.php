@@ -26,7 +26,7 @@ class UserDashboardController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id = null)
+    public function show($id = null)
     {
         if ($id == null) {
             $id = Auth::id();
