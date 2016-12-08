@@ -6,16 +6,13 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
 use Redirect;
-use Hash;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\User;
 
 use Auth;
 use Session;
 use Validator;
+use Mail;
 
 class UserDashboardController extends Controller
 {
@@ -87,8 +84,31 @@ class UserDashboardController extends Controller
             return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
         }
 
+        if ($userdata['email'] !== $user->email) {
+            $email = [
+                'old' => $user->email,
+                'new' => $userdata['email']
+            ];
+            $name = $user->name;
+            Mail::queue('emails.emailchange', [
+                'changer' => [
+                    'name' => Auth::user()->name,
+                    'ip' => $request->ip()
+                ],
+                'email' => $email,
+                'user' => $user
+            ], function ($message) use ($name, $email) {
+                $message
+                    ->to($email['old'], $name)
+                    ->to($email['new'], $name)
+                    ->from('security@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                    ->subject('Your e-mail address for S.A. Proto has been changed.');
+            });
+        }
+
         $user->fill($userdata);
         $user->save();
+
         Session::flash("flash_message", "Changes saved.");
         return Redirect::route('user::dashboard', ['id' => $user->id]);
 
