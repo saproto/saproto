@@ -288,22 +288,21 @@ class AuthController extends Controller
 
         if (Session::get('wizard')) $user->wizard = true;
 
-        $password = str_random(16);
-        $user->password = Hash::make($password);
-
         $user->save();
 
         $email = $user->email;
         $name = $user->mail;
 
-        Mail::queue('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($email, $name) {
+        Mail::queue('emails.registration', ['user' => $user], function ($m) use ($email, $name) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
             $m->to($email, $name);
             $m->subject('Account registration at Study Association Proto');
         });
 
+        AuthController::dispatchPasswordEmailFor($user);
+
         if (!Auth::check()) {
-            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with your password shortly.');
+            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
             return Redirect::route('homepage');
         }
     }
@@ -405,21 +404,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user !== null) {
 
-            $reset = PasswordReset::create([
-                'email' => $user->email,
-                'token' => str_random(128),
-                'valid_to' => strtotime('+1 hour')
-            ]);
-
-            $name = $user->name;
-            $email = $user->email;
-
-            Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
-                $message
-                    ->to($email, $name)
-                    ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
-                    ->subject('Your password reset request for S.A. Proto.');
-            });
+            AuthController::dispatchPasswordEmailFor($user);
 
             $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
             return Redirect::route('homepage');
@@ -428,6 +413,27 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
             return Redirect::back();
         }
+    }
+
+    public static function dispatchPasswordEmailFor(User $user)
+    {
+
+        $reset = PasswordReset::create([
+            'email' => $user->email,
+            'token' => str_random(128),
+            'valid_to' => strtotime('+1 hour')
+        ]);
+
+        $name = $user->name;
+        $email = $user->email;
+
+        Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+            $message
+                ->to($email, $name)
+                ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                ->subject('Your password reset request for S.A. Proto.');
+        });
+
     }
 
 }
