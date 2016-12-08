@@ -9,7 +9,7 @@
         @if ($user->utwente_username)
             <hr>
             <p style="text-align: center;">
-                {{ $utwente->cn or 'Unknown UT Account' }}<br>
+                {{ $utwente->displayname[0] or 'Unknown UT Account' }}<br>
                 {{ $user->utwente_username }}
             </p>
         @endif

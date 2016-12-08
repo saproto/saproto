@@ -71,49 +71,49 @@
     </div>
 </div>
 
-@if($ldap)
+@if($ldap && Auth::user()->getUtwenteData())
     <div class="panel panel-default">
         <div class="panel-heading">
             From the University of Twente address book
         </div>
         <div class="panel-body">
             <table class="table borderless">
-                @if($ldap->description == "Student")
-                    <tr>
-                        <td style="text-align: right;"><strong>Name</strong></td>
-                        <td>{{ $ldap->cn }}</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>E-mail</strong></td>
-                        <td><a href="mailto:{{ $ldap->mail }}">{{ $ldap->mail }}</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>Study</strong></td>
-                        <td>{!! property_exists($ldap, 'ou') ? $ldap->ou : '<i>unknown</i>' !!}</td>
-                    </tr>
-                @elseif($ldap->description == "Employee")
-                    <tr>
-                        <td style="text-align: right;"><strong>Name</strong></td>
-                        <td>{{ $ldap->title or '' }} {{ $ldap->givenname }} {{ $ldap->sn }}</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>E-mail</strong></td>
-                        <td><a href="mailto:{{ $ldap->mail }}">{{ $ldap->mail }}</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>Department</strong></td>
-                        <td>{!! property_exists($ldap, 'ou') ? $ldap->ou : '<i>unknown</i>' !!}</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>Phone</strong></td>
-                        <td>
-                            <a href="tel:{!! property_exists($ldap, 'telephonenumber') ? $ldap->telephonenumber : '???' !!}">{!! property_exists($ldap, 'telephonenumber') ? $ldap->telephonenumber : '<i>unknown</i>' !!}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: right;"><strong>Room</strong></td>
-                        <td>{!! property_exists($ldap, 'roomnumber') ? $ldap->roomnumber : '<i>unknown</i>' !!}</td>
-                    </tr>
+                <tr>
+                    <td style="text-align: right;"><strong>Name</strong></td>
+                    <td>{{ $ldap->givenname[0] }} {{ $ldap->sn[0] }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;"><strong>E-mail</strong></td>
+                    <td><a href="mailto:{{ $ldap->mail[0] }}">{{ $ldap->mail[0] }}</td>
+                </tr>
+                @if(substr($ldap->userprincipalname[0], 0, 1) == "s")
+                    @if(property_exists($ldap, 'department'))
+                        <tr>
+                            <td style="text-align: right;"><strong>Study</strong></td>
+                            <td>{{ $ldap->department[0] }}</td>
+                        </tr>
+                    @endif
+                @elseif(substr($ldap->userprincipalname[0], 0, 1) == "m")
+                    @if(property_exists($ldap, 'department'))
+                        <tr>
+                            <td style="text-align: right;"><strong>Department</strong></td>
+                            <td>{{ $ldap->department[0] }}</td>
+                        </tr>
+                    @endif
+                    @if(property_exists($ldap, 'telephonenumber'))
+                        <tr>
+                            <td style="text-align: right;"><strong>Phone</strong></td>
+                            <td>
+                                <a href="tel:{{ $ldap->telephonenumber[0] }}">{{ $ldap->telephonenumber[0] }}</a>
+                            </td>
+                        </tr>
+                    @endif
+                    @if(property_exists($ldap, 'physicaldeliveryofficename'))
+                        <tr>
+                            <td style="text-align: right;"><strong>Room</strong></td>
+                            <td>{{ $ldap->physicaldeliveryofficename[0] }}</td>
+                        </tr>
+                    @endif
                 @endif
             </table>
 
