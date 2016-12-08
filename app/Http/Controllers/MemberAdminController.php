@@ -56,7 +56,7 @@ class MemberAdminController extends Controller
 
     public function showDetails($id)
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         return view('users.members.nested.details', ['user' => $user]);
     }
 
