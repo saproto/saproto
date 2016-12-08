@@ -82,12 +82,12 @@ class ActiveDirectorySync extends Command
             if ($user == null) {
                 $this->info('Creating LDAP user for ' . $member->user->name . '.');
                 $user = $provider->make()->user();
-                $user->cn = trim($member->user->name);
+                $user->cn = $member->proto_username;
                 $user->description = $member->user->id;
                 $user->save();
             }
 
-            $user->move('cn=' . trim($member->user->name), 'OU=Members,OU=Proto,DC=net,DC=saproto,DC=nl');
+            $user->move('cn=' . $member->proto_username, 'OU=Members,OU=Proto,DC=net,DC=saproto,DC=nl');
 
             $user->displayName = trim($member->user->name);
             $user->givenName = $member->user->calling_name;
