@@ -120,6 +120,9 @@ class Handler extends ExceptionHandler
             $statuscode = 403;
         }
 
+        if ($statuscode == 503) {
+            return response()->view('errors.503');
+        }
 
         if (App::environment('production')) {
 
