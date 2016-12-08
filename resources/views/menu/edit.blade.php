@@ -33,7 +33,9 @@
             <select class="form-control" name="parent" id="parent">
                 <option @if($new || $item->parent == null) selected @endif value="0">No parent</option>
                 @foreach($topMenuItems as $topMenuItem)
-                    <option @if(!$new && $topMenuItem->id == $item->parent) selected @endif value="{{ $topMenuItem->id }}" @if(!$new && $topMenuItem->id == $item->id) disabled @endif>{{ $topMenuItem->menuname }}</option>
+                    <option @if(!$new && $topMenuItem->id == $item->parent) selected
+                            @endif value="{{ $topMenuItem->id }}"
+                            @if(!$new && $topMenuItem->id == $item->id) disabled @endif>{{ $topMenuItem->menuname }}</option>
                 @endforeach
             </select>
         </div>
@@ -49,23 +51,24 @@
         <div class="form-group">
             <label for="page_id">Target page:</label>
             <select class="form-control" name="page_id" id="page_id">
-                    <option @if($new) selected @endif disabled>Select a page...</option>
+                <option @if($new) selected @endif disabled>Select a page...</option>
                 @foreach($pages as $page)
-                    <option @if(!$new && $page->id == $item->pageId) selected @endif value="{{ $page->id }}">{{ $page->title }}</option>
+                    <option @if(!$new && $page->id == $item->pageId) selected
+                            @endif value="{{ $page->id }}">{{ $page->title }}</option>
                 @endforeach
-                    <option @if(!$new && $item->pageId == null) selected @endif value="0">Other URL</option>
+                <option @if(!$new && $item->pageId == null) selected @endif value="0">Other URL</option>
             </select>
         </div>
 
         <div class="form-group" @if($new || !$item->pageId == null) style="display: none;" @endif id="menu__otherUrl">
             <label for="url">Other URL:</label>
             <input type="text" class="form-control" id="url" name="url"
-                   placeholder="http://www.saproto.nl/" value="{{ $item->url or '' }}">
+                   placeholder="http://www.proto.utwente.nl/" value="{{ $item->url or '' }}">
         </div>
 
-@endsection
+        @endsection
 
-@section('panel-footer')
+        @section('panel-footer')
 
             <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
 
@@ -80,10 +83,10 @@
     @parent
 
     <script>
-        $("#page_id").change(function() {
-            if($(this).val() == 0) {
+        $("#page_id").change(function () {
+            if ($(this).val() == 0) {
                 $("#menu__otherUrl").show(0);
-            }else{
+            } else {
                 $("#menu__otherUrl").hide(0);
             }
         });
