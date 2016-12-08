@@ -16,12 +16,11 @@
 
         <div class="form-group">
             <label for="recipient-name" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="username" name="email" placeholder="E-mail address or UTwente username">
+            <input type="text" class="form-control" id="username" name="email">
         </div>
         <div class="form-group">
             <label for="message-text" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" name="password"
-                   placeholder="Proto password or UTwente password">
+            <input type="password" class="form-control" id="password" name="password">
         </div>
 
         <div class="checkbox">
@@ -29,6 +28,19 @@
                 <input type="checkbox" id="remember" name="remember"> Remember me
             </label>
         </div>
+
+        <hr>
+
+        <p>
+            To log-in to your Proto account, you can use the e-mail address registered to your account in combination
+            with your password. If you are a Proto member, you also have a Proto username you can use instead of your
+            e-mail address to save typing.
+        </p>
+
+        <p>
+            If you previously linked them to your Proto account, you can use your University of Twente credentials as an
+            alternative means to sign in.
+        </p>
 
         @endsection
 

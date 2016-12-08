@@ -52,21 +52,9 @@
                          style="text-align: left;">{{ ($user->isActiveMember() ? 'Yes!' : 'No. :(') }}</div>
                 </div>
 
-                <div class="form-group">
-                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
-                    <div class="col-sm-8 control-label" style="text-align: left;">
-                        {{ $user->member->proto_username }}
-                    </div>
-                </div>
-
-                <p>
-                    <sub>
-                        Your Proto username comes with your membership. You can use it instead of your e-mail address to
-                        sign in, and is sometimes even the only way to sign in.
-                    </sub>
-                </p>
-
                 @if($user->isActiveMember())
+
+                    <hr>
 
                     <div class="form-group">
                         <label for="member_proto_mail" class="col-sm-4 control-label">Proto E-mail</label>

@@ -9,6 +9,18 @@
         <div class="panel-body">
 
             {!! csrf_field() !!}
+
+            @if($user->member)
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->member->proto_username }}
+                    </div>
+                </div>
+
+            @endif
+
             <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-mail</label>
 
@@ -77,14 +89,38 @@
         <div class="panel-body">
 
             <p>
-                This changes the password for your Proto account across al of our systems.
-                <i>This will not affect your UTwente password.</i>
-                You can change your UTwente password <a href="https://tap.utwente.nl/tap/">here</a>.
+                This changes the password for your Proto account across all of our systems. Your new password should be
+                at least eight (8) characters in length.
+
+                @if($user->utwente_username)
+                    You can use your University of Twente password as your current password.
+                @endif
             </p>
 
             <hr>
 
             {!! csrf_field() !!}
+
+
+            @if($user->member)
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->member->proto_username }}
+                    </div>
+                </div>
+
+            @else
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->email }}
+                    </div>
+                </div>
+
+            @endif
 
             <div class="form-group">
                 <label for="oldpass" class="col-sm-4 control-label">Current</label>
@@ -111,6 +147,13 @@
                     <input type="password" class="form-control" id="newpass2" name="newpass2" required minlength="8">
                 </div>
             </div>
+
+            <hr>
+
+            <p>
+                <i>This will not change your University of Twente password.</i> You can change that password <a
+                        href="https://tap.utwente.nl/tap/">here</a>.
+            </p>
 
         </div>
 
