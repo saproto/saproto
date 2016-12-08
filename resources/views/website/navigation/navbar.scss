@@ -1,84 +1,65 @@
 .navbar {
-    transition: all 0.5s;
-    text-shadow: 0 0 5px #000;
+  transition: all 0.5s;
+  text-shadow: 0 0 5px #000;
 
-    .dropdown-menu {
-        text-shadow: none;
-    }
+  .dropdown-menu {
+    text-shadow: none;
+  }
 }
 
-$navbar-dark: rgba(0,0,0,.85);
+$navbar-dark: rgba(0, 0, 0, .85);
 
 .navbar-scroll {
-    background-color: $navbar-dark;
+  background-color: $navbar-dark;
 }
 
-@media only screen and (max-width : 768px) {
-    .navbar {
-        background-color: $navbar-dark;
-    }
+@media only screen and (max-width: 768px) {
+  .navbar {
+    background-color: $navbar-dark;
+  }
 }
 
 .navbar-title, .navbar-title:hover, .navbar-title:active {
-    background-color: transparent !important;
-    font-style: italic;
+  background-color: transparent !important;
+  font-style: italic;
 }
 
-.navbar-search {
-	outline: none;
-}
-.navbar-search {
-	-webkit-appearance: textfield;
-	-webkit-box-sizing: content-box;
-	font-family: inherit;
-	font-size: 100%;
-}
-.navbar-search::-webkit-search-decoration,
-.navbar-search::-webkit-search-cancel-button {
-	display: none;
-}
+.navbar__search {
 
-.navbar-search {
-    background-color: transparent;
-	background: #fff url(http://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
-	width: 98px;
+  background: #fff;
+  padding: 0px;
+  margin-right: 15px;
+  margin-left: 15px;
+  text-shadow: none;
+  overflow: hidden;
 
-    margin-right: 15px;
+  &__icon {
+    background: none;
+    border: none;
+    box-shadow: 0 0 20px -7px #333;
+    margin-right: 5px;
 
-    white-space: nowrap;
-    padding: 6px 12px 6px 32px;
-    font-size: 14px;
-    line-height: 1.428571429;
+    transition: all 0.5s;
+  }
 
-	-webkit-border-radius: 10em;
-	-moz-border-radius: 10em;
-	border-radius: 10em;
+  &:hover .navbar__search__icon {
+    background: #333;
+    color: #fff;
+  }
 
-	-webkit-transition: all .5s !important;
-	-moz-transition: all .5s !important;
-	transition: all .5s !important;
+  &__input {
+    width: 0 !important;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0 0;
 
-    border: 1px solid #ccc;
-    border-radius: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-}
+    transition: all 0.5s;
+  }
 
-.navbar-search:focus {
-	width: 224px;
-	background-color: #fff;
-	border-color: #66CC75;
+  &:hover .navbar__search__input {
+    width: 175px !important;
+    padding: 0 15px;
+  }
 
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
-}
-
-
-.navbar-search input:-moz-placeholder {
-	color: #999;
-}
-.navbar-search input::-webkit-input-placeholder {
-	color: #999;
 }

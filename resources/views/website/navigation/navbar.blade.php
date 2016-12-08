@@ -160,9 +160,15 @@
                     </li>
                 @endif
 
-                <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right">
+                <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right navbar__search">
                     {{ csrf_field() }}
-                    <input class="navbar-search" type="search" name="query" placeholder="Search">
+                    <div class="input-group">
+                        <input class="navbar__search__input form-control"
+                               type="search" name="query" placeholder="Search">
+                        <span class="navbar__search__icon input-group-addon">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>
+                    </div>
                 </form>
 
                 @if (Auth::check())
