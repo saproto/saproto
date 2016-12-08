@@ -66,7 +66,7 @@
 
                     $('form').bind('submit', function(e){
                         e.preventDefault();
-                        remote.emit("search", $("#searchBox").val());
+                        remote.emit("search", encodeURIComponent($("#searchBox").val()));
                         $("#results").html("Loading...");
                     });
 
