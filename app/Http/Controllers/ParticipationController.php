@@ -47,7 +47,7 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if($event->activity->participants == 0) {
+            if ($event->activity->participants == 0) {
                 abort(500, "You cannot subscribe to this activity!");
             } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
@@ -77,7 +77,7 @@ class ParticipationController extends Controller
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
 
-        if($request->has('helping_committee_id')) {
+        if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
             if (!$helping->committee->isMember($user)) {
                 abort(500, $user->name . " is not a member of the " . $helping->committee->name . " and thus cannot help on behalf of it.");
@@ -157,7 +157,11 @@ class ParticipationController extends Controller
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
 
-                Mail::queue('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queue('emails.unsubscribeactivity', ['activity' => [
+                    'id' => $participation->activity->event->id,
+                    'title' => $activitytitle,
+                    'name' => $participation->user->calling_name
+                ]], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You have been signed out for ' . $activitytitle . '.');
