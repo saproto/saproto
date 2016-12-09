@@ -4,9 +4,10 @@ namespace Proto\Console\Commands;
 
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
+use Adldap\Objects\AccountControl;
 
 use Illuminate\Console\Command;
-use Proto\Models\Member;
+use Proto\Models\User;
 use Proto\Models\Committee;
 
 /**
@@ -74,37 +75,55 @@ class ActiveDirectorySync extends Command
 
         $this->info("Make sure all users exist in LDAP.");
 
-        foreach (Member::all() as $member) {
+        foreach (User::all() as $user) {
 
-            $activeIds[] = $member->user->id;
-            $user = $provider->search()->where('objectClass', 'user')->where('description', $member->user->id)->first();
+            $activeIds[] = $user->id;
+            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
 
-            if ($user == null) {
-                $this->info('Creating LDAP user for ' . $member->user->name . '.');
-                $user = $provider->make()->user();
-                $user->cn = $member->proto_username;
-                $user->description = $member->user->id;
-                $user->save();
+            $username = ($user->member ? $user->member->proto_username : "user-" . $user->id);
+
+            if ($ldapuser == null) {
+                $this->info('Creating LDAP user for ' . $user->name . '.');
+                $ldapuser = $provider->make()->user();
+                $ldapuser->cn = $username;
+                $ldapuser->description = $user->id;
+                $ldapuser->save();
             }
 
-            $user->move('cn=' . $member->proto_username, 'OU=Members,OU=Proto,DC=net,DC=saproto,DC=nl');
+            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=net,DC=saproto,DC=nl');
 
-            $user->displayName = trim($member->user->name);
-            $user->givenName = $member->user->calling_name;
+            $ldapuser->displayName = trim($user->name);
+            $ldapuser->givenName = trim($user->calling_name);
 
-            $user->mail = $member->proto_username . '@' . config('proto.emaildomain');
-            $user->wWWHomePage = $member->user->website;
+            $ldapuser->mail = $user->email;
+            $ldapuser->wWWHomePage = $user->website;
 
-            $user->l = $member->user->address->city;
-            $user->postalCode = $member->user->address->zipcode;
-            $user->streetAddress = $member->user->address->street . " " . $member->user->address->number;
+            if ($user->address) {
 
-            $user->telephoneNumber = $member->user->phone;
+                $ldapuser->l = $user->address->city;
+                $ldapuser->postalCode = $user->address->zipcode;
+                $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
+                $ldapuser->preferredLanguage = $user->address->country;
 
-            $user->setAttribute('sAMAccountName', $member->proto_username);
-            $user->setUserPrincipalName($member->proto_username . config('adldap.proto')['account_suffix']);
+            } else {
 
-            $user->save();
+                $ldapuser->l = null;
+                $ldapuser->postalCode = null;
+                $ldapuser->streetAddress = null;
+                $ldapuser->preferredLanguage = null;
+
+            }
+
+            $ldapuser->telephoneNumber = $user->phone;
+
+            $ldapuser->setAttribute('sAMAccountName', $username);
+            $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
+
+            if (!$user->member) {
+                $ldapuser->setUserAccountControl(AccountControl::ACCOUNTDISABLE);
+            }
+
+            $ldapuser->save();
 
         }
 

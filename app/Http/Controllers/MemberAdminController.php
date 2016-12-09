@@ -5,13 +5,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 use Carbon\Carbon;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Member;
 use Proto\Models\Tempadmin;
@@ -143,20 +137,6 @@ class MemberAdminController extends Controller
         /** End create member alias */
 
         $member->save();
-
-        /** Add user to LDAP */
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->make()->user();
-        $ldapuser->cn = $member->proto_username;
-        $ldapuser->description = $user->id;
-        $ldapuser->save();
-
-        /** End add user to LDAP */
 
         $name = $user->name;
         $email = $user->email;

@@ -4,6 +4,7 @@ namespace Proto\Models;
 
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
+use Adldap\Objects\AccountControl;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -78,8 +79,10 @@ class User extends Model implements AuthenticatableContract,
 
         $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
         if ($ldapuser !== null) {
-            $ldapuser->setUserAccountControl(512);
             $ldapuser->setPassword($password);
+            if ($this->member) {
+                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
+            }
             $ldapuser->save();
         }
     }

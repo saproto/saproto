@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use PragmaRX\Google2FA\Google2FA;
 
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\Alias;
@@ -289,6 +292,20 @@ class AuthController extends Controller
         if (Session::get('wizard')) $user->wizard = true;
 
         $user->save();
+
+        /** Add user to LDAP */
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+        /** End add user to LDAP */
 
         $email = $user->email;
         $name = $user->mail;
