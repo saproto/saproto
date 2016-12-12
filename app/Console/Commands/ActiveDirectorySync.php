@@ -90,7 +90,7 @@ class ActiveDirectorySync extends Command
                 $ldapuser->save();
             }
 
-            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=net,DC=saproto,DC=nl');
+            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
 
             $ldapuser->displayName = trim($user->name);
             $ldapuser->givenName = trim($user->calling_name);
@@ -160,7 +160,7 @@ class ActiveDirectorySync extends Command
                 $group->save();
             }
 
-            $group->move('cn=' . trim($committee->name), 'OU=Committees,OU=Proto,DC=net,DC=saproto,DC=nl');
+            $group->move('cn=' . trim($committee->name), 'OU=Committees,OU=Proto,DC=ad,DC=saproto,DC=nl');
             $group->displayName = trim($committee->name);
             $group->description = $committee->id;
             $group->mail = $committee->slug . '@' . config('proto.emaildomain');

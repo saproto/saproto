@@ -17,12 +17,12 @@ return [
 
     'proto' => [
         'account_prefix' => '',
-        'account_suffix' => '@net.saproto.nl',
+        'account_suffix' => '@ad.saproto.nl',
         'domain_controllers' => ['ad.proto.utwente.nl'],
         'port' => 636,
         'timeout' => 5,
-        'base_dn' => 'OU=Proto,DC=net,DC=saproto,DC=nl',
-        'admin_account_suffix' => '@net.saproto.nl',
+        'base_dn' => 'OU=Proto,DC=ad,DC=saproto,DC=nl',
+        'admin_account_suffix' => '@ad.saproto.nl',
         'admin_username' => env('LDAP_PROTO_ADMIN_USER'),
         'admin_password' => env('LDAP_PROTO_ADMIN_PASS'),
         'follow_referrals' => false,
