@@ -15,7 +15,7 @@ return [
     'stores' => [
         'protopolis' => (object)[
             'name' => 'Protopolis',
-            'categories' => [1, 4, 5, 6, 7, 9, 11, 12],
+            'categories' => [12, 1, 4, 5, 6, 7, 9, 11],
             'addresses' => ['130.89.190.22'],
             'roles' => ['admin'],
             'cash_allowed' => false,
