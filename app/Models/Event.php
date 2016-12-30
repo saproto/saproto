@@ -47,7 +47,7 @@ class Event extends Model
      */
     public static function getEventsForNewsletter()
     {
-        return Event::where('secret', false)->where('start', '>', date('U'))->where('start', '<', strtotime('+4 weeks'))->orderBy('start')->get();
+        return Event::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
     }
 
     public function current()

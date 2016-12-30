@@ -265,6 +265,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
 
+        Route::group(['prefix' => 'newsletter', 'as' => 'innewsletter::', 'middleware' => ['permission:board']], function () {
+            Route::get('', ['as' => 'show', 'uses' => 'EventController@getInNewsletter']);
+            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'EventController@toggleInNewsletter']);
+        });
+
         Route::get('', ['as' => 'list', 'uses' => 'EventController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);

@@ -121,6 +121,7 @@
 
                             <li><a class="navbar-title">Internal Affairs:</a></li>
                             <li><a href="{{ route("pastries::list") }}">Pastries</a></li>
+                            <li><a href="{{ route("event::innewsletter::show") }}">Edit Newsletter</a></li>
 
                             @if (Auth::user()->can("finadmin"))
                                 <li role="separator" class="divider"></li>
