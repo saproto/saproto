@@ -612,15 +612,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /**
-     * Routes related to the pastries system.
-     */
-    Route::group(['prefix' => 'pastries', 'middleware' => ['auth', 'permission:board'], 'as' => 'pastries::'], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'PastriesController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'PastriesController@store']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PastriesController@destroy']);
-    });
-
-    /**
      * Routes related to the welcome message system.
      */
     Route::group(['prefix' => 'welcomeMessages', 'middleware' => ['auth', 'permission:board'], 'as' => 'welcomeMessages::'], function () {
