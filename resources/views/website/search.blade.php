@@ -16,7 +16,7 @@
                     <form method="post" action="{{ route('search') }}">
                         {!! csrf_field() !!}
                         <input type="text" name="query" class="form-control"
-                               placeholder="Enter year search term here and hit enter...">
+                               placeholder="Enter your search term here and hit enter...">
                     </form>
                 </div>
             </div>
