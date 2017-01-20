@@ -15,9 +15,9 @@ class Token extends Model
         return $this->belongsTo('Proto\Models\User', 'user_id');
     }
 
-    public function generate()
+    public function generate($user)
     {
-        $this->user_id = Auth::user()->id;
+        $this->user_id = $user->id;
         $this->token = uniqid();
         $this->save();
 
