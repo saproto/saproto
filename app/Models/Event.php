@@ -34,6 +34,15 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\Committee');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany('Proto\Models\Ticket', 'event_id');
+    }
+
+    public function getTicketPurchasesFor(User $user) {
+        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->lists('id'))->get();
+    }
+
     /**
      * @return mixed The image associated with this event, if any.
      */
