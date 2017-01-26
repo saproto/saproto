@@ -293,6 +293,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('addhelp/{id}', ['as' => 'addhelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@addHelp']);
         Route::get('deletehelp/{id}', ['as' => 'deletehelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@deleteHelp']);
 
+        // Buy tickets for an event
+        Route::post('buytickets/{id}', ['as' => 'buytickets', 'middleware' => ['auth'], 'uses' => 'TicketController@buyForEvent']);
+
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
@@ -350,6 +353,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
+
+    });
+
+    /*
+     * Routes related to tickets.
+     */
+    Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'permission:board'], 'as' => 'tickets::'], function () {
+
+        Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'TicketController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'TicketController@destroy']);
+
+        Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
     });
 

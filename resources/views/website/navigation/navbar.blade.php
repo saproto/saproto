@@ -106,7 +106,11 @@
 
                             <li><a href="{{ route("user::member::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
+                            <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+
+                            <li role="separator" class="divider"></li>
+
                             <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                             <li><a href="{{ route("event::add") }}">Add Event</a></li>
 

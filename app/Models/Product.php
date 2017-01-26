@@ -34,8 +34,29 @@ class Product extends Model
     {
         if (!$this->is_visible) return false;
         if ($this->stock <= 0 && !$this->is_visible_when_no_stock) return false;
-        
+
         return true;
+    }
+
+    public function buyForUser(User $user, $amount, $total, $withCash = false)
+    {
+
+        $this->stock -= $amount;
+        $this->save();
+
+        $orderline = OrderLine::create([
+            'user_id' => ($withCash ? null : $user->id),
+            'cashier_id' => ($withCash ? $user->id : null),
+            'product_id' => $this->id,
+            'original_unit_price' => $this->price,
+            'units' => $amount,
+            'total_price' => $total,
+            'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null)
+        ]);
+
+        $orderline->save();
+        return $orderline->id;
+        
     }
 
 }

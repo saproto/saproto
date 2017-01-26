@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-{{ ($event->activity && $event->activity->withParticipants() ? '8' : '8 col-md-offset-2') }}">
+        <div class="col-md-{{ (($event->activity && $event->activity->withParticipants()) ? '8' : '8 col-md-offset-2') }}">
 
             @if($event->image)
                 <img src="{{ $event->image->generateImagePath(800,300) }}"
@@ -53,6 +53,8 @@
                 </div>
 
             </div>
+
+            @include('event.display_includes.tickets')
 
             @if($event->activity && Auth::check() && Auth::user()->member)
 
