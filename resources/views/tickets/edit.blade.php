@@ -33,7 +33,7 @@
             <label for="event">Event:</label>
             <select class="form-control" id="event" name="event" required>
                 <option disabled selected>-- Select an event:</option>
-                @foreach(Event::where('end','>',date('U'))->get() as $event)
+                @foreach(Event::where('end','>',date('U'))->orWhere('id', $ticket->event->id)->orderBy('start','asc')->get() as $event)
                     <option value="{{ $event->id }}"
                             {{($ticket && $ticket->event->id == $event->id ? 'selected' : '')}}>
                         {{ $event->title }} ({{ $event->id }})
