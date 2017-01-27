@@ -1,6 +1,6 @@
 @if($event->tickets()->count() > 0)
 
-    @if(count($event->getTicketPurchasesFor(Auth::user())) > 0)
+    @if(Auth::check() && count($event->getTicketPurchasesFor(Auth::user())) > 0)
 
         <div class="panel panel-default">
 
