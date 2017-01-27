@@ -135,7 +135,7 @@
                 @endif
             </div>
 
-            @if(Auth::user()->bank)
+            @if(Auth::check() && Auth::user()->bank)
                 <div class="panel-footer">
 
                     <input type="submit" class="form-control btn btn-success" value="Purchase Tickets"
