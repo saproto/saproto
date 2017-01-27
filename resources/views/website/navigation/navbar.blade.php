@@ -169,8 +169,11 @@
                     <div class="input-group">
                         <input class="navbar__search__input form-control"
                                type="search" name="query" placeholder="Search">
-                        <span class="navbar__search__icon input-group-addon">
+                        <!--<span class="navbar__search__icon input-group-addon">
                             <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>-->
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>
