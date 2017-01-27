@@ -359,14 +359,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to tickets.
      */
-    Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'permission:board'], 'as' => 'tickets::'], function () {
+    Route::group(['prefix' => 'tickets', 'as' => 'tickets::'], function () {
 
-        Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
-        Route::post('add', ['as' => 'add', 'uses' => 'TicketController@store']);
-        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@edit']);
-        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@update']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'TicketController@destroy']);
+        Route::group(['middleware' => ['auth', 'permission:board']], function() {
+            Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
+            Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'TicketController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'TicketController@destroy']);
+        });
 
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
