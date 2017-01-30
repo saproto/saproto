@@ -276,8 +276,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
-
+        
         Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
+
+        Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 

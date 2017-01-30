@@ -198,4 +198,9 @@ class ParticipationController extends Controller
         return Redirect::back();
 
     }
+
+    public function checklist($id) {
+        $event = Event::findOrFail($id);
+        return view('event.checklist', ['event' => $event]);
+    }
 }
