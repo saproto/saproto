@@ -52,4 +52,13 @@ class Ticket extends Model
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
     }
 
+    public function turnover()
+    {
+        $total = 0;
+        foreach ($this->purchases as $purchase) {
+            $total += $purchase->orderline->total_price;
+        }
+        return $total;
+    }
+
 }

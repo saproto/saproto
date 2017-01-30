@@ -68,17 +68,6 @@ class TicketController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -131,14 +120,46 @@ class TicketController extends Controller
         return Redirect::route('tickets::list');
     }
 
+    public function scan($barcode)
+    {
+        $ticket = TicketPurchase::where('barcode', $barcode)->first();
+        if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not allowed to scan for this event.");
+            return Redirect::back();
+        }
+        if ($ticket) {
+            $ticket->scanned = date('Y-m-d H:i:s');
+            $ticket->save();
+            Session::flash("flash_message", "Ticket has been scanned!");
+        } else {
+            Session::flash("flash_message", "Unknown ticket.");
+        }
+        return Redirect::back();
+    }
+
+    public function unscan($barcode)
+    {
+        $ticket = TicketPurchase::where('barcode', $barcode)->first();
+        if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not allowed to scan for this event.");
+            return Redirect::back();
+        }
+        if ($ticket) {
+            $ticket->scanned = null;
+            $ticket->save();
+            Session::flash("flash_message", "Ticket has been unscanned!");
+        } else {
+            Session::flash("flash_message", "Unknown ticket.");
+        }
+        return Redirect::back();
+    }
+
     public function download($id)
     {
         $ticket = TicketPurchase::findOrFail($id);
         if ($ticket->user->id != Auth::id()) {
             abort(403, "This is not your ticket!");
         }
-
-
         return PDF::loadView('tickets.download', ['ticket' => $ticket])->stream();
     }
 
@@ -187,6 +208,8 @@ class TicketController extends Controller
             }
         }
 
+        $sold = false;
+
         foreach ($request->get('tickets') as $ticket_id => $amount) {
 
             $ticket = Ticket::find($ticket_id);
@@ -199,16 +222,24 @@ class TicketController extends Controller
                     'ticket_id' => $ticket_id,
                     'orderline_id' => $oid,
                     'user_id' => Auth::id(),
-                    'barcode' => $oid . mt_rand(10000000000000000000,99999999999999999999),
+                    'barcode' => $oid . mt_rand(10000000000000000000, 99999999999999999999),
                 ]);
                 $purchase->save();
 
+                $sold = true;
+
             }
 
+        }
+
+        if (!$sold) {
+            Session::flash("flash_message", "You didn't select any tickets to buy. Maybe buy some tickets?");
+            return Redirect::back();
         }
 
         Session::flash("flash_message", "Order completed succesfully! You can find your tickets on this event page.");
         return Redirect::back();
 
     }
+
 }

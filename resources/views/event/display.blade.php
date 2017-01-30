@@ -27,6 +27,12 @@
 
                     @ {{ $event->location }}
 
+                    @if(Auth::check() && $event->isEventAdmin(Auth::user()))
+                        <a href="{{ route("event::admin", ['id'=>$event->id]) }}">
+                            <span class="label label-success pull-left">Admin</span>
+                        </a>
+                    @endif
+
                     @if(Auth::check() && Auth::user()->can('board'))
                         <a href="{{ route("event::edit", ['id'=>$event->id]) }}">
                             <span class="label label-success pull-right">Edit</span>

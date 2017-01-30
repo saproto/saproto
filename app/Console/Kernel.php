@@ -23,8 +23,6 @@ class Kernel extends ConsoleKernel
         Commands\BirthdayCron::class,
         Commands\FlickrSync::class,
         Commands\PlaySound::class,
-
-        Commands\ImportTickets::class,
     ];
 
     /**

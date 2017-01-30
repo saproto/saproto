@@ -80,6 +80,11 @@ class Event extends Model
             );
     }
 
+    public function isEventAdmin(User $user)
+    {
+        return $user->can('board') || $this->committee->isMember($user);
+    }
+
     protected $guarded = ['id'];
 
 }

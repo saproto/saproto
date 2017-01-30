@@ -277,6 +277,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
+        Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
+
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
         // Related to participation
@@ -359,9 +361,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to tickets.
      */
-    Route::group(['prefix' => 'tickets', 'as' => 'tickets::'], function () {
+    Route::group(['prefix' => 'tickets', 'middleware' => ['auth'], 'as' => 'tickets::'], function () {
 
-        Route::group(['middleware' => ['auth', 'permission:board']], function() {
+        Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'TicketController@store']);
@@ -370,6 +372,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'TicketController@destroy']);
         });
 
+        Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
+        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
     });
