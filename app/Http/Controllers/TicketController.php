@@ -222,7 +222,7 @@ class TicketController extends Controller
                     'ticket_id' => $ticket_id,
                     'orderline_id' => $oid,
                     'user_id' => Auth::id(),
-                    'barcode' => $oid . mt_rand(10000000000000000000, 99999999999999999999),
+                    'barcode' => $oid . mt_rand(100000000000, 999999999999),
                 ]);
                 $purchase->save();
 
