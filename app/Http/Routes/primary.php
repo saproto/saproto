@@ -277,6 +277,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
+        Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
+
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
         // Related to participation
