@@ -160,7 +160,7 @@ class TicketController extends Controller
         if ($ticket->user->id != Auth::id()) {
             abort(403, "This is not your ticket!");
         }
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->stream();
+        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream();
     }
 
     /**
@@ -222,7 +222,7 @@ class TicketController extends Controller
                     'ticket_id' => $ticket_id,
                     'orderline_id' => $oid,
                     'user_id' => Auth::id(),
-                    'barcode' => $oid . mt_rand(100000000000, 999999999999),
+                    'barcode' => $oid . mt_rand(1000000000, 9999999999),
                 ]);
                 $purchase->save();
 
