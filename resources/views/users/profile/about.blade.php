@@ -80,7 +80,7 @@
             <table class="table borderless">
                 <tr>
                     <td style="text-align: right;"><strong>Name</strong></td>
-                    <td>{{ $ldap->givenname[0] }} {{ $ldap->sn[0] }}</td>
+                    <td>{{ $ldap->cn[0] }}</td>
                 </tr>
                 <tr>
                     <td style="text-align: right;"><strong>E-mail</strong></td>
