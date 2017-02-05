@@ -276,8 +276,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
-        
+
         Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
+        Route::get('scan/{id}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'EventController@scan']);
 
         Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
 
@@ -612,6 +613,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
         });
+
+        Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
 
     });
 

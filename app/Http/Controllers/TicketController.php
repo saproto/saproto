@@ -137,6 +137,67 @@ class TicketController extends Controller
         return Redirect::back();
     }
 
+    public function scanApi($event, Request $request)
+    {
+        if (!$request->has('barcode')) {
+            return [
+                'code' => 500,
+                'message' => 'Missing barcode',
+                'data' => null
+            ];
+        }
+
+        $event = Event::find($event);
+        if ($event === null) {
+            return [
+                'code' => 500,
+                'message' => 'Unknown event',
+                'data' => null
+            ];
+        }
+
+        $ticket = TicketPurchase::where('barcode', $request->barcode)->first();
+
+        if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
+            return [
+                'code' => 500,
+                'message' => 'Unauthorized to scan',
+                'data' => null
+            ];
+        }
+
+        if ($ticket) {
+            $ticket->load('user', 'orderline', 'ticket', 'ticket.product');
+            if ($ticket->ticket->event_id != $event->id) {
+                return [
+                    'code' => 500,
+                    'message' => 'Ticket not for this event',
+                    'data' => null
+                ];
+            }
+            if ($ticket->scanned !== null) {
+                return [
+                    'code' => 403,
+                    'message' => 'Ticket already used',
+                    'data' => $ticket
+                ];
+            }
+            $ticket->scanned = date('Y-m-d H:i:s');
+            $ticket->save();
+            return [
+                'code' => 200,
+                'message' => 'Valid ticket',
+                'data' => $ticket
+            ];
+        } else {
+            return [
+                'code' => 500,
+                'message' => 'Unknown barcode',
+                'data' => null
+            ];
+        }
+    }
+
     public function unscan($barcode)
     {
         $ticket = TicketPurchase::where('barcode', $barcode)->first();

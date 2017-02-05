@@ -8,6 +8,12 @@
 
     @if (count($event->tickets) > 0)
 
+        <p style="text-align: center;">
+            <a class="form-control btn btn-success" href="{{ route('event::scan', ['id' => $event->id]) }}">
+                Start Scanner Application for Event
+            </a>
+        </p>
+
         @foreach($event->tickets as $ticket)
 
             <div class="panel panel-default">
