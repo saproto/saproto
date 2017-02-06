@@ -41,14 +41,14 @@
                                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                                     </a>
 
-                                    @if($menuItem->order > 0)
+                                    @if(!$menuItem->isFirst())
                                         <a class="btn btn-xs btn-default"
                                        href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}" role="button">
                                             <i class="fa fa-arrow-up" aria-hidden="true"></i>
                                         </a>
                                     @endif
 
-                                    @if($menuItem->order != $menuItems->count() - 1)
+                                    @if(!$menuItem->isLast())
                                         <a class="btn btn-xs btn-default"
                                            href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}" role="button">
                                             <i class="fa fa-arrow-down" aria-hidden="true"></i>
@@ -74,14 +74,14 @@
                                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                                 </a>
 
-                                                @if($childItem->order > 0)
+                                                @if(!$childItem->isFirst())
                                                     <a class="btn btn-xs btn-default"
                                                        href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}" role="button">
                                                         <i class="fa fa-arrow-up" aria-hidden="true"></i>
                                                     </a>
                                                 @endif
 
-                                                @if($childItem->order != $menuItem->children()->orderBy('order')->get()->count() - 1)
+                                                @if(!$childItem->isLast())
                                                     <a class="btn btn-xs btn-default"
                                                        href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}" role="button">
                                                         <i class="fa fa-arrow-down" aria-hidden="true"></i>

@@ -29,4 +29,22 @@ class MenuItem extends Model
             return "#";
         }
     }
+
+    public function isFirst() {
+        $lowest = MenuItem::where('parent', '=', $this->parent)->orderBy('order')->first();
+        if($this->id == $lowest->id) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function isLast() {
+        $highest = MenuItem::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
+        if($this->id == $highest->id) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
