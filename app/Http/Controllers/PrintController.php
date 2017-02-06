@@ -32,6 +32,11 @@ class PrintController extends Controller
 
         $upload = $request->file('file');
 
+        if (!file_exists($upload->__toString())) {
+            $request->session()->flash('flash_message', 'You didn\'t upload a file!');
+            return Redirect::back();
+        }
+
         if ($upload->getMimeType() != "application/pdf") {
             $request->session()->flash('flash_message', 'You uploaded an invalid PDF file.');
             return Redirect::back();
