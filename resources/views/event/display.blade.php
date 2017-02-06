@@ -4,6 +4,14 @@
     {{ $event->title }}
 @endsection
 
+@section('og-description')
+    From {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }} @ {{ $event->location }}.
+
+    {{ $event->description }}
+@endsection
+
+@section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
+
 @section('content')
 
     <div class="row">
