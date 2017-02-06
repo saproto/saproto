@@ -265,12 +265,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
 
+        Route::group(['prefix' => 'newsletter', 'as' => 'innewsletter::', 'middleware' => ['permission:board']], function () {
+            Route::get('', ['as' => 'show', 'uses' => 'EventController@getInNewsletter']);
+            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'EventController@toggleInNewsletter']);
+        });
+
         Route::get('', ['as' => 'list', 'uses' => 'EventController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
         Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
+
+        Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
+        Route::get('scan/{id}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'EventController@scan']);
+
+        Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
@@ -287,6 +297,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         // Related to helping committees
         Route::post('addhelp/{id}', ['as' => 'addhelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@addHelp']);
         Route::get('deletehelp/{id}', ['as' => 'deletehelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@deleteHelp']);
+
+        // Buy tickets for an event
+        Route::post('buytickets/{id}', ['as' => 'buytickets', 'middleware' => ['auth'], 'uses' => 'TicketController@buyForEvent']);
 
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
@@ -345,6 +358,26 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
+
+    });
+
+    /*
+     * Routes related to tickets.
+     */
+    Route::group(['prefix' => 'tickets', 'middleware' => ['auth'], 'as' => 'tickets::'], function () {
+
+        Route::group(['middleware' => ['auth', 'permission:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
+            Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'TicketController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'TicketController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'TicketController@destroy']);
+        });
+
+        Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
+        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
+        Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
     });
 
@@ -581,6 +614,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
         });
 
+        Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
+
     });
 
     /*
@@ -604,15 +639,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
         Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
         Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
-    });
-
-    /**
-     * Routes related to the pastries system.
-     */
-    Route::group(['prefix' => 'pastries', 'middleware' => ['auth', 'permission:board'], 'as' => 'pastries::'], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'PastriesController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'PastriesController@store']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PastriesController@destroy']);
     });
 
     /**

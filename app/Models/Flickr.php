@@ -13,7 +13,7 @@ class Flickr extends Model
 
     public static function getPhotos($albumID) {
         $items = FlickrItem::where("album_id", "=", $albumID)->get();
-        if(!$items) abort(404, "Album not found.");
+        if(count($items) == 0) abort(404, "Album not found.");
 
         $data = new \stdClass();
         $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;

@@ -31,7 +31,7 @@ class AuthLoginEventHandler
     public function handle(User $user, $remember)
     {
         $token = new Token();
-        $token->generate();
+        $token->generate($user);
         Session::put('token', $token->token);
         
 

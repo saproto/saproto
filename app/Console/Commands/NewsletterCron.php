@@ -74,7 +74,7 @@ class NewsletterCron extends Command
 
         } else {
 
-            $this->info("There are no upcomming activities.");
+            $this->info("No activities scheduled for the newsletter. Newsletter not sent.");
 
         }
 

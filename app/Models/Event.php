@@ -34,6 +34,15 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\Committee');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany('Proto\Models\Ticket', 'event_id');
+    }
+
+    public function getTicketPurchasesFor(User $user) {
+        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->lists('id'))->get();
+    }
+
     /**
      * @return mixed The image associated with this event, if any.
      */
@@ -47,7 +56,7 @@ class Event extends Model
      */
     public static function getEventsForNewsletter()
     {
-        return Event::where('secret', false)->where('start', '>', date('U'))->where('start', '<', strtotime('+4 weeks'))->orderBy('start')->get();
+        return Event::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
     }
 
     public function current()
@@ -69,6 +78,11 @@ class Event extends Model
                 :
                 date($long_format, $this->end)
             );
+    }
+
+    public function isEventAdmin(User $user)
+    {
+        return $user->can('board') || ($this->committee && $this->committee->isMember($user));
     }
 
     protected $guarded = ['id'];

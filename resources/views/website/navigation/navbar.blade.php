@@ -106,7 +106,11 @@
 
                             <li><a href="{{ route("user::member::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
+                            <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+
+                            <li role="separator" class="divider"></li>
+
                             <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                             <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
@@ -120,7 +124,7 @@
                             <li role="separator" class="divider"></li>
 
                             <li><a class="navbar-title">Internal Affairs:</a></li>
-                            <li><a href="{{ route("pastries::list") }}">Pastries</a></li>
+                            <li><a href="{{ route("event::innewsletter::show") }}">Edit Newsletter</a></li>
 
                             @if (Auth::user()->can("finadmin"))
                                 <li role="separator" class="divider"></li>
@@ -165,8 +169,11 @@
                     <div class="input-group">
                         <input class="navbar__search__input form-control"
                                type="search" name="query" placeholder="Search">
-                        <span class="navbar__search__icon input-group-addon">
+                        <!--<span class="navbar__search__icon input-group-addon">
                             <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>-->
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>
