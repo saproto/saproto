@@ -45,6 +45,8 @@ class Email extends Model
                 $userids = array_merge($userids, $list->users->lists('id')->toArray());
             }
             return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+        } else {
+            return collect([]);
         }
     }
 
