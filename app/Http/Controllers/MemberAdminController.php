@@ -119,11 +119,17 @@ class MemberAdminController extends Controller
         /** Create member alias */
 
         $name = explode(" ", $user->name);
-        $aliasbase = MemberAdminController::transliterateString(strtolower(
-            preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-            . '.' .
-            preg_replace('/\PL/u', '', implode("", array_slice($name, 1)))
-        ));
+        if (count($name) > 1) {
+            $aliasbase = MemberAdminController::transliterateString(strtolower(
+                preg_replace('/\PL/u', '', substr($name[0], 0, 1))
+                . '.' .
+                preg_replace('/\PL/u', '', implode("", array_slice($name, 1)))
+            ));
+        } else {
+            $aliasbase = MemberAdminController::transliterateString(strtolower(
+                preg_replace('/\PL/u', '', $name[0])
+            ));
+        }
         $alias = $aliasbase;
         $i = 0;
 
