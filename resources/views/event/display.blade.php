@@ -10,7 +10,9 @@
     {{ $event->description }}
 @endsection
 
-@section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
+@if($event->image)
+    @section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
+@endif
 
 @section('content')
 
