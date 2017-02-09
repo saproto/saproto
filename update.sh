@@ -39,6 +39,9 @@ php artisan optimize
 # Reload worker queues.
 php artisan queue:restart
 
+# Generate assets
+grunt
+
 # Disable maintenance mode.
 php artisan up
 
