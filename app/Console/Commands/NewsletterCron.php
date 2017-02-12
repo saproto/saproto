@@ -56,7 +56,7 @@ class NewsletterCron extends Command
                 $email = $user->email;
                 $name = $user->name;
 
-                Mail::queue('emails.newsletter', [
+                Mail::queueOn('low', 'emails.newsletter', [
                     'user' => $user,
                     'list' => $newsletterlist
                 ], function ($message) use ($email, $name) {

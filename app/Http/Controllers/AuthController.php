@@ -310,7 +310,7 @@ class AuthController extends Controller
         $email = $user->email;
         $name = $user->mail;
 
-        Mail::queue('emails.registration', ['user' => $user], function ($m) use ($email, $name) {
+        Mail::queueOn('high', 'emails.registration', ['user' => $user], function ($m) use ($email, $name) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
             $m->to($email, $name);
             $m->subject('Account registration at Study Association Proto');
@@ -444,7 +444,7 @@ class AuthController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+        Mail::queueOn('high', 'emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
             $message
                 ->to($email, $name)
                 ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')

@@ -323,7 +323,7 @@ class WithdrawalController extends Controller
                 'email' => $user->email,
                 'date' => $withdrawal->date
             ];
-            Mail::queue('emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
+            Mail::queueOn('medium','emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
                 $message
                     ->to($data['email'], $data['name'])
                     ->from('treasurer@' . config('proto.emaildomain'), config('proto.treasurer'))

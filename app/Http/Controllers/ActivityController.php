@@ -113,7 +113,7 @@ class ActivityController extends Controller
             $name = $user->name;
             $email = $user->email;
             $helptitle = $help->activity->event->title;
-            Mail::queue('emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
+            Mail::queueOn('medium', 'emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
                 $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                 $m->to($email, $name);
                 $m->subject('The activity ' . $helptitle . ' needs your help.');
@@ -132,7 +132,7 @@ class ActivityController extends Controller
             $name = $user->name;
             $email = $user->email;
             $helptitle = $help->activity->event->title;
-            Mail::queue('emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
+            Mail::queueOn('medium', 'emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
                 $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                 $m->to($email, $name);
                 $m->subject('The activity ' . $helptitle . ' doesn\'t need your help anymore.');
