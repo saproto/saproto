@@ -605,6 +605,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
         Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
+        Route::get('users', ['as' => 'users', 'uses' => 'ApiController@users']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);

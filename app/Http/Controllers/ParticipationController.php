@@ -144,7 +144,7 @@ class ParticipationController extends Controller
                 $email = $backupparticipation->user->email;
                 $activitytitle = $backupparticipation->activity->event->title;
 
-                Mail::queue('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queueOn('high', 'emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
@@ -157,7 +157,7 @@ class ParticipationController extends Controller
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
 
-                Mail::queue('emails.unsubscribeactivity', ['activity' => [
+                Mail::queueOn('high', 'emails.unsubscribeactivity', ['activity' => [
                     'id' => $participation->activity->event->id,
                     'title' => $activitytitle,
                     'name' => $participation->user->calling_name
@@ -183,7 +183,7 @@ class ParticipationController extends Controller
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
 
-                Mail::queue('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queueOn('high', 'emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
                     $m->queue('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');

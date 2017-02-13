@@ -147,7 +147,7 @@ class MemberAdminController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
+        Mail::queueOn('high', 'emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
             $m->replyTo('internal@proto.utwente.nl', config('proto.internal') . ' (Officer Internal Affairs)');
             $m->to($email, $name);
             $m->subject('Start of your membership of Study Association Proto');
@@ -174,7 +174,7 @@ class MemberAdminController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
+        Mail::queueOn('high', 'emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
             $m->replyTo('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)');
             $m->to($email, $name);
             $m->subject('Termination of your membership of Study Association Proto');

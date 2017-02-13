@@ -43,40 +43,66 @@ class ApiController extends Controller
 
     }
 
-    public function train(Request $request) {
+    public function users(Request $request)
+    {
 
-        return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=".$_GET['station']));
+        if (!Auth::check() || !Auth::user()->member) {
+            abort(403);
+        }
+
+        $users = User::all();
+        $data = array();
+
+        foreach ($users as $user) {
+            if ($request->has('term') && strpos(strtolower($user->name), strtolower($request->term)) === false) continue;
+
+            $member = new \stdClass();
+            $member->name = $user->name;
+            $member->id = $user->id;
+            $data[] = $member;
+        }
+
+        return $data;
 
     }
-    
-    public function protubeAdmin($token) {
+
+    public function train(Request $request)
+    {
+
+        return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=" . $_GET['station']));
+
+    }
+
+    public function protubeAdmin($token)
+    {
         $token = Token::where('token', $token)->first();
 
-        if(!$token) return("{\"is_admin\":false}");
+        if (!$token) return ("{\"is_admin\":false}");
 
         $user = $token->user()->first();
 
-        if(!$user) return("{\"is_admin\":false}");
+        if (!$user) return ("{\"is_admin\":false}");
 
         $adminInfo = new \stdClass();
-        
-        if($user->can('board') || $user->isTempadmin()) {
+
+        if ($user->can('board') || $user->isTempadmin()) {
             $adminInfo->is_admin = true;
-        }else{
+        } else {
             $adminInfo->is_admin = false;
         }
 
-        return(json_encode($adminInfo));
+        return (json_encode($adminInfo));
     }
 
-    public function protubePlayed(Request $request) {
-        if($request->secret != env('HERBERT_SECRET')) abort(403);
+    public function protubePlayed(Request $request)
+    {
+        if ($request->secret != env('HERBERT_SECRET')) abort(403);
 
         $playedVideo = new PlayedVideo();
 
         $token = Token::where('token', $request->token)->first();
 
-        if($token) {
+        if ($token) {
             $user = $token->user()->first();
             $playedVideo->user()->associate($user);
         }
@@ -87,18 +113,19 @@ class ApiController extends Controller
         $playedVideo->save();
     }
 
-    public function getToken(Request $request) {
+    public function getToken(Request $request)
+    {
         $response = new \stdClass();
 
-        if(Auth::check()) {
+        if (Auth::check()) {
             $response->token = Session::get('token');
-        }else{
+        } else {
             $response->token = 0;
         }
 
-        if($request->has('callback')) {
+        if ($request->has('callback')) {
             return $request->callback . "(" . json_encode($response) . ")";
-        }else{
+        } else {
             return json_encode($response);
         }
     }
