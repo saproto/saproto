@@ -153,6 +153,63 @@
 
                 </div>
 
+                <div class="panel-footer">
+                    <a class="btn btn-success" style="width: 100%;" href="{{ route('omnomcom::mollie::pay') }}"
+                       data-toggle="modal" data-target="#mollie-modal">
+                        Pay Outstanding Balance
+                    </a>
+                </div>
+
+            </div>
+
+            <div id="mollie-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Pay Outstanding Balance</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Using this service you can pay your outstanding balance using our external payment
+                                provider Mollie. Using Mollie you can pay your outstanding balance using iDeal,
+                                CreditCard, Bitcoin and various German and Belgien payment providers.
+                            </p>
+                            <p>
+                                <strong>Important!</strong> Using this service you will incur a transaction fee on top
+                                of your outstanding balance. This transaction fee is
+                                €{{ number_format(config('omnomcom.mollie')['fixed_fee'], 2) }} per transaction
+                                plus {{ number_format(config('omnomcom.mollie')['variable_fee']*100, 2) }}% of the total
+                                transaction. This transaction will appear in your OmNomCom history after payment.
+                            </p>
+                            <p>
+                                If you wish to pay only a part of your outstanding balance, please use the field below
+                                to indicate the maximum amount you would like to pay.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
+                                {!! csrf_field() !!}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">&euro;</div>
+                                            <input type="number" name="cap" class="form-control pull-left" min="0"
+                                                   max="250" value="{{ number_format($next_withdrawal, 2, '.', '') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Pay</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="panel panel-default">

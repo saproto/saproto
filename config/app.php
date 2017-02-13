@@ -162,7 +162,8 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        Alaouy\Youtube\YoutubeServiceProvider::class
+        Alaouy\Youtube\YoutubeServiceProvider::class,
+        Mollie\Laravel\MollieServiceProvider::class
 
     ],
 
@@ -254,7 +255,9 @@ return [
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 
-        'Youtube' => Alaouy\Youtube\Facades\Youtube::class
+        'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
+
+        'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 
     ],
 

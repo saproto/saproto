@@ -8,7 +8,7 @@ class OrderLine extends Model
 {
 
     protected $table = 'orderlines';
-    protected $guarded = [/*'id'*/];
+    protected $guarded = ['id'];
 
     public function user()
     {

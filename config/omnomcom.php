@@ -40,4 +40,19 @@ return [
 
     'alfred-account' => 43,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Mollie Settings
+    |--------------------------------------------------------------------------
+    |
+    | Defines various configuration options for the Mollie integration.
+    |
+    */
+
+    'mollie' => [
+        'fixed_fee' => .3,
+        'variable_fee' => .02,
+        'fee_id' => 883
+    ],
+
 ];
