@@ -104,16 +104,10 @@ class AchievementController extends Controller
         return Redirect::back();
     }
 
-    public function takeAll($achievement_id)
+    function takeAll($achievement_id)
     {
+        $this->staticTakeAll($achievement_id);
         $achievement = Achievement::find($achievement_id);
-        if (!$achievement) abort(404);
-        $achieved = AchievementOwnership::all();
-        foreach ($achieved as $entry) {
-            if ($entry->achievement_id == $achievement_id) {
-                $entry->delete();
-            }
-        }
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
         return Redirect::back();
     }
@@ -127,5 +121,17 @@ class AchievementController extends Controller
 
         Session::flash('flash_message', "Achievement Icon set");
         return Redirect::route('achievement::manage', ['id' => $id]);
+    }
+
+    static function staticTakeAll($id)
+    {
+        $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achieved = AchievementOwnership::all();
+        foreach ($achieved as $entry) {
+            if ($entry->achievement_id == $id) {
+                $entry->delete();
+            }
+        }
     }
 }
