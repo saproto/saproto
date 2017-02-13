@@ -104,7 +104,7 @@ class AchievementController extends Controller
         return Redirect::back();
     }
 
-    function takeAll($achievement_id)
+    public function takeAll($achievement_id)
     {
         $this->staticTakeAll($achievement_id);
         $achievement = Achievement::find($achievement_id);
