@@ -1,19 +1,37 @@
 .homepage {
 
   &__companyimage {
-    max-width: 100%;
-    max-height: 100px;
+    margin: 0 20px;
   }
 
   &__companyrow {
-    background-color: #666;
+    position: relative;
+
+    background-color: #fff;
     margin: 0 auto 20px auto;
     box-shadow: 0 0 20px -7px #000;
-  }
+    height: 100px;
 
-  &__companyentry {
-    height: 130px;
-    line-height: 130px;
+    overflow: hidden;
+
+    &__inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      padding: 0 20px;
+
+      height: 100px;
+      line-height: 100px;
+
+      min-width: 100%;
+      text-align: center;
+
+      transition: all 7.5s;
+
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 
   &__calendar {

@@ -5,9 +5,10 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use DirectAdmin\DirectAdmin;
 
+use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
+use Proto\Models\User;
 
 use App;
 
@@ -108,11 +109,13 @@ class DirectAdminSync extends Command
         $data = [];
 
         // Constructing user forwarders.
-        $members = Member::whereNotNull('proto_mail')->get();
-        foreach ($members as $member) {
-            $data[$member->proto_mail] = [
-                $member->user->email
-            ];
+        $users = User::all();
+        foreach ($users as $user) {
+            if ($user->member && $user->isActiveMember()) {
+                $data[$user->member->proto_username] = [
+                    $user->email
+                ];
+            }
         }
 
         // Constructing committee forwarders.
@@ -135,8 +138,19 @@ class DirectAdminSync extends Command
 
             if (count($destinations) > 0) {
                 $data[$committee->slug] = $destinations;
+                $data['committees'][] = $committee->slug . '@' . config('proto.emaildomain');
             }
 
+        }
+
+        // Constructing manual aliases.
+        $aliases = Alias::all();
+        foreach ($aliases as $alias) {
+            if ($alias->destination) {
+                $data[$alias->alias][] = $alias->destination;
+            } else {
+                $data[$alias->alias][] = $alias->user->email;
+            }
         }
 
         return $data;

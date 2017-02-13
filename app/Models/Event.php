@@ -27,11 +27,48 @@ class Event extends Model
     }
 
     /**
+     * @return mixed The committee associated with this event, if any.
+     */
+    public function committee()
+    {
+        return $this->belongsTo('Proto\Models\Committee');
+    }
+
+    /**
      * @return mixed The image associated with this event, if any.
      */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry');
+    }
+
+    /**
+     * @return Event A collection of events for the weekly newsletter.
+     */
+    public static function getEventsForNewsletter()
+    {
+        return Event::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
+    }
+
+    public function current()
+    {
+        return ($this->start < date('U') && $this->end > date('U'));
+    }
+
+    public function over()
+    {
+        return ($this->end < date('U'));
+    }
+
+    public function generateTimespanText($long_format, $short_format, $combiner)
+    {
+        return date($long_format, $this->start) . " " . $combiner . " " . (
+            (($this->end - $this->start) < 3600 * 24)
+                ?
+                date($short_format, $this->end)
+                :
+                date($long_format, $this->end)
+            );
     }
 
     protected $guarded = ['id'];

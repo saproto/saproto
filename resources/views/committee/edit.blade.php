@@ -100,12 +100,6 @@
             margin: 10px 0;
         }
 
-        @if(!$new && $committee->image)
-            #header {
-            background-image: url('{!! $committee->image->generateImagePath(2000,500) !!}');
-        }
-        @endif
-
     </style>
 
 @endsection

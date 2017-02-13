@@ -15,14 +15,19 @@
         {!! csrf_field() !!}
 
         <p>
-            If you forgot your password, you can request a new password using this form. All you have to do is put in
-            your e-mail address (and be sure to use the one associated with your account), hit the button and wait for
-            our e-mail!
+            If you forgot the password to your <strong>Proto account</strong>, you can request a new password using this
+            form. All you have to do is put in your e-mail address (and be sure to use the one associated with your
+            account), hit the button and wait for our e-mail!
         </p>
+
         <p>
-            Resetting your password will change your Proto password, but leave your UTwente password untouched. If
-            you're looking to reset your UTwente password, please contact the <a
-                    href="https://www.utwente.nl/icts/contact/" target="_blank">ICTS Servicedesk</a>.
+            If you have your University of Twente account linked to your Proto account, you can also log-in and set a
+            new Proto password using those credentials.
+        </p>
+
+        <p>
+            This form is NOT for resetting your UTwente password. If you're looking to do that, please click
+            <a href="https://utpm.utwente.nl/" target="_blank">here</a>.
         </p>
 
         <hr>

@@ -13,12 +13,15 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\Company;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
+use Proto\Models\Page;
+use Proto\Models\User;
 
 use Auth;
-use DB;
+use Proto\Models\WelcomeMessage;
 
 class HomeController extends Controller
 {
+
     /**
      * Display the homepage.
      */
@@ -29,7 +32,8 @@ class HomeController extends Controller
         $companies = Company::where('in_logo_bar', true)->get();
 
         if (Auth::check()) {
-            return view('website.home.members', ['events' => $events, 'companies' => $companies]);
+            $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
+            return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message]);
         } else {
             return view('website.home.external', ['events' => $events, 'companies' => $companies]);
         }
@@ -48,4 +52,10 @@ class HomeController extends Controller
         ];
         return view('website.developers', ['developers' => $developers, 'committee' => $committee]);
     }
+
+    public function fishcam()
+    {
+        return view('misc.fishcam');
+    }
+
 }

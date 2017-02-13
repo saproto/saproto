@@ -12,7 +12,7 @@ class OrderLine extends Model
 
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
     public function product()
@@ -22,7 +22,7 @@ class OrderLine extends Model
 
     public function cashier()
     {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
     public function withdrawal()
@@ -32,7 +32,7 @@ class OrderLine extends Model
 
     public function isPayed()
     {
-        return ($this->payed_with_cash != null || $this->payed_with_mollie != null || $this->payed_with_withdrawal != null);
+        return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null);
     }
 
 }

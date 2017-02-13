@@ -1,5 +1,9 @@
 @extends('website.layouts.content')
 
+@section('page-title')
+    Homepage
+@endsection
+
 @section('header')
 
     <div id="header">
@@ -21,18 +25,14 @@
 
         <div class="row homepage__companyrow">
 
-            <div class="container">
+            <div class="homepage__companyrow__inner">
 
                 @foreach($companies as $company)
 
-                    <div class="col-md-3 homepage__companyentry">
-
-                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                            <img class="homepage__companyimage"
-                                 src="{{ $company->image->generateImagePath(null, 50) }}">
-                        </a>
-
-                    </div>
+                    <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                        <img class="homepage__companyimage"
+                             src="{{ $company->image->generateImagePath(null, 50) }}">
+                    </a>
 
                 @endforeach
 
@@ -61,7 +61,7 @@
 
                         <hr>
 
-                        <? $week = date('W', $events[0]->start); ?>
+                        <?php if (isset($events[0])) $week = date('W', $events[0]->start); ?>
 
                         @foreach($events as $key => $event)
 
@@ -77,21 +77,18 @@
                                     </p>
                                     <p>
                                         <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                        {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }} -
-                                        @if (($event->end - $event->start) < 3600 * 24)
-                                            {{ date('H:i', $event->end) }}
-                                        @else
-                                            {{ date('j M, H:i', $event->end) }}
-                                        @endif
+                                        {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                     </p>
                                 </div>
                             </a>
 
-                            <? $week = date('W', $event->start); ?>
+                            <?php $week = date('W', $event->start); ?>
 
                         @endforeach
 
                         <hr>
+
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
 
                     </div>
 
@@ -115,9 +112,9 @@
 
                     <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
                         <div class="album"
-                             style="background-image: url('{!! $album->primary_photo_extras->url_m !!}')">
+                             style="background-image: url('{!! $album->thumb !!}')">
                             <div class="album-name">
-                                {{ $album->title->_content }}
+                                {{ $album->name }}
                             </div>
                         </div>
                     </a>
@@ -129,5 +126,54 @@
         </div>
 
     </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="application/javascript">
+
+        var sliderDelta = 0;
+        var oneWayOrTheOther = true;
+
+        $(document).ready(function () {
+
+            setTimeout(function () {
+
+                updateSlider();
+
+                setInterval(doSlide, 10000);
+
+                doSlide();
+
+            }, 2500);
+
+        });
+
+        $(window).resize(updateSlider);
+
+        function doSlide() {
+
+            if (sliderDelta < 0) {
+                if (oneWayOrTheOther) {
+                    $(".homepage__companyrow__inner").css('left', sliderDelta + 'px');
+                } else {
+                    $(".homepage__companyrow__inner").css('left', '0px');
+                }
+            }
+
+            oneWayOrTheOther = !oneWayOrTheOther;
+
+        }
+
+        setInterval(updateSlider, 1);
+
+        function updateSlider() {
+            sliderDelta = $(".homepage__companyrow").width() - $(".homepage__companyrow__inner").width() - 40;
+        }
+
+    </script>
 
 @endsection

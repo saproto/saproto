@@ -21,7 +21,7 @@ class CommitteeMembership extends Model
      * @return mixed The user this association is for.
      */
     public function user() {
-        return $this->belongsTo('Proto\Models\User');
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
     /**

@@ -88,10 +88,12 @@ class ProductController extends Controller
         }
 
         $categories = [];
-        foreach ($request->input('product_categories') as $category) {
-            $category = ProductCategory::find($category);
-            if ($category != null) {
-                $categories[] = $category->id;
+        if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
+            foreach ($request->input('product_categories') as $category) {
+                $category = ProductCategory::find($category);
+                if ($category != null) {
+                    $categories[] = $category->id;
+                }
             }
         }
         $product->categories()->sync($categories);
@@ -112,8 +114,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-
-        return view('omnomcom.products.show', ['product' => Product::findOrFail($id)]);
+        $product = Product::findOrFail($id);
+        $orderlines = $product->orderlines()->orderBy('created_at', "DESC")->paginate(15);
+        return view('omnomcom.products.show', ['product' => $product, 'orderlines' => $orderlines]);
 
     }
 
@@ -160,10 +163,12 @@ class ProductController extends Controller
         $product->account()->associate(Account::findOrFail($request->input('account_id')));
 
         $categories = [];
-        foreach ($request->input('product_categories') as $category) {
-            $category = ProductCategory::find($category);
-            if ($category != null) {
-                $categories[] = $category->id;
+        if ($request->has('product_categories') && count($request->input('product_categories')) > 0) {
+            foreach ($request->input('product_categories') as $category) {
+                $category = ProductCategory::find($category);
+                if ($category != null) {
+                    $categories[] = $category->id;
+                }
             }
         }
         $product->categories()->sync($categories);

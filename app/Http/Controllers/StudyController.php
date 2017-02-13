@@ -115,12 +115,13 @@ class StudyController extends Controller
             abort(403);
         }
         $study = Study::findOrFail($request->study);
-
         $link = new StudyEntry();
-        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+        if (($link->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false || $request->start == "") {
             Session::flash("flash_message", "Ill-formatted start date.");
             return Redirect::back();
         }
+
+        $link->deleted_at = null;
         if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
@@ -131,6 +132,7 @@ class StudyController extends Controller
 
         $link->save();
 
+        Session::flash("flash_message", "Your study has been saved.");
         return Redirect::route('user::dashboard', ['id' => $user->id]);
     }
 
@@ -145,7 +147,7 @@ class StudyController extends Controller
             Session::flash("flash_message", "Ill-formatted start date.");
             return Redirect::back();
         }
-        
+
         $link->deleted_at = null;
         if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
@@ -154,6 +156,8 @@ class StudyController extends Controller
 
         $link->save();
 
+
+        Session::flash("flash_message", "Your study has been saved.");
         return Redirect::route('user::dashboard', ['id' => $link->user->id]);
     }
 
@@ -164,6 +168,7 @@ class StudyController extends Controller
             abort(403);
         }
         $link->forceDelete();
+        Session::flash("flash_message", "Study removed!");
         return Redirect::route('user::dashboard', ['id' => $link->user->id]);
     }
 

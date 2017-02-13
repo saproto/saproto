@@ -14,6 +14,7 @@ return [
     */
 
     'rootcommittee' => 'haveyoutriedturningitoffandonagain',
+    'rootrole' => 12,
 
     /*
     |--------------------------------------------------------------------------
@@ -87,6 +88,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Weekly newsletter
+    |--------------------------------------------------------------------------
+    |
+    | The email list ID for the weekly newsletter.
+    |
+    */
+
+    'weeklynewsletter' => 1,
+
+    /*
+    |--------------------------------------------------------------------------
     | Public Timetable Calendar
     |--------------------------------------------------------------------------
     |
@@ -94,6 +106,102 @@ return [
     |
     */
 
-    'google-timetable-id' => '55pq1udukakaeg9ouc56utojmuqiap80@import.calendar.google.com',
+    'google-timetable-id' => '76ambpj6tq40mlht0ok7ibonori7dliv@import.calendar.google.com',
+
+    /*
+    |--------------------------------------------------------------------------
+    | SmartXp Timetable Calendar
+    |--------------------------------------------------------------------------
+    |
+    | The Google calendar ID for the imported timetable.
+    |
+    */
+
+    'smartxp-google-timetable-id' => 'sk5jps5kgrmvq5gp6oc20qfrmsvdfin7@import.calendar.google.com',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Internal Name
+    |--------------------------------------------------------------------------
+    |
+    | The name that is shown in e-mails as the Officer Internal Affairs.
+    |
+    */
+
+    'internal' => 'Laura Kester',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Treasurer Name
+    |--------------------------------------------------------------------------
+    |
+    | The name that is shown in e-mails as the Treasurer.
+    |
+    */
+
+    'treasurer' => 'Jur van Geel',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proto Incassant ID
+    |--------------------------------------------------------------------------
+    |
+    | Proto's Incassant ID.
+    |
+    */
+
+    'incassant-id' => 'NL65ZZZ525625650000',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Secretary Name
+    |--------------------------------------------------------------------------
+    |
+    | The name that is shown in e-mails as the Secretary.
+    |
+    */
+
+    'secretary' => 'Dennis Vinke',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Main Study
+    |--------------------------------------------------------------------------
+    |
+    | The ID of the study that is prominently featured on the courses page.
+    |
+    */
+
+    'mainstudy' => 1,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Domain Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Domains that are linked to various routes.
+    |
+    */
+
+    'domains' => [
+        'protube' => [
+            'protube.nl',
+            'www.protube.nl'
+        ],
+        'omnomcom' => [
+            'omnomcom.nl',
+            'www.omnomcom.nl'
+        ],
+        'smartxp' => [
+            'smartxp.nl',
+            'www.smartxp.nl',
+            'caniworkinthesmartxp.nl',
+            'www.caniworkinthesmartxp.nl'
+        ],
+        'developers' => [
+            'haveyoutriedturningitoffandonagain.nl',
+            'www.haveyoutriedturningitoffandonagain.nl'
+        ]
+    ]
 
 ];

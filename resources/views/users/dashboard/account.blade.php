@@ -1,53 +1,3 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <strong>Basic information</strong>
-    </div>
-    <div class="panel-body">
-
-        <div class="form-horizontal">
-
-            <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Name</label>
-
-                <div class="col-sm-8 control-label" style="text-align: left;">{{ $user->name }}</div>
-            </div>
-
-            <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Bio Gender</label>
-
-                <div class="col-sm-8 control-label" style="text-align: left;">
-                    @if($user->gender == 1)
-                        Male
-                    @elseif($user->gender == 2)
-                        Female
-                    @elseif($user->gender == 0)
-                        Unknown
-                    @elseif($user->gender == 9)
-                        Not applicable
-                    @else
-                        Invalid gender value
-                    @endif
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Birthday</label>
-
-                <div class="col-sm-8 control-label"
-                     style="text-align: left;">{{ date('F j, Y', strtotime($user->birthdate)) }}</div>
-            </div>
-
-            <div class="form-group">
-                <label for="name_first" class="col-sm-4 control-label">Nationality</label>
-
-                <div class="col-sm-8 control-label" style="text-align: left;">{{ $user->nationality }}</div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
 <form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
 
     <div class="panel panel-default">
@@ -59,20 +9,24 @@
         <div class="panel-body">
 
             {!! csrf_field() !!}
+
+            @if($user->member)
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->member->proto_username }}
+                    </div>
+                </div>
+
+            @endif
+
             <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-mail</label>
 
                 <div class="col-sm-8">
                     <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}"
                            required>
-
-                    <div class="checkbox">
-                        <label>
-                            <input name="receive_newsletter"
-                                   type="checkbox" {{ ($user->receive_newsletter == 1 ? 'checked' : '') }}>
-                            Receive the newsletter
-                        </label>
-                    </div>
                 </div>
             </div>
 
@@ -108,23 +62,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="password" class="col-sm-4 control-label">New Password</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpassword" name="newpassword">
-                    <input type="password" class="form-control" id="newpassword2" name="newpassword2">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="old_pass" class="col-sm-4 control-label">Password</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="old_pass" name="old_pass"
-                           placeholder="For changing e-mail or password">
-                </div>
-            </div>
         </div>
 
         <div class="panel-footer">
@@ -141,25 +78,95 @@
 
 </form>
 
-@if (count($user->roles) > 0)
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>You have elevated authorization</strong>
-        </div>
-        <div class="panel-body">
-            @foreach($user->roles as $role)
-                <div class="list-group">
-                    <a class="list-group-item list-group-item-success">
-                        <strong>{{ $role->description }}</strong><br>
+<form class="form-horizontal" method="post" action="{{ route("user::changepassword", ["id" => $user->id]) }}">
 
-                    </a>
-                    @foreach($role->permissions as $permission)
-                        <a class="list-group-item">
-                            {{ $permission->description }}
-                        </a>
-                    @endforeach
-                </div>
-            @endforeach
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <strong>Change Proto password</strong>
         </div>
+
+        <div class="panel-body">
+
+            <p>
+                This changes the password for your Proto account across all of our systems. Your new password should be
+                at least eight (8) characters in length.
+
+                @if($user->utwente_username)
+                    You can use your University of Twente password as your current password.
+                @endif
+            </p>
+
+            <hr>
+
+            {!! csrf_field() !!}
+
+
+            @if($user->member)
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->member->proto_username }}
+                    </div>
+                </div>
+
+            @else
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->email }}
+                    </div>
+                </div>
+
+            @endif
+
+            <div class="form-group">
+                <label for="oldpass" class="col-sm-4 control-label">Current</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="oldpass" name="oldpass" required>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label for="newpass1" class="col-sm-4 control-label">New</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="newpass1" name="newpass1" required minlength="8">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="newpass2" class="col-sm-4 control-label">Repeat</label>
+
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" id="newpass2" name="newpass2" required minlength="8">
+                </div>
+            </div>
+
+            <hr>
+
+            <p>
+                <i>This will not change your University of Twente password.</i> You can change that password <a
+                        href="https://tap.utwente.nl/tap/">here</a>.
+            </p>
+
+        </div>
+
+        <div class="panel-footer">
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button type="submit" class="btn btn-success">
+                        Update password
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </div>
-@endif
+
+</form>

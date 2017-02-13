@@ -26,7 +26,7 @@
 
                         <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <div class="form-group">
                                     <label for="name">Event name:</label>
@@ -38,12 +38,28 @@
 
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
 
                                 <div class="location-group">
-                                    <label for="slide_duration">Location:</label>
+                                    <label for="location">Location:</label>
                                     <input type="text" class="form-control" id="location" name="location"
                                            placeholder="SmartXp" value="{{ $event->location or '' }}" required>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="location-group">
+                                    <label for="organisation">Organization:</label>
+                                    <select class="form-control" id="organisation" name="committee">
+                                        <option selected>None</option>
+                                        @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
+                                            <option value="{{ $committee->id }}" {{ ($event && $event->committee ? ($event->committee->id == $committee->id ? 'selected' : '') : '') }}>
+                                                {{ $committee->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                             </div>
@@ -73,16 +89,6 @@
 
                             </div>
 
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editor">Description</label>
-                            @if (!$event)
-                                <textarea id="editor" name="description"
-                                          placeholder="Please elaborate on why this event is awesome."></textarea>
-                            @else
-                                <textarea id="editor" name="description">{{ $event->description }}</textarea>
-                            @endif
                         </div>
 
                         <div class="row">
@@ -116,6 +122,26 @@
 
                         </div>
 
+                        <div class="form-group">
+                            <label for="editor">Description</label>
+                            @if (!$event)
+                                <textarea id="editor" name="description"
+                                          placeholder="Please elaborate on why this event is awesome."></textarea>
+                            @else
+                                <textarea id="editor" name="description">{{ $event->description }}</textarea>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editor-summary">Summary</label>
+                            @if (!$event)
+                                <textarea id="editor-summary" name="summary"
+                                          placeholder="A summary (used in the newsletter for example). Only a description, all other data (date, time, location, costs, sign-up info) will be added automaticall where needed."></textarea>
+                            @else
+                                <textarea id="editor-summary" name="summary">{{ $event->summary or '' }}</textarea>
+                            @endif
+                        </div>
+
                         @if($event && $event->image)
 
                             <hr>
@@ -137,7 +163,8 @@
                                class="btn btn-danger pull-left">Delete</a>
                         @endif
 
-                        <a href="javascript:history.go(-1)" class="btn btn-default pull-right">Cancel</a>
+                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}"
+                           class="btn btn-default pull-right">Cancel</a>
 
                     </div>
 
@@ -157,8 +184,7 @@
 
                 @if ($event != null)
 
-                    <form method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}"
-                          enctype="multipart/form-data">
+                    <form method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}">
 
                         {!! csrf_field() !!}
 
@@ -199,10 +225,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="participants">Participant limit:</label>
-                                        <input type="text" class="form-control" id="participants"
-                                               name="participants"
-                                               value="{{ ($event->activity ? $event->activity->participants : '') }}"
-                                               placeholder="0 for no limit" required>
+                                        <input type="number" class="form-control" id="participants"
+                                               name="participants" min="-1"
+                                               value="{{ ($event->activity ? $event->activity->participants : '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -216,6 +241,12 @@
                                                    required>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <sub>-1 for no limit, 0 for only helpers</sub>
                                 </div>
                             </div>
 
@@ -248,6 +279,86 @@
 
             </div>
 
+            @if($event)
+
+                @if($event->activity)
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Edit helping committees
+                        </div>
+
+                        <form method="post" action="{{ route('event::addhelp', ['id'=>$event->id]) }}">
+
+                            {!! csrf_field() !!}
+
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <select class="form-control" name="committee">
+                                        <option disabled selected>Select a committee below:</option>
+                                        @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
+                                            <option value="{{ $committee->id }}">{{ $committee->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" name="amount" placeholder="15"
+                                                   min="1" required>
+                                            <span class="input-group-addon">people</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="submit" class="btn btn-success pull-right" value="Add">
+                                    </div>
+                                </div>
+
+                                @if($event->activity->helpingCommittees->count() > 0)
+                                    <hr>
+                                    @foreach($event->activity->helpingCommittees as $committee)
+                                        <p>
+                                            <strong>{{ $committee->name }}</strong><br>
+                                            Helps with
+                                            {{ $event->activity->helpingUsers($committee->pivot->id)->count() }} people.
+                                            {{ $committee->pivot->amount }} are needed.
+                                            <a href="{{ route('event::deletehelp', ['id'=>$committee->pivot->id]) }}">
+                                                Delete.
+                                            </a>
+                                        </p>
+                                    @endforeach
+                                @endif
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Contact details participants
+                        </div>
+
+                        <div class="panel-body">
+                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
+                                to participants!</p>
+                            <textarea
+                                    class="form-control">@foreach($event->activity->allUsers as $user){{ $user->email }}
+                                , @endforeach</textarea>
+                        </div>
+
+                    </div>
+
+                @endif
+
+            @endif
+
+
         </div>
 
     </div>
@@ -262,6 +373,12 @@
 
         var simplemde = new SimpleMDE({
             element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+
+        var simplemde = new SimpleMDE({
+            element: $("#editor-summary")[0],
             toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
             spellChecker: false
         });

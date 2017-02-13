@@ -91,16 +91,15 @@
             </div>
         </div>
 
-        @if(Auth::user()->hasRole('admin'))
-            <div class="col-md-4 col-xs-4">
-                <div class="btn-group btn-group-justified" role="group">
-                    <a class="btn btn-default" target="_blank"
-                       href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
-                        Impersonate
-                    </a>
-                </div>
+
+        <div class="col-md-4 col-xs-4">
+            <div class="btn-group btn-group-justified" role="group">
+                <a class="btn btn-default" target="_blank"
+                   href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
+                    Impersonate
+                </a>
             </div>
-        @endif
+        </div>
 
     </div>
 
@@ -130,13 +129,17 @@
             </div>
         </div>
 
-        <div class="col-md-4 col-xs-6">
-            <div class="btn-group btn-group-justified" role="group">
-                <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
-                    Print Member Form
-                </a>
+        @if($user->address)
+
+            <div class="col-md-4 col-xs-6">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-form" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Member Form
+                    </a>
+                </div>
             </div>
-        </div>
+
+        @endif
 
     </div>
 
@@ -146,7 +149,7 @@
 
         <div class="row clearfix">
 
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-4 col-xs-4">
                 <div class="btn-group btn-group-justified" role="group">
                     <a href="{{ route('membercard::download', ['id' => $user->id]) }}" class="btn btn-default"
                        target="_blank">
@@ -155,11 +158,39 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-xs-6">
+            <div class="col-md-4 col-xs-4">
                 <div class="btn-group btn-group-justified" role="group">
                     <a id="print-card" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
                         Print Card ({{ $user->member->card_printed_on or 'First' }})
                     </a>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-xs-4">
+                <div class="btn-group btn-group-justified" role="group">
+                    <a id="print-card-overlay" data-id="{{ $user->id }}" class="btn btn-default" target="_blank">
+                        Print Overlay
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row clearfix">
+
+            <div class="col-md-12 col-xs-12">
+                <div class="btn-group btn-group-justified" role="group">
+                    @if($user->isTempadmin())
+                        <a href="{{ route('user::member::endtempadmin', ['id' => $user->id]) }}" class="btn btn-default">
+                            End temporary admin
+                        </a>
+                    @else
+                        <a href="{{ route('user::member::maketempadmin', ['id' => $user->id]) }}" class="btn btn-default">
+                            Make temporary admin
+                        </a>
+                    @endif
                 </div>
             </div>
 

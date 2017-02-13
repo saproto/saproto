@@ -79,6 +79,16 @@ class OrderLineController extends Controller
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->get();
 
+        if (Auth::user()->can('alfred')) {
+            $neworderlines = [];
+            foreach ($orderlines as $orderline) {
+                if ($orderline->product->account->id == config('omnomcom.alfred-account')) {
+                    $neworderlines[] = $orderline;
+                }
+            }
+            $orderlines = collect($neworderlines);
+        }
+
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
             'orderlines' => ($orderlines ? $orderlines : [])
@@ -113,6 +123,9 @@ class OrderLineController extends Controller
 
             $order->save();
 
+            $product->stock -= $units;
+            $product->save();
+
         }
 
         $request->session()->flash('flash_message', 'Your manual orders have been added.');
@@ -133,6 +146,9 @@ class OrderLineController extends Controller
             $request->session()->flash('flash_message', 'The orderline cannot be deleted, as it has already been paid for.');
             return Redirect::back();
         }
+
+        $order->product->stock += $order->units;
+        $order->product->save();
 
         $order->delete();
 

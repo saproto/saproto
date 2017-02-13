@@ -100,10 +100,16 @@
 
             transition: all 0.5s;
             transform: translate(0, 0);
+            opacity: 1;
+
+            z-index: 100;
         }
 
         .category_view.inactive {
             transform: translate(0, -100%);
+            opacity: 0;
+
+            z-index: 0;
         }
 
         #product_nav {
@@ -155,6 +161,10 @@
             margin: 10px;
             text-align: right;
             font-size: 20px;
+            max-height: 56px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .product-price {
@@ -370,6 +380,8 @@
 
             background-color: rgba(0, 0, 0, 0.8);
 
+            z-index: 200;
+
             overflow: hidden;
 
             display: none;
@@ -519,9 +531,11 @@
                                     &euro; {{ number_format($product->price, 2, '.', '') }}
                                 </div>
 
-                                <div class="product-stock">
-                                    {{ $product->stock }} x
-                                </div>
+                                @if ($product->stock < 1000)
+                                    <div class="product-stock">
+                                        {{ $product->stock }} x
+                                    </div>
+                                @endif
 
                             </div>
 
@@ -579,14 +593,33 @@
         <h1>Link an RFID card to your account.</h1>
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
-               type="text" placeholder="member@proto.utwente.nl">
+               type="text" placeholder="E-mail address or UTwente username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
                type="password"
-               placeholder="correct horse battery staple">
+               placeholder="Proto password or UTwente password">
 
         <span class="modal-status">
             First enter your username and password, then present an RFID card.
         </span>
+
+    </div>
+
+    <div id="outofstock-modal" class="modal inactive">
+
+        <h1>The product you selected is out of stock.</h1>
+
+    </div>
+
+    <div id="idlewarning-modal" class="modal inactive">
+
+        <h1>Timeout warning!</h1>
+        <span class="modal-status">If you want to continue using the OmNomCom, please touch the screen.</span>
+
+    </div>
+
+    <div id="emptycart-modal" class="modal inactive">
+
+        <h1>The cart is empty. Please fill the cart before scanning your card :)</h1>
 
     </div>
 
@@ -596,10 +629,10 @@
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-username"
                type="text"
-               placeholder="member@proto.utwente.nl">
+               placeholder="E-mail address or UTwente username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-password"
                type="password"
-               placeholder="correct horse battery staple">
+               placeholder="Proto password or UTwente password">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
         @if($store->cash_allowed)
@@ -610,12 +643,6 @@
         <span class="modal-status">
             Enter your credentials above, or present an RFID card.
         </span>
-
-    </div>
-
-    <div id="outofstock-modal" class="modal inactive">
-
-        <h1>The product you selected is out of stock.</h1>
 
     </div>
 
@@ -687,7 +714,8 @@
             cart[$(this).attr('data-id')]++;
             stock[$(this).attr('data-id')]--;
 
-            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+            var s = stock[$(this).attr('data-id')];
+            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
             update();
 
@@ -700,7 +728,8 @@
         cart[$(this).attr('data-id')]--;
         stock[$(this).attr('data-id')]++;
 
-        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(stock[$(this).attr('data-id')] + ' x');
+        var s = stock[$(this).attr('data-id')];
+        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
         update();
 
@@ -738,6 +767,13 @@
                     finishPurchase();
                 } else {
                     $("#purchase-modal .modal-status").html(data);
+                }
+            },
+            error: function (xhr, status) {
+                if (xhr.status == 503) {
+                    $("#purchase-modal .modal-status").html("The website is currently in maintenance. Please try again in 30 seconds.");
+                } else {
+                    $("#purchase-modal .modal-status").html("There is something wrong with the website, call someone to help!");
                 }
             }
         })
@@ -833,8 +869,21 @@
 
             } else {
 
-                $("#purchase").trigger('click');
-                purchase(data);
+                var anythingincart = false;
+
+                for (id in cart) {
+                    if (cart[id] > 0) {
+                        anythingincart = true;
+                    }
+                }
+
+                if(anythingincart) {
+                    $("#purchase").trigger('click');
+                    purchase(data);
+                }else{
+                    $("#modal-overlay").show();
+                    $("#emptycart-modal").removeClass('inactive');
+                }
 
             }
 
@@ -869,6 +918,53 @@
         $("#purchase-modal").removeClass('inactive');
         modal_status = 'purchase';
     });
+
+
+    /*
+     Handle idle timeout
+     */
+
+    var idleTime = 0;
+    var idleWarning = false;
+
+    $(document).ready(function () {
+        //Increment the idle time counter every minute.
+        var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+
+        //Zero the idle timer on mouse movement.
+        $(this).mousemove(function (e) {
+            idleTime = 0;
+            idleWarning = false;
+        });
+        $(this).keypress(function (e) {
+            idleTime = 0;
+            idleWarning = false;
+        });
+    });
+
+    function timerIncrement() {
+        idleTime = idleTime + 1;
+
+        if (idleTime > 60 && !idleWarning) { // 1 minutes
+            var anythingincart = false;
+
+            for (id in cart) {
+                if (cart[id] > 0) {
+                    anythingincart = true;
+                }
+            }
+
+            if(anythingincart) {
+                idleWarning = true;
+                $("#modal-overlay").show();
+                $("#idlewarning-modal").removeClass('inactive');
+
+                setTimeout(function() {
+                    if(idleWarning) window.location.reload();
+                }, 10000);
+            }
+        }
+    }
 
 
 </script>

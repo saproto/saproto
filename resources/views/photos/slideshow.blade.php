@@ -99,21 +99,22 @@
             left: 20px;
             top: 20px;
             padding: 15px 20px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: #FFFFFF;
-            text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
             font: 26px 'Roboto';
             border: 1px solid #c1ff00;
         }
     </style>
 
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.7.2.min.js"></script>
+    @include('website.layouts.assets.javascripts')
+
     <script type="text/javascript">
         var slideInterval;
 
         var protoServer = '{{ URL::to('/') }}';
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             startSlideshow();
         });
 
@@ -121,50 +122,50 @@
             $.ajax({
                 url: protoServer + '/api/photos',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     $('#albums').html('');
-                    $(data).each(function() {
-                        $('#albums').append('<option value="' + this.id + '">' + this.title._content + '</option>')
+                    $(data).each(function () {
+                        $('#albums').append('<option value="' + this.id + '">' + this.name + '</option>')
                     });
 
                     displayRandomAlbum();
 
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus)
                     alert('Error');
                 }
             });
 
-            $('#albums').bind('change', function() {
-                displayAlbum( $(this).val() );
+            $('#albums').bind('change', function () {
+                displayAlbum($(this).val());
             });
         }
 
         function displayRandomAlbum() {
             var random = $('#albums > option:nth-child(' + Math.round(Math.random() * $('#albums > option').length) + ')').val();
-            displayAlbum( random );
+            displayAlbum(random);
         }
 
-        function displayAlbum( id ) {
+        function displayAlbum(id) {
             $('#slideshow').addClass('loading').html('');
             $.ajax({
                 url: protoServer + '/api/photos/' + id,
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
 
                     $('#slideshow').removeClass('loading');
 
-                    $('#albums > option').each(function() {
+                    $('#albums > option').each(function () {
                         $(this).removeAttr('selected');
-                        if( $(this).attr('value') == id ) {
+                        if ($(this).attr('value') == id) {
                             $(this).attr('selected', 'selected');
-                            $('#title').html( $(this).html() );
+                            $('#title').html($(this).html());
                         }
                     });
 
-                    $(data.photo).each(function() {
-                        $('#slideshow').append('<div style="background-image:url(' + this.url_l + ');"></div>');
+                    $(data.photos).each(function () {
+                        $('#slideshow').append('<div style="background-image:url(' + this.url + ');"></div>');
                     });
 
                     prepareSlideshow();
@@ -179,7 +180,7 @@
             $('#slideshow > div:first-child').addClass('active');
 
             var z = 1;
-            $('#slideshow > div').each(function() {
+            $('#slideshow > div').each(function () {
                 $(this).css({
                     zIndex: z
                 });
@@ -192,8 +193,8 @@
             var next = $('#slideshow > div.active').next();
             $('#slideshow > div.active').removeClass('active');
 
-            if( next.length > 0 ) {
-                setTimeout(function(){
+            if (next.length > 0) {
+                setTimeout(function () {
                     $(next).addClass('active');
                 }, 300);
             } else {

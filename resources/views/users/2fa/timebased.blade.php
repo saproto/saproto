@@ -25,11 +25,12 @@
 
                     <p style="text-align: center; padding: 0 150px;">
                         <input class="form-control" name="2facode" placeholder="Your six digit code.">
+                        <input type="hidden" name="2fakey" value="{{ $tfa_key }}">
                     </p>
 
                     <p style="text-align: center;">
                         You can also enter the below secret key manually.<br>
-                        <strong>{{ Session::get('2fa_secret') }}</strong>
+                        <strong>{{ $tfa_key }}</strong>
                     </p>
 
                 </div>

@@ -78,7 +78,7 @@
                         </div>
 
                         <select class="form-control" name="user">
-                            @foreach(User::orderBy('name_first', 'asc')->get() as $user)
+                            @foreach(User::orderBy('name', 'asc')->get() as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
                             @endforeach
                         </select>

@@ -50,6 +50,42 @@
                     </div>
 
                 </div>
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        Descriptions for membercard
+                    </div>
+
+                    <div class="panel-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label for="editor">Excerpt for membercard</label>
+                                    <textarea id="editor-membercard_excerpt"
+                                              name="membercard_excerpt" placeholder="A small paragraph about what this company does on our membercard.">{{ $company->membercard_excerpt or '' }}</textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label for="editor">Long for membercard</label>
+                                    <textarea id="editor-membercard_long"
+                                              name="membercard_long" placeholder="A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!">{{ $company->membercard_long or '' }}</textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
 
             <div class="col-md-4">
@@ -102,6 +138,14 @@
                             </label>
                         </div>
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"
+                                       name="in_logo_bar" {{ ($company && $company->on_membercard? 'checked' : '') }}>
+                                    Visible on membercard page.
+                            </label>
+                        </div>
+
                         <hr>
 
                         <div class="form-group">
@@ -142,6 +186,16 @@
         });
         var simplemde2 = new SimpleMDE({
             element: $("#editor-description")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+        var simplemde3 = new SimpleMDE({
+            element: $("#editor-membercard_excerpt")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
+            spellChecker: false
+        });
+        var simplemde4 = new SimpleMDE({
+            element: $("#editor-membercard_long")[0],
             toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
             spellChecker: false
         });

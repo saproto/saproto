@@ -132,6 +132,28 @@
 
         });
 
+        $('body').delegate('#print-card-overlay', 'click', function () {
+
+            if (confirm("Please confirm you have the right member card loaded.")) {
+                $.ajax({
+                    url: '{{ route('membercard::printoverlay') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
         $('body').delegate('#print-form', 'click', function () {
 
             if (confirm("Please confirm you want to print a membership document.")) {

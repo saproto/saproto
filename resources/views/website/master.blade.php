@@ -7,14 +7,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
+    <meta name="theme-color" content="#C1FF00">
 
-    <title>S.A. Proto | @yield('page-title','Default Page Title')</title>
+    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
+    <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto"
+          href="{{ route('search::opensearch') }}"/>
+
+    <title>@if(env('APP_ENV') != 'production') [DEV] @endif S.A. Proto | @yield('page-title','Default Page Title')</title>
+
+    @section('head')
+    @show
 
     @include('website.layouts.assets.stylesheets')
 
     @section('stylesheet')
         @include('website.layouts.assets.customcss')
+    @show
+
+    @section('opengraph')
+        <meta property="og:url" content="{{ Request::url() }}"/>
+        <meta property="og:type" content="website"/>
+        <meta property="fb:app_id" content="145272648862427"/>
+        <meta property="og:title" content="@yield('page-title','Website')"/>
+        <meta property="og:description"
+              content="@yield('og-description','S.A. Proto is the study association for Creative Technology at the University of Twente.')"/>
+        <meta property="og:image"
+              content="@yield('og-image',asset('images/logo/og-image.png'))"/>
     @show
 
 </head>
@@ -31,13 +49,13 @@
 
 </div>
 
-<footer id="footer">
+<footer class="main-footer" id="footer">
     <div class="container">
         <div class="row vcard">
             <div class="col-md-2 col-xs-6">
                 <strong>
                     <span class="fa fa-home"></span>&nbsp;&nbsp;
-                    <span class="org url" href="http://www.kick-in.nl/"><span
+                    <span class="org url" href="https://www.saproto.nl/"><span
                                 class="green">S.A. Proto</span></span>
                 </strong>
                 <br>
@@ -61,12 +79,15 @@
 
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.<br>
                 <sub>
-                    This website has been created with ♥ by the folks of the <a
-                            href="{{ route('developers') }}" class="green">{{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}</a> of Study Association Proto. The source is available on <a
-                            href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
+                    This website has been created with ♥ by the folks of the
+                    <a href="{{ route('developers') }}" class="green">
+                        {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                    </a>.
+                    The source is available on
+                    <a href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
                 </sub>
             </div>
-            <div class="col-md-3 col-xs-6" style="text-align: right;">
+            <div class="col-md-3 col-xs-6 footer__logo">
                 <img src="{{ asset('images/logo/inverse.png') }}" width="57%">
             </div>
         </div>

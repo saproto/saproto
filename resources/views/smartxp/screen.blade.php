@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <title>SmartXp Screen v3</title>
+    <title>SmartXP Screen v3</title>
 
     @include('website.layouts.assets.stylesheets')
 
@@ -143,6 +143,10 @@
             opacity: 0.5;
         }
 
+        .activity.current {
+            color: #c1ff00;
+        }
+
         .busentry {
             padding: 5px 10px 5px 10px;
             color: #fff;
@@ -158,6 +162,40 @@
 
         .busentry:nth-child(even) {
             background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        #protube {
+            position: relative;
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            border-bottom: none;
+        }
+
+        #protube.inactive {
+            background-image: url('{{ getenv('FISHCAM_URL') }}') !important;
+        }
+
+        #protube-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 0 5px #000;
+            border: none;
+        }
+
+        #protube-ticker {
+            position: absolute;
+
+            bottom: 0;
+            left: 0;
+
+            height: 5px;
+            width: 100%;
+
+            background-color: #c1ff00;
         }
 
     </style>
@@ -207,11 +245,13 @@
 
             <div class="box-partial" style="height: 33.33%;">
 
-                <div id="protube" class="box" style="height: 100%;">
+                <div id="protube" class="box inactive" style="height: 100%;">
 
                     <div id="protube-title" class="box-header">
-                        ProTube coming soon
+                        Connecting to ProTube...
                     </div>
+
+                    <div id="protube-ticker"></div>
 
                 </div>
 
@@ -300,12 +340,12 @@
                         var start = moment.unix(data[i].start);
                         var end = moment.unix(data[i].end);
                         var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                        $("#timetable").append('<div class="activity ' + (data[i].over ? "past" : "") + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
+                        $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
                     }
                 } else {
                     $("#timetable").html('<div class="notice">No lectures today!</div>');
                 }
-                setTimeout(updateTimetable, 300000);
+                setTimeout(updateTimetable, 60000);
             },
             error: function () {
                 $("#timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
@@ -326,21 +366,21 @@
                     for (i in data) {
                         var start = moment.unix(data[i].start);
                         var end = moment.unix(data[i].end);
-                        if (start.format('DD-MM') != end.format('DD-MM')) {
+                        if (start.format('DD-MM') == end.format('DD-MM')) {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
                         } else {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].over ? "past" : "") + '">' + time + ' @ ' + data[i].location + '<br><strong>' + data[i].title + '</strong></div>');
+                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' @ ' + data[i].location + '<br><strong>' + data[i].title + '</strong></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
                 }
-                setTimeout(updateTimetable, 300000);
+                setTimeout(updateActivities, 60000);
             },
             error: function () {
                 $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
-                setTimeout(updateTimetable, 5000);
+                setTimeout(updateActivities, 5000);
             }
         })
     }
@@ -374,6 +414,62 @@
 
     updateBuses();
     setInterval(updateBuses, 60000);
+
+    // ProTube
+    var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
+    var nowplaying;
+
+    screen.on("connect", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").removeClass('active').html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
+    screen.on("progress", function (data) {
+
+        var progress = parseInt(data);
+        $("#protube-ticker").css("width", (data.duration / progress) + "%");
+
+    });
+
+    screen.on("ytInfo", function (data) {
+
+        nowplaying = data;
+        if (typeof data.title == "undefined") {
+            $("#protube-title").html("ProTube Idle");
+            $("#protube-ticker").css("width", "100%");
+            $("#protube").addClass('inactive').css("background-image", "auto");
+        } else {
+            var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
+            $("#protube-ticker").css("width", "0%");
+            $("#protube-title").html(data.title);
+            $("#protube").removeClass('inactive').css("background-image", url);
+        }
+
+    });
+
+    screen.on("disconnect", function () {
+
+        $("#protube-title").html("Connection lost");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
+    screen.on("reconnect", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
 
 </script>
 

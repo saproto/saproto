@@ -43,21 +43,15 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
-                    <label for="name_first" class="control-label">First name</label>
-                    <input type="text" class="form-control" id="name_first" name="name_first" placeholder="John"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_first'] : '') }}"
+                    <label for="name" class="control-label">Your full name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}"
                            required>
                 </div>
                 <div class="col-md-5">
-                    <label for="name_last" class="control-label">Last name</label>
-                    <input type="text" class="form-control" id="name_last" name="name_last" placeholder="Doe"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_last'] : '') }}"
-                           required>
-                </div>
-                <div class="col-md-2">
-                    <label for="name_initials" class="control-label">Initials</label>
-                    <input type="text" class="form-control" id="name_initials" name="name_initials" placeholder="J."
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name_initials'] : '') }}"
+                    <label for="calling_name" class="control-label">Calling name</label>
+                    <input type="text" class="form-control" id="calling_name" name="calling_name" placeholder="Johnny"
+                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '') }}"
                            required>
                 </div>
             </div>

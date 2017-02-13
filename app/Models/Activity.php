@@ -38,7 +38,16 @@ class Activity extends Validatable
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
+    }
+
+    /**
+     * @return mixed A list of participants to this activity.
+     */
+    public function allUsers()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')
+            ->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
     }
 
     /**
@@ -47,7 +56,7 @@ class Activity extends Validatable
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps()->get();
+            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
     /**
@@ -56,6 +65,14 @@ class Activity extends Validatable
     public function helpingCommittees()
     {
         return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(array('amount', 'id'))->withTimestamps();
+    }
+
+    /**
+     * @return mixed A list of committees helping out at this activity.
+     */
+    public function helpingCommitteeInstances()
+    {
+        return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
     }
 
     /**
@@ -70,7 +87,7 @@ class Activity extends Validatable
     /**
      * @param Committee $committee The committee for which the user should be helping.
      * @param User $user The user to check helping status for.
-     * @return bool Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
+     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation(Committee $committee, User $user)
     {
@@ -84,7 +101,7 @@ class Activity extends Validatable
 
     /**
      * @param User $user The user to check participation status for.
-     * @return Model|null|static Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
+     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation(User $user, HelpingCommittee $h = null)
     {
@@ -110,7 +127,7 @@ class Activity extends Validatable
      */
     public function isFull()
     {
-        return count($this->users()) >= $this->participants;
+        return $this->participants != -1 && count($this->users) >= $this->participants;
     }
 
     /**
@@ -118,10 +135,10 @@ class Activity extends Validatable
      */
     public function freeSpots()
     {
-        if ($this->participants == null) {
-            return null;
+        if ($this->participants <= 0) {
+            return -1;
         } else {
-            return ($this->participants - count($this->users()));
+            return max(($this->participants - count($this->users)), 0);
         }
     }
 
@@ -130,7 +147,7 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if ($this->closed) {
+        if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
@@ -145,5 +162,15 @@ class Activity extends Validatable
             return false;
         }
         return $this->deregistration_end === null || date('U') < $this->deregistration_end;
+    }
+
+    public function hasStarted()
+    {
+        return $this->event->start < date('U');
+    }
+
+    public function withParticipants()
+    {
+        return $this->participants !== 0;
     }
 }

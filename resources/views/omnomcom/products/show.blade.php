@@ -27,20 +27,20 @@
 
             @endif
 
+            <hr>
+
+            <div class="btn-group-justified">
+                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}" class="btn btn-success">
+                    Edit
+                </a>
+            </div>
+
 
         </div>
 
         <div class="col-md-9">
 
             <h3>Most recent orders for this product</h3>
-
-            @if ($product->orderlines->count() > 15)
-
-                <p>
-                    Only showing the last 15 out of {{ $product->orderlines->count() }} orders.
-                </p>
-
-            @endif
 
             @if ($product->orderlines->count() > 0)
 
@@ -53,12 +53,13 @@
                         <th>Order time</th>
                         <th>User</th>
                         <th>Quantity</th>
+                        <th>Total price</th>
 
                     </tr>
 
                     </thead>
 
-                    @foreach($product->orderlines->slice(0, 15)->all() as $orderline)
+                    @foreach($orderlines as $orderline)
 
                         <tr>
 
@@ -69,12 +70,15 @@
                                 </a>
                             </td>
                             <td>{{ $orderline->units }}x</td>
+                            <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>
 
                         </tr>
 
                     @endforeach
 
                 </table>
+
+                <div style="text-align: center;">{!! $orderlines->render() !!}</div>
 
             @else
 

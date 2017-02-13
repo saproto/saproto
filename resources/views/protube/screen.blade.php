@@ -1,5 +1,6 @@
 <html>
 <head>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
@@ -140,7 +141,7 @@
 
         #pin h1 {
             color: #c1ff00;
-            font-size: 12px;
+            font-size: 16px;
 
             margin: 0;
             padding: 0;
@@ -415,6 +416,18 @@
             $("#nowPlaying").html(title);
         }
     </script>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-36196842-5', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
 </head>
 
 <body>
@@ -433,7 +446,7 @@
 
 <div id="bottomBar">
     <div id="pin">
-        <h1>https://protube.saproto.nl/</h1>
+        <h1>www.protube.nl</h1>
         <p id="pinCode">...</p>
     </div>
     <div id="queue">

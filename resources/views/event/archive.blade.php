@@ -56,7 +56,7 @@
 
                             @if(count($month) > 0)
 
-                                <? $week = date('W', $month[0]->start); ?>
+                                <?php $week = date('W', $month[0]->start); ?>
 
                                 @foreach($month as $i => $event)
 
@@ -72,17 +72,12 @@
                                             </p>
                                             <p>
                                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }} -
-                                                @if (($event->end - $event->start) < 3600 * 24)
-                                                    {{ date('H:i', $event->end) }}
-                                                @else
-                                                    {{ date('j M, H:i', $event->end) }}
-                                                @endif
+                                                {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                             </p>
                                         </div>
                                     </a>
 
-                                    <? $week = date('W', $event->start); ?>
+                                    <?php $week = date('W', $event->start); ?>
 
                                 @endforeach
 

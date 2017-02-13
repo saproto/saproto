@@ -4,18 +4,28 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use PragmaRX\Google2FA\Google2FA;
 
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+
+use Proto\Models\AchievementOwnership;
+use Proto\Models\Address;
+use Proto\Models\Alias;
+use Proto\Models\Bank;
+use Proto\Models\EmailListSubscription;
+use Proto\Models\PasswordReset;
+use Proto\Models\RfidCard;
 use Proto\Models\User;
+use Proto\Models\Member;
 
 use Auth;
+use Proto\Models\WelcomeMessage;
 use Redirect;
 use Yubikey;
 use Hash;
 use Mail;
+use Session;
 
 class AuthController extends Controller
 {
@@ -49,13 +59,25 @@ class AuthController extends Controller
 
         } else {
 
-            // We cannot authenticate to our own records. Try RADIUS.
-            $user = User::where('utwente_username', $username)->first();
+            // See if someone maybe used their Proto username.
+            $member = Member::where('proto_username', $username)->first();
 
-            if ($user) {
+            // Check password again.
+            if ($member && $member->user && Hash::check($password, $member->user->password)) {
 
-                if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
-                    return $user;
+                return $member->user;
+
+            } else {
+
+                // We cannot authenticate to our own records. Try RADIUS.
+                $user = User::where('utwente_username', $username)->first();
+
+                if ($user) {
+
+                    if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
+                        return $user;
+                    }
+
                 }
 
             }
@@ -192,6 +214,41 @@ class AuthController extends Controller
 
     }
 
+    public function updatePassword(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($user == null) {
+            abort(404);
+        }
+
+        if ($user->id != Auth::id()) {
+            $request->session()->flash('flash_message', 'Sorry! You cannot change another user their password. If a user forgot their password, please let them use the \'forgot password\' form on the login screen.');
+            return Redirect::back();
+        }
+
+        if (
+            AuthController::verifyCredentials($user->email, $request->oldpass)
+            || ($user->utwente_username && AuthController::verifyUtwenteCredentials($user->utwente_username, $request->oldpass))
+        ) {
+            if ($request->newpass1 !== $request->newpass2) {
+                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
+                return Redirect::route('user::dashboard');
+            } elseif (strlen($request->newpass1) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
+                return Redirect::route('user::dashboard');
+            } else {
+                $user->setPassword($request->newpass1);
+                $request->session()->flash('flash_message', 'Your password has been changed.');
+                return Redirect::route('user::dashboard');
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Old password incorrect! Password not updated.');
+        return Redirect::route('user::dashboard');
+
+    }
+
     public function getLogout()
     {
         Auth::logout();
@@ -204,6 +261,9 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
             return Redirect::route('user::dashboard');
         }
+
+        if ($request->wizard) Session::flash('wizard', true);
+
         return view('users.register');
     }
 
@@ -218,9 +278,8 @@ class AuthController extends Controller
 
         $this->validate($request, [
             'email' => 'required|email|unique:users',
-            'name_first' => 'required|string',
-            'name_last' => 'required|string',
-            'name_initials' => 'required|regex:(([A-Za-z]\.)+)',
+            'name' => 'required|string',
+            'calling_name' => 'required|string',
             'birthdate' => 'required|date_format:Y-m-d',
             'gender' => 'required|in:1,2,9',
             'nationality' => 'required|string',
@@ -230,19 +289,37 @@ class AuthController extends Controller
 
         $user = User::create($request->except('g-recaptcha-response'));
 
-        $password = str_random(16);
-        $user->password = Hash::make($password);
+        if (Session::get('wizard')) $user->wizard = true;
 
         $user->save();
 
-        Mail::send('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($user) {
+        /** Add user to LDAP */
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+        /** End add user to LDAP */
+
+        $email = $user->email;
+        $name = $user->mail;
+
+        Mail::queue('emails.registration', ['user' => $user], function ($m) use ($email, $name) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
-            $m->to($user->email, $user->name);
+            $m->to($email, $name);
             $m->subject('Account registration at Study Association Proto');
         });
 
+        AuthController::dispatchPasswordEmailFor($user);
+
         if (!Auth::check()) {
-            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with your password shortly.');
+            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
             return Redirect::route('homepage');
         }
     }
@@ -363,8 +440,6 @@ class AuthController extends Controller
             'token' => str_random(128),
             'valid_to' => strtotime('+1 hour')
         ]);
-
-        die(print_r($reset));
 
         $name = $user->name;
         $email = $user->email;

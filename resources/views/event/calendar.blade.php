@@ -25,7 +25,6 @@
                         </span>
 
                     @endforeach
-
                 </div>
 
             </div>
@@ -39,6 +38,35 @@
         @foreach($events as $key => $section)
 
             <div class="col-md-4">
+
+                @if($key == 1)
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+
+                            <div class="btn-group btn-lg btn-group-justified">
+                                <a class="btn btn-info" target="_blank"
+                                   href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar"))) }}">
+                                    <i class="fa fa-google" aria-hidden="true"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Google Calendar
+                                </a>
+                            </div>
+
+                            <div class="btn-group btn-lg btn-group-justified">
+                                <div class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
+                                    <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+                                    &nbsp;&nbsp;&nbsp;
+                                    Other Calendars
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                @endif
 
                 <div class="panel panel-default">
 
@@ -58,7 +86,7 @@
 
                         @if(count($section) > 0)
 
-                            <? $week = date('W', $section[0]->start); ?>
+                            <?php $week = date('W', $section[0]->start); ?>
 
                             @foreach($section as $key => $event)
 
@@ -74,17 +102,12 @@
                                         </p>
                                         <p>
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                            {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }} -
-                                            @if (($event->end - $event->start) < 3600 * 24)
-                                                {{ date('H:i', $event->end) }}
-                                            @else
-                                                {{ date('j M, H:i', $event->end) }}
-                                            @endif
+                                            {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                         </p>
                                     </div>
                                 </a>
 
-                                <? $week = date('W', $event->start); ?>
+                                <?php $week = date('W', $event->start); ?>
 
                             @endforeach
 
@@ -102,6 +125,32 @@
 
         @endforeach
 
+    </div>
+
+    <!-- Modal for deleting automatic withdrawal. //-->
+    <div id="calendar-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Import our calendar into yours!</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>
+                        If you want to, you can import our calendar into yours. This can be easily done by going to your
+                        favorite calendar application and looking for an option similar to <i>Import calendar by URL</i>.
+                        You can then copy and paste the link below.
+                    </p>
+
+                    <p style="text-align: center;">
+                        <strong>{{ route("ical::calendar") }}</strong>
+                    </p>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

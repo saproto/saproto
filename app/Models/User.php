@@ -2,6 +2,10 @@
 
 namespace Proto\Models;
 
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+use Adldap\Objects\AccountControl;
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +16,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use DateTime;
 use Carbon\Carbon;
+use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -60,25 +65,26 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany('Proto\Models\Role', 'role_user');
     }
 
-    /**
-     * @return string The full name of the user.
-     */
-    public function getNameAttribute()
+    public function setPassword($password)
     {
-        return $this->name_first . " " . $this->name_last;
-    }
+        // Update Laravel Password
+        $this->password = Hash::make($password);
+        $this->save();
 
-    /**
-     * @return null|Address The primary address of the user, if any.
-     */
-    public function getPrimaryAddress()
-    {
-        foreach ($this->address as $address) {
-            if ($address->is_primary) {
-                return $address;
+        // Update Active Directory Password
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
+        if ($ldapuser !== null) {
+            $ldapuser->setPassword($password);
+            if ($this->member) {
+                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
             }
+            $ldapuser->save();
         }
-        return null;
     }
 
     /**
@@ -89,9 +95,44 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('Proto\Models\Member');
     }
 
+    public function getUtwenteData()
+    {
+        if ($this->utwente_username) {
+            $data = json_decode(file_get_contents(getenv("LDAP_URL_UTWENTE") . "?filter=userprincipalname=" . $this->utwente_username . "*"));
+            if (count($data) > 0) {
+                return (object)$data[0];
+            } else {
+                return null;
+            }
+        }
+    }
+
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');
+    }
+
+    public function hasUnpaidOrderlines()
+    {
+        foreach ($this->orderlines as $orderline) {
+            if (!$orderline->isPayed()) return true;
+            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) return true;
+        }
+        return false;
+    }
+
+    public function tempadmin()
+    {
+        return $this->hasMany('Proto\Models\Tempadmin');
+    }
+
+    public function isTempadmin()
+    {
+        foreach ($this->tempadmin as $tempadmin) {
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -100,6 +141,11 @@ class User extends Model implements AuthenticatableContract,
     public function bank()
     {
         return $this->hasOne('Proto\Models\Bank');
+    }
+
+    public function backupBank()
+    {
+        return $this->hasOne('Proto\Models\Bank')->withTrashed();
     }
 
     /**
@@ -115,15 +161,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function address()
     {
-        return $this->hasMany('Proto\Models\Address');
-    }
-
-    /**
-     * @return mixed The associated primary addresses, if any.
-     */
-    public function primary_address()
-    {
-        return $this->address()->where('is_primary', true)->get()->first();
+        return $this->hasOne('Proto\Models\Address');
     }
 
     /**
@@ -136,7 +174,7 @@ class User extends Model implements AuthenticatableContract,
 
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->whereNull('committees_users.deleted_at')->withPivot(array('role', 'edition', 'id'))->withTimestamps()->orderBy('pivot_created_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id', 'created_at', 'deleted_at'))->whereNull('committees_users.deleted_at')->withTimestamps()->orderBy('pivot_created_at', 'asc');
     }
 
     /**
@@ -145,6 +183,11 @@ class User extends Model implements AuthenticatableContract,
     public function quotes()
     {
         return $this->hasMany('Proto\Models\Quote');
+    }
+
+    public function lists()
+    {
+        return $this->belongsToMany('Proto\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
     }
 
     /**
@@ -164,6 +207,14 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * @return mixed Any videos played by the user.
+     */
+    public function playedVideos()
+    {
+        return $this->hasMany('Proto\Models\PlayedVideo');
+    }
+
+    /**
      * @return mixed The age in years of a user.
      */
     public function age()
@@ -177,6 +228,64 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $this->id)->where('committee_id', $committee->id)->get()) > 0;
+        return count(CommitteeMembership::withTrashed()
+                ->where('user_id', $this->id)
+                ->where('committee_id', $committee->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
+    }
+
+    public function isInCommitteeBySlug($slug)
+    {
+        $committee = Committee::where('slug', $slug)->first();
+        return $committee && $this->isInCommittee($committee);
+    }
+
+    /**
+     * @return bool Whether the user is an active member of the association.
+     */
+    public function isActiveMember()
+    {
+        return count(CommitteeMembership::withTrashed()
+                ->where('user_id', $this->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
+    }
+
+    /**
+     * @return mixed Any Achievements the user aquired
+     */
+    public function achieved()
+    {
+        $achievements = $this->achievements;
+        $r = array();
+        foreach ($achievements as $achievement) {
+            $r[] = $achievement;
+        }
+        return $r;
+    }
+
+    public function withdrawals()
+    {
+        $withdrawals = [];
+        foreach (Withdrawal::all() as $withdrawal) {
+            if ($withdrawal->orderlinesForUser($this)->count() > 0) {
+                $withdrawals[] = $withdrawal;
+            }
+        }
+        return $withdrawals;
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 }

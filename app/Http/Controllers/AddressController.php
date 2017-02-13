@@ -21,7 +21,7 @@ use Redirect;
 class AddressController extends Controller
 {
 
-    public function addForm($id)
+    public function addForm($id, Request $request)
     {
         $user = User::find($id);
         if ($user == null) {
@@ -30,52 +30,28 @@ class AddressController extends Controller
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+
+        if($request->wizard > 0) Session::flash("wizard", true);
+
         return view('users.addresses.add', ['user' => $user]);
     }
 
-    public function delete($id, $address_id)
+    public function delete($id)
     {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404);
-        }
+        $user = User::findOrFail($id);
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
-        $address = Address::find($address_id);
-        if ($address == null) {
-            abort(404);
+        if (!$user->address) {
+            Session::flash("flash_message", "We don't have an address for you?");
+            return Redirect::back();
         }
-        if ($address->is_primary && $user->member != null) {
-            abort(404);
+        if ($user->member != null) {
+            Session::flash("flash_message", "You are a member. You can't delete your address!");
+            return Redirect::back();
         }
-        $address->delete();
+        $user->address->delete();
         Session::flash("flash_message", "Your address has been deleted.");
-        return Redirect::route('user::dashboard', ['id' => $id]);
-    }
-
-    public function makePrimary($id, $address_id)
-    {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404);
-        }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-        $address = Address::find($address_id);
-        if ($address == null) {
-            abort(404);
-        }
-        foreach ($user->address as $address) {
-            if ($address->id != $address_id) {
-                $address->is_primary = false;
-            } else {
-                $address->is_primary = true;
-            }
-            $address->save();
-        }
-        Session::flash("flash_message", "Your primary address has been saved.");
         return Redirect::route('user::dashboard', ['id' => $id]);
     }
 
@@ -102,36 +78,26 @@ class AddressController extends Controller
         }
         $address->fill($addressdata);
 
-        // See if we have a primary address already...
-        $address->is_primary = true;
-        foreach ($user->address as $a) {
-            if ($a->is_primary == true) {
-                $address->is_primary = false;
-                break;
-            }
-        }
-
         // Save it baby!
         $address->save();
 
         Session::flash("flash_message", "The address has been added.");
 
+        if(Session::get('wizard')) return Redirect::route('becomeamember');
+
         return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 
-    public function edit($id, $address_id, Request $request)
+    public function edit($id, Request $request)
     {
 
-        $address = Address::find($address_id);
-        $user = $address->user;
+        $user = User::findOrFail($id);
+        $address = $user->address;
 
         if ($address == null) {
-            abort(404);
-        }
-
-        if ($user == null) {
-            abort(404);
+            Session::flash("flash_message", "We don't have an address for you?");
+            return Redirect::back();
         }
 
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
@@ -142,30 +108,31 @@ class AddressController extends Controller
         $addressdata['user_id'] = $user->id;
 
         if (!$address->validate($addressdata)) {
-            return Redirect::route('user::address::edit', ['id' => $id, 'address_id' => $address_id])->withErrors($address->errors());
+            return Redirect::route('user::address::edit', ['id' => $id])->withErrors($address->errors());
         }
         $address->fill($addressdata);
         $address->save();
 
         Session::flash("flash_message", "The address has been edited.");
-
         return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 
-    public function editForm($id, $address_id)
+    public function editForm($id)
     {
-        $address = Address::find($address_id);
+
+        $user = User::findOrFail($id);
+        $address = $user->address;
+
         if ($address == null) {
-            abort(404);
+            Session::flash("flash_message", "We don't have an address for you?");
+            return Redirect::back();
         }
-        $user = $address->user;
-        if ($user == null) {
-            abort(404);
-        }
+
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
     }
 

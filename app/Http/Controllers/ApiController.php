@@ -12,8 +12,10 @@ use Proto\Models\User;
 use Proto\Models\Event;
 use Proto\Models\Activity;
 use Proto\Models\Token;
+use Proto\Models\PlayedVideo;
 
 use Auth;
+use Session;
 
 class ApiController extends Controller
 {
@@ -54,10 +56,51 @@ class ApiController extends Controller
 
         $user = $token->user()->first();
 
+        if(!$user) return("{\"is_admin\":false}");
+
         $adminInfo = new \stdClass();
-        $adminInfo->is_admin = $user->can('board');
+        
+        if($user->can('board') || $user->isTempadmin()) {
+            $adminInfo->is_admin = true;
+        }else{
+            $adminInfo->is_admin = false;
+        }
 
         return(json_encode($adminInfo));
+    }
+
+    public function protubePlayed(Request $request) {
+        if($request->secret != env('HERBERT_SECRET')) abort(403);
+
+        $playedVideo = new PlayedVideo();
+
+        $token = Token::where('token', $request->token)->first();
+
+        if($token) {
+            $user = $token->user()->first();
+            $playedVideo->user()->associate($user);
+        }
+
+        $playedVideo->video_id = $request->video_id;
+        $playedVideo->video_title = $request->video_title;
+
+        $playedVideo->save();
+    }
+
+    public function getToken(Request $request) {
+        $response = new \stdClass();
+
+        if(Auth::check()) {
+            $response->token = Session::get('token');
+        }else{
+            $response->token = 0;
+        }
+
+        if($request->has('callback')) {
+            return $request->callback . "(" . json_encode($response) . ")";
+        }else{
+            return json_encode($response);
+        }
     }
 
 }

@@ -15,7 +15,12 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER'),
+    'driver' => env('MAIL_DRIVER', 'log'),
+    'host' => 'localhost',
+    'port' => 25,
+    'encryption' => false,
+    'username' => env('SMTP_USERNAME'),
+    'password' => env('SMTP_PASSWORD'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +33,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'webmaster@saproto.nl', 'name' => 'S.A. Proto'],
+    'from' => ['address' => 'noreply@proto.utwente.nl', 'name' => 'S.A. Proto'],
 
     /*
     |--------------------------------------------------------------------------

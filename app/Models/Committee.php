@@ -4,9 +4,11 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Committee extends Model
 {
-    
+
     /**
      * The database table used by the model.
      *
@@ -17,9 +19,37 @@ class Committee extends Model
     /**
      * @return mixed All events organized by this committee.
      */
-    public function organizedActivities()
+    public function organizedEvents()
     {
-        return $this->hasMany('Proto\Models\Activity', 'organizing_committee');
+        return $this->hasMany('Proto\Models\Event', 'committee_id');
+    }
+
+    /**
+     * @return mixed All events organized by this committee in the past.
+     */
+    public function pastEvents()
+    {
+        $events = $this->organizedEvents()->where('end', '<', time())->get();
+
+        if (Auth::check() && Auth::user()->can('board')) {
+            return $events;
+        } else {
+            return $events->where('secret', '=', 0);
+        }
+    }
+
+    /**
+     * @return mixed All upcoming events organized by this committee.
+     */
+    public function upcomingEvents()
+    {
+        $events = $this->organizedEvents()->where('end', '>', time())->get();
+
+        if (Auth::check() && Auth::user()->can('board')) {
+            return $events;
+        } else {
+            return $events->where('secret', '=', 0);
+        }
     }
 
     /**
@@ -35,7 +65,7 @@ class Committee extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')->withPivot(array('id', 'role', 'edition'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')->whereNull('committees_users.deleted_at')->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     public function image()

@@ -138,7 +138,7 @@
 
                 <label for="max_stock">Product categories:</label>
 
-                <select multiple name="product_categories[]" class="form-control" required>
+                <select multiple name="product_categories[]" class="form-control">
 
                     @foreach($categories as $catogory)
 

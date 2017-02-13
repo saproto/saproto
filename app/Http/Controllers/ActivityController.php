@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Activity;
+use Proto\Models\ActivityParticipation;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 
+use Proto\Models\HelpingCommittee;
 use Redirect;
 
 use Auth;
+use Mail;
 
 class ActivityController extends Controller
 {
@@ -33,7 +37,7 @@ class ActivityController extends Controller
             'registration_start' => strtotime($request->registration_start),
             'registration_end' => strtotime($request->registration_end),
             'deregistration_end' => strtotime($request->deregistration_end),
-            'participants' => ($request->participants == 0 ? null : $request->participants),
+            'participants' => $request->participants,
             'price' => $request->price
         ];
 
@@ -67,16 +71,81 @@ class ActivityController extends Controller
         $event = Event::findOrFail($id);
 
         if (!$event->activity) {
-            abort(500, "There is no participation data to delete.");
-        } elseif (count($event->activity->users()) > 0) {
-            abort(500, "You cannot delete participation data because there are still participants to this activity.");
+            $request->session()->flash('flash_message', "There is no participation data to delete.");
+            return Redirect::back();
+        } elseif (count($event->activity->users) > 0) {
+            $request->session()->flash('flash_message', "You cannot delete participation data because there are still participants to this activity.");
+            return Redirect::back();
         }
 
-        $event->activity()->delete();
+        ActivityParticipation::withTrashed()->where('activity_id', $event->activity->id)->forceDelete();
+
+        $event->activity->delete();
 
         $request->session()->flash('flash_message', 'Participation data deleted.');
 
         return Redirect::route('event::edit', ['id' => $event->id]);
+    }
+
+    public function addHelp(Request $request, $id)
+    {
+        $event = Event::findOrFail($id);
+        if (!$event->activity) {
+            $request->session()->flash('flash_message', 'This event has no activity data.');
+            return Redirect::back();
+        }
+
+        $amount = $request->input('amount');
+        if ($amount < 1) {
+            $request->session()->flash('flash_message', 'The amount of helpers should be positive.');
+            return Redirect::back();
+        }
+
+        $committee = Committee::findOrFail($request->input('committee'));
+
+        $help = HelpingCommittee::create([
+            'activity_id' => $event->activity->id,
+            'committee_id' => $committee->id,
+            'amount' => $amount
+        ]);
+
+        foreach ($committee->users as $user) {
+            $name = $user->name;
+            $email = $user->email;
+            $helptitle = $help->activity->event->title;
+            Mail::queue('emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
+                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                $m->to($email, $name);
+                $m->subject('The activity ' . $helptitle . ' needs your help.');
+            });
+        }
+
+        $request->session()->flash('flash_message', 'Added ' . $committee->name . ' as helping committee.');
+        return Redirect::back();
+    }
+
+    public function deleteHelp(Request $request, $id)
+    {
+        $help = HelpingCommittee::findOrFail($id);
+
+        foreach ($help->users as $user) {
+            $name = $user->name;
+            $email = $user->email;
+            $helptitle = $help->activity->event->title;
+            Mail::queue('emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
+                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                $m->to($email, $name);
+                $m->subject('The activity ' . $helptitle . ' doesn\'t need your help anymore.');
+            });
+        }
+
+        foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
+            $participation->delete();
+        }
+
+        $help->delete();
+        $request->session()->flash('flash_message', 'Removed ' . $help->committee->name . ' as helping committee.');
+        return Redirect::back();
     }
 
 }

@@ -22,7 +22,7 @@
                     <div id="latest">
 
                         @if(count($data) > 0)
-                            <? $entry = $data[0] ?>
+                            <?php $entry = $data[0] ?>
                             <h4 style="margin-top: 0;">
                                 <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
                                 <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>

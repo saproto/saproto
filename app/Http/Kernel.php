@@ -22,7 +22,8 @@ class Kernel extends HttpKernel
         // Our own middleware
         \Proto\Http\Middleware\EnforceHTTPS::class,
         \Proto\Http\Middleware\DevelopmentAccess::class,
-        \Proto\Http\Middleware\EnforceTFA::class
+        \Proto\Http\Middleware\EnforceTFA::class,
+        \Proto\Http\Middleware\EnforceWizard::class
     ];
 
     /**
@@ -34,6 +35,7 @@ class Kernel extends HttpKernel
         'auth' => \Proto\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Proto\Http\Middleware\RedirectIfAuthenticated::class,
-        'member' => \Proto\Http\Middleware\Member::class
+        'member' => \Proto\Http\Middleware\Member::class,
+        'forcedomain' => \Proto\Http\Middleware\ForceDomain::class
     ];
 }

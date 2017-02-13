@@ -8,6 +8,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Activity;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -16,6 +17,13 @@ use Proto\Models\StorageEntry;
 use Session;
 use Redirect;
 use Auth;
+use Response;
+use Markdown;
+
+use IcalCalendar;
+use IcalEvent;
+use IcalOrganizer;
+use DateTime;
 
 class EventController extends Controller
 {
@@ -61,7 +69,7 @@ class EventController extends Controller
     public function finindex()
     {
 
-        $activities = Activity::where('closed', false)->get();
+        $activities = Activity::where('closed', false)->orderBy('registration_end', 'asc')->get();
         return view('event.notclosed', ['activities' => $activities]);
     }
 
@@ -115,6 +123,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
+
         $event = new Event();
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -122,6 +131,7 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->summary = $request->summary;
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -129,6 +139,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 
@@ -172,12 +185,14 @@ class EventController extends Controller
     {
 
         $event = Event::findOrFail($id);
+
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->summary = $request->summary;
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -185,6 +200,9 @@ class EventController extends Controller
 
             $event->image()->associate($file);
         }
+
+        $committee = Committee::find($request->input('committee'));
+        $event->committee()->associate($committee);
 
         $event->save();
 
@@ -220,12 +238,17 @@ class EventController extends Controller
 
         $activity = Activity::findOrFail($id);
 
+        if ($activity->event && !$activity->event->over()) {
+            Session::flash("flash_message", "You cannot close an activity before it has finished.");
+            return Redirect::back();
+        }
+
         if ($activity->closed) {
             Session::flash("flash_message", "This activity is already closed.");
             return Redirect::back();
         }
 
-        if (count($activity->users()) == 0 || $activity->price == 0) {
+        if (count($activity->users) == 0 || $activity->price == 0) {
             $activity->closed = true;
             $activity->save();
             Session::flash("flash_message", "This activity is now closed. It either was free or had no participants, so no orderlines or products were created.");
@@ -237,12 +260,12 @@ class EventController extends Controller
         $product = Product::create([
             'account_id' => $account->id,
             'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
-            'nicename' => 'activity',
+            'nicename' => 'activity-' . $activity->id,
             'price' => $activity->price
         ]);
         $product->save();
 
-        foreach ($activity->users() as $user) {
+        foreach ($activity->users as $user) {
             $order = OrderLine::create([
                 'user_id' => $user->id,
                 'product_id' => $product->id,
@@ -261,13 +284,49 @@ class EventController extends Controller
 
     }
 
+    public function getInNewsletter()
+    {
+
+        $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
+
+        return view('event.innewsletter', ['events' => $events]);
+
+    }
+
+    public function toggleInNewsletter($id)
+    {
+
+        $event = Event::findOrFail($id);
+
+        $event->include_in_newsletter = !$event->include_in_newsletter;
+        $event->save();
+
+        return Redirect::back();
+
+    }
+
 
     public function apiUpcomingEvents($limit = 20)
     {
 
-        $events = Event::where('secret', 0)->where('start', '>', date('U'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::where('secret', 0)->where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
 
-        return $events;
+        $data = [];
+
+        foreach ($events as $event) {
+            $data[] = (object)[
+                'id' => $event->id,
+                'title' => $event->title,
+                'description' => $event->description,
+                'start' => $event->start,
+                'end' => $event->end,
+                'location' => $event->location,
+                'current' => $event->current(),
+                'over' => $event->over()
+            ];
+        }
+
+        return $data;
 
     }
 
@@ -345,9 +404,7 @@ class EventController extends Controller
             $item = new \stdClass();
             $item->id = $activity->id;
             $item->email = $activity->email;
-            $item->name_first = $activity->name_first;
-            $item->name_last = $activity->name_last;
-            $item->name_initials = $activity->name_initials;
+            $item->name = $activity->name;
             $item->birthdate = $activity->birthdate;
             $item->gender = $activity->gender;
             $data[] = $item;
@@ -355,6 +412,48 @@ class EventController extends Controller
 
         return $data;
 
+    }
+
+    public function icalCalendar(Request $request)
+    {
+        $calendar = new IcalCalendar('-//HYTTIOAOAc//S.A. Proto Calendar//EN');
+        $calendar->setName('S.A. Proto Calendar');
+        $calendar->setDescription('All of Proto\'s events and happenings, straight from the website!');
+        $calendar->setCalendarColor('#C1FF00');
+        $calendar->setCalendarScale('GREGORIAN');
+        $calendar->setMethod('PUBLISH');
+
+        foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            $infotext = '';
+            if ($event->over()) {
+                $infotext = 'This activity is over.';
+            } elseif ($event->activity !== null && $event->activity->participants == -1) {
+                $infotext = 'Sign-up required, but no participant limit.';
+            } elseif ($event->activity !== null && $event->activity->participants > 0) {
+                $infotext = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
+            } else {
+                $infotext = 'No sign-up necessary.';
+            }
+
+            $component = (new IcalEvent())
+                ->setDtStart(new DateTime(date('d-m-Y H:i:s', $event->start)))
+                ->setDtEnd(new DateTime(date('d-m-Y H:i:s', $event->end)))
+                ->setSummary($event->title)
+                ->setDescription($infotext . ' More information: ' . route("event::show", ['id' => $event->id]))
+                ->setUseTimezone(true)
+                ->setLocation($event->location);
+
+            if ($event->committee !== null) {
+                $component->setOrganizer(new IcalOrganizer($event->committee->name));
+            }
+
+            $calendar->addComponent($component);
+        }
+
+        return Response::make($calendar->render())
+            ->header('Content-Type', 'text/calendar; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
     }
 
 }

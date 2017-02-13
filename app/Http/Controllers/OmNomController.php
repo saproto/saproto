@@ -148,4 +148,8 @@ class OmNomController extends Controller
         $products = Product::where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
         return view('omnomcom.products.generateorder', ['products' => $products]);
     }
+
+    public function miniSite() {
+        return view('omnomcom.minisite');
+    }
 }

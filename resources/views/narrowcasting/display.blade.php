@@ -35,51 +35,26 @@
             text-align: center;
             font-size: 50px;
             color: #fff;
-            transition: opacity 2s;
+            transition: opacity 1s;
         }
 
-        #slideshow {
-            transition: opacity 2s;
+        #slideshow, #yt-player {
+            transition: all 1s;
         }
 
         .slide {
             background-size: cover;
             background-position: center center;
-            transition: transform 2s;
-            transform: translate(0, 0);
+            transition: all 1s;
+            opacity: 1;
         }
 
         .slide.old {
-            transform: translate(0, 100%);
+            opacity: 0;
         }
 
         .slide.new {
-            transform: translate(0, -100%);
-        }
-
-        #protologo {
-            position: absolute;
-            top: 0;
-            height: 50px;
-            left: 0;
-            right: 0;
-        }
-        #protologo div {
-            height: 50px;
-            line-height: 55px;
-
-            margin: -10px auto 0 auto;
-            width: 400px;
-
-            color: #fff;
-            background-color: #000000;
-
-            opacity: 0.5;
-            text-align: center;
-            font-size: 20px;
-            text-shadow: 0 0 5px #000;
-
-            border-radius: 5px;
+            opacity: 0;
         }
 
     </style>
@@ -96,10 +71,8 @@
 
 </div>
 
-<div id="protologo">
-    <div>
-        Study Association Proto
-    </div>
+<div id="yt-player" style="opacity: 0;">
+
 </div>
 
 @include('website.layouts.assets.javascripts')
@@ -108,6 +81,25 @@
 
     var campaigns = [];
     var currentcampaign = 0;
+
+    var previousWasVideo = false;
+
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+            height: window.innerHeight,
+            width: window.innerWidth,
+            events: {
+                'onReady': onPlayerReady
+            },
+            playerVars: {
+                modestbranding: 1,
+                controls: 0,
+                showinfo: 0
+            }
+        });
+    }
 
     function updateCampaigns() {
 
@@ -121,13 +113,21 @@
 
     }
 
+    function onPlayerReady(event) {
+        event.target.mute();
+        event.target.playVideo();
+    }
+
     function updateSlide() {
 
         if (campaigns.length == 0) {
+
             $("#fullpagetext").html("There are no messages to display. :)").css("opacity", 1);
             $("#slideshow").css("opacity", 0);
-            setTimeout(updateSlide, 1000)
+            setTimeout(updateSlide, 1000);
+
         } else {
+
             $("#fullpagetext").html("Starting slideshow... :)").css("opacity", 0);
             $("#slideshow").css("opacity", 1);
 
@@ -139,15 +139,40 @@
             }
             campaign = campaigns[currentcampaign];
 
-            var campaignimage = campaign.image;
-            console.log(campaignimage);
-            $("#slideshow").append('<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaignimage + ');"></div>');
+            if (campaign.hasOwnProperty('image')) {
+
+                if (previousWasVideo) {
+                    $("#slideshow").css("opacity", 1);
+                    $("#yt-player").css("opacity", 0);
+                }
+
+                $("#slideshow").append('<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaign.image + ');"></div>');
+
+                setTimeout(updateSlide, campaign.slide_duration * 1000);
+                setTimeout(showSlide, 0);
+                setTimeout(clearSlides, 2000);
+
+                previousWasVideo = false;
+
+            } else {
+
+                player.loadVideoById(campaign.video, "highres");
+                player.playVideo();
+
+                if (!previousWasVideo) {
+                    $("#slideshow").css("opacity", 0);
+                    $("#yt-player").css("opacity", 1);
+                }
+
+                setTimeout(updateSlide, (campaign.slide_duration - 1) * 1000);
+                setTimeout(clearSlides, 2000);
+
+                previousWasVideo = true;
+
+            }
 
             currentcampaign++;
 
-            setTimeout(updateSlide, campaign.slide_duration * 1000);
-            setTimeout(showSlide, 500);
-            setTimeout(clearSlides, 2000);
         }
 
     }
@@ -170,6 +195,8 @@
     });
 
 </script>
+
+<script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 
 </body>
 

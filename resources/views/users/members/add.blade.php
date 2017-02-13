@@ -8,7 +8,17 @@
                     <h4 class="modal-title" id="addMembershipLabel">Make member</h4>
                 </div>
                 <div class="modal-body">
-                    @if (!$user->primary_address())
+
+                    @if($user->utwente_username == null)
+                        <p>
+                            <strong>
+                                This user has no University of Twente account linked to their user account. Please
+                                kindly ask the user to - if he is a student - link their UTwente account!
+                            </strong>
+                        </p>
+                    @endif
+
+                    @if (!$user->address)
                         <p>
                             <strong>
                                 This user does not have an address linked to their account. Please ask them to register
@@ -23,6 +33,7 @@
                             </strong>
                         </p>
                     @else
+
                         <p>
                             You are about to initiate membership for {{ $user->name }}. Please indicate below whether
                             the user should be a primary member of not.
@@ -39,10 +50,11 @@
                             </div>
                         </div>
                     @endif
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    @if ($user->primary_address() && $user->bank)
+                    @if ($user->address && $user->bank)
                         <button type="submit" class="btn btn-primary"
                                 onClick="return confirm('Did this user sign the membership form?')">Make member
                         </button>

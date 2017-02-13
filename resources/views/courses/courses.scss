@@ -1,0 +1,36 @@
+.courses {
+  &__title {
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 20px #000;
+
+    border-bottom: 5px solid $brand-primary;
+
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+
+    margin-top: 35px;
+    padding-top: 15px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px -7px #000;
+  }
+
+  @media only screen and (min-width: 768px) {
+    &__row-eq-height {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    &__row-eq-height > .col-md-3 > .panel {
+      height: 100%;
+      margin-bottom: 0;
+    }
+
+    &__row-eq-height > .col-md-3 {
+      margin-bottom: 20px;
+    }
+  }
+}

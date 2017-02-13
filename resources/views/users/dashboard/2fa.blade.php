@@ -10,7 +10,8 @@
 
                 @if($user->tfa_totp_key)
 
-                    <div class="btn-group btn-group-justified" role="group">
+                    <div onclick="return confirm('Do really want to unset time-based 2FA?')"
+                         class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
                             <a href="{{ route('user::2fa::deletetimebased', ['user' => $user->id]) }}"
                                class="btn btn-danger">
@@ -39,7 +40,8 @@
 
                 @if($user->tfa_yubikey_identity)
 
-                    <div class="btn-group btn-group-justified" role="group">
+                    <div onclick="return confirm('Do really want to unlink your YubiKey?')"
+                         class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
                             <a href="{{ route('user::2fa::deleteyubikey', ['user' => $user->id]) }}"
                                class="btn btn-danger">
@@ -65,6 +67,10 @@
             </div>
 
         </div>
+
+    </div>
+
+    <div class="panel-footer">
 
     </div>
 
