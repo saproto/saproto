@@ -276,7 +276,7 @@ class AchievementsCron extends Command
         $selected = array();
         $fristies = OrderLine::where('product_id', 180)->get();
         foreach ($fristies as $fristi) {
-            $studies = StudyEntry::where('user_id', $fristi->user_id);
+            $studies = StudyEntry::where('user_id', $fristi->user_id)->get();
             $creater = false;
             foreach ($studies as $study) {
                 if ($study->study_id == 1) {
