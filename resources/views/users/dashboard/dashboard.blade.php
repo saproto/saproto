@@ -27,3 +27,46 @@
     @endif
 
 @endsection
+
+
+@section('javascript')
+
+    @parent
+        <script  type="text/javascript">
+
+        angular.module('app', ['ngImgCrop'], function($interpolateProvider) {
+                $interpolateProvider.startSymbol('<%');
+                $interpolateProvider.endSymbol('%>');
+            })
+          .controller('Ctrl', function($scope) {
+            $scope.myImage='';
+            $scope.myCroppedImage='';
+
+            var handleFileSelect=function(evt) {
+              var file=evt.currentTarget.files[0];
+              var reader = new FileReader();
+              reader.onload = function (evt) {
+                $scope.$apply(function($scope){
+                  $scope.myImage=evt.target.result;
+                });
+              };
+              reader.readAsDataURL(file);
+            };
+            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+          });
+        </script>
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+        <style type="text/css">
+            .cropArea {
+              background: #E4E4E4;
+              overflow: hidden;
+              width: 100%;
+              height: 300px;
+            }
+        </style>
+@endsection

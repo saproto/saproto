@@ -247,4 +247,134 @@ class AuthController extends Controller
         }
     }
 
+    public function deleteUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
+            abort(403);
+        }
+
+        if ($user->member) {
+            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            return Redirect::back();
+        }
+
+        Address::where('user_id', $user->id)->delete();
+        Bank::where('user_id', $user->id)->delete();
+        EmailListSubscription::where('user_id', $user->id)->delete();
+        AchievementOwnership::where('user_id', $user->id)->delete();
+        Alias::where('user_id', $user->id)->delete();
+        RfidCard::where('user_id', $user->id)->delete();
+        WelcomeMessage::where('user_id', $user->id)->delete();
+
+        if ($user->photo) {
+            $user->photo->delete();
+        }
+
+        $user->password = null;
+        $user->remember_token = null;
+        $user->birthdate = null;
+        $user->gender = null;
+        $user->nationality = null;
+        $user->phone = null;
+        $user->website = null;
+        $user->utwente_username = null;
+        $user->tfa_totp_key = null;
+        $user->tfa_yubikey_identity = null;
+
+        $user->phone_visible = 0;
+        $user->address_visible = 0;
+        $user->receive_sms = 0;
+
+        $user->save();
+
+        $user->delete();
+
+        $request->session()->flash('flash_message', 'Your account has been deleted.');
+        return Redirect::route('homepage');
+    }
+
+    public function getEmail()
+    {
+        return view('auth.password');
+    }
+
+    public function getReset(Request $request, $token)
+    {
+        PasswordReset::where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::where('token', $token)->first();
+        if ($reset !== null) {
+            return view('auth.reset', ['reset' => $reset]);
+        } else {
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
+            return Redirect::route('login::resetpass');
+        }
+    }
+
+    public function postReset(Request $request)
+    {
+        PasswordReset::where('valid_to', '<', date('U'))->delete();
+        $reset = PasswordReset::where('token', $request->token)->first();
+        if ($reset !== null) {
+
+            if ($request->password !== $request->password_confirmation) {
+                $request->session()->flash('flash_message', 'Your passwords don\'t match.');
+                return Redirect::back();
+            } elseif (strlen($request->password) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
+                return Redirect::route('user::dashboard');
+            }
+
+            $reset->user->setPassword($request->password);
+
+            PasswordReset::where('token', $request->token)->delete();
+
+            $request->session()->flash('flash_message', 'Your password has been changed.');
+            return Redirect::route('login::show');
+
+        } else {
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
+            return Redirect::route('login::resetpass');
+        }
+    }
+
+    public function postEmail(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user !== null) {
+
+            AuthController::dispatchPasswordEmailFor($user);
+
+            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
+            return Redirect::route('homepage');
+
+        } else {
+            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
+            return Redirect::back();
+        }
+    }
+
+    public static function dispatchPasswordEmailFor(User $user)
+    {
+
+        $reset = PasswordReset::create([
+            'email' => $user->email,
+            'token' => str_random(128),
+            'valid_to' => strtotime('+1 hour')
+        ]);
+
+        die(print_r($reset));
+
+        $name = $user->name;
+        $email = $user->email;
+
+        Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+            $message
+                ->to($email, $name)
+                ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                ->subject('Your password reset request for S.A. Proto.');
+        });
+
+    }
 }
