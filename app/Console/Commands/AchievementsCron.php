@@ -49,15 +49,15 @@ class AchievementsCron extends Command
     {
         $this->info('Autoassigning achievements to users...');
 
-//        $this->giveAchievement($this->AchievementBeast(), 19);
-//        $this->giveAchievement($this->Hangry(), 20);
-//        $this->giveAchievement($this->CryBaby(), 21);
-//        $this->giveAchievement($this->TrueGerman(), 22);
-//        $this->giveAchievement($this->OldFart(), 23);
-//        $this->giveAchievement($this->IAmBread(), 24);
-//        $this->giveAchievement($this->GottaCatchEmAll(), 25);
-//        $this->giveAchievement($this->YouDandy(), 26);
-        $this->giveAchievement($this->FristiMember(), 1);
+        $this->giveAchievement($this->AchievementBeast(), 19);
+        $this->giveAchievement($this->Hangry(), 20);
+        $this->giveAchievement($this->CryBaby(), 21);
+        $this->giveAchievement($this->TrueGerman(), 22);
+        $this->giveAchievement($this->OldFart(), 23);
+        $this->giveAchievement($this->IAmBread(), 24);
+        $this->giveAchievement($this->GottaCatchEmAll(), 25);
+        $this->giveAchievement($this->YouDandy(), 26);
+        $this->giveAchievement($this->FristiMember(), 27);
 
         $this->info('Auto achievement gifting done!');
     }
