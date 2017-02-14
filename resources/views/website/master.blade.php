@@ -67,7 +67,7 @@
             </div>
             <div class="col-md-3 col-xs-6">
                 <br>
-                <span class="fa fa-clock-o"></span>&nbsp;&nbsp;Mon-Fri, 09:30-16:30<br>
+                <span class="fa fa-clock-o"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
                 <span class="fa fa-phone"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
                     4423</a><br>
                 <span class="fa fa-paperclip"></span>&nbsp;&nbsp;
