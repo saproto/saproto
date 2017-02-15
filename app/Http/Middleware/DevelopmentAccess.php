@@ -11,6 +11,10 @@ use Closure;
 
 class DevelopmentAccess
 {
+    protected $except = [
+        'webhook/*'
+    ];
+    
     /**
      * Client IPs allowed to access the app.
      * Defaults are loopback IPv4 and IPv6 for use in local development.

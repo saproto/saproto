@@ -284,6 +284,11 @@ class User extends Model implements AuthenticatableContract,
         return $withdrawals;
     }
 
+    public function mollieTransactions()
+    {
+        return $this->hasMany('Proto\Models\MollieTransaction');
+    }
+
     public function achievements()
     {
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');

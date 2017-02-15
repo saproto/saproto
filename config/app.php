@@ -252,6 +252,7 @@ return [
         'Email' => \Proto\Models\Email::class,
         'Event' => \Proto\Models\Event::class,
         'Product' => \Proto\Models\Product::class,
+        'MollieTransaction' => \Proto\Models\MollieTransaction::class,
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 

@@ -17,6 +17,7 @@ class AddMollieTable extends Migration
             $table->string('user_id');
             $table->string('mollie_id');
             $table->string('status');
+            $table->float('amount');
             $table->timestamps();
         });
     }

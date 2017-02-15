@@ -52,7 +52,7 @@ return [
     'mollie' => [
         'fixed_fee' => .3,
         'variable_fee' => .02,
-        'fee_id' => 883
+        'fee_id' => 887
     ],
 
 ];

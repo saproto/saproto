@@ -132,6 +132,7 @@
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
+                                <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
                             @endif
 
                         </ul>
@@ -173,7 +174,8 @@
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </span>-->
                         <span class="input-group-btn">
-                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search"
+                                                                                               aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>

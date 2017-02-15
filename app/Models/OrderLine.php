@@ -35,4 +35,22 @@ class OrderLine extends Model
         return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null);
     }
 
+    public function generateHistoryStatus()
+    {
+
+        if ($this->isPayed()) {
+            if ($this->payed_with_withdrawal !== null) {
+                return "Withdrawal <a href='" . route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]) . "'>#" . $this->payed_with_withdrawal . "</a>";
+            } elseif ($this->payed_with_cash !== null) {
+
+                return "Cash";
+            } elseif ($this->payed_with_mollie !== null) {
+                return "Mollie <a href='" . route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) . "'>#" . $this->payed_with_mollie . "</a>";
+            }
+        } else {
+            return "Unpaid";
+        }
+
+    }
+
 }

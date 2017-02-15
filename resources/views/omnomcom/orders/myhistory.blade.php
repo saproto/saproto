@@ -8,50 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-3">
-
-            <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: #222;">
-                Overview for {{ $user->name }}
-            </p>
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    History
-                </div>
-
-                <div class="panel-body">
-
-                    @foreach($available_months as $year => $months)
-
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>{{ $year }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($months as $month)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
-                                            {{ date('F Y', strtotime($month)) }}
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
+        <div class="col-md-9">
 
             @if(count($orderlines) > 0)
 
@@ -91,7 +48,11 @@
                                 {{ $orderline->units }}x <strong>{{ $orderline->product->name }}</strong>
                             </div>
 
-                            <div class="col-md-4" style="text-align: right; opacity: 0.5;">
+                            <div class="col-md-2" style="text-align: right;">
+                                {!! $orderline->generateHistoryStatus() !!}
+                            </div>
+
+                            <div class="col-md-2" style="text-align: right; opacity: 0.5;">
                                 {{ date('H:i:s', strtotime($orderline->created_at)) }}
                             </div>
 
@@ -153,12 +114,14 @@
 
                 </div>
 
-                <div class="panel-footer">
-                    <a class="btn btn-success" style="width: 100%;" href="{{ route('omnomcom::mollie::pay') }}"
-                       data-toggle="modal" data-target="#mollie-modal">
-                        Pay Outstanding Balance
-                    </a>
-                </div>
+                @if($next_withdrawal > 0)
+                    <div class="panel-footer">
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('omnomcom::mollie::pay') }}"
+                           data-toggle="modal" data-target="#mollie-modal">
+                            Pay Outstanding Balance
+                        </a>
+                    </div>
+                @endif
 
             </div>
 
@@ -195,8 +158,8 @@
                                     <div class="col-md-6">
                                         <div class="input-group">
                                             <div class="input-group-addon">&euro;</div>
-                                            <input type="number" name="cap" class="form-control pull-left" min="0"
-                                                   max="250" value="{{ number_format($next_withdrawal, 2, '.', '') }}">
+                                            <input type="number" name="cap" class="form-control pull-left"
+                                                   value="{{ number_format(ceil($next_withdrawal), 2, '.', '') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -236,6 +199,70 @@
                         @endforeach
                         </tbody>
                     </table>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    Mollie Payments
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table">
+                        <tbody>
+                        @foreach($user->mollieTransactions as $transaction)
+                            <tr style="{{ MollieTransaction::translateStatus($transaction->status) == "failed" ? "opacity: 0.3;" : "" }}">
+                                <td>
+                                    <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
+                                        {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
+                                    </a>
+                                </td>
+                                <td style="text-align: right;">
+                                    &euro;{{ number_format($transaction->amount, 2, '.', ',') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    History
+                </div>
+
+                <div class="panel-body">
+
+                    @foreach($available_months as $year => $months)
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{{ $year }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($months as $month)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
+                                            {{ date('F Y', strtotime($month)) }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                    @endforeach
 
                 </div>
 
