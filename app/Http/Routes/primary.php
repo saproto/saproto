@@ -510,10 +510,24 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
         });
 
+        Route::group(['prefix' => 'mollie', 'middleware' => ['auth'], 'as' => 'mollie::'], function () {
+            Route::post('pay', ['as' => 'pay', 'uses' => 'MollieController@pay']);
+            Route::get('status/{id}', ['as' => 'status', 'uses' => 'MollieController@status']);
+            Route::get('receive/{id}', ['as' => 'receive', 'uses' => 'MollieController@receive']);
+            Route::get('list', ['as' => 'list', 'middleware' => ['permission:board'], 'uses' => 'MollieController@index']);
+        });
+
         Route::get('mywithdrawal/{id}', ['as' => 'mywithdrawal', 'middleware' => ['auth'], 'uses' => 'WithdrawalController@showForUser']);
 
         Route::get('supplier', ['as' => 'generateorder', 'middleware' => ['permission:omnomcom'], 'uses' => 'OmNomController@generateOrder']);
 
+    });
+
+    /**
+     * Routes related to webhooks.
+     */
+    Route::group(['prefix' => 'webhook', 'as' => 'webhook::'], function () {
+        Route::any('mollie/{id}', ['as' => 'mollie', 'uses' => 'MollieController@webhook']);
     });
 
     /**

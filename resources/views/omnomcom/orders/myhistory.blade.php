@@ -8,50 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-3">
-
-            <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: #222;">
-                Overview for {{ $user->name }}
-            </p>
-
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    History
-                </div>
-
-                <div class="panel-body">
-
-                    @foreach($available_months as $year => $months)
-
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>{{ $year }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($months as $month)
-                                <tr>
-                                    <td>
-                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
-                                            {{ date('F Y', strtotime($month)) }}
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
+        <div class="col-md-9">
 
             @if(count($orderlines) > 0)
 
@@ -91,7 +48,11 @@
                                 {{ $orderline->units }}x <strong>{{ $orderline->product->name }}</strong>
                             </div>
 
-                            <div class="col-md-4" style="text-align: right; opacity: 0.5;">
+                            <div class="col-md-2" style="text-align: right;">
+                                {!! $orderline->generateHistoryStatus() !!}
+                            </div>
+
+                            <div class="col-md-2" style="text-align: right; opacity: 0.5;">
                                 {{ date('H:i:s', strtotime($orderline->created_at)) }}
                             </div>
 
@@ -153,6 +114,65 @@
 
                 </div>
 
+                @if($next_withdrawal > 0)
+                    <div class="panel-footer">
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('omnomcom::mollie::pay') }}"
+                           data-toggle="modal" data-target="#mollie-modal">
+                            Pay Outstanding Balance
+                        </a>
+                    </div>
+                @endif
+
+            </div>
+
+            <div id="mollie-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Pay Outstanding Balance</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Using this service you can pay your outstanding balance using our external payment
+                                provider Mollie. Using Mollie you can pay your outstanding balance using iDeal,
+                                CreditCard, Bitcoin and various German and Belgien payment providers.
+                            </p>
+                            <p>
+                                <strong>Important!</strong> Using this service you will incur a transaction fee on top
+                                of your outstanding balance. This transaction fee is
+                                €{{ number_format(config('omnomcom.mollie')['fixed_fee'], 2) }} per transaction
+                                plus {{ number_format(config('omnomcom.mollie')['variable_fee']*100, 2) }}% of the total
+                                transaction. This transaction will appear in your OmNomCom history after payment.
+                            </p>
+                            <p>
+                                If you wish to pay only a part of your outstanding balance, please use the field below
+                                to indicate the maximum amount you would like to pay.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
+                                {!! csrf_field() !!}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">&euro;</div>
+                                            <input type="number" name="cap" class="form-control pull-left"
+                                                   value="{{ number_format(ceil($next_withdrawal), 2, '.', '') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Pay</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="panel panel-default">
@@ -179,6 +199,70 @@
                         @endforeach
                         </tbody>
                     </table>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    Mollie Payments
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table">
+                        <tbody>
+                        @foreach($user->mollieTransactions as $transaction)
+                            <tr style="{{ MollieTransaction::translateStatus($transaction->status) == "failed" ? "opacity: 0.3;" : "" }}">
+                                <td>
+                                    <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
+                                        {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
+                                    </a>
+                                </td>
+                                <td style="text-align: right;">
+                                    &euro;{{ number_format($transaction->amount, 2, '.', ',') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    History
+                </div>
+
+                <div class="panel-body">
+
+                    @foreach($available_months as $year => $months)
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{{ $year }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($months as $month)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route("omnomcom::orders::list", ['user_id' =>$user->id, 'month' => $month]) }}">
+                                            {{ date('F Y', strtotime($month)) }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                    @endforeach
 
                 </div>
 
