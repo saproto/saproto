@@ -39,6 +39,7 @@ class MollieController extends Controller
         }
 
         if ($total <= 0) {
+            $transaction->delete();
             Session::flash("flash_message", "You cannot complete a purchase using this cap. Please try to increase the maximum amount you wish to pay!");
             return Redirect::back();
         }
