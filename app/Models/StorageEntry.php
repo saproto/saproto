@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Hash;
+use DB;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
 use Proto\Http\Controllers\FileController;
+
+use Proto\Models\Company;
+use Proto\Models\NarrowcastingItem;
+use Proto\Models\Page;
+use Proto\Models\Product;
 
 class StorageEntry extends Model
 {
@@ -91,12 +97,27 @@ class StorageEntry extends Model
         }
     }
 
-    public function generateLocalPath() {
+    public function generateLocalPath()
+    {
         return storage_path('app/' . $this->filename);
     }
 
     public function getFileHash($algo = 'md5')
     {
         return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+    }
+
+    public function isOrphan()
+    {
+        $id = $this->id;
+        return NarrowcastingItem::where('image_id', $id)->count() == 0 &&
+            Page::where('featured_image_id', $id)->count() == 0 &&
+            DB::table('pages_files')->where('file_id', $id)->count() == 0 &&
+            Product::where('image_id', $id)->count() == 0 &&
+            Company::where('image_id', $id)->count() == 0 &&
+            User::where('image_id', $id)->count() == 0 &&
+            DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
+            Committee::where('image_id', $id)->count() == 0 &&
+            Event::where('image_id', $id)->count() == 0;
     }
 }
