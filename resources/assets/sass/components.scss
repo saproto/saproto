@@ -440,6 +440,13 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .chocolat-wrapper {
   z-index: 10000;
 }
+.print__item {
+  margin-bottom: 10px;
+  overflow: auto;
+  &:last-child {
+    margin-bottom: auto;
+  }
+}
 .becomeamember {
   &__number {
     font-size: 48px; text-align: center;
