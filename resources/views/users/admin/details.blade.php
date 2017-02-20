@@ -52,7 +52,8 @@
                         Preview membership card
                     </a>
                     <li id="print-card" data-id="{{ $user->id }}" class="list-group-item">
-                        Print membership card
+                        Print membership card<br>
+                        (Last printed: {{ $user->member->card_printed_on }})
                     </li>
                     <li id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                         Print opener overlay
