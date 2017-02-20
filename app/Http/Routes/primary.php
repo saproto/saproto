@@ -48,22 +48,21 @@ Route::group(['middleware' => ['forcedomain']], function () {
          * Routes related to members.
          */
         Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
-            Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
-            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@impersonate']);
-            Route::get('maketempadmin', ['as' => 'maketempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@makeTempAdmin']);
-            Route::get('endtempadmin', ['as' => 'endtempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@endTempAdmin']);
+            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@impersonate']);
 
-            Route::post('add', ['as' => 'add', 'uses' => 'MemberAdminController@addMembership']);
-            Route::post('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
-            Route::get('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
+            Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
+            Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
         });
 
-        Route::group(['prefix' => 'admin', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
-            Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
-            Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
+        Route::group(['prefix' => 'admin', 'as' => 'admin::', 'middleware' => ['auth', 'permission:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'UserAdminController@index']);
+            Route::get('details/{id}', ['as' => 'details', 'uses' => 'UserAdminController@details']);
+            Route::post('update/{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
+            Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePage']);
+            Route::post('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePost']);
         });
 
-        Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'MemberAdminController@quitImpersonating']);
+        Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);
 
         Route::get('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
         Route::post('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
@@ -144,8 +143,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@printForm']);
-    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'MemberAdminController@showForm']);
+    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
+    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
 
     /**
      * Routes related to files.
@@ -663,6 +662,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'WelcomeController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'WelcomeController@store']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WelcomeController@destroy']);
+    });
+
+    /**
+     * Tempadmin
+     */
+    Route::group(['prefix' => 'tempadmin', 'as' => 'tempadmin::', 'middleware' => ['auth', 'permission:board']], function () {
+        Route::get('make/{id}', ['as' => 'make', 'uses' => 'TempAdminController@make']);
+        Route::get('end/{id}', ['as' => 'end', 'uses' => 'TempAdminController@end']);
     });
 
 });

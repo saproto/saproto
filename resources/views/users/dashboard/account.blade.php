@@ -22,6 +22,15 @@
             @endif
 
             <div class="form-group">
+                <label for="calling_name" class="col-sm-4 control-label">Display name</label>
+
+                <div class="col-sm-8">
+                    <input type="calling_name" class="form-control" id="calling_name" name="calling_name" value="{{ $user->calling_name }}"
+                           required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-mail</label>
 
                 <div class="col-sm-8">

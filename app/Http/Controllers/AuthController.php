@@ -293,19 +293,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        /** Add user to LDAP */
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->make()->user();
-        $ldapuser->cn = "user-" . $user->id;
-        $ldapuser->description = $user->id;
-        $ldapuser->save();
-
-        /** End add user to LDAP */
+        AuthController::makeLdapAccount($user);
 
         $email = $user->email;
         $name = $user->mail;
@@ -322,6 +310,25 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
             return Redirect::route('homepage');
         }
+    }
+
+    public static function makeLdapAccount($user)
+    {
+
+        /** Add user to LDAP */
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+        /** End add user to LDAP */
+
     }
 
     public function deleteUser(Request $request, $id)

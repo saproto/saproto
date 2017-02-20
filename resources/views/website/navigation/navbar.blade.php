@@ -104,7 +104,7 @@
                            aria-expanded="false">Association Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("user::member::list") }}">Users</a></li>
+                            <li><a href="{{ route("user::admin::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
                             <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
