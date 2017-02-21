@@ -56,9 +56,6 @@ class PrintController extends Controller
             $file = new StorageEntry();
             $file->createFromFile($upload);
 
-            $file->is_print_file = true;
-            $file->save();
-
             $result = FileController::requestPrint('document', $file->generatePath(), $copies);
 
             if ($result === false) {
@@ -72,7 +69,7 @@ class PrintController extends Controller
             $pdf = file_get_contents(storage_path('app/' . $file->filename));
             $pages = preg_match_all("/\/Page\W/", $pdf, $dummy);
 
-            $orderline = OrderLine::create([
+            OrderLine::create([
                 'user_id' => Auth::user()->id,
                 'product_id' => $print->id,
                 'original_unit_price' => $print->price,
