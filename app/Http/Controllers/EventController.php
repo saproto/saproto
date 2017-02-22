@@ -290,14 +290,7 @@ class EventController extends Controller
         $product->save();
 
         foreach ($activity->users as $user) {
-            $order = OrderLine::create([
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'original_unit_price' => $product->price,
-                'units' => 1,
-                'total_price' => $product->price
-            ]);
-            $order->save();
+            $product->buyForUser($user, 1, $product->price);
         }
 
         $activity->closed = true;

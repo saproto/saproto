@@ -69,13 +69,9 @@ class PrintController extends Controller
             $pdf = file_get_contents(storage_path('app/' . $file->filename));
             $pages = preg_match_all("/\/Page\W/", $pdf, $dummy);
 
-            OrderLine::create([
-                'user_id' => Auth::user()->id,
-                'product_id' => $print->id,
-                'original_unit_price' => $print->price,
-                'units' => $copies * $pages,
-                'total_price' => ((($request->has('free') && Auth::user()->can('board')) ? 0 : $copies * $pages * $print->price))
-            ]);
+            $total_price = ((($request->has('free') && Auth::user()->can('board')) ? 0 : $copies * $pages * $print->price));
+
+            $print->buyForUser(Auth::user(), $copies * $pages, $total_price);
 
             $successes++;
 

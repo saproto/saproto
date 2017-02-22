@@ -5,6 +5,7 @@ namespace Proto\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use MongoDB\Driver\Command;
+use Proto\Models\Committee;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
+        Commands\FeeCron::class,
     ];
 
     /**
