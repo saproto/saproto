@@ -132,6 +132,7 @@
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
+                                <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
                                 <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
                             @endif
 

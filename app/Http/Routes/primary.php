@@ -509,6 +509,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
         });
 
+        Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
+
         Route::group(['prefix' => 'mollie', 'middleware' => ['auth'], 'as' => 'mollie::'], function () {
             Route::post('pay', ['as' => 'pay', 'uses' => 'MollieController@pay']);
             Route::get('status/{id}', ['as' => 'status', 'uses' => 'MollieController@status']);

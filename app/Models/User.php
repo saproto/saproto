@@ -165,11 +165,6 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasOne('Proto\Models\Bank');
     }
 
-    public function backupBank()
-    {
-        return $this->hasOne('Proto\Models\Bank')->withTrashed();
-    }
-
     /**
      * @return mixed The profile picture of this user.
      */
