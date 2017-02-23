@@ -110,7 +110,7 @@
 
 <div id="half2" class="half">
 
-    <img src="{{ asset('images/logo/regular.png') }}" id="protologo">
+    <img src="{{ str_replace('https','http',asset('images/logo/regular.png')) }}" id="protologo">
 
     <p>
         <sub>
