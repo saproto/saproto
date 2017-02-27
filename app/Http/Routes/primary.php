@@ -629,17 +629,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /**
      * Routes related to the Achievement system.
      */
-    Route::group(['prefix' => 'achievement', 'middleware' => ['auth', 'permission:board'], 'as' => 'achievement::'], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
-        Route::get('add', ['as' => 'add', 'uses' => 'AchievementController@create']);
-        Route::post('add', ['as' => 'add', 'uses' => 'AchievementController@store']);
-        Route::get('manage/{id}', ['as' => 'manage', 'uses' => 'AchievementController@manage']);
-        Route::post('update/{id}', ['as' => 'update', 'uses' => 'AchievementController@update']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
-        Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
-        Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
-        Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
-        Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
+    Route::group(['prefix' => 'achievement', 'as' => 'achievement::'], function () {
+        Route::get('', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@overview']);
+        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@create']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@store']);
+        Route::get('manage/{id}', ['as' => 'manage', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@manage']);
+        Route::post('update/{id}', ['as' => 'update', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@destroy']);
+        Route::post('give/{id}', ['as' => 'give', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@give']);
+        Route::get('take/{id}/{user}', ['as' => 'take', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@take']);
+        Route::get('takeAll/{id}', ['as' => 'takeAll', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@takeAll']);
+        Route::post('{id}/icon', ['as' => 'icon', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@icon']);
+        Route::get('gallery', ['as' => 'gallery', 'uses' => 'AchievementController@gallery']);
     });
 
     /**

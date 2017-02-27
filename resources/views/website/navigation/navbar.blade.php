@@ -63,6 +63,7 @@
                             <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
                         @endif
                         <li><a href="{{ route("fishcam") }}">FishCam</a></li>
+                        <li><a href="{{ route("achievement::gallery") }}">Achievements</a></li>
                     </ul>
                 </li>
 
