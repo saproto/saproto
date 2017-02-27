@@ -9,7 +9,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('developers', ['uses' => 'HomeController@developers']);
     Route::get('becomeamember', ['as' => 'becomeamember', 'uses' => 'UserDashboardController@becomeAMemberOf']);
 
-    Route::get('fishcam', ['as' => 'fishcam', 'middleware' => ['member'], 'uses' => 'HomeController@fishcam']);
+    Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'HomeController@fishcam']);
 
     /*
      * Routes for the search function.
@@ -48,21 +48,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
          * Routes related to members.
          */
         Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
-            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@impersonate']);
+            Route::get('nested', ['as' => 'nested::details', 'uses' => 'MemberAdminController@showDetails']);
+            Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@impersonate']);
+            Route::get('maketempadmin', ['as' => 'maketempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@makeTempAdmin']);
+            Route::get('endtempadmin', ['as' => 'endtempadmin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@endTempAdmin']);
 
-            Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
-            Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+            Route::post('add', ['as' => 'add', 'uses' => 'MemberAdminController@addMembership']);
+            Route::post('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
+            Route::get('remove', ['as' => 'remove', 'uses' => 'MemberAdminController@endMembership']);
         });
 
-        Route::group(['prefix' => 'admin', 'as' => 'admin::', 'middleware' => ['auth', 'permission:board']], function () {
-            Route::get('', ['as' => 'list', 'uses' => 'UserAdminController@index']);
-            Route::get('details/{id}', ['as' => 'details', 'uses' => 'UserAdminController@details']);
-            Route::post('update/{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
-            Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePage']);
-            Route::post('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePost']);
+        Route::group(['prefix' => 'admin', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'MemberAdminController@index']);
+            Route::post('search/nested', ['as' => 'nested::search', 'uses' => 'MemberAdminController@showSearch']);
         });
 
-        Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);
+        Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'MemberAdminController@quitImpersonating']);
 
         Route::get('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
         Route::post('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
@@ -143,8 +144,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
-    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
+    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberAdminController@printForm']);
+    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'MemberAdminController@showForm']);
 
     /**
      * Routes related to files.
@@ -509,26 +510,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
         });
 
-        Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
-
-        Route::group(['prefix' => 'mollie', 'middleware' => ['auth'], 'as' => 'mollie::'], function () {
-            Route::post('pay', ['as' => 'pay', 'uses' => 'MollieController@pay']);
-            Route::get('status/{id}', ['as' => 'status', 'uses' => 'MollieController@status']);
-            Route::get('receive/{id}', ['as' => 'receive', 'uses' => 'MollieController@receive']);
-            Route::get('list', ['as' => 'list', 'middleware' => ['permission:board'], 'uses' => 'MollieController@index']);
-        });
-
         Route::get('mywithdrawal/{id}', ['as' => 'mywithdrawal', 'middleware' => ['auth'], 'uses' => 'WithdrawalController@showForUser']);
 
         Route::get('supplier', ['as' => 'generateorder', 'middleware' => ['permission:omnomcom'], 'uses' => 'OmNomController@generateOrder']);
 
-    });
-
-    /**
-     * Routes related to webhooks.
-     */
-    Route::group(['prefix' => 'webhook', 'as' => 'webhook::'], function () {
-        Route::any('mollie/{id}', ['as' => 'mollie', 'uses' => 'MollieController@webhook']);
     });
 
     /**
@@ -645,16 +630,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Routes related to the Achievement system.
      */
     Route::group(['prefix' => 'achievement', 'as' => 'achievement::'], function () {
-        Route::get('', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@overview']);
-        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@create']);
-        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@store']);
-        Route::get('manage/{id}', ['as' => 'manage', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@manage']);
-        Route::post('update/{id}', ['as' => 'update', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@update']);
-        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@destroy']);
-        Route::post('give/{id}', ['as' => 'give', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@give']);
-        Route::get('take/{id}/{user}', ['as' => 'take', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@take']);
-        Route::get('takeAll/{id}', ['as' => 'takeAll', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@takeAll']);
-        Route::post('{id}/icon', ['as' => 'icon', 'middleware' => ['auth', 'permission:board'], 'uses' => 'AchievementController@icon']);
+        Route::group(['middleware' => ['auth', 'permission:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
+            Route::get('add', ['as' => 'add', 'uses' => 'AchievementController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'AchievementController@store']);
+            Route::get('manage/{id}', ['as' => 'manage', 'uses' => 'AchievementController@manage']);
+            Route::post('update/{id}', ['as' => 'update', 'uses' => 'AchievementController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
+            Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+            Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
+            Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
+            Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
+        });
         Route::get('gallery', ['as' => 'gallery', 'uses' => 'AchievementController@gallery']);
     });
 
@@ -665,14 +652,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'WelcomeController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'WelcomeController@store']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WelcomeController@destroy']);
-    });
-
-    /**
-     * Tempadmin
-     */
-    Route::group(['prefix' => 'tempadmin', 'as' => 'tempadmin::', 'middleware' => ['auth', 'permission:board']], function () {
-        Route::get('make/{id}', ['as' => 'make', 'uses' => 'TempAdminController@make']);
-        Route::get('end/{id}', ['as' => 'end', 'uses' => 'TempAdminController@end']);
     });
 
 });
