@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
         Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
-        Commands\UserCleanup::class,
+        Commands\UserCleanup::class
     ];
 
     /**

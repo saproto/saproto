@@ -7,103 +7,104 @@
 @section('content')
 
 
-                    @if (count($menuItems) > 0)
+    @if (count($menuItems) > 0)
 
-                        <table class="table">
+        <table class="table">
 
-                            <thead>
+            <thead>
 
-                            <tr>
+            <tr>
 
-                                <th>Menuname</th>
-                                <th>URL</th>
-                                <th>Visibility</th>
-                                <th>Controls</th>
+                <th>Menuname</th>
+                <th>URL</th>
+                <th>Visibility</th>
+                <th>Controls</th>
 
-                            </tr>
+            </tr>
 
-                            </thead>
+            </thead>
 
-                        @foreach($menuItems as $menuItem)
+            @foreach($menuItems as $menuItem)
 
-                            <tr>
-                                <td>{{ $menuItem->menuname }}</td>
-                                <td>@if($menuItem->page) {{ $menuItem->page->getUrl() }} @else {{ $menuItem->url }} @endif</td>
-                                <td>@if($menuItem->is_member_only) Member only @else Public @endif</td>
-                                <td>
+                <tr>
+                    <td>{{ $menuItem->menuname }}</td>
+                    <td>{{ $menuItem->getUrl() }}</td>
+                    <td>@if($menuItem->is_member_only) Member only @else Public @endif</td>
+                    <td>
+                        <a class="btn btn-xs btn-default"
+                           href="{{ route('menu::edit', ['id' => $menuItem->id]) }}" role="button">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+
+                        <a class="btn btn-xs btn-danger"
+                           href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" role="button">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </a>
+
+                        @if(!$menuItem->isFirst())
+                            <a class="btn btn-xs btn-default"
+                               href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}" role="button">
+                                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                            </a>
+                        @endif
+
+                        @if(!$menuItem->isLast())
+                            <a class="btn btn-xs btn-default"
+                               href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}" role="button">
+                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                    </td>
+                </tr>
+                @if($menuItem->children->count() > 0)
+
+                    @foreach($menuItem->children()->orderBy('order')->get() as $childItem)
+                        <tr>
+                            <td>&mdash;{{ $childItem->menuname }}</td>
+                            <td>@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
+                            <td>@if($childItem->is_member_only) Member only @else Public @endif</td>
+                            <td>
+                                <a class="btn btn-xs btn-default"
+                                   href="{{ route('menu::edit', ['id' => $childItem->id]) }}" role="button">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+
+                                <a class="btn btn-xs btn-danger"
+                                   href="{{ route('menu::delete', ['id' => $childItem->id]) }}" role="button">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </a>
+
+                                @if(!$childItem->isFirst())
                                     <a class="btn btn-xs btn-default"
-                                        href="{{ route('menu::edit', ['id' => $menuItem->id]) }}" role="button">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                       href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}" role="button">
+                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
                                     </a>
+                                @endif
 
-                                    <a class="btn btn-xs btn-danger"
-                                       href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" role="button">
-                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                @if(!$childItem->isLast())
+                                    <a class="btn btn-xs btn-default"
+                                       href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}" role="button">
+                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
                                     </a>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
 
-                                    @if(!$menuItem->isFirst())
-                                        <a class="btn btn-xs btn-default"
-                                       href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}" role="button">
-                                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                                        </a>
-                                    @endif
+                @endif
 
-                                    @if(!$menuItem->isLast())
-                                        <a class="btn btn-xs btn-default"
-                                           href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}" role="button">
-                                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @if($menuItem->children->count() > 0)
+            @endforeach
 
-                                @foreach($menuItem->children()->orderBy('order')->get() as $childItem)
-                                        <tr>
-                                            <td>&mdash;{{ $childItem->menuname }}</td>
-                                            <td>@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
-                                            <td>@if($childItem->is_member_only) Member only @else Public @endif</td>
-                                            <td>
-                                                <a class="btn btn-xs btn-default"
-                                                   href="{{ route('menu::edit', ['id' => $childItem->id]) }}" role="button">
-                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                                </a>
+        </table>
 
-                                                <a class="btn btn-xs btn-danger"
-                                                   href="{{ route('menu::delete', ['id' => $childItem->id]) }}" role="button">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                </a>
+        <p style="text-align: center;"><a href="{{ route('menu::add') }}">Create a new menu item.</a></p>
 
-                                                @if(!$childItem->isFirst())
-                                                    <a class="btn btn-xs btn-default"
-                                                       href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}" role="button">
-                                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                                                    </a>
-                                                @endif
+    @else
 
-                                                @if(!$childItem->isLast())
-                                                    <a class="btn btn-xs btn-default"
-                                                       href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}" role="button">
-                                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                                                    </a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                @endforeach
+        <p style="text-align: center;">There are no menu items. <a href="{{ route('menu::add') }}">Create a new menu
+                item.</a></p>
 
-                            @endif
-
-                        @endforeach
-
-                            </table>
-
-                            <p style="text-align: center;"><a href="{{ route('menu::add') }}">Create a new menu item.</a></p>
-
-                    @else
-
-                        <p style="text-align: center;">There are no menu items. <a href="{{ route('menu::add') }}">Create a new menu item.</a></p>
-
-                    @endif
+    @endif
 
 
 @endsection
