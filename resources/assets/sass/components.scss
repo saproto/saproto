@@ -242,6 +242,16 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   box-shadow: 0 0 20px -7px #000;
 
 }
+.page-show__content {
+  width: 100%;
+  background-color: #fff;
+  padding: 50px;
+  box-shadow: 0 0 20px;
+}
+
+.page-show__content img {
+  width: 100%;
+}
 .product {
 
   &__account {

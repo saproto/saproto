@@ -3,13 +3,14 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Newsitem extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'pages';
+    protected $table = 'newsitems';
 
     protected $guarded = ['id'];
 
