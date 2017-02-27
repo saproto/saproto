@@ -1,7 +1,15 @@
-@include('users.profile.photo')
-
 <div class="panel panel-default">
     <div class="panel-body">
+
+        @if($user->photo)
+            <div class="profile__photo-wrapper">
+                <img class="profile__photo" src="{{ $user->photo->generateImagePath(200, 200) }}" alt="">
+            </div>
+        @endif
+
+        <h3 class="center">{{ $user->name }}</h3>
+
+        <hr class="rule">
 
         <table class="table borderless">
             <tr>

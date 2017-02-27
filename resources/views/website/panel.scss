@@ -1,0 +1,21 @@
+.panel {
+    border-radius: 3px;
+    box-shadow: none;
+    overflow: hidden;
+    background: transparent;
+
+    & > .panel-heading {
+        color: #fff;
+        background-color: #242424;
+        border: none;
+        border-bottom: 1px solid #000;
+    }
+
+    & > .panel-body {
+        background-color: #fff;
+    }
+}
+
+.panel-default {
+    border: none;
+}

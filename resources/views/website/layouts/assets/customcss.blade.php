@@ -3,7 +3,7 @@
 <style type="text/css">
 
     html, body {
-        background-color: #333;
+        background-color: #121212;
         height: 100%;
     }
 
@@ -19,15 +19,20 @@
     #header {
         background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
         background-size: cover;
-        height: 400px;
-        border-bottom: 5px solid #C1FF00;
+        height: 60px;
+        margin-bottom: 60px;
+        border-bottom: 5px solid #7FBA00;
+        /*position: fixed;*/
     }
 
     #header .container {
         color: #fff !important;
-        padding-top: 100px;
-        text-shadow: 0 0 10px #000;
+        padding-top: 60px;
         text-align: center;
+    }
+
+    #header .container h1 {
+        font-weight: 300;
     }
 
     .green {
@@ -48,6 +53,10 @@
 
     .light {
         background-color: #fafafa !important;
+    }
+
+    .center {
+        text-align: center;
     }
 
     .member {
@@ -81,6 +90,7 @@
 
     .panel {
         border-width: 0;
+        border-radius: 3px;
     }
 
     .panel .panel {
@@ -96,7 +106,7 @@
     }
 
     .container-panel .panel-body {
-        padding: 50px;
+        padding: 0 24px 16px;
     }
 
 </style>
