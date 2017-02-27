@@ -293,19 +293,7 @@ class AuthController extends Controller
 
         $user->save();
 
-        /** Add user to LDAP */
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->make()->user();
-        $ldapuser->cn = "user-" . $user->id;
-        $ldapuser->description = $user->id;
-        $ldapuser->save();
-
-        /** End add user to LDAP */
+        AuthController::makeLdapAccount($user);
 
         $email = $user->email;
         $name = $user->mail;
@@ -324,6 +312,25 @@ class AuthController extends Controller
         }
     }
 
+    public static function makeLdapAccount($user)
+    {
+
+        /** Add user to LDAP */
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+        /** End add user to LDAP */
+
+    }
+
     public function deleteUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -333,7 +340,7 @@ class AuthController extends Controller
         }
 
         if ($user->member) {
-            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
         }
 
@@ -368,7 +375,7 @@ class AuthController extends Controller
 
         $user->delete();
 
-        $request->session()->flash('flash_message', 'Your account has been deleted.');
+        $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 

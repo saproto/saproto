@@ -1,0 +1,7 @@
+.print__item {
+  margin-bottom: 10px;
+  overflow: auto;
+  &:last-child {
+    margin-bottom: auto;
+  }
+}

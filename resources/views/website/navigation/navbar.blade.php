@@ -50,32 +50,6 @@
 
                 @endforeach
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Association <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("page::show", ["slug" => "board"]) }}">Board</a></li>
-                        <li><a href="{{ route("committee::list") }}">Committees</a></li>
-                        <li><a href="{{ route("event::list") }}">Calendar</a></li>
-                        <li><a href="{{ route("photo::albums") }}">Photos</a></li>
-                        <li><a href="{{ route("protube.nl::remote") }}">ProTube</a></li>
-                        @if (Auth::check() && Auth::user()->member)
-                            <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
-                        @endif
-                        <li><a href="{{ route("fishcam") }}">FishCam</a></li>
-                        <li><a href="{{ route("achievement::gallery") }}">Achievements</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Career <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("companies::index") }}">Companies</a></li>
-                        <li><a href="{{ route("joboffers::index") }}">Job offers</a></li>
-                    </ul>
-                </li>
-
                 @if (Auth::check() && Auth::user()->can(["omnomcom","pilscie"]))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -105,7 +79,7 @@
                            aria-expanded="false">Association Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("user::member::list") }}">Users</a></li>
+                            <li><a href="{{ route("user::admin::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
                             <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
@@ -133,6 +107,8 @@
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
+                                <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
+                                <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
                             @endif
 
                         </ul>
@@ -174,7 +150,8 @@
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </span>-->
                         <span class="input-group-btn">
-                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search"
+                                                                                               aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>
@@ -197,7 +174,6 @@
 
                             @if(Auth::check() && Auth::user()->member)
                                 <li><a href="{{ route('user::profile') }}">My Profile</a></li>
-                                <li><a href="{{ route('print::form') }}">Print Something</a></li>
                             @else
                                 <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
                             @endif

@@ -77,6 +77,7 @@
                     </p>
                 @else
                     <div class="form-horizontal">
+                        <? $tickets_available = 0; ?>
                         @foreach($event->tickets as $ticket)
                             <div class="form-group"
                                  style="opacity: {{ ($ticket->isAvailable(Auth::user()) ? '1' : '0.5') }};">
@@ -113,6 +114,7 @@
                                         @elseif($ticket->product->stock <= 0)
                                             Sold-out!
                                         @else
+                                            <? $tickets_available++; ?>
                                             <strong>On sale!</strong> Available
                                             until {{ date('d-m-Y H:i', $ticket->available_to) }}
                                         @endif
@@ -123,19 +125,21 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-2 control-label" style="text-align: left;">
-                                <strong>Order total:</strong>
+                        @if ($tickets_available > 0)
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-2 control-label" style="text-align: left;">
+                                    <strong>Order total:</strong>
+                                </div>
+                                <div class="col-md-2 control-label" style="text-align: left;">
+                                    &euro;<span id="ticket-total">0.00</span>
+                                </div>
                             </div>
-                            <div class="col-md-2 control-label" style="text-align: left;">
-                                &euro;<span id="ticket-total">0.00</span>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 @endif
             </div>
 
-            @if(Auth::check() && Auth::user()->bank)
+            @if(Auth::check() && Auth::user()->bank && $tickets_available > 0)
                 <div class="panel-footer">
 
                     <input type="submit" class="form-control btn btn-success" value="Purchase Tickets"

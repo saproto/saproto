@@ -30,53 +30,62 @@ class PrintController extends Controller
             return Redirect::back();
         }
 
-        $upload = $request->file('file');
+        $uploads = $request->file('file');
 
-        if (!file_exists($upload->__toString())) {
-            $request->session()->flash('flash_message', 'You didn\'t upload a file!');
-            return Redirect::back();
+        $errors = 0;
+        $successes = 0;
+
+        foreach ($uploads as $i => $upload) {
+
+            if (!file_exists($upload->__toString())) {
+                $errors++;
+                continue;
+            }
+
+            if ($upload->getMimeType() != "application/pdf") {
+                $errors++;
+                continue;
+            }
+
+            $copies = $request->input('copies')[$i];
+
+            if ($copies < 1) {
+                continue;
+            }
+
+            $file = new StorageEntry();
+            $file->createFromFile($upload);
+
+            $result = FileController::requestPrint('document', $file->generatePath(), $copies);
+
+            if ($result === false) {
+                $errors++;
+                continue;
+            } elseif ($result != "OK") {
+                $errors++;
+                continue;
+            }
+
+            $pdf = file_get_contents(storage_path('app/' . $file->filename));
+            $pages = preg_match_all("/\/Page\W/", $pdf, $dummy);
+
+            OrderLine::create([
+                'user_id' => Auth::user()->id,
+                'product_id' => $print->id,
+                'original_unit_price' => $print->price,
+                'units' => $copies * $pages,
+                'total_price' => ((($request->has('free') && Auth::user()->can('board')) ? 0 : $copies * $pages * $print->price))
+            ]);
+
+            $successes++;
+
         }
 
-        if ($upload->getMimeType() != "application/pdf") {
-            $request->session()->flash('flash_message', 'You uploaded an invalid PDF file.');
-            return Redirect::back();
+        if ($errors > 0) {
+            $request->session()->flash('flash_message', "An error occured trying to print $errors documents. $successes documents successfully printed.");
+        } else {
+            $request->session()->flash('flash_message', "$successes documents successfully printed.");
         }
-
-        $file = new StorageEntry();
-        $file->createFromFile($upload);
-
-        $file->is_print_file = true;
-        $file->save();
-
-        $copies = $request->input('copies');
-
-        if ($copies < 1) {
-            $request->session()->flash('flash_message', "You cannot print nothing.");
-            return Redirect::back();
-        }
-
-        $result = FileController::requestPrint('document', $file->generatePath(), $copies);
-
-        if ($result === false) {
-            $request->session()->flash('flash_message', "Something went wrong trying to reach the printer service.");
-            return Redirect::back();
-        } elseif ($result != "OK") {
-            $request->session()->flash('flash_message', "The printer server responded something unexpected: " . $result);
-            return Redirect::back();
-        }
-
-        $pdf = file_get_contents(storage_path('app/' . $file->filename));
-        $pages = preg_match_all("/\/Page\W/", $pdf, $dummy);
-
-        $orderline = OrderLine::create([
-            'user_id' => Auth::user()->id,
-            'product_id' => $print->id,
-            'original_unit_price' => $print->price,
-            'units' => $copies * $pages,
-            'total_price' => ((($request->has('free') && Auth::user()->can('board')) ? 0 : $copies * $pages * $print->price))
-        ]);
-
-        $request->session()->flash('flash_message', 'Printed ' . $file->original_filename . ' (' . $pages . ' pages) ' . $copies . ' times. You can collect your printed document in the Protopolis!');
         return Redirect::back();
     }
 }
