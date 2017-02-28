@@ -1,62 +1,85 @@
-@extends('website.layouts.default')
+@extends('website.layouts.default-nobg')
 
 @section('page-title')
-    News Admin
+    News
 @endsection
 
 @section('content')
 
-    @if (count($newsitems) > 0)
+    @if(count($newsitems) == 0)
 
-        <table class="table">
+        <div class="row">
 
-            <thead>
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default news__card">
+                    <div class="panel-body">
+                        <p>
+                            &nbsp;
+                        </p>
+                        <p style="text-align: center">
+                            <strong>
+                                There are currently no news articles.
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-            <tr>
-
-                <th>Title</th>
-                <th width="25px">Published</th>
-                <th width="25px">Controls</th>
-
-            </tr>
-
-            </thead>
-
-            @foreach($newsitems as $newsitem)
-
-                <tr>
-
-                    <td>{{ $newsitem->title }}</td>
-                    <td>@if($newsitem->isPublished()) <strong>published</strong> @endif</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('news::edit', ['id' => $newsitem->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('news::delete', ['id' => $newsitem->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
-
-                </tr>
-
-            @endforeach
-
-        </table>
-
-        <p style="text-align: center;">
-            <a href="{{ route('news::add') }}">Create a new news item.</a>
-        </p>
-
-    @else
-
-        <p style="text-align: center;">
-            There are currently no pages.
-            <a href="{{ route('news::add') }}">Create a new news item.</a>
-        </p>
+        </div>
 
     @endif
+
+    @foreach($newsitems as $index => $newsitem)
+
+        @if ($index % 3 == 0)
+
+            <div class="row">
+
+        @endif
+
+                <div class="col-md-4">
+
+                    <a class="news__href" href="{{ $newsitem->url() }}">
+
+                        <div class="panel panel-default news__card">
+
+                            <div class="panel-body ">
+
+                                    @if ($newsitem->featuredImage)
+
+                                        <img src="{{ $newsitem->featuredImage->generateImagePath(125,150) }}"
+                                             class="news__card__photo"/>
+
+                                    @endif
+
+                                    <p>
+                                        <strong>
+                                            {{ $newsitem->title }}
+                                        </strong>
+                                        <br />
+                                        <em>
+                                            Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
+                                        </em>
+                                    </p>
+
+                                        <p>
+                                            {{ $newsitem->content }}
+                                        </p>
+
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+                @if ($index %3 == 2 || $index + 1 == count($newsitems))
+
+            </div>
+
+        @endif
+
+    @endforeach
 
 @endsection

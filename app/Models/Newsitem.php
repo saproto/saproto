@@ -19,11 +19,21 @@ class Newsitem extends Model
         return $this->belongsTo('Proto\Models\StorageEntry', 'featured_image_id');
     }
 
-    public function isPublished() {
+    public function isPublished()
+    {
         if(Carbon::parse($this->published_at)->isPast()) {
             return true;
         }
 
         return false;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('Proto\Models\User', 'user_id');
+    }
+
+    public function url() {
+        return route('news::show', ['id' => $this->id]);
     }
 }

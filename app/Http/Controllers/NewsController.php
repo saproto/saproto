@@ -21,11 +21,29 @@ class NewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function admin()
     {
         $newsitems = Newsitem::all();
 
-        return view('news.list', ['newsitems' => $newsitems]);
+        return view('news.admin', ['newsitems' => $newsitems]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $newsitems = Newsitem::all()->sortByDesc('published_at');
+
+        $return = [];
+
+        foreach($newsitems as $newsitem) {
+            if($newsitem->isPublished()) $return[] = $newsitem;
+        }
+
+        return view('news.list', ['newsitems' => $return]);
     }
 
     /**
@@ -54,7 +72,7 @@ class NewsController extends Controller
 
         $newsitem->save();
 
-        return redirect(route('news::list'));
+        return redirect(route('news::admin'));
 
     }
 
@@ -66,9 +84,19 @@ class NewsController extends Controller
      */
     public function show($id)
     {
+        $preview = false;
+
         $newsitem = Newsitem::findOrFail($id);
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content)]);
+        if(!$newsitem->isPublished()) {
+            if(Auth::check() && Auth::user()->can('board')) {
+                $preview = true;
+            }else{
+                abort(404);
+            }
+        }
+
+        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content), 'preview' => $preview]);
     }
 
     /**
@@ -100,7 +128,7 @@ class NewsController extends Controller
 
         $newsitem->save();
 
-        return redirect(route('news::list'));
+        return redirect(route('news::admin'));
     }
 
     /**
@@ -117,7 +145,7 @@ class NewsController extends Controller
 
         $newsitem->delete();
 
-        return Redirect::route('news::list');
+        return Redirect::route('news::admin');
     }
 
     /**
