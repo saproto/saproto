@@ -151,6 +151,8 @@ class CommitteeController extends Controller
         if ($request->end != "" && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
+        } elseif ($request->end == "") {
+            $membership->deleted_at = null;
         }
 
         $membership->save();
@@ -184,6 +186,8 @@ class CommitteeController extends Controller
         if ($request->end != "" && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
             return Redirect::back();
+        } elseif ($request->end == "") {
+            $membership->deleted_at = null;
         }
 
         $membership->save();

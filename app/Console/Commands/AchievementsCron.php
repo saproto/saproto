@@ -15,6 +15,8 @@ use Proto\Models\OrderLine;
 use Proto\Models\Member;
 use Proto\Models\CommitteeMembership;
 
+use Proto\Http\Controllers\AchievementController;
+
 class AchievementsCron extends Command
 {
 
@@ -58,6 +60,9 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->GottaCatchEmAll(), 25);
         $this->giveAchievement($this->YouDandy(), 26);
         $this->giveAchievement($this->FristiMember(), 27);
+        $this->giveAchievement($this->BigSpender(), 28);
+        $this->giveAchievement($this->fourOClock(), 29);
+        $this->giveAchievement($this->youreSpecial(30), 30);
 
         $this->info('Auto achievement gifting done!');
     }
@@ -276,7 +281,7 @@ class AchievementsCron extends Command
         $selected = array();
         $fristies = OrderLine::where('product_id', 180)->get();
         foreach ($fristies as $fristi) {
-            $studies = StudyEntry::where('user_id', $fristi->user_id);
+            $studies = StudyEntry::where('user_id', $fristi->user_id)->get();
             $creater = false;
             foreach ($studies as $study) {
                 if ($study->study_id == 1) {
@@ -287,6 +292,82 @@ class AchievementsCron extends Command
                 $selected[] = User::find($fristi->user_id);
             }
         }
+        return $selected;
+    }
+
+    /**
+     *  Big spender = you had the max money subtracted for 1 month (=€250)
+     */
+    private function BigSpender()
+    {
+        $selected = array();
+        if (Carbon::now()->day == 1) {
+            $users = User::all();
+            foreach ($users as $user) {
+                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
+                $cost = 0;
+                foreach ($orders as $order) {
+                    $cost += $order->total_price;
+                    if ($cost >= 250) {
+                        $selected[] = $user;
+                        break;
+                    }
+                }
+            }
+        } else {
+            $this->info('Its not the first of the month! Cancelling Big Spender...');
+        }
+        return $selected;
+    }
+
+    /**
+     *  It’s always 4 o’clock somewhere = a month where more than 25% of OmNomCom purchases is beer
+     */
+    private function fourOClock()
+    {
+        $selected = array();
+        if (Carbon::now()->day == 1) {
+            $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
+            $users = User::all();
+            foreach ($users as $user) {
+                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
+                $beers = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->whereIn('product_id', $beerIDs)->get();
+                if (count($beers) > 0) {
+                    if (count($beers) / count($orders) > 0.25) {
+                        $selected[] = $user;
+                    }
+                }
+            }
+        } else {
+            $this->info('Its not the first of the month! Cancelling It\'s always 4 o\'clock somewhere...');
+        }
+        return $selected;
+    }
+
+    /**
+     *  You’re special = more than 15% of your beer purchases is special beer
+     */
+    private function youreSpecial($id)
+    {
+        $selected = array();
+        $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
+        $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
+        $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
+        $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
+        $users = User::all();
+        foreach ($users as $user) {
+            $orders = OrderLine::whereIn('product_id', $beerIDs)->where('user_id', $user->id)->get();
+            $beers = OrderLine::where('product_id', 493)->where('user_id', $user->id)->get();
+            if (count($beers) > 0) {
+                if (count($beers) / count($orders) > 0.15) {
+                    $selected[] = $user;
+                }
+            }
+        }
+        AchievementController::staticTakeAll($id);
         return $selected;
     }
 

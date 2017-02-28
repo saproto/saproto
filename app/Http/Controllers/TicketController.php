@@ -245,6 +245,11 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
+        if (!$request->has('tickets')) {
+            Session::flash("flash_message", "There are no tickets available for this event.");
+            return Redirect::back();
+        }
+
         foreach ($request->get('tickets') as $ticket_id => $amount) {
             $ticket = Ticket::find($ticket_id);
             if (!$ticket) {

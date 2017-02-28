@@ -5,9 +5,6 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
-
 use Mail;
 
 class TestEmail extends Command
@@ -45,7 +42,7 @@ class TestEmail extends Command
 
         $email = $this->ask('What is the destination for this e-mail?');
 
-        Mail::queue('emails.test', [], function ($message) use ($email) {
+        Mail::queueOn('high', 'emails.test', [], function ($message) use ($email) {
             $message->to($email, 'S.A. Proto Test Message');
             $message->subject("Verifying that the e-mailing service works.");
         });
