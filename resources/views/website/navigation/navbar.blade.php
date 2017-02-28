@@ -123,6 +123,7 @@
 
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
                             <li><a href="{{ route("page::list") }}">Pages</a></li>
+                            <li><a href="{{ route("news::admin") }}">News</a></li>
                             <li><a href="{{ route("email::admin") }}">Email</a></li>
                             <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                             <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>

@@ -331,6 +331,26 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to pages.
+     */
+    Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
+
+        Route::group(['middleware' => ['auth', 'permission:board']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
+            Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
+            Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'NewsController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'NewsController@update']);
+            Route::post('edit/{id}/image', ['as' => 'image', 'uses' => 'NewsController@featuredImage']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'NewsController@destroy']);
+        });
+
+        Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
+
+    });
+
+    /*
      * Routes related to menu.
      */
     Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function () {
