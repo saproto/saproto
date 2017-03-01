@@ -46,17 +46,17 @@ class Product extends Model
 
         $orderline = OrderLine::create([
             'user_id' => ($withCash ? null : $user->id),
-            'cashier_id' => ($withCash ? $user->id : null),
+            'cashier_id' => ($withCash || $total == 0 ? $user->id : null),
             'product_id' => $this->id,
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total,
-            'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null)
+            'payed_with_cash' => ($withCash || $total == 0 ? date('Y-m-d H:i:s') : null),
         ]);
 
         $orderline->save();
         return $orderline->id;
-        
+
     }
 
 }
