@@ -11,7 +11,7 @@
 @endsection
 
 @if($event->image)
-    @section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
+@section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
 @endif
 
 @section('content')
@@ -233,7 +233,7 @@
                                     </a>
                                 @endif
                             @else
-                                @if($event->activity->canSubscribe() || !$event->activity->hasStarted())
+                                @if($event->activity->canSubscribe() || !$event->activity->hasStarted() && $event->activity->registration_start < date('U'))
                                     <a class="btn btn-{{ ($event->activity->isFull() ? 'warning' : 'success') }}"
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">

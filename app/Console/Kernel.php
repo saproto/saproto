@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
         Commands\FeeCron::class,
+        Commands\UserCleanup::class
     ];
 
     /**
@@ -45,6 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:flickrsync')->everyThirtyMinutes();
         $schedule->command('proto:playsound ganaarjecollege')->daily()->at('13:37');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
+        $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
         $schedule->command('proto:feecron')->daily()->at('02:00');
     }

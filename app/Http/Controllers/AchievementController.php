@@ -134,4 +134,14 @@ class AchievementController extends Controller
             }
         }
     }
+
+    public function gallery()
+    {
+        $common = Achievement::where('tier', 'COMMON')->get();
+        $uncommon = Achievement::where('tier', 'UNCOMMON')->get();
+        $rare = Achievement::where('tier', 'RARE')->get();
+        $epic = Achievement::where('tier', 'EPIC')->get();
+        $legendary = Achievement::where('tier', 'LEGENDARY')->get();
+        return view('achievement.gallery', ['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary]);
+    }
 }

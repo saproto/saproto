@@ -71,7 +71,7 @@ class MollieController extends Controller
     public function status($id)
     {
         $transaction = MollieTransaction::findOrFail($id);
-        if ($transaction->user->id != Auth::id() && Auth::user()->can('board')) {
+        if ($transaction->user->id != Auth::id() && !Auth::user()->can('board')) {
             abort(403, "You are unauthorized to view this transcation.");
         }
         $transaction = $transaction->updateFromWebhook();

@@ -68,6 +68,8 @@
                                         <td>
                                             @if($purchase->orderline->isPayed())
                                                 Already Paid
+                                            @elseif($purchase->scanned)
+                                                Already Used
                                             @else
                                                 <a href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
                                                    onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">

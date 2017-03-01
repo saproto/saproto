@@ -29,7 +29,7 @@ class ParticipationController extends Controller
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(500, "You are already subscribed for " . $event->title . ".");
-        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id') && $event->activity->hasStarted()) {
+        } elseif ((!$event->activity->canSubscribe() && !$request->has('helping_committee_id')) || $event->activity->hasStarted()) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");
         } elseif ($event->activity->closed) {
             abort(500, "This activity is closed, you cannot change participation anymore.");

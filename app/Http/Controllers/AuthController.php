@@ -340,7 +340,7 @@ class AuthController extends Controller
         }
 
         if ($user->member) {
-            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
         }
 
@@ -375,7 +375,7 @@ class AuthController extends Controller
 
         $user->delete();
 
-        $request->session()->flash('flash_message', 'Your account has been deleted.');
+        $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 
