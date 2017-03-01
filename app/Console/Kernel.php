@@ -4,8 +4,6 @@ namespace Proto\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use MongoDB\Driver\Command;
-use Proto\Models\Committee;
 
 class Kernel extends ConsoleKernel
 {
