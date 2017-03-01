@@ -109,7 +109,7 @@ class FeeCron extends Command
 
         if ($charged->count > 0) {
             Mail::queueOn('high', 'emails.fee', ['data' => $charged], function ($message) use ($charged) {
-                $message->to('jonathan@proto.utwente.nl', 'S.A. Proto Payments Update');
+                $message->to('payments@proto.utwente.nl', 'S.A. Proto Payments Update');
                 $message->subject('Membership Fee Cron Update for ' . date('d-m-Y') . '. (' . $charged->count . ' transactions)');
             });
         }
