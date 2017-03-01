@@ -176,7 +176,6 @@ class UserAdminController extends Controller
         }
 
         $member = Member::create();
-        $member->is_associate = !$request->input('is_primary');
         $member->user()->associate($user);
 
         /** Create member alias */

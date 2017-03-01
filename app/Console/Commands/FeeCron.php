@@ -9,6 +9,8 @@ use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 
+use Mail;
+
 class FeeCron extends Command
 {
 
@@ -42,8 +44,8 @@ class FeeCron extends Command
     public function handle()
     {
 
-        if (intval(date('n')) == 8) {
-            $this->info('It is August. We don\'t charge membership fees in August.');
+        if (intval(date('n')) == 8 || intval(date('n')) == 8) {
+            $this->info('We don\'t charge membership fees in August or September.');
             return;
         }
 
@@ -67,11 +69,14 @@ class FeeCron extends Command
 
         $already_paid = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
-        $members = 0;
-        $charged = 0;
+        $charged = (object)[
+            'count' => 0,
+            'regular' => [],
+            'reduced' => [],
+            'remitted' => []
+        ];
 
         foreach (Member::all() as $member) {
-            $members++;
 
             if (in_array($member->user->id, $already_paid)) {
                 continue;
@@ -79,19 +84,37 @@ class FeeCron extends Command
 
             if ($member->is_lifelong || $member->is_honorary || $member->is_donator) {
                 $fee = config('omnomcom.fee')['remitted'];
+                if ($member->is_honorary) {
+                    $reason = "Honorary Member";
+                } elseif ($member->is_lifelong) {
+                    $reason = "Lifelong Member";
+                } else {
+                    $reason = "Donator";
+                }
+                $charged->remitted[] = $member->user->name . " (#" . $member->user->id . ") - $reason";
             } elseif (in_array($member->user->email, $emails) || in_array($member->user->utwente_username, $usernames) || in_array($member->user->name, $names)) {
                 $fee = config('omnomcom.fee')['regular'];
+                $charged->regular[] = $member->user->name . " (#" . $member->user->id . ")";
             } else {
                 $fee = config('omnomcom.fee')['reduced'];
+                $charged->reduced[] = $member->user->name . " (#" . $member->user->id . ")";
             }
 
-            $charged++;
+            $charged->count++;
 
             $product = Product::findOrFail($fee);
             $product->buyForUser($member->user, 1, $product->price);
+
         }
 
-        $this->info("Charged $charged or $members members their fee.");
+        if ($charged->count > 0) {
+            Mail::queueOn('high', 'emails.fee', ['data' => $charged], function ($message) use ($charged) {
+                $message->to('jonathan@proto.utwente.nl', 'S.A. Proto Payments Update');
+                $message->subject('Membership Fee Cron Update for ' . date('d-m-Y') . '. (' . $charged->count . ' transactions)');
+            });
+        }
+
+        $this->info("Charged " . $charged->count . " of " . Member::count() . " members their fee.");
 
     }
 
