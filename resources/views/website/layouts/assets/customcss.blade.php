@@ -56,9 +56,11 @@
         padding: 5px 20px 5px 5px;
         text-align: left;
     }
+
     .member:nth-child(odd) {
         background-color: rgba(0, 0, 0, 0.05);
     }
+
     .member-picture {
         width: 30px;
         height: 30px;
@@ -127,6 +129,16 @@
     .ui-menu-item:hover {
         background-color: rgba(0, 0, 0, 0.1);
         cursor: pointer;
+    }
+
+</style>
+
+<!-- Lightbox Bugfixes //-->
+<style>
+
+    /* Navbar had a higher z-index */
+    .chocolat-wrapper {
+        z-index: 2000;
     }
 
 </style>
