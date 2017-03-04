@@ -69,7 +69,7 @@ class User extends Model implements AuthenticatableContract,
         if ($this->password) return false;
         if (strtotime($this->created_at) > strtotime('-1 hour')) return false;
         if (Member::withTrashed()->where('user_id', $this->id)->first()) return false;
-        if (Bank::withTrashed()->where('user_id', $this->id)->first()) return false;
+        if (Bank::where('user_id', $this->id)->first()) return false;
         if (Address::where('user_id', $this->id)->first()) return false;
         if (OrderLine::where('user_id', $this->id)->count() > 0) return false;
         if (CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
