@@ -2,7 +2,7 @@
 <head>
 
     <script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
-    
+
     <title>Screen</title>
 
     <style>

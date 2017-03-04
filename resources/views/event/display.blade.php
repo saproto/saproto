@@ -233,7 +233,7 @@
                                     </a>
                                 @endif
                             @else
-                                @if($event->activity->canSubscribe() || !$event->activity->hasStarted() && $event->activity->registration_start < date('U'))
+                                @if($event->activity->canSubscribeBackup())
                                     <a class="btn btn-{{ ($event->activity->isFull() ? 'warning' : 'success') }}"
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
@@ -248,13 +248,17 @@
                             @endif
                         </p>
 
-                        <p style="text-align: center;">
-                            Sign up is possible between {{ date('F j, H:i', $event->activity->registration_start) }}
-                            and {{ date('F j, H:i', $event->activity->registration_end) }}. You can sign out
-                            until {{ date('F j, H:i', $event->activity->deregistration_end) }}.
+                        <hr>
+
+                        <p>
+                            <strong>Sign up open:</strong> {{ date('F j, H:i', $event->activity->registration_start) }}
+                            <br>
+                            <strong>Sign up close:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
+                            <br>
+                            <strong>Sign out till:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
                         </p>
 
-                        <p style="text-align: center">
+                        <p>
                             <strong>
                                 Participation fee &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             </strong>
