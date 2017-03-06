@@ -199,6 +199,10 @@
             -webkit-appearance: none;
             margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
         }
+        
+        input[type=number] {
+            -moz-appearance:textfield;
+        }
 
         #pin-input {
             transform: translate3d(0, 0, 0);
@@ -338,7 +342,7 @@
     </style>
 
     <title>Remote</title>
-    
+
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
