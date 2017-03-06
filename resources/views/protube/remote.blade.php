@@ -1,8 +1,7 @@
 <html>
 <head>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
 
     <script>
         var server = "{!! env('HERBERT_SERVER') !!}";
@@ -200,6 +199,10 @@
             -webkit-appearance: none;
             margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
         }
+        
+        input[type=number] {
+            -moz-appearance:textfield;
+        }
 
         #pin-input {
             transform: translate3d(0, 0, 0);
@@ -339,7 +342,7 @@
     </style>
 
     <title>Remote</title>
-    
+
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

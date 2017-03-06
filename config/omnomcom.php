@@ -15,7 +15,7 @@ return [
     'stores' => [
         'protopolis' => (object)[
             'name' => 'Protopolis',
-            'categories' => [12, 1, 4, 5, 6, 7, 9, 11],
+            'categories' => [12, 1, 4, 5, 6, 22, 7, 9, 11],
             'addresses' => ['130.89.190.22', '2001:67c:2564:318:9ab:3c5a:78f5:5fd'],
             'roles' => ['admin'],
             'cash_allowed' => false,
@@ -54,5 +54,20 @@ return [
         'variable_fee' => .02,
         'fee_id' => 887
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Membership Fee Settings
+    |--------------------------------------------------------------------------
+    |
+    | Defines the products for membership fees.
+    |
+    */
+
+    'fee' => [
+        'regular' => 292,
+        'reduced' => 293,
+        'remitted' => 889,
+    ]
 
 ];

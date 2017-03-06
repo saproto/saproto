@@ -1,9 +1,7 @@
 <html>
 <head>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
 
     <title>Screen</title>
 

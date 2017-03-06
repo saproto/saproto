@@ -50,31 +50,6 @@
 
                 @endforeach
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Association <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("page::show", ["slug" => "board"]) }}">Board</a></li>
-                        <li><a href="{{ route("committee::list") }}">Committees</a></li>
-                        <li><a href="{{ route("event::list") }}">Calendar</a></li>
-                        <li><a href="{{ route("photo::albums") }}">Photos</a></li>
-                        <li><a href="{{ route("protube.nl::remote") }}">ProTube</a></li>
-                        @if (Auth::check() && Auth::user()->member)
-                            <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
-                        @endif
-                        <li><a href="{{ route("fishcam") }}">FishCam</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Career <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("companies::index") }}">Companies</a></li>
-                        <li><a href="{{ route("joboffers::index") }}">Job offers</a></li>
-                    </ul>
-                </li>
-
                 @if (Auth::check() && Auth::user()->can(["omnomcom","pilscie"]))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -148,6 +123,7 @@
 
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
                             <li><a href="{{ route("page::list") }}">Pages</a></li>
+                            <li><a href="{{ route("news::admin") }}">News</a></li>
                             <li><a href="{{ route("email::admin") }}">Email</a></li>
                             <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                             <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
@@ -199,7 +175,6 @@
 
                             @if(Auth::check() && Auth::user()->member)
                                 <li><a href="{{ route('user::profile') }}">My Profile</a></li>
-                                <li><a href="{{ route('print::form') }}">Print Something</a></li>
                             @else
                                 <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
                             @endif

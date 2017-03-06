@@ -42,7 +42,14 @@
                 @endif
 
             <!-- Membership //-->
-                <li class="list-group-item list-group-item-success">Membership</li>
+                <li class="list-group-item list-group-item-success">
+                    Membership
+                    @if($user->member)
+                        (member since {{ date('d-m-Y', strtotime($user->member->created_at)) }})
+                    @else
+                        (not a member)
+                    @endif
+                </li>
                 @if($user->member)
                     <li class="list-group-item" data-toggle="modal" data-target="#removeMembership">
                         End membership
@@ -75,6 +82,8 @@
         </div>
 
         <div class="col-md-4">
+
+            <h3 style="text-align: center;">Update user</h3>
 
             <form class="form-horizontal" method="post"
                   action="{{ route("user::admin::update", ["id" => $user->id]) }}">
@@ -125,6 +134,36 @@
                 </div>
 
             </form>
+
+            <br><br>
+
+            <h3 style="text-align: center;">Contact</h3>
+
+            <div class="form-group">
+                <div class="form-horizontal">
+
+                    <label class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->email }}
+                    </div>
+
+                    <label class="col-sm-4 control-label">Phone</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        {{ $user->phone }}
+                    </div>
+
+                    <label class="col-sm-4 control-label">Address</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        @if ($user->address)
+                            {{ $user->address->street }} {{ $user->address->number }}<br>
+                            {{ $user->address->zipcode }} {{ $user->address->city }} ({{ $user->address->country }})
+                        @else
+                            <i>n/a</i>
+                        @endif
+                    </div>
+
+                </div>
+            </div>
 
         </div>
 

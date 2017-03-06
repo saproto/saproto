@@ -11,6 +11,7 @@ use Proto\Models\MollieTransaction;
 
 use Auth;
 use Mollie;
+use Proto\Models\Product;
 use Redirect;
 use Session;
 
@@ -48,16 +49,9 @@ class MollieController extends Controller
 
         $fee = config('omnomcom.mollie')['fixed_fee'] + $total * config('omnomcom.mollie')['variable_fee'];
 
-        $fee_orderline = OrderLine::create([
-            'user_id' => Auth::id(),
-            'product_id' => config('omnomcom.mollie')['fee_id'],
-            'original_unit_price' => 0,
-            'units' => 1,
-            'total_price' => $fee,
-            'payed_with_mollie' => $transaction->id
-        ]);
-
-        $fee_orderline->save();
+        $orderline = OrderLine::findOrFail(Product::findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(Auth::user(), 1, $fee));
+        $orderline->payed_with_mollie = $transaction->id;
+        $orderline->save();
 
         $mollie = Mollie::api()->payments()->create([
             "amount" => $total + $fee,
@@ -77,7 +71,7 @@ class MollieController extends Controller
     public function status($id)
     {
         $transaction = MollieTransaction::findOrFail($id);
-        if ($transaction->user->id != Auth::id() && Auth::user()->can('board')) {
+        if ($transaction->user->id != Auth::id() && !Auth::user()->can('board')) {
             abort(403, "You are unauthorized to view this transcation.");
         }
         $transaction = $transaction->updateFromWebhook();

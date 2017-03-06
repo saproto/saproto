@@ -176,20 +176,19 @@ class UserAdminController extends Controller
         }
 
         $member = Member::create();
-        $member->is_associate = !$request->input('is_primary');
         $member->user()->associate($user);
 
         /** Create member alias */
 
         $name = explode(" ", $user->name);
         if (count($name) > 1) {
-            $aliasbase = MemberAdminController::transliterateString(strtolower(
+            $aliasbase = UserAdminController::transliterateString(strtolower(
                 preg_replace('/\PL/u', '', substr($name[0], 0, 1))
                 . '.' .
                 preg_replace('/\PL/u', '', implode("", array_slice($name, 1)))
             ));
         } else {
-            $aliasbase = MemberAdminController::transliterateString(strtolower(
+            $aliasbase = UserAdminController::transliterateString(strtolower(
                 preg_replace('/\PL/u', '', $name[0])
             ));
         }

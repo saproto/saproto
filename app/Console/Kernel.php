@@ -4,7 +4,6 @@ namespace Proto\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use MongoDB\Driver\Command;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,7 +24,8 @@ class Kernel extends ConsoleKernel
         Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
-        Commands\UserCleanup::class,
+        Commands\FeeCron::class,
+        Commands\UserCleanup::class
     ];
 
     /**
@@ -46,5 +46,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
+        $schedule->command('proto:feecron')->daily()->at('02:00');
     }
 }

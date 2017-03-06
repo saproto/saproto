@@ -29,7 +29,7 @@ class ParticipationController extends Controller
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(500, "You are already subscribed for " . $event->title . ".");
-        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id') && $event->activity->hasStarted()) {
+        } elseif (!$request->has('helping_committee_id') && (!$event->activity->canSubscribeBackup())) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");
         } elseif ($event->activity->closed) {
             abort(500, "This activity is closed, you cannot change participation anymore.");
@@ -47,9 +47,7 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if ($event->activity->participants == 0) {
-                abort(500, "You cannot subscribe to this activity!");
-            } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
@@ -184,7 +182,7 @@ class ParticipationController extends Controller
                 $activitytitle = $participation->activity->event->title;
 
                 Mail::queueOn('high', 'emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
-                    $m->queue('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->from('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
                 });
@@ -199,7 +197,8 @@ class ParticipationController extends Controller
 
     }
 
-    public function checklist($id) {
+    public function checklist($id)
+    {
         $event = Event::findOrFail($id);
         return view('event.checklist', ['event' => $event]);
     }
