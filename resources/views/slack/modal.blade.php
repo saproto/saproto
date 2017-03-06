@@ -18,11 +18,15 @@
             </div>
             <div class="modal-footer">
                 <a href="https://slack.com/is" class="btn btn-default pull-left" target="_blank">Learn about Slack</a>
-                <form method="POST" action="{{ route('api::slack::invite', ['email' => Auth::user()->email]) }}">
+                @if (Auth::check())
                     <a href="#" class="btn btn-success" id="slack__invite">
                         Invite me to Slack!
                     </a>
-                </form>
+                @else
+                    <a href="#" class="btn btn-default" disabled>
+                        Our Slack team is only for members!
+                    </a>
+                @endif
             </div>
         </div>
     </div>
