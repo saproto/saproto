@@ -1,6 +1,7 @@
 <div class="modal fade" id="addMembership" tabindex="-1" role="dialog" aria-labelledby="addMembershipLabel">
     <div class="modal-dialog" role="document">
         <form action="{{ route("user::member::add", ['id'=>$user->id]) }}" method="post">
+            {!! csrf_field() !!}
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
