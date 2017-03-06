@@ -142,6 +142,13 @@ class AchievementController extends Controller
         $rare = Achievement::where('tier', 'RARE')->get();
         $epic = Achievement::where('tier', 'EPIC')->get();
         $legendary = Achievement::where('tier', 'LEGENDARY')->get();
-        return view('achievement.gallery', ['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary]);
+        $obtained = array();
+        if (Auth::check()) {
+            $achievements = Auth::user()->achieved();
+            foreach ($achievements as $achievement) {
+                $obtained[] = $achievement->id;
+            }
+        }
+        return view('achievement.gallery', ['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary, 'obtained' => $obtained]);
     }
 }
