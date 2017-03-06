@@ -1,13 +1,13 @@
 .navbar {
   transition: all 0.5s;
-  text-shadow: 0 0 5px #000;
+  // text-shadow: 0 0 5px #000;
 
-  .dropdown-menu {
-    text-shadow: none;
-  }
+  // .dropdown-menu {
+  //   text-shadow: none;
+  // }
 }
 
-$navbar-dark: rgba(0, 0, 0, .85);
+$navbar-dark: rgba(0, 0, 0, .9);
 
 .navbar-scroll {
   background-color: $navbar-dark;
@@ -30,13 +30,13 @@ $navbar-dark: rgba(0, 0, 0, .85);
   padding: 0px;
   margin-right: 15px;
   margin-left: 15px;
-  text-shadow: none;
+  // text-shadow: none;
   overflow: hidden;
 
   &__icon {
     background: none;
     border: none;
-    box-shadow: 0 0 20px -7px #333;
+    // box-shadow: 0 0 20px -7px #333;
     margin: 0;
     padding: 7px;
     padding-left: 12px;

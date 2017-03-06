@@ -1,38 +1,8 @@
 <!-- Extra style //-->
 
 <style type="text/css">
-
-    html, body {
-        background-color: #121212;
-        height: 100%;
-    }
-
-    #wrap {
-        min-height: 100%;
-    }
-
-    #main {
-        overflow: auto;
-        padding-bottom: 120px; /* this needs to be bigger than footer height*/
-    }
-
     #header {
-        background: #333 url('{{ asset('images/application/headerbg.jpg') }}') no-repeat center center;
-        background-size: cover;
-        height: 60px;
-        margin-bottom: 60px;
-        border-bottom: 5px solid #7FBA00;
-        /*position: fixed;*/
-    }
-
-    #header .container {
-        color: #fff !important;
-        padding-top: 60px;
-        text-align: center;
-    }
-
-    #header .container h1 {
-        font-weight: 300;
+        background-image: url('{{ asset('images/application/headerbg.jpg') }}');
     }
 
     .green {

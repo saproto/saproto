@@ -820,6 +820,29 @@ div .achievement-button {
     display: block;
 }
 
+$proto-darker:     #7fba00;
+
+/**
+ * Base stuff
+ */
+$base-font-size:    16px!default;
+$base-line-height:  24px!default;
+
+/**
+ * Base font-family.
+ */
+$base-font-family:  sans-serif!default;
+
+/**
+ * Default colour for objects’ borders etc.
+ */
+$base-ui-color:     #ccc!default;
+
+$base-spacing-unit: $base-line-height!default;
+$spacing-unit: $base-line-height!default;
+$half-spacing-unit: $base-spacing-unit / 2!default;
+$line-height-ratio: $base-line-height / $base-font-size;
+
 .btn {
     border-radius: 2px;
 }
@@ -860,6 +883,46 @@ div .achievement-button {
   }
 
 }
+.main__header {
+    background-color: #000;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    height: 4rem;
+    margin-bottom: 4rem;
+    border-bottom: 5px solid $proto-darker;
+}
+
+.main__header .container {
+    color: #fff !important;
+    padding-top: 4rem;
+    text-align: center;
+}
+
+.main__header .container h1 {
+    font-weight: 300;
+}
+
+[class="template-website.home.external"],
+[class="template-website.home.members"] {
+    .main__header {
+        height: 20rem;
+        margin-bottom: 0;
+    }
+}
+
+
+.media__icon {
+    background-color: $proto-darker;
+    text-align: center;
+    color: #fff;
+    padding: .5rem;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    display: block;
+}
+
 .homepage {
 
   &__companyimage {
@@ -896,16 +959,55 @@ div .achievement-button {
     }
   }
 
-  &__calendar {
-    min-height: 300px;
-    max-height: 300px;
-    overflow: hidden;
-  }
-
-  &__calendar:hover {
-    max-height: none;
-  }
+  // &__calendar {
+  //   min-height: 300px;
+  //   max-height: 300px;
+  //   overflow: hidden;
+  // }
+  //
+  // &__calendar:hover {
+  //   max-height: none;
+  // }
 }
+
+.carousel {
+    background: #fff;
+    border-radius: 3px;
+
+    .carousel-caption {
+        left:0;
+    	right:0;
+    	bottom:0;
+    	text-align:left;
+    	padding:10px;
+    	background:rgba(0,0,0,0.6);
+    	text-shadow:none;
+    }
+
+    .list-group {
+    	position:absolute;
+    	top:0;
+    	right:0;
+        width: 50%;
+    }
+    .list-group-item {
+    	border-radius:0px;
+    	cursor:pointer;
+    }
+    .list-group .active {
+    	background-color:#eee;
+    }
+}
+
+@media (min-width: 992px) {
+	#myCarousel {padding-right:50%;}
+	#myCarousel .carousel-controls {display:none;}
+}
+@media (max-width: 991px) {
+	.carousel-caption p,
+	#myCarousel .list-group {display:none;}
+}
+
 #container {
     background-color: #fff;
     // margin-top: -200px;
@@ -928,6 +1030,38 @@ div .achievement-button {
         padding-left: 1rem;
         padding-right: 1rem;
     }
+}
+
+@charset "UTF-8";
+
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+  background-color: #121212;
+}
+
+html {
+  box-sizing: border-box;
+  font: 16px sans-serif;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+    position: relative;
+    margin: 0;
+}
+
+#wrap {
+    min-height: 100%;
+}
+
+#main {
+    overflow: auto;
+    padding-bottom: 120px; /* this needs to be bigger than footer height*/
 }
 
 .main-footer {
@@ -955,14 +1089,14 @@ div .achievement-button {
 
 .navbar {
   transition: all 0.5s;
-  text-shadow: 0 0 5px #000;
+  // text-shadow: 0 0 5px #000;
 
-  .dropdown-menu {
-    text-shadow: none;
-  }
+  // .dropdown-menu {
+  //   text-shadow: none;
+  // }
 }
 
-$navbar-dark: rgba(0, 0, 0, .85);
+$navbar-dark: rgba(0, 0, 0, .9);
 
 .navbar-scroll {
   background-color: $navbar-dark;
@@ -985,13 +1119,13 @@ $navbar-dark: rgba(0, 0, 0, .85);
   padding: 0px;
   margin-right: 15px;
   margin-left: 15px;
-  text-shadow: none;
+  // text-shadow: none;
   overflow: hidden;
 
   &__icon {
     background: none;
     border: none;
-    box-shadow: 0 0 20px -7px #333;
+    // box-shadow: 0 0 20px -7px #333;
     margin: 0;
     padding: 7px;
     padding-left: 12px;
@@ -1085,8 +1219,79 @@ $navbar-dark: rgba(0, 0, 0, .85);
 
   }
 }
-p {
-    line-height: 2em;
+@mixin font-size($font-size, $line-height:true){
+    font-size:$font-size;
+    font-size:($font-size / $base-font-size)*1rem;
+    @if $line-height == true{
+        line-height:ceil($font-size / $base-line-height) * ($base-line-height / $font-size);
+    }
+}
+
+body {
+	font-weight: 400;
+	@include font-size(16px);
+}
+
+strong,
+.strong,
+%strong,
+b {
+	font-weight: 600;
+}
+
+em,
+.italic,
+%italic,
+i {
+	font-style: italic;
+}
+
+.lede,
+%lede,
+.lead,
+%lead {
+    @include font-size(18px, false);
+	line-height: 1.8;
+}
+
+small,
+.small,
+%small {
+    font-size: 12px;
+    font-size: 0.75rem;
+}
+
+p,
+.paragraph,
+%paragraph {
+    @include font-size(16px, false);
+	line-height: 1.8;
+}
+
+h1,
+.alpha,
+%alpha,
+h2,
+.beta,
+%beta,
+h3,
+.gamma,
+%gamma {
+    font-weight: 300;
+    letter-spacing: -0.01em;
+}
+
+h4,
+.delta,
+%delta,
+h5,
+.epsilon,
+%epsilon,
+h6,
+.zeta,
+%zeta {
+	font-weight: 400;
+	letter-spacing: -0.01em;
 }
 
 /*!
