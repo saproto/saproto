@@ -1,3 +1,65 @@
+.fixNav {
+  position: fixed;
+}
+
+@media (max-width: 991px) {
+  .fixNav {
+    display: none;
+  }
+}
+
+.achievement-gallery .achievement-tooltip {
+  left: 47%;
+  opacity: 1;
+  position: relative;
+  transform: translate(-50%, 0);
+}
+
+.achievement-gallery .achievement-icon {
+  max-width:none;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.achievement-gallery .achievement-tooltip:hover {
+  left: 47%;
+  opacity: 1;
+  position: relative;
+  transform: translate(-50%, 0);
+}
+
+.achievement-gallery .achievement {
+  margin: 10px;
+}
+
+.fixNav button {
+  margin: 3px 0 3px 0;
+}
+
+button.COMMON {
+  background: #fd9744;
+  color: #d86100;
+}
+
+button.UNCOMMON {
+  background: #cccccc;
+  color: #808080;
+}
+
+button.RARE {
+  background: #ffd02a;
+  color: #a77d00;
+}
+
+button.EPIC {
+  background: #b9cccc;
+  color: #638080;
+}
+
+button.LEGENDARY {
+  background: #d8ebf5;
+  color: #99c5dc;
+}
 .achievement-admin-list {
 
   tr * {
@@ -241,6 +303,58 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
   box-shadow: 0 0 20px -7px #000;
 
+}
+.news-show__content {
+  width: 100%;
+  background-color: #fff;
+  padding: 50px;
+  box-shadow: 0 0 20px;
+}
+
+.news-show__content img {
+  width: 100%;
+}
+
+.news {
+
+  &__href {
+
+    color: #333;
+    text-decoration: none;
+
+    &:hover {
+
+      color: #333;
+      text-decoration: none;
+
+    }
+
+  }
+
+  &__card {
+
+    height: 200px;
+    overflow: hidden;
+    box-shadow: 0 0 20px -7px #000;
+    position: relative;
+    padding: 10px;
+    transition: all 0.2s;
+    background: #eee;
+
+    &:hover {
+      transform: scale(1.05, 1.05);
+    }
+
+    &__photo {
+      height: 75%;
+      border-top-left-radius: 30px;
+      box-shadow: 0 0 20px -7px #000;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+  }
 }
 .product {
 
