@@ -36,7 +36,10 @@ class SlackController extends Controller
         } catch (SlackApiException $e) {
             switch ($e->getMessage()) {
                 case 'already_invited':
-                    return "You have already been invited!";
+                    return "You've already been invited!";
+                    break;
+                case 'already_in_team':
+                    return "You're already in the team silly!";
                     break;
                 default:
                     return "Something went wrong...";
