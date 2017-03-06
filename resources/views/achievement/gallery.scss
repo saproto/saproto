@@ -28,6 +28,10 @@
   transform: translate(-50%, 0);
 }
 
+.achievement-gallery .achievement:hover .achievement-tooltip {
+  left:47%;
+}
+
 .achievement-gallery .achievement {
   margin: 10px;
 }
