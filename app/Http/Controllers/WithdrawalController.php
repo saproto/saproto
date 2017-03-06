@@ -281,12 +281,6 @@ class WithdrawalController extends Controller
         $withdrawal->closed = true;
         $withdrawal->save();
 
-        foreach (Bank::onlyTrashed()->get() as $trashedBank) {
-            if (!$trashedBank->user->hasUnpaidOrderlines()) {
-                $trashedBank->forceDelete();
-            }
-        }
-
         $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
         return Redirect::back();
     }

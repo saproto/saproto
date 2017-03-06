@@ -17,3 +17,4 @@ composer.phar
 .DS_Store
 
 /public/assets/*
+/resources/assets/sass/components.scss
