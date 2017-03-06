@@ -1,3 +1,15 @@
+
+.media__icon {
+    background-color: $proto-darker;
+    text-align: center;
+    color: #fff;
+    padding: .5rem;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    display: block;
+}
+
 .homepage {
 
   &__companyimage {
@@ -34,38 +46,44 @@
     }
   }
 
-  &__calendar {
-    min-height: 300px;
-    max-height: 300px;
-    overflow: hidden;
-  }
-
-  &__calendar:hover {
-    max-height: none;
-  }
+  // &__calendar {
+  //   min-height: 300px;
+  //   max-height: 300px;
+  //   overflow: hidden;
+  // }
+  //
+  // &__calendar:hover {
+  //   max-height: none;
+  // }
 }
 
-#myCarousel .carousel-caption {
-    left:0;
-	right:0;
-	bottom:0;
-	text-align:left;
-	padding:10px;
-	background:rgba(0,0,0,0.6);
-	text-shadow:none;
-}
+.carousel {
+    background: #fff;
+    border-radius: 3px;
 
-#myCarousel .list-group {
-	position:absolute;
-	top:0;
-	right:0;
-}
-#myCarousel .list-group-item {
-	border-radius:0px;
-	cursor:pointer;
-}
-#myCarousel .list-group .active {
-	background-color:#eee;
+    .carousel-caption {
+        left:0;
+    	right:0;
+    	bottom:0;
+    	text-align:left;
+    	padding:10px;
+    	background:rgba(0,0,0,0.6);
+    	text-shadow:none;
+    }
+
+    .list-group {
+    	position:absolute;
+    	top:0;
+    	right:0;
+        width: 50%;
+    }
+    .list-group-item {
+    	border-radius:0px;
+    	cursor:pointer;
+    }
+    .list-group .active {
+    	background-color:#eee;
+    }
 }
 
 @media (min-width: 992px) {

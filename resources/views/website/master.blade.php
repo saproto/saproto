@@ -36,7 +36,7 @@
 
 </head>
 
-<body ng-controller="AppController as app" style="display: block;">
+<body ng-controller="AppController as app" style="display: block;" class="template-{{ $viewName }}">
 
 <div id="wrap">
 

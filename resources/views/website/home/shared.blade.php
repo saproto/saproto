@@ -6,7 +6,7 @@
 
 @section('header')
 
-    <div id="header">
+    <div id="header" class="main__header">
 
         <div class="container">
 
@@ -14,9 +14,6 @@
             @show
 
         </div>
-
-        <div class="greeting">Proto is <span id="greeting" ></span></div>
-
     </div>
 
 @endsection
@@ -45,127 +42,44 @@
     @endif
 
     <div class="container" style="margin-top: 30px;">
-
         @section('visitor-specific')
         @show
 
         <div class="row">
+            <div class="container">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
 
-            <div class="col-md-4">
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner">
+                      @foreach($posts as $key => $post)
+                        <div class="item @if ($post == reset($posts )) active @endif">
+                          <img src="http://placehold.it/760x400/cccccc/ffffff">
+                           <div class="carousel-caption">
+                            <h4><a href="#">{{$post->title}}</a></h4>
+                            <p>{{$post->description}}</p>
+                          </div>
+                        </div><!-- End Item -->
+                    @endforeach
+                  </div><!-- End Carousel Inner -->
 
-                <div class="panel panel-default homepage__calendar">
+                <ul class="list-group">
+                @foreach($posts as $key => $post)
+                  <li data-target="#myCarousel" data-slide-to="{{$key}}" class="list-group-item @if ($post == reset($posts )) active @endif"><h4>{{$post->title}}</h4></li>
+                  @endforeach
+                </ul>
 
-                    <div class="panel-body calendar">
+                  <!-- Controls -->
+                  <div class="carousel-controls">
+                      <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                      </a>
+                      <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                      </a>
+                  </div>
 
-                        <h4 style="text-align: center;">
-                            Upcoming activities
-                        </h4>
-
-                        <hr>
-
-                        <?php if (isset($events[0])) $week = date('W', $events[0]->start); ?>
-
-                        @foreach($events as $key => $event)
-
-                            @if($week != date('W', $event->start))
-                                <hr>
-                            @endif
-
-                            <a class="activity"
-                               href="{{ route('event::show', ['id' => $event->id]) }}">
-                                <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
-                                    <p><strong>{{ $event->title }}</strong></p>
-                                    <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
-                                    </p>
-                                    <p>
-                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                        {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
-                                    </p>
-                                </div>
-                            </a>
-
-                            <?php $week = date('W', $event->start); ?>
-
-                        @endforeach
-
-                        <hr>
-
-                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
-
-                    </div>
-
-                </div>
-
+                </div><!-- End Carousel -->
             </div>
-
-        </div>
-
-        <div class="container">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-
-              <!-- Wrapper for slides -->
-              <div class="carousel-inner">
-
-                <div class="item active">
-                  <img src="http://placehold.it/760x400/cccccc/ffffff">
-                   <div class="carousel-caption">
-                    <h4><a href="#">Lorem ipsum dolor sit amet consetetur sadipscing</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
-                  </div>
-                </div><!-- End Item -->
-
-                 <div class="item">
-                  <img src="http://placehold.it/760x400/999999/cccccc">
-                   <div class="carousel-caption">
-                    <h4><a href="#">consetetur sadipscing elitr, sed diam nonumy eirmod</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
-                  </div>
-                </div><!-- End Item -->
-
-                <div class="item">
-                  <img src="http://placehold.it/760x400/dddddd/333333">
-                   <div class="carousel-caption">
-                    <h4><a href="#">tempor invidunt ut labore et dolore</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
-                  </div>
-                </div><!-- End Item -->
-
-                <div class="item">
-                  <img src="http://placehold.it/760x400/999999/cccccc">
-                   <div class="carousel-caption">
-                    <h4><a href="#">magna aliquyam erat, sed diam voluptua</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
-                  </div>
-                </div><!-- End Item -->
-
-                <div class="item">
-                  <img src="http://placehold.it/760x400/dddddd/333333">
-                   <div class="carousel-caption">
-                    <h4><a href="#">tempor invidunt ut labore et dolore magna aliquyam erat</a></h4>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat. <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a></p>
-                  </div>
-                </div><!-- End Item -->
-              </div><!-- End Carousel Inner -->
-
-            <ul class="list-group col-sm-6">
-              <li data-target="#myCarousel" data-slide-to="0" class="list-group-item active"><h4>Lorem ipsum dolor sit amet consetetur sadipscing</h4></li>
-              <li data-target="#myCarousel" data-slide-to="1" class="list-group-item"><h4>consetetur sadipscing elitr, sed diam nonumy eirmod</h4></li>
-              <li data-target="#myCarousel" data-slide-to="2" class="list-group-item"><h4>tempor invidunt ut labore et dolore</h4></li>
-              <!-- <li data-target="#myCarousel" data-slide-to="3" class="list-group-item"><h4>magna aliquyam erat, sed diam voluptua</h4></li>
-              <li data-target="#myCarousel" data-slide-to="4" class="list-group-item"><h4>tempor invidunt ut labore et dolore magna aliquyam erat</h4></li> -->
-            </ul>
-
-              <!-- Controls -->
-              <div class="carousel-controls">
-                  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                  </a>
-                  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                  </a>
-              </div>
-
-            </div><!-- End Carousel -->
         </div>
 
         <hr>
