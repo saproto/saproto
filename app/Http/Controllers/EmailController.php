@@ -123,7 +123,7 @@ class EmailController extends Controller
         }
         if (strtotime($request->input('time')) === false) {
             $request->session()->flash('flash_message', 'Schedule time improperly formatted.');
-            return Redirect::route('email::admin');
+            return Redirect::back();
         }
         $email->fill([
             'description' => $request->input('description'),
@@ -238,15 +238,17 @@ class EmailController extends Controller
         return Redirect::route('email::admin');
     }
 
-    private function updateEmailDestination(Email $email, $type, $lists = null)
+    private function updateEmailDestination(Email $email, $type, $lists = [])
     {
         switch ($type) {
+
             case 'users':
                 $email->to_user = true;
                 $email->to_member = false;
                 $email->to_list = false;
                 $email->lists()->sync([]);
                 break;
+
             case 'members':
                 $email->to_user = false;
                 $email->to_member = true;
@@ -258,11 +260,16 @@ class EmailController extends Controller
                 $email->to_user = false;
                 $email->to_member = false;
                 $email->to_list = true;
-                $email->lists()->sync($lists);
+                $email->lists()->sync((gettype($lists) == "array" ? $lists : []));
                 break;
+
             default:
-                abort(500, 'Invalid e-mail destination');
+                $email->to_user = false;
+                $email->to_member = false;
+                $email->to_list = false;
+                $email->lists()->sync([]);
                 break;
+
         }
         $email->save();
     }

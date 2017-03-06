@@ -154,6 +154,20 @@ class Activity extends Validatable
     }
 
     /**
+     * @return bool Returns whether one can still subscribe for the back-up list for this activity.
+     */
+    public function canSubscribeBackup()
+    {
+        if ($this->canSubscribe()) {
+            return true;
+        }
+        if ($this->closed || $this->participants == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @return bool Returns whether one can still unsubscribe for this activity.
      */
     public function canUnsubscribe()
@@ -161,7 +175,7 @@ class Activity extends Validatable
         if ($this->closed) {
             return false;
         }
-        return $this->deregistration_end === null || date('U') < $this->deregistration_end;
+        return date('U') < $this->deregistration_end;
     }
 
     public function hasStarted()

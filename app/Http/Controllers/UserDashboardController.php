@@ -6,16 +6,13 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
 use Redirect;
-use Hash;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\User;
 
 use Auth;
 use Session;
 use Validator;
+use Mail;
 
 class UserDashboardController extends Controller
 {
@@ -26,7 +23,7 @@ class UserDashboardController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id = null)
+    public function show($id = null)
     {
         if ($id == null) {
             $id = Auth::id();
@@ -50,13 +47,7 @@ class UserDashboardController extends Controller
             $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
         }
 
-        $utwente = null;
-        if ($user->utwente_username) {
-            $data = json_decode(file_get_contents(getenv("LDAP_URL") . "?query=uid=" . md5($user->utwente_username)));
-            if ($data->count > 0) {
-                $utwente = $data->entries[0];
-            }
-        }
+        $utwente = $user->getUtwenteData();
 
         return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey, 'utwente' => $utwente]);
     }
@@ -77,25 +68,9 @@ class UserDashboardController extends Controller
             abort(403);
         }
 
-        $userdata = array('email' => $user->email);
 
-        if (($user->email != $request->input('email')) || ($request->input('newpassword') != "")) {
-            if (!Hash::check($request->input('old_pass'), $user->password)) {
-                Session::flash("flash_message", "You need to enter your current password in order to change your e-mail or password. No changes made to e-mail or password.");
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
-            } else {
-                $userdata['email'] = $request->input('email');
-
-                if ($request->input('newpassword') != "") {
-                    if ($request->input('newpassword') != $request->input('newpassword2')) {
-                        Session::flash("flash_message", "The two new passwords weren't identical. Password not changed.");
-                    } else {
-                        $userdata['password'] = Hash::make($request->input('newpassword'));
-                    }
-                }
-            }
-        }
-
+        $userdata['email'] = $request->input('email');
+        $userdata['calling_name'] = $request->input('calling_name');
         $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
@@ -110,17 +85,41 @@ class UserDashboardController extends Controller
             return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
         }
 
+        if ($userdata['email'] !== $user->email) {
+            $email = [
+                'old' => $user->email,
+                'new' => $userdata['email']
+            ];
+            $name = $user->name;
+            Mail::queueOn('high', 'emails.emailchange', [
+                'changer' => [
+                    'name' => Auth::user()->name,
+                    'ip' => $request->ip()
+                ],
+                'email' => $email,
+                'user' => $user
+            ], function ($message) use ($name, $email) {
+                $message
+                    ->to($email['old'], $name)
+                    ->to($email['new'], $name)
+                    ->from('security@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                    ->subject('Your e-mail address for S.A. Proto has been changed.');
+            });
+        }
+
         $user->fill($userdata);
         $user->save();
+
         Session::flash("flash_message", "Changes saved.");
         return Redirect::route('user::dashboard', ['id' => $user->id]);
 
     }
 
-    public function becomeAMemberOf() {
-        if(Auth::check()) {
+    public function becomeAMemberOf()
+    {
+        if (Auth::check()) {
             $user = Auth::user();
-        }else{
+        } else {
             $user = null;
         }
         return view("users.becomeamember", ['user' => $user]);

@@ -18,6 +18,7 @@ use DB;
 
 class AliasController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -151,77 +152,4 @@ class AliasController extends Controller
 
     }
 
-    /**
-     * Create personal alias for a user.
-     *
-     * @param $id
-     */
-    public function createFor($id)
-    {
-
-        $user = User::findOrFail($id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
-        if (!$user->member || !$user->isActiveMember()) {
-            Session::flash("flash_message", "Only active members can have a personal alias!");
-            return Redirect::back();
-        }
-
-        if ($user->member->proto_mail) {
-            Session::flash("flash_message", "You already have a personal alias!");
-            return Redirect::back();
-        }
-
-        $name = explode(" ", $user->name);
-        $aliasbase = strtolower(substr($name[0], 0, 1) . '.' . str_replace(' ', '', implode("", array_slice($name, 1))));
-        $alias = $aliasbase;
-        $i = 0;
-
-        while (Member::where('proto_mail', $alias)->count() > 0) {
-            $i++;
-            $alias = $aliasbase . '-' . $i;
-        }
-
-        $user->member->proto_mail = $alias;
-        $user->member->save();
-
-        Session::flash("flash_message", "Your alias will be activated soon!");
-        return Redirect::back();
-
-    }
-
-    /**
-     * Delete personal alias for a user.
-     *
-     * @param $id
-     */
-    public function deleteFor($id)
-    {
-
-        $user = User::findOrFail($id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
-        if (!$user->member) {
-            Session::flash("flash_message", "This user is not a member.");
-            return Redirect::back();
-        }
-
-        if (!$user->member->proto_mail) {
-            Session::flash("flash_message", "You don't have an alias.");
-            return Redirect::back();
-        }
-
-        $user->member->proto_mail = null;
-        $user->member->save();
-
-        Session::flash("flash_message", "Your alias will be removed soon!");
-        return Redirect::back();
-
-    }
 }

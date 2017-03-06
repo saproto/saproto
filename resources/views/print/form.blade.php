@@ -16,7 +16,7 @@
 
         <div class="row">
 
-            <div class="col-md-12">
+            <div class="col-md-12 print__body">
 
                 @if($print->stock <= 0)
                     <p style="color: red;">
@@ -34,17 +34,23 @@
                     this form are deleted every night.
                 </p>
 
-                <div class="form-group">
-                    <div class="col-md-8">
-                        <input type="file" class="form-control" name="file"
+                <div class="form-group print__item">
+                    <div class="col-md-7">
+                        <input type="file" class="form-control" name="file[]"
                                placeholder="Select your file to be uploaded." required>
                     </div>
 
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input class="form-control" type="number" name="copies" value="1" min="1">
-                            <span class="input-group-addon">copies</span>
+                            <input class="form-control" type="number" name="copies[]" value="1" min="1">
+                            <span class="input-group-addon">x</span>
                         </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-danger pull-right print__delete">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -69,6 +75,34 @@
 
             <a href="#" onclick="javascript:history.go(-1)" class="btn btn-default pull-right">Cancel</a>
 
+            <button id="print__add" type="button" class="btn btn-default pull-right" style="margin-right: 15px;">More!
+            </button>
+
     </form>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+
+        $('#print__add').click(function () {
+
+            var oldrow = $('.print__item').last();
+
+            $('.print__body').append(oldrow.wrap('<p/>').parent().html());
+            oldrow.unwrap();
+
+        });
+
+        $('div').delegate('.print__delete', 'click', function () {
+            if ($('.print__item').length > 1) {
+                $(this).parents('.print__item').remove();
+            }
+        });
+
+    </script>
 
 @endsection

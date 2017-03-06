@@ -2,6 +2,10 @@
 
 namespace Proto\Models;
 
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+use Adldap\Objects\AccountControl;
+
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +16,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 use DateTime;
 use Carbon\Carbon;
+use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
@@ -55,9 +60,53 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
+    /**
+     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
+     * @return bool whether or not the user is stale (not in use, can be *really* deleted safely)
+     */
+    public function isStale()
+    {
+        if ($this->password) return false;
+        if (strtotime($this->created_at) > strtotime('-1 hour')) return false;
+        if (Member::withTrashed()->where('user_id', $this->id)->first()) return false;
+        if (Bank::where('user_id', $this->id)->first()) return false;
+        if (Address::where('user_id', $this->id)->first()) return false;
+        if (OrderLine::where('user_id', $this->id)->count() > 0) return false;
+        if (CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
+        if (StudyEntry::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
+        if (Quote::where('user_id', $this->id)->count() > 0) return false;
+        if (EmailListSubscription::where('user_id', $this->id)->count() > 0) return false;
+        if (RfidCard::where('user_id', $this->id)->count() > 0) return false;
+        if (PlayedVideo::where('user_id', $this->id)->count() > 0) return false;
+        if (AchievementOwnership::where('user_id', $this->id)->count() > 0) return false;
+        return true;
+    }
+
     public function roles()
     {
         return $this->belongsToMany('Proto\Models\Role', 'role_user');
+    }
+
+    public function setPassword($password)
+    {
+        // Update Laravel Password
+        $this->password = Hash::make($password);
+        $this->save();
+
+        // Update Active Directory Password
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
+        if ($ldapuser !== null) {
+            $ldapuser->setPassword($password);
+            if ($this->member) {
+                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
+            }
+            $ldapuser->save();
+        }
     }
 
     /**
@@ -66,6 +115,18 @@ class User extends Model implements AuthenticatableContract,
     public function member()
     {
         return $this->hasOne('Proto\Models\Member');
+    }
+
+    public function getUtwenteData()
+    {
+        if ($this->utwente_username) {
+            $data = json_decode(file_get_contents(getenv("LDAP_URL_UTWENTE") . "?filter=userprincipalname=" . $this->utwente_username . "*"));
+            if (count($data) > 0) {
+                return (object)$data[0];
+            } else {
+                return null;
+            }
+        }
     }
 
     public function orderlines()
@@ -102,11 +163,6 @@ class User extends Model implements AuthenticatableContract,
     public function bank()
     {
         return $this->hasOne('Proto\Models\Bank');
-    }
-
-    public function backupBank()
-    {
-        return $this->hasOne('Proto\Models\Bank')->withTrashed();
     }
 
     /**
@@ -190,14 +246,14 @@ class User extends Model implements AuthenticatableContract,
     public function isInCommittee(Committee $committee)
     {
         return count(CommitteeMembership::withTrashed()
-            ->where('user_id', $this->id)
-            ->where('committee_id', $committee->id)
-            ->where('created_at', '<', date('Y-m-d H:i:s'))
-            ->where(function ($q) {
-                $q->whereNull('deleted_at')
-                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-            })->get()
-        ) > 0;
+                ->where('user_id', $this->id)
+                ->where('committee_id', $committee->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
     }
 
     public function isInCommitteeBySlug($slug)
@@ -212,13 +268,13 @@ class User extends Model implements AuthenticatableContract,
     public function isActiveMember()
     {
         return count(CommitteeMembership::withTrashed()
-            ->where('user_id', $this->id)
-            ->where('created_at', '<', date('Y-m-d H:i:s'))
-            ->where(function ($q) {
-                $q->whereNull('deleted_at')
-                    ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-            })->get()
-        ) > 0;
+                ->where('user_id', $this->id)
+                ->where('created_at', '<', date('Y-m-d H:i:s'))
+                ->where(function ($q) {
+                    $q->whereNull('deleted_at')
+                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
+                })->get()
+            ) > 0;
     }
 
     /**
@@ -243,6 +299,11 @@ class User extends Model implements AuthenticatableContract,
             }
         }
         return $withdrawals;
+    }
+
+    public function mollieTransactions()
+    {
+        return $this->hasMany('Proto\Models\MollieTransaction');
     }
 
     public function achievements()

@@ -106,36 +106,42 @@ class AchievementController extends Controller
 
     public function takeAll($achievement_id)
     {
+        $this->staticTakeAll($achievement_id);
         $achievement = Achievement::find($achievement_id);
-        if (!$achievement) abort(404);
-        $achieved = AchievementOwnership::all();
-        foreach ($achieved as $entry) {
-            if ($entry->achievement_id == $achievement_id) {
-                $entry->delete();
-            }
-        }
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
         return Redirect::back();
     }
 
-    public function image($id, Request $request)
+    public function icon($id, Request $request)
     {
-
         $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achievement->fa_icon = $request->fa_icon;
+        $achievement->save();
 
-        $image = $request->file('image');
-        if ($image) {
-            $file = new StorageEntry();
-            $file->createFromFile($image);
-
-            $achievement->image()->associate($file);
-            $achievement->save();
-        } else {
-            $achievement->image()->dissociate();
-            $achievement->save();
-        }
         Session::flash('flash_message', "Achievement Icon set");
         return Redirect::route('achievement::manage', ['id' => $id]);
+    }
 
+    static function staticTakeAll($id)
+    {
+        $achievement = Achievement::find($id);
+        if (!$achievement) abort(404);
+        $achieved = AchievementOwnership::all();
+        foreach ($achieved as $entry) {
+            if ($entry->achievement_id == $id) {
+                $entry->delete();
+            }
+        }
+    }
+
+    public function gallery()
+    {
+        $common = Achievement::where('tier', 'COMMON')->get();
+        $uncommon = Achievement::where('tier', 'UNCOMMON')->get();
+        $rare = Achievement::where('tier', 'RARE')->get();
+        $epic = Achievement::where('tier', 'EPIC')->get();
+        $legendary = Achievement::where('tier', 'LEGENDARY')->get();
+        return view('achievement.gallery', ['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary]);
     }
 }

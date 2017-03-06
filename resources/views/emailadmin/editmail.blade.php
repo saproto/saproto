@@ -99,7 +99,7 @@
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="destinationType" id="destinationUsers"
+                                            <input type="radio" name="destinationType" id="destinationUsers" required
                                                    value="users" {{ ($email && $email->to_user ? 'checked' : '') }}>
                                             All users
                                         </label>
@@ -107,7 +107,7 @@
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="destinationType" id="destinationMembers"
+                                            <input type="radio" name="destinationType" id="destinationMembers" required
                                                    value="members" {{ ($email && $email->to_member ? 'checked' : '') }}>
                                             All members
                                         </label>
@@ -115,7 +115,7 @@
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="destinationType" id="destinationLists"
+                                            <input type="radio" name="destinationType" id="destinationLists" required
                                                    value="lists" {{ ($email && $email->to_list ? 'checked' : '') }}>
                                             These e-mail lists:
                                         </label>

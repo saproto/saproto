@@ -50,31 +50,6 @@
 
                 @endforeach
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Association <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("page::show", ["slug" => "board"]) }}">Board</a></li>
-                        <li><a href="{{ route("committee::list") }}">Committees</a></li>
-                        <li><a href="{{ route("event::list") }}">Calendar</a></li>
-                        <li><a href="{{ route("photo::albums") }}">Photos</a></li>
-                        <li><a href="{{ route("protube.nl::remote") }}">ProTube</a></li>
-                        @if (Auth::check() && Auth::user()->member)
-                            <li><a href="{{ route("quotes::list") }}">Quote Corner</a></li>
-                        @endif
-                        <li><a href="{{ route("fishcam") }}">FishCam</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Career <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ route("companies::index") }}">Companies</a></li>
-                        <li><a href="{{ route("joboffers::index") }}">Job offers</a></li>
-                    </ul>
-                </li>
-
                 @if (Auth::check() && Auth::user()->can(["omnomcom","pilscie"]))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -104,9 +79,13 @@
                            aria-expanded="false">Association Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("user::member::list") }}">Users</a></li>
+                            <li><a href="{{ route("user::admin::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
+                            <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+
+                            <li role="separator" class="divider"></li>
+
                             <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                             <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
@@ -120,7 +99,7 @@
                             <li role="separator" class="divider"></li>
 
                             <li><a class="navbar-title">Internal Affairs:</a></li>
-                            <li><a href="{{ route("pastries::list") }}">Pastries</a></li>
+                            <li><a href="{{ route("event::innewsletter::show") }}">Edit Newsletter</a></li>
 
                             @if (Auth::user()->can("finadmin"))
                                 <li role="separator" class="divider"></li>
@@ -128,6 +107,8 @@
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
+                                <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
+                                <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
                             @endif
 
                         </ul>
@@ -142,6 +123,7 @@
 
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
                             <li><a href="{{ route("page::list") }}">Pages</a></li>
+                            <li><a href="{{ route("news::admin") }}">News</a></li>
                             <li><a href="{{ route("email::admin") }}">Email</a></li>
                             <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
                             <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
@@ -160,9 +142,20 @@
                     </li>
                 @endif
 
-                <li>
-                    <a href="{{ route('search') }}">Search</a>
-                </li>
+                <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right navbar__search">
+                    {{ csrf_field() }}
+                    <div class="input-group">
+                        <input class="navbar__search__input form-control"
+                               type="search" name="query" placeholder="Search">
+                        <!--<span class="navbar__search__icon input-group-addon">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>-->
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search"
+                                                                                               aria-hidden="true"></i></button>
+                        </span>
+                    </div>
+                </form>
 
                 @if (Auth::check())
 
@@ -182,7 +175,6 @@
 
                             @if(Auth::check() && Auth::user()->member)
                                 <li><a href="{{ route('user::profile') }}">My Profile</a></li>
-                                <li><a href="{{ route('print::form') }}">Print Something</a></li>
                             @else
                                 <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
                             @endif
@@ -207,6 +199,8 @@
                     </form>
 
                 @endif
+
+
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

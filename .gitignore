@@ -15,3 +15,6 @@ _ide_helper_models.php
 composer.phar
 
 .DS_Store
+
+/public/assets/*
+/resources/assets/sass/components.scss

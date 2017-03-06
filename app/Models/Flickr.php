@@ -6,23 +6,42 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flickr extends Model
 {
+    public static function getAlbums($max = null) {
+        $albums = ($max == null) ? FlickrAlbum::orderBy('date_create', 'desc')->get() : $albums = FlickrAlbum::orderBy('date_create', 'desc')->paginate($max);
+        return $albums;
+    }
+
+    public static function getPhotos($albumID) {
+        $items = FlickrItem::where("album_id", "=", $albumID)->get();
+        if(count($items) == 0) abort(404, "Album not found.");
+
+        $data = new \stdClass();
+        $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
+        $data->photos = $items;
+
+        return $data;
+    }
+
 
     /**
      * Returns Flickr albums
      *
      * @return mixed
      */
-    public static function getAlbums($max = null)
+    public static function getAlbumsFromAPI($max = null)
     {
         try {
 
             $albums = json_decode(file_get_contents("https://api.flickr.com/services/rest/?method=flickr.photosets.getList&user_id=" . env('FLICKR_USER') . "&format=json&primary_photo_extras=url_o,url_m,date_taken&nojsoncallback=1&api_key=" . env('FLICKR_KEY')))->photosets->photoset;
+
             $data = [];
             foreach (array_slice($albums, 0, $max) as $album) {
                 $data[] = (object)[
                     'name' => $album->title->_content,
                     'thumb' => $album->primary_photo_extras->url_m,
-                    'id' => $album->id
+                    'id' => $album->id,
+                    'date_create' => $album->date_create,
+                    'date_update' => $album->date_update
                 ];
             }
             return $data;
@@ -42,7 +61,7 @@ class Flickr extends Model
      * @param $albumId
      * @return null
      */
-    public static function getPhotos($albumId)
+    public static function getPhotosFromAPI($albumId)
     {
         try {
 

@@ -4,24 +4,20 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Middleware\Member;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use PragmaRX\Google2FA\Google2FA;
 
-use Proto\Models\Achievement;
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
+
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\Alias;
 use Proto\Models\Bank;
-use Proto\Models\EmailList;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\PasswordReset;
-use Proto\Models\Quote;
 use Proto\Models\RfidCard;
-use Proto\Models\StudyEntry;
 use Proto\Models\User;
+use Proto\Models\Member;
 
 use Auth;
 use Proto\Models\WelcomeMessage;
@@ -63,13 +59,25 @@ class AuthController extends Controller
 
         } else {
 
-            // We cannot authenticate to our own records. Try RADIUS.
-            $user = User::where('utwente_username', $username)->first();
+            // See if someone maybe used their Proto username.
+            $member = Member::where('proto_username', $username)->first();
 
-            if ($user) {
+            // Check password again.
+            if ($member && $member->user && Hash::check($password, $member->user->password)) {
 
-                if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
-                    return $user;
+                return $member->user;
+
+            } else {
+
+                // We cannot authenticate to our own records. Try RADIUS.
+                $user = User::where('utwente_username', $username)->first();
+
+                if ($user) {
+
+                    if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
+                        return $user;
+                    }
+
                 }
 
             }
@@ -206,6 +214,41 @@ class AuthController extends Controller
 
     }
 
+    public function updatePassword(Request $request)
+    {
+        $user = User::find($request->id);
+
+        if ($user == null) {
+            abort(404);
+        }
+
+        if ($user->id != Auth::id()) {
+            $request->session()->flash('flash_message', 'Sorry! You cannot change another user their password. If a user forgot their password, please let them use the \'forgot password\' form on the login screen.');
+            return Redirect::back();
+        }
+
+        if (
+            AuthController::verifyCredentials($user->email, $request->oldpass)
+            || ($user->utwente_username && AuthController::verifyUtwenteCredentials($user->utwente_username, $request->oldpass))
+        ) {
+            if ($request->newpass1 !== $request->newpass2) {
+                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
+                return Redirect::route('user::dashboard');
+            } elseif (strlen($request->newpass1) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
+                return Redirect::route('user::dashboard');
+            } else {
+                $user->setPassword($request->newpass1);
+                $request->session()->flash('flash_message', 'Your password has been changed.');
+                return Redirect::route('user::dashboard');
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Old password incorrect! Password not updated.');
+        return Redirect::route('user::dashboard');
+
+    }
+
     public function getLogout()
     {
         Auth::logout();
@@ -248,24 +291,44 @@ class AuthController extends Controller
 
         if (Session::get('wizard')) $user->wizard = true;
 
-        $password = str_random(16);
-        $user->password = Hash::make($password);
-
         $user->save();
+
+        AuthController::makeLdapAccount($user);
 
         $email = $user->email;
         $name = $user->mail;
 
-        Mail::queue('emails.registration', ['user' => $user, 'password' => $password], function ($m) use ($email, $name) {
+        Mail::queueOn('high', 'emails.registration', ['user' => $user], function ($m) use ($email, $name) {
             $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
             $m->to($email, $name);
             $m->subject('Account registration at Study Association Proto');
         });
 
+        AuthController::dispatchPasswordEmailFor($user);
+
         if (!Auth::check()) {
-            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with your password shortly.');
+            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
             return Redirect::route('homepage');
         }
+    }
+
+    public static function makeLdapAccount($user)
+    {
+
+        /** Add user to LDAP */
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+        /** End add user to LDAP */
+
     }
 
     public function deleteUser(Request $request, $id)
@@ -277,7 +340,7 @@ class AuthController extends Controller
         }
 
         if ($user->member) {
-            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
         }
 
@@ -312,7 +375,7 @@ class AuthController extends Controller
 
         $user->delete();
 
-        $request->session()->flash('flash_message', 'Your account has been deleted.');
+        $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 
@@ -342,10 +405,12 @@ class AuthController extends Controller
             if ($request->password !== $request->password_confirmation) {
                 $request->session()->flash('flash_message', 'Your passwords don\'t match.');
                 return Redirect::back();
+            } elseif (strlen($request->password) < 8) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
+                return Redirect::route('user::dashboard');
             }
 
-            $reset->user->password = Hash::make($request->password);
-            $reset->user->save();
+            $reset->user->setPassword($request->password);
 
             PasswordReset::where('token', $request->token)->delete();
 
@@ -363,21 +428,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user !== null) {
 
-            $reset = PasswordReset::create([
-                'email' => $user->email,
-                'token' => str_random(128),
-                'valid_to' => strtotime('+1 hour')
-            ]);
-
-            $name = $user->name;
-            $email = $user->email;
-
-            Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
-                $message
-                    ->to($email, $name)
-                    ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
-                    ->subject('Your password reset request for S.A. Proto.');
-            });
+            AuthController::dispatchPasswordEmailFor($user);
 
             $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
             return Redirect::route('homepage');
@@ -386,6 +437,27 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
             return Redirect::back();
         }
+    }
+
+    public static function dispatchPasswordEmailFor(User $user)
+    {
+
+        $reset = PasswordReset::create([
+            'email' => $user->email,
+            'token' => str_random(128),
+            'valid_to' => strtotime('+1 hour')
+        ]);
+
+        $name = $user->name;
+        $email = $user->email;
+
+        Mail::queueOn('high', 'emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+            $message
+                ->to($email, $name)
+                ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
+                ->subject('Your password reset request for S.A. Proto.');
+        });
+
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Hash;
+use DB;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\File;
 
 use Proto\Http\Controllers\FileController;
 
+use Proto\Models\Company;
+use Proto\Models\NarrowcastingItem;
+use Proto\Models\Page;
+use Proto\Models\Product;
+
 class StorageEntry extends Model
 {
     /**
@@ -20,6 +26,24 @@ class StorageEntry extends Model
      * @var string
      */
     protected $table = 'files';
+
+    /**
+     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
+     * @return bool whether or not the file is orphaned (not in use, can be *really* deleted safely)
+     */
+    public function isOrphan()
+    {
+        $id = $this->id;
+        return NarrowcastingItem::where('image_id', $id)->count() == 0 &&
+            Page::where('featured_image_id', $id)->count() == 0 &&
+            DB::table('pages_files')->where('file_id', $id)->count() == 0 &&
+            Product::where('image_id', $id)->count() == 0 &&
+            Company::where('image_id', $id)->count() == 0 &&
+            User::where('image_id', $id)->count() == 0 &&
+            DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
+            Committee::where('image_id', $id)->count() == 0 &&
+            Event::where('image_id', $id)->count() == 0;
+    }
 
     public function createFromFile($file)
     {
@@ -91,7 +115,8 @@ class StorageEntry extends Model
         }
     }
 
-    public function generateLocalPath() {
+    public function generateLocalPath()
+    {
         return storage_path('app/' . $this->filename);
     }
 

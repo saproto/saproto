@@ -15,10 +15,18 @@
 
     <p>
         As an association we also organise a lot of activities, these activities are very diverse and can be both fun
-        and educative. You can sign up for these activities on our <a href='https://www.saproto.nl'>website</a>. We
-        also have a <a href='https://www.facebook.com/groups/574894482542033/'>private Facebook group</a> where we keep
-        you posted on things going around the Protopolis and upcoming activities. Finally, we also have membership
+        and educative. You can sign up for these activities on our <a href='https://www.proto.utwente.nl'>website</a>.
+        We also have a <a href='https://www.facebook.com/groups/574894482542033/'>private Facebook group</a> where we
+        keep you posted on things going around the Protopolis and upcoming activities. Finally, we also have membership
         passes. You can pick yours up at the Protopolis and use it to get discounts at various stores and food-chains.
+    </p>
+
+    <p>
+        With your membership also comes a Proto username. Your Proto username is
+        <strong>{{ $user->member->proto_username }}</strong>. On the website and the OmNomCom, you can use this username
+        instead of your e-mail address to log-in. For all other Proto services, you have to use this username and your
+        Proto password to log-in. On these other services, your University of Twente credentials won't work
+        unfortunately.
     </p>
 
     <p>

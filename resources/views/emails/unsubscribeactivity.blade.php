@@ -3,13 +3,13 @@
 @section('body')
 
     <p>
-        Hey {{ $participation->user->calling_name }},
+        Hey {{ $activity['name'] }},
     </p>
 
     <p>
         You receive this e-mail because someone else signed you out for
-        <a href="{{ route('event::show', ['id' => $participation->activity->event->id]) }}">
-            {{ $participation->activity->event->title }}
+        <a href="{{ route('event::show', ['id' => $activity['id']]) }}">
+            {{ $activity['title'] }}
         </a>.
         If you believe this is a mistake, please let us know!
     </p>

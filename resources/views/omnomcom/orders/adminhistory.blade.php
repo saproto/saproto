@@ -45,7 +45,7 @@
 
                                 @else
 
-                                    No associated user account
+                                    [Cashier: {{ $orderline->cashier->name }}]
 
                                 @endif
                             </div>
@@ -57,17 +57,7 @@
 
                             <div class="col-md-2"
                                  style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                @if($orderline->isPayed())
-                                    @if($orderline->payed_with_withdrawal !== null)
-                                        Withdrawal #{{ $orderline->payed_with_withdrawal }}
-                                    @elseif($orderline->payed_with_cash !== null)
-                                        Cash
-                                    @elseif($orderline->payed_with_mollie !== null)
-                                        Mollie #{{ $orderline->payed_with_mollie }}
-                                    @endif
-                                @else
-                                    Unpaid
-                                @endif
+                                {!! $orderline->generateHistoryStatus() !!}
                             </div>
 
                             <div class="col-md-2" style="text-align: right;">

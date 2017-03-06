@@ -56,7 +56,7 @@ class NewsletterCron extends Command
                 $email = $user->email;
                 $name = $user->name;
 
-                Mail::queue('emails.newsletter', [
+                Mail::queueOn('low', 'emails.newsletter', [
                     'user' => $user,
                     'list' => $newsletterlist
                 ], function ($message) use ($email, $name) {
@@ -74,7 +74,7 @@ class NewsletterCron extends Command
 
         } else {
 
-            $this->info("There are no upcomming activities.");
+            $this->info("No activities scheduled for the newsletter. Newsletter not sent.");
 
         }
 

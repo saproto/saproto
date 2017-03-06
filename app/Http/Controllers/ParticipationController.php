@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\ActivityParticipation;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
@@ -28,7 +29,7 @@ class ParticipationController extends Controller
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation(Auth::user(), ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
             abort(500, "You are already subscribed for " . $event->title . ".");
-        } elseif (!$event->activity->canSubscribe() && !$request->has('helping_committee_id') && $event->activity->hasStarted()) {
+        } elseif (!$request->has('helping_committee_id') && (!$event->activity->canSubscribeBackup())) {
             abort(500, "You cannot subscribe for " . $event->title . " at this time.");
         } elseif ($event->activity->closed) {
             abort(500, "This activity is closed, you cannot change participation anymore.");
@@ -46,9 +47,7 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
         } else {
-            if($event->activity->participants == 0) {
-                abort(500, "You cannot subscribe to this activity!");
-            } elseif ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
@@ -74,6 +73,16 @@ class ParticipationController extends Controller
         $user = User::findOrFail($request->user_id);
         $event = Event::findOrFail($id);
 
+        $data = ['activity_id' => $event->activity->id, 'user_id' => $user->id];
+
+        if ($request->has('helping_committee_id')) {
+            $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
+            if (!$helping->committee->isMember($user)) {
+                abort(500, $user->name . " is not a member of the " . $helping->committee->name . " and thus cannot help on behalf of it.");
+            }
+            $data['committees_activities_id'] = $helping->id;
+        }
+
         if (!$event->activity) {
             abort(500, "You cannot subscribe for " . $event->title . ".");
         } elseif ($event->activity->getParticipation($user, ($request->has('helping_committee_id') ? HelpingCommittee::findOrFail($request->input('helping_committee_id')) : null)) !== null) {
@@ -82,10 +91,10 @@ class ParticipationController extends Controller
             abort(500, "This activity is closed, you cannot change participation anymore.");
         }
 
-        $request->session()->flash('flash_message', 'You added ' . $user->name . ' as a participant for ' . $event->title . '.');
+        $request->session()->flash('flash_message', 'You added ' . $user->name . ' for ' . $event->title . '.');
 
         $participation = new ActivityParticipation();
-        $participation->fill(['activity_id' => $event->activity->id, 'user_id' => $user->id]);
+        $participation->fill($data);
         $participation->save();
 
         return Redirect::back();
@@ -133,7 +142,7 @@ class ParticipationController extends Controller
                 $email = $backupparticipation->user->email;
                 $activitytitle = $backupparticipation->activity->event->title;
 
-                Mail::queue('emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queueOn('high', 'emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
@@ -146,7 +155,11 @@ class ParticipationController extends Controller
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
 
-                Mail::queue('emails.unsubscribeactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queueOn('high', 'emails.unsubscribeactivity', ['activity' => [
+                    'id' => $participation->activity->event->id,
+                    'title' => $activitytitle,
+                    'name' => $participation->user->calling_name
+                ]], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You have been signed out for ' . $activitytitle . '.');
@@ -168,8 +181,8 @@ class ParticipationController extends Controller
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
 
-                Mail::queue('emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
-                    $m->queue('board@proto.utwente.nl', 'S.A. Proto');
+                Mail::queueOn('high', 'emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                    $m->from('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
                 });
@@ -182,5 +195,11 @@ class ParticipationController extends Controller
 
         return Redirect::back();
 
+    }
+
+    public function checklist($id)
+    {
+        $event = Event::findOrFail($id);
+        return view('event.checklist', ['event' => $event]);
     }
 }

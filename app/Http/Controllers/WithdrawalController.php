@@ -67,7 +67,7 @@ class WithdrawalController extends Controller
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
 
             if ($orderline->isPayed()) continue;
-            if ($orderline->user->bank == null && $orderline->user->backupBank == null) continue;
+            if ($orderline->user->bank == null) continue;
 
             if ($max != null) {
                 if (!array_key_exists($orderline->user->id, $totalPerUser)) {
@@ -117,9 +117,9 @@ class WithdrawalController extends Controller
             $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString(); // We sort by date, where a date goes from 6am - 6am.
 
             if (isset($accounts[$orderline->product->account->account_number])) { // Check if this account has already been encountered
-                if(isset($accounts[$orderline->product->account->account_number]->byDate[$sortDate])) { // Check if orderlines on this date have already been encountered
+                if (isset($accounts[$orderline->product->account->account_number]->byDate[$sortDate])) { // Check if orderlines on this date have already been encountered
                     $accounts[$orderline->product->account->account_number]->byDate[$sortDate] += $orderline->total_price;
-                }else{
+                } else {
                     $accounts[$orderline->product->account->account_number]->byDate[$sortDate] = $orderline->total_price;
                 }
 
@@ -137,7 +137,7 @@ class WithdrawalController extends Controller
         }
 
         ksort($accounts);
-        
+
         return view("omnomcom.withdrawals.show-accounts", ['accounts' => $accounts, 'withdrawal' => $withdrawal]);
     }
 
@@ -238,13 +238,13 @@ class WithdrawalController extends Controller
 
         foreach ($withdrawal->users() as $user) {
             $response .= implode($seperator, [
-                    (($user->bank ? $user->bank->is_first : $user->backupBank->is_first) ? 'FRST' : 'RCUR'),
+                    ($user->bank ? 'FRST' : 'RCUR'),
                     number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                    ($user->bank ? $user->bank->machtigingid : $user->backupBank->machtigingid),
-                    date('Y-m-d', strtotime(($user->bank ? $user->bank->created_at : $user->backupBank->created_at))),
-                    ($user->bank ? $user->bank->bic : $user->backupBank->bic),
+                    $user->bank->machtigingid,
+                    date('Y-m-d', strtotime($user->bank->created_at)),
+                    $user->bank->bic,
                     $user->name,
-                    ($user->bank ? $user->bank->iban : $user->backupBank->iban),
+                    $user->bank->iban,
                     $user->email
                 ]) . "\n";
         }
@@ -274,23 +274,12 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            if ($user->bank) {
-                $user->bank->is_first = false;
-                $user->bank->save();
-            } else {
-                $user->backupBank->is_first = false;
-                $user->backupBank->save();
-            }
+            $user->bank->is_first = false;
+            $user->bank->save();
         }
 
         $withdrawal->closed = true;
         $withdrawal->save();
-
-        foreach (Bank::onlyTrashed()->get() as $trashedBank) {
-            if (!$trashedBank->user->hasUnpaidOrderlines()) {
-                $trashedBank->forceDelete();
-            }
-        }
 
         $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
         return Redirect::back();
@@ -323,7 +312,7 @@ class WithdrawalController extends Controller
                 'email' => $user->email,
                 'date' => $withdrawal->date
             ];
-            Mail::queue('emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
+            Mail::queueOn('medium', 'emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
                 $message
                     ->to($data['email'], $data['name'])
                     ->from('treasurer@' . config('proto.emaildomain'), config('proto.treasurer'))
@@ -333,6 +322,27 @@ class WithdrawalController extends Controller
 
         $request->session()->flash('flash_message', 'All e-mails have been queued.');
         return Redirect::back();
+    }
+
+    public function unwithdrawable()
+    {
+        $users = [];
+
+        foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
+            if ($orderline->isPayed()) continue;
+            if ($orderline->user->bank) continue;
+            if (!in_array($orderline->user->id, array_keys($users))) {
+                $users[$orderline->user->id] = (object)[
+                    'user' => $orderline->user,
+                    'orderlines' => [],
+                    'total' => 0
+                ];
+            }
+            $users[$orderline->user->id]->orderlines[] = $orderline;
+            $users[$orderline->user->id]->total += $orderline->total_price;
+        }
+
+        return view('omnomcom.unwithdrawable', ['users' => $users]);
     }
 
     /**

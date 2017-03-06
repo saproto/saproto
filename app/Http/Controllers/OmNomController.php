@@ -121,20 +121,7 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-
-                $orderline = OrderLine::create([
-                    'user_id' => ($withCash == "true" ? null : $user->id),
-                    'cashier_id' => ($withCash == "true" ? $user->id : null),
-                    'product_id' => $product->id,
-                    'original_unit_price' => $product->price,
-                    'units' => $amount,
-                    'total_price' => $amount * $product->price,
-                    'payed_with_cash' => ($withCash == "true" ? date('Y-m-d H:i:s') : null)
-                ]);
-                $orderline->save();
-
-                $product->stock -= $amount;
-                $product->save();
+                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false));
             }
         }
 
@@ -149,7 +136,8 @@ class OmNomController extends Controller
         return view('omnomcom.products.generateorder', ['products' => $products]);
     }
 
-    public function miniSite() {
+    public function miniSite()
+    {
         return view('omnomcom.minisite');
     }
 }

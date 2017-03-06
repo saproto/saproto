@@ -153,7 +153,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class,
+        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class, /* We really need this for SMTP, for some reason. Do not remove. */
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Bitbeans\Yubikey\YubikeyServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -162,7 +162,8 @@ return [
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
-        Alaouy\Youtube\YoutubeServiceProvider::class
+        Alaouy\Youtube\YoutubeServiceProvider::class,
+        Mollie\Laravel\MollieServiceProvider::class
 
     ],
 
@@ -251,10 +252,13 @@ return [
         'Email' => \Proto\Models\Email::class,
         'Event' => \Proto\Models\Event::class,
         'Product' => \Proto\Models\Product::class,
+        'MollieTransaction' => \Proto\Models\MollieTransaction::class,
 
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 
-        'Youtube'=> Alaouy\Youtube\Facades\Youtube::class
+        'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
+
+        'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 
     ],
 

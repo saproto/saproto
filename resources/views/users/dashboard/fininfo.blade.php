@@ -53,7 +53,7 @@
 
                         <a type="submit" class="btn btn-success"
                            href="{{ route("user::bank::edit", ["id"=>$user->id]) }}">
-                            Update your bank authorization.
+                            Update your bank authorization
                         </a>
 
                     @endif

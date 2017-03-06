@@ -233,6 +233,30 @@ class EventController extends Controller
         return Redirect::route('event::list');
     }
 
+    public function admin($id)
+    {
+        $event = Event::findOrFail($id);
+
+        if (!$event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not an event admin for this event!");
+            return Redirect::back();
+        }
+
+        return view('event.admin', ['event' => $event]);
+    }
+
+    public function scan($id)
+    {
+        $event = Event::findOrFail($id);
+
+        if (!$event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not an event admin for this event!");
+            return Redirect::back();
+        }
+
+        return view('event.scan', ['event' => $event]);
+    }
+
     public function finclose(Request $request, $id)
     {
 
@@ -266,20 +290,34 @@ class EventController extends Controller
         $product->save();
 
         foreach ($activity->users as $user) {
-            $order = OrderLine::create([
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'original_unit_price' => $product->price,
-                'units' => 1,
-                'total_price' => $product->price
-            ]);
-            $order->save();
+            $product->buyForUser($user, 1, $product->price);
         }
 
         $activity->closed = true;
         $activity->save();
 
         Session::flash("flash_message", "This activity has been closed and the relevant orderlines were added.");
+        return Redirect::back();
+
+    }
+
+    public function getInNewsletter()
+    {
+
+        $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
+
+        return view('event.innewsletter', ['events' => $events]);
+
+    }
+
+    public function toggleInNewsletter($id)
+    {
+
+        $event = Event::findOrFail($id);
+
+        $event->include_in_newsletter = !$event->include_in_newsletter;
+        $event->save();
+
         return Redirect::back();
 
     }

@@ -1,7 +1,10 @@
 # S.A. Proto 2.0
 
-Fancy readme.md will follow soon.
+## Prerequisites
 
+This README is taylored to install on a Debian system. You may need to change commands to match your operating system.
+
+Before following the intallation instructions, you need to have a working installation of `php`, `git`, `npm`, `composer`. Depending on your operating system and plans for your development environment, you also need to set-up a web-server and database server.
 
 ## Installation instructions
 
@@ -19,45 +22,27 @@ cp .env.example .env
 
 This is the environment configuration. In this file you will establish your own database connection, e-mail credentials and whatnot. You will at least need a database configured for the website to work. You can skip all the other stuff (mailing API, Google API) since only a few specific services use them.
 
-Now we need to initialize the program. This is done using our own update utility:
+Now we need to initialize the project:
 
 ```
 chmod +x update.sh
+composer install
+npm install
+php artisan key:generate
+```
+
+After this is done we can install, and later update, our project using our own update utility:
+
+```
 ./update.sh
 ```
 
 This update utility will initialize the website for you. It can also be used to update to a newer version of our code.
 
-If you are developing for the site, but are not a part of the Have You Tried Turning It Off And On Again committee, you'll need to create your own copy of `update.sh` to use. In this copy, change this line:
-
-```
-php artisan app:migrate --no-confirmation
-```
-
-to look like this:
-
-```
-# php artisan app:migrate --no-confirmation
-```
-
-This is because this piece of code migrates data from the old site to you're installation. But since this includes a lot of personal data of members it is not availble to those outside the committee.
-
 Now you have set-up your website correctly. The only thing that remains is pointing your web directory to the `public` directory of the website. This is where the front-facing controllers reside. The rest of the project is then shielded from public access. You could do this using symlinks. An example command on a webserver running DirectAdmin could like like this:
 
 ```
 ln -s /home/user/domains/example.saproto.nl/saproto/public /home/user/domains/example.saproto.nl/public_html
-```
-
-If you wish to edit the stylesheet as well, you'll need to use Grunt for that. Grunt compiles our SASS files and publishes them to the public directory for you. You can install all needed components using `npm`:
-
-```
-npm install
-```
-
-Then you only need to start Grunt by running the following once:
-
-```
-grunt
 ```
 
 That's it, everything should be up and running!
