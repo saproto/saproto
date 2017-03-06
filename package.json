@@ -1,6 +1,6 @@
 {
   "name": "saproto",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "S.A. Proto Main Website",
   "main": "./public/index.php",
   "scripts": {
