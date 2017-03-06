@@ -1,46 +1,173 @@
-tr * {
-  max-height: 50px !important;
-  max-width:150px;
-  vertical-align: middle !important;
+.fixNav {
+  position: fixed;
 }
 
-.COMMON {
-  color: #DDDDDD;
+@media (max-width: 991px) {
+  .fixNav {
+    display: none;
+  }
 }
 
-.UNCOMMON {
-  color: #1E90FF;
+.achievement-gallery .achievement-tooltip {
+  left: 47%;
+  opacity: 1;
+  position: relative;
+  transform: translate(-50%, 0);
 }
 
-.RARE {
-  color: #9932CC;
+.achievement-gallery .achievement-icon {
+  max-width:none;
+  font-size:20px;
+  font-weight:bold;
 }
 
-.EPIC {
-  color: #EAA400;
+.achievement-gallery .achievement-tooltip:hover {
+  left: 47%;
+  opacity: 1;
+  position: relative;
+  transform: translate(-50%, 0);
 }
 
-.LEGENDARY {
-  color: #C1FF00;
+.achievement-gallery .achievement {
+  margin: 10px;
+}
+
+.fixNav button {
+  margin: 3px 0 3px 0;
+}
+
+button.COMMON {
+  background: #fd9744;
+  color: #d86100;
+}
+
+button.UNCOMMON {
+  background: #cccccc;
+  color: #808080;
+}
+
+button.RARE {
+  background: #ffd02a;
+  color: #a77d00;
+}
+
+button.EPIC {
+  background: #b9cccc;
+  color: #638080;
+}
+
+button.LEGENDARY {
+  background: #d8ebf5;
+  color: #99c5dc;
+}
+.achievement-admin-list {
+
+  tr * {
+    max-height: 50px !important;
+    max-width:150px;
+    vertical-align: middle !important;
+  }
+
+  .COMMON {
+    color:#de843b;
+  }
+
+  .UNCOMMON {
+    color:#999;
+  }
+
+  .RARE {
+    color:#c09c21;
+  }
+
+  .EPIC {
+    color:#9db3b3;
+  }
+
+  .LEGENDARY {
+    color:#b7d8e8;
+  }
+
+  .COMMON div, .UNCOMMON div, .RARE div, .EPIC div, .LEGENDARY div {
+    border-radius:9001px;
+    padding:10px;
+    overflow:hidden;
+    display:inline-block;
+    width:40px;
+    height:40px;
+    text-align:center;
+    vertical-align:middle !important;
+    color:white;
+  }
+
+  .COMMON div i, .UNCOMMON div i, .RARE div i, .EPIC div i, .LEGENDARY div i {
+    display:inline-block;
+  }
+
+  .COMMON div{
+    background:#de843b;
+  }
+
+  .UNCOMMON div {
+    background:#999;
+  }
+
+  .RARE div {
+    background:#c09c21;
+  }
+
+  .EPIC div {
+    background:#9db3b3;
+  }
+
+  .LEGENDARY div {
+    background:#b7d8e8;
+  }
+
 }
 select.COMMON, option[value="COMMON"] {
-  color: #DDDDDD;
+  color:#de843b;
 }
 
 select.UNCOMMON, option[value="UNCOMMON"] {
-  color: #1E90FF;
+  color:#999;
 }
 
 select.RARE, option[value="RARE"] {
-  color: #9932CC;
+  color:#c09c21;
 }
 
 select.EPIC, option[value="EPIC"] {
-  color: #EAA400;
+  color:#9db3b3;
 }
 
 select.LEGENDARY, option[value="LEGENDARY"] {
-  color: #C1FF00;
+  color:#b7d8e8;
+}
+
+.iconpicker-container, .iconpicker-popover.popover, .popover-title {
+  border:none !important;
+  background:transparent !important;
+  width:100% !important;
+}
+
+.iconpicker-items {
+  min-height:0 !important;
+  max-height:none !important;
+  height:260px;
+}
+
+.iconpicker .iconpicker-item {
+  margin:0 11px 11px 0 !important;
+}
+
+.achievement-preview {
+  margin-left:-100px !important;
+  width:683px;
+
+  .achievement {
+    margin:0;
+  }
 }
 .company {
 
@@ -177,6 +304,58 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   box-shadow: 0 0 20px -7px #000;
 
 }
+.news-show__content {
+  width: 100%;
+  background-color: #fff;
+  padding: 50px;
+  box-shadow: 0 0 20px;
+}
+
+.news-show__content img {
+  width: 100%;
+}
+
+.news {
+
+  &__href {
+
+    color: #333;
+    text-decoration: none;
+
+    &:hover {
+
+      color: #333;
+      text-decoration: none;
+
+    }
+
+  }
+
+  &__card {
+
+    height: 200px;
+    overflow: hidden;
+    box-shadow: 0 0 20px -7px #000;
+    position: relative;
+    padding: 10px;
+    transition: all 0.2s;
+    background: #eee;
+
+    &:hover {
+      transform: scale(1.05, 1.05);
+    }
+
+    &__photo {
+      height: 75%;
+      border-top-left-radius: 30px;
+      box-shadow: 0 0 20px -7px #000;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+  }
+}
 .product {
 
   &__account {
@@ -280,9 +459,6 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   }
 
 }
-#addpastry .col-md-4 div {
-  padding: 0 !important;
-}
 .album {
   position: relative;
   width: 100%;
@@ -378,6 +554,13 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .chocolat-wrapper {
   z-index: 10000;
 }
+.print__item {
+  margin-bottom: 10px;
+  overflow: auto;
+  &:last-child {
+    margin-bottom: auto;
+  }
+}
 .becomeamember {
   &__number {
     font-size: 48px; text-align: center;
@@ -404,99 +587,241 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .dashboard {
   &__divider {
     text-align: center;
-    color: #fff;
-    text-shadow: 0 0 20px #000;
 
-    border-bottom: 5px solid $brand-primary;
-
+    font-weight: 400;
+    color: #A5A5A5;
     margin-bottom: 15px;
-    padding-bottom: 15px;
+    // text-shadow: 0 0 20px #000;
 
-    margin-top: 35px;
-    padding-top: 15px;
+    // border-bottom: 5px solid $brand-primary;
+    //
 
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 20px -7px #000;
+    // padding-bottom: 15px;
+    //
+    // margin-top: 35px;
+    // padding-top: 15px;
+    //
+    // background-color: rgba(0, 0, 0, 0.5);
+    // box-shadow: 0 0 20px -7px #000;
   }
 }
-.achievement div {
-  float: right;
-  width: 50%;
-  padding: 10px;
-}
 
-.achievement .achievement-icon {
-  padding:0;
-  text-align:center;
-  max-width:calc(50% - 20px);
-  height:calc(100% - 20px);
-  top:50%;
-  position: absolute;
-  transform:translate(0, -50%);
+.achievement div {
+  width: 100%;
 }
 
 .list-group {
   margin-bottom:0;
 }
 
-.achievement-icon img {
-  height: 100px;
-  max-width: 100%;
-  top:50%;
-  left:50%;
+.achievement-icon {
+  max-height: 88px;
+  max-width: 88px;
+  top:calc(50% + 0.5px);
+  left:calc(50% + 1px);
   position: absolute;
   transform:translate(-50%, -50%);
+  border-radius:9001px;
+  text-align:center;
+  color:white;
+}
+
+.achievement-list {
+  padding:60px 0;
+  margin:-40px;
 }
 
 .achievement {
-  margin-top:5px;
-  margin-left:auto;
-  margin-right:auto;
-  overflow: hidden;
+  margin:80px 0;
   word-wrap: break-word;
-  border-width: 5px;
   position: relative;
-  width: 70%;
+  list-style-type: none;
+}
+
+.achievement-label img {
+  position:relative;
+  left:50%;
+  transform:translate(-50%);
+}
+
+.COMMON .achievement-label img {
+  width:47%;
+  left:calc(50% + 1px);
+  margin-top:-4%;
+  margin-bottom:-2.5%;
+}
+
+.UNCOMMON .achievement-label img {
+  width:54%;
+  margin-top:-1.5%;
+  margin-bottom:-2.5%;
+}
+
+.RARE .achievement-label img {
+  width:49%;
+  margin-top:-8.6%;
+  margin-bottom:-1%;
+}
+
+.EPIC .achievement-label img {
+  width:62%;
+  left:calc(50% + 1px);
+  margin-top:-8.5%;
+  margin-bottom:-1%;
+}
+
+.LEGENDARY .achievement-label img {
+  width: 100%;
+  margin-top: -9%;
+  margin-bottom: -3%;
+}
+
+//.EPIC .achievement-icon img {
+//  top:50%;
+//  left:calc(50% - 1px);
+//}
+//
+//.LEGENDARY .achievement-icon img {
+//  left:calc(50% - 1px);
+//}
+
+.achievement i {
+  font-size:65px;
+}
+
+.achievement-tooltip i {
+  font-size:100px;
+}
+
+.achievement-tooltip {
+  position:absolute;
+  top:50%;
+  border-top-left-radius:9001px;
+  border-bottom-left-radius:9001px;
+  overflow:hidden;
+  left:40%;
+  transform: translate(-50%, -50%);
+  width:500px !important;
+  opacity:0;
+  transition:0.25s;
+  max-width:95%;
+}
+
+.achievement-text {
+  height:154px;
+}
+
+.achievement-title {
+  padding:10px;
+}
+
+.achievement-text div {
+  padding-left: 180px;
+}
+
+.achievement-data {
+  bottom:10px;
+  position:absolute;
+}
+
+.COMMON .achievement-tooltip {
+  background:#fd9744;
+  color:#d86100;
+}
+
+.COMMON .achievement-title {
+  background:#de843b;
+}
+
+.UNCOMMON .achievement-tooltip {
+  background:#cccccc;
+  color:#808080;
+}
+
+.UNCOMMON .achievement-title {
+  background:#999999;
+}
+
+.RARE .achievement-tooltip {
+  background:#ffd02a;
+  color:#a77d00;
+}
+
+.RARE .achievement-title {
+  background:#c09c21;
+}
+
+.EPIC .achievement-tooltip {
+  background:#b9cccc;
+  color:#638080;
+}
+
+.EPIC .achievement-title {
+  background:#9db3b3;
+}
+
+.LEGENDARY .achievement-tooltip {
+  background:#d8ebf5;
+  color:#99c5dc;
+}
+
+.LEGENDARY .achievement-title {
+  background:#b7d8e8;
 }
 
 .del {
-  position: absolute;
-  right: 5px;
-  top: 0;
-  font-size:12px;
+  position:absolute;
+  right:10px;
+  color:black;
 }
 
-.COMMON {
-  border-color: #DDDDDD;
+.achievement:hover .achievement-tooltip {
+  opacity:1;
+  left:calc(50% - 20px);
 }
 
-.UNCOMMON {
-  border-color: #1E90FF;
+div .achievement-button {
+  position:absolute;
+  top:0;
+  left:0;
+  width:154px;
 }
 
-.RARE {
-  border-color: #9932CC;
+.achievement-button-icon {
+  color:white;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  text-align:center;
 }
 
-.EPIC {
-  border-color: #EAA400;
+.achievement-button img{
+  max-width:154px;
+  max-height:154px;
 }
-
-.LEGENDARY {
-  border-color: #C1FF00;
-}
-
+//
+//.achievement-button-icon img {
+//  max-width:138px;
+//  max-height:150px;
+//  border-radius:9001px;
+//}
 .profile__photo {
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
+    width: 80px;
+    height: 80px;
     display: inline-block;
     text-align: center;
+    background-color: red;
 }
 
 .profile__photo-wrapper {
     text-align: center;
     display: block;
+}
+
+.btn {
+    border-radius: 2px;
 }
 
 .developer__list__entry {
@@ -581,42 +906,9 @@ select.LEGENDARY, option[value="LEGENDARY"] {
     max-height: none;
   }
 }
-
-#myCarousel .carousel-caption {
-    left:0;
-	right:0;
-	bottom:0;
-	text-align:left;
-	padding:10px;
-	background:rgba(0,0,0,0.6);
-	text-shadow:none;
-}
-
-#myCarousel .list-group {
-	position:absolute;
-	top:0;
-	right:0;
-}
-#myCarousel .list-group-item {
-	border-radius:0px;
-	cursor:pointer;
-}
-#myCarousel .list-group .active {
-	background-color:#eee;
-}
-
-@media (min-width: 992px) {
-	#myCarousel {padding-right:50%;}
-	#myCarousel .carousel-controls {display:none;}
-}
-@media (max-width: 991px) {
-	.carousel-caption p,
-	#myCarousel .list-group {display:none;}
-}
-
 #container {
     background-color: #fff;
-    margin-top: -200px;
+    // margin-top: -200px;
     padding: 50px;
     box-shadow: 0 0 20px;
 }
@@ -639,48 +931,117 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 }
 
 .main-footer {
-    position: relative;
-    margin-top: -120px;
-    min-height: 120px;
-    clear: both;
-    background-color: #111;
-    color: #fff;
+  position: relative;
+  margin-top: -120px;
+  min-height: 120px;
+  clear: both;
+  background-color: #000;
+  color: #fff;
 
-    @media only screen and (min-width : 768px) {
-        .footer__logo {
-            text-align: right;
-        }
+  @media only screen and (min-width: 768px) {
+    .footer__logo {
+      text-align: right;
     }
+  }
 
-    .row > * {
-        padding-top: 20px;
-    }
+  .row > * {
+    padding-top: 20px;
+  }
+}
+
+.large-emoji {
+  font-size: 90px;
 }
 
 .navbar {
-    transition: all 0.5s;
-    text-shadow: 0 0 5px #000;
+  transition: all 0.5s;
+  text-shadow: 0 0 5px #000;
 
-    .dropdown-menu {
-        text-shadow: none;
-    }
+  .dropdown-menu {
+    text-shadow: none;
+  }
 }
 
-$navbar-dark: rgba(0,0,0,.85);
+$navbar-dark: rgba(0, 0, 0, .85);
 
 .navbar-scroll {
-    background-color: $navbar-dark;
+  background-color: $navbar-dark;
 }
 
-@media only screen and (max-width : 768px) {
-    .navbar {
-        background-color: $navbar-dark;
-    }
+@media only screen and (max-width: 768px) {
+  .navbar {
+    background-color: $navbar-dark;
+  }
 }
 
 .navbar-title, .navbar-title:hover, .navbar-title:active {
-    background-color: transparent !important;
-    font-style: italic;
+  background-color: transparent !important;
+  font-style: italic;
+}
+
+.navbar__search {
+
+  background: #fff;
+  padding: 0px;
+  margin-right: 15px;
+  margin-left: 15px;
+  text-shadow: none;
+  overflow: hidden;
+
+  &__icon {
+    background: none;
+    border: none;
+    box-shadow: 0 0 20px -7px #333;
+    margin: 0;
+    padding: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    transition: all 0.5s;
+  }
+
+  &:hover .navbar__search__icon {
+    background: #333;
+    color: #fff;
+  }
+
+  &__input {
+    width: 0 !important;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0 0;
+
+    transition: all 0.5s;
+  }
+
+  &:hover .navbar__search__input {
+    width: 175px !important;
+    padding: 0 15px;
+  }
+
+}
+
+.panel {
+    border-radius: 3px;
+    box-shadow: none;
+    overflow: hidden;
+    background: transparent;
+
+    & > .panel-heading {
+        color: #fff;
+        background-color: #242424;
+        border: none;
+        border-bottom: 1px solid #000;
+    }
+
+    & > .panel-body {
+        background-color: #fff;
+    }
+}
+
+.panel-default {
+    border: none;
 }
 
 .search {
@@ -724,9 +1085,13 @@ $navbar-dark: rgba(0,0,0,.85);
 
   }
 }
+p {
+    line-height: 2em;
+}
+
 /*!
  * Datetimepicker for Bootstrap 3
- * version : 4.17.42
+ * version : 4.17.44
  * https://github.com/Eonasdan/bootstrap-datetimepicker/
  */.bootstrap-datetimepicker-widget{list-style:none}.bootstrap-datetimepicker-widget.dropdown-menu{margin:2px 0;padding:4px;width:19em}@media (min-width:768px){.bootstrap-datetimepicker-widget.dropdown-menu.timepicker-sbs{width:38em}}@media (min-width:992px){.bootstrap-datetimepicker-widget.dropdown-menu.timepicker-sbs{width:38em}}@media (min-width:1200px){.bootstrap-datetimepicker-widget.dropdown-menu.timepicker-sbs{width:38em}}.bootstrap-datetimepicker-widget.dropdown-menu:before,.bootstrap-datetimepicker-widget.dropdown-menu:after{content:'';display:inline-block;position:absolute}.bootstrap-datetimepicker-widget.dropdown-menu.bottom:before{border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:7px solid #ccc;border-bottom-color:rgba(0,0,0,0.2);top:-7px;left:7px}.bootstrap-datetimepicker-widget.dropdown-menu.bottom:after{border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid white;top:-6px;left:8px}.bootstrap-datetimepicker-widget.dropdown-menu.top:before{border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid #ccc;border-top-color:rgba(0,0,0,0.2);bottom:-7px;left:6px}.bootstrap-datetimepicker-widget.dropdown-menu.top:after{border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid white;bottom:-6px;left:7px}.bootstrap-datetimepicker-widget.dropdown-menu.pull-right:before{left:auto;right:6px}.bootstrap-datetimepicker-widget.dropdown-menu.pull-right:after{left:auto;right:7px}.bootstrap-datetimepicker-widget .list-unstyled{margin:0}.bootstrap-datetimepicker-widget a[data-action]{padding:6px 0}.bootstrap-datetimepicker-widget a[data-action]:active{box-shadow:none}.bootstrap-datetimepicker-widget .timepicker-hour,.bootstrap-datetimepicker-widget .timepicker-minute,.bootstrap-datetimepicker-widget .timepicker-second{width:54px;font-weight:bold;font-size:1.2em;margin:0}.bootstrap-datetimepicker-widget button[data-action]{padding:6px}.bootstrap-datetimepicker-widget .btn[data-action="incrementHours"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Increment Hours"}.bootstrap-datetimepicker-widget .btn[data-action="incrementMinutes"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Increment Minutes"}.bootstrap-datetimepicker-widget .btn[data-action="decrementHours"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Decrement Hours"}.bootstrap-datetimepicker-widget .btn[data-action="decrementMinutes"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Decrement Minutes"}.bootstrap-datetimepicker-widget .btn[data-action="showHours"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Show Hours"}.bootstrap-datetimepicker-widget .btn[data-action="showMinutes"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Show Minutes"}.bootstrap-datetimepicker-widget .btn[data-action="togglePeriod"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Toggle AM/PM"}.bootstrap-datetimepicker-widget .btn[data-action="clear"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Clear the picker"}.bootstrap-datetimepicker-widget .btn[data-action="today"]::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Set the date to today"}.bootstrap-datetimepicker-widget .picker-switch{text-align:center}.bootstrap-datetimepicker-widget .picker-switch::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Toggle Date and Time Screens"}.bootstrap-datetimepicker-widget .picker-switch td{padding:0;margin:0;height:auto;width:auto;line-height:inherit}.bootstrap-datetimepicker-widget .picker-switch td span{line-height:2.5;height:2.5em;width:100%}.bootstrap-datetimepicker-widget table{width:100%;margin:0}.bootstrap-datetimepicker-widget table td,.bootstrap-datetimepicker-widget table th{text-align:center;border-radius:4px}.bootstrap-datetimepicker-widget table th{height:20px;line-height:20px;width:20px}.bootstrap-datetimepicker-widget table th.picker-switch{width:145px}.bootstrap-datetimepicker-widget table th.disabled,.bootstrap-datetimepicker-widget table th.disabled:hover{background:none;color:#777;cursor:not-allowed}.bootstrap-datetimepicker-widget table th.prev::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Previous Month"}.bootstrap-datetimepicker-widget table th.next::after{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0;content:"Next Month"}.bootstrap-datetimepicker-widget table thead tr:first-child th{cursor:pointer}.bootstrap-datetimepicker-widget table thead tr:first-child th:hover{background:#eee}.bootstrap-datetimepicker-widget table td{height:54px;line-height:54px;width:54px}.bootstrap-datetimepicker-widget table td.cw{font-size:.8em;height:20px;line-height:20px;color:#777}.bootstrap-datetimepicker-widget table td.day{height:20px;line-height:20px;width:20px}.bootstrap-datetimepicker-widget table td.day:hover,.bootstrap-datetimepicker-widget table td.hour:hover,.bootstrap-datetimepicker-widget table td.minute:hover,.bootstrap-datetimepicker-widget table td.second:hover{background:#eee;cursor:pointer}.bootstrap-datetimepicker-widget table td.old,.bootstrap-datetimepicker-widget table td.new{color:#777}.bootstrap-datetimepicker-widget table td.today{position:relative}.bootstrap-datetimepicker-widget table td.today:before{content:'';display:inline-block;border:solid transparent;border-width:0 0 7px 7px;border-bottom-color:#337ab7;border-top-color:rgba(0,0,0,0.2);position:absolute;bottom:4px;right:4px}.bootstrap-datetimepicker-widget table td.active,.bootstrap-datetimepicker-widget table td.active:hover{background-color:#337ab7;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}.bootstrap-datetimepicker-widget table td.active.today:before{border-bottom-color:#fff}.bootstrap-datetimepicker-widget table td.disabled,.bootstrap-datetimepicker-widget table td.disabled:hover{background:none;color:#777;cursor:not-allowed}.bootstrap-datetimepicker-widget table td span{display:inline-block;width:54px;height:54px;line-height:54px;margin:2px 1.5px;cursor:pointer;border-radius:4px}.bootstrap-datetimepicker-widget table td span:hover{background:#eee}.bootstrap-datetimepicker-widget table td span.active{background-color:#337ab7;color:#fff;text-shadow:0 -1px 0 rgba(0,0,0,0.25)}.bootstrap-datetimepicker-widget table td span.old{color:#777}.bootstrap-datetimepicker-widget table td span.disabled,.bootstrap-datetimepicker-widget table td span.disabled:hover{background:none;color:#777;cursor:not-allowed}.bootstrap-datetimepicker-widget.usetwentyfour td.hour{height:27px;line-height:27px}.bootstrap-datetimepicker-widget.wider{width:21em}.bootstrap-datetimepicker-widget .datepicker-decades .decade{line-height:1.8em !important}.input-group.date .input-group-addon{cursor:pointer}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);border:0}
 /**

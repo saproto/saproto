@@ -64,7 +64,7 @@
         "./resources/assets/bower/on-screen-keyboard/jquery.onScreenKeyboard.min.js",
         "./resources/assets/bower/chocolat/dist/js/jquery.chocolat.min.js",
         "./resources/assets/bower/Croppie/croppie.min.js",
-        "./resources/assets/bower/theaterjs/dist/theater.min.js"
+        "./resources/assets/bower/ng-img-crop/compile/minified/ng-img-crop.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -90,7 +90,8 @@
         "./resources/assets/bower/font-awesome/css/font-awesome.css",
         "./resources/assets/bower/on-screen-keyboard/onScreenKeyboard.css",
         "./resources/assets/bower/chocolat/dist/css/chocolat.css",
-        "./resources/assets/bower/Croppie/croppie.css"
+        "./resources/assets/bower/Croppie/croppie.css",
+        "./resources/assets/bower/ng-img-crop/compile/minifiedo/ng-img-crop.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [

@@ -14,10 +14,9 @@
             <div class="panel panel-default container-panel">
                 <div class="panel-body">
                     @include('users.profile.committees')
-                </div>
-            </div>
-            <div class="panel panel-default container-panel">
-                <div class="panel-body">
+
+                    <hr class="rule">
+
                     @include('users.profile.committeespast')
                 </div>
             </div>
