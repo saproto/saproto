@@ -1,7 +1,8 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+          href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
     <style type="text/css">
         html, body {
             margin: 0px;
@@ -14,7 +15,7 @@
             width: 86mm;
             height: 52mm;
 
-            font-family: Arial, sans-serif;
+            font-family: 'Lato', Arial, sans-serif;
         }
 
         #name {

@@ -186,17 +186,21 @@ class ProductController extends Controller
         $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
 
         $feedback = "";
-        foreach ($input as $line) {
-            $line = explode(',', $line);
-            $product = Product::find($line[0]);
-            if ($product) {
-                $oldstock = $product->stock;
-                $newstock = $oldstock + $line[1];
-                $product->stock = $newstock;
-                $feedback .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
-                $product->save();
-            } else {
-                $feedback .= "Product ID <strong>" . $line[0] . "</strong> not recognized.<br>";
+        foreach ($input as $lineRaw) {
+            $line = explode(',', $lineRaw);
+            if(count($line) == 2) {
+                $product = Product::find($line[0]);
+                if ($product) {
+                    $oldstock = $product->stock;
+                    $newstock = $oldstock + $line[1];
+                    $product->stock = $newstock;
+                    $feedback .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
+                    $product->save();
+                } else {
+                    $feedback .= "Product ID <strong>" . $line[0] . "</strong> not recognized.<br>";
+                }
+            }else{
+                $feedback .= "Incorrect format for line <strong>" . $lineRaw ."</strong>.<br>";
             }
         }
         $request->session()->flash('flash_message', $feedback);

@@ -293,6 +293,28 @@ class AuthController extends Controller
 
         $user->save();
 
+        AuthController::makeLdapAccount($user);
+
+        $email = $user->email;
+        $name = $user->mail;
+
+        Mail::queueOn('high', 'emails.registration', ['user' => $user], function ($m) use ($email, $name) {
+            $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
+            $m->to($email, $name);
+            $m->subject('Account registration at Study Association Proto');
+        });
+
+        AuthController::dispatchPasswordEmailFor($user);
+
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
+            return Redirect::route('homepage');
+        }
+    }
+
+    public static function makeLdapAccount($user)
+    {
+
         /** Add user to LDAP */
 
         $ad = new Adldap();
@@ -307,21 +329,6 @@ class AuthController extends Controller
 
         /** End add user to LDAP */
 
-        $email = $user->email;
-        $name = $user->mail;
-
-        Mail::queue('emails.registration', ['user' => $user], function ($m) use ($email, $name) {
-            $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
-            $m->to($email, $name);
-            $m->subject('Account registration at Study Association Proto');
-        });
-
-        AuthController::dispatchPasswordEmailFor($user);
-
-        if (!Auth::check()) {
-            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
-            return Redirect::route('homepage');
-        }
     }
 
     public function deleteUser(Request $request, $id)
@@ -333,7 +340,7 @@ class AuthController extends Controller
         }
 
         if ($user->member) {
-            $request->session()->flash('flash_message', 'You cannot delete your account while you are a member.');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
         }
 
@@ -368,7 +375,7 @@ class AuthController extends Controller
 
         $user->delete();
 
-        $request->session()->flash('flash_message', 'Your account has been deleted.');
+        $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 
@@ -444,7 +451,7 @@ class AuthController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
+        Mail::queueOn('high', 'emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
             $message
                 ->to($email, $name)
                 ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')

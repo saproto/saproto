@@ -11,6 +11,7 @@ use Proto\Http\Controllers\Controller;
 use Auth;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
+use Proto\Models\TicketPurchase;
 use Proto\Models\User;
 
 use Redirect;
@@ -149,6 +150,8 @@ class OrderLineController extends Controller
 
         $order->product->stock += $order->units;
         $order->product->save();
+
+        TicketPurchase::where('orderline_id', $id)->delete();
 
         $order->delete();
 

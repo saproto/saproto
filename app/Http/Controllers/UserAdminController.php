@@ -5,6 +5,8 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
+use Proto\Http\Controllers\AuthController;
+
 use Carbon\Carbon;
 
 use Proto\Models\Member;
@@ -18,43 +20,102 @@ use Session;
 use Redirect;
 use Mail;
 
-class MemberAdminController extends Controller
+class UserAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('users.members.overview');
-    }
 
-    public function showSearch(Request $request)
-    {
         $search = $request->input('query');
 
         if ($search) {
-            $users = User::where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%')->paginate(20);
+            $users = User::withTrashed()->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%')->paginate(20);
         } else {
-            $users = User::paginate(20);
+            $users = User::withTrashed()->paginate(20);
         }
 
-        return view('users.members.nested.list', ['users' => $users]);
+        return view('users.admin.overview', ['users' => $users, 'query' => $search]);
+
     }
 
 
     /**
-     * Show the nested details view for member admin.
+     * Show the details view for member admin.
      *
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
 
-    public function showDetails($id)
+    public function details($id)
     {
         $user = User::findOrFail($id);
-        return view('users.members.nested.details', ['user' => $user]);
+        return view('users.admin.details', ['user' => $user]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->gender = $request->gender;
+        $user->nationality = $request->nationality;
+        if (strtotime($user->birthdate) !== false) {
+            $user->birthdate = $request->birthdate;
+        }
+        $user->save();
+        Session::flash("flash_message", "User updated!");
+        return Redirect::back();
+    }
+
+    /**
+     * Restore user
+     */
+    public function restorePage($id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        return view('users.admin.restore', ['user' => $user]);
+    }
+
+    public function restorePost(Request $request, $id)
+    {
+
+        $user = User::onlyTrashed()->findOrFail($id);
+
+        $request->session()->flash('register_persist', $request->all());
+
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+            'name' => 'required|string',
+            'calling_name' => 'required|string',
+            'birthdate' => 'required|date_format:Y-m-d',
+            'gender' => 'required|in:1,2,9',
+            'nationality' => 'required|string',
+            'phone' => 'required|regex:(\+[0-9]{8,16})',
+        ]);
+
+        $user->fill($request->all());
+        $user->save();
+        $user->restore();
+
+        AuthController::makeLdapAccount($user);
+
+        $email = $user->email;
+        $name = $user->mail;
+
+        Mail::queueOn('high', 'emails.reactivation', ['user' => $user], function ($m) use ($email, $name) {
+            $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
+            $m->to($email, $name);
+            $m->subject('Account re-activation at Study Association Proto');
+        });
+
+        AuthController::dispatchPasswordEmailFor($user);
+
+        $request->session()->flash('flash_message', 'Account reactivated.');
+        return Redirect::route('user::admin::details', ['id' => $id]);
+
     }
 
     /**
@@ -88,12 +149,14 @@ class MemberAdminController extends Controller
     public function quitImpersonating()
     {
         if (Session::has("impersonator")) {
+            $redirectuser = Auth::id();
+
             $impersonator = User::findOrFail(Session::get("impersonator"));
             Session::pull("impersonator");
 
             Auth::login($impersonator);
 
-            return response()->redirectTo("/");
+            return redirect()->route('user::admin::details', ['id' => $redirectuser]);
         }
     }
 
@@ -119,11 +182,17 @@ class MemberAdminController extends Controller
         /** Create member alias */
 
         $name = explode(" ", $user->name);
-        $aliasbase = MemberAdminController::transliterateString(strtolower(
-            preg_replace('/\PL/u', '', substr($name[0], 0, 1))
-            . '.' .
-            preg_replace('/\PL/u', '', implode("", array_slice($name, 1)))
-        ));
+        if (count($name) > 1) {
+            $aliasbase = MemberAdminController::transliterateString(strtolower(
+                preg_replace('/\PL/u', '', substr($name[0], 0, 1))
+                . '.' .
+                preg_replace('/\PL/u', '', implode("", array_slice($name, 1)))
+            ));
+        } else {
+            $aliasbase = MemberAdminController::transliterateString(strtolower(
+                preg_replace('/\PL/u', '', $name[0])
+            ));
+        }
         $alias = $aliasbase;
         $i = 0;
 
@@ -141,7 +210,7 @@ class MemberAdminController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
+        Mail::queueOn('high', 'emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
             $m->replyTo('internal@proto.utwente.nl', config('proto.internal') . ' (Officer Internal Affairs)');
             $m->to($email, $name);
             $m->subject('Start of your membership of Study Association Proto');
@@ -149,7 +218,7 @@ class MemberAdminController extends Controller
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
-        return redirect()->route('user::member::list');
+        return redirect()->back();
     }
 
     /**
@@ -168,7 +237,7 @@ class MemberAdminController extends Controller
         $name = $user->name;
         $email = $user->email;
 
-        Mail::queue('emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
+        Mail::queueOn('high', 'emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
             $m->replyTo('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)');
             $m->to($email, $name);
             $m->subject('Termination of your membership of Study Association Proto');
@@ -176,7 +245,7 @@ class MemberAdminController extends Controller
 
         Session::flash("flash_message", "Membership of " . $user->name . " has been termindated.");
 
-        return redirect()->route('user::member::list');
+        return redirect()->back();
     }
 
     public function showForm(Request $request, $id)
@@ -193,7 +262,7 @@ class MemberAdminController extends Controller
             return Redirect::back();
         }
 
-        $form = PDF::loadView('users.members.membershipform', ['user' => $user]);
+        $form = PDF::loadView('users.admin.membershipform', ['user' => $user]);
 
         $form = $form->setPaper('a4');
 
@@ -226,40 +295,6 @@ class MemberAdminController extends Controller
 
         return "The printer service responded: " . $result;
 
-    }
-
-    public function makeTempAdmin($id)
-    {
-        $user = User::findOrFail($id);
-
-        $tempAdmin = new Tempadmin;
-
-        $tempAdmin->created_by = Auth::user()->id;
-        $tempAdmin->start_at = Carbon::today();
-        $tempAdmin->end_at = Carbon::tomorrow();
-        $tempAdmin->user()->associate($user);
-
-        $tempAdmin->save();
-
-        return redirect()->route('user::member::list');
-    }
-
-    public function endTempAdmin($id)
-    {
-        $user = User::findOrFail($id);
-
-        foreach ($user->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
-                $tempadmin->end_at = Carbon::now();
-                $tempadmin->save();
-            }
-        }
-
-        // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
-        // temporary adminpowers were removed.
-        file_get_contents(env('HERBERT_SERVER') . "/adminCheck");
-
-        return redirect()->route('user::member::list');
     }
 
     /**

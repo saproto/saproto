@@ -70,6 +70,7 @@ class UserDashboardController extends Controller
 
 
         $userdata['email'] = $request->input('email');
+        $userdata['calling_name'] = $request->input('calling_name');
         $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
         $userdata['phone_visible'] = $request->has('phone_visible');
@@ -90,7 +91,7 @@ class UserDashboardController extends Controller
                 'new' => $userdata['email']
             ];
             $name = $user->name;
-            Mail::queue('emails.emailchange', [
+            Mail::queueOn('high', 'emails.emailchange', [
                 'changer' => [
                     'name' => Auth::user()->name,
                     'ip' => $request->ip()

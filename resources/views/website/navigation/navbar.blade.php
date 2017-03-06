@@ -104,9 +104,13 @@
                            aria-expanded="false">Association Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("user::member::list") }}">Users</a></li>
+                            <li><a href="{{ route("user::admin::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
+                            <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+
+                            <li role="separator" class="divider"></li>
+
                             <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
                             <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
@@ -128,6 +132,8 @@
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
+                                <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
+                                <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
                             @endif
 
                         </ul>
@@ -165,8 +171,12 @@
                     <div class="input-group">
                         <input class="navbar__search__input form-control"
                                type="search" name="query" placeholder="Search">
-                        <span class="navbar__search__icon input-group-addon">
+                        <!--<span class="navbar__search__icon input-group-addon">
                             <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>-->
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn navbar__search__icon" style=""><i class="fa fa-search"
+                                                                                               aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>

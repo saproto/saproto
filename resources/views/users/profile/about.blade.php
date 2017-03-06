@@ -1,7 +1,15 @@
-@include('users.profile.photo')
-
 <div class="panel panel-default">
     <div class="panel-body">
+
+        @if($user->photo)
+            <div class="profile__photo-wrapper">
+                <img class="profile__photo" src="{{ $user->photo->generateImagePath(200, 200) }}" alt="">
+            </div>
+        @endif
+
+        <h3 class="center">{{ $user->name }}</h3>
+
+        <hr class="rule">
 
         <table class="table borderless">
             <tr>
@@ -70,53 +78,3 @@
 
     </div>
 </div>
-
-@if($ldap && Auth::user()->getUtwenteData())
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            From the University of Twente address book
-        </div>
-        <div class="panel-body">
-            <table class="table borderless">
-                <tr>
-                    <td style="text-align: right;"><strong>Name</strong></td>
-                    <td>{{ $ldap->givenname[0] }} {{ $ldap->sn[0] }}</td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"><strong>E-mail</strong></td>
-                    <td><a href="mailto:{{ $ldap->mail[0] }}">{{ $ldap->mail[0] }}</td>
-                </tr>
-                @if(substr($ldap->userprincipalname[0], 0, 1) == "s")
-                    @if(property_exists($ldap, 'department'))
-                        <tr>
-                            <td style="text-align: right;"><strong>Study</strong></td>
-                            <td>{{ $ldap->department[0] }}</td>
-                        </tr>
-                    @endif
-                @elseif(substr($ldap->userprincipalname[0], 0, 1) == "m")
-                    @if(property_exists($ldap, 'department'))
-                        <tr>
-                            <td style="text-align: right;"><strong>Department</strong></td>
-                            <td>{{ $ldap->department[0] }}</td>
-                        </tr>
-                    @endif
-                    @if(property_exists($ldap, 'telephonenumber'))
-                        <tr>
-                            <td style="text-align: right;"><strong>Phone</strong></td>
-                            <td>
-                                <a href="tel:{{ $ldap->telephonenumber[0] }}">{{ $ldap->telephonenumber[0] }}</a>
-                            </td>
-                        </tr>
-                    @endif
-                    @if(property_exists($ldap, 'physicaldeliveryofficename'))
-                        <tr>
-                            <td style="text-align: right;"><strong>Room</strong></td>
-                            <td>{{ $ldap->physicaldeliveryofficename[0] }}</td>
-                        </tr>
-                    @endif
-                @endif
-            </table>
-
-        </div>
-    </div>
-@endif

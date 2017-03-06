@@ -233,6 +233,30 @@ class EventController extends Controller
         return Redirect::route('event::list');
     }
 
+    public function admin($id)
+    {
+        $event = Event::findOrFail($id);
+
+        if (!$event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not an event admin for this event!");
+            return Redirect::back();
+        }
+
+        return view('event.admin', ['event' => $event]);
+    }
+
+    public function scan($id)
+    {
+        $event = Event::findOrFail($id);
+
+        if (!$event->isEventAdmin(Auth::user())) {
+            Session::flash("flash_message", "You are not an event admin for this event!");
+            return Redirect::back();
+        }
+
+        return view('event.scan', ['event' => $event]);
+    }
+
     public function finclose(Request $request, $id)
     {
 

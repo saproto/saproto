@@ -1,0 +1,246 @@
+@extends('website.layouts.default')
+
+@section('page-title')
+    User: {{ $user->name }}
+@endsection
+
+@section('content')
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <ul class="list-group">
+
+                <!-- Quicklinks //-->
+                <li class="list-group-item list-group-item-success">Quicklinks</li>
+                <a class="list-group-item" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
+                    Dashboard
+                </a>
+                @if($user->member)
+                    <a class="list-group-item" href="{{ route('user::profile', ['id' => $user->id]) }}">
+                        Profile
+                    </a>
+                @endif
+
+            <!-- Actions //-->
+                <li class="list-group-item list-group-item-success">Actions</li>
+                <a class="list-group-item"
+                   href="{{ route("user::member::impersonate", ["id" => $user->id]) }}">
+                    Impersonate
+                </a>
+                @if($user->isTempadmin())
+                    <a href="{{ route('tempadmin::end', ['id' => $user->id]) }}"
+                       class="list-group-item">
+                        End temporary admin
+                    </a>
+                @else
+                    <a href="{{ route('tempadmin::make', ['id' => $user->id]) }}"
+                       class="list-group-item">
+                        Make temporary admin
+                    </a>
+                @endif
+
+            <!-- Membership //-->
+                <li class="list-group-item list-group-item-success">Membership</li>
+                @if($user->member)
+                    <li class="list-group-item" data-toggle="modal" data-target="#removeMembership">
+                        End membership
+                    </li>
+                    <a href="{{ route('membercard::download', ['id' => $user->id]) }}" target="_blank"
+                       class="list-group-item">
+                        Preview membership card
+                    </a>
+                    <li id="print-card" data-id="{{ $user->id }}" class="list-group-item">
+                        Print membership card<br>
+                        (Last printed: {{ $user->member->card_printed_on }})
+                    </li>
+                    <li id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
+                        Print opener overlay
+                    </li>
+
+                @else
+                    <li class="list-group-item" data-toggle="modal" data-target="#addMembership">
+                        Make member
+                    </li>
+                @endif
+                @if($user->address)
+                    <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
+                        Show membership form
+                    </a>
+                    <li id="print-form" data-id="{{ $user->id }}" class="list-group-item">Print membership form</li>
+                @endif
+            </ul>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <form class="form-horizontal" method="post"
+                  action="{{ route("user::admin::update", ["id" => $user->id]) }}">
+
+                {!! csrf_field() !!}
+
+                <div class="form-group">
+                    <label for="name" class="col-sm-4 control-label">Name</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}"
+                               required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="col-sm-4 control-label">Gender</label>
+
+                    <div class="col-md-8">
+                        <select id="gender" name="gender" class="form-control" required>
+                            <option value="1" {{$user->gender==1?'selected':''}}>Male</option>
+                            <option value="2" {{$user->gender==2?'selected':''}}>Female</option>
+                            <option value="9" {{$user->gender==9?'selected':''}}>More complicated</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nationality" class="col-sm-4 control-label">Nationality</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="nationality" name="nationality"
+                               value="{{ $user->nationality }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthdate" class="col-sm-4 control-label">Birthday</label>
+
+                    <div class="col-sm-8">
+                        <input type="date" class="form-control" id="birthdate" name="birthdate"
+                               value="{{ $user->birthdate }}">
+                    </div>
+                </div>
+
+                <div class="col-sm-8 col-sm-offset-4">
+                    <button type="submit" class="btn btn-success">Update User Account</button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <br>
+
+            @if($user->photo)
+                <div class="profile__photo-wrapper">
+                    <img class="profile__photo" src="{{ $user->photo->generateImagePath(200, 200) }}" alt="">
+                </div>
+            @endif
+
+        </div>
+
+    </div>
+
+    <!-- Modal for adding membership to user -->
+    @include("users.admin.add")
+
+    <!-- Modal for removing membership from user -->
+    @include("users.admin.remove")
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+
+        .list-group-item {
+            cursor: pointer;
+        }
+
+        .list-group-item-success {
+            cursor: default !important;
+            font-weight: 700 !important;
+        }
+
+    </style>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+
+        $('body').delegate('#print-card', 'click', function () {
+
+            if (confirm("Please confirm you want to print a membership card.")) {
+                $.ajax({
+                    url: '{{ route('membercard::print') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
+        $('body').delegate('#print-card-overlay', 'click', function () {
+
+            if (confirm("Please confirm you have the right member card loaded.")) {
+                $.ajax({
+                    url: '{{ route('membercard::printoverlay') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
+        $('body').delegate('#print-form', 'click', function () {
+
+            if (confirm("Please confirm you want to print a membership document.")) {
+                $.ajax({
+                    url: '{{ route('memberform::print') }}',
+                    data: {
+                        '_token': '{!! csrf_token() !!}',
+                        'id': $(this).attr('data-id')
+                    },
+                    method: 'post',
+                    dataType: 'html',
+                    success: function (data) {
+                        alert(data);
+                    },
+                    error: function (data) {
+                        alert("Something went wrong while requesting the print.");
+                    }
+                });
+            }
+
+        });
+
+    </script>
+
+@endsection

@@ -56,7 +56,7 @@
     <script>
         $("#member-name").autocomplete({
             minLength: 3,
-            source: "{{ route("api::members") }}",
+            source: "{{ route("api::users") }}",
             select: function (event, ui) {
                 $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
                 ;

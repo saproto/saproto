@@ -440,6 +440,13 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .chocolat-wrapper {
   z-index: 10000;
 }
+.print__item {
+  margin-bottom: 10px;
+  overflow: auto;
+  &:last-child {
+    margin-bottom: auto;
+  }
+}
 .becomeamember {
   &__number {
     font-size: 48px; text-align: center;
@@ -466,21 +473,25 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .dashboard {
   &__divider {
     text-align: center;
-    color: #fff;
-    text-shadow: 0 0 20px #000;
 
-    border-bottom: 5px solid $brand-primary;
-
+    font-weight: 400;
+    color: #A5A5A5;
     margin-bottom: 15px;
-    padding-bottom: 15px;
+    // text-shadow: 0 0 20px #000;
 
-    margin-top: 35px;
-    padding-top: 15px;
+    // border-bottom: 5px solid $brand-primary;
+    //
 
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 20px -7px #000;
+    // padding-bottom: 15px;
+    //
+    // margin-top: 35px;
+    // padding-top: 15px;
+    //
+    // background-color: rgba(0, 0, 0, 0.5);
+    // box-shadow: 0 0 20px -7px #000;
   }
 }
+
 .achievement div {
   width: 100%;
 }
@@ -522,33 +533,33 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 .COMMON .achievement-label img {
   width:47%;
   left:calc(50% + 1px);
-  margin-top:-27px;
-  margin-bottom:-18px;
+  margin-top:-4%;
+  margin-bottom:-2.5%;
 }
 
 .UNCOMMON .achievement-label img {
   width:54%;
-  margin-top:-10px;
-  margin-bottom:-17px;
+  margin-top:-1.5%;
+  margin-bottom:-2.5%;
 }
 
 .RARE .achievement-label img {
   width:49%;
-  margin-top:-58px;
-  margin-bottom:-7px;
+  margin-top:-8.6%;
+  margin-bottom:-1%;
 }
 
 .EPIC .achievement-label img {
   width:62%;
   left:calc(50% + 1px);
-  margin-top:-58px;
-  margin-bottom:-10px;
+  margin-top:-8.5%;
+  margin-bottom:-1%;
 }
 
 .LEGENDARY .achievement-label img {
   width: 100%;
-  margin-top: -62px;
-  margin-bottom: -20px;
+  margin-top: -9%;
+  margin-bottom: -3%;
 }
 
 //.EPIC .achievement-icon img {
@@ -570,15 +581,16 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
 .achievement-tooltip {
   position:absolute;
-  top:0;
+  top:50%;
   border-top-left-radius:9001px;
   border-bottom-left-radius:9001px;
   overflow:hidden;
   left:40%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
   width:500px !important;
   opacity:0;
   transition:0.25s;
+  max-width:95%;
 }
 
 .achievement-text {
@@ -682,15 +694,20 @@ div .achievement-button {
 //}
 .profile__photo {
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
+    width: 80px;
+    height: 80px;
     display: inline-block;
     text-align: center;
+    background-color: red;
 }
 
 .profile__photo-wrapper {
     text-align: center;
     display: block;
+}
+
+.btn {
+    border-radius: 2px;
 }
 
 .developer__list__entry {
@@ -777,7 +794,7 @@ div .achievement-button {
 }
 #container {
     background-color: #fff;
-    margin-top: -200px;
+    // margin-top: -200px;
     padding: 50px;
     box-shadow: 0 0 20px;
 }
@@ -804,7 +821,7 @@ div .achievement-button {
   margin-top: -120px;
   min-height: 120px;
   clear: both;
-  background-color: #111;
+  background-color: #000;
   color: #fff;
 
   @media only screen and (min-width: 768px) {
@@ -821,6 +838,7 @@ div .achievement-button {
 .large-emoji {
   font-size: 90px;
 }
+
 .navbar {
   transition: all 0.5s;
   text-shadow: 0 0 5px #000;
@@ -860,7 +878,10 @@ $navbar-dark: rgba(0, 0, 0, .85);
     background: none;
     border: none;
     box-shadow: 0 0 20px -7px #333;
-    margin-right: 5px;
+    margin: 0;
+    padding: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
 
     transition: all 0.5s;
   }
@@ -886,6 +907,29 @@ $navbar-dark: rgba(0, 0, 0, .85);
   }
 
 }
+
+.panel {
+    border-radius: 3px;
+    box-shadow: none;
+    overflow: hidden;
+    background: transparent;
+
+    & > .panel-heading {
+        color: #fff;
+        background-color: #242424;
+        border: none;
+        border-bottom: 1px solid #000;
+    }
+
+    & > .panel-body {
+        background-color: #fff;
+    }
+}
+
+.panel-default {
+    border: none;
+}
+
 .search {
 
   &__href {
@@ -927,6 +971,10 @@ $navbar-dark: rgba(0, 0, 0, .85);
 
   }
 }
+p {
+    line-height: 2em;
+}
+
 /*!
  * Datetimepicker for Bootstrap 3
  * version : 4.17.44

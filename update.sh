@@ -21,7 +21,7 @@ php artisan migrate
 php artisan proto:generateroles
 
 # Update bower dependencies.
-if [ "$1" == --no-deps ] || [ "$2" == --no-deps ]; then
+if [ "$1" == --no-deps ]; then
   echo "Not updating bower dependencies.";
 else
   bower install
@@ -38,6 +38,9 @@ php artisan optimize
 
 # Reload worker queues.
 php artisan queue:restart
+
+# Generate assets
+grunt
 
 # Disable maintenance mode.
 php artisan up

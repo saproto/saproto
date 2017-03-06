@@ -63,7 +63,7 @@ class BirthdayCron extends Command
                 $name = $user->name;
                 $email = $user->email;
 
-                Mail::queue('emails.users.birthdayemail', ['user' => $user], function ($message) use ($name, $email) {
+                Mail::queueOn('medium', 'emails.users.birthdayemail', ['user' => $user], function ($message) use ($name, $email) {
                     $message
                         ->to($email, $name)
                         ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
@@ -73,7 +73,7 @@ class BirthdayCron extends Command
             }
 
             // For some super strange reason we cannot queue this e-mail... Well...
-            Mail::queue('emails.users.birthdaylist', ['users' => $adminoverview], function ($message) {
+            Mail::queueOn('low', 'emails.users.birthdaylist', ['users' => $adminoverview], function ($message) {
                 $message
                     ->to('board@' . config('proto.emaildomain'), 'S.A. Proto Board')
                     ->subject('Birthdays of today!');

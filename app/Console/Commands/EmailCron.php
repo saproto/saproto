@@ -57,7 +57,7 @@ class EmailCron extends Command
 
             foreach ($email->recipients() as $recipient) {
 
-                Mail::queue('emails.manualemail', [
+                Mail::queueOn('medium', 'emails.manualemail', [
                     'body' => $email->parseBodyFor($recipient),
                     'attachments' => $email->attachments,
                     'destination' => $email->destinationForBody(),
