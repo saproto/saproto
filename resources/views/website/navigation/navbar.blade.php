@@ -160,7 +160,7 @@
                 <li>
                     <a href="#" data-toggle="modal" data-target="#slack-modal">
                         Slack
-                        <span class="badge" id="slack__online">...</span>
+                        <span class="badge">Online: <span id="slack__online">...</span></span>
                     </a>
                 </li>
 
