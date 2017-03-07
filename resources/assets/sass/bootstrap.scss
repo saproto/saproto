@@ -10,16 +10,16 @@ $link-color: $brand-success;
 // Navbar
 $navbar-default-bg: transparent;
 
-$navbar-default-brand-color: #fff;
-$navbar-default-brand-hover-color: $navbar-default-brand-color;
-
 $navbar-default-color: #fff;
 
+$navbar-default-brand-color: $navbar-default-color;
+$navbar-default-brand-hover-color: $navbar-default-color;
+
 $navbar-default-link-color: $navbar-default-color;
-$navbar-default-link-hover-color: $brand-success;
+$navbar-default-link-hover-color: $navbar-default-color;
 
 $navbar-default-link-active-bg: transparent;
-$navbar-default-link-active-color: #fff;
+$navbar-default-link-active-color: $navbar-default-color;
 
 // Border radius
 $border-radius-small: 0px;

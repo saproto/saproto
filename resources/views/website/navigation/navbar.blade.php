@@ -157,6 +157,13 @@
                     </div>
                 </form>
 
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#slack-modal">
+                        Slack
+                        <span class="badge" id="slack__online">...</span>
+                    </a>
+                </li>
+
                 @if (Auth::check())
 
                     @if(Auth::user()->isTempadmin())
@@ -199,7 +206,6 @@
                     </form>
 
                 @endif
-
 
             </ul>
         </div><!-- /.navbar-collapse -->
