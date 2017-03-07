@@ -14,8 +14,11 @@ use \Lisennk\Laravel\SlackWebApi\Exceptions\SlackApiException;
 
 class SlackController extends Controller
 {
-    public function getOnlineCount()
+    public function getOnlineCount(Request $request)
     {
+        // Because this may be Ajax loaded in the middle of a sequence using flash data.
+        $request->session()->reflash();
+
         try {
             $users = SlackApi::execute('users.list', ['presence' => true]);
             $count = 0;
@@ -28,8 +31,11 @@ class SlackController extends Controller
         }
     }
 
-    public function inviteUser()
+    public function inviteUser(Request $request)
     {
+        // Because this may be Ajax loaded in the middle of a sequence using flash data.
+        $request->session()->reflash();
+        
         try {
             SlackApi::execute('users.admin.invite', ['email' => Auth::user()->email]);
             return "You've got an invite!";
