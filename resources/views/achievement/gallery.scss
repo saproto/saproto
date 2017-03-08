@@ -16,9 +16,9 @@
 }
 
 .achievement-gallery .achievement-icon {
-  max-width:none;
-  font-size:20px;
-  font-weight:bold;
+  max-width: none;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .achievement-gallery .achievement-tooltip:hover {
@@ -26,6 +26,10 @@
   opacity: 1;
   position: relative;
   transform: translate(-50%, 0);
+}
+
+.achievement-gallery .achievement:hover .achievement-tooltip {
+  left:47%;
 }
 
 .achievement-gallery .achievement {
@@ -59,4 +63,10 @@ button.EPIC {
 button.LEGENDARY {
   background: #d8ebf5;
   color: #99c5dc;
+}
+
+.achievement-title i {
+  float: right;
+  font-size: 20px !important;
+  color: white;
 }

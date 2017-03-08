@@ -63,6 +63,7 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->BigSpender(), 28);
         $this->giveAchievement($this->fourOClock(), 29);
         $this->giveAchievement($this->youreSpecial(30), 30);
+        $this->giveAchievement($this->bigKid(), 32);
 
         $this->info('Auto achievement gifting done!');
     }
@@ -368,6 +369,30 @@ class AchievementsCron extends Command
             }
         }
         AchievementController::staticTakeAll($id);
+        return $selected;
+    }
+
+    /**
+     *  Big kid = month where more than 25% of purchases is from the kid friendly category
+     */
+    private function bigKid()
+    {
+        $selected = array();
+        if (Carbon::now()->day == 1) {
+            $kidIDs = ProductCategory::find(21)->products->pluck('id')->toArray();
+            $users = User::all();
+            foreach ($users as $user) {
+                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
+                $kidOrders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->whereIn('product_id', $kidIDs)->where('user_id', $user->id)->get();
+                if (count($kidOrders) > 0) {
+                    if (count($kidOrders) / count($orders) > 0.25) {
+                        $selected[] = $user;
+                    }
+                }
+            }
+        } else {
+            $this->info('Its not the first of the month! Cancelling Big kid...');
+        }
         return $selected;
     }
 
