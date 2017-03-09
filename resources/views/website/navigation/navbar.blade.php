@@ -157,12 +157,14 @@
                     </div>
                 </form>
 
-                <li>
-                    <a href="#" data-toggle="modal" data-target="#slack-modal">
-                        Slack
-                        <span class="badge">Online: <span id="slack__online">...</span></span>
-                    </a>
-                </li>
+                @if (Auth::check() && Auth::user()->member && Cookie::get('hideSlack', 'show') === 'show')
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#slack-modal">
+                            Slack
+                            <span class="badge">Online: <span id="slack__online">...</span></span>
+                        </a>
+                    </li>
+                @endif
 
                 @if (Auth::check())
 

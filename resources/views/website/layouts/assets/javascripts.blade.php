@@ -19,7 +19,10 @@
             }
         });
 
-        initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
+        @if (Auth::check() && Auth::user()->member && Cookie::get('hideSlack', 'show') === 'show')
+                initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
+        @endif
+
 
     });
 </script>
@@ -50,9 +53,15 @@
             });
         });
 
+        $("#slack__hide").on('click', function () {
+            if (confirm("This will hide the Slack status button from your navigation bar. The only way to undo this action is to clear your browser cookies. Are you sure?")) {
+                document.cookie = "hideSlack=yesSir; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+                window.location.reload();
+            }
+        });
+
     }
 </script>
-
 <script>
 
     (function (i, s, o, g, r, a, m) {

@@ -22,20 +22,23 @@
 
             </div>
             <div class="modal-footer">
-                <a href="https://slack.com/is" class="btn btn-default pull-left" target="_blank">Learn about Slack</a>
+
+                <a href="#" class="btn btn-default pull-left" id="slack__hide">
+                    Hide
+                </a>
+
+                <a href="https://slack.com/is" class="btn btn-default pull-left" target="_blank">
+                    About Slack
+                </a>
 
                 <a href="https://saproto.slack.com" class="btn btn-default" target="_blank">
                     Visit our Slack
                 </a>
-                @if (Auth::check())
-                    <a href="#" class="btn btn-success" id="slack__invite">
-                        Invite me to Slack!
-                    </a>
-                @else
-                    <a href="#" class="btn btn-default" disabled>
-                        Our Slack team is only for members!
-                    </a>
-                @endif
+
+                <a href="#" class="btn btn-success" id="slack__invite">
+                    Invite me to Slack!
+                </a>
+
             </div>
         </div>
     </div>
