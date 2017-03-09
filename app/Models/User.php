@@ -310,4 +310,22 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
+
+    public function websiteUrl()
+    {
+        if (preg_match("/(?:http|https):\/\/(?:.*)/i", $this->website) === 1) {
+            return $this->website;
+        } else {
+            return "http://" . $this->website;
+        }
+    }
+
+    public function websiteDisplay()
+    {
+        if (preg_match("/(?:http|https):\/\/(.*)/i", $this->website, $matches) === 1) {
+            return $matches[1];
+        } else {
+            return $this->website;
+        }
+    }
 }
