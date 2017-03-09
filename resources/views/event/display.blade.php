@@ -206,7 +206,35 @@
                             <p style="text-align: center;">
                                 This activity is closed and cannot be changed anymore.
                             </p>
+
+                            <hr>
                         @endif
+
+                        <p>
+                        <div class="alert alert-{{ ($event->activity->price > 0 ? 'info' : 'success') }}" role="alert"
+                             style="text-align: center;">
+                            @if ($event->activity->price > 0)
+                                This activity costs &euro;{{ number_format($event->activity->price, 2, '.', ',') }}.
+                            @else
+                                This activity is free!
+                            @endif
+                        </div>
+                        </p>
+
+                        @if ($event->activity->no_show_fee > 0)
+                            <p>
+                            <div class="alert alert-warning" data-toggle="modal" style="text-align: center;"
+                                 data-target="#noshow-modal">
+                                Not showing up can
+                                cost &euro;{{ number_format($event->activity->no_show_fee, 2, '.', ',') }}.
+                                <span class="pull-right" style="cursor: pointer;">
+                                        <strong>?</strong>
+                                    </span>
+                            </div>
+                            </p>
+                        @endif
+
+                        <hr>
 
                         <p style="text-align: center;">
                             @if($event->activity->getParticipation(Auth::user()) !== null)
@@ -250,23 +278,21 @@
 
                         <hr>
 
-                        <p>
-                            <strong>Sign up open:</strong> {{ date('F j, H:i', $event->activity->registration_start) }}
+                        <p style="text-align: center;">
+                            <strong>Sign up
+                                opens:</strong> {{ date('F j, H:i', $event->activity->registration_start) }}
                             <br>
-                            <strong>Sign up close:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
+                            <strong>Sign up
+                                closes:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
                             <br>
-                            <strong>Sign out till:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
+                            <strong>Sign out
+                                possible untill:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
                         </p>
-
-                        <p>
-                            <strong>
-                                Participation fee &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
-                            </strong>
-                        </p>
-
-                        <hr>
 
                         @if($event->activity->users->count() > 0)
+
+                            <hr>
+                            
                             <p style="text-align: center; padding-bottom: 5px;">
                                 {{ $event->activity->users->count() }} participants:
                             </p>
@@ -379,6 +405,34 @@
 
         </div>
 
+    </div>
+
+    <!-- Modal for deleting automatic withdrawal. //-->
+    <div id="noshow-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">No show fee</h4>
+                </div>
+                <div class="modal-body">
+
+                    <p>
+                        For some activities Proto, or another party, sponsors part of the participation fee or other
+                        costs associated with an activity. As an example, for a barbecue a sponsor may pay for the food.
+                    </p>
+
+                    <p>
+                        For these kinds of activities a <i>no show fee</i> may be enacted, which compensates for the
+                        fact that money has been spent for people who do not show up. This means that if you sign up,
+                        but don't show up for the activity, the <i>no show fee</i> may be charged to you. This may even
+                        be the case for free activities.
+                    </p>
+
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection
