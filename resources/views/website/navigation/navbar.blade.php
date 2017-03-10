@@ -161,7 +161,7 @@
                     <li>
                         <a href="#" data-toggle="modal" data-target="#slack-modal">
                             Slack
-                            <span class="badge">Online: <span id="slack__online">...</span></span>
+                            <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span id="slack__online">...</span></span>
                         </a>
                     </li>
                 @endif
