@@ -65,6 +65,8 @@ class ActivityController extends Controller
             $activity->save();
         }
 
+        ParticipationController::processBackupQueue($activity);
+
         $request->session()->flash('flash_message', 'Your changes have been saved.');
 
         return Redirect::route('event::edit', ['id' => $event->id]);

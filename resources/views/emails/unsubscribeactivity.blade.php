@@ -7,11 +7,11 @@
     </p>
 
     <p>
-        You receive this e-mail because someone else signed you out for
+        You receive this e-mail because the board signed you out for
         <a href="{{ route('event::show', ['id' => $activity['id']]) }}">
             {{ $activity['title'] }}
         </a>.
-        If you believe this is a mistake, please let us know!
+        If you believe this is a mistake, please let us know.
     </p>
 
     <p>
