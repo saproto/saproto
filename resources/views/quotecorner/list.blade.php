@@ -30,8 +30,12 @@
                             <div id="bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
                             </div>
+                            <div class="like">
+                                <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
+                                {{ count($entry->likes()) }}
+                            </div>
                             @if (Auth::check() && Auth::user()->can("board"))
-                                <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}">Remove</a>
+                                <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}" style="float:right;">Remove</a>
                             @endif
                         @else
                             <h2>No quotes available. Add some yourself!</h2>
@@ -62,9 +66,14 @@
                                             <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
                                         </p>
                                         <h4>{!! $entry["quote"] !!}</h4>
+                                        <div class="like">
+                                            <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
+                                            {{ count($entry->likes()) }}
+                                        </div>
                                         @if (Auth::check() && Auth::user()->can("board"))
-                                            <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}">Remove</a>
+                                            <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}" style="float:right;">Remove</a>
                                         @endif
+                                        <br>
                                     </div>
                                 @endif
                             @endforeach
@@ -128,6 +137,21 @@
 
         h4 {
             word-wrap: break-word;
+        }
+
+        .like {
+            float:left;
+            color:#ccc;
+        }
+
+        .like i {
+            font-size:25px;
+            margin-right: 5px;
+            color:#ccc;
+        }
+
+        .liked {
+            color:#7FBA00 !important;
         }
 
     </style>

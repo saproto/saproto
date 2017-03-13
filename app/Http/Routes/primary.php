@@ -457,6 +457,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
+        Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
     });
 
     /**
