@@ -58,7 +58,7 @@
                                 class="green">S.A. Proto</span></span>
                 </strong>
                 <br>
-                <span class="adr">
+                <span class="adr medium-text">
                     <span class="extended-address">Zilverling A230</span><br>
                     <span class="street-address">Drienerlolaan 5</span><br>
                     <span class="postal-code">7522NB</span>
@@ -66,24 +66,26 @@
                 </span>
             </div>
             <div class="col-md-3 col-xs-6">
-                <br>
-                <span class="fa fa-clock-o"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
-                <span class="fa fa-phone"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
-                    4423</a><br>
-                <span class="fa fa-paperclip"></span>&nbsp;&nbsp;
-                <a class="email white"
-                   href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
+                <span class=" medium-text">
+                    <br>
+                    <span class="fa fa-clock-o"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
+                    <span class="fa fa-phone"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
+                        4423</a><br>
+                    <span class="fa fa-paperclip"></span>&nbsp;&nbsp;
+                    <a class="email white"
+                       href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
+                </span>
             </div>
             <div class="col-md-4 col-xs-6">
 
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.<br>
                 <sub>
                     This website has been created with ♥ by the folks of the
-                    <a href="{{ route('developers') }}" class="green">
+                    <a href="{{ route('developers') }}">
                         {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                     </a>.
                     The source is available on
-                    <a href="https://github.com/saproto/saproto" class="green" target="_blank">GitHub</a>.
+                    <a href="https://github.com/saproto/saproto" target="_blank">GitHub</a>.
                 </sub>
             </div>
             <div class="col-md-3 col-xs-6 footer__logo">
