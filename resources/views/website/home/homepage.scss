@@ -12,6 +12,10 @@
 
 .homepage {
 
+    .main__header .container {
+        margin-top: 6rem;
+    }
+
   &__companyimage {
     margin: 0 20px;
   }
@@ -59,7 +63,11 @@
 
 .carousel {
     background: #fff;
-    border-radius: 3px;
+
+    .item {
+        border-radius: 3px 0 0 3px;
+        overflow: hidden;
+    }
 
     .carousel-caption {
         left:0;
@@ -72,17 +80,22 @@
     }
 
     .list-group {
-    	position:absolute;
+    	position: absolute;
+        background-color: #fff;
+        transition: all 0.3s ease-out;
     	top:0;
     	right:0;
         width: 50%;
+        border-color: #eee;
     }
     .list-group-item {
     	border-radius:0px;
     	cursor:pointer;
     }
     .list-group .active {
-    	background-color:#eee;
+        transition: all 0.3s ease-out;
+    	background-color: $primary-color;
+        border: none;
     }
 }
 
