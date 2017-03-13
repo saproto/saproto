@@ -163,7 +163,8 @@ return [
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
-        Mollie\Laravel\MollieServiceProvider::class
+        Mollie\Laravel\MollieServiceProvider::class,
+        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class
 
     ],
 
@@ -254,11 +255,14 @@ return [
         'Product' => \Proto\Models\Product::class,
         'MollieTransaction' => \Proto\Models\MollieTransaction::class,
 
+        'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
 
         'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
+
+        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class
 
     ],
 

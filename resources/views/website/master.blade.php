@@ -13,7 +13,8 @@
     <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto"
           href="{{ route('search::opensearch') }}"/>
 
-    <title>@if(env('APP_ENV') != 'production') [DEV] @endif S.A. Proto | @yield('page-title','Default Page Title')</title>
+    <title>@if(env('APP_ENV') != 'production') [DEV] @endif S.A. Proto
+        | @yield('page-title','Default Page Title')</title>
 
     @section('head')
     @show
@@ -154,6 +155,8 @@
 @endif
 
 @endif
+
+@include('slack.modal')
 
 </body>
 

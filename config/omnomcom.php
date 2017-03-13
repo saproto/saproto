@@ -17,14 +17,14 @@ return [
             'name' => 'Protopolis',
             'categories' => [12, 1, 4, 5, 6, 22, 7, 9, 11],
             'addresses' => ['130.89.190.22', '2001:67c:2564:318:9ab:3c5a:78f5:5fd'],
-            'roles' => ['admin'],
+            'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,
         ],
         'pilscie' => (object)[
             'name' => 'PilsCie',
             'categories' => [15, 18],
             'addresses' => [],
-            'roles' => ['pilscie'],
+            'roles' => ['board', 'pilscie'],
             'cash_allowed' => true
         ]
     ],

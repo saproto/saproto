@@ -224,22 +224,37 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="participants">Participant limit:</label>
-                                        <input type="number" class="form-control" id="participants"
-                                               name="participants" min="-1"
-                                               value="{{ ($event->activity ? $event->activity->participants : '') }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
                                         <label for="price">Participation cost:</label>
                                         <div class="input-group">
                                             <span class="input-group-addon">&euro;</span>
                                             <input type="text" class="form-control" id="price" name="price"
-                                                   value="{{ ($event->activity ? $event->activity->price : '') }}"
+                                                   value="{{ ($event->activity ? $event->activity->price : '0') }}"
                                                    placeholder="15"
                                                    required>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="no_show_fee">No show fee:</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">&euro;</span>
+                                            <input type="text" class="form-control" id="no_show_fee" name="no_show_fee"
+                                                   value="{{ ($event->activity ? $event->activity->no_show_fee : '0') }}"
+                                                   placeholder="15"
+                                                   required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="participants">Participant limit:</label>
+                                        <input type="number" class="form-control" id="participants"
+                                               name="participants" min="-1"
+                                               value="{{ ($event->activity ? $event->activity->participants : '') }}">
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +360,8 @@
                         </div>
 
                         <div class="panel-body">
-                            <p><a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant checklist</a></p>
+                            <p><a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant checklist</a>
+                            </p>
                             <p><strong>Contact details</strong></p>
                             <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
                                 to participants!</p>

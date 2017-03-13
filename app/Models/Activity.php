@@ -37,8 +37,7 @@ class Activity extends Validatable
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withPivot('id')->withTimestamps();
     }
 
     /**
@@ -46,8 +45,7 @@ class Activity extends Validatable
      */
     public function allUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')
-            ->where('backup', false)->withPivot('id')->withTimestamps()->withTrashed();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps();
     }
 
     /**
@@ -55,8 +53,7 @@ class Activity extends Validatable
      */
     public function backupUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('committees_activities_id')
-            ->whereNull('activities_users.deleted_at')->where('backup', true)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
     /**

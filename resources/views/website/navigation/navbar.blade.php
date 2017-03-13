@@ -157,9 +157,18 @@
                     </div>
                 </form>
 
+                @if (Auth::check() && Auth::user()->member && Cookie::get('hideSlack', 'show') === 'show')
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#slack-modal">
+                            Slack
+                            <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span id="slack__online">...</span></span>
+                        </a>
+                    </li>
+                @endif
+
                 @if (Auth::check())
 
-                    @if(Auth::user()->isTempadmin())
+                    @if(Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board')))
                         <li>
                             <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
                                aria-expanded="false">ProTube Admin</a>
@@ -199,7 +208,6 @@
                     </form>
 
                 @endif
-
 
             </ul>
         </div><!-- /.navbar-collapse -->

@@ -13,7 +13,7 @@ class ProtubeController extends Controller
 {
     public function admin()
     {
-        if(Auth::user()->can('board') || Auth::user()->isTempadmin()) {
+        if(Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
             return view('protube.admin');
         }else{
             abort(403);

@@ -30,18 +30,12 @@
                             <strong>Honorary!</strong><br>
                         @endif
 
-                        @if($user->member->is_associate)
-                            External
-                        @else
-                            Primary
-                        @endif
-
                         @if($user->member->is_donator)
-                            <br>Donator
+                            Donator
                         @endif
 
                         @if($user->member->is_lifelong)
-                            <br>Lifelong
+                            Lifelong
                         @endif
                     </div>
                 </div>

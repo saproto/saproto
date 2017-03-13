@@ -85,7 +85,7 @@ class ApiController extends Controller
 
         $adminInfo = new \stdClass();
 
-        if ($user->can('board') || $user->isTempadmin()) {
+        if ($user->can('protube') || $user->isTempadmin()) {
             $adminInfo->is_admin = true;
         } else {
             $adminInfo->is_admin = false;

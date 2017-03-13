@@ -42,12 +42,12 @@ class AuthLoginEventHandler
         $pilscie = Committee::where('slug', config('proto.pilscie'))->first();
 
         if($user->isInCommittee($rootcommittee)) {
-            if (!$user->hasRole('admin')) {
-                $user->attachRole(Role::where('name', '=', 'admin')->first());
+            if (!$user->hasRole('protube')) {
+                $user->attachRole(Role::where('name', '=', 'protube')->first());
             }
         } else {
-            if ($user->hasRole('admin')) {
-                $user->detachRole(Role::where('name', '=', 'admin')->first());
+            if ($user->hasRole('protube')) {
+                $user->detachRole(Role::where('name', '=', 'protube')->first());
             }
         }
 

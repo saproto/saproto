@@ -636,6 +636,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
         });
 
+        Route::group(['prefix' => 'slack', 'as' => 'slack::'], function () {
+            Route::get('count', ['as' => 'count', 'uses' => 'SlackController@getOnlineCount']);
+            Route::get('invite', ['as' => 'invite', 'middleware' => ['member'], 'uses' => 'SlackController@inviteUser']);
+        });
+
         Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);

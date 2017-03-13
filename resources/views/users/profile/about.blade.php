@@ -19,7 +19,7 @@
             @if($user->website)
                 <tr>
                     <td style="text-align: right;"><strong>Website</strong></td>
-                    <td><a href="{{ $user->website }}">{{ $user->website }}</a></td>
+                    <td><a href="{{ $user->websiteUrl() }}">{{ $user->websiteDisplay() }}</a></td>
                 </tr>
             @endif
             @if($user->phone_visible)
