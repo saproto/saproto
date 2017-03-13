@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\Event;
@@ -97,6 +98,24 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
+        $name = $participation->user->name;
+        $calling_name = $participation->user->calling_name;
+        $email = $participation->user->email;
+        $activitytitle = $participation->activity->event->title;
+        $helpcommittee = ($request->has('helping_committee_id') ? $helping->committee->name : null);
+        $eventid = $participation->activity->event->id;
+
+        Mail::queueOn('high', 'emails.subscribeactivity', ['activity' => [
+            'id' => $eventid,
+            'title' => $activitytitle,
+            'name' => $calling_name,
+            'help' => $helpcommittee
+        ]], function ($m) use ($name, $email, $activitytitle) {
+            $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+            $m->to($email, $name);
+            $m->subject('You have been signed out for ' . $activitytitle . '.');
+        });
+
         return Redirect::back();
 
     }
@@ -131,34 +150,20 @@ class ParticipationController extends Controller
                 abort(500, "You cannot unsubscribe for this event at this time.");
             }
 
-            $backupparticipation = ($participation->backup ? null : ActivityParticipation::where('activity_id', $participation->activity->id)
-                ->whereNull('committees_activities_id')->where('backup', true)
-                ->first());
-            if ($backupparticipation !== null) {
-                $backupparticipation->backup = false;
-                $backupparticipation->save();
-
-                $name = $backupparticipation->user->name;
-                $email = $backupparticipation->user->email;
-                $activitytitle = $backupparticipation->activity->event->title;
-
-                Mail::queueOn('high', 'emails.takenfrombackup', ['participation' => $backupparticipation], function ($m) use ($name, $email, $activitytitle) {
-                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($email, $name);
-                    $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
-                });
-            }
+            ParticipationController::processBackupQueue($participation->activity);
 
             if ($notify) {
 
                 $name = $participation->user->name;
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
+                $eventid = $participation->activity->event->id;
+                $calling_name = $participation->user->calling_name;
 
                 Mail::queueOn('high', 'emails.unsubscribeactivity', ['activity' => [
-                    'id' => $participation->activity->event->id,
+                    'id' => $eventid,
                     'title' => $activitytitle,
-                    'name' => $participation->user->calling_name
+                    'name' => $calling_name
                 ]], function ($m) use ($name, $email, $activitytitle) {
                     $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
@@ -180,8 +185,17 @@ class ParticipationController extends Controller
                 $name = $participation->user->name;
                 $email = $participation->user->email;
                 $activitytitle = $participation->activity->event->title;
+                $calling_name = $participation->user->calling_name;
+                $committee_name = $participation->help->committee->name;
+                $event_id = $participation->activity->event->id;
+                $event_title = $participation->activity->event->title;
 
-                Mail::queueOn('high', 'emails.unsubscribehelpactivity', ['participation' => $participation], function ($m) use ($name, $email, $activitytitle) {
+                Mail::queueOn('high', 'emails.unsubscribehelpactivity', [
+                    'calling_name' => $calling_name,
+                    'committee_name' => $committee_name,
+                    'event_id' => $event_id,
+                    'event_title' => $event_title
+                ], function ($m) use ($name, $email, $activitytitle) {
                     $m->from('board@proto.utwente.nl', 'S.A. Proto');
                     $m->to($email, $name);
                     $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
@@ -201,5 +215,39 @@ class ParticipationController extends Controller
     {
         $event = Event::findOrFail($id);
         return view('event.checklist', ['event' => $event]);
+    }
+
+    public static function processBackupQueue(Activity $activity)
+    {
+
+        while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
+
+            $backupparticipation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();
+
+            if ($backupparticipation !== null) {
+                $backupparticipation->backup = false;
+                $backupparticipation->save();
+
+                $name = $backupparticipation->user->name;
+                $email = $backupparticipation->user->email;
+                $activitytitle = $backupparticipation->activity->event->title;
+
+                $calling_name = $backupparticipation->user->calling_name;
+                $event_id = $backupparticipation->activity->event->id;
+                $event_title = $backupparticipation->activity->event->title;
+
+                Mail::queueOn('high', 'emails.takenfrombackup', [
+                    'calling_name' => $calling_name,
+                    'event_id' => $event_id,
+                    'event_title' => $event_title
+                ], function ($m) use ($name, $email, $activitytitle) {
+                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                    $m->to($email, $name);
+                    $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
+                });
+            }
+
+        }
+
     }
 }

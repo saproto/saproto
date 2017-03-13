@@ -11,6 +11,8 @@
 
             @include('quotecorner.newquote')
 
+            @include('quotecorner.popular')
+
         </div>
 
         <div class="col-md-8 col-md-pull-4">
@@ -30,8 +32,13 @@
                             <div id="bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
                             </div>
+                            <div class="like">
+                                <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
+                                            class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
+                                {{ count($entry->likes()) }}
+                            </div>
                             @if (Auth::check() && Auth::user()->can("board"))
-                                <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}">Remove</a>
+                                <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}" style="float:right;">Remove</a>
                             @endif
                         @else
                             <h2>No quotes available. Add some yourself!</h2>
@@ -49,27 +56,30 @@
 
                     <div class="panel-body">
 
-                        <div id="quotes">
-
-                            @foreach($data as $key => $entry)
-                                @if($key > 1)
-                                    <hr>
-                                @endif
-                                @if($key > 0)
-                                    <div>
-                                        <p>
-                                            <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                            <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
-                                        </p>
-                                        <h4>{!! $entry["quote"] !!}</h4>
-                                        @if (Auth::check() && Auth::user()->can("board"))
-                                            <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}">Remove</a>
-                                        @endif
+                        @foreach($data as $key => $entry)
+                            @if($key > 1)
+                                <hr>
+                            @endif
+                            @if($key > 0)
+                                <div>
+                                    <p>
+                                        <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
+                                        <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
+                                    </p>
+                                    <h4>{!! $entry["quote"] !!}</h4>
+                                    <div class="like">
+                                        <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
+                                                    class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
+                                        {{ count($entry->likes()) }}
                                     </div>
-                                @endif
-                            @endforeach
-
-                        </div>
+                                    @if (Auth::check() && Auth::user()->can("board"))
+                                        <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}"
+                                           style="float:right;">Remove</a>
+                                    @endif
+                                    <br>
+                                </div>
+                            @endif
+                        @endforeach
 
                     </div>
 
@@ -128,6 +138,21 @@
 
         h4 {
             word-wrap: break-word;
+        }
+
+        .like {
+            float: left;
+            color: #ccc;
+        }
+
+        .like i {
+            font-size: 25px;
+            margin-right: 5px;
+            color: #ccc;
+        }
+
+        .liked {
+            color: #7FBA00 !important;
         }
 
     </style>

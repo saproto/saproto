@@ -292,7 +292,7 @@
                         @if($event->activity->users->count() > 0)
 
                             <hr>
-                            
+
                             <p style="text-align: center; padding-bottom: 5px;">
                                 {{ $event->activity->users->count() }} participants:
                             </p>
