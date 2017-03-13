@@ -30,10 +30,15 @@ body {
     padding-bottom: 120px; /* this needs to be bigger than footer height*/
 }
 
+.green {
+	color: $primary-color
+}
+
 .main-footer {
   position: relative;
   margin-top: -120px;
   min-height: 120px;
+  padding-bottom: 1rem;
   clear: both;
   background-color: #000;
   color: #fff;
@@ -51,4 +56,9 @@ body {
 
 .large-emoji {
   font-size: 90px;
+}
+
+hr {
+    margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }

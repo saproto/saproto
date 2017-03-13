@@ -1,21 +1,27 @@
 .panel {
-    border-radius: 3px;
+    border-radius: $border-radius;
     box-shadow: none;
     overflow: hidden;
     background: transparent;
 
     & > .panel-heading {
         color: #fff;
-        background-color: #242424;
+        background-color: $background-lighter;
         border: none;
         border-bottom: 1px solid #000;
     }
 
     & > .panel-body {
         background-color: #fff;
+        padding: 1rem 1.5rem;
     }
 }
 
+.panel {
+    border-radius: 3px;
+    border: 1px solid transparent;
+}
+
 .panel-default {
-    border: none;
+    border-color: rgba($background-color, .15);
 }
