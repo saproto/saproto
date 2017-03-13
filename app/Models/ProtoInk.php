@@ -17,13 +17,14 @@ class ProtoInk extends Model
 
             $xml = simplexml_load_string(file_get_contents("http://proto.ink/feed/"));
 
-            // dd($posts->attributes('item', 1));
-
+            // dd($xml);
             $data = [];
             foreach ($xml->channel->item as $item) {
                 $data[] = (object)[
                     'title' => (string)$item->title,
                     'description' => (string)$item->description,
+                    'link' => (string)$item->link,
+                    'date' => strtotime((string)$item->pubDate)
                 ];
                 // dd($item->description);
             }
