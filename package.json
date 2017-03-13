@@ -84,6 +84,7 @@
     },
     "sass": {
       "src": [
+        "./resources/assets/sass/framework/**/*.scss",
         "./resources/views/**/*.scss",
         "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
         "./resources/assets/bower/simplemde/dist/simplemde.min.css",
@@ -95,6 +96,7 @@
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [
+         "./resources/views/**/*.scss",
         "./resources/assets/**/*.scss"
       ]
     }
