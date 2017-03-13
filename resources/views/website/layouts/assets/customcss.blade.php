@@ -5,9 +5,9 @@
         background-image: url('{{ asset('images/application/headerbg.jpg') }}');
     }
 
-    .green {
+    /*.green {
         color: #C1FF00 !important;
-    }
+    }*/
 
     .white {
         color: #fff !important;
@@ -58,27 +58,6 @@
 
     .borderless td, .borderless th {
         border: none !important;
-    }
-
-    .panel {
-        border-width: 0;
-        border-radius: 3px;
-    }
-
-    .panel .panel {
-        border-width: 1px;
-    }
-
-    .container-panel {
-        background-color: #fff;
-    }
-
-    .container-panel .panel-header, .container-panel .panel-footer {
-        padding: 10px 50px;
-    }
-
-    .container-panel .panel-body {
-        padding: 0 24px 16px;
     }
 
 </style>
