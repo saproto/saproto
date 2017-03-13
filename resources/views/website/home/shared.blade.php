@@ -45,9 +45,15 @@
         @section('visitor-specific')
         @show
 
+        <hr>
+
+        <h1 style="text-align: center; color: #fff; margin: 30px;">
+            Recent <img src="{{ asset('images/application/protoink.png') }}" alt="/Proto/.Ink" width="160"> articles
+        </h1>
+
         <div class="row">
             <div class="container">
-                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <div id="myCarousel" class="carousel slide panel panel-default" data-ride="carousel">
 
                   <!-- Wrapper for slides -->
                   <div class="carousel-inner">
@@ -55,8 +61,8 @@
                         <div class="item @if ($post == reset($posts )) active @endif">
                           <img src="http://placehold.it/760x400/cccccc/ffffff">
                            <div class="carousel-caption">
-                            <h4><a href="#">{{$post->title}}</a></h4>
-                            <p>{{$post->description}}</p>
+                            <h4><a href="{{$post->link}}">{{$post->title}}</a></h4>
+                            <p class="medium-text">{{$post->description}}</p>
                           </div>
                         </div><!-- End Item -->
                     @endforeach
@@ -64,7 +70,10 @@
 
                 <ul class="list-group">
                 @foreach($posts as $key => $post)
-                  <li data-target="#myCarousel" data-slide-to="{{$key}}" class="list-group-item @if ($post == reset($posts )) active @endif"><h4>{{$post->title}}</h4></li>
+                  <li data-target="#myCarousel" data-slide-to="{{$key}}" class="list-group-item @if ($post == reset($posts )) active @endif">
+                      <h5 style="margin-bottom: 0;">{{$post->title}}</h5>
+                      <p><small>{{gmdate("d M Y", $post->date)}}</small></p>
+                  </li>
                   @endforeach
                 </ul>
 
@@ -89,7 +98,6 @@
         </h1>
 
         <div class="row">
-
             @foreach(Flickr::getAlbums(6) as $key => $album)
 
                 <div class="col-md-4 col-xs-6">
