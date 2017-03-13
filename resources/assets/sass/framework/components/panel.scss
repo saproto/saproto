@@ -19,9 +19,10 @@
 
 .panel {
     border-radius: 3px;
-    border: 1px solid transparent;
+    // border: 1px solid transparent;
+    border: none;
 }
 
 .panel-default {
-    border-color: rgba($background-color, .15);
+    // border-color: rgba($background-color, .15);
 }
