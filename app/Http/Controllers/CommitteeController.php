@@ -130,14 +130,6 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        if (($committee->slug == config('proto.rootcommittee') || $committee->slug == config('proto.boardcommittee')) && !Auth::user()->can('admin')) {
-
-            Session::flash("flash_message", "This committee is protected. Only the Have You Tried Turning It Off And On Again committee can change this committee.");
-
-            return Redirect::back();
-
-        }
-
         $membership = new CommitteeMembership();
 
         $membership->role = $request->role;
@@ -200,22 +192,6 @@ class CommitteeController extends Controller
     {
 
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-
-        if ($membership->committee->slug == config('proto.rootcommittee') && !Auth::user()->can('admin')) {
-
-            Session::flash("flash_message", "This committee is protected. You cannot delete members from this committee if you are not in it.");
-
-            return Redirect::back();
-
-        }
-
-        if ($membership->user->id == Auth::id() && !Auth::user()->can('admin')) {
-
-            Session::flash("flash_message", "You cannot remove yourself from a committee. Please ask someone else to do so.");
-
-            return Redirect::back();
-
-        }
 
         Session::flash("flash_message", "You have removed " . $membership->user->name . " from " . $membership->committee->name . ".");
 
