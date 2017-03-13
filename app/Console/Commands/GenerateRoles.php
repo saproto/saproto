@@ -67,6 +67,12 @@ class GenerateRoles extends Command
             $permissions['board']->save();
             $this->info('Added board permission.');
         }
+        $permissions['protube'] = Permission::where('name', '=', 'protube')->first();
+        if ($permissions['protube'] == null) {
+            $permissions['protube'] = new Permission(array('name' => 'protube', 'display_name' => 'Protube Admin', 'description' => 'Gives Protube admin access.'));
+            $permissions['protube']->save();
+            $this->info('Added protube permission.');
+        }
         $permissions['omnomcom'] = Permission::where('name', '=', 'omnomcom')->first();
         if ($permissions['omnomcom'] == null) {
             $permissions['omnomcom'] = new Permission(array('name' => 'omnomcom', 'display_name' => 'OmNomCom Access', 'description' => 'Gives access to the OmNomCom administration.'));
@@ -103,6 +109,12 @@ class GenerateRoles extends Command
             $roles['admin'] = new Role(array('name' => 'admin', 'display_name' => 'Administrator', 'description' => 'Application administrator'));
             $roles['admin']->save();
             $this->info('Added admin role.');
+        }
+        $roles['protube'] = Role::where('name', '=', 'protube')->first();
+        if ($roles['protube'] == null) {
+            $roles['protube'] = new Role(array('name' => 'protube', 'display_name' => 'Protube', 'description' => 'Protube administration'));
+            $roles['protube']->save();
+            $this->info('Added protube role.');
         }
         $roles['board'] = Role::where('name', '=', 'board')->first();
         if ($roles['board'] == null) {
@@ -143,11 +155,13 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id));
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id, $permissions['protube']->id));
         $this->info('Synced sysadmin role with permissions.');
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id, $permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id));
+        $roles['protube']->perms()->sync(array($permissions['protube']->id));
+        $this->info('Synced admin role with permissions.');
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id, $permissions['protube']->id));
         $this->info('Synced board role with permissions.');
         $roles['finadmin']->perms()->sync(array($permissions['finadmin']->id));
         $this->info('Synced finadmin role with permissions.');

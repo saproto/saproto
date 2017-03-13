@@ -168,7 +168,7 @@
 
                 @if (Auth::check())
 
-                    @if(Auth::user()->isTempadmin())
+                    @if(Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board')))
                         <li>
                             <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
                                aria-expanded="false">ProTube Admin</a>
