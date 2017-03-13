@@ -11,6 +11,8 @@ use Proto\Http\Requests;
 use Proto\Models\User;
 use Proto\Models\Quote;
 
+use Carbon\Carbon;
+
 use Auth;
 use Session;
 use Redirect;
@@ -21,7 +23,17 @@ class QuoteCornerController extends Controller
 
     public function overview()
     {
-        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->get()]);
+        $quotes = Quote::where('updated_at', '>', Carbon::now()->subMonths(1))->get();
+        $popular = null;
+        $popularLikes = 0;
+        foreach ($quotes as $key => $quote) {
+            $likes = QuoteLike::where('quote_id', $quote->id)->get();
+            if ($popularLikes < count($likes)) {
+                $popular = $quote;
+                $popularLikes = count($likes);
+            }
+        }
+        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->get(), 'popular' => $popular]);
     }
 
     public function add(Request $request)
