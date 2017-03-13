@@ -6,6 +6,10 @@
 
             <div id="popular">
 
+                <h2>Popular</h2>
+
+                <br>
+
                 <?php $entry = $popular ?>
 
                 <div>
