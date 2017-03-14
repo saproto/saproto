@@ -150,7 +150,7 @@ class ParticipationController extends Controller
                 abort(500, "You cannot unsubscribe for this event at this time.");
             }
 
-            ParticipationController::processBackupQueue($participation->activity);
+            ParticipationController::transferOneBackupUser($participation->activity);
 
             if ($notify) {
 
@@ -222,31 +222,38 @@ class ParticipationController extends Controller
 
         while ($activity->backupUsers()->count() > 0 && $activity->users()->count() < $activity->participants) {
 
-            $backupparticipation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();
+            ParticipationController::transferOneBackupUser($activity);
 
-            if ($backupparticipation !== null) {
-                $backupparticipation->backup = false;
-                $backupparticipation->save();
+        }
 
-                $name = $backupparticipation->user->name;
-                $email = $backupparticipation->user->email;
-                $activitytitle = $backupparticipation->activity->event->title;
+    }
 
-                $calling_name = $backupparticipation->user->calling_name;
-                $event_id = $backupparticipation->activity->event->id;
-                $event_title = $backupparticipation->activity->event->title;
+    public static function transferOneBackupUser(Activity $activity)
+    {
 
-                Mail::queueOn('high', 'emails.takenfrombackup', [
-                    'calling_name' => $calling_name,
-                    'event_id' => $event_id,
-                    'event_title' => $event_title
-                ], function ($m) use ($name, $email, $activitytitle) {
-                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($email, $name);
-                    $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
-                });
-            }
+        $backupparticipation = ActivityParticipation::where('activity_id', $activity->id)->whereNull('committees_activities_id')->where('backup', true)->first();
 
+        if ($backupparticipation !== null) {
+            $backupparticipation->backup = false;
+            $backupparticipation->save();
+
+            $name = $backupparticipation->user->name;
+            $email = $backupparticipation->user->email;
+            $activitytitle = $backupparticipation->activity->event->title;
+
+            $calling_name = $backupparticipation->user->calling_name;
+            $event_id = $backupparticipation->activity->event->id;
+            $event_title = $backupparticipation->activity->event->title;
+
+            Mail::queueOn('high', 'emails.takenfrombackup', [
+                'calling_name' => $calling_name,
+                'event_id' => $event_id,
+                'event_title' => $event_title
+            ], function ($m) use ($name, $email, $activitytitle) {
+                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                $m->to($email, $name);
+                $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
+            });
         }
 
     }
