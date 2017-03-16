@@ -88,7 +88,8 @@
 
                         <hr>
 
-                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
+                        <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming
+                            events</a>
 
                     </div>
 
@@ -114,7 +115,7 @@
                         <div class="album"
                              style="background-image: url('{!! $album->thumb !!}')">
                             <div class="album-name">
-                                {{ $album->name }}
+                                {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
                             </div>
                         </div>
                     </a>

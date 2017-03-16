@@ -13,4 +13,9 @@ class FlickrAlbum extends Model
     public function items() {
         return $this->hasMany('Proto\Models\FlickrItem', 'album_id');
     }
+
+    public function event()
+    {
+        return $this->belongsTo('Proto\Models\Event', 'event_id');
+    }
 }

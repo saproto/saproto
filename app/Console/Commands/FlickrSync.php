@@ -45,27 +45,39 @@ class FlickrSync extends Command
         $dbAlbums = FlickrAlbum::all();
 
         // Album cleanup
-        foreach($dbAlbums as $dbAlbum) {
+        $this->info('Album clean-up...');
+        foreach ($dbAlbums as $dbAlbum) {
             $found = false;
 
-            foreach($albums as $album) {
-                if($album->id == $dbAlbum->id) {
+            foreach ($albums as $album) {
+                if ($album->id == $dbAlbum->id) {
                     $found = true;
                     break;
                 }
             }
 
-            if(!$found) {
+            if (!$found) {
                 $this->info('Deleted album ' . $dbAlbum->name . " from database.");
                 $dbAlbum->items()->delete();
                 $dbAlbum->delete();
             }
         }
 
-        foreach($albums as $album) {
+        // Get new albums
+        $this->info('Getting new data...');
+        $n = 0;
+        foreach ($albums as $album) {
+
+            $n++;
+
+            $this->info("Now processing " . $album->name . "... ($n/" . count($albums) . ")");
+
             $dbAlbum = FlickrAlbum::where('id', '=', $album->id)->first();
 
-            if(!$dbAlbum) {
+            if ($dbAlbum === false) {
+                $this->error('Flickr API not available.');
+                continue;
+            } else if (!$dbAlbum) {
                 $albumObject = new FlickrAlbum();
                 $albumObject->id = $album->id;
                 $albumObject->name = $album->name;
@@ -73,28 +85,44 @@ class FlickrSync extends Command
                 $albumObject->date_create = $album->date_create;
                 $albumObject->date_update = $album->date_update;
                 $albumObject->save();
-                $this->info("Added album " . $album->name . " to database.");
+                $this->info("  added to database.");
 
                 $dbAlbum = $albumObject;
+            } else {
+                $albumObject = FlickrAlbum::findOrFail($album->id);
+                $albumObject->id = $album->id;
+                $albumObject->name = $album->name;
+                $albumObject->thumb = $album->thumb;
+                $albumObject->save();
+                $this->info("  updated in database.");
             }
 
             $items = Flickr::getPhotosFromAPI($album->id);
 
+            if ($items === false) {
+                $this->error('Flickr API not available.');
+                continue;
+            }
+
             $count = 0;
 
-            foreach($items->photos as $item) {
-                if(!FlickrItem::where('url', '=', $item->url)->exists()) {
+            $this->info('  looking for new photos.');
+
+            foreach ($items->photos as $item) {
+                if (!FlickrItem::where('id', '=', $item->id)->exists()) {
                     $itemObject = new FlickrItem();
+                    $itemObject->id = $item->id;
                     $itemObject->url = $item->url;
                     $itemObject->thumb = $item->thumb;
                     $itemObject->album_id = $album->id;
+                    $itemObject->date_taken = strtotime($item->timestamp);
                     $itemObject->save();
                     $count++;
                 }
             }
 
-            if($count > 0) {
-                $this->info("Added " . $count . " items to album.");
+            if ($count > 0) {
+                $this->info("  added " . $count . " items to album.");
                 $dbAlbum->date_update = $album->date_update;
                 $dbAlbum->save();
             }
@@ -102,7 +130,8 @@ class FlickrSync extends Command
             $dbItems = $dbAlbum->items;
 
             // Item cleanup
-            foreach($dbItems as $dbItem) {
+            $this->info("  starting clean-up.");
+            foreach ($dbItems as $dbItem) {
                 $found = false;
 
                 foreach ($items->photos as $item) {
@@ -112,11 +141,25 @@ class FlickrSync extends Command
                     }
                 }
 
-                if(!$found) {
-                    $this->info('Deleted item from album ' . $dbAlbum->name . ' from database');
+                if (!$found) {
+                    $this->info('  removed item ' . $dbAlbum->name . ' from album.');
                     $dbItem->delete();
                 }
             }
+
+            if ($albumObject->event === null) {
+                $dates = FlickrItem::where('album_id', $albumObject->id)->orderBy('date_taken', 'asc')->get()->pluck('date_taken');
+
+                $albumObject->date_taken = $dates[ceil(count($dates) / 2)];
+                $albumObject->save();
+            } else {
+                $albumObject->date_taken = $albumObject->event->start;
+                $albumObject->save();
+            }
+            $this->info('  album date set to ' . date('Y-m-d H:i:s', $albumObject->date_taken) . '.');
+
+            $this->info("Done!\n");
+
         }
     }
 }

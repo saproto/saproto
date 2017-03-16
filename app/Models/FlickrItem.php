@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FlickrItem extends Model
 {
     protected $table = 'flickr_items';
-    protected $primaryKey = 'url';
+    protected $primaryKey = 'id';
 
     public $timestamps = false;
 

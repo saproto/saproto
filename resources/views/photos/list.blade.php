@@ -12,7 +12,7 @@
                 <div class="album"
                      style="background-image: url('{!! $album->thumb !!}')">
                     <div class="album-name">
-                        {{ $album->name }}
+                        {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
                     </div>
                 </div>
             </a>
