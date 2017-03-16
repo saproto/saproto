@@ -150,7 +150,7 @@ class FlickrSync extends Command
             if ($albumObject->event === null) {
                 $dates = FlickrItem::where('album_id', $albumObject->id)->orderBy('date_taken', 'asc')->get()->pluck('date_taken');
 
-                $albumObject->date_taken = $dates[ceil(count($dates) / 2)];
+                $albumObject->date_taken = (count($dates) > 0 ? $dates[ceil(count($dates) / 2)] : 0);
                 $albumObject->save();
             } else {
                 $albumObject->date_taken = $albumObject->event->start;
