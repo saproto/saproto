@@ -263,8 +263,11 @@
 
         var nowPlaying = {};
 
+        var idle = true;
+
         screen.on("radioStation", function(data) {
             radioStation = data;
+            if(idle) startRadio();
         });
 
         function onYouTubePlayerReady() {
@@ -387,6 +390,8 @@
         }
 
         function startIdle() {
+            idle = true;
+
             $("#queue").hide(0);
             $("#progressBar").hide(0);
             $("#progressBarBackground").hide(0);
@@ -397,6 +402,8 @@
         }
 
         function stopIdle(slideshow) {
+            idle = false;
+
             if(!slideshow) {
                 stopSlideshow();
             }else{

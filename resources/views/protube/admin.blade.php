@@ -34,6 +34,9 @@
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
                 </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default" id="shuffleRadio">Shuffle radio</button>
+                </div>
             </div>
         </div>
 
@@ -302,6 +305,11 @@
             $("#protubeToggle").click(function(e) {
                 e.preventDefault();
                 admin.emit("protubeToggle");
+            });
+
+            $("#shuffleRadio").click(function(e) {
+                e.preventDefault();
+                admin.emit("shuffleRadio");
             });
 
             $(".soundboard").click(function(e) {
