@@ -16,6 +16,7 @@ use Response;
 use Mail;
 use Auth;
 use Carbon\Carbon;
+use DB;
 
 class WithdrawalController extends Controller
 {
@@ -111,29 +112,42 @@ class WithdrawalController extends Controller
     {
         $withdrawal = Withdrawal::findOrFail($id);
 
+        // We do one massive query to reduce the number of queries.
+        $orderlines = DB::table('orderlines')
+            ->join('products', 'orderlines.product_id', '=', 'products.id')
+            ->join('accounts', 'products.account_id', '=', 'accounts.id')
+            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
+            ->where('orderlines.payed_with_withdrawal', $withdrawal->id)
+            ->get();
+
         $accounts = [];
 
-        foreach ($withdrawal->orderlines as $orderline) {
-            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString(); // We sort by date, where a date goes from 6am - 6am.
+        foreach ($orderlines as $orderline) {
+            // We sort by date, where a date goes from 6am - 6am.
+            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
 
-            if (isset($accounts[$orderline->product->account->account_number])) { // Check if this account has already been encountered
-                if (isset($accounts[$orderline->product->account->account_number]->byDate[$sortDate])) { // Check if orderlines on this date have already been encountered
-                    $accounts[$orderline->product->account->account_number]->byDate[$sortDate] += $orderline->total_price;
-                } else {
-                    $accounts[$orderline->product->account->account_number]->byDate[$sortDate] = $orderline->total_price;
-                }
+            // Shorthand variable names.
+            $accnr = $orderline->account_number;
 
-                $accounts[$orderline->product->account->account_number]->total = $accounts[$orderline->product->account->account_number]->total + $orderline->total_price;
-
-            } else { // First entry for this account, create account object.
-                $accounts[$orderline->product->account->account_number] = new \stdClass();
-
-                $accounts[$orderline->product->account->account_number]->byDate = [];
-                $accounts[$orderline->product->account->account_number]->byDate[$sortDate] = $orderline->total_price;
-
-                $accounts[$orderline->product->account->account_number]->name = $orderline->product->account->name;
-                $accounts[$orderline->product->account->account_number]->total = $orderline->total_price;
+            // Add account to dataset if not existing yet.
+            if (!isset($accounts[$accnr])) {
+                $accounts[$accnr] = (object)[
+                    'byDate' => [],
+                    'name' => $orderline->name,
+                    'total' => 0
+                ];
             }
+
+            // Add orderline to total account price.
+            $accounts[$accnr]->total += $orderline->total_price;
+
+            // Add date to account data if not existing yet.
+            if (!isset($accounts[$accnr]->byDate[$sortDate])) {
+                $accounts[$accnr]->byDate[$sortDate] = 0;
+            }
+
+            // Add orderline to account-on-date total.
+            $accounts[$accnr]->byDate[$sortDate] += $orderline->total_price;
         }
 
         ksort($accounts);
