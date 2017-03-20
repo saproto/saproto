@@ -49,10 +49,18 @@
 
     </script>
     <style type="text/css">
+
+        html {
+          box-sizing: border-box;
+          font: 14px sans-serif;
+        }
+
         body {
             background-color: #0089FA;
             font-family: "Roboto Slab", "Arial";
             color: #fff;
+            font-weight: 400;
+            font-size: 14px;
         }
 
         .animate {

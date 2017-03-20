@@ -2,7 +2,7 @@
 
 @section('header')
 
-    <div id="header">
+    <div id="header" class="main__header">
 
         <div class="container">
 

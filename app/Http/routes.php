@@ -19,3 +19,7 @@ require $routesdir . '/minisites.php';
 // Routes for our primary site.
 require $routesdir . '/primary.php';
 
+/* Pass viewname to body class */
+View::composer('*', function ($view) {
+    View::share('viewName', $view->getName());
+});

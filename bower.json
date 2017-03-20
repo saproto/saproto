@@ -1,6 +1,6 @@
 {
   "name": "saproto",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "license": "GNU General Public License (http://www.gnu.org/licenses)",
   "description": "",
@@ -35,7 +35,8 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.37",
     "moment": "^2.13.0",
     "moment-timezone": "^0.5.4",
-    "simplemde": "^1.10.1"
+    "simplemde": "^1.10.1",
+    "ng-img-crop": "ngImgCrop#^0.3.2"
   },
   "resolutions": {
     "jquery": "^2.2.4"
