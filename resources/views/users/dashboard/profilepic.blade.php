@@ -6,7 +6,7 @@
         <div class="panel-heading"><strong>Your profile photo</strong></div>
         <div class="panel-body">
 
-            <!-- @if($user->photo)
+            @if($user->photo)
                 <div class="profile__photo-wrapper">
                     <img class="profile__photo" src="{{ $user->photo->generateImagePath(200, 200) }}" alt="">
                 </div>
@@ -14,15 +14,15 @@
                 <p style="text-align: center;">
                     You currently have no profile picture.
                 </p>
-            @endif -->
+            @endif
 
-            <!-- <div>Select an image file: <input type="file" id="fileInput" /></div> -->
-            <div class="cropArea">
+            <div>Select an image file: <input type="file" id="fileInput" /></div>
+            <!-- <div class="cropArea">
               <img-crop image="myImage" area-type="square" result-image="myCroppedImage"></img-crop>
-            </div>
-            <hr>
+            </div> -->
+            <!-- <hr>
 
-            <input type="file" id="fileInput" name="image" class="form-control" required />
+            <input type="file" id="fileInput" name="image" class="form-control" required /> -->
 
         </div>
 
