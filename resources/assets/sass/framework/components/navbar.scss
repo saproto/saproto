@@ -1,5 +1,6 @@
 .navbar {
     transition: all 0.5s;
+    background-color: rgba(0,0,0,.3);
 
     @include font-size(14px);
     letter-spacing: 0.02em;
