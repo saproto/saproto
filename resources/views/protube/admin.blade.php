@@ -148,8 +148,8 @@
                     </div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified" role="group">
-                            <a class="btn btn-default lampOn" href="#" rel="19">On</a>
-                            <a class="btn btn-default lampOff" href="#" rel="19">Off</a>
+                            <a class="btn btn-default lampOn" href="#" rel="2">On</a>
+                            <a class="btn btn-default lampOff" href="#" rel="2">Off</a>
                         </div>
                     </div>
                 </div>
