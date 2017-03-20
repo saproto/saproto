@@ -47,7 +47,7 @@
 
                 <ul class="achievement-list achievement-gallery">
 
-                    <li class="achievement COMMON">
+                    <li class="achievement achievement-rank COMMON">
                         <div class="achievement-label">
                             <img src="{{ asset('images/achievements/common.svg') }}" alt="">
                         </div>
@@ -116,7 +116,7 @@
 
                 <ul class="achievement-list achievement-gallery">
 
-                    <li class="achievement UNCOMMON">
+                    <li class="achievement achievement-rank UNCOMMON">
                         <div class="achievement-label">
                             <img src="{{ asset('images/achievements/uncommon.svg') }}" alt="">
                         </div>
@@ -185,7 +185,7 @@
 
                 <ul class="achievement-list achievement-gallery">
 
-                    <li class="achievement RARE">
+                    <li class="achievement achievement-rank RARE">
                         <div class="achievement-label">
                             <img src="{{ asset('images/achievements/rare.svg') }}" alt="">
                         </div>
@@ -254,7 +254,7 @@
 
                 <ul class="achievement-list achievement-gallery">
 
-                    <li class="achievement EPIC">
+                    <li class="achievement achievement-rank EPIC">
                         <div class="achievement-label">
                             <img src="{{ asset('images/achievements/epic.svg') }}" alt="">
                         </div>
@@ -323,7 +323,7 @@
 
                 <ul class="achievement-list achievement-gallery">
 
-                    <li class="achievement LEGENDARY">
+                    <li class="achievement achievement-rank LEGENDARY">
                         <div class="achievement-label">
                             <img src="{{ asset('images/achievements/legendary.svg') }}" alt="">
                         </div>
