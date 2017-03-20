@@ -57,7 +57,7 @@
                   <div class="carousel-inner">
                       @foreach($posts as $key => $post)
                         <div class="item @if ($post == reset($posts )) active @endif">
-                          <img src="http://placehold.it/760x400/cccccc/ffffff">
+                          <img height="400" width="auto" src="{{ asset('images/protoink-placeholder.png') }}">
                            <div class="carousel-caption">
                             <h4><a href="{{$post->link}}">{{$post->title}}</a></h4>
                             <p class="medium-text">{{$post->description}}</p>

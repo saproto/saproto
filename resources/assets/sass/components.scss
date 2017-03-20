@@ -51,13 +51,13 @@ $line-height-ratio: $base-line-height / $base-font-size;
     background-position: center center;
     background-size: cover;
     height: 3.5rem;
-    margin-bottom: 4rem;
+    margin-bottom: 5rem;
     border-bottom: 5px solid $proto-darker;
 }
 
 .main__header .container {
     color: #fff !important;
-    padding-top: 4rem;
+    padding-top: 4.5rem;
     text-align: center;
 }
 
@@ -192,7 +192,7 @@ $navbar-dark: rgba(0, 0, 0, .9);
 .panel {
     border-radius: $border-radius;
     box-shadow: none;
-    overflow: hidden;
+    // overflow: hidden;
     background: transparent;
 
     & > .panel-heading {
@@ -1433,7 +1433,7 @@ select.LEGENDARY, option[value="LEGENDARY"] {
   }
 
   .achievement-title {
-    padding:5px;
+    padding:5px 10px;
     margin:-10px;
     margin-bottom:5px;
   }
@@ -1471,7 +1471,7 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
   .achievement-button-icon {
     position: absolute;
-    right: 5px;
+    right: 10px;
     top: 5px;
   }
 
