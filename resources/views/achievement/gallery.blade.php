@@ -389,3 +389,15 @@
     </div>
 
 @endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style type="text/css">
+        #main {
+            overflow-x: hidden;
+        }
+    </style>
+
+@endsection
