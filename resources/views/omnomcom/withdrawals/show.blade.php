@@ -108,22 +108,22 @@
         </tr>
         </thead>
 
-        @foreach($withdrawal->users() as $user)
+        @foreach($withdrawal->totalsPerUser() as $data)
 
             <tr>
-                <td>{{ $user->name }}</td>
+                <td>{{ $data->user->name }}</td>
                 @if(!$withdrawal->closed)
                     <td>
-                        <strong>{{ $user->bank->iban }}</strong>
-                        / {{ $user->bank->bic }}
+                        <strong>{{ $data->user->bank->iban }}</strong>
+                        / {{ $data->user->bank->bic }}
                     </td>
-                    <td>{{ $user->bank->machtigingid }}</td>
+                    <td>{{ $data->user->bank->machtigingid }}</td>
                 @endif
-                <td>{{ $withdrawal->orderlinesForUser($user)->count() }}</td>
-                <td>&euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '.') }}</td>
+                <td>{{ $data->count }}</td>
+                <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
                 @if(!$withdrawal->closed)
                     <td>
-                        <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $user->id]) }}">
+                        <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
                             Remove
                         </a>
                     </td>

@@ -55,7 +55,7 @@
                             </td>
                             <td>{{ $withdrawal->withdrawalId() }}</td>
                             <td>{{ $withdrawal->date }}</td>
-                            <td>{{ $withdrawal->users()->count() }}</td>
+                            <td>{{ $withdrawal->userCount() }}</td>
                             <td>{{ $withdrawal->orderlines->count() }}</td>
                             <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
                             <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>

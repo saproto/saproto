@@ -66,6 +66,27 @@
 
                     @endif
 
+                    @if($event->albums->count() > 0)
+
+                        <hr>
+
+                        @foreach($event->albums as $album)
+
+                            <div class="col-md-6 col-xs-6">
+                                <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
+                                    <div class="album"
+                                         style="background-image: url('{!! $album->thumb !!}')">
+                                        <div class="album-name">
+                                            {{ $album->name }}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        @endforeach
+
+                    @endif
+
                 </div>
 
             </div>

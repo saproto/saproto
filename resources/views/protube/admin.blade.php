@@ -34,6 +34,9 @@
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
                 </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-default" id="shuffleRadio">Shuffle radio</button>
+                </div>
             </div>
         </div>
 
@@ -125,6 +128,33 @@
     </div>
 
     <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Light control</div>
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Waving light</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-default lampOn" href="#" rel="18">On</a>
+                            <a class="btn btn-default lampOff" href="#" rel="18">Off</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Disco light</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-default lampOn" href="#" rel="2">On</a>
+                            <a class="btn btn-default lampOff" href="#" rel="2">Off</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading">Active sessions</div>
             <div class="panel-body">...</div>
@@ -304,9 +334,24 @@
                 admin.emit("protubeToggle");
             });
 
+            $("#shuffleRadio").click(function(e) {
+                e.preventDefault();
+                admin.emit("shuffleRadio");
+            });
+
             $(".soundboard").click(function(e) {
                 e.preventDefault();
                 admin.emit("soundboard", $(this).attr("rel"));
+            });
+
+            $(".lampOn").click(function(e) {
+                e.preventDefault();
+                admin.emit("lampOn", $(this).attr("rel"));
+            });
+
+            $(".lampOff").click(function(e) {
+                e.preventDefault();
+                admin.emit("lampOff", $(this).attr("rel"));
             });
 
             admin.on("volume", function(data) {

@@ -254,6 +254,7 @@ return [
         'Event' => \Proto\Models\Event::class,
         'Product' => \Proto\Models\Product::class,
         'MollieTransaction' => \Proto\Models\MollieTransaction::class,
+        'FlickrAlbum' => \Proto\Models\FlickrAlbum::class,
 
         'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,

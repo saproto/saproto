@@ -45,8 +45,6 @@
         @section('visitor-specific')
         @show
 
-        <hr>
-
         <h1 style="text-align: center; color: #fff; margin: 30px;">
             Recent <img src="{{ asset('images/application/protoink.png') }}" alt="/Proto/.Ink" width="160"> articles
         </h1>
@@ -106,7 +104,7 @@
                         <div class="album"
                              style="background-image: url('{!! $album->thumb !!}')">
                             <div class="album-name">
-                                {{ $album->name }}
+                                {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
                             </div>
                         </div>
                     </a>

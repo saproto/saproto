@@ -101,16 +101,39 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         $menuItem = MenuItem::findOrFail($id);
-        $menuItem->fill($request->all());
+
+        if($request->parent != $menuItem->parent) {
+            $change = MenuItem::where('parent', '=', $menuItem->parent)->get();
+
+            foreach($change as $item) {
+                if($item->order > $menuItem->order && $item->id != $menuItem->id) {
+                    $item->order = $item->order - 1;
+                    $item->save();
+                }
+            }
+        }
+
+        $menuItem->menuname = $request->menuname;
+        $menuItem->url = $request->url;
+        $menuItem->page_id = $request->page_id;
+        $menuItem->parent = $request->parent;
+
+        if ($request->page_id == 0) $menuItem->page_id = null;
+        if ($request->parent == 0) $menuItem->parent = null;
+
+        $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
+
+        if ($maxOrder) {
+            $menuItem->order = $maxOrder->order + 1;
+        } else {
+            $menuItem->order = 0;
+        }
 
         if ($request->has('is_member_only')) {
             $menuItem->is_member_only = true;
         } else {
             $menuItem->is_member_only = false;
         }
-
-        if ($request->page_id == 0) $menuItem->page_id = null;
-        if ($request->parent == 0) $menuItem->parent = null;
 
         if ($menuItem->page_id) {
             $menuItem->url = Page::find($menuItem->page_id)->getUrl();
@@ -168,6 +191,15 @@ class MenuController extends Controller
         if ($menuItem->children->count() > 0) {
             Session::flash('flash_message', 'A menu item with children can\'t be removed.');
             return Redirect::route('menu::list');
+        }
+
+        $change = MenuItem::where('parent', '=', $menuItem->parent)->get();
+
+        foreach($change as $item) {
+            if($item->order > $menuItem->order && $item->id != $menuItem->id) {
+                $item->order = $item->order - 1;
+                $item->save();
+            }
         }
 
         Session::flash('flash_message', 'Menu item has been removed.');

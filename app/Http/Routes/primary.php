@@ -276,6 +276,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'EventController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
+        Route::post('album/{event}/link', ['as' => 'linkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@linkAlbum']);
+        Route::get('album/unlink/{album}', ['as' => 'unlinkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@unlinkAlbum']);
+
         Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
         Route::get('scan/{id}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'EventController@scan']);
 
@@ -336,7 +339,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
 
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
-            Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
             Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'NewsController@store']);
@@ -346,6 +348,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'NewsController@destroy']);
         });
 
+        Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
 
     });
@@ -457,6 +460,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
+        Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
     });
 
     /**

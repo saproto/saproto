@@ -1,200 +1,256 @@
-.achievement div {
-  width: 100%;
-}
-
-.list-group {
-  margin-bottom:0;
-}
-
-.achievement-icon {
-  max-height: 88px;
-  max-width: 88px;
-  top:calc(50% + 0.5px);
-  left:calc(50% + 1px);
-  position: absolute;
-  transform:translate(-50%, -50%);
-  border-radius:9001px;
-  text-align:center;
-  color:white;
-}
-
 .achievement-list {
-  padding:60px 0;
-  margin:-40px;
+  padding: 60px 0;
+  margin: -40px;
 }
 
 .achievement {
-  margin:80px 0;
-  word-wrap: break-word;
-  position: relative;
   list-style-type: none;
-}
-
-.achievement-label img {
-  position:relative;
-  left:50%;
-  transform:translate(-50%);
-}
-
-.COMMON .achievement-label img {
-  width:47%;
-  left:calc(50% + 1px);
-  margin-top:-4%;
-  margin-bottom:-2.5%;
-}
-
-.UNCOMMON .achievement-label img {
-  width:54%;
-  margin-top:-1.5%;
-  margin-bottom:-2.5%;
-}
-
-.RARE .achievement-label img {
-  width:49%;
-  margin-top:-8.6%;
-  margin-bottom:-1%;
-}
-
-.EPIC .achievement-label img {
-  width:62%;
-  left:calc(50% + 1px);
-  margin-top:-8.5%;
-  margin-bottom:-1%;
-}
-
-.LEGENDARY .achievement-label img {
-  width: 100%;
-  margin-top: -9%;
-  margin-bottom: -3%;
-}
-
-//.EPIC .achievement-icon img {
-//  top:50%;
-//  left:calc(50% - 1px);
-//}
-//
-//.LEGENDARY .achievement-icon img {
-//  left:calc(50% - 1px);
-//}
-
-.achievement i {
-  font-size:65px;
-}
-
-.achievement-tooltip i {
-  font-size:100px;
-}
-
-.achievement-tooltip {
-  position:absolute;
-  top:50%;
-  border-top-left-radius:9001px;
-  border-bottom-left-radius:9001px;
-  overflow:hidden;
-  left:40%;
-  transform: translate(-50%, -50%);
-  width:500px !important;
-  opacity:0;
-  transition:0.25s;
-  max-width:95%;
-}
-
-.achievement-text {
-  height:154px;
-}
-
-.achievement-title {
-  padding:10px;
-}
-
-.achievement-text div {
-  padding-left: 180px;
-}
-
-.achievement-data {
-  bottom:10px;
-  position:absolute;
-}
-
-.COMMON .achievement-tooltip {
-  background:#fd9744;
-  color:#d86100;
-}
-
-.COMMON .achievement-title {
-  background:#de843b;
-}
-
-.UNCOMMON .achievement-tooltip {
-  background:#cccccc;
-  color:#808080;
-}
-
-.UNCOMMON .achievement-title {
-  background:#999999;
-}
-
-.RARE .achievement-tooltip {
-  background:#ffd02a;
-  color:#a77d00;
-}
-
-.RARE .achievement-title {
-  background:#c09c21;
-}
-
-.EPIC .achievement-tooltip {
-  background:#b9cccc;
-  color:#638080;
-}
-
-.EPIC .achievement-title {
-  background:#9db3b3;
-}
-
-.LEGENDARY .achievement-tooltip {
-  background:#d8ebf5;
-  color:#99c5dc;
-}
-
-.LEGENDARY .achievement-title {
-  background:#b7d8e8;
+  position: relative;
 }
 
 .del {
-  position:absolute;
-  right:10px;
-  color:black;
+  position: absolute;
+  right: 10px;
+  color: black;
 }
 
-.achievement:hover .achievement-tooltip {
-  opacity:1;
-  left:calc(50% - 20px);
+.COMMON .achievement-tooltip {
+  background: #fd9744;
+  color: #d86100;
 }
 
-div .achievement-button {
-  position:absolute;
-  top:0;
-  left:0;
-  width:154px;
+.COMMON .achievement-title {
+  background: #de843b;
 }
 
-.achievement-button-icon {
-  color:white;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  text-align:center;
+.UNCOMMON .achievement-tooltip {
+  background: #cccccc;
+  color: #808080;
 }
 
-.achievement-button img{
-  max-width:154px;
-  max-height:154px;
+.UNCOMMON .achievement-title {
+  background: #999999;
 }
-//
-//.achievement-button-icon img {
-//  max-width:138px;
-//  max-height:150px;
-//  border-radius:9001px;
-//}
+
+.RARE .achievement-tooltip {
+  background: #ffd02a;
+  color: #a77d00;
+}
+
+.RARE .achievement-title {
+  background: #c09c21;
+}
+
+.EPIC .achievement-tooltip {
+  background: #b9cccc;
+  color: #638080;
+}
+
+.EPIC .achievement-title {
+  background: #9db3b3;
+}
+
+.LEGENDARY .achievement-tooltip {
+  background: #d8ebf5;
+  color: #99c5dc;
+}
+
+.LEGENDARY .achievement-title {
+  background: #b7d8e8;
+}
+
+@media screen and (min-width: 769px) {
+
+  .achievement div {
+    width: 100%;
+  }
+
+  .list-group {
+    margin-bottom: 0;
+  }
+
+  .achievement-icon {
+    max-height: 88px;
+    max-width: 88px;
+    top: calc(50% + 0.5px);
+    left: calc(50% + 1px);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 9001px;
+    text-align: center;
+    color: white;
+  }
+
+  .achievement {
+    margin: 80px 0;
+    word-wrap: break-word;
+  }
+
+  .achievement-label img {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+  }
+
+  .COMMON .achievement-label img {
+    width: 47%;
+    left: calc(50% + 1px);
+    margin-top: -4%;
+    margin-bottom: -2.5%;
+  }
+
+  .UNCOMMON .achievement-label img {
+    width: 54%;
+    margin-top: -1.5%;
+    margin-bottom: -2.5%;
+  }
+
+  .RARE .achievement-label img {
+    width: 49%;
+    margin-top: -8.6%;
+    margin-bottom: -1%;
+  }
+
+  .EPIC .achievement-label img {
+    width: 62%;
+    left: calc(50% + 1px);
+    margin-top: -8.5%;
+    margin-bottom: -1%;
+  }
+
+  .LEGENDARY .achievement-label img {
+    width: 100%;
+    margin-top: -9%;
+    margin-bottom: -3%;
+  }
+
+  .achievement i {
+    font-size: 65px;
+  }
+
+  .achievement-tooltip i {
+    font-size: 100px;
+  }
+
+  .achievement-tooltip {
+    position: absolute;
+    top: 50%;
+    border-top-left-radius: 9001px;
+    border-bottom-left-radius: 9001px;
+    overflow: hidden;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    width: 500px !important;
+    opacity: 0;
+    transition: 0.25s;
+    max-width: 95%;
+  }
+
+  .achievement-text {
+    height: 154px;
+  }
+
+  .achievement-title {
+    padding: 10px;
+  }
+
+  .achievement-text div {
+    padding-left: 180px;
+  }
+
+  .achievement-data {
+    bottom: 10px;
+    position: absolute;
+  }
+
+  .achievement:hover .achievement-tooltip {
+    opacity: 1;
+    left: calc(50% - 20px);
+  }
+
+  div .achievement-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 154px;
+  }
+
+  .achievement-button-icon {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .achievement {
+    max-width: 400px;
+    margin: auto !important;
+  }
+
+  .achievement-icon {
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    color: white;
+    transform: translate(-50%, -50%);
+    font-size: 200% !important;
+  }
+
+  .achievement-tooltip {
+    margin:10px 0;
+  }
+
+  .achievement-text {
+    padding:10px;
+  }
+
+  .achievement-title {
+    padding:5px;
+    margin:-10px;
+    margin-bottom:5px;
+  }
+
+  .COMMON .achievement-label img {
+    transform:scale(1);
+    margin-top:-25px;
+  }
+
+  .UNCOMMON .achievement-label img {
+    transform:scale(1.15);
+    margin-bottom:15px;
+  }
+
+  .RARE .achievement-label img {
+    transform:scale(1.06);
+    margin-top:-60px;
+    margin-bottom:20px;
+  }
+
+  .EPIC .achievement-label img {
+    transform:scale(1.33);
+    margin-top:-35px;
+    margin-bottom:45px;
+  }
+
+  .LEGENDARY .achievement-label img {
+    transform:scale(2.14);
+    margin-bottom:70px;
+  }
+
+  .achievement-button img, .achievement-label, .achievement-icon {
+    display:none;
+  }
+
+  .achievement-button-icon {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+
+}

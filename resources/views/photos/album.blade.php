@@ -1,10 +1,24 @@
 @extends('website.layouts.default-nobg')
 
 @section('page-title')
-    {{ $photos->album_title }}
+    {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
 @endsection
 
 @section('content')
+
+    @if($photos->event !== null)
+
+        <p style="text-align: center;">
+
+            <a class="btn btn-info" href="{{ route('event::show', ['event_id'=>$photos->event->id]) }}">
+                Visit event information of {{ $photos->event->title }}
+            </a>
+
+        </p>
+
+        <hr>
+
+    @endif
 
     <div id="album" data-chocolat-title="{{ $photos->album_title }}">
 

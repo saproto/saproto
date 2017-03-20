@@ -8,34 +8,6 @@
   }
 }
 
-.achievement-gallery .achievement-tooltip {
-  left: 47%;
-  opacity: 1;
-  position: relative;
-  transform: translate(-50%, 0);
-}
-
-.achievement-gallery .achievement-icon {
-  max-width: none;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.achievement-gallery .achievement-tooltip:hover {
-  left: 47%;
-  opacity: 1;
-  position: relative;
-  transform: translate(-50%, 0);
-}
-
-.achievement-gallery .achievement:hover .achievement-tooltip {
-  left:47%;
-}
-
-.achievement-gallery .achievement {
-  margin: 10px;
-}
-
 .fixNav button {
   margin: 3px 0 3px 0;
 }
@@ -65,8 +37,48 @@ button.LEGENDARY {
   color: #99c5dc;
 }
 
-.achievement-title i {
-  float: right;
-  font-size: 20px !important;
-  color: white;
+.achievement-gallery .achievement-icon {
+  max-width: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 769px) {
+
+  .achievement-gallery .achievement-tooltip {
+    left: 47%;
+    opacity: 1;
+    position: relative;
+    transform: translate(-50%, 0);
+  }
+
+  .achievement-gallery .achievement-tooltip:hover {
+    left: 47%;
+    opacity: 1;
+    position: relative;
+    transform: translate(-50%, 0);
+  }
+
+  .achievement-gallery .achievement:hover .achievement-tooltip {
+    left: 47%;
+  }
+
+  .achievement-gallery .achievement {
+    margin: 10px;
+  }
+
+  .achievement-title i {
+    float: right;
+    font-size: 20px !important;
+    color: white;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+
+  .achievement-rank > * {
+    display: inline !important;
+  }
+
 }

@@ -10,6 +10,7 @@ use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
+use Proto\Models\FlickrAlbum;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
@@ -320,6 +321,27 @@ class EventController extends Controller
 
         return Redirect::back();
 
+    }
+
+    public function linkAlbum(Request $request, $event)
+    {
+        $event = Event::findOrFail($event);
+        $album = FlickrAlbum::findOrFail($request->album_id);
+        $album->event_id = $event->id;
+        $album->save();
+
+        Session::flash("flash_message", "The album " . $album->name . " has been linked to this activity!");
+        return Redirect::back();
+    }
+
+    public function unlinkAlbum($album)
+    {
+        $album = FlickrAlbum::findOrFail($album);
+        $album->event_id = null;
+        $album->save();
+
+        Session::flash("flash_message", "The album " . $album->name . " has been unlinked from an activity!");
+        return Redirect::back();
     }
 
 

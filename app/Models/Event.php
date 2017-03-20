@@ -39,7 +39,8 @@ class Event extends Model
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
     }
 
-    public function getTicketPurchasesFor(User $user) {
+    public function getTicketPurchasesFor(User $user)
+    {
         return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->lists('id'))->get();
     }
 
@@ -49,6 +50,14 @@ class Event extends Model
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry');
+    }
+
+    /**
+     * @return mixed The image associated with this event, if any.
+     */
+    public function albums()
+    {
+        return $this->hasMany('Proto\Models\FlickrAlbum', 'event_id');
     }
 
     /**

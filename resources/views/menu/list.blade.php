@@ -37,7 +37,7 @@
                         </a>
 
                         <a class="btn btn-xs btn-danger"
-                           href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" role="button">
+                           href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" onclick="return confirm('Are you sure?')" role="button">
                             <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </a>
 
@@ -70,7 +70,7 @@
                                 </a>
 
                                 <a class="btn btn-xs btn-danger"
-                                   href="{{ route('menu::delete', ['id' => $childItem->id]) }}" role="button">
+                                   href="{{ route('menu::delete', ['id' => $childItem->id]) }}" onclick="return confirm('Are you sure?')" role="button">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
 
