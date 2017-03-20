@@ -129,6 +129,33 @@
 
     <div class="col-md-4">
         <div class="panel panel-default">
+            <div class="panel-heading">Light control</div>
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Waving light</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-default lampOn" href="#" rel="18">On</a>
+                            <a class="btn btn-default lampOff" href="#" rel="18">Off</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Disco light</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-default lampOn" href="#" rel="19">On</a>
+                            <a class="btn btn-default lampOff" href="#" rel="19">Off</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
             <div class="panel-heading">Active sessions</div>
             <div class="panel-body">...</div>
         </div>
@@ -315,6 +342,16 @@
             $(".soundboard").click(function(e) {
                 e.preventDefault();
                 admin.emit("soundboard", $(this).attr("rel"));
+            });
+
+            $(".lampOn").click(function(e) {
+                e.preventDefault();
+                admin.emit("lampOn", $(this).attr("rel"));
+            });
+
+            $(".lampOff").click(function(e) {
+                e.preventDefault();
+                admin.emit("lampOff", $(this).attr("rel"));
             });
 
             admin.on("volume", function(data) {
