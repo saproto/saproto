@@ -18,6 +18,8 @@ use Proto\Models\User;
 
 use Auth;
 use Proto\Models\WelcomeMessage;
+use Proto\Models\Newsitem;
+use Proto\Models\ProtoInk;
 
 class HomeController extends Controller
 {
@@ -30,12 +32,16 @@ class HomeController extends Controller
 
         $events = Event::where('secret', false)->where('start', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
+        $posts = ProtoInk::getPostsFromFeed();
+        $newsitems = Newsitem::all();
+
+        // dd($posts);
 
         if (Auth::check()) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
-            return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message]);
+            return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message, 'posts' => $posts, 'newsitems' => $newsitems]);
         } else {
-            return view('website.home.external', ['events' => $events, 'companies' => $companies]);
+            return view('website.home.external', ['events' => $events, 'companies' => $companies, 'posts' => $posts]);
         }
 
     }

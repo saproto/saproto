@@ -1,0 +1,65 @@
+// .btn {
+//     border-radius: 2px;
+// }
+
+/*
+#Buttons
+
+Provides extra visual weight and identifies the primary action in a set of buttons.
+
+```
+<a href="" class="btn btn--primary">Primary</a>
+```
+
+*/
+
+a {
+    cursor: pointer;
+}
+
+@mixin button-background($bg:$button-bg) {
+    // background-color: $bg;
+    // background: linear-gradient(lighten($bg, 1), darken($bg, 2));
+    min-width: 8rem;
+    // box-shadow: 0 1px 2px rgba($text-color, .05);
+    transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+    // border-color: darken($bg, 5);
+    //
+    // &:hover,
+    // &:focus {
+    //   box-shadow: 0 2px 8px rgba($text-color, .1);
+    //   color: inherit;
+    // }
+    //
+    // &:active {
+    //     background-color: darken($bg, 5);
+    //     @include gradient(darken(lighten($bg, 10), 5), darken($bg, 5));
+    //     box-shadow: 0 1px 2px rgba($text-color, .1);
+    // }
+
+    &,
+    &:hover,
+    &:active,
+    &:focus {
+        outline: 0;
+        // color: set-button-text-color($bg);
+    }
+}
+
+.btn,
+%btn {
+    // @include font-size(14px);
+    border-radius: $border-radius;
+    // padding: .5rem 1rem; /* [7] */
+    letter-spacing: 0.02em;
+    transition: opacity 0.3s ease-out;
+    // @include button-background($primary-color);
+    user-select: none;
+
+    &.btn--disabled,
+    &[disabled],
+    &:disabled {
+        opacity: .2;
+        cursor: not-allowed;
+    }
+}

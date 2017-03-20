@@ -1,0 +1,115 @@
+.navbar {
+    transition: all 0.5s;
+    background-color: rgba(0,0,0,.3);
+
+    @include font-size(14px);
+    letter-spacing: 0.02em;
+    // text-shadow: 0 0 5px #000;
+
+    // .dropdown-menu {
+    //   text-shadow: none;
+    // }
+}
+
+$navbar-dark: rgba(0, 0, 0, .9);
+
+.navbar-scroll {
+    background-color: $navbar-dark;
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: $navbar-dark;
+    }
+}
+
+.navbar-title, .navbar-title:hover, .navbar-title:active {
+    background-color: transparent !important;
+    font-style: italic;
+}
+.navbar-right {
+    position: relative;
+    margin-right: 2rem;
+}
+.navbar__search {
+    position: absolute;
+    left: auto;
+    right: -3rem;
+    background: transparent;
+    border-radius: 3px;
+    margin: 0.6rem 0;
+    padding: 0 .5rem;
+
+    .input-group {
+        width: 100%;
+    }
+
+    .input-group-btn {
+        right: 0;
+        position: absolute;
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    &:hover {
+        left: 0;
+
+        .navbar__search__icon {
+            color: #333;
+        }
+
+        .navbar__search__input {
+            width: 100% !important;
+            padding: 0 1rem;
+            left: 0;
+        }
+
+        // .navbar__search__icon {
+        //     i {
+        //
+        //     }
+        // }
+    }
+
+    &__icon {
+        background: transparent;
+        border: none;
+        color: #fff;
+        margin: 0;
+        padding: auto 12px;
+        transition: all 0.5s;
+        z-index: 100;
+
+
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.428571429;
+        border-radius: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none
+    }
+
+    &__input {
+        width: 0 !important;
+        background: none;
+        border: none;
+        margin: 0;
+        padding: 0 0;
+        height: 2rem;
+        background: #fff;
+        position: absolute;
+        transition: all 0.5s;
+        z-index: 10;
+    }
+
+}
