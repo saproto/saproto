@@ -21,14 +21,14 @@
             <div class="col-md-4">
 
                 @if($page->featuredImage)
-                    <div class="panel panel-default" style="box-shadow: 0 0 20px;">
+                    <div class="panel panel-default">
                         <img src="{{ $page->featuredImage->generateImagePath('600', null) }}" class="img-responsive" />
                     </div>
                 @endif
 
                     @if($page->files->count() > 0)
 
-                    <div class="panel panel-default" style="box-shadow: 0 0 20px;">
+                    <div class="panel panel-default">
 
                         <div class="panel-heading">
 

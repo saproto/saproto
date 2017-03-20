@@ -1,6 +1,6 @@
 {
   "name": "saproto",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "S.A. Proto Main Website",
   "main": "./public/index.php",
   "scripts": {
@@ -63,7 +63,8 @@
         "./resources/assets/bower/socket.io-client/dist/socket.io.js",
         "./resources/assets/bower/on-screen-keyboard/jquery.onScreenKeyboard.min.js",
         "./resources/assets/bower/chocolat/dist/js/jquery.chocolat.min.js",
-        "./resources/assets/bower/Croppie/croppie.min.js"
+        "./resources/assets/bower/Croppie/croppie.min.js",
+        "./resources/assets/bower/ng-img-crop/compile/minified/ng-img-crop.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -83,16 +84,19 @@
     },
     "sass": {
       "src": [
+        "./resources/assets/sass/framework/**/*.scss",
         "./resources/views/**/*.scss",
         "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
         "./resources/assets/bower/simplemde/dist/simplemde.min.css",
         "./resources/assets/bower/font-awesome/css/font-awesome.css",
         "./resources/assets/bower/on-screen-keyboard/onScreenKeyboard.css",
         "./resources/assets/bower/chocolat/dist/css/chocolat.css",
-        "./resources/assets/bower/Croppie/croppie.css"
+        "./resources/assets/bower/Croppie/croppie.css",
+        "./resources/assets/bower/ng-img-crop/compile/minifiedo/ng-img-crop.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [
+         "./resources/views/**/*.scss",
         "./resources/assets/**/*.scss"
       ]
     }
