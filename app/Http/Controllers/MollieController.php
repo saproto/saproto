@@ -15,6 +15,9 @@ use Proto\Models\Product;
 use Redirect;
 use Session;
 
+use DB;
+use Carbon;
+
 class MollieController extends Controller
 {
 
@@ -80,7 +83,70 @@ class MollieController extends Controller
 
     public function index()
     {
-        return view('omnomcom.mollie.list', ['transactions' => MollieTransaction::orderBy('updated_at', 'desc')->get()]);
+        return view('omnomcom.mollie.list', [
+            'transactions' => MollieTransaction::orderBy('updated_at', 'desc')->get(),
+            'accounts' => MollieController::getAccounts()
+        ]);
+    }
+
+    /**
+     * Display the accounts associated with mollie payments.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public static function getAccounts()
+    {
+
+        // We do one massive query to reduce the number of queries.
+        $orderlines = DB::table('orderlines')
+            ->join('products', 'orderlines.product_id', '=', 'products.id')
+            ->join('accounts', 'products.account_id', '=', 'accounts.id')
+            ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
+            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
+            ->whereNotNull('orderlines.payed_with_mollie')
+            ->where('mollie_transactions.status', '=', 'paid')
+            ->get();
+
+        $accounts = [];
+
+        foreach ($orderlines as $orderline) {
+            // We sort by date, where a date goes from 6am - 6am.
+            $month = Carbon::parse($orderline->created_at)->format('m-Y');
+
+            // Shorthand variable names.
+            $accnr = $orderline->account_number;
+
+            // Add account to dataset if not existing yet.
+            if (!isset($accounts[$month])) {
+                $accounts[$month] = (object)[
+                    'byAccounts' => [],
+                    'name' => Carbon::parse($orderline->created_at)->format('F Y'),
+                    'total' => 0
+                ];
+            }
+
+            // Add orderline to total account price.
+            $accounts[$month]->total += $orderline->total_price;
+
+            // Add date to account data if not existing yet.
+            if (!isset($accounts[$month]->byAccounts[$accnr])) {
+                $accounts[$month]->byAccounts[$accnr] = (object)[
+                    'name' => $orderline->account_number . " " . $orderline->name,
+                    'total' => 0
+                ];
+            }
+
+            // Add orderline to account-on-date total.
+            $accounts[$month]->byAccounts[$accnr]->total += $orderline->total_price;
+        }
+
+        ksort($accounts);
+        foreach ($accounts as $month) {
+            ksort($month->byAccounts);
+        }
+
+        return $accounts;
     }
 
     public function receive($id)

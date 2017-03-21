@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-7">
 
             <div class="panel">
                 <div class="panel-body">
@@ -61,7 +61,7 @@
                                     </td>
 
                                     <td>
-                                        {{ date(' Y-m-d H:i:s', strtotime($transaction->updated_at)) }}
+                                        {{ date('Y-m-d', strtotime($transaction->updated_at)) }}
                                     </td>
 
                                 </tr>
@@ -83,6 +83,47 @@
                         </div>
 
                     @endif
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <div class="panel">
+                <div class="panel-body">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        @foreach($accounts as $key => $month)
+
+                            <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
+                                <th>{{ $month->name }}</th>
+                                <th>&euro; {{ number_format($month->total, 2) }}</th>
+
+                            </tr>
+
+                            @foreach($month->byAccounts as $account => $data)
+                                <tr class="collapse {{ $key }}">
+                                    <td>{{ $data->name }}</td>
+                                    <td>&euro; {{ number_format($data->total, 2) }}</td>
+                                </tr>
+                            @endforeach
+
+                        @endforeach
+                        </tbody>
+
+                    </table>
 
                 </div>
             </div>
