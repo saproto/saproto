@@ -294,44 +294,44 @@
 
             </div>
 
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    Photo albums
-                </div>
-
-                <form method="post" action="{{ route('event::linkalbum', ['event'=> $event->id]) }}">
-
-                    {!! csrf_field() !!}
-
-                    <div class="panel-body">
-                        @foreach($event->albums as $album)
-                            {{ $album->name }} <a
-                                    href="{{ route('event::unlinkalbum', ['album'=>$album->id]) }}">[X]</a> <br>
-                        @endforeach
-
-                        <hr>
-
-                        <select name="album_id" class="form-control" required>
-                            @foreach(FlickrAlbum::whereNull('event_id')->orderBy('date_taken', 'desc')->get() as $album)
-                                <option value="{{ $album->id }}">{{ date('Y-m-d', $album->date_taken) }}
-                                    : {{ $album->name }}</option>
-                            @endforeach
-                        </select>
-
-                    </div>
-
-                    <div class="panel-footer">
-
-                        <input type="submit" class="btn btn-success" value="Link photo album!">
-
-                    </div>
-
-                </form>
-
-            </div>
-
             @if($event)
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        Photo albums
+                    </div>
+
+                    <form method="post" action="{{ route('event::linkalbum', ['event'=> $event->id]) }}">
+
+                        {!! csrf_field() !!}
+
+                        <div class="panel-body">
+                            @foreach($event->albums as $album)
+                                {{ $album->name }} <a
+                                        href="{{ route('event::unlinkalbum', ['album'=>$album->id]) }}">[X]</a> <br>
+                            @endforeach
+
+                            <hr>
+
+                            <select name="album_id" class="form-control" required>
+                                @foreach(FlickrAlbum::whereNull('event_id')->orderBy('date_taken', 'desc')->get() as $album)
+                                    <option value="{{ $album->id }}">{{ date('Y-m-d', $album->date_taken) }}
+                                        : {{ $album->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                        <div class="panel-footer">
+
+                            <input type="submit" class="btn btn-success" value="Link photo album!">
+
+                        </div>
+
+                    </form>
+
+                </div>
 
                 @if($event->activity)
 
