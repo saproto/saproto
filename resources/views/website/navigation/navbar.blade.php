@@ -177,7 +177,7 @@
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false"><img class="profile__photo profile__photo--small" src="{{ Auth::user()->photo->generateImagePath(64, 64) }}" alt="{{ Auth::user()->name }}"> <span class="caret"></span></a>
+                           aria-expanded="false"><img class="profile__photo profile__photo--small" src="{{ Auth::user()->generatePhotoPath(64, 64) }}" alt="{{ Auth::user()->name }}"> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('user::dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>

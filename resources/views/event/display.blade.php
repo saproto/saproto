@@ -124,7 +124,7 @@
                                         @foreach($event->activity->helpingUsers($instance->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
-                                                     style="background-image:url('{!! ($participation->user->photo ? $participation->user->photo->generateImagePath(100, 100) : '') !!}');">
+                                                     style="background-image:url('{!! $participation->user->generatePhotoPath(100, 100) !!}');">
                                                 </div>
                                                 <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
 
@@ -323,7 +323,7 @@
 
                             <div class="member">
                                 <div class="member-picture"
-                                     style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                 @if(Auth::user()->can('board') && !$event->activity->closed)
@@ -350,7 +350,7 @@
 
                                 <div class="member">
                                     <div class="member-picture"
-                                         style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                                         style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                     <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                     @if(Auth::user()->can('board'))

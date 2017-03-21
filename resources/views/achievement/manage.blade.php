@@ -286,7 +286,7 @@
 
                             <div class="member">
                                 <div class="member-picture"
-                                     style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                 <p class="pull-right activity__admin-controls">

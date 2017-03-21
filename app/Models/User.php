@@ -174,6 +174,31 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * Returns a sized version of someone's profile photo, use this instead of $user->photo->generate to bypass the no profile problem.
+     * @param int $x
+     * @param int $y
+     * @return mixed
+     */
+    public function generatePhotoPath($x = 100, $y = 100)
+    {
+        if ($this->photo) {
+            return $this->photo->generateImagePath($x, $y);
+        } else {
+            switch ($this->gender) {
+                case 1:
+                    return asset('images/default-avatars/male.png');
+                    break;
+                case 2:
+                    return asset('images/default-avatars/female.png');
+                    break;
+                default:
+                    return asset('images/default-avatars/other.png');
+                    break;
+            }
+        }
+    }
+
+    /**
      * @return mixed The associated addresses, if any.
      */
     public function address()
