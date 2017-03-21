@@ -95,7 +95,7 @@
             @foreach($members['members']['past'] as $i => $membership)
 
                 <div class="member-picture"
-                     style="background-image:url('{!! ($membership->user->generatePhotoPath(100, 100) !!}');"></div>
+                     style="background-image:url('{!! $membership->user->generatePhotoPath(100, 100) !!}');"></div>
 
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
