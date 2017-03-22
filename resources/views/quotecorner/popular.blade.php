@@ -6,7 +6,7 @@
 
             <div id="popular">
 
-                <h2>Popular</h2>
+                <h2>Popular this week</h2>
 
                 <br>
 
