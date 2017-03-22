@@ -247,7 +247,7 @@
                             <div class="alert alert-warning" data-toggle="modal" style="text-align: center;"
                                  data-target="#noshow-modal">
                                 Not showing up can
-                                cost &euro;{{ number_format($event->activity->no_show_fee, 2, '.', ',') }}.
+                                cost you &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}.
                                 <span class="pull-right" style="cursor: pointer;">
                                         <strong>?</strong>
                                     </span>
