@@ -48,6 +48,10 @@ class AuthorizationController extends Controller
         $role = Role::findOrFail($id);
         $user = User::findOrFail($user);
         $user->roles()->detach($role->id);
+        
+        // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
+        // temporary adminpowers were removed.
+        file_get_contents(env('HERBERT_SERVER') . "/adminCheck");
 
         $request->session()->flash('flash_message', '<strong>' . $role->name . '</strong> has been revoked from ' . $user->name . '.');
         return Redirect::back();
