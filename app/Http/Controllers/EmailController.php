@@ -60,7 +60,7 @@ class EmailController extends Controller
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $request->input('sender_address'),
         ]);
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'));
         $request->session()->flash('flash_message', 'Your e-mail has been saved.');
         return Redirect::route('email::admin');
     }
@@ -78,7 +78,8 @@ class EmailController extends Controller
             'body' => $email->parseBodyFor(Auth::user()),
             'attachments' => $email->attachments,
             'destination' => $email->destinationForBody(),
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'event_name' => $email->getEventName()
         ]);
     }
 
@@ -133,7 +134,7 @@ class EmailController extends Controller
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $request->input('sender_address'),
         ]);
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'));
         $request->session()->flash('flash_message', 'Your e-mail has been saved.');
         return Redirect::route('email::admin');
     }
@@ -238,21 +239,15 @@ class EmailController extends Controller
         return Redirect::route('email::admin');
     }
 
-    private function updateEmailDestination(Email $email, $type, $lists = [])
+    private function updateEmailDestination(Email $email, $type, $lists = [], $event = 0)
     {
         switch ($type) {
-
-            case 'users':
-                $email->to_user = true;
-                $email->to_member = false;
-                $email->to_list = false;
-                $email->lists()->sync([]);
-                break;
 
             case 'members':
                 $email->to_user = false;
                 $email->to_member = true;
                 $email->to_list = false;
+                $email->to_event = false;
                 $email->lists()->sync([]);
                 break;
 
@@ -260,7 +255,15 @@ class EmailController extends Controller
                 $email->to_user = false;
                 $email->to_member = false;
                 $email->to_list = true;
+                $email->to_event = false;
                 $email->lists()->sync((gettype($lists) == "array" ? $lists : []));
+                break;
+
+            case 'event':
+                $email->to_user = false;
+                $email->to_member = false;
+                $email->to_list = false;
+                $email->to_event = $event;
                 break;
 
             default:
