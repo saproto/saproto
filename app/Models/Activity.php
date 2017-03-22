@@ -158,7 +158,7 @@ class Activity extends Validatable
         if ($this->canSubscribe()) {
             return true;
         }
-        if ($this->closed || $this->participants == 0) {
+        if ($this->closed || $this->participants == 0 || date('U') < $this->registration_start) {
             return false;
         }
         return true;

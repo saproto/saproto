@@ -246,8 +246,9 @@
                             <p>
                             <div class="alert alert-warning" data-toggle="modal" style="text-align: center;"
                                  data-target="#noshow-modal">
-                                Not showing up can
-                                cost you &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}.
+                                Not showing up can cost you
+                                &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+                                .
                                 <span class="pull-right" style="cursor: pointer;">
                                         <strong>?</strong>
                                     </span>
@@ -265,7 +266,7 @@
                                     <strong>You are signed up for this activity!</strong>
                                 @endif
                             @else
-                                You are <strong>not signed</strong> up for this activity.
+                                You are <strong>not signed up</strong> for this activity.
                             @endif
                         </p>
 
