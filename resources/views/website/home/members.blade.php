@@ -50,7 +50,7 @@
                           </div>
                           @endif
                           <div class="media-body">
-                            <h5 class="media-heading"><a href=" href="{{ $newsitem->url() }}"">{{ $newsitem->title }}</a></h5>
+                            <h5 class="media-heading"><a href="{{ $newsitem->url() }}">{{ $newsitem->title }}</a></h5>
                             <em class="small-text">
                                 Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
                             </em>
