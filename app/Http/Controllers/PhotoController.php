@@ -66,8 +66,7 @@ class PhotoController extends Controller
      *
      * @return string
      */
-    public
-    function apiIndex()
+    public function apiIndex()
     {
         $albums = Flickr::getAlbums();
         return json_encode($albums);
@@ -79,15 +78,13 @@ class PhotoController extends Controller
      * @param $id
      * @return string
      */
-    public
-    function apiShow($id)
+    public function apiShow($id)
     {
         $photos = Flickr::getPhotos($id);
         return json_encode($photos);
     }
 
-    public
-    function slideshow()
+    public function slideshow()
     {
         return view('photos.slideshow');
     }
