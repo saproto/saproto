@@ -8,6 +8,9 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\Flickr;
 
+use Proto\Models\FlickrAlbum;
+use Redirect;
+
 class PhotoController extends Controller
 {
 
@@ -18,23 +21,43 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $albums = Flickr::getAlbums();
+        $albums = Flickr::getAlbums(null,false);
 
         return view('photos.list', ['albums' => $albums]);
     }
 
+    /**
+     * Display the admin toolie
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function manage()
+    {
+        $albums = Flickr::getAlbums(null,true);
+
+        return view('photos.manage', ['albums' => $albums]);
+    }
+
+    public function toggleprivate($id)
+    {
+        $album = FlickrAlbum::find($id);
+        $album->private = !$album->private;
+        $album->save();
+        return Redirect::route("photo::manage");
+    }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public
+    function show($id)
     {
         $photos = Flickr::getPhotos($id);
 
-        if($photos) return view('photos.album', ['photos' => $photos]);
+        if ($photos) return view('photos.album', ['photos' => $photos]);
 
         abort(404);
     }
@@ -44,7 +67,9 @@ class PhotoController extends Controller
      *
      * @return string
      */
-    public function apiIndex() {
+    public
+    function apiIndex()
+    {
         $albums = Flickr::getAlbums();
         return json_encode($albums);
     }
@@ -55,12 +80,16 @@ class PhotoController extends Controller
      * @param $id
      * @return string
      */
-    public function apiShow($id) {
+    public
+    function apiShow($id)
+    {
         $photos = Flickr::getPhotos($id);
         return json_encode($photos);
     }
 
-    public function slideshow() {
+    public
+    function slideshow()
+    {
         return view('photos.slideshow');
     }
 
