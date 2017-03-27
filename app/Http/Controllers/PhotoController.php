@@ -21,7 +21,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $albums = Flickr::getAlbums(null,false);
+        $albums = Flickr::getAlbums(null, false);
 
         return view('photos.list', ['albums' => $albums]);
     }
@@ -33,7 +33,7 @@ class PhotoController extends Controller
      */
     public function manage()
     {
-        $albums = Flickr::getAlbums(null,true);
+        $albums = Flickr::getAlbums(null, true);
 
         return view('photos.manage', ['albums' => $albums]);
     }
@@ -52,8 +52,7 @@ class PhotoController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($id)
+    public function show($id)
     {
         $photos = Flickr::getPhotos($id);
 
