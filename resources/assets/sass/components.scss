@@ -92,12 +92,6 @@ $navbar-dark: rgba(0, 0, 0, .9);
     background-color: $navbar-dark;
 }
 
-@media only screen and (max-width: 768px) {
-    .navbar {
-        background-color: $navbar-dark;
-    }
-}
-
 .navbar-title, .navbar-title:hover, .navbar-title:active {
     background-color: transparent !important;
     font-style: italic;
@@ -183,17 +177,37 @@ $navbar-dark: rgba(0, 0, 0, .9);
         height: 2rem;
         background: #fff;
         position: absolute;
-        transition: all 0.5s;
+        // transition: width 0.5s linear;
         z-index: 10;
     }
 
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: $navbar-dark;
+    }
+
+    .navbar__search {
+        left: 0;
+        position: relative;
+        padding: 0;
+        right: 0;
+        margin: 0 1rem;
+
+        .navbar__search__input {
+            width: 100% !important;
+            padding: 0 1rem;
+            left: 0;
+        }
+    }
 }
 
 .panel {
     border-radius: $border-radius;
     box-shadow: none;
     // overflow: hidden;
-    background: transparent;
+    // background: transparent;
 
     & > .panel-heading {
         color: #fff;
@@ -214,8 +228,13 @@ $navbar-dark: rgba(0, 0, 0, .9);
     border: none;
 }
 
-.panel-default {
+.panel--default {
     // border-color: rgba($background-color, .15);
+}
+
+.panel--border {
+    border: 1px solid #ddd;
+    // border-radius: 3px;
 }
 
 a {
@@ -1598,6 +1617,10 @@ select.LEGENDARY, option[value="LEGENDARY"] {
 
 .carousel {
     background: #fff;
+
+    i {
+        margin-top: 5rem;
+    }
 
     .item {
         border-radius: 3px 0 0 3px;
