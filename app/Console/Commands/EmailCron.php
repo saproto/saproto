@@ -61,7 +61,8 @@ class EmailCron extends Command
                     'body' => $email->parseBodyFor($recipient),
                     'attachments' => $email->attachments,
                     'destination' => $email->destinationForBody(),
-                    'user_id' => $recipient->id
+                    'user_id' => $recipient->id,
+                    'event_name' => $email->getEventName()
                 ], function ($message) use ($email, $recipient) {
 
                     $message

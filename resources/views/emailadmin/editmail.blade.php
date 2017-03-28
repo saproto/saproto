@@ -99,19 +99,31 @@
 
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="destinationType" id="destinationUsers" required
-                                                   value="users" {{ ($email && $email->to_user ? 'checked' : '') }}>
-                                            All users
-                                        </label>
-                                    </div>
-
-                                    <div class="radio">
-                                        <label>
                                             <input type="radio" name="destinationType" id="destinationMembers" required
                                                    value="members" {{ ($email && $email->to_member ? 'checked' : '') }}>
                                             All members
                                         </label>
                                     </div>
+
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="destinationType" id="destinationEvent" required
+                                                   value="event" {{ ($email && $email->to_event ? 'checked' : '') }}>
+                                            This event:
+                                        </label>
+                                    </div>
+
+                                    <select name="eventSelect" id="eventSelect" class="form-control"
+                                            {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }}>
+
+                                        @foreach(Event::has('activity')->where('end','>',strtotime('-1 month'))->orderBy('start', 'desc')->get() as $event)
+                                            <option value="{{ $event->id }}" {{ ($email && $email->to_event == $event->id ? 'selected' : '') }}>
+                                                [{{ ($event->end < date('U') ? 'p' : 'f') }}]
+                                                {{ date('d-m-Y', $event->start) }}: {{ $event->title }}
+                                            </option>
+                                        @endforeach
+
+                                    </select>
 
                                     <div class="radio">
                                         <label>
@@ -337,14 +349,21 @@
             format: 'DD-MM-YYYY HH:mm'
         });
 
+        $("#destinationEvent").click(function () {
+            $("#listSelect").prop('disabled', true);
+            $("#eventSelect").prop('disabled', false);
+        });
         $("#destinationLists").click(function () {
             $("#listSelect").prop('disabled', false);
+            $("#eventSelect").prop('disabled', true);
         });
         $("#destinationMembers").click(function () {
             $("#listSelect").prop('disabled', true);
+            $("#eventSelect").prop('disabled', true);
         });
         $("#destinationUsers").click(function () {
             $("#listSelect").prop('disabled', true);
+            $("#eventSelect").prop('disabled', true);
         });
     </script>
 

@@ -30,14 +30,6 @@
 
                 <tr>
                     <td>&nbsp;</td>
-                    <td>All users</td>
-                    <td><i>System managed</i></td>
-                    <td>{{ User::count() }}</td>
-                    <td><i>Not editable</i></td>
-                </tr>
-
-                <tr>
-                    <td>&nbsp;</td>
                     <td>All members</td>
                     <td><i>System managed</i></td>
                     <td>{{ Member::count() }}</td>
@@ -93,9 +85,9 @@
 
                 </thead>
 
-                @foreach(Email::all() as $email)
+                @foreach(Email::orderBy('id', 'desc')->get() as $email)
 
-                    <tr>
+                    <tr style="{{ ($email->sent ? 'opacity: 0.5;' : '') }}">
 
                         <td>{{ $email->id }}</td>
                         <td>{{ $email->description }}</td>
@@ -116,6 +108,8 @@
                                 @foreach($email->lists as $list)
                                     {{ $list->id }}
                                 @endforeach
+                            @elseif($email->to_event != false)
+                                event {{ $email->getEventName() }}
                             @endif
                         </td>
                         <td>

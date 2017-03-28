@@ -121,7 +121,7 @@
                         <div class="col-md-6">
 
                             <div class="developer__list__entry"
-                                 style="background-image: url('{!! ($dev->user->photo ? $dev->user->photo->generateImagePath(250, 250) : '') !!}');">
+                                 style="background-image: url('{!! $dev->user->generatePhotoPath(250, 250) !!}');">
 
                                 <span>
                                     <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">

@@ -1,20 +1,31 @@
+# Configuration
+.env
+
+# External assets
 /vendor
 /resources/assets/bower
+
+# Development tools
 /node_modules
-.env
-/.well-known
 
+# Local files
 /personal
+/resources/views/website/custom.scss
 
+# IDE files
 /.idea
 
+# Helper files
 _ide_helper.php
 .phpstorm.meta.php
 _ide_helper_models.php
 
+# Meta files
 composer.phar
 
-.DS_Store
-
+# Generated files
 /public/assets/*
 /resources/assets/sass/components.scss
+
+# Dammit, Mac users
+.DS_Store

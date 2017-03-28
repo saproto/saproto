@@ -150,7 +150,9 @@ class ParticipationController extends Controller
                 abort(500, "You cannot unsubscribe for this event at this time.");
             }
 
-            ParticipationController::transferOneBackupUser($participation->activity);
+            if ($participation->backup === false) {
+                ParticipationController::transferOneBackupUser($participation->activity);
+            }
 
             if ($notify) {
 

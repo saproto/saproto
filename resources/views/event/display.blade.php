@@ -124,7 +124,7 @@
                                         @foreach($event->activity->helpingUsers($instance->id) as $participation)
                                             <div class="member">
                                                 <div class="member-picture"
-                                                     style="background-image:url('{!! ($participation->user->photo ? $participation->user->photo->generateImagePath(100, 100) : '') !!}');">
+                                                     style="background-image:url('{!! $participation->user->generatePhotoPath(100, 100) !!}');">
                                                 </div>
                                                 <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
 
@@ -246,8 +246,9 @@
                             <p>
                             <div class="alert alert-warning" data-toggle="modal" style="text-align: center;"
                                  data-target="#noshow-modal">
-                                Not showing up can
-                                cost &euro;{{ number_format($event->activity->no_show_fee, 2, '.', ',') }}.
+                                Not showing up can cost you
+                                &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+                                .
                                 <span class="pull-right" style="cursor: pointer;">
                                         <strong>?</strong>
                                     </span>
@@ -265,7 +266,7 @@
                                     <strong>You are signed up for this activity!</strong>
                                 @endif
                             @else
-                                You are <strong>not signed</strong> up for this activity.
+                                You are <strong>not signed up</strong> for this activity.
                             @endif
                         </p>
 
@@ -323,7 +324,7 @@
 
                             <div class="member">
                                 <div class="member-picture"
-                                     style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                 @if(Auth::user()->can('board') && !$event->activity->closed)
@@ -350,7 +351,7 @@
 
                                 <div class="member">
                                     <div class="member-picture"
-                                         style="background-image:url('{!! ($user->photo ? $user->photo->generateImagePath(100, 100) : '') !!}');"></div>
+                                         style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                     <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
 
                                     @if(Auth::user()->can('board'))

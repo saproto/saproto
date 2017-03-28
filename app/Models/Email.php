@@ -30,6 +30,8 @@ class Email extends Model
             return 'members';
         } elseif ($this->to_list) {
             return $this->lists->toArray();
+        } elseif ($this->to_event != false) {
+            return 'event';
         }
     }
 
@@ -45,6 +47,14 @@ class Email extends Model
                 $userids = array_merge($userids, $list->users->lists('id')->toArray());
             }
             return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+        } elseif ($this->to_event != false) {
+            $event = Event::find($this->to_event);
+            if ($event && $event->activity) {
+                $userids = ActivityParticipation::whereNull('committees_activities_id')->where('activity_id', $event->activity->id)->where('backup', false)->get()->pluck('user_id');
+                return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+            } else {
+                return collect([]);
+            }
         } else {
             return collect([]);
         }
@@ -60,6 +70,20 @@ class Email extends Model
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
         return str_replace($variable_from, $variable_to, $this->body);
+    }
+
+    public function getEventName()
+    {
+        if ($this->to_event == false) {
+            return 'No event.';
+        } else {
+            $event = Event::find($this->to_event);
+            if ($event) {
+                return $event->title;
+            } else {
+                return 'Unknown Event';
+            }
+        }
     }
 
 }
