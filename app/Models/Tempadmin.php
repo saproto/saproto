@@ -14,4 +14,9 @@ class Tempadmin extends Model
     {
         return $this->belongsTo('Proto\Models\User');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo('Proto\Models\User', 'created_by');
+    }
 }
