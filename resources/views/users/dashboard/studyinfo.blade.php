@@ -14,7 +14,7 @@
             <div class="row">
                 @foreach($user->studies as $study)
                     <div class="col-md-4">
-                        <div class="panel panel-default">
+                        <div class="panel panel-default panel--border">
                             <div class="panel-body">
 
                                 <p style="text-align: center">
