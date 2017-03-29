@@ -358,7 +358,7 @@
 
     function updateActivities() {
         $.ajax({
-            url: '{{ route('api::events::upcoming', ['limit' => 20]) }}',
+            url: '{{ route('api::events::upcoming', ['limit' => 9]) }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
