@@ -23,6 +23,11 @@
     border: none;
 }
 
-.panel-default {
+.panel--default {
     // border-color: rgba($background-color, .15);
+}
+
+.panel--border {
+    border: 1px solid #ddd;
+    // border-radius: 3px;
 }

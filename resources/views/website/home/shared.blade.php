@@ -78,10 +78,10 @@
                   <!-- Controls -->
                   <div class="carousel-controls">
                       <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
                       </a>
                       <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
                       </a>
                   </div>
 

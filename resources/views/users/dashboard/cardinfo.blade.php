@@ -14,7 +14,7 @@
 
                     <div class="col-md-6">
 
-                        <div class="panel panel-default">
+                        <div class="panel panel--border panel-default">
 
                             <div class="panel-body">
                                 <strong>{{ $rfid->name or 'No name' }}</strong>
