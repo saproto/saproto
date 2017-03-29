@@ -17,6 +17,7 @@ use Proto\Models\Page;
 use Proto\Models\User;
 
 use Auth;
+use Carbon;
 use Proto\Models\WelcomeMessage;
 use Proto\Models\Newsitem;
 use Proto\Models\ProtoInk;
@@ -33,7 +34,7 @@ class HomeController extends Controller
         $events = Event::where('secret', false)->where('start', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
         $posts = ProtoInk::getPostsFromFeed();
-        $newsitems = Newsitem::all();
+        $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->take(3)->get();
 
         // dd($posts);
 
