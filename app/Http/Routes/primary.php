@@ -569,8 +569,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
-        Route::get('manage', ['as' => 'manage', 'middleware' => ['auth', 'permission:board'], 'uses' => 'PhotoController@manage']);
-        Route::get('toggleprivate/{id}', ['as' => 'toggleprivate', 'uses' => 'PhotoController@toggleprivate']);
+
+        Route::group(['middleware' => ['auth', 'permission:board']], function() {
+            Route::get('manage', ['as' => 'manage', 'uses' => 'PhotoController@manage']);
+            Route::get('toggleprivate/{id}', ['as' => 'toggleprivate', 'uses' => 'PhotoController@toggleprivate']);
+        });
 
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
