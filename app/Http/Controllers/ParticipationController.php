@@ -171,7 +171,7 @@ class ParticipationController extends Controller
             }
 
             $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
-            
+
             $participation->delete();
 
             if ($participation->backup == false) {

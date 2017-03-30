@@ -22,12 +22,8 @@
         html, body {
             font-family: Lato, sans-serif;
 
-            position: absolute;
-
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
+            padding: 15px 10px;
+            margin: 0;
 
             background-color: #555;
         }
@@ -239,6 +235,8 @@
                     <div id="ticker"></div>
                 </div>
 
+                <br>
+
                 <img src="{{ asset('images/logo/inverse.png') }}" style="max-width: 100%; max-height: 100%;"/>
 
             </div>
@@ -358,7 +356,7 @@
 
     function updateActivities() {
         $.ajax({
-            url: '{{ route('api::events::upcoming', ['limit' => 9]) }}',
+            url: '{{ route('api::events::upcoming', ['limit' => 10]) }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
