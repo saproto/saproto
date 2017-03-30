@@ -53,11 +53,17 @@ class Committee extends Model
     }
 
     /**
-     * @return mixed All activities at which this committee helped out.
+     * @return mixed All events at which this committee helped out.
      */
-    public function helpedActivities()
+    public function helpedEvents()
     {
-        return $this->belongsToMany('Proto\Models\Activity', 'committees_events')->withPivot(array('amount', 'id'))->withTimestamps();
+        $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $events = array();
+        foreach ($activities as $activity) {
+            $event = $activity->event;
+            if ($event) $events[] = $event;
+        }
+        return $events;
     }
 
     /**

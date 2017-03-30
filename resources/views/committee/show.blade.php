@@ -49,7 +49,7 @@
                     <div class="panel panel-default calendar">
 
                         <div class="panel-heading">
-                            Upcoming activities
+                            Upcoming Events
                         </div>
 
                         <div class="panel-body">
@@ -64,11 +64,13 @@
                                            href="{{ route('event::show', ['id' => $event->id]) }}">
                                             <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event->title }}</strong></p>
-                                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
+                                                <p><i class="fa fa-map-marker"
+                                                      aria-hidden="true"></i> {{ $event->location }}
                                                 </p>
                                                 <p>
                                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                    {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }} -
+                                                    {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }}
+                                                    -
                                                     @if (($event->end - $event->start) < 3600 * 24)
                                                         {{ date('H:i', $event->end) }}
                                                     @else
@@ -95,7 +97,7 @@
                     <div class="panel panel-default calendar">
 
                         <div class="panel-heading">
-                            Past activities
+                            Past Events
                         </div>
 
                         <div class="panel-body">
@@ -110,11 +112,13 @@
                                            href="{{ route('event::show', ['id' => $event->id]) }}">
                                             <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event->title }}</strong></p>
-                                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
+                                                <p><i class="fa fa-map-marker"
+                                                      aria-hidden="true"></i> {{ $event->location }}
                                                 </p>
                                                 <p>
                                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                    {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }} -
+                                                    {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }}
+                                                    -
                                                     @if (($event->end - $event->start) < 3600 * 24)
                                                         {{ date('H:i', $event->end) }}
                                                     @else
@@ -131,6 +135,54 @@
                             </div>
 
                         </div>
+                    </div>
+
+                @endif
+
+                @if(count($committee->helpedEvents()) > 0)
+
+                    <div class="panel panel-default calendar">
+
+                        <div class="panel-heading">
+                            Helped Events
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="row">
+
+                                @foreach($committee->helpedEvents() as $key => $event)
+
+                                    <div class="col-md-6">
+
+                                        <a class="activity"
+                                           href="{{ route('event::show', ['id' => $event['id']]) }}">
+                                            <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event['secret'] ? 'style="opacity: 0.3;"' : '') !!}>
+                                                <p><strong>{{ $event['title'] }}</strong></p>
+                                                <p><i class="fa fa-map-marker"
+                                                      aria-hidden="true"></i> {{ $event['location'] }}
+                                                </p>
+                                                <p>
+                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    {{ date('l j F Y', $event['start']) }}, {{ date('H:i', $event['start']) }}
+                                                    -
+                                                    @if (($event['end'] - $event['start']) < 3600 * 24)
+                                                        {{ date('H:i', $event['end']) }}
+                                                    @else
+                                                        {{ date('j M, H:i', $event['end']) }}
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </a>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 @endif
