@@ -84,6 +84,7 @@
                             <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
                             <li><a href="{{ route("photo::manage") }}">Photo Albums</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+                            <li><a href="{{ route("tempadmin::index") }}">Temp Admin Admin</a></li>
 
                             <li role="separator" class="divider"></li>
 

@@ -155,14 +155,12 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="panel panel-default">
             <div class="panel-heading">Active sessions</div>
             <div class="panel-body">...</div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">Omnomcom</div>
-            <div class="panel-body">...</div>
-        </div>
+        -->
     </div>
 </div>
 @endsection

@@ -17,12 +17,6 @@ $navbar-dark: rgba(0, 0, 0, .9);
     background-color: $navbar-dark;
 }
 
-@media only screen and (max-width: 768px) {
-    .navbar {
-        background-color: $navbar-dark;
-    }
-}
-
 .navbar-title, .navbar-title:hover, .navbar-title:active {
     background-color: transparent !important;
     font-style: italic;
@@ -108,8 +102,28 @@ $navbar-dark: rgba(0, 0, 0, .9);
         height: 2rem;
         background: #fff;
         position: absolute;
-        transition: all 0.5s;
+        // transition: width 0.5s linear;
         z-index: 10;
     }
 
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        background-color: $navbar-dark;
+    }
+
+    .navbar__search {
+        left: 0;
+        position: relative;
+        padding: 0;
+        right: 0;
+        margin: 0 1rem;
+
+        .navbar__search__input {
+            width: 100% !important;
+            padding: 0 1rem;
+            left: 0;
+        }
+    }
 }

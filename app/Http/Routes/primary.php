@@ -709,6 +709,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'tempadmin', 'as' => 'tempadmin::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('make/{id}', ['as' => 'make', 'uses' => 'TempAdminController@make']);
         Route::get('end/{id}', ['as' => 'end', 'uses' => 'TempAdminController@end']);
+        Route::get('endId/{id}', ['as' => 'endId', 'uses' => 'TempAdminController@endId']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'TempAdminController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'TempAdminController@update']);
+        Route::get('add', ['as' => 'add', 'uses' => 'TempAdminController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'TempAdminController@store']);
+        Route::get('', ['as' => 'index', 'uses' => 'TempAdminController@index']);
     });
 
 });
