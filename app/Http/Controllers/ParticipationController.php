@@ -113,7 +113,7 @@ class ParticipationController extends Controller
         ]], function ($m) use ($name, $email, $activitytitle) {
             $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
             $m->to($email, $name);
-            $m->subject('You have been signed out for ' . $activitytitle . '.');
+            $m->subject('You have been signed up for ' . $activitytitle . '.');
         });
 
         return Redirect::back();
