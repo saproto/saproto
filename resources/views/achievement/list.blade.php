@@ -8,7 +8,7 @@
 
     @if (count($achievements) > 0)
 
-        <table class="table achievement-admin-list">
+        <table class="table achievement-admin-list row-3-6">
 
             <thead>
 

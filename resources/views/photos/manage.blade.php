@@ -8,7 +8,7 @@
 
     @if (count($albums) > 0)
 
-        <table class="table achievement-admin-list">
+        <table class="table">
 
             <thead>
 
