@@ -83,15 +83,6 @@ class EmailController extends Controller
         ]);
     }
 
-    public function newsletterPreview()
-    {
-        return view('emails.newsletter', [
-            'user' => Auth::user(),
-            'list' => EmailList::find(config('proto.weeklynewsletter')),
-            'events' => Event::getEventsForNewsletter()
-        ]);
-    }
-
     /**
      * Show the form for editing the specified resource.
      *

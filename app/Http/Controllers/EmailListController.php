@@ -139,4 +139,5 @@ class EmailListController extends Controller
         $request->session()->flash('flash_message', 'The list has been deleted!');
         return Redirect::route('email::admin');
     }
+
 }

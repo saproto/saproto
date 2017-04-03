@@ -304,27 +304,6 @@ class EventController extends Controller
 
     }
 
-    public function getInNewsletter()
-    {
-
-        $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
-
-        return view('event.innewsletter', ['events' => $events]);
-
-    }
-
-    public function toggleInNewsletter($id)
-    {
-
-        $event = Event::findOrFail($id);
-
-        $event->include_in_newsletter = !$event->include_in_newsletter;
-        $event->save();
-
-        return Redirect::back();
-
-    }
-
     public function linkAlbum(Request $request, $event)
     {
         $event = Event::findOrFail($event);

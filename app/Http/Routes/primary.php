@@ -271,11 +271,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
 
-        Route::group(['prefix' => 'newsletter', 'as' => 'innewsletter::', 'middleware' => ['permission:board']], function () {
-            Route::get('', ['as' => 'show', 'uses' => 'EventController@getInNewsletter']);
-            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'EventController@toggleInNewsletter']);
-        });
-
         Route::get('', ['as' => 'list', 'uses' => 'EventController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
@@ -313,6 +308,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
+    });
+
+    Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
+        Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
+        Route::group(['middleware' => ['permission:board']], function () {
+            Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
+            Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
+            Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
+        });
     });
 
     /*
@@ -428,7 +432,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Routes related to e-mail.
      */
     Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
-    Route::get('newsletter', ['as' => 'newsletter', 'middleware' => ['auth'], 'uses' => 'EmailController@newsletterPreview']);
+
     Route::get('unsubscribe/{hash}', ['as' => 'unsubscribefromlist', 'uses' => 'EmailController@unsubscribeLink']);
 
     Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
@@ -577,7 +581,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
-        Route::group(['middleware' => ['auth', 'permission:board']], function() {
+        Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('manage', ['as' => 'manage', 'uses' => 'PhotoController@manage']);
             Route::get('toggleprivate/{id}', ['as' => 'toggleprivate', 'uses' => 'PhotoController@toggleprivate']);
         });
