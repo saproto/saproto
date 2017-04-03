@@ -60,5 +60,20 @@ body {
 
 hr {
     margin-bottom: 1rem;
-    margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .row-3-6 {
+    td:nth-of-type(1), td:nth-of-type(2), td:nth-of-type(4), td:nth-of-type(5),
+    th:nth-of-type(1), th:nth-of-type(2), th:nth-of-type(4), th:nth-of-type(5) {
+      display: none;
+    }
+  }
+
+  .row-1-4 {
+    td:nth-of-type(2), td:nth-of-type(3),
+    th:nth-of-type(2), th:nth-of-type(3) {
+      display: none;
+    }
+  }
 }

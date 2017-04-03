@@ -9,7 +9,7 @@
 
     @if (count($menuItems) > 0)
 
-        <table class="table">
+        <table class="table row-1-4">
 
             <thead>
 
