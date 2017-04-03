@@ -8,7 +8,7 @@
 
     @if (count($studies) > 0)
 
-        <table class="table">
+        <table class="table row-3-6">
 
             <thead>
 
