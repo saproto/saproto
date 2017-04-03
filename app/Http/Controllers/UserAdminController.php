@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use Proto\Http\Controllers\AuthController;
+use Proto\Http\Controllers\EmailListController;
 
 use Carbon\Carbon;
 
@@ -214,6 +215,8 @@ class UserAdminController extends Controller
             $m->to($email, $name);
             $m->subject('Start of your membership of Study Association Proto');
         });
+
+        EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 

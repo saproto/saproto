@@ -140,4 +140,15 @@ class EmailListController extends Controller
         return Redirect::route('email::admin');
     }
 
+    public static function autoSubscribeToLists($type, $user)
+    {
+        $lists = config('proto.' . $type);
+        foreach($lists as $list) {
+            $list = EmailList::find($list);
+            if ($list) {
+                $list->subscribe($user);
+            }
+        }
+    }
+
 }
