@@ -23,7 +23,7 @@ class TicketPurchase extends Model
 
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User', 'user_id');
+        return $this->belongsTo('Proto\Models\User', 'user_id')->withTrashed();
     }
 
 }

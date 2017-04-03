@@ -94,6 +94,18 @@ class Event extends Model
         return $user->can('board') || ($this->committee && $this->committee->isMember($user));
     }
 
+    public function returnAllUsers()
+    {
+        $users = [];
+        foreach ($this->tickets as $ticket) {
+            $users = array_merge($users, $ticket->getUsers()->pluck('id')->toArray());
+        }
+        if ($this->activity) {
+            $users = array_merge($users, $this->activity->allUsers->pluck('id')->toArray());
+        }
+        return User::whereIn('id', array_unique($users))->get();
+    }
+
     protected $guarded = ['id'];
 
 }

@@ -133,6 +133,7 @@ class EventController extends Controller
         $event->secret = $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
+        $event->involves_food = $request->has('involves_food');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -194,6 +195,7 @@ class EventController extends Controller
         $event->secret = $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
+        $event->involves_food = $request->has('involves_food');
 
         if ($request->file('image')) {
             $file = new StorageEntry();

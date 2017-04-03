@@ -56,14 +56,23 @@
                     {!! Markdown::convertToHtml($event->description) !!}
 
                     @if($event->committee)
-
                         <hr>
+                        <p>
+                            This activity is brought to you by the
+                            <a href="{{ route('committee::show', ['id' => $event->committee->id]) }}">
+                                {{ $event->committee->name }}
+                            </a>.
+                        </p>
+                    @endif
 
-                        This activity is brought to you by the
-                        <a href="{{ route('committee::show', ['id' => $event->committee->id]) }}">
-                            {{ $event->committee->name }}
-                        </a>.
-
+                    @if ($event->involves_food == true)
+                        <p>
+                            <i>
+                                <strong>This activity involves eating food.</strong>
+                                If you have any allergies or follow a diet, please make sure to let us know via your
+                                <a href="{{ route("user::dashboard") }}#alergies">dashboard</a>.
+                            </i>
+                        </p>
                     @endif
 
                     @if($event->albums->count() > 0)
@@ -429,7 +438,6 @@
 
     </div>
 
-    <!-- Modal for deleting automatic withdrawal. //-->
     <div id="noshow-modal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -49,7 +49,7 @@ class ActivityController extends Controller
             'deregistration_end' => strtotime($request->deregistration_end),
             'participants' => $request->participants,
             'price' => $request->price,
-            'no_show_fee' => $request->no_show_fee,
+            'no_show_fee' => $request->no_show_fee
         ];
 
         if (!$activity->validate($data)) {

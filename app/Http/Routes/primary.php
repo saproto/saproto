@@ -82,6 +82,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         /*
+         * Routes related to diet.
+         */
+        Route::group(['prefix' => '{id}/diet', 'as' => 'diet::'], function () {
+            Route::post('edit', ['as' => 'edit', 'uses' => 'UserDashboardController@editDiet']);
+        });
+
+        /*
          * Routes related to bank accounts
          */
         Route::group(['prefix' => '{id}/bank', 'as' => 'bank::'], function () {

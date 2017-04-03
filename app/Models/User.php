@@ -353,4 +353,14 @@ class User extends Model implements AuthenticatableContract,
             return $this->website;
         }
     }
+
+    public function hasDiet()
+    {
+        return (strlen(str_replace(["\r", "\n", " "], "", $this->diet)) > 0 ? true : false);
+    }
+
+    public function renderDiet()
+    {
+        return nl2br($this->diet);
+    }
 }
