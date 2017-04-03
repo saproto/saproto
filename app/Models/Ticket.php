@@ -27,6 +27,12 @@ class Ticket extends Model
         return $this->belongsTo('Proto\Models\Event', 'event_id');
     }
 
+    public function getUsers()
+    {
+        $uids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+        return User::whereIn('id', array_unique($uids))->get();
+    }
+
     public function totalAvailable()
     {
         return $this->sold() + $this->product->stock;

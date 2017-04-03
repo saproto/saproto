@@ -122,6 +122,14 @@
 
                         </div>
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="involves_food"
+                                        {{ ($event->involves_food ? 'checked' : '') }}>
+                                This activity involves people eating food.
+                            </label>
+                        </div>
+
                         <div class="form-group">
                             <label for="editor">Description</label>
                             @if (!$event)
@@ -247,6 +255,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                             <div class="row">
                                 <div class="col-md-6">
