@@ -6,6 +6,47 @@
 
 @section('content')
 
+    @if ($event->involves_food && $event->end > strtotime('-1 week'))
+
+        <p style="text-align: center;">
+            Diet and alergy information for Event.
+        </p>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Diet and Allergy Info</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach($event->returnAllUsers() as $user)
+
+                @if($user->hasDiet())
+
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{!! $user->renderDiet() !!}</td>
+                    </tr>
+
+                @endif
+
+            @endforeach
+
+            </tbody>
+        </table>
+
+    @else
+
+        <p style="text-align: center;">
+            There is no diet and allergy information available for this event.
+        </p>
+
+    @endif
+
+    <hr>
+
     @if (count($event->tickets) > 0)
 
         <p style="text-align: center;">

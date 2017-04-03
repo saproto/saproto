@@ -115,6 +115,23 @@ class UserDashboardController extends Controller
 
     }
 
+    public function editDiet(Request $request, $id)
+    {
+
+        $id = ($id ? $id : Auth::id());
+        $user = User::findOrFail($id);
+        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
+            abort(403);
+        }
+
+        $user->diet = $request->input('diet');
+        $user->save();
+
+        Session::flash("flash_message", "Your diet and allergy information has been updated.");
+        return Redirect::route('user::dashboard', ['id' => $user->id]);
+
+    }
+
     public function becomeAMemberOf()
     {
         if (Auth::check()) {

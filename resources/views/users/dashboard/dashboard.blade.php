@@ -16,6 +16,7 @@
             @include('users.dashboard.memberinfo')
             @include('users.dashboard.addressinfo')
             @include('users.dashboard.fininfo')
+            @include('users.dashboard.allergies')
         </div>
         <div class="col-md-4">
             @include('users.dashboard.profilepic')
@@ -68,41 +69,41 @@
 @section('javascript')
 
     @parent
-        <script  type="text/javascript">
+    <script type="text/javascript">
 
-        angular.module('app', ['ngImgCrop'], function($interpolateProvider) {
-                $interpolateProvider.startSymbol('<%');
-                $interpolateProvider.endSymbol('%>');
-            })
-          .controller('Ctrl', function($scope) {
-            $scope.myImage='';
-            $scope.myCroppedImage='';
+        angular.module('app', ['ngImgCrop'], function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('<%');
+            $interpolateProvider.endSymbol('%>');
+        })
+            .controller('Ctrl', function ($scope) {
+                $scope.myImage = '';
+                $scope.myCroppedImage = '';
 
-            var handleFileSelect=function(evt) {
-              var file=evt.currentTarget.files[0];
-              var reader = new FileReader();
-              reader.onload = function (evt) {
-                $scope.$apply(function($scope){
-                  $scope.myImage=evt.target.result;
-                });
-              };
-              reader.readAsDataURL(file);
-            };
-            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-          });
-        </script>
+                var handleFileSelect = function (evt) {
+                    var file = evt.currentTarget.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        $scope.$apply(function ($scope) {
+                            $scope.myImage = evt.target.result;
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                angular.element(document.querySelector('#fileInput')).on('change', handleFileSelect);
+            });
+    </script>
 
 @endsection
 
 @section('stylesheet')
 
     @parent
-        <style type="text/css">
-            .cropArea {
-              background: #E4E4E4;
-              overflow: hidden;
-              width: 100%;
-              height: 300px;
-            }
-        </style>
+    <style type="text/css">
+        .cropArea {
+            background: #E4E4E4;
+            overflow: hidden;
+            width: 100%;
+            height: 300px;
+        }
+    </style>
 @endsection
