@@ -125,7 +125,7 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="involves_food"
-                                        {{ ($event->involves_food ? 'checked' : '') }}>
+                                        {{ ($event && $event->involves_food ? 'checked' : '') }}>
                                 This activity involves people eating food.
                             </label>
                         </div>
