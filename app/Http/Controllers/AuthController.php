@@ -306,7 +306,7 @@ class AuthController extends Controller
 
         AuthController::dispatchPasswordEmailFor($user);
 
-        EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
+        EmailListController::autoSubscribeToLists('autoSubscribeUser', $user);
 
         if (!Auth::check()) {
             $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
