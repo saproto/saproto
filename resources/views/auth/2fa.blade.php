@@ -14,6 +14,10 @@
 
         {!! csrf_field() !!}
 
+        @if(isset($_POST['SAMLRequest']))
+            <input type="hidden" id="SAMLRequest" name="SAMLRequest" value="{{ $_POST['SAMLRequest'] }}">
+        @endif
+
         <p>
             This account is protected by two factor authentication. Please provide a one-time password from one of your
             supported methods of two factor authentication below.

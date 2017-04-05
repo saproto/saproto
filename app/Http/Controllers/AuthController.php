@@ -30,9 +30,12 @@ use Session;
 class AuthController extends Controller
 {
 
-    public function getLogin()
+    public function getLogin(Request $request)
     {
         if (Auth::check()) {
+            if ($request->has('SAMLRequest')) {
+                return $this->handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
+            }
             return Redirect::route('homepage');
         } else {
             return view('auth.login');
@@ -132,6 +135,9 @@ class AuthController extends Controller
     {
 
         if (Auth::check()) {
+            if ($request->has('SAMLRequest')) {
+                return $this->handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
+            }
             return Redirect::route('homepage');
         } else {
 
@@ -148,6 +154,9 @@ class AuthController extends Controller
                     // Catching Two Factor Authentication attempt
                     if ($google2fa->verifyKey($request->session()->get('2fa_user')->tfa_totp_key, $request->input('2fa_totp_token'))) {
                         Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
+                        if ($request->has('SAMLRequest')) {
+                            return $this->handleSAMLRequest($request->session()->get('2fa_user'), $request->input('SAMLRequest'));
+                        }
                         return Redirect::intended(route('homepage'));
                     } else {
                         $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
@@ -161,6 +170,9 @@ class AuthController extends Controller
 
                         if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
                             Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
+                            if ($request->has('SAMLRequest')) {
+                                return $this->handleSAMLRequest($request->session()->get('2fa_user'), $request->input('SAMLRequest'));
+                            }
                             return Redirect::intended(route('homepage'));
                         } else {
                             $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
@@ -200,6 +212,9 @@ class AuthController extends Controller
                         return view('auth.2fa');
                     } else {
                         Auth::login($user, $remember);
+                        if ($request->has('SAMLRequest')) {
+                            return $this->handleSAMLRequest($user, $request->input('SAMLRequest'));
+                        }
                         return Redirect::intended(route('homepage'));
                     }
 
@@ -459,6 +474,125 @@ class AuthController extends Controller
                 ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
                 ->subject('Your password reset request for S.A. Proto.');
         });
+
+    }
+
+    private function handleSAMLRequest($user, $saml)
+    {
+        if (!$user->member) {
+            Session::flash('flash_message', 'Only members can use the Proto SSO. You only have a user account.');
+            return Redirect::route('becomeamember');
+        }
+
+        // SAML is transmitted base64 encoded and GZip deflated.
+        $xml = gzinflate(base64_decode($saml));
+
+        // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
+        $deserializationContext = new \LightSaml\Model\Context\DeserializationContext();
+        $deserializationContext->getDocument()->loadXML($xml);
+
+        $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest();
+        $authnRequest->deserialize($deserializationContext->getDocument()->firstChild, $deserializationContext);
+
+        if (!array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
+            Session::flash('flash_message', 'You are using an unknown Service Provider. Please contact the System Administrators to get your Service Provider whitelisted for Proto SSO.');
+            return Redirect::route('homepage');
+        }
+
+        $response = $this->buildSAMLResponse($user, $authnRequest);
+
+        $bindingFactory = new \LightSaml\Binding\BindingFactory();
+        $postBinding = $bindingFactory->create(\LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST);
+        $messageContext = new \LightSaml\Context\Profile\MessageContext();
+        $messageContext->setMessage($response)->asResponse();
+
+        $httpResponse = $postBinding->send($messageContext);
+
+        return view('auth.saml.samlpostbind', ['response' => $httpResponse->getData()["SAMLResponse"], 'destination' => $httpResponse->getDestination()]);
+    }
+
+    private function buildSAMLResponse($user, $authnRequest)
+    {
+
+        // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
+        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience'];
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $issuer = config('saml-idp.idp.issuer');
+
+        $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path() . '/resources/saml2/saml2.crt');
+        $privateKey = \LightSaml\Credential\KeyHelper::createPrivateKey(base_path() . '/resources/saml2/saml2.pem', '', true);
+
+        $response = new \LightSaml\Model\Protocol\Response();
+        $response
+            ->addAssertion($assertion = new \LightSaml\Model\Assertion\Assertion())
+            ->setID(\LightSaml\Helper::generateID())
+            ->setIssueInstant(new \DateTime())
+            ->setDestination($destination)
+            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
+            ->setStatus(new \LightSaml\Model\Protocol\Status(new \LightSaml\Model\Protocol\StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
+            ->setSignature(new \LightSaml\Model\XmlDSig\SignatureWriter($certificate, $privateKey));
+
+        $email = $user->email;
+
+        $assertion
+            ->setId(\LightSaml\Helper::generateID())
+            ->setIssueInstant(new \DateTime())
+            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
+            ->setSubject(
+                (new \LightSaml\Model\Assertion\Subject())
+                    ->setNameID(new \LightSaml\Model\Assertion\NameID(
+                        $email,
+                        \LightSaml\SamlConstants::NAME_ID_FORMAT_EMAIL
+                    ))
+                    ->addSubjectConfirmation(
+                        (new \LightSaml\Model\Assertion\SubjectConfirmation())
+                            ->setMethod(\LightSaml\SamlConstants::CONFIRMATION_METHOD_BEARER)
+                            ->setSubjectConfirmationData(
+                                (new \LightSaml\Model\Assertion\SubjectConfirmationData())
+                                    ->setInResponseTo($authnRequest->getId())
+                                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
+                            )
+                    )
+            )
+            ->setConditions(
+                (new \LightSaml\Model\Assertion\Conditions())
+                    ->setNotBefore(new \DateTime())
+                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                    ->addItem(
+                        new \LightSaml\Model\Assertion\AudienceRestriction($audience)
+                    )
+            )
+            ->addItem(
+                (new \LightSaml\Model\Assertion\AttributeStatement())
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:oid:0.9.2342.19200300.100.1.3',
+                        $email
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:oid:2.5.4.3',
+                        $user->name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:oid:2.5.4.42',
+                        $user->given_name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:oid:0.9.2342.19200300.100.1.1',
+                        $user->member->proto_username
+                    ))
+            )
+            ->addItem(
+                (new \LightSaml\Model\Assertion\AuthnStatement())
+                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
+                    ->setSessionIndex('_some_session_index')
+                    ->setAuthnContext(
+                        (new \LightSaml\Model\Assertion\AuthnContext())
+                            ->setAuthnContextClassRef(\LightSaml\SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT)
+                    )
+            );
+
+        return $response;
 
     }
 }
