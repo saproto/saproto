@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2030-01-01T12:00:00Z" cacheDuration="PT1491994282S" entityID="https://idp.proto.utwente.nl">
+    <md:IDPSSODescriptor WantAuthnRequestsSigned="false" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <md:KeyDescriptor use="signing">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIEljCCA36gAwIBAgIJAIHOuUpAu142MA0GCSqGSIb3DQEBCwUAMIHfMQswCQYDVQQGEwJOTDETMBEGA1UECAwKT3Zlcmlqc3NlbDERMA8GA1UEBwwIRW5zY2hlZGUxIDAeBgNVBAoMF1N0dWR5IEFzc29jaWF0aW9uIFByb3RvMT0wOwYDVQQLDDRIYXZlIFlvdSBUcmllZCBUdXJuaW5nIEl0IE9mZiBBbmQgT24gQWdhaW4gY29tbWl0dGVlMR0wGwYDVQQDDBRTLkEuIFByb3RvIFNBTUwyIElEUDEoMCYGCSqGSIb3DQEJARYZc3lzYWRtaW5AcHJvdG8udXR3ZW50ZS5ubDAeFw0xNzA0MDUxMDQ2NThaFw0yNzA0MDUxMDQ2NThaMIHfMQswCQYDVQQGEwJOTDETMBEGA1UECAwKT3Zlcmlqc3NlbDERMA8GA1UEBwwIRW5zY2hlZGUxIDAeBgNVBAoMF1N0dWR5IEFzc29jaWF0aW9uIFByb3RvMT0wOwYDVQQLDDRIYXZlIFlvdSBUcmllZCBUdXJuaW5nIEl0IE9mZiBBbmQgT24gQWdhaW4gY29tbWl0dGVlMR0wGwYDVQQDDBRTLkEuIFByb3RvIFNBTUwyIElEUDEoMCYGCSqGSIb3DQEJARYZc3lzYWRtaW5AcHJvdG8udXR3ZW50ZS5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALdWD17iS5lJorwBnRBDt/u6YzUdPWsbf+ab9zCuDdSSsYHtpyXviWt/AlcxaeWLTC0ZbU4p1Vvvt+en1I0l1tGjtCcxCet/YDKyyjn69TTWwB9aSdkoNfongBjPvn181FaE/nm09vnABb/YylPK75x6j9qFsIo7uGfh1xg4K/zI6LPIap3FiyiEWEfUVeoUgre+WSyMfUjAshX6sLbbpANqwX2rK0v9qLDF/uGqe5xvfuU9ekISg5xdGcTWX2FcLtnNt7Y3FgkXUT3iIogooeWNigzEFFUsSQaxmH2cifo6mYw0sjKz0rzuI/ZRlv4WNPXRE+euA/UQAKMod9GlcqsCAwEAAaNTMFEwHQYDVR0OBBYEFMS/MmkzB7J7WeOUnpehBRhcGu9FMB8GA1UdIwQYMBaAFMS/MmkzB7J7WeOUnpehBRhcGu9FMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAGv+cYX5Fk8svTQXNe4Qpgy0hcTgw/KNiahNcU15uxvDCC1L8lrBwZ2JcsxIa0I5pWv4B9er5xptmaSKn0usVZaLsutcy2TMrdOYnPkJv8/BC97FZKloTzgo3/rBMrxB3INNORUuISJxKYw0liW/gpqGjX2mMvkqUFtKkQ2LsF+4z4gBnytq9VFVwyNrSfQWfjYvw8etb+/oXmDxjqnzqgaxNO7LG5Zs5xKvSwis1sn8IkMwpGcATp5tg3lY14R+wh0dxHefsLVvuNB42/3lxLf1jXY2yPJW1tHRB3rgc7RZeN0uUKPwdwmauAZaBYatKvgcb7JEeUcBMMbFKhy9knc=</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:KeyDescriptor use="encryption">
+            <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIEljCCA36gAwIBAgIJAIHOuUpAu142MA0GCSqGSIb3DQEBCwUAMIHfMQswCQYDVQQGEwJOTDETMBEGA1UECAwKT3Zlcmlqc3NlbDERMA8GA1UEBwwIRW5zY2hlZGUxIDAeBgNVBAoMF1N0dWR5IEFzc29jaWF0aW9uIFByb3RvMT0wOwYDVQQLDDRIYXZlIFlvdSBUcmllZCBUdXJuaW5nIEl0IE9mZiBBbmQgT24gQWdhaW4gY29tbWl0dGVlMR0wGwYDVQQDDBRTLkEuIFByb3RvIFNBTUwyIElEUDEoMCYGCSqGSIb3DQEJARYZc3lzYWRtaW5AcHJvdG8udXR3ZW50ZS5ubDAeFw0xNzA0MDUxMDQ2NThaFw0yNzA0MDUxMDQ2NThaMIHfMQswCQYDVQQGEwJOTDETMBEGA1UECAwKT3Zlcmlqc3NlbDERMA8GA1UEBwwIRW5zY2hlZGUxIDAeBgNVBAoMF1N0dWR5IEFzc29jaWF0aW9uIFByb3RvMT0wOwYDVQQLDDRIYXZlIFlvdSBUcmllZCBUdXJuaW5nIEl0IE9mZiBBbmQgT24gQWdhaW4gY29tbWl0dGVlMR0wGwYDVQQDDBRTLkEuIFByb3RvIFNBTUwyIElEUDEoMCYGCSqGSIb3DQEJARYZc3lzYWRtaW5AcHJvdG8udXR3ZW50ZS5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALdWD17iS5lJorwBnRBDt/u6YzUdPWsbf+ab9zCuDdSSsYHtpyXviWt/AlcxaeWLTC0ZbU4p1Vvvt+en1I0l1tGjtCcxCet/YDKyyjn69TTWwB9aSdkoNfongBjPvn181FaE/nm09vnABb/YylPK75x6j9qFsIo7uGfh1xg4K/zI6LPIap3FiyiEWEfUVeoUgre+WSyMfUjAshX6sLbbpANqwX2rK0v9qLDF/uGqe5xvfuU9ekISg5xdGcTWX2FcLtnNt7Y3FgkXUT3iIogooeWNigzEFFUsSQaxmH2cifo6mYw0sjKz0rzuI/ZRlv4WNPXRE+euA/UQAKMod9GlcqsCAwEAAaNTMFEwHQYDVR0OBBYEFMS/MmkzB7J7WeOUnpehBRhcGu9FMB8GA1UdIwQYMBaAFMS/MmkzB7J7WeOUnpehBRhcGu9FMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAGv+cYX5Fk8svTQXNe4Qpgy0hcTgw/KNiahNcU15uxvDCC1L8lrBwZ2JcsxIa0I5pWv4B9er5xptmaSKn0usVZaLsutcy2TMrdOYnPkJv8/BC97FZKloTzgo3/rBMrxB3INNORUuISJxKYw0liW/gpqGjX2mMvkqUFtKkQ2LsF+4z4gBnytq9VFVwyNrSfQWfjYvw8etb+/oXmDxjqnzqgaxNO7LG5Zs5xKvSwis1sn8IkMwpGcATp5tg3lY14R+wh0dxHefsLVvuNB42/3lxLf1jXY2yPJW1tHRB3rgc7RZeN0uUKPwdwmauAZaBYatKvgcb7JEeUcBMMbFKhy9knc=</ds:X509Certificate>
+                </ds:X509Data>
+            </ds:KeyInfo>
+        </md:KeyDescriptor>
+        <md:SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://www.proto.utwente.nl/auth/logout"/>
+        <md:NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</md:NameIDFormat>
+        <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://www.proto.utwente.nl/auth/login"/>
+    </md:IDPSSODescriptor>
+    <md:Organization>
+        <md:OrganizationName xml:lang="en-US">Study Association Proto</md:OrganizationName>
+        <md:OrganizationDisplayName xml:lang="en-US">S.A. Proto</md:OrganizationDisplayName>
+        <md:OrganizationURL xml:lang="en-US">https://www.proto.utwente.nl</md:OrganizationURL>
+    </md:Organization>
+    <md:ContactPerson contactType="technical">
+        <md:GivenName>Have You Tried Turning It Off And On Again committeee</md:GivenName>
+        <md:EmailAddress>sysadmin@proto.utwente.nl</md:EmailAddress>
+    </md:ContactPerson>
+    <md:ContactPerson contactType="support">
+        <md:GivenName>Have You Tried Turning It Off And On Again committeee</md:GivenName>
+        <md:EmailAddress>sysadmin@proto.utwente.nl</md:EmailAddress>
+    </md:ContactPerson>
+</md:EntityDescriptor>

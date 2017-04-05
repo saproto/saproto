@@ -14,6 +14,10 @@
 
         {!! csrf_field() !!}
 
+        @if(isset($_GET['SAMLRequest']))
+            <input type="hidden" id="SAMLRequest" name="SAMLRequest" value="{{ $_GET['SAMLRequest'] }}">
+        @endif
+
         <div class="form-group">
             <label for="recipient-name" class="control-label">Username:</label>
             <input type="text" class="form-control" id="username" name="email">
