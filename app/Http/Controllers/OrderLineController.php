@@ -52,12 +52,21 @@ class OrderLineController extends Controller
             return Carbon::parse($date)->format('Y');
         });
 
+        $total = 0;
+        if ($orderlines->has($selected_month)) {
+            $selected_orders = $orderlines[Carbon::parse($date)->format('Y-m')];
+            foreach ($selected_orders as $orderline) {
+                $total += $orderline->total_price;
+            }
+        }
+
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
             'selected_month' => $selected_month,
             'orderlines' => ($orderlines->has($selected_month) ? $orderlines[$selected_month] : []),
-            'next_withdrawal' => $next_withdrawal
+            'next_withdrawal' => $next_withdrawal,
+            'total' => $total
         ]);
 
     }

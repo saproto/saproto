@@ -54,25 +54,10 @@
                 <div id="myCarousel" class="carousel slide panel panel-default" data-ride="carousel">
 
                   <!-- Wrapper for slides -->
-                  <div class="carousel-inner">
-                      @foreach($posts as $key => $post)
-                        <div class="item @if ($post == reset($posts )) active @endif">
-                          <img height="400" width="auto" src="{{ asset('images/protoink-placeholder.png') }}">
-                           <div class="carousel-caption">
-                            <h4><a href="{{$post->link}}">{{$post->title}}</a></h4>
-                            <p class="medium-text">{{$post->description}}</p>
-                          </div>
-                        </div><!-- End Item -->
-                    @endforeach
-                  </div><!-- End Carousel Inner -->
+                  <div class="carousel-inner" id="carouselItems"></div><!-- End Carousel Inner -->
 
-                <ul class="list-group">
-                @foreach($posts as $key => $post)
-                  <li data-target="#myCarousel" data-slide-to="{{$key}}" class="list-group-item @if ($post == reset($posts )) active @endif">
-                      <h5 style="margin-bottom: 0;">{{$post->title}}</h5>
-                      <p><small>{{gmdate("d M Y", $post->date)}}</small></p>
-                  </li>
-                  @endforeach
+                <ul class="list-group" id="carouselList">
+
                 </ul>
 
                   <!-- Controls -->
@@ -166,28 +151,26 @@
 
             }, 2500);
 
-            var theater = theaterJS()
+            $.ajax({
+                type: 'GET',
+                url: '/api/protoink',
+                dataType: 'json',
+                success: function (data) {
+                    $.each(data, function(index, element) {
+                        $('#carouselItems').append('<div class="item" id="carouselItem"><img height="400" width="auto" src="{{ asset('images/protoink-placeholder.png') }}"><div class="carousel-caption"><h4><a href="' + element.link + '">' + element.title + '</a></h4><p class="medium-text">' + element.description + '</p></div></div>');
+                        $('#carouselList').append('<li data-target="#myCarousel" id="carouselListItem" data-slide-to="'+index+'" class="list-group-item"><h5 style="margin-bottom: 0;">' + element.title + '</h5><p><small>' +$.format.date(new Date(element.date*1000), "d MMM yyyy") + '</small></p></li>');
+                        $("#carouselItem").first().addClass('active');
+                        $("#carouselListItem").first().addClass('active');
+                    });
 
-            theater
-            .on('type:start, erase:start', function () {
-              // add a class to actor's dom element when he starts typing/erasing
-              var actor = theater.getCurrentActor()
-              actor.$element.classList.add('is-typing')
-            })
-            .on('type:end, erase:end', function () {
-              // and then remove it when he's done
-              var actor = theater.getCurrentActor()
-              actor.$element.classList.remove('is-typing')
-            })
-
-            theater
-                .addActor('greeting')
-
-            theater
-                .addScene('greeting:Lorem Ipsum...', 400)
-                .addScene('greeting:Dolor sit amet?', 400)
-                .addScene(theater.replay)
-
+                    if(data.length < 1) {
+                        $("#myCarousel").html('Something went wrong loading the ProtoInk articles!');
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    $("#myCarousel").html('Something went wrong loading the ProtoInk articles!');
+                }
+            });
         });
 
         $(window).resize(updateSlider);

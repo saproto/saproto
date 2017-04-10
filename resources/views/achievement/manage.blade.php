@@ -16,7 +16,7 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    {{ ($new ? "Create a new Achievement." : "Edit Achievement " . $achievement->name .".") }}
+                    {{ ($new ? "Create a new Achievement" : "Edit Achievement " . $achievement->name) }}
                 </div>
 
                 <div class="panel-body">

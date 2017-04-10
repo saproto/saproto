@@ -33,15 +33,15 @@ class AuthLoginEventHandler
         $token = new Token();
         $token->generate($user);
         Session::put('token', $token->token);
-        
 
         // We will grant the user all roles to which he is entitled!
         $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
-        $boardcommittee = Committee::where('slug', config('proto.boardcommittee'))->first();
-        $omnomcom = Committee::where('slug', config('proto.omnomcom'))->first();
-        $pilscie = Committee::where('slug', config('proto.pilscie'))->first();
+        $boardcommittee = Committee::find(2108);
+        $omnomcom = Committee::find(26);
+        $pilscie = Committee::find(22);
+        $drafters = Committee::find(3336);
 
-        if($user->isInCommittee($rootcommittee)) {
+        if ($user->isInCommittee($rootcommittee)) {
             if (!$user->hasRole('protube')) {
                 $user->attachRole(Role::where('name', '=', 'protube')->first());
             }
@@ -51,7 +51,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if($user->isInCommittee($boardcommittee)) {
+        if ($user->isInCommittee($boardcommittee)) {
             if (!$user->hasRole('board')) {
                 $user->attachRole(Role::where('name', '=', 'board')->first());
             }
@@ -61,7 +61,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if($user->isInCommittee($omnomcom)) {
+        if ($user->isInCommittee($omnomcom)) {
             if (!$user->hasRole('omnomcom')) {
                 $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
             }
@@ -71,7 +71,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if($user->isInCommittee($pilscie)) {
+        if ($user->isInCommittee($pilscie) || $user->isInCommittee($drafters)) {
             if (!$user->hasRole('pilscie')) {
                 $user->attachRole(Role::where('name', '=', 'pilscie')->first());
             }
