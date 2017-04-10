@@ -1,31 +1,27 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
     Authentication
 @endsection
 
-@section('panel-title')
-    Authentication
-@endsection
-
-@section('panel-body')
+@section('login-body')
 
     <form method="POST" action="{{ route('login::post') }}">
 
         {!! csrf_field() !!}
 
-        @if(isset($_GET['SAMLRequest']))
-            <input type="hidden" id="SAMLRequest" name="SAMLRequest" value="{{ $_GET['SAMLRequest'] }}">
-        @endif
+        <div class="form-group">
+            <input type="text" class="form-control" id="username" name="email" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        </div>
 
-        <div class="form-group">
-            <label for="recipient-name" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="username" name="email">
-        </div>
-        <div class="form-group">
-            <label for="message-text" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
+        <p>
+            <button type="submit" class="btn btn-success" style="width: 100%;">
+                LOG-IN
+            </button>
+        </p>
 
         <div class="checkbox">
             <label>
@@ -33,25 +29,23 @@
             </label>
         </div>
 
+        <br>
+
+        <p>
+            <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
+                Forgot your Proto password?
+            </a>
+        </p>
+
+        <br>
+
         <hr>
 
-        <p>
-            To log-in to your Proto account, you can use the e-mail address registered to your account in combination
-            with your password. If you are a Proto member, you also have a Proto username you can use instead of your
-            e-mail address to save typing.
-        </p>
+        <br>
 
-        <p>
-            If you previously linked them to your Proto account, you can use your University of Twente credentials as an
-            alternative means to sign in.
-        </p>
-
-        @endsection
-
-        @section('panel-footer')
-            <button type="submit" class="btn btn-success">LOG-IN</button>
-
-            <a class="btn btn-default pull-right" href="{{ route('login::resetpass') }}">Forgot your password?</a>
+        <a href="{{ route('login::utwente') }}" class="btn btn-default" style="width: 100%;">
+            University of Twente Login
+        </a>
 
     </form>
 @endsection

@@ -29,37 +29,11 @@ class UtwenteController extends Controller
             abort(403);
         }
 
-        if($request->wizard > 0) Session::flash("wizard", true);
+        if ($request->wizard > 0) Session::flash("wizard", true);
 
-        return view('users.study.utwente', ['user' => $user]);
-    }
+        Session::flash('link_utwente_to_user', $user);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, $id)
-    {
-
-        $user = User::findOrFail($id);
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
-
-        if (AuthController::verifyUtwenteCredentials($request->username, $request->password)) {
-            $user->utwente_username = $request->username;
-            $user->save();
-            $request->session()->flash('flash_message', 'We have associated your UT account ' . $user->utwente_username . ' with your Proto account.');
-            if(Session::get('wizard')) return Redirect::route('becomeamember');
-            return Redirect::route('user::dashboard', ['id' => $user->id]);
-        }
-
-        $request->session()->flash('flash_message', 'Your UTwente credentials were not correct.');
-        return Redirect::back();
-
+        return Redirect::route('login::utwente');
     }
 
     /**
