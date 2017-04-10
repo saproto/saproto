@@ -26,5 +26,11 @@
     .main__header {
         height: 20rem;
         margin-bottom: 0;
+
+        .container {
+            border-top:none;
+            background-color: transparent;
+            margin-top:100px;
+        }
     }
 }
