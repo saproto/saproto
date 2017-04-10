@@ -53,8 +53,11 @@ class OrderLineController extends Controller
         });
 
         $total = 0;
-        foreach ($orderlines as $orderline) {
-            $total += $orderline[0]->total_price;
+        if ($orderlines->has($selected_month)) {
+            $selected_orders = $orderlines[Carbon::parse($date)->format('Y-m')];
+            foreach ($selected_orders as $orderline) {
+                $total += $orderline->total_price;
+            }
         }
 
         return view('omnomcom.orders.myhistory', [
