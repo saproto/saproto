@@ -8,81 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-9">
-
-            @if(count($orderlines) > 0)
-
-                <?php
-                $total = 0;
-                $current_date = date('d-m-Y', strtotime($orderlines[0]->created_at));
-                ?>
-
-                <div class="list-group">
-
-                    <li class="list-group-item list-group-item-success">{{ date('l F jS', strtotime($current_date)) }}</li>
-
-                    @foreach($orderlines as $orderline)
-
-                        @if(date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
-
-                </div>
-                <div class="list-group">
-
-                    <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
-                    <li class="list-group-item list-group-item-success">{{ date('l F jS', strtotime($current_date)) }}</li>
-
-                    @endif
-
-                    <li class="list-group-item">
-
-                        <?php $total += $orderline->total_price; ?>
-
-                        <div class="row">
-
-                            <div class="col-md-2">
-                                <strong>&euro;</strong> {{ number_format($orderline->total_price, 2, '.', '') }}
-                            </div>
-
-                            <div class="col-md-6"
-                                 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                {{ $orderline->units }}x <strong>{{ $orderline->product->name }}</strong>
-                            </div>
-
-                            <div class="col-md-2" style="text-align: right;">
-                                {!! $orderline->generateHistoryStatus() !!}
-                            </div>
-
-                            <div class="col-md-2" style="text-align: right; opacity: 0.5;">
-                                {{ date('H:i:s', strtotime($orderline->created_at)) }}
-                            </div>
-
-                        </div>
-
-                    </li>
-
-                    @endforeach
-
-                </div>
-
-            @else
-
-                <?php
-                $total = 0;
-                ?>
-
-                <div class="list-group">
-
-                    <li class="list-group-item">
-                        You didn't buy anything in this month.
-                    </li>
-
-                </div>
-
-            @endif
-
-        </div>
-
-        <div class="col-md-3">
+        <div class="col-md-3 col-md-push-9">
 
             <div class="panel panel-default">
 
@@ -267,6 +193,73 @@
                 </div>
 
             </div>
+
+        </div>
+
+        <div class="col-md-9 col-md-pull-3">
+
+            @if(count($orderlines) > 0)
+
+                <?php
+                $current_date = date('d-m-Y', strtotime($orderlines[0]->created_at));
+                ?>
+
+                <div class="list-group">
+
+                    <li class="list-group-item list-group-item-success">{{ date('l F jS', strtotime($current_date)) }}</li>
+
+                    @foreach($orderlines as $orderline)
+
+                        @if(date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
+
+                </div>
+                <div class="list-group">
+
+                    <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
+                    <li class="list-group-item list-group-item-success">{{ date('l F jS', strtotime($current_date)) }}</li>
+
+                    @endif
+
+                    <li class="list-group-item">
+
+                        <div class="row">
+
+                            <div class="col-md-2">
+                                <strong>&euro;</strong> {{ number_format($orderline->total_price, 2, '.', '') }}
+                            </div>
+
+                            <div class="col-md-6"
+                                 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                {{ $orderline->units }}x <strong>{{ $orderline->product->name }}</strong>
+                            </div>
+
+                            <div class="col-md-2" style="text-align: right;">
+                                {!! $orderline->generateHistoryStatus() !!}
+                            </div>
+
+                            <div class="col-md-2" style="text-align: right; opacity: 0.5;">
+                                {{ date('H:i:s', strtotime($orderline->created_at)) }}
+                            </div>
+
+                        </div>
+
+                    </li>
+
+                    @endforeach
+
+                </div>
+
+            @else
+
+                <div class="list-group">
+
+                    <li class="list-group-item">
+                        You didn't buy anything in this month.
+                    </li>
+
+                </div>
+
+            @endif
 
         </div>
 
