@@ -3,19 +3,22 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    //height: 3.5rem;
-    //margin-bottom: 5rem;
-    border-bottom: 5px solid $proto-darker;
+    overflow:auto;
 }
 
 .main__header .container {
     color: #fff !important;
-    padding-top: 4.5rem;
     text-align: center;
+    width: 100%;
+    border-top:5px solid #7fba00;
+    margin-top:50px;
+    background-color:#121212;
+    padding:14px;
 }
 
 .main__header .container h1 {
     font-weight: 300;
+    margin-bottom:0;
 }
 
 [class="template-website.home.external"],
