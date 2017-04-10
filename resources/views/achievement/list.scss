@@ -1,8 +1,6 @@
 .achievement-admin-list {
 
   tr * {
-    max-height: 50px !important;
-    max-width:150px;
     vertical-align: middle !important;
   }
 
@@ -34,12 +32,12 @@
     width:40px;
     height:40px;
     text-align:center;
-    vertical-align:middle !important;
     color:white;
   }
 
   .COMMON div i, .UNCOMMON div i, .RARE div i, .EPIC div i, .LEGENDARY div i {
     display:inline-block;
+    vertical-align:baseline !important;
   }
 
   .COMMON div{

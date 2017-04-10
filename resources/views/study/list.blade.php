@@ -8,20 +8,22 @@
 
     @if (count($studies) > 0)
 
-        <table class="table row-3-6">
+        <strong class="visible-sm visible-xs" style="text-align: center;">- Some columns have been hidden because the screen is too small -</strong>
+
+        <table class="table">
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>#</th>
-                <th>Type</th>
-                <th>Study</th>
-                <th>Faculty</th>
-                <th>Institution</th>
-                <th>Controls</th>
+                    <th class="hidden-sm hidden-xs">#</th>
+                    <th class="hidden-sm hidden-xs">Type</th>
+                    <th>Study</th>
+                    <th class="hidden-sm hidden-xs">Faculty</th>
+                    <th class="hidden-sm hidden-xs">Institution</th>
+                    <th>Controls</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
@@ -29,11 +31,11 @@
 
                 <tr>
 
-                    <td>{{ $study->id }}</td>
-                    <td>{{ $study->type }}</td>
+                    <td class="hidden-sm hidden-xs">{{ $study->id }}</td>
+                    <td class="hidden-sm hidden-xs">{{ $study->type }}</td>
                     <td>{{ $study->name }}</td>
-                    <td>{{ $study->faculty }}</td>
-                    <td>{{ ($study->utwente ? 'University of Twente' : 'External' ) }}</td>
+                    <td class="hidden-sm hidden-xs">{{ $study->faculty }}</td>
+                    <td class="hidden-sm hidden-xs">{{ ($study->utwente ? 'University of Twente' : 'External' ) }}</td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('study::edit', ['id' => $study->id]) }}" role="button">
