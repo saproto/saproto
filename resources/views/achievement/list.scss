@@ -37,7 +37,7 @@
 
   .COMMON div i, .UNCOMMON div i, .RARE div i, .EPIC div i, .LEGENDARY div i {
     display:inline-block;
-    vertical-align:baseline;
+    vertical-align:baseline !important;
   }
 
   .COMMON div{
