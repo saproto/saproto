@@ -464,10 +464,6 @@ class EventController extends Controller
                 ->setUseTimezone(true)
                 ->setLocation($event->location);
 
-            if ($event->end - $event->start >= 3600 * 24) {
-                $component->setNoTime(true);
-            }
-
             if ($event->committee !== null) {
                 $component->setOrganizer(new IcalOrganizer($event->committee->name));
             }
