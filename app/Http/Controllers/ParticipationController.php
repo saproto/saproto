@@ -252,8 +252,9 @@ class ParticipationController extends Controller
                 'event_id' => $event_id,
                 'event_title' => $event_title
             ], function ($m) use ($name, $email, $activitytitle) {
-                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
+                $m->replyTo('board@' . config('proto.emaildomain'), 'S.A. Proto');
                 $m->to($email, $name);
+                $m->bcc('board@' . config('proto.emaildomain'));
                 $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
             });
         }
