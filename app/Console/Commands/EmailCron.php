@@ -55,6 +55,13 @@ class EmailCron extends Command
             $email->sent_to = $email->recipients()->count();
             $email->save();
 
+            $emaildata = (object)[
+                'sender_address' => $email->sender_address,
+                'sender_name' => $email->sender_name,
+                'subject' => $email->subject,
+                'attachments' => $email->attachments
+            ];
+
             foreach ($email->recipients() as $recipient) {
 
                 Mail::queueOn('medium', 'emails.manualemail', [
@@ -63,14 +70,14 @@ class EmailCron extends Command
                     'destination' => $email->destinationForBody(),
                     'user_id' => $recipient->id,
                     'event_name' => $email->getEventName()
-                ], function ($message) use ($email, $recipient) {
+                ], function ($message) use ($emaildata, $recipient) {
 
                     $message
                         ->to($recipient->email, $recipient->name)
-                        ->from($email->sender_address . '@' . config('proto.emaildomain'), $email->sender_name)
-                        ->subject($email->subject);
+                        ->from($emaildata->sender_address . '@' . config('proto.emaildomain'), $emaildata->sender_name)
+                        ->subject($emaildata->subject);
 
-                    foreach ($email->attachments as $attachment) {
+                    foreach ($emaildata->attachments as $attachment) {
                         $message->attach($attachment->generateLocalPath(), ['as' => $attachment->original_filename, 'mime' => $attachment->mime]);
                     }
 
