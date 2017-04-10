@@ -677,6 +677,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
 
+        Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
     });
 
     /*
