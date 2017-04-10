@@ -317,7 +317,7 @@
                                 closes:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
                             <br>
                             <strong>Sign out
-                                possible untill:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
+                                possible until:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
                         </p>
 
                         @if($event->activity->users->count() > 0)
