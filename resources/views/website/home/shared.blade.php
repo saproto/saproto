@@ -163,7 +163,12 @@
                         $("#carouselListItem").first().addClass('active');
                     });
 
-
+                    if(data.length < 1) {
+                        $("#myCarousel").html('Something went wrong loading the ProtoInk articles!');
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    $("#myCarousel").html('Something went wrong loading the ProtoInk articles!');
                 }
             });
         });
