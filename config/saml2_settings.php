@@ -112,7 +112,9 @@ return $settings = array(
             'url' => getenv('SAML2_SP_REMOTE_SLS'),
         ),
         // Public x509 certificate of the IdP
-        'x509cert' => getenv('SAML2_SP_REMOTE_CERT')
+        'x509cert' => getenv('SAML2_SP_REMOTE_CERT'),
+        'validate.authnrequest' => true,
+        'saml20.sign.assertion' => true,
     ),
 
 
@@ -153,8 +155,8 @@ return $settings = array(
         'wantMessagesSigned' => false,
 
         // Indicates a requirement for the <saml:Assertion> elements received by
-        // this SP to be signed.        [The Metadata of the SP will offer this info]
-        'wantAssertionsSigned' => false,
+        // this SP to be signed. [The Metadata of the SP will offer this info]
+        'wantAssertionsSigned' => true,
 
         // Indicates a requirement for the NameID received by
         // this SP to be encrypted.

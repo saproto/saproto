@@ -11,9 +11,6 @@ return [
     'sp' => [
 
         // Test Service Provider TestShib (www.testshib.org)
-        base64_encode('https://sp.testshib.org/Shibboleth.sso/SAML2/POST') => [
-            'audience' => ['https://sp.testshib.org/shibboleth-sp'],
-        ],
         base64_encode('https://atalanta.saproto.nl/saml2/module.php/saml/sp/saml2-acs.php/default-sp') => [
             'audience' => ['http://test.proto.utwente.nl'],
         ]
