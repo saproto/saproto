@@ -48,26 +48,26 @@ class PageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $page = new Page($request->all());
 
-        if($request->has('is_member_only')) {
+        if ($request->has('is_member_only')) {
             $page->is_member_only = true;
         } else {
             $page->is_member_only = false;
         }
 
-        if(in_array($request->slug, $this->reservedSlugs)) {
+        if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
 
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
-        if(Page::where('slug', $page->slug)->get()->count() > 0) {
+        if (Page::where('slug', $page->slug)->get()->count() > 0) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
 
             return view('pages.edit', ['item' => $page, 'new' => true]);
@@ -82,18 +82,18 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  string  $slug
+     * @param  string $slug
      * @return \Illuminate\Http\Response
      */
     public function show($slug)
     {
         $page = Page::where('slug', '=', $slug)->first();
 
-        if($page == null) {
+        if ($page == null) {
             abort(404, "Page not found.");
         }
 
-        if($page->is_member_only && !(Auth::check() && Auth::user()->member != null)) {
+        if ($page->is_member_only && !(Auth::check() && Auth::user()->member != null)) {
             abort(403, "You need to be a member of S.A. Proto to see this page.");
         }
 
@@ -107,7 +107,8 @@ class PageController extends Controller
      * @param $id
      * @return mixed
      */
-    public function featuredImage(Request $request, $id) {
+    public function featuredImage(Request $request, $id)
+    {
         $page = Page::find($id);
 
         $image = $request->file('image');
@@ -132,7 +133,14 @@ class PageController extends Controller
      * @param $id
      * @return mixed
      */
-    public function addFile(Request $request, $id) {
+    public function addFile(Request $request, $id)
+    {
+
+        if (!$request->file('file')) {
+            Session::flash('flash_message', 'You forgot a file.');
+            return Redirect::back();
+        }
+
         $page = Page::find($id);
 
         $file = new StorageEntry();
@@ -150,7 +158,8 @@ class PageController extends Controller
      * @param $file_id
      * @return mixed
      */
-    public function deleteFile($id, $file_id) {
+    public function deleteFile($id, $file_id)
+    {
         $page = Page::find($id);
 
         $page->files()->detach($file_id);
@@ -162,7 +171,7 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -175,15 +184,15 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $page = Page::findOrFail($id);
 
-        if(($request->slug != $page->slug) && Page::where('slug', $page->slug)->get()->count() > 0) {
+        if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->get()->count() > 0) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
 
             return view('pages.edit', ['item' => $request, 'new' => false]);
@@ -191,13 +200,13 @@ class PageController extends Controller
 
         $page->fill($request->all());
 
-        if($request->has('is_member_only')) {
+        if ($request->has('is_member_only')) {
             $page->is_member_only = true;
         } else {
             $page->is_member_only = false;
         }
 
-        if(in_array($request->slug, $this->reservedSlugs)) {
+        if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
 
             return view('pages.edit', ['item' => $page, 'new' => false]);
@@ -212,7 +221,7 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

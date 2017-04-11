@@ -8,20 +8,22 @@
 
     @if (count($achievements) > 0)
 
-        <table class="table achievement-admin-list row-3-6">
+        <strong class="visible-sm visible-xs" style="text-align: center;">- Some columns have been hidden because the screen is too small -</strong>
+
+        <table class="table achievement-admin-list">
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>#</th>
-                <th>Icon</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Tier</th>
-                <th>Controls</th>
+                    <th class="hidden-sm hidden-xs">#</th>
+                    <th class="hidden-sm hidden-xs">Icon</th>
+                    <th>Title</th>
+                    <th class="hidden-sm hidden-xs">Description</th>
+                    <th class="hidden-sm hidden-xs">Tier</th>
+                    <th>Controls</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
@@ -29,8 +31,8 @@
 
                 <tr>
 
-                    <td>{{ $achievement->id }}</td>
-                    <td class="{{ $achievement->tier }}">
+                    <td class="hidden-sm hidden-xs">{{ $achievement->id }}</td>
+                    <td class="hidden-sm hidden-xs {{ $achievement->tier }}">
                         @if($achievement->fa_icon)
                             <div><i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i></div>
                         @else
@@ -38,8 +40,8 @@
                         @endif
                     </td>
                     <td>{{ $achievement->name }}</td>
-                    <td>{{ $achievement->desc }}</td>
-                    <td class="{{ $achievement->tier }}">{{ $achievement->tier }}</td>
+                    <td class="hidden-sm hidden-xs">{{ $achievement->desc }}</td>
+                    <td class=" hidden-sm hidden-xs {{ $achievement->tier }}">{{ $achievement->tier }}</td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('achievement::manage', ['id' => $achievement->id]) }}" role="button">

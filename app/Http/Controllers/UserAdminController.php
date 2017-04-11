@@ -129,10 +129,10 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (!Auth::user()->can('admin')) {
+        if (!Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
                 foreach ($role->permissions as $permission) {
-                    if (!Auth::user()->can($permission->name)) abort(403);
+                    if (!Auth::user()->can($permission->name)) abort(403, "You may not impersonate this person.");
                 }
             }
         }

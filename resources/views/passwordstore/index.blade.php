@@ -45,7 +45,11 @@
 
             </thead>
 
+            <?php $i = 0; ?>
+
             @foreach($passwords as $password)
+
+                <?php $i++; ?>
 
                 @if($password->canAccess(Auth::user()))
 
@@ -79,11 +83,12 @@
 
                             <td>
                                 @if($password->url)
-                                    <a href="{{ $password->url }}">{{ $password->url }}</a>
+                                    <a href="{{ $password->url }}" class="btn btn-default"><i class="fa fa-external-link" aria-hidden="true"></i>
+                                    </a>
                                 @endif
                             </td>
-                            <td>{{ Crypt::decrypt($password->username) }}</td>
-                            <td class="passwordmanager__password">{{ Crypt::decrypt($password->password) }}</td>
+                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="user_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="user_{{ $i }}" value="{{ Crypt::decrypt($password->username) }}"></td>
+                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="pass_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}" value="{{ Crypt::decrypt($password->password) }}"></td>
 
                         @endif
 
@@ -92,11 +97,8 @@
                         </td>
 
                         <td>
-                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}">Edit</a>
-                        </td>
-
-                        <td>
-                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}">Delete</a>
+                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </td>
 
                     </tr>
@@ -140,5 +142,68 @@
         @endif
 
     @endforeach
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+        $(".passwordmanager__copy").click(function() {
+            //copyToClipboard($("#" + $(this).attr("copyTarget")));
+            copyToClipboard(document.getElementById($(this).attr("copyTarget")));
+        });
+
+        function copyToClipboard(elem) {
+            // create hidden text element, if it doesn't already exist
+            var targetId = "_hiddenCopyText_";
+            var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+            var origSelectionStart, origSelectionEnd;
+            if (isInput) {
+                // can just use the original source element for the selection and copy
+                target = elem;
+                origSelectionStart = elem.selectionStart;
+                origSelectionEnd = elem.selectionEnd;
+            } else {
+                // must use a temporary form element for the selection and copy
+                target = document.getElementById(targetId);
+                if (!target) {
+                    var target = document.createElement("textarea");
+                    target.style.position = "absolute";
+                    target.style.left = "-9999px";
+                    target.style.top = "0";
+                    target.id = targetId;
+                    document.body.appendChild(target);
+                }
+                target.textContent = elem.textContent;
+            }
+            // select the content
+            var currentFocus = document.activeElement;
+            target.focus();
+            target.setSelectionRange(0, target.value.length);
+
+            // copy the selection
+            var succeed;
+            try {
+                succeed = document.execCommand("copy");
+            } catch(e) {
+                succeed = false;
+            }
+            // restore original focus
+            if (currentFocus && typeof currentFocus.focus === "function") {
+                currentFocus.focus();
+            }
+
+            if (isInput) {
+                // restore prior selection
+                elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+            } else {
+                // clear temporary content
+                target.textContent = "";
+            }
+            return succeed;
+        }
+    </script>
 
 @endsection

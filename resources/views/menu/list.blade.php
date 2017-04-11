@@ -9,18 +9,20 @@
 
     @if (count($menuItems) > 0)
 
-        <table class="table row-1-4">
+        <strong class="visible-sm visible-xs" style="text-align: center;">- Some columns have been hidden because the screen is too small -</strong>
+
+        <table class="table">
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>Menuname</th>
-                <th>URL</th>
-                <th>Visibility</th>
-                <th>Controls</th>
+                    <th>Menuname</th>
+                    <th class="hidden-sm hidden-xs">URL</th>
+                    <th class="hidden-sm hidden-xs">Visibility</th>
+                    <th>Controls</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
@@ -28,8 +30,8 @@
 
                 <tr>
                     <td>{{ $menuItem->menuname }}</td>
-                    <td>{{ $menuItem->getUrl() }}</td>
-                    <td>@if($menuItem->is_member_only) Member only @else Public @endif</td>
+                    <td class="hidden-sm hidden-xs">{{ $menuItem->getUrl() }}</td>
+                    <td class="hidden-sm hidden-xs">@if($menuItem->is_member_only) Member only @else Public @endif</td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('menu::edit', ['id' => $menuItem->id]) }}" role="button">
@@ -61,8 +63,8 @@
                     @foreach($menuItem->children()->orderBy('order')->get() as $childItem)
                         <tr>
                             <td>&mdash;{{ $childItem->menuname }}</td>
-                            <td>@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
-                            <td>@if($childItem->is_member_only) Member only @else Public @endif</td>
+                            <td class="hidden-sm hidden-xs">@if($childItem->page) {{ $childItem->page->getUrl() }} @else {{ $childItem->url }} @endif</td>
+                            <td class="hidden-sm hidden-xs">@if($childItem->is_member_only) Member only @else Public @endif</td>
                             <td>
                                 <a class="btn btn-xs btn-default"
                                    href="{{ route('menu::edit', ['id' => $childItem->id]) }}" role="button">
