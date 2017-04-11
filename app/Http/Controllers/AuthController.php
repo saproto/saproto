@@ -369,7 +369,7 @@ class AuthController extends Controller
     {
 
         $remoteUser = Session::get('utwente_sso_user');
-        $remoteUsername = $remoteUser['urn:mace:dir:attribute-def:mail'][0];
+        $remoteUsername = $remoteUser['urn:mace:dir:attribute-def:uid'][0];
 
         // We can be here for two reasons:
         // Reason 1: we were trying to link a UTwente account to a user
@@ -724,11 +724,15 @@ class AuthController extends Controller
                         $user->name
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:cn',
+                        $user->name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
                         'urn:mace:dir:attribute-def:givenName',
                         $user->given_name
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
-                        'urn:mace:dir:attribute-def:cn',
+                        'urn:mace:dir:attribute-def:uid',
                         $user->member->proto_username
                     ))
             )
