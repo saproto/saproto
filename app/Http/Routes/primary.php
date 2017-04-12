@@ -284,7 +284,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
         Route::get('scan/{id}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'EventController@scan']);
 
-        Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
+        Route::get('checklist/{id}', ['as' => 'checklist', 'uses' => 'ActivityController@checklist']);
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
