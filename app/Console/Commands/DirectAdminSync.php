@@ -125,7 +125,7 @@ class DirectAdminSync extends Command
             $destinations = [];
 
             foreach ($committee->users as $user) {
-                $destinations[] = $user->user->email;
+                $destinations[] = $user->email;
             }
 
             if (count($destinations) > 0) {
