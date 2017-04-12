@@ -15,7 +15,8 @@
                 ({{ ($committeeparticipation->role ? $committeeparticipation->role : 'General Member') }})
                 <br>
                 <sub>
-                    Between {{ date('j F Y', strtotime($committeeparticipation->created_at)) }} and {{ date('j F Y', strtotime($committeeparticipation->deleted_at)) }}.
+                    Between {{ date('j F Y', strtotime($committeeparticipation->created_at)) }}
+                    and {{ date('j F Y', strtotime($committeeparticipation->deleted_at)) }}.
                 </sub>
             </li>
         @endforeach
