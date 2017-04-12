@@ -22,7 +22,7 @@
         @if(Request::session()->get('2fa_user')->tfa_yubikey_identity)
 
             <div class="form-group">
-                <input type="text" class="form-control" id="code" name="2fa_yubikey_token"
+                <input type="password" class="form-control" id="code" name="2fa_yubikey_token"
                        placeholder="YubiKey One Time Password" autofocus>
             </div>
 

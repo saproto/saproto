@@ -383,7 +383,7 @@ class AuthController extends Controller
 
         // Reason 2: we were trying to login using a UTwente account
         Session::keep('incoming_saml_request');
-        $localUser = User::where('email', $remoteUsername)->first();
+        $localUser = User::where('utwente_username', $remoteUsername)->first();
         if ($localUser == null) {
             Session::flash('flash_message', 'We could not find a Proto account for your UTwente account ' . $remoteUsername . '.');
             return Redirect::route('login::show');
