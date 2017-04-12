@@ -24,7 +24,7 @@ return [
             'name' => 'PilsCie',
             'categories' => [15, 18],
             'addresses' => [],
-            'roles' => ['board', 'pilscie'],
+            'roles' => ['board', 'pilscie', 'drafters'],
             'cash_allowed' => true
         ]
     ],
