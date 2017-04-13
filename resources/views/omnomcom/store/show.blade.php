@@ -629,10 +629,10 @@
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-username"
                type="text"
-               placeholder="E-mail address or UTwente username">
+               placeholder="Proto username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-password"
                type="password"
-               placeholder="Proto password or UTwente password">
+               placeholder="Proto password">
 
         <div class="modal-input modal-button" id="purchase-button">Complete order</div>
         @if($store->cash_allowed)
@@ -641,7 +641,7 @@
         <hr>
 
         <span class="modal-status">
-            Enter your credentials above, or present an RFID card.
+            Enter your <strong>Proto</strong> credentials above, or present an RFID card.
         </span>
 
     </div>
@@ -755,9 +755,9 @@
                 _token: '{{ csrf_token() }}',
                 credentialtype: (card !== null ? 'card' : 'account'),
                 credentials: (card !== null ? card : {
-                    username: $("#purchase-username").val(),
-                    password: $("#purchase-password").val()
-                }),
+                        username: $("#purchase-username").val(),
+                        password: $("#purchase-password").val()
+                    }),
                 cash: {!! ($store->cash_allowed ? "$('#purchase-cash').hasClass('modal-toggle-true')" : "false") !!},
                 cart: cart
             },
@@ -877,10 +877,10 @@
                     }
                 }
 
-                if(anythingincart) {
+                if (anythingincart) {
                     $("#purchase").trigger('click');
                     purchase(data);
-                }else{
+                } else {
                     $("#modal-overlay").show();
                     $("#emptycart-modal").removeClass('inactive');
                 }
@@ -954,13 +954,13 @@
                 }
             }
 
-            if(anythingincart) {
+            if (anythingincart) {
                 idleWarning = true;
                 $("#modal-overlay").show();
                 $("#idlewarning-modal").removeClass('inactive');
 
-                setTimeout(function() {
-                    if(idleWarning) window.location.reload();
+                setTimeout(function () {
+                    if (idleWarning) window.location.reload();
                 }, 10000);
             }
         }

@@ -34,6 +34,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
         Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
+
+        Route::get('auth/utwente', ['as' => 'utwente', 'uses' => 'AuthController@startUtwenteAuth']);
+        Route::get('auth/utwente/post', ['as' => 'utwentepost', 'uses' => 'AuthController@utwenteAuthPost']);
     });
 
     /*

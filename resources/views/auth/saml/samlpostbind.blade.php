@@ -1,27 +1,14 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
-    SAML2 Authentication
+    SSO Authentication
 @endsection
 
-@section('panel-title')
-    Redirecting you back.
-@endsection
-
-@section('panel-body')
-
-    <p>
-        We would love to do this automagically, but your browser has JavaScript disabled. Please be so kind to press the
-        button below to continue authenticating.
-    </p>
-
-@endsection
-
-@section('panel-footer')
+@section('login-body')
 
     <form method="POST" action="{{ $destination }}" id="samlform">
         <input type="hidden" name="SAMLResponse" value="{{ $response }}">
-        <input type="submit" value="Continue!" class="btn btn-success" style="width: 100%;">
+        <input type="submit" value="Continue Authentication" class="btn btn-default" style="width: 100%;">
     </form>
 
     <script type="text/javascript">
