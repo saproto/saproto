@@ -36,14 +36,13 @@ class UserProfileController extends Controller
             abort(404);
         }
 
-        $ldap = $user->getUtwenteData();
         $pastCommittees = CommitteeMembership::withTrashed()
             ->with('committee')
             ->where('user_id', $user->id)
             ->whereNotIn('id', $user->committees->pluck('pivot.id'))
             ->get();
 
-        return view('users.profile.profile', ['user' => $user, 'ldap' => $ldap, 'pastcommittees' => $pastCommittees]);
+        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees]);
     }
 
 }

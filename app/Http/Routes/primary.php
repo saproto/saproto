@@ -19,6 +19,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('opensearch', ['as' => 'search::opensearch', 'uses' => 'SearchController@openSearch']);
 
     /*
+     * Routes for the UTwente addressbook.
+     */
+    Route::group(['prefix' => 'ldap', 'as' => 'ldap::', 'middleware' => ['utwente']], function () {
+        Route::get('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
+        Route::post('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
+    });
+
+    /*
      * Routes related to authentication.
      */
     Route::group(['as' => 'login::'], function () {
