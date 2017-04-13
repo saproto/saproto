@@ -4,26 +4,6 @@
     UTwente Address Book Search
 @endsection
 
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        #ldapsearch__input {
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: center;
-            margin: 0px auto;
-            font-size: 20px;
-            box-shadow: none;
-        }
-
-    </style>
-
-@endsection
-
 @section('content')
 
     <form method="post" action="{{ route('ldap::search') }}">
