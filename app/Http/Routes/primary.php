@@ -506,6 +506,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
         });
 
+        Route::group(['prefix' => 'pilscie', 'middleware' => ['auth', 'permission:pilscie'], 'as' => 'pilscie::'], function () {
+            Route::get('', ['as' => 'orderhistory', 'uses' => 'PilscieController@orderIndex']);
+        });
+
         Route::group(['prefix' => 'accounts', 'middleware' => ['permission:finadmin'], 'as' => 'accounts::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'AccountController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'AccountController@create']);

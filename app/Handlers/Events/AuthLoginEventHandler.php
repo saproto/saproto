@@ -71,13 +71,23 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($pilscie) || $user->isInCommittee($drafters)) {
+        if ($user->isInCommittee($pilscie)) {
             if (!$user->hasRole('pilscie')) {
                 $user->attachRole(Role::where('name', '=', 'pilscie')->first());
             }
         } else {
             if ($user->hasRole('pilscie')) {
                 $user->detachRole(Role::where('name', '=', 'pilscie')->first());
+            }
+        }
+
+        if ($user->isInCommittee($drafters)) {
+            if (!$user->hasRole('drafters')) {
+                $user->attachRole(Role::where('name', '=', 'drafters')->first());
+            }
+        } else {
+            if ($user->hasRole('drafters')) {
+                $user->detachRole(Role::where('name', '=', 'drafters')->first());
             }
         }
     }
