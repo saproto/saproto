@@ -100,6 +100,15 @@ class ActivityController extends Controller
         return Redirect::route('event::edit', ['id' => $event->id]);
     }
 
+    public function checklist($id)
+    {
+        $event = Event::findOrFail($id);
+        if (!(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
+            abort(403, 'You may not see this page.');
+        }
+        return view('event.checklist', ['event' => $event]);
+    }
+
     public function addHelp(Request $request, $id)
     {
         $event = Event::findOrFail($id);

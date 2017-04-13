@@ -223,10 +223,11 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
-                        Activity Sign-up
+                        <strong>Activity Sign-up</strong>
+                        <br>
                         @if($event->activity->canSubscribe())
-                            ({{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
-                            places available)
+                            {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
+                            out of {{ $event->activity->participants }} places available
                         @endif
                     </div>
 

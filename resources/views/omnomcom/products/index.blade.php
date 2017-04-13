@@ -4,6 +4,20 @@
     OmNomCom Product Administration
 @endsection
 
+@section('javascript')
+
+    @parent
+
+    <script type="text/javascript">
+
+        $("#product-search-submit").click(function () {
+            document.getElementById('product-search-form').submit();
+        });
+
+    </script>
+
+@endsection
+
 @section('content')
 
     <div class="row">
@@ -12,10 +26,12 @@
 
             <div class="form-group">
 
-                <form method="get" action="{{ route("omnomcom::products::list") }}">
+                <form id="product-search-form" method="get" action="{{ route("omnomcom::products::list") }}">
                     <div class="input-group">
                         <input type="text" class="form-control" name="search">
-                        <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        <span id="product-search-submit" class="input-group-addon" style="cursor: pointer;">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </span>
                     </div>
                 </form>
 

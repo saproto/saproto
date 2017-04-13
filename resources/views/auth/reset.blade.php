@@ -1,42 +1,30 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
     Password Reset
 @endsection
 
-@section('panel-title')
-    Password reset for {{ $reset->user->name }}
-@endsection
+@section('login-body')
 
-@section('panel-body')
-
-    <form method="POST" action="{{ route("login::resetpass::submit") }}" class="form-horizontal">
+    <form method="POST" action="{{ route("login::resetpass::submit") }}">
 
         {!! csrf_field() !!}
 
         <input type="hidden" name="token" value="{{ $reset->token }}">
 
         <div class="form-group">
-            <label for="password" class="col-sm-3 control-label">New password</label>
-            <div class="col-sm-9">
-                <input id="password" type="password" name="password" class="form-control" minlength="8">
-            </div>
+            <input id="password" type="password" name="password" class="form-control" minlength="8"
+                   placeholder="New password">
         </div>
 
         <div class="form-group">
-            <label for="password2" class="col-sm-3 control-label"></label>
-            <div class="col-sm-9">
-                <input id="password2" type="password" name="password_confirmation" class="form-control" minlength="8">
-            </div>
+            <input id="password2" type="password" name="password_confirmation" class="form-control" minlength="8"
+                   placeholder="New password again">
         </div>
 
-        @endsection
-
-        @section('panel-footer')
-
-            <button type="submit" class="btn btn-success pull-right">
-                Reset Password
-            </button>
+        <button type="submit" class="btn btn-default" style="width: 100%;">
+            Reset Password for {{ $reset->user->calling_name }}
+        </button>
 
     </form>
 
