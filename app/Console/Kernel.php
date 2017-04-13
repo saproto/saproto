@@ -25,7 +25,8 @@ class Kernel extends ConsoleKernel
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
         Commands\FeeCron::class,
-        Commands\UserCleanup::class
+        Commands\UserCleanup::class,
+        Commands\CheckUtwenteAccounts::class
     ];
 
     /**
