@@ -48,11 +48,7 @@ class CheckUtwenteAccounts extends Command
         $unlinked = [];
 
         foreach ($users as $user) {
-
-            if ($user->id > 10) {
-                break;
-            }
-
+            
             // Find remote user
             $userprincipalname = $user->utwente_username . '@utwente.nl';
             $remoteusers = LdapController::searchUtwente("userprincipalname=$userprincipalname");
