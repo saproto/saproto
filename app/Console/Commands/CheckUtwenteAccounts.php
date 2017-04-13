@@ -48,7 +48,7 @@ class CheckUtwenteAccounts extends Command
         $unlinked = [];
 
         foreach ($users as $user) {
-            
+
             // Find remote user
             $userprincipalname = $user->utwente_username . '@utwente.nl';
             $remoteusers = LdapController::searchUtwente("userprincipalname=$userprincipalname");
@@ -73,7 +73,8 @@ class CheckUtwenteAccounts extends Command
         // For some super strange reason we cannot queue this e-mail... Well...
         Mail::queueOn('high', 'emails.utwente_cleanup', ['unlinked' => $unlinked], function ($message) {
             $message
-                ->to('sysadmin@' . config('proto.emaildomain'), 'S.A. Proto System Admins')
+                ->to('secretary@' . config('proto.emaildomain'), 'S.A. Proto Secretary')
+                ->cc('sysadmin@' . config('proto.emaildomain'), 'S.A. Proto System Admins')
                 ->subject('UTwente Account Clean-Up');
         });
 
