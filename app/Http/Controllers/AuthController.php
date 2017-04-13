@@ -369,7 +369,16 @@ class AuthController extends Controller
     {
 
         $remoteUser = Session::get('utwente_sso_user');
-        $remoteUsername = $remoteUser['urn:mace:dir:attribute-def:uid'][0];
+        $remoteData = [
+            'uid' => $remoteUser['urn:mace:dir:attribute-def:uid'][0],
+            'surname' => $remoteUser['urn:mace:dir:attribute-def:sn'][0],
+            'mail' => $remoteUser['urn:mace:dir:attribute-def:mail'][0],
+            'displayname' => $remoteUser['urn:mace:dir:attribute-def:displayName'][0],
+            'utwente_role' => $remoteUser['urn:mace:dir:attribute-def:eduPersonAffiliation'][0],
+            'givenname' => $remoteUser['urn:mace:dir:attribute-def:givenName'][0],
+            'commonname' => $remoteUser['urn:mace:dir:attribute-def:cn'][0],
+        ];
+        $remoteUsername = $remoteData['uid'];
 
         // We can be here for two reasons:
         // Reason 1: we were trying to link a UTwente account to a user
@@ -385,7 +394,7 @@ class AuthController extends Controller
         Session::keep('incoming_saml_request');
         $localUser = User::where('utwente_username', $remoteUsername)->first();
         if ($localUser == null) {
-            Session::flash('flash_message', 'We could not find a Proto account for your UTwente account ' . $remoteUsername . '.');
+            Session::flash('flash_message', 'Could not find a Proto account for your UTwente account ' . $remoteUsername . ', ' . $remoteData["givenname"] . '. Did you link it already?');
             return Redirect::route('login::show');
         }
 
