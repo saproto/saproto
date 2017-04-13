@@ -42,14 +42,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | PilsCie Categories
+    | PilsCie Account
     |--------------------------------------------------------------------------
     |
-    | Defines the product categories used by the PilsCie
+    | Defines the financial account used by the PilsCie
     |
     */
 
-    'pilscie-categories' => [15, 18],
+    'pilscie-account' => 4,
 
     /*
     |--------------------------------------------------------------------------

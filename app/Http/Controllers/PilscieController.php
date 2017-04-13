@@ -9,7 +9,7 @@ use Carbon;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
-use Proto\Models\ProductCategory;
+use Proto\Models\Account;
 
 class PilscieController extends Controller
 {
@@ -22,15 +22,7 @@ class PilscieController extends Controller
     {
         $date = $request->has('date') ? $request->date : null;
 
-        $pilscieCategories = ProductCategory::whereIn('id', config('omnomcom.pilscie-categories'))->get();
-
-        $pilscieProducts = [];
-
-        foreach($pilscieCategories as $pilscieCategory) {
-            foreach($pilscieCategory->products as $pilscieProduct) {
-                array_push($pilscieProducts, $pilscieProduct);
-            }
-        }
+        $pilscieProducts = Account::find(config('omnomcom.pilscie-account'))->products;
 
         $pilscieOrders = [];
 
