@@ -47,5 +47,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
         $schedule->command('proto:feecron')->daily()->at('02:00');
+        $schedule->command('proto:checkutaccounts')->monthly();
     }
 }
