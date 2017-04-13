@@ -66,13 +66,20 @@
                             <tr>
                                 <th>Product</th>
                                 <th>Amount</th>
+                                <th>Total</th>
                             </tr>
-                            @foreach($orders as $key=>$order)
+                            @foreach($orders as $order)
                                 <tr>
-                                    <td>{{ $key }}</td>
-                                    <td>{{ $order }}</td>
+                                    <td>{{ $order->name }}</td>
+                                    <td>{{ $order->amount }}</td>
+                                    <td>&euro; {{ number_format($order->totalPrice, 2) }}</td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td><strong>{{ $dailyAmount }}</strong></td>
+                                <td><strong>&euro; {{ number_format($dailyTotal, 2) }}</strong></td>
+                            </tr>
                         </table>
                     @else
 

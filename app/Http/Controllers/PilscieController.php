@@ -26,6 +26,9 @@ class PilscieController extends Controller
 
         $pilscieOrders = [];
 
+        $dailyAmount = 0;
+        $dailyTotal = 0;
+
         foreach($pilscieProducts as $pilscieProduct) {
             $orders = $pilscieProduct->orderlines()
                 ->where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
@@ -33,14 +36,23 @@ class PilscieController extends Controller
                 ->get();
 
             if(count($orders) > 0) {
-                $pilscieOrders[$pilscieProduct->name] = 0;
+                $productInfo = new \stdClass();
+
+                $productInfo->name = $pilscieProduct->name;
+                $productInfo->amount = 0;
+                $productInfo->totalPrice = 0;
 
                 foreach($orders as $order) {
-                    $pilscieOrders[$pilscieProduct->name]++;
+                    $productInfo->amount += $order->units;
+                    $productInfo->totalPrice += $order->total_price;
                 }
+
+                $dailyAmount += $productInfo->amount;
+                $dailyTotal += $productInfo->totalPrice;
+                $pilscieOrders[] = $productInfo;
             }
         }
 
-        return view('omnomcom.pilscie.orderhistory', ['orders' => $pilscieOrders, 'date' => $date]);
+        return view('omnomcom.pilscie.orderhistory', ['orders' => $pilscieOrders, 'date' => $date, 'dailyTotal' => $dailyTotal, 'dailyAmount' => $dailyAmount]);
     }
 }
