@@ -100,10 +100,6 @@
             <p>
                 This changes the password for your Proto account across all of our systems. Your new password should be
                 at least eight (8) characters in length.
-
-                @if($user->utwente_username)
-                    You can use your University of Twente password as your current password.
-                @endif
             </p>
 
             <hr>
