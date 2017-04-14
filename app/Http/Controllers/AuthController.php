@@ -402,6 +402,30 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * Handle a request for a user's username
+     *
+     * @return Redirect
+     */
+    public function requestUsername(Request $request)
+    {
+        if ($request->has('email')) {
+            $user = User::whereEmail($request->get('email'))->first();
+            if ($user) {
+                if ($user->member) {
+                    Session::flash('flash_message', 'Your username is <strong>' . $user->member->proto_username . '</strong>');
+                    Session::flash('login_username', $user->member->proto_username);
+                } else {
+                    Session::flash('flash_message', 'Only members have a Proto username. You can login using your e-mail address.');
+                }
+            } else {
+                Session::flash('flash_message', 'We could not find a user with that e-mail address.');
+            }
+            return Redirect::route('login::show');
+        }
+        return view('auth.username');
+    }
+
     /******************************************************
      * These are the static helper functions of the AuthController for more overview and modularity. Heuh!
      *
@@ -441,7 +465,7 @@ class AuthController extends Controller
      * @param Request $request The request object, needed to handle some checks.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function loginUser(User $user, $remember, Request $request)
+    public static function loginUser(User $user, $remember)
     {
         Auth::login($user, $remember);
         if (Session::has('incoming_saml_request')) {
@@ -506,7 +530,7 @@ class AuthController extends Controller
             Session::flash('2fa_remember', $remember);
             return view('auth.2fa');
         } else {
-            return AuthController::loginUser($user, $remember, $request);
+            return AuthController::loginUser($user, $remember);
         }
 
     }
@@ -531,7 +555,7 @@ class AuthController extends Controller
 
             // Verify if the response is valid.
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                return AuthController::loginUser($user, $remember, $request);
+                return AuthController::loginUser($user, $remember);
             } else {
                 $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
                 $request->session()->reflash();
@@ -550,7 +574,7 @@ class AuthController extends Controller
 
                 // Verify if the response is valid.
                 if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
-                    return AuthController::loginUser($user, $remember, $request);
+                    return AuthController::loginUser($user, $remember);
                 } else {
                     $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
                     $request->session()->reflash();

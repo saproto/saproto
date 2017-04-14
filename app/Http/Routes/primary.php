@@ -45,6 +45,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('auth/utwente', ['as' => 'utwente', 'uses' => 'AuthController@startUtwenteAuth']);
         Route::get('auth/utwente/post', ['as' => 'utwentepost', 'uses' => 'AuthController@utwenteAuthPost']);
+
+        Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
+        Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
     });
 
     /*

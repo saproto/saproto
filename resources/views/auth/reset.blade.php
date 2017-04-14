@@ -1,7 +1,7 @@
 @extends('auth.template')
 
 @section('page-title')
-    Password Reset
+    Proto Password Reset
 @endsection
 
 @section('login-body')
@@ -11,6 +11,14 @@
         {!! csrf_field() !!}
 
         <input type="hidden" name="token" value="{{ $reset->token }}">
+
+        <p>
+            You're resetting the password for:
+            <br>
+            <strong>{{ $reset->user->name }}</strong>
+        </p>
+
+        <br>
 
         <div class="form-group">
             <input id="password" type="password" name="password" class="form-control" minlength="8"

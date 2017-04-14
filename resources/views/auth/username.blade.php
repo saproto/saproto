@@ -1,12 +1,12 @@
 @extends('auth.template')
 
 @section('page-title')
-    Proto Password Reset
+    Request Proto Username
 @endsection
 
 @section('login-body')
 
-    <form method="POST" action="{{ route("login::resetpass::send") }}">
+    <form method="POST" action="{{ route("login::requestusername") }}">
 
         {!! csrf_field() !!}
 
@@ -21,17 +21,8 @@
 
         <p>
             <button type="submit" class="btn btn-default" style="width: 100%;">
-                Send Password Reset Link
+                What is my Proto username?
             </button>
-        </p>
-
-        <hr>
-
-        <p>
-            <a class="btn btn-default" href="https://utpm.utwente.nl/pmuser" target="_blank"
-               style="width: 100%;">
-                Reset UTwente Password
-            </a>
         </p>
 
     </form>
