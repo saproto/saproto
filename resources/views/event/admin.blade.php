@@ -6,11 +6,15 @@
 
 @section('content')
 
-    <p style="text-align: center;">
-        <a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant Checklist</a>
-    </p>
+    @if ($event->activity)
 
-    <hr>
+        <p style="text-align: center;">
+            <a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant Checklist</a>
+        </p>
+
+        <hr>
+
+    @endif
 
     @if ($event->involves_food && $event->end > strtotime('-1 week'))
 
