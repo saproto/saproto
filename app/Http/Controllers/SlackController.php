@@ -35,7 +35,7 @@ class SlackController extends Controller
     {
         // Because this may be Ajax loaded in the middle of a sequence using flash data.
         $request->session()->reflash();
-        
+
         try {
             SlackApi::execute('users.admin.invite', ['email' => Auth::user()->email]);
             return "You've got an invite!";
@@ -52,5 +52,16 @@ class SlackController extends Controller
                     break;
             }
         }
+    }
+
+    public static function sendNotification($text, $channel = null)
+    {
+        $channel = ($channel == null ? config('proto.slackchannel') : $channel);
+        SlackApi::execute('chat.postMessage', [
+            'text' => $text,
+            'channel' => $channel,
+            'username' => 'Slacqueline the Proto Bot',
+            'icon_emoji' => ':woman:'
+        ]);
     }
 }

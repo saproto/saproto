@@ -166,7 +166,6 @@ return [
         Mollie\Laravel\MollieServiceProvider::class,
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-
     ],
 
     /*

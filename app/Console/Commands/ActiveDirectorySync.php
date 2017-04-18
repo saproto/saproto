@@ -10,6 +10,10 @@ use Illuminate\Console\Command;
 use Proto\Models\User;
 use Proto\Models\Committee;
 
+use Proto\Http\Controllers\SlackController;
+
+use Adldap\Exceptions\Auth\BindException;
+
 /**
  * TODO
  * Autorelate permissions to roles.
@@ -47,25 +51,28 @@ class ActiveDirectorySync extends Command
      */
     public function handle()
     {
+        try {
+            $ad = new Adldap();
+            $provider = new Provider(config('adldap.proto'));
+            $ad->addProvider('proto', $provider);
+            $ad->connect('proto');
 
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
+            $this->info("Connected to LDAP server.");
 
-        $this->info("Connected to LDAP server.");
+            $this->info("Synchronizing users to LDAP.");
+            $this->syncUsers($provider);
 
-        $this->info("Synchronizing users to LDAP.");
-        $this->syncUsers($provider);
+            $this->info("Synchronizing committees to LDAP.");
+            $this->syncCommittees($provider);
 
-        $this->info("Synchronizing committees to LDAP.");
-        $this->syncCommittees($provider);
+            $this->info("Synchronizing committees members to LDAP.");
+            $this->syncCommitteeMembers($provider);
 
-        $this->info("Synchronizing committees members to LDAP.");
-        $this->syncCommitteeMembers($provider);
-
-        $this->info("Done!");
-
+            $this->info("Done!");
+        } catch (BindException $e) {
+            $this->error('Could not bind with LDAP server!');
+            SlackController::sendNotification('[console *proto:adsync*] Could not bind with LDAP Server.');
+        }
     }
 
     private function syncUsers($provider)

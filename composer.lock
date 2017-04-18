@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f23579cd840a566e89570b34c6966656",
-    "content-hash": "211e40d859ca527a0df4da126680cf1f",
+    "hash": "445ebcbcd86c34b831b693d9d8bd4aab",
+    "content-hash": "4321f4e11b3e7f879ac7d8bdfebd80a0",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
