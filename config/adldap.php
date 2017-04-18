@@ -18,7 +18,7 @@ return [
     'proto' => [
         'account_prefix' => '',
         'account_suffix' => '@ad.saproto.nl',
-        'domain_controllers' => ['ad2.proto.utwente.nl'],
+        'domain_controllers' => ['ad.proto.utwente.nl'],
         'port' => 636,
         'timeout' => 5,
         'base_dn' => 'OU=Proto,DC=ad,DC=saproto,DC=nl',
