@@ -33,12 +33,15 @@ class ActivityController extends Controller
         $new = $event->activity === null;
         $activity = ($new ? new Activity() : $event->activity);
 
-        if (floatval($request->no_show_fee) > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
+        $newprice = floatval(str_replace(',', '.', $request->price));
+        $newnoshow = floatval(str_replace(',', '.', $request->no_show_fee));
+
+        if ($newnoshow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
-        if (floatval($request->price) > floatval($activity->price) && $activity->users->count() > 0) {
+        if ($newprice > floatval($activity->price) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
@@ -48,8 +51,8 @@ class ActivityController extends Controller
             'registration_end' => strtotime($request->registration_end),
             'deregistration_end' => strtotime($request->deregistration_end),
             'participants' => $request->participants,
-            'price' => $request->price,
-            'no_show_fee' => $request->no_show_fee
+            'price' => $newprice,
+            'no_show_fee' => $newnoshow
         ];
 
         if (!$activity->validate($data)) {
