@@ -30,7 +30,7 @@
                    placeholder="New password again">
         </div>
 
-        <button type="submit" class="btn btn-default" style="width: 100%;">
+        <button type="submit" class="btn btn-success" style="width: 100%;">
             Reset Password for {{ $reset->user->calling_name }}
         </button>
 

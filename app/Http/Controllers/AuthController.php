@@ -398,7 +398,7 @@ class AuthController extends Controller
             return Redirect::route('login::show');
         }
 
-        return AuthController::continueLogin($localUser, "on");
+        return AuthController::continueLogin($localUser);
 
     }
 
@@ -413,7 +413,7 @@ class AuthController extends Controller
             $user = User::whereEmail($request->get('email'))->first();
             if ($user) {
                 if ($user->member) {
-                    Session::flash('flash_message', 'Your username is <strong>' . $user->member->proto_username . '</strong>');
+                    Session::flash('flash_message', 'Your Proto username is <strong>' . $user->member->proto_username . '</strong>');
                     Session::flash('login_username', $user->member->proto_username);
                 } else {
                     Session::flash('flash_message', 'Only members have a Proto username. You can login using your e-mail address.');
@@ -461,13 +461,12 @@ class AuthController extends Controller
      * Login the supplied user and perform post-login checks and redirects. Returns the application's response.
      *
      * @param User $user The user to be logged in.
-     * @param $remember The remember-me option. Either null or the string 'on'
      * @param Request $request The request object, needed to handle some checks.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function loginUser(User $user, $remember)
+    public static function loginUser(User $user)
     {
-        Auth::login($user, $remember);
+        Auth::login($user, true);
         if (Session::has('incoming_saml_request')) {
             return AuthController::handleSAMLRequest(Auth::user(), Session::get('incoming_saml_request'));
         }
@@ -495,16 +494,17 @@ class AuthController extends Controller
 
         $username = $request->input('email');
         $password = $request->input('password');
-        $remember = $request->input('remember');
 
         $user = AuthController::verifyCredentials($username, $password);
 
         if ($user) {
-            return AuthController::continueLogin($user, $remember, $request);
+            return AuthController::continueLogin($user);
         }
 
         if (preg_match('/[mxs][0-9]{7}/i', $username)) {
-            $request->session()->flash('flash_message', 'It looks like you are trying to log-in to the website using your University of Twente account. If you want to login to the website using your University of Twente account, please click the appropriate button on the log-in screen to be taken to the University of Twente Single Sign-On. The login form on the Proto website, where you enter a username and password, should only be used with a Proto account.');
+            $request->session()->flash('flash_message', '<p>It looks like you are trying to log-in to the website using your University of Twente account.</p>
+<p>The login form on the Proto website, where you enter a username and password, should only be used with a Proto account. If you don\'t know your Proto username or password, or need more information on what a Proto account is, please see the help buttons below the log-in form.</p>
+<p>If you want to login to the website using your University of Twente account, please click the appropriate button on the log-in screen to be taken to the University of Twente Single Sign-On.</p>');
             return Redirect::route('login::show');
         }
 
@@ -517,20 +517,18 @@ class AuthController extends Controller
      * We know a user has identified itself, but we still need to check for other stuff like SAML or Two Factor Authentication. We do this here.
      *
      * @param User $user The username to be logged in.
-     * @param $remember The remember thingy from the log-in form.
      * @param Request $request Thje request object for the data.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function continueLogin(User $user, $remember, Request $request = null)
+    public static function continueLogin(User $user)
     {
 
         // Catch users that have 2FA enabled.
         if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
             Session::flash('2fa_user', $user);
-            Session::flash('2fa_remember', $remember);
             return view('auth.2fa');
         } else {
-            return AuthController::loginUser($user, $remember);
+            return AuthController::loginUser($user);
         }
 
     }
@@ -546,7 +544,6 @@ class AuthController extends Controller
     {
 
         $user = $request->session()->get('2fa_user');
-        $remember = $request->session()->get('2fa_remember');
 
         /*
          * Time based Two Factor Authentication (Google2FA)
@@ -555,7 +552,7 @@ class AuthController extends Controller
 
             // Verify if the response is valid.
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                return AuthController::loginUser($user, $remember);
+                return AuthController::loginUser($user);
             } else {
                 $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
                 $request->session()->reflash();
@@ -574,7 +571,7 @@ class AuthController extends Controller
 
                 // Verify if the response is valid.
                 if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
-                    return AuthController::loginUser($user, $remember);
+                    return AuthController::loginUser($user);
                 } else {
                     $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
                     $request->session()->reflash();

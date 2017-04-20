@@ -593,13 +593,13 @@
         <h1>Link an RFID card to your account.</h1>
 
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
-               type="text" placeholder="E-mail address or UTwente username">
+               type="text" placeholder="Proto username">
         <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
                type="password"
-               placeholder="Proto password or UTwente password">
+               placeholder="Proto password">
 
         <span class="modal-status">
-            First enter your username and password, then present an RFID card.
+            First enter your <strong>Proto</strong> username and password, then present an RFID card.
         </span>
 
     </div>
@@ -755,9 +755,9 @@
                 _token: '{{ csrf_token() }}',
                 credentialtype: (card !== null ? 'card' : 'account'),
                 credentials: (card !== null ? card : {
-                        username: $("#purchase-username").val(),
-                        password: $("#purchase-password").val()
-                    }),
+                    username: $("#purchase-username").val(),
+                    password: $("#purchase-password").val()
+                }),
                 cash: {!! ($store->cash_allowed ? "$('#purchase-cash').hasClass('modal-toggle-true')" : "false") !!},
                 cart: cart
             },

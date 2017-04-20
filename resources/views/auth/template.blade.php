@@ -37,32 +37,6 @@
             display: none;
         }
 
-        #auth__header {
-            margin-top: 100px;
-            text-align: center;
-        }
-
-        #auth__container {
-            margin-top: 25px;
-            clear: both;
-            text-align: center;
-        }
-
-        #auth__header, #auth__container {
-            color: #fff;
-        }
-
-        #auth__logo {
-            margin-bottom: 25px;
-            width: 50%;
-        }
-
-        .form-control, .btn-default {
-            background-color: #222;
-            border-color: #222;
-            color: #fff;
-        }
-
     </style>
 
 @endsection

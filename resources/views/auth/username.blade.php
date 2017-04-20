@@ -20,7 +20,7 @@
         </div>
 
         <p>
-            <button type="submit" class="btn btn-default" style="width: 100%;">
+            <button type="submit" class="btn btn-success" style="width: 100%;">
                 What is my Proto username?
             </button>
         </p>
