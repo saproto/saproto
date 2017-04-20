@@ -75,6 +75,14 @@
                         </p>
                     @endif
 
+                    @if ($event->is_external == true)
+                        <p>
+                            <i>
+                                This activity is not organized by S.A. Proto.
+                            </i>
+                        </p>
+                    @endif
+
                     @if($event->albums->count() > 0)
 
                         <hr>

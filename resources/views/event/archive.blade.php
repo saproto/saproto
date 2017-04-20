@@ -74,6 +74,12 @@
                                                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                                                 {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                             </p>
+                                            @if($event->is_external)
+                                                <p>
+                                                    <i class="fa fa-info-circle" aria-hidden="true"></i> Not Organized
+                                                    by S.A. Proto
+                                                </p>
+                                            @endif
                                         </div>
                                     </a>
 
