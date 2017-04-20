@@ -504,7 +504,7 @@ class AuthController extends Controller
         }
 
         if (preg_match('/[mxs][0-9]{7}/i', $username)) {
-            $request->session()->flash('flash_message', 'To login with your University of Twente account, please click the appropriate button.');
+            $request->session()->flash('flash_message', 'It looks like you are trying to log-in to the website using your University of Twente account. If you want to login to the website using your University of Twente account, please click the appropriate button on the log-in screen to be taken to the University of Twente Single Sign-On. The login form on the Proto website, where you enter a username and password, should only be used with a Proto account.');
             return Redirect::route('login::show');
         }
 

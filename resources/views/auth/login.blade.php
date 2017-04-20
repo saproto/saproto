@@ -12,7 +12,7 @@
 
         <p>
             <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
-                University of Twente Login
+                Login with UTwente Account
             </a>
         </p>
 
@@ -38,7 +38,7 @@
 
         <p>
             <button type="submit" class="btn btn-success" style="width: 100%;">
-                Proto Login
+                Login with Proto Account
             </button>
         </p>
 
