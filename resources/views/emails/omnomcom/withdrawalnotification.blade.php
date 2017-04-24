@@ -10,7 +10,7 @@
         Around {{ date('d-m-Y', strtotime($withdrawal->date)) }} an automatic withdrawal for S.A. Proto will take place
         to settle your purchases at our association. This withdrawal concerns an amount
         of &euro;{{ number_format($withdrawal->totalForUser($user), 2, ',', '') }} and will be withdrawn
-        from {{ $user->bank->iban }}. Furthermore, this withdrawal has to following details:
+        from {{ $user->bank->iban }}. Furthermore, this withdrawal has the following details:
     </p>
 
     <p>
