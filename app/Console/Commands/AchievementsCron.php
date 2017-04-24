@@ -62,7 +62,7 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->FristiMember(), 27);
         $this->giveAchievement($this->BigSpender(), 28);
         $this->giveAchievement($this->fourOClock(), 29);
-        $this->giveAchievement($this->youreSpecial(30), 30);
+        $this->giveAchievement($this->youreSpecial(), 30);
         $this->giveAchievement($this->bigKid(), 32);
 
         $this->info('Auto achievement gifting done!');
@@ -349,26 +349,29 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  You’re special = more than 15% of your beer purchases is special beer
+     *  You’re special = more than 25% of your beer purchases this month is special beer
      */
-    private function youreSpecial($id)
+    private function youreSpecial()
     {
         $selected = array();
-        $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
-        $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
-        $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
-        $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
-        $users = User::all();
-        foreach ($users as $user) {
-            $orders = OrderLine::whereIn('product_id', $beerIDs)->where('user_id', $user->id)->get();
-            $beers = OrderLine::where('product_id', 493)->where('user_id', $user->id)->get();
-            if (count($beers) > 0) {
-                if (count($beers) / count($orders) > 0.15) {
-                    $selected[] = $user;
+        if (Carbon::now()->day == 1) {
+            $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
+            $users = User::all();
+            foreach ($users as $user) {
+                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
+                $beers = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->whereIn('product_id', $beerIDs)->get();
+                if (count($beers) > 0) {
+                    if (count($beers) / count($orders) > 0.25) {
+                        $selected[] = $user;
+                    }
                 }
             }
+        } else {
+            $this->info('Its not the first of the month! Cancelling You\'re special...');
         }
-        AchievementController::staticTakeAll($id);
         return $selected;
     }
 
