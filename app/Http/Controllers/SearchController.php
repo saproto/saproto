@@ -15,6 +15,7 @@ use Proto\Models\Committee;
 use Response;
 use View;
 use Auth;
+use Session;
 
 class SearchController extends Controller
 {
@@ -66,6 +67,37 @@ class SearchController extends Controller
             'data' => $aggregate
         ]);
 
+    }
+
+    public function ldapSearch(Request $request)
+    {
+        $query = null;
+        $data = null;
+
+        if ($request->has('query')) {
+
+            $query = $request->input('query');
+            if (strlen($query) >= 3) {
+                $terms = explode(' ', $query);
+                $search = "&";
+
+                $data = [];
+
+                foreach ($terms as $term) {
+                    $search .= "(|(sn=$term)(givenName=$term)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                }
+
+                $data = LdapController::searchUtwente($search, true);
+            } else {
+                Session::flash('flash_message', 'Please make your search term more than three characters.');
+            }
+
+        }
+
+        return view('website.ldapsearch', [
+            'term' => $query,
+            'data' => (array)$data
+        ]);
     }
 
     public static function doSearch($term)

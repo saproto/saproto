@@ -213,12 +213,6 @@ class ParticipationController extends Controller
 
     }
 
-    public function checklist($id)
-    {
-        $event = Event::findOrFail($id);
-        return view('event.checklist', ['event' => $event]);
-    }
-
     public static function processBackupQueue(Activity $activity)
     {
 

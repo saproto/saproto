@@ -75,6 +75,14 @@
                         </p>
                     @endif
 
+                    @if ($event->is_external == true)
+                        <p>
+                            <i>
+                                This activity is not organized by S.A. Proto.
+                            </i>
+                        </p>
+                    @endif
+
                     @if($event->albums->count() > 0)
 
                         <hr>
@@ -223,10 +231,11 @@
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="text-align: center;">
-                        Activity Sign-up
+                        <strong>Activity Sign-up</strong>
+                        <br>
                         @if($event->activity->canSubscribe())
-                            ({{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
-                            places available)
+                            {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
+                            out of {{ $event->activity->participants }} places available
                         @endif
                     </div>
 

@@ -8,6 +8,8 @@
 
     @if (count($albums) > 0)
 
+        <strong style="text-align:center; display:block;">Making an album for members only means it won't appear on places like the front page for non members, but anyone with the link can still visit it.</strong>
+
         <table class="table">
 
             <thead>

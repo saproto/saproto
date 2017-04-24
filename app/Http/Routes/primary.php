@@ -19,6 +19,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('opensearch', ['as' => 'search::opensearch', 'uses' => 'SearchController@openSearch']);
 
     /*
+     * Routes for the UTwente addressbook.
+     */
+    Route::group(['prefix' => 'ldap', 'as' => 'ldap::', 'middleware' => ['utwente']], function () {
+        Route::get('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
+        Route::post('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
+    });
+
+    /*
      * Routes related to authentication.
      */
     Route::group(['as' => 'login::'], function () {
@@ -34,6 +42,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
         Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
+
+        Route::get('auth/utwente', ['as' => 'utwente', 'uses' => 'AuthController@startUtwenteAuth']);
+        Route::get('auth/utwente/post', ['as' => 'utwentepost', 'uses' => 'AuthController@utwenteAuthPost']);
+
+        Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
+        Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
     });
 
     /*
@@ -284,7 +298,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('admin/{id}', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'EventController@admin']);
         Route::get('scan/{id}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'EventController@scan']);
 
-        Route::get('checklist/{id}', ['as' => 'checklist', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@checklist']);
+        Route::get('checklist/{id}', ['as' => 'checklist', 'uses' => 'ActivityController@checklist']);
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
@@ -493,6 +507,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
+        });
+
+        Route::group(['prefix' => 'pilscie', 'middleware' => ['auth', 'permission:pilscie'], 'as' => 'pilscie::'], function () {
+            Route::get('', ['as' => 'orderhistory', 'uses' => 'PilscieController@orderIndex']);
         });
 
         Route::group(['prefix' => 'accounts', 'middleware' => ['permission:finadmin'], 'as' => 'accounts::'], function () {

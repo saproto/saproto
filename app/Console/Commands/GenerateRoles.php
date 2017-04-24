@@ -91,6 +91,12 @@ class GenerateRoles extends Command
             $permissions['pilscie']->save();
             $this->info('Added pilscie permission.');
         }
+        $permissions['drafters'] = Permission::where('name', '=', 'drafters')->first();
+        if ($permissions['drafters'] == null) {
+            $permissions['drafters'] = new Permission(array('name' => 'drafters', 'display_name' => 'Guild of Drafters Access', 'description' => 'Gives access to the relevant tools for drafters.'));
+            $permissions['drafters']->save();
+            $this->info('Added drafters permission.');
+        }
         $permissions['alfred'] = Permission::where('name', '=', 'alfred')->first();
         if ($permissions['alfred'] == null) {
             $permissions['alfred'] = new Permission(array('name' => 'alfred', 'display_name' => 'Alfred\'s Workshop', 'description' => 'Manages access to the OmNomCom for workshop functions.'));
@@ -140,11 +146,11 @@ class GenerateRoles extends Command
             $roles['pilscie']->save();
             $this->info('Added pilscie role.');
         }
-        $roles['pilscie'] = Role::where('name', '=', 'pilscie')->first();
-        if ($roles['pilscie'] == null) {
-            $roles['pilscie'] = new Role(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'PilsCie member'));
-            $roles['pilscie']->save();
-            $this->info('Added pilscie role.');
+        $roles['drafters'] = Role::where('name', '=', 'drafters')->first();
+        if ($roles['drafters'] == null) {
+            $roles['drafters'] = new Role(array('name' => 'drafters', 'display_name' => 'Guild of Drafters', 'description' => 'Guild of Drafters member'));
+            $roles['drafters']->save();
+            $this->info('Added drafters role.');
         }
         $roles['alfred'] = Role::where('name', '=', 'alfred')->first();
         if ($roles['alfred'] == null) {
@@ -167,8 +173,10 @@ class GenerateRoles extends Command
         $this->info('Synced finadmin role with permissions.');
         $roles['omnomcom']->perms()->sync(array($permissions['omnomcom']->id));
         $this->info('Synced omnomcom role with permissions.');
-        $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id));
+        $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id, $permissions['drafters']->id));
         $this->info('Synced pilscie role with permissions.');
+        $roles['drafters']->perms()->sync(array($permissions['drafters']->id));
+        $this->info('Synced drafters role with permissions.');
         $roles['alfred']->perms()->sync(array($permissions['alfred']->id, $permissions['omnomcom']->id));
         $this->info('Synced alfred role with permissions.');
 

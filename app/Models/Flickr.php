@@ -3,14 +3,15 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 use Exception;
 
 class Flickr extends Model
 {
-    public static function getAlbums($max = null, $private = false)
+    public static function getAlbums($max = null)
     {
-        if ($private) {
+        if (Auth::check() && count(Auth::user()->member()->get()) > 0) {
             $albums = ($max == null) ? FlickrAlbum::orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::orderBy('date_taken', 'desc')->paginate($max);
         } else {
             $albums = ($max == null) ? FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->paginate($max);

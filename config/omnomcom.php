@@ -24,7 +24,7 @@ return [
             'name' => 'PilsCie',
             'categories' => [15, 18],
             'addresses' => [],
-            'roles' => ['board', 'pilscie'],
+            'roles' => ['board', 'pilscie', 'drafters'],
             'cash_allowed' => true
         ]
     ],
@@ -39,6 +39,17 @@ return [
     */
 
     'alfred-account' => 43,
+
+    /*
+    |--------------------------------------------------------------------------
+    | PilsCie Account
+    |--------------------------------------------------------------------------
+    |
+    | Defines the financial account used by the PilsCie
+    |
+    */
+
+    'pilscie-account' => 4,
 
     /*
     |--------------------------------------------------------------------------

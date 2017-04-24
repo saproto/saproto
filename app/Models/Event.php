@@ -91,7 +91,29 @@ class Event extends Model
 
     public function isEventAdmin(User $user)
     {
-        return $user->can('board') || ($this->committee && $this->committee->isMember($user));
+        return $user->can('board') || ($this->committee && $this->committee->isMember($user)) || $this->isEventEro($user);
+    }
+
+    public function isEventEro(User $user)
+    {
+        if ($user->can('board')) {
+            return true;
+        }
+        if (date('U') > $this->end) {
+            return false;
+        }
+        if (!$this->activity) {
+            return false;
+        }
+        $eroHelping = HelpingCommittee::where('activity_id', $this->activity->id)
+            ->where('committee_id', config('proto.committee')['ero'])->first();
+        if ($eroHelping) {
+            return ActivityParticipation::where('activity_id', $this->activity->id)
+                    ->where('committees_activities_id', $eroHelping->id)
+                    ->where('user_id', $user->id)->count() > 0;
+        } else {
+            return false;
+        }
     }
 
     public function returnAllUsers()
