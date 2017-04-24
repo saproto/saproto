@@ -77,11 +77,11 @@
 
     <div class="row">
         <div class="col-md-6">
-            <a type="button" class="btn btn-success btn-lg btn-block" href="{{ route('page::show', ['slug' => 'board']) }}"><span class="fa fa-user"> Contact</a>
+            <a type="button" class="btn btn-success btn-lg btn-block" href="{{ route('page::show', ['slug' => 'board']) }}"><span class="fa fa-user"></span> Contact</a>
         </div>
 
         <div class="col-md-6">
-            <a class="btn btn-success btn-lg btn-block" href="{{ route('event::list') }}"><span class="fa fa-calendar"> Activites</a>
+            <a class="btn btn-success btn-lg btn-block" href="{{ route('event::list') }}"><span class="fa fa-calendar"></span> Activities</a>
         </div>
     </div>
 

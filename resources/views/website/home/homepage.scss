@@ -83,6 +83,12 @@
     	text-shadow:none;
     }
 
+    h5 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .list-group {
     	position: absolute;
         background-color: #fff;
