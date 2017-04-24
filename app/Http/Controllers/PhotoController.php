@@ -38,6 +38,14 @@ class PhotoController extends Controller
         return view('photos.manage', ['albums' => $albums]);
     }
 
+    public function toggleprivate($id)
+    {
+        $album = FlickrAlbum::find($id);
+        $album->private = !$album->private;
+        $album->save();
+        return Redirect::route("photo::manage");
+    }
+
     /**
      * Display the specified resource.
      *
