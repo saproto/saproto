@@ -139,4 +139,16 @@ class EmailListController extends Controller
         $request->session()->flash('flash_message', 'The list has been deleted!');
         return Redirect::route('email::admin');
     }
+
+    public static function autoSubscribeToLists($type, $user)
+    {
+        $lists = config('proto.' . $type);
+        foreach($lists as $list) {
+            $list = EmailList::find($list);
+            if ($list) {
+                $list->subscribe($user);
+            }
+        }
+    }
+
 }

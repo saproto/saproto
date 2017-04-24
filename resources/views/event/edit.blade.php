@@ -13,7 +13,7 @@
             <div class="panel panel-default">
 
                 <div class="panel-heading">
-                    Edit event details
+                    Event details
                 </div>
 
                 <form method="post"
@@ -122,12 +122,32 @@
 
                         </div>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="involves_food"
-                                        {{ ($event->involves_food ? 'checked' : '') }}>
-                                This activity involves people eating food.
-                            </label>
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="involves_food"
+                                                {{ ($event && $event->involves_food ? 'checked' : '') }}>
+                                        This activity involves people eating food.
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="is_external"
+                                                {{ ($event && $event->is_external ? 'checked' : '') }}>
+                                        This activity is not organized by Proto.
+                                    </label>
+                                </div>
+
+                            </div>
+
                         </div>
 
                         <div class="form-group">
@@ -139,6 +159,7 @@
                                 <textarea id="editor" name="description">{{ $event->description }}</textarea>
                             @endif
                         </div>
+
 
                         <div class="form-group">
                             <label for="editor-summary">Summary</label>

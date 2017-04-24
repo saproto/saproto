@@ -57,7 +57,9 @@
     "webuni/commonmark-table-extension": "0.5.0",
     "adldap2/adldap2": "6.1.*",
     "mollie/laravel-mollie": "^1.4",
-    "lisennk/laravel-slack-web-api": "^0.1.1"
+    "lisennk/laravel-slack-web-api": "^0.1.1",
+    "lightsaml/lightsaml": "^1.2",
+    "aacotroneo/laravel-saml2": "^0.8.1"
   },
   "require-dev": {
   },

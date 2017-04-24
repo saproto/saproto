@@ -134,6 +134,7 @@ class EventController extends Controller
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
+        $event->is_external = $request->has('is_external');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -196,6 +197,7 @@ class EventController extends Controller
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
+        $event->is_external = $request->has('is_external');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -300,27 +302,6 @@ class EventController extends Controller
         $activity->save();
 
         Session::flash("flash_message", "This activity has been closed and the relevant orderlines were added.");
-        return Redirect::back();
-
-    }
-
-    public function getInNewsletter()
-    {
-
-        $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
-
-        return view('event.innewsletter', ['events' => $events]);
-
-    }
-
-    public function toggleInNewsletter($id)
-    {
-
-        $event = Event::findOrFail($id);
-
-        $event->include_in_newsletter = !$event->include_in_newsletter;
-        $event->save();
-
         return Redirect::back();
 
     }
@@ -465,6 +446,10 @@ class EventController extends Controller
         $calendar->setMethod('PUBLISH');
 
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            if ($event->is_external && !$request->has('with_external')) {
+                continue;
+            }
 
             $infotext = '';
             if ($event->over()) {

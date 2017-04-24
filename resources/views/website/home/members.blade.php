@@ -21,7 +21,8 @@
 
                     <p>
                         Welcome to the new Proto website. You should find most of what you had on the old website around
-                        here somewhere, and the final missing features are coming soon. Should you miss something, do let us
+                        here somewhere, and the final missing features are coming soon. Should you miss something, do
+                        let us
                         know!
                     </p>
 
@@ -40,22 +41,24 @@
 
                     @foreach($newsitems as $index => $newsitem)
                         @if($index > 0)
-                        <hr class="rule">
+                            <hr class="rule">
                         @endif
 
                         <div class="media">
-                          @if ($newsitem->featuredImage)
-                          <div class="media-left">
-                            <img src="{{ $newsitem->featuredImage->generateImagePath(192,192) }}" width="96" height="96" alt="">
-                          </div>
-                          @endif
-                          <div class="media-body">
-                            <h5 class="media-heading"><a href="{{ $newsitem->url() }}">{{ $newsitem->title }}</a></h5>
-                            <em class="small-text">
-                                Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
-                            </em>
-                            <p class="medium-text">{{ $newsitem->content }}</p>
-                          </div>
+                            @if ($newsitem->featuredImage)
+                                <div class="media-left">
+                                    <img src="{{ $newsitem->featuredImage->generateImagePath(192,192) }}" width="96"
+                                         height="96" alt="">
+                                </div>
+                            @endif
+                            <div class="media-body">
+                                <h5 class="media-heading"><a href="{{ $newsitem->url() }}">{{ $newsitem->title }}</a>
+                                </h5>
+                                <em class="small-text">
+                                    Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
+                                </em>
+                                <p class="medium-text">{!!  Markdown::convertToHtml(\Illuminate\Support\Str::words($newsitem->content, 50)) !!} </p>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -93,6 +96,12 @@
                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
                                     {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                 </p>
+                                @if($event->is_external)
+                                    <p>
+                                        <i class="fa fa-info-circle" aria-hidden="true"></i> Not Organized
+                                        by S.A. Proto
+                                    </p>
+                                @endif
                             </div>
                         </a>
 
@@ -102,7 +111,8 @@
 
                     <hr>
 
-                    <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming events</a>
+                    <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming
+                        events</a>
 
                 </div>
             </div>

@@ -46,19 +46,10 @@
                         <div class="panel-body">
 
                             <div class="btn-group btn-lg btn-group-justified">
-                                <a class="btn btn-info" target="_blank"
-                                   href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar"))) }}">
-                                    <i class="fa fa-google" aria-hidden="true"></i>
-                                    &nbsp;&nbsp;&nbsp;
-                                    Google Calendar
-                                </a>
-                            </div>
-
-                            <div class="btn-group btn-lg btn-group-justified">
                                 <div class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
                                     <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
                                     &nbsp;&nbsp;&nbsp;
-                                    Other Calendars
+                                    Add to your Calendar
                                 </div>
                             </div>
 
@@ -104,6 +95,12 @@
                                             <i class="fa fa-clock-o" aria-hidden="true"></i>
                                             {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
                                         </p>
+                                        @if($event->is_external)
+                                            <p>
+                                                <i class="fa fa-info-circle" aria-hidden="true"></i> Not Organized
+                                                by S.A. Proto
+                                            </p>
+                                        @endif
                                     </div>
                                 </a>
 
@@ -145,8 +142,37 @@
                     </p>
 
                     <p style="text-align: center;">
-                        <strong>{{ route("ical::calendar") }}</strong>
+                        <strong>{{ str_replace('https', 'http', route("ical::calendar")) }}</strong>
                     </p>
+
+                    <p>
+                        If you also want to include external activies (not organized by S.A. Proto) in your calendar,
+                        please use the URL below.
+                    </p>
+
+                    <p style="text-align: center;">
+                        <strong>{{ str_replace('https', 'http', route("ical::calendar", ["with_external" => true])) }}</strong>
+                    </p>
+
+                    <hr>
+
+                    <div class="btn-group btn-lg btn-group-justified">
+                        <a class="btn btn-info" target="_blank"
+                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar"))) }}">
+                            <i class="fa fa-google" aria-hidden="true"></i>
+                            &nbsp;&nbsp;&nbsp;
+                            Import to Google Calendar
+                        </a>
+                    </div>
+
+                    <div class="btn-group btn-lg btn-group-justified">
+                        <a class="btn btn-default" target="_blank"
+                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar", ["with_external" => true]))) }}">
+                            <i class="fa fa-google" aria-hidden="true"></i>
+                            &nbsp;&nbsp;&nbsp;
+                            Import to Google Calendar with External Activities
+                        </a>
+                    </div>
 
                 </div>
             </div>

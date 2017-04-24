@@ -124,16 +124,8 @@ class DirectAdminSync extends Command
 
             $destinations = [];
 
-            $users = CommitteeMembership::withTrashed()
-                ->where('committee_id', $committee->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })->get();
-
-            foreach ($users as $user) {
-                $destinations[] = $user->user->email;
+            foreach ($committee->users as $user) {
+                $destinations[] = $user->email;
             }
 
             if (count($destinations) > 0) {

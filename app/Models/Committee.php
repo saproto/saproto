@@ -4,7 +4,10 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Carbon\Carbon;
+
 use Auth;
+use DB;
 
 class Committee extends Model
 {
@@ -67,11 +70,19 @@ class Committee extends Model
     }
 
     /**
-     * @return mixed All users associated with this committee.
+     * @return mixed All users currently associated with this committee.
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')->whereNull('committees_users.deleted_at')->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')
+            ->where(function ($query) {
+                $query->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
     }
 
     public function image()
@@ -84,14 +95,27 @@ class Committee extends Model
 
         $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
 
-        foreach (CommitteeMembership::withTrashed()->where('committee_id', $this->id)->orderBy('created_at', 'desc')->get() as $membership) {
+        foreach (
+            CommitteeMembership::withTrashed()->where('committee_id', $this->id)
+                ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
+                ->orderBy('created_at', 'asc')
+                ->orderBy('deleted_at', 'desc')
+                ->get()
+            as $membership
+        ) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } else {
-                if ($membership->trashed()) {
-                    $members['members']['past'][] = $membership;
-                } else {
+                if (
+                    strtotime($membership->created_at) < date('U') &&
+                    (
+                        !$membership->deleted_at ||
+                        strtotime($membership->deleted_at) > date('U')
+                    )
+                ) {
                     $members['members']['current'][] = $membership;
+                } else {
+                    $members['members']['past'][] = $membership;
                 }
             }
         }
@@ -106,7 +130,7 @@ class Committee extends Model
      */
     public function isMember(User $user)
     {
-        return count(CommitteeMembership::whereNull('committees_users.deleted_at')->where('user_id', $user->id)->where('committee_id', $this->id)->get()) > 0;
+        return $user->isInCommittee($this);
     }
 
     protected $guarded = [];

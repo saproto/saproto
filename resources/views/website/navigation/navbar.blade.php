@@ -68,6 +68,7 @@
                             <li role="separator" class="divider"></li>
 
                             <li><a class="navbar-title">Utilities:</a></li>
+                            <li><a href="{{ route("omnomcom::pilscie::orderhistory") }}">Pilscie Order Overview</a></li>
                             <li><a href="{{ route("passwordstore::index") }}">Password Store</a></li>
                         </ul>
                     </li>
@@ -101,7 +102,7 @@
                             <li role="separator" class="divider"></li>
 
                             <li><a class="navbar-title">Internal Affairs:</a></li>
-                            <li><a href="{{ route("event::innewsletter::show") }}">Edit Newsletter</a></li>
+                            <li><a href="{{ route("newsletter::show") }}">Edit Newsletter</a></li>
 
                             @if (Auth::user()->can("finadmin"))
                                 <li role="separator" class="divider"></li>

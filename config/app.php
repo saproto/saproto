@@ -164,8 +164,8 @@ return [
         Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
-        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class
-
+        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
+        Aacotroneo\Saml2\Saml2ServiceProvider::class,
     ],
 
     /*
@@ -255,6 +255,7 @@ return [
         'Product' => \Proto\Models\Product::class,
         'MollieTransaction' => \Proto\Models\MollieTransaction::class,
         'FlickrAlbum' => \Proto\Models\FlickrAlbum::class,
+        'Newsletter' => \Proto\Models\Newsletter::class,
 
         'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
@@ -263,7 +264,9 @@ return [
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 
-        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class
+        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
+
+        'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
     ],
 

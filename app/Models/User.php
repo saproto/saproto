@@ -214,9 +214,20 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('id', 'deleted_at'))->withTimestamps();
     }
 
+    /**
+     * @return mixed Returns all committees a user is currently a member of.
+     */
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')->withPivot(array('role', 'edition', 'id', 'created_at', 'deleted_at'))->whereNull('committees_users.deleted_at')->withTimestamps()->orderBy('pivot_created_at', 'asc');
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
+            ->where(function ($query) {
+                $query->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
     }
 
     /**
@@ -270,15 +281,7 @@ class User extends Model implements AuthenticatableContract,
      */
     public function isInCommittee(Committee $committee)
     {
-        return count(CommitteeMembership::withTrashed()
-                ->where('user_id', $this->id)
-                ->where('committee_id', $committee->id)
-                ->where('created_at', '<', date('Y-m-d H:i:s'))
-                ->where(function ($q) {
-                    $q->whereNull('deleted_at')
-                        ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })->get()
-            ) > 0;
+        return in_array($this->id, $committee->users->pluck('id')->toArray());
     }
 
     public function isInCommitteeBySlug($slug)

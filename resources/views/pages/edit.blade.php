@@ -106,7 +106,8 @@
                                 <div class="form-group">
                                     <label for="image" class="col-sm-4 control-label">New featured image</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" id="image" type="file" name="image" accept="image/*">
+                                        <input class="form-control" id="image" type="file" name="image"
+                                               accept="image/*">
                                     </div>
                                 </div>
 
@@ -160,11 +161,13 @@
 
                                     <tr>
 
-                                        <td><a href="{{ $file->generatePath() }}" target="_blank">{{ $file->original_filename }}</a></td>
+                                        <td><a href="{{ $file->generatePath() }}"
+                                               target="_blank">{{ $file->original_filename }}</a></td>
                                         <td>
                                             @if(substr($file->mime, 0, 5) == 'image')
                                                 <a class="btn btn-xs btn-default pageEdit_insertImage"
-                                                   href="#" role="button" rel="{{ $file->generateImagePath(1000, null) }}">
+                                                   href="#" role="button"
+                                                   rel="{{ $file->generateImagePath(1000, null) }}">
                                                     <i class="fa fa-image" aria-hidden="true"></i>
                                                 </a>
                                             @else
@@ -174,7 +177,8 @@
                                                 </a>
                                             @endif
                                             <a class="btn btn-xs btn-danger"
-                                               href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}" role="button">
+                                               href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
+                                               role="button">
                                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -195,7 +199,8 @@
 
                         <hr>
 
-                        <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}" enctype="multipart/form-data">
+                        <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}"
+                              enctype="multipart/form-data">
 
                             {!! csrf_field() !!}
 
@@ -204,7 +209,7 @@
                                 <div class="form-group">
                                     <label for="image" class="col-sm-4 control-label">New file</label>
                                     <div class="col-sm-8">
-                                        <input class="form-control" id="file" type="file" name="file">
+                                        <input class="form-control" id="file" type="file" name="file" required>
                                     </div>
                                 </div>
 
@@ -225,53 +230,53 @@
 
             </div>
 
-        </div>
+    </div>
 
-            <style type="text/css">
-                .CodeMirror img {
-                    width: 100%;
-                }
-            </style>
-
-
-
-            @endsection
-
-        @section('javascript')
-
-            @parent
-
-            <script>
-                var simplemde = new SimpleMDE({
-                    element: $("#editor")[0],
-                    toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
-                    spellChecker: false
-                });
+    <style type="text/css">
+        .CodeMirror img {
+            width: 100%;
+        }
+    </style>
 
 
-                // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
-                function insertLineAtCursor(data){
-                    var cm = $('.CodeMirror')[0].CodeMirror;
-                    var doc = cm.getDoc();
-                    var cursor = doc.getCursor(); // gets the line number in the cursor position
-                    var line = doc.getLine(cursor.line); // get the line contents
-                    var pos = { // create a new object to avoid mutation of the original selection
-                        line: cursor.line,                ch: line.length - 1 // set the character position to the end of the line
-                    };
-                    doc.replaceRange('\n'+data+'\n', pos); // adds a new line
-                }
 
-                $(".pageEdit_insertLink").click(function(e) {
-                    e.preventDefault();
-                    var linkUrl = $(this).attr('rel');
-                    insertLineAtCursor("[Link text](" + linkUrl + ")");
-                });
+@endsection
 
-                $(".pageEdit_insertImage").click(function(e) {
-                    e.preventDefault();
-                    var linkUrl = $(this).attr('rel');
-                    insertLineAtCursor("![Alt text](" + linkUrl + ")");
-                });
-            </script>
+@section('javascript')
+
+    @parent
+
+    <script>
+        var simplemde = new SimpleMDE({
+            element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
+            spellChecker: false
+        });
+
+
+        // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
+        function insertLineAtCursor(data) {
+            var cm = $('.CodeMirror')[0].CodeMirror;
+            var doc = cm.getDoc();
+            var cursor = doc.getCursor(); // gets the line number in the cursor position
+            var line = doc.getLine(cursor.line); // get the line contents
+            var pos = { // create a new object to avoid mutation of the original selection
+                line: cursor.line, ch: line.length - 1 // set the character position to the end of the line
+            };
+            doc.replaceRange('\n' + data + '\n', pos); // adds a new line
+        }
+
+        $(".pageEdit_insertLink").click(function (e) {
+            e.preventDefault();
+            var linkUrl = $(this).attr('rel');
+            insertLineAtCursor("[Link text](" + linkUrl + ")");
+        });
+
+        $(".pageEdit_insertImage").click(function (e) {
+            e.preventDefault();
+            var linkUrl = $(this).attr('rel');
+            insertLineAtCursor("![Alt text](" + linkUrl + ")");
+        });
+    </script>
 
 @endsection

@@ -79,6 +79,7 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->price = str_replace(',', '.', $request->price);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -152,6 +153,7 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->price = str_replace(',', '.', $request->price);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -188,7 +190,7 @@ class ProductController extends Controller
         $feedback = "";
         foreach ($input as $lineRaw) {
             $line = explode(',', $lineRaw);
-            if(count($line) == 2) {
+            if (count($line) == 2) {
                 $product = Product::find($line[0]);
                 if ($product) {
                     $oldstock = $product->stock;
@@ -199,8 +201,8 @@ class ProductController extends Controller
                 } else {
                     $feedback .= "Product ID <strong>" . $line[0] . "</strong> not recognized.<br>";
                 }
-            }else{
-                $feedback .= "Incorrect format for line <strong>" . $lineRaw ."</strong>.<br>";
+            } else {
+                $feedback .= "Incorrect format for line <strong>" . $lineRaw . "</strong>.<br>";
             }
         }
         $request->session()->flash('flash_message', $feedback);

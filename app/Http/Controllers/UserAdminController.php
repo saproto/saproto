@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use Proto\Http\Controllers\AuthController;
+use Proto\Http\Controllers\EmailListController;
 
 use Carbon\Carbon;
 
@@ -128,10 +129,10 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if (!Auth::user()->can('admin')) {
+        if (!Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
                 foreach ($role->permissions as $permission) {
-                    if (!Auth::user()->can($permission->name)) abort(403);
+                    if (!Auth::user()->can($permission->name)) abort(403, "You may not impersonate this person.");
                 }
             }
         }
@@ -214,6 +215,8 @@ class UserAdminController extends Controller
             $m->to($email, $name);
             $m->subject('Start of your membership of Study Association Proto');
         });
+
+        EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 

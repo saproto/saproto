@@ -30,192 +30,73 @@ use Session;
 class AuthController extends Controller
 {
 
-    public function getLogin()
+    /******************************************************
+     * These are the regular, non-static methods serving as entry point to the AuthController
+     *
+     *
+     *
+     */
+
+    /*
+     * Present the login page.
+     */
+    public function getLogin(Request $request)
     {
+
+
         if (Auth::check()) {
+            if ($request->has('SAMLRequest')) {
+                return AuthController::handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
+            }
             return Redirect::route('homepage');
         } else {
+            if ($request->has('SAMLRequest')) {
+                Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
+            }
             return view('auth.login');
         }
+
     }
 
     /**
-     * This static function takes a supplied username and password, and returns the associated user if the combination is valid. Accepts either e-mail / password or UTwente credentials.
+     * Handle a submitted log-in form. Returns the application's response.
      *
-     * @param $username The e-mail address or UTwente username.
-     * @param $password The password or UTwente password.
-     * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
+     * @param Request $request The request object, needed for the log-in data.
+     * @param Google2FA $google2fa The Google2FA object, because this is apparently the only way to access it.
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public static function verifyCredentials($username, $password)
-    {
-
-        // First, we try matching our own records.
-        $user = User::where('email', $username)->first();
-
-        // See if we can authenticate the user ourselves.
-        if ($user && Hash::check($password, $user->password)) {
-
-            return $user;
-
-        } else {
-
-            // See if someone maybe used their Proto username.
-            $member = Member::where('proto_username', $username)->first();
-
-            // Check password again.
-            if ($member && $member->user && Hash::check($password, $member->user->password)) {
-
-                return $member->user;
-
-            } else {
-
-                // We cannot authenticate to our own records. Try RADIUS.
-                $user = User::where('utwente_username', $username)->first();
-
-                if ($user) {
-
-                    if (AuthController::verifyUtwenteCredentials($user->utwente_username, $password)) {
-                        return $user;
-                    }
-
-                }
-
-            }
-
-        }
-
-        return null;
-
-    }
-
-
-    public static function verifyUtwenteCredentials($username, $password)
-    {
-
-        // Do weird escape character stuff, because DotEnv doesn't support newlines :(
-        $publicKey = str_replace('_!n_', "\n", env('UTWENTEAUTH_KEY'));
-
-        $token = md5(rand()); // Generate random token
-
-        // Store userdata in array to create JSON later on
-        $userData = array(
-            'user' => $username,
-            'password' => $password,
-            'token' => $token
-        );
-
-        // Encrypt userData in JSON with public key
-        openssl_public_encrypt(json_encode($userData), $userDataEncrypted, $publicKey);
-
-        // Start CURL to secureAuth on WESP
-        $ch = curl_init(env('UTWENTEAUTH_SRV'));
-
-        // Tell CURL to post encrypted userData in base64
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "challenge=" . urlencode(base64_encode($userDataEncrypted)));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute CURL, store response
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // If response matches token, user is verified.
-        if ($response == $token) {
-            return true;
-        }
-
-        return false;
-
-    }
-
     public function postLogin(Request $request, Google2FA $google2fa)
     {
 
-        if (Auth::check()) {
-            return Redirect::route('homepage');
-        } else {
+        Session::keep('incoming_saml_request');
 
-            if ($request->session()->has('2fa_user') && ($request->has('2fa_totp_token') || $request->has('2fa_yubikey_token'))) {
+        if (Auth::check()) { // User is already logged in
 
-                if ($request->has('2fa_totp_token') && $request->has('2fa_yubikey_token')) {
+            AuthController::postLoginRedirect($request);
 
-                    $request->session()->flash('flash_message', 'Please enter only one of the tokens.');
-                    $request->session()->reflash();
-                    return view('auth.2fa');
+        } else { // User is not yet logged in.
 
-                } elseif ($request->session()->get('2fa_user')->tfa_totp_key && $request->has('2fa_totp_token') && $request->input('2fa_totp_token') != '') {
-
-                    // Catching Two Factor Authentication attempt
-                    if ($google2fa->verifyKey($request->session()->get('2fa_user')->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                        Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
-                        return Redirect::intended(route('homepage'));
-                    } else {
-                        $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
-                        $request->session()->reflash();
-                        return view('auth.2fa');
-                    }
-
-                } elseif ($request->session()->get('2fa_user')->tfa_yubikey_identity && $request->has('2fa_yubikey_token') && $request->input('2fa_yubikey_token') != '') {
-
-                    try {
-
-                        if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
-                            Auth::login($request->session()->get('2fa_user'), $request->session()->get('2fa_remember'));
-                            return Redirect::intended(route('homepage'));
-                        } else {
-                            $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
-                            $request->session()->reflash();
-                            return view('auth.2fa');
-                        }
-
-                    } catch (\Exception $e) {
-                        $request->session()->flash('flash_message', $e->getMessage());
-                        $request->session()->reflash();
-                        return view('auth.2fa');
-                    }
-
-                } else {
-
-                    $request->session()->flash('flash_message', 'Invalid authentication attempt. Try again.');
-                    $request->session()->reflash();
-                    return view('auth.2fa');
-
-                }
-
-            } else {
-
-                // This is the real deal!
-                $username = $request->input('email');
-                $password = $request->input('password');
-                $remember = $request->input('remember');
-
-                $user = AuthController::verifyCredentials($username, $password);
-
-                if ($user) {
-
-                    // Catch users that have 2FA enabled.
-                    if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
-                        $request->session()->flash('2fa_user', $user);
-                        $request->session()->flash('2fa_remember', $remember);
-                        return view('auth.2fa');
-                    } else {
-                        Auth::login($user, $remember);
-                        return Redirect::intended(route('homepage'));
-                    }
-
-                }
-
+            // Catch a login form submission for two factor authentication.
+            if ($request->session()->has('2fa_user')) {
+                return AuthController::handleTwofactorSubmit($request, $google2fa);
             }
+
+            // Otherwise this is a regular login.
+            return AuthController::handleRegularLogin($request);
 
         }
 
-        $request->session()->flash('flash_message', 'Invalid username of password provided.');
-        return Redirect::route('login::show');
-
     }
 
+    /**
+     * Handle a submitted password change form.
+     *
+     * @param Request $request The request object.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePassword(Request $request)
     {
+
         $user = User::find($request->id);
 
         if ($user == null) {
@@ -227,34 +108,42 @@ class AuthController extends Controller
             return Redirect::back();
         }
 
-        if (
-            AuthController::verifyCredentials($user->email, $request->oldpass)
-            || ($user->utwente_username && AuthController::verifyUtwenteCredentials($user->utwente_username, $request->oldpass))
-        ) {
+        if (AuthController::verifyCredentials($user->email, $request->oldpass)) {
             if ($request->newpass1 !== $request->newpass2) {
                 $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
-                return Redirect::route('user::dashboard');
+                return Redirect::back();
             } elseif (strlen($request->newpass1) < 8) {
                 $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
-                return Redirect::route('user::dashboard');
+                return Redirect::back();
             } else {
                 $user->setPassword($request->newpass1);
                 $request->session()->flash('flash_message', 'Your password has been changed.');
-                return Redirect::route('user::dashboard');
+                return Redirect::back();
             }
         }
 
         $request->session()->flash('flash_message', 'Old password incorrect! Password not updated.');
-        return Redirect::route('user::dashboard');
+        return Redirect::back();
 
     }
 
+    /**
+     * Handle a request to the log-out URL.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function getLogout()
     {
         Auth::logout();
         return Redirect::route('homepage');
     }
 
+    /**
+     * Handle a request for the register-an-account page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function getRegister(Request $request)
     {
         if (Auth::check()) {
@@ -267,6 +156,12 @@ class AuthController extends Controller
         return view('users.register');
     }
 
+    /**
+     * Handle a submission of the register-an-account page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postRegister(Request $request)
     {
         if (Auth::check()) {
@@ -306,31 +201,21 @@ class AuthController extends Controller
 
         AuthController::dispatchPasswordEmailFor($user);
 
+        EmailListController::autoSubscribeToLists('autoSubscribeUser', $user);
+
         if (!Auth::check()) {
             $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
             return Redirect::route('homepage');
         }
     }
 
-    public static function makeLdapAccount($user)
-    {
-
-        /** Add user to LDAP */
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->make()->user();
-        $ldapuser->cn = "user-" . $user->id;
-        $ldapuser->description = $user->id;
-        $ldapuser->save();
-
-        /** End add user to LDAP */
-
-    }
-
+    /**
+     * Handle a request to delete the current user account.
+     *
+     * @param Request $request
+     * @param $id The user id.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -379,11 +264,45 @@ class AuthController extends Controller
         return Redirect::route('homepage');
     }
 
+    /**
+     * Handle a request to see the begin-with-password-reset page.
+     *
+     * @return mixed
+     */
     public function getEmail()
     {
         return view('auth.password');
     }
 
+    /**
+     * Handle a submission of the begin-with-password-reset page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postEmail(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user !== null) {
+
+            AuthController::dispatchPasswordEmailFor($user);
+
+            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
+            return Redirect::route('login::show');
+
+        } else {
+            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
+            return Redirect::back();
+        }
+    }
+
+    /**
+     * Handle a request to see the continue-with-password-reset page.
+     *
+     * @param Request $request
+     * @param $token The reset token, as e-mailed to the user.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function getReset(Request $request, $token)
     {
         PasswordReset::where('valid_to', '<', date('U'))->delete();
@@ -396,6 +315,12 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Handle a submission of the continue-with-password-reset page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postReset(Request $request)
     {
         PasswordReset::where('valid_to', '<', date('U'))->delete();
@@ -423,22 +348,278 @@ class AuthController extends Controller
         }
     }
 
-    public function postEmail(Request $request)
+    /**
+     * Handle a request for UTwente SSO auth.
+     *
+     * @return Redirect
+     */
+    public function startUtwenteAuth()
     {
-        $user = User::where('email', $request->email)->first();
-        if ($user !== null) {
-
-            AuthController::dispatchPasswordEmailFor($user);
-
-            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
-            return Redirect::route('homepage');
-
-        } else {
-            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
-            return Redirect::back();
-        }
+        Session::reflash();
+        return redirect('saml2/login');
     }
 
+    /**
+     * This is where we land after a successfull UTwente SSO auth.
+     * We do the authentication here because only using the Event handler for the SAML login doesn't let us do the proper redirects.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function utwenteAuthPost()
+    {
+
+        $remoteUser = Session::get('utwente_sso_user');
+        $remoteData = [
+            'uid' => $remoteUser['urn:mace:dir:attribute-def:uid'][0],
+            'surname' => $remoteUser['urn:mace:dir:attribute-def:sn'][0],
+            'mail' => $remoteUser['urn:mace:dir:attribute-def:mail'][0],
+            'displayname' => $remoteUser['urn:mace:dir:attribute-def:displayName'][0],
+            'utwente_role' => $remoteUser['urn:mace:dir:attribute-def:eduPersonAffiliation'][0],
+            'givenname' => $remoteUser['urn:mace:dir:attribute-def:givenName'][0],
+            'commonname' => $remoteUser['urn:mace:dir:attribute-def:cn'][0],
+        ];
+        $remoteUsername = $remoteData['uid'];
+
+        // We can be here for two reasons:
+        // Reason 1: we were trying to link a UTwente account to a user
+        if (Session::has('link_utwente_to_user')) {
+            $user = Session::get('link_utwente_to_user');
+            $user->utwente_username = $remoteUsername;
+            $user->save();
+            Session::flash('flash_message', 'We linked your UTwente account ' . $remoteUsername . ' to your Proto account.');
+            return Redirect::route('user::dashboard', ['id' => $user->id]);
+        }
+
+        // Reason 2: we were trying to login using a UTwente account
+        Session::keep('incoming_saml_request');
+        $localUser = User::where('utwente_username', $remoteUsername)->first();
+        if ($localUser == null) {
+            Session::flash('flash_message', 'Could not find a Proto account for your UTwente account ' . $remoteUsername . ', ' . $remoteData["givenname"] . '. Did you link it already?');
+            return Redirect::route('login::show');
+        }
+
+        return AuthController::continueLogin($localUser);
+
+    }
+
+    /**
+     * Handle a request for a user's username
+     *
+     * @return Redirect
+     */
+    public function requestUsername(Request $request)
+    {
+        if ($request->has('email')) {
+            $user = User::whereEmail($request->get('email'))->first();
+            if ($user) {
+                if ($user->member) {
+                    Session::flash('flash_message', 'Your Proto username is <strong>' . $user->member->proto_username . '</strong>');
+                    Session::flash('login_username', $user->member->proto_username);
+                } else {
+                    Session::flash('flash_message', 'Only members have a Proto username. You can login using your e-mail address.');
+                }
+            } else {
+                Session::flash('flash_message', 'We could not find a user with that e-mail address.');
+            }
+            return Redirect::route('login::show');
+        }
+        return view('auth.username');
+    }
+
+    /******************************************************
+     * These are the static helper functions of the AuthController for more overview and modularity. Heuh!
+     *
+     *
+     *
+     */
+
+    /**
+     * This static function takes a supplied username and password, and returns the associated user if the combination is valid. Accepts either Proto username or e-mail and password.
+     *
+     * @param $username The e-mail address or Proto username.
+     * @param $password The password.
+     * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
+     */
+    public static function verifyCredentials($username, $password)
+    {
+
+        $user = User::where('email', $username)->first();
+        if ($user == null) {
+            $member = Member::where('proto_username', $username)->first();
+            $user = ($member ? $member->user : null);
+        }
+
+        if ($user != null && Hash::check($password, $user->password)) {
+            return $user;
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Login the supplied user and perform post-login checks and redirects. Returns the application's response.
+     *
+     * @param User $user The user to be logged in.
+     * @param Request $request The request object, needed to handle some checks.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public static function loginUser(User $user)
+    {
+        Auth::login($user, true);
+        if (Session::has('incoming_saml_request')) {
+            return AuthController::handleSAMLRequest(Auth::user(), Session::get('incoming_saml_request'));
+        }
+        return AuthController::postLoginRedirect();
+    }
+
+    /**
+     * The login has been completed (succesfull or not). Return where the user is supposed to be redirected.
+     *
+     * @param Request $request The request object.
+     */
+    private static function postLoginRedirect()
+    {
+        return Redirect::route('homepage');
+    }
+
+    /**
+     * Handle the submission of a regular log-in form with username and password. Return the application's response.
+     *
+     * @param Request $request Thje request object for the data.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private static function handleRegularLogin(Request $request)
+    {
+
+        $username = $request->input('email');
+        $password = $request->input('password');
+
+        $user = AuthController::verifyCredentials($username, $password);
+
+        if ($user) {
+            return AuthController::continueLogin($user);
+        }
+
+        if (preg_match('/[mxs][0-9]{7}/i', $username)) {
+            $request->session()->flash('flash_message', '<p>It looks like you are trying to log-in to the website using your University of Twente account.</p>
+<p>The login form on the Proto website, where you enter a username and password, should only be used with a Proto account. If you don\'t know your Proto username or password, or need more information on what a Proto account is, please see the help buttons below the log-in form.</p>
+<p>If you want to login to the website using your University of Twente account, please click the appropriate button on the log-in screen to be taken to the University of Twente Single Sign-On.</p>');
+            return Redirect::route('login::show');
+        }
+
+        $request->session()->flash('flash_message', 'Invalid username of password provided.');
+        return Redirect::route('login::show');
+
+    }
+
+    /**
+     * We know a user has identified itself, but we still need to check for other stuff like SAML or Two Factor Authentication. We do this here.
+     *
+     * @param User $user The username to be logged in.
+     * @param Request $request Thje request object for the data.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public static function continueLogin(User $user)
+    {
+
+        // Catch users that have 2FA enabled.
+        if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
+            Session::flash('2fa_user', $user);
+            return view('auth.2fa');
+        } else {
+            return AuthController::loginUser($user);
+        }
+
+    }
+
+    /**
+     * Handle the submission of two factor authentication data. Return the application's response.
+     *
+     * @param Request $request The request object for the data.
+     * @param Google2FA $google2fa The Google2FA object, because this is apparently the only way to access it.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private static function handleTwofactorSubmit(Request $request, Google2FA $google2fa)
+    {
+
+        $user = $request->session()->get('2fa_user');
+
+        /*
+         * Time based Two Factor Authentication (Google2FA)
+         */
+        if ($user->tfa_totp_key && $request->has('2fa_totp_token') && $request->input('2fa_totp_token') != '') {
+
+            // Verify if the response is valid.
+            if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
+                return AuthController::loginUser($user);
+            } else {
+                $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
+                $request->session()->reflash();
+                return view('auth.2fa');
+            }
+
+        }
+
+        /*
+         * YubiKey Authentication (yay!)
+         */
+        if ($request->session()->get('2fa_user')->tfa_yubikey_identity && $request->has('2fa_yubikey_token') && $request->input('2fa_yubikey_token') != '') {
+
+            // Try statement because YubiKey uses an external API that may fail to respond.
+            try {
+
+                // Verify if the response is valid.
+                if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
+                    return AuthController::loginUser($user);
+                } else {
+                    $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
+                    $request->session()->reflash();
+                    return view('auth.2fa');
+                }
+
+            } catch (\Exception $e) {
+                $request->session()->flash('flash_message', $e->getMessage());
+                $request->session()->reflash();
+                return view('auth.2fa');
+            }
+
+        }
+
+        /*
+         * Something we don't recognize
+         */
+        $request->session()->flash('flash_message', 'Please complete either of the requested challenges.');
+        $request->session()->reflash();
+        return view('auth.2fa');
+
+    }
+
+    /**
+     * Static helper function that will prepare an LDAP account associated with a new local user.
+     *
+     * @param $user The user to make the LDAP account for.
+     */
+    public static function makeLdapAccount($user)
+    {
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->make()->user();
+        $ldapuser->cn = "user-" . $user->id;
+        $ldapuser->description = $user->id;
+        $ldapuser->save();
+
+    }
+
+    /**
+     * Static helper function that will dispatch a password reset e-mail for a user.
+     *
+     * @param User $user The user to submit the e-mail for.
+     */
     public static function dispatchPasswordEmailFor(User $user)
     {
 
@@ -457,6 +638,145 @@ class AuthController extends Controller
                 ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
                 ->subject('Your password reset request for S.A. Proto.');
         });
+
+    }
+
+    /**
+     * Static helper function to handle a SAML request.
+     * The function expects an authed user for which to complete the SAML request.
+     * This function assumes the user has already been authenticated one way or another.
+     *
+     * @param $user The (currently logged in) user to complete the SAML request for.
+     * @param $saml The SAML data (deflated and encoded).
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private static function handleSAMLRequest($user, $saml)
+    {
+        if (!$user->member) {
+            Session::flash('flash_message', 'Only members can use the Proto SSO. You only have a user account.');
+            return Redirect::route('becomeamember');
+        }
+
+        // SAML is transmitted base64 encoded and GZip deflated.
+        $xml = gzinflate(base64_decode($saml));
+
+        // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
+        $deserializationContext = new \LightSaml\Model\Context\DeserializationContext();
+        $deserializationContext->getDocument()->loadXML($xml);
+
+        $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest();
+        $authnRequest->deserialize($deserializationContext->getDocument()->firstChild, $deserializationContext);
+
+        if (!array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
+            Session::flash('flash_message', 'You are using an unknown Service Provider. Please contact the System Administrators to get your Service Provider whitelisted for Proto SSO.');
+            return Redirect::route('login::show');
+        }
+
+        $response = AuthController::buildSAMLResponse($user, $authnRequest);
+
+        $bindingFactory = new \LightSaml\Binding\BindingFactory();
+        $postBinding = $bindingFactory->create(\LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST);
+        $messageContext = new \LightSaml\Context\Profile\MessageContext();
+        $messageContext->setMessage($response)->asResponse();
+
+        $httpResponse = $postBinding->send($messageContext);
+
+        return view('auth.saml.samlpostbind', ['response' => $httpResponse->getData()["SAMLResponse"], 'destination' => $httpResponse->getDestination()]);
+    }
+
+    /**
+     * Another static helper function to build a SAML response based on a user and a request.
+     *
+     * @param $user The user to generate the SAML response for.
+     * @param $authnRequest The request to generate a SAML response for.
+     * @return \LightSaml\Model\Protocol\Response A LightSAML response.
+     */
+    private static function buildSAMLResponse($user, $authnRequest)
+    {
+
+        // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
+        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience'];
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $issuer = config('saml-idp.idp.issuer');
+
+        $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path() . config('saml-idp.idp.cert'));
+        $privateKey = \LightSaml\Credential\KeyHelper::createPrivateKey(base_path() . config('saml-idp.idp.key'), '', true);
+
+        $response = new \LightSaml\Model\Protocol\Response();
+        $response
+            ->addAssertion($assertion = new \LightSaml\Model\Assertion\Assertion())
+            ->setID(\LightSaml\Helper::generateID())
+            ->setIssueInstant(new \DateTime())
+            ->setDestination($destination)
+            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
+            ->setStatus(new \LightSaml\Model\Protocol\Status(new \LightSaml\Model\Protocol\StatusCode('urn:oasis:names:tc:SAML:2.0:status:Success')))
+            ->setSignature(new \LightSaml\Model\XmlDSig\SignatureWriter($certificate, $privateKey));
+
+        $email = $user->email;
+
+        $assertion
+            ->setId(\LightSaml\Helper::generateID())
+            ->setIssueInstant(new \DateTime())
+            ->setIssuer(new \LightSaml\Model\Assertion\Issuer($issuer))
+            ->setSubject(
+                (new \LightSaml\Model\Assertion\Subject())
+                    ->setNameID(new \LightSaml\Model\Assertion\NameID(
+                        $email,
+                        \LightSaml\SamlConstants::NAME_ID_FORMAT_EMAIL
+                    ))
+                    ->addSubjectConfirmation(
+                        (new \LightSaml\Model\Assertion\SubjectConfirmation())
+                            ->setMethod(\LightSaml\SamlConstants::CONFIRMATION_METHOD_BEARER)
+                            ->setSubjectConfirmationData(
+                                (new \LightSaml\Model\Assertion\SubjectConfirmationData())
+                                    ->setInResponseTo($authnRequest->getId())
+                                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
+                            )
+                    )
+            )
+            ->setConditions(
+                (new \LightSaml\Model\Assertion\Conditions())
+                    ->setNotBefore(new \DateTime())
+                    ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
+                    ->addItem(
+                        new \LightSaml\Model\Assertion\AudienceRestriction($audience)
+                    )
+            )
+            ->addItem(
+                (new \LightSaml\Model\Assertion\AttributeStatement())
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:mail',
+                        $email
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:displayName',
+                        $user->name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:cn',
+                        $user->name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:givenName',
+                        $user->given_name
+                    ))
+                    ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
+                        'urn:mace:dir:attribute-def:uid',
+                        $user->member->proto_username
+                    ))
+            )
+            ->addItem(
+                (new \LightSaml\Model\Assertion\AuthnStatement())
+                    ->setAuthnInstant(new \DateTime('-10 MINUTE'))
+                    ->setSessionIndex('_some_session_index')
+                    ->setAuthnContext(
+                        (new \LightSaml\Model\Assertion\AuthnContext())
+                            ->setAuthnContextClassRef(\LightSaml\SamlConstants::AUTHN_CONTEXT_PASSWORD_PROTECTED_TRANSPORT)
+                    )
+            );
+
+        return $response;
 
     }
 }

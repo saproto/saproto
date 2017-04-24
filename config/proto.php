@@ -17,43 +17,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Board Committee
-    |--------------------------------------------------------------------------
-    |
-    | The slug of the committee that is considered to be the board committee of the application.
-    | For example, this committee is used when generating the board page.
-    | Members of this committee will always get the 'board' role when successfully logging in.
-    |
-    */
-
-    'boardcommittee' => 'association-board',
-
-    /*
-    |--------------------------------------------------------------------------
-    | OmNomCom Committee
-    |--------------------------------------------------------------------------
-    |
-    | The slug of the committee that is considered to be the OmNomCom of the application.
-    | Members of this committee will always get the 'omnomcom' role when successfully logging in.
-    |
-    */
-
-    'omnomcom' => 'omnomcom',
-
-    /*
-    |--------------------------------------------------------------------------
-    | PilsCie Committee
-    |--------------------------------------------------------------------------
-    |
-    | The slug of the committee that is considered to be the PilsCie of the application.
-    | Members of this committee will always get the 'pilscie' role when successfully logging in.
-    |
-    */
-
-    'pilscie' => 'pilscie',
-
-    /*
-    |--------------------------------------------------------------------------
     | Primary e-mail domain
     |--------------------------------------------------------------------------
     |
@@ -76,6 +39,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Committee Links
+    |--------------------------------------------------------------------------
+    |
+    | Link between committee concepts and actual ID's
+    |
+    */
+
+    'committee' => [
+        'board' => 2108,
+        'omnomcom' => 26,
+        'pilscie' => 22,
+        'drafters' => 3336,
+        'ero' => 1364,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Print product
     |--------------------------------------------------------------------------
     |
@@ -95,6 +75,18 @@ return [
     */
 
     'weeklynewsletter' => 1,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Auto subscribe mailinglist
+    |--------------------------------------------------------------------------
+    |
+    | The email list ID's that a user should be subscribed to.
+    |
+    */
+
+    'autoSubscribeUser' => [],
+    'autoSubscribeMember' => [8],
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +175,17 @@ return [
     */
 
     'maxtickets' => 10,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Slack channel
+    |--------------------------------------------------------------------------
+    |
+    | The default Slack channel for messages.
+    |
+    */
+
+    'slackchannel' => '#hyttioaoac-public',
 
     /*
     |--------------------------------------------------------------------------

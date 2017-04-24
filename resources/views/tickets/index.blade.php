@@ -12,21 +12,23 @@
             <a href="{{ route('tickets::add') }}">Create a new ticket.</a>
         </p>
 
+        <strong class="visible-sm visible-xs" style="text-align: center;">- Some columns have been hidden because the screen is too small -</strong>
+
         <table class="table">
 
             <thead>
 
-            <tr>
+                <tr>
 
-                <th>#</th>
-                <th>Event</th>
-                <th>Ticket Name</th>
-                <th>Availability</th>
-                <th>Who</th>
-                <th>Sold</th>
-                <th>Controls</th>
+                    <th class="hidden-sm hidden-xs">#</th>
+                    <th class="hidden-sm hidden-xs">Event</th>
+                    <th>Ticket Name</th>
+                    <th class="hidden-sm hidden-xs">Availability</th>
+                    <th class="hidden-sm hidden-xs">Who</th>
+                    <th class="hidden-sm hidden-xs">Sold</th>
+                    <th>Controls</th>
 
-            </tr>
+                </tr>
 
             </thead>
 
@@ -34,8 +36,8 @@
 
                 <tr>
 
-                    <td>{{ $ticket->id }}</td>
-                    <td>
+                    <td class="hidden-sm hidden-xs">{{ $ticket->id }}</td>
+                    <td class="hidden-sm hidden-xs">
                         <a href="{{ route('event::show', ['id'=>$ticket->event->id]) }}">
                             {{ $ticket->event->title }}
                         </a>
@@ -45,15 +47,15 @@
                             {{ $ticket->product->name }}
                         </a>
                     </td>
-                    <td>
+                    <td class="hidden-sm hidden-xs">
                         {{ date('d-m-Y H:i', $ticket->available_from) }}
                         -
                         {{ date('d-m-Y H:i', $ticket->available_to) }}
                     </td>
-                    <td>
+                    <td class="hidden-sm hidden-xs">
                         {{ $ticket->members_only ? 'Members' : 'Everyone' }}
                     </td>
-                    <td>{{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}</td>
+                    <td class="hidden-sm hidden-xs">{{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}</td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('tickets::edit', ['id' => $ticket->id]) }}" role="button">

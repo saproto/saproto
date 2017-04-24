@@ -15,8 +15,8 @@ return [
     'stores' => [
         'protopolis' => (object)[
             'name' => 'Protopolis',
-            'categories' => [12, 1, 4, 5, 6, 22, 7, 9, 11],
-            'addresses' => ['130.89.190.22', '2001:67c:2564:318:9ab:3c5a:78f5:5fd'],
+            'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11],
+            'addresses' => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
             'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,
         ],
@@ -24,7 +24,7 @@ return [
             'name' => 'PilsCie',
             'categories' => [15, 18],
             'addresses' => [],
-            'roles' => ['board', 'pilscie'],
+            'roles' => ['board', 'pilscie', 'drafters'],
             'cash_allowed' => true
         ]
     ],
@@ -39,6 +39,17 @@ return [
     */
 
     'alfred-account' => 43,
+
+    /*
+    |--------------------------------------------------------------------------
+    | PilsCie Account
+    |--------------------------------------------------------------------------
+    |
+    | Defines the financial account used by the PilsCie
+    |
+    */
+
+    'pilscie-account' => 4,
 
     /*
     |--------------------------------------------------------------------------

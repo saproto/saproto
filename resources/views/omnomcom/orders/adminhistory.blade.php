@@ -8,7 +8,54 @@
 
     <div class="row">
 
-        <div class="col-md-9">
+        <div class="col-md-3 col-md-push-9">
+
+            <form method="get" action="{{ route('omnomcom::orders::adminlist') }}">
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading" style="padding: 10px; text-align: center;">
+
+                        Orderline History
+
+                    </div>
+
+                    <div class="panel-body">
+
+                        <p style="text-align: center;">
+                            @if(!$date)
+                                Today's orderlines
+                            @else
+                                Orderlines of {{ $date }}
+                            @endif
+                        </p>
+
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="date">Orderlines from:</label>
+                            <input type="text" class="form-control datetime-picker" id="date"
+                                   name="date" value="{{ $date or '' }}"
+                                   placeholder="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
+                        </div>
+
+                    </div>
+
+                    <div class="panel-footer clearfix">
+                        <input type="submit" class="btn btn-success pull-right" value="Get orders">
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="btn-group btn-group-justified" role="group" style="margin-bottom:20px;">
+                <a class="btn btn-success" data-toggle="modal" data-target="#orderlinemodal">Add orderlines manually</a>
+            </div>
+
+        </div>
+
+        <div class="col-md-9 col-md-pull-3">
 
             @if(count($orderlines) > 0)
 
@@ -94,53 +141,6 @@
                 </div>
 
             @endif
-
-        </div>
-
-        <div class="col-md-3">
-
-            <form method="get" action="{{ route('omnomcom::orders::adminlist') }}">
-
-                <div class="panel panel-default">
-
-                    <div class="panel-heading" style="padding: 10px; text-align: center;">
-
-                        Orderline History
-
-                    </div>
-
-                    <div class="panel-body">
-
-                        <p style="text-align: center;">
-                            @if(!$date)
-                                Today's orderlines
-                            @else
-                                Orderlines of {{ $date }}
-                            @endif
-                        </p>
-
-                        <hr>
-
-                        <div class="form-group">
-                            <label for="date">Orderlines from:</label>
-                            <input type="text" class="form-control datetime-picker" id="date"
-                                   name="date" value="{{ $date or '' }}"
-                                   placeholder="{{ Carbon\Carbon::today()->format('Y-m-d') }}">
-                        </div>
-
-                    </div>
-
-                    <div class="panel-footer clearfix">
-                        <input type="submit" class="btn btn-success pull-right" value="Get orders">
-                    </div>
-
-                </div>
-
-            </form>
-
-            <div class="btn-group btn-group-justified" role="group">
-                <a class="btn btn-success" data-toggle="modal" data-target="#orderlinemodal">Add orderlines manually</a>
-            </div>
 
         </div>
 

@@ -24,10 +24,7 @@ class PasswordController extends Controller
 
     public function postAuth(Request $request)
     {
-        if (
-            AuthController::verifyCredentials(Auth::user()->email, $request->password) ||
-            (Auth::user()->utwente_username && AuthController::verifyUtwenteCredentials(Auth::user()->utwente_username, $request->password))
-        ) {
+        if (AuthController::verifyCredentials(Auth::user()->email, $request->password)) {
             $request->session()->put('passwordstore-verify', strtotime('+10 minutes'));
             $request->session()->flash('flash_message', 'You can access this tool for 10 minutes.');
             return Redirect::route('passwordstore::index');

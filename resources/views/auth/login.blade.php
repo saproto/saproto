@@ -1,53 +1,55 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
     Authentication
 @endsection
 
-@section('panel-title')
-    Authentication
-@endsection
-
-@section('panel-body')
+@section('login-body')
 
     <form method="POST" action="{{ route('login::post') }}">
 
         {!! csrf_field() !!}
 
-        <div class="form-group">
-            <label for="recipient-name" class="control-label">Username:</label>
-            <input type="text" class="form-control" id="username" name="email">
-        </div>
-        <div class="form-group">
-            <label for="message-text" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" name="password">
-        </div>
+        <p>
+            <input type="text" class="form-control" id="username" name="email" placeholder="Proto Username or E-mail"
+                   value="{{ (Session::has('login_username') ? Session::get('login_username') : '') }}">
+        </p>
+        <p>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Proto Password">
+        </p>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" id="remember" name="remember"> Remember me
-            </label>
-        </div>
+        <p>
+            <button type="submit" class="btn btn-success" style="width: 100%;">
+                Login with Proto Account
+            </button>
+        </p>
+
+        <p>
+            <a class="btn btn-default" href="{{ route('login::requestusername') }}" style="width: 100%;">
+                Forgot your Proto username?
+            </a>
+        </p>
+
+        <p>
+            <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
+                Forgot your Proto password?
+            </a>
+        </p>
+
+        <p>
+            <a class="btn btn-default" href="https://github.com/saproto/saproto/wiki/The-Proto-Account" target="_blank"
+               style="width: 100%;">
+                What is a Proto account?
+            </a>
+        </p>
 
         <hr>
 
         <p>
-            To log-in to your Proto account, you can use the e-mail address registered to your account in combination
-            with your password. If you are a Proto member, you also have a Proto username you can use instead of your
-            e-mail address to save typing.
+            <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
+                Login with UTwente Account
+            </a>
         </p>
-
-        <p>
-            If you previously linked them to your Proto account, you can use your University of Twente credentials as an
-            alternative means to sign in.
-        </p>
-
-        @endsection
-
-        @section('panel-footer')
-            <button type="submit" class="btn btn-success">LOG-IN</button>
-
-            <a class="btn btn-default pull-right" href="{{ route('login::resetpass') }}">Forgot your password?</a>
 
     </form>
 @endsection

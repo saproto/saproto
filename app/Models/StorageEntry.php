@@ -42,7 +42,8 @@ class StorageEntry extends Model
             User::where('image_id', $id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
             Committee::where('image_id', $id)->count() == 0 &&
-            Event::where('image_id', $id)->count() == 0;
+            Event::where('image_id', $id)->count() == 0 &&
+            Newsitem::where('featured_image_id', $id)->count() == 0;
     }
 
     public function createFromFile($file)

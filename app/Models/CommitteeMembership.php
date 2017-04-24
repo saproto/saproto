@@ -20,16 +20,18 @@ class CommitteeMembership extends Model
     /**
      * @return mixed The user this association is for.
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
     /**
      * @return mixed The committee this association is for.
      */
-    public function committee() {
+    public function committee()
+    {
         return $this->belongsTo('Proto\Models\Committee');
     }
-    
+
     protected $guarded = ['id'];
 }
