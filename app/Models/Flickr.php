@@ -8,9 +8,13 @@ use Exception;
 
 class Flickr extends Model
 {
-    public static function getAlbums($max = null)
+    public static function getAlbums($max = null, $private = false)
     {
-        $albums = ($max == null) ? FlickrAlbum::orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::orderBy('date_taken', 'desc')->paginate($max);
+        if ($private) {
+            $albums = ($max == null) ? FlickrAlbum::orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::orderBy('date_taken', 'desc')->paginate($max);
+        } else {
+            $albums = ($max == null) ? FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->paginate($max);
+        }
         return $albums;
     }
 
