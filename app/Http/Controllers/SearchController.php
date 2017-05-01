@@ -27,44 +27,51 @@ class SearchController extends Controller
 
         $data = SearchController::doSearch($term);
 
-        $aggregate = [];
+        $users = [];
         foreach ($data['users'] as $id => $count) {
-            $aggregate[] = [
+            $users[] = [
                 'score' => $count,
                 'object' => User::findOrFail($id),
                 'href' => route('user::profile', ['id' => $id])
             ];
         }
+        $pages = [];
         foreach ($data['pages'] as $id => $count) {
             $page = Page::findOrFail($id);
-            $aggregate[] = [
+            $pages[] = [
                 'score' => $count,
                 'object' => $page,
                 'href' => route('page::show', ['slug' => $page->slug])
             ];
         }
+        $committees = [];
         foreach ($data['committees'] as $id => $count) {
-            $aggregate[] = [
+            $committees[] = [
                 'score' => $count,
                 'object' => Committee::findOrFail($id),
                 'href' => route('committee::show', ['id' => $id])
             ];
         }
+        $events = [];
         foreach ($data['events'] as $id => $count) {
-            $aggregate[] = [
+            $events[] = [
                 'score' => $count,
                 'object' => Event::findOrFail($id),
                 'href' => route('event::show', ['id' => $id])
             ];
         }
 
-        usort($aggregate, function ($a, $b) {
-            return $b['score'] - $a['score'];
-        });
+        usort($users, function ($a, $b) { return $b['score'] - $a['score'];});
+        usort($pages, function ($a, $b) { return $b['score'] - $a['score'];});
+        usort($committees, function ($a, $b) { return $b['score'] - $a['score'];});
+        usort($events, function ($a, $b) { return $b['score'] - $a['score'];});
 
         return view('website.search', [
             'term' => $term,
-            'data' => $aggregate
+            'users' => $users,
+            'pages' => $pages,
+            'committees' => $committees,
+            'events' => $events
         ]);
 
     }
