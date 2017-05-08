@@ -21,19 +21,19 @@
 
                 <div class="panel-body">
 
-                    <div id="latest">
+                    <div id="qq_latest">
 
                         @if(count($data) > 0)
                             <?php $entry = $data[0] ?>
                             <h4 style="margin-top: 0;">
                                 <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>
+                                <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>
                             </h4>
-                            <div id="bigquote">
+                            <div id="qq_bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
                             </div>
-                            <div class="like" data-id="{{ $entry->id }}">
-                                <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i>
+                            <div class="qq_like" data-id="{{ $entry->id }}">
+                                <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
                                 <span>{{ count($entry->likes()) }}</span>
                             </div>
                             @if (Auth::check() && Auth::user()->can("board"))
@@ -63,11 +63,11 @@
                                 <div>
                                     <p>
                                         <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                        <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
+                                        <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
                                     </p>
                                     <h4>{!! $entry["quote"] !!}</h4>
-                                    <div class="like" data-id="{{ $entry->id }}">
-                                        <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i>
+                                    <div class="qq_like" data-id="{{ $entry->id }}">
+                                        <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
                                         <span>{{ count($entry->likes()) }}</span>
                                     </div>
                                     @if (Auth::check() && Auth::user()->can("board"))
@@ -97,15 +97,15 @@
 
     <script>
 
-        $(".like").click(function (event) {
+        $(".qq_like").click(function (event) {
             var id = $(event.target).parent().attr('data-id');
             if (id === undefined) throw new Error("Can\'t find id");
-            if ($(event.target).hasClass('liked')) {
+            if ($(event.target).hasClass('qq_liked')) {
                 $(event.target).next().html(parseInt($(event.target).next().html())-1);
             } else {
                 $(event.target).next().html(parseInt($(event.target).next().html())+1);
             }
-            $(event.target).toggleClass('liked');
+            $(event.target).toggleClass('qq_liked');
             $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
             $.ajax({
                 type: "GET",
@@ -116,12 +116,12 @@
                 error: function () {
                     console.log('Couldn\'t (un)like quote ' + id);
                     window.alert('Couldn\'t (un)like quote!');
-                    if ($(event.target).hasClass('liked')) {
+                    if ($(event.target).hasClass('qq_liked')) {
                         $(event.target).next().html(parseInt($(event.target).next().html())-1);
                     } else {
                         $(event.target).next().html(parseInt($(event.target).next().html())+1);
                     }
-                    $(event.target).toggleClass('liked');
+                    $(event.target).toggleClass('qq_liked');
                 }
             });
         });

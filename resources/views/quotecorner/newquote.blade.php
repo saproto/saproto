@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("quotes::add") }}" id="addquote">
+<form class="form-horizontal" method="post" action="{{ route("quotes::add") }}" id="qq_addquote">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Post your own quote</strong>
@@ -7,7 +7,7 @@
             {{ csrf_field() }}
             <div class="form-group" style="margin-bottom: 0;">
                 <div class="col-sm-12">
-                    <textarea id="field" rows="4" cols="30" form="addquote" name="quote" placeholder="Quote goes here" style="width: 100%; outline:none; resize:none; border:none; overflow:hidden;" required></textarea>
+                    <textarea id="qq_field" rows="4" cols="30" form="addquote" name="quote" placeholder="Quote goes here" style="width: 100%; outline:none; resize:none; border:none; overflow:hidden;" required></textarea>
                 </div>
             </div>
         </div>

@@ -1,21 +1,21 @@
-#bigquote {
+#qq_bigquote {
   font-size: 50px;
   position: relative;
 }
 
-#bigquote::before {
+#qq_bigquote::before {
   content: "“";
   position: absolute;
   top: 0;
 }
 
-#bigquote::after {
+#qq_bigquote::after {
   content: "”";
   position: absolute;
   bottom: 0;
 }
 
-#bigquote * {
+#qq_bigquote * {
   display: inline-block;
   word-wrap: break-word;
   padding-left: 20px;
@@ -25,32 +25,32 @@
   max-width: 100%;
 }
 
-#bigquote div {
+#qq_bigquote div {
   max-width: calc(100% - 18px);
 }
 
-.timestamp {
+.qq_timestamp {
   color: #ccc;
   margin-left: 5px;
   font-size: 12px;
 }
 
-h4 {
+#qq_latest h4 {
   word-wrap: break-word;
 }
 
-.like {
+.qq_like {
   float: left;
   color: #ccc;
   cursor:pointer;
 }
 
-.like i {
+.qq_like i {
   font-size: 25px;
   margin-right: 5px;
   color: #ccc;
 }
 
-.liked {
+.qq_liked {
   color: #7FBA00 !important;
 }
