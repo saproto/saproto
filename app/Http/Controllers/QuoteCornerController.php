@@ -67,7 +67,6 @@ class QuoteCornerController extends Controller
         $quote = QuoteLike::where('quote_id', $id)->where('user_id', Auth::user()->id)->get();
         if (count($quote) != 0) {
             $quote[0]->delete();
-            Session::flash('flash_message', "Quote unliked.");
         } else {
             $new = array(
                 'user_id' => Auth::user()->id,
@@ -75,7 +74,6 @@ class QuoteCornerController extends Controller
             );
             $relation = new QuoteLike($new);
             $relation->save();
-            Session::flash('flash_message', "Quote liked.");
         }
         return Redirect::back();
     }
