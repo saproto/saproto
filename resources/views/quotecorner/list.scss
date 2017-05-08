@@ -1,0 +1,56 @@
+#bigquote {
+  font-size: 50px;
+  position: relative;
+}
+
+#bigquote::before {
+  content: "“";
+  position: absolute;
+  top: 0;
+}
+
+#bigquote::after {
+  content: "”";
+  position: absolute;
+  bottom: 0;
+}
+
+#bigquote * {
+  display: inline-block;
+  word-wrap: break-word;
+  padding-left: 20px;
+  padding-bottom: 30px;
+  padding-top: 10px;
+  padding-right: 15px;
+  max-width: 100%;
+}
+
+#bigquote div {
+  max-width: calc(100% - 18px);
+}
+
+.timestamp {
+  color: #ccc;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+h4 {
+  word-wrap: break-word;
+}
+
+.like {
+  float: left;
+  color: #ccc;
+  cursor:pointer;
+}
+
+.like i {
+  font-size: 25px;
+  margin-right: 5px;
+  color: #ccc;
+}
+
+.liked {
+  color: #7FBA00 !important;
+}

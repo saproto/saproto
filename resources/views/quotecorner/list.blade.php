@@ -32,10 +32,9 @@
                             <div id="bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
                             </div>
-                            <div class="like">
-                                <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
-                                            class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
-                                {{ count($entry->likes()) }}
+                            <div class="like" data-id="{{ $entry->id }}">
+                                <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i>
+                                <span>{{ count($entry->likes()) }}</span>
                             </div>
                             @if (Auth::check() && Auth::user()->can("board"))
                                 <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}" style="float:right;">Remove</a>
@@ -67,10 +66,9 @@
                                         <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
                                     </p>
                                     <h4>{!! $entry["quote"] !!}</h4>
-                                    <div class="like">
-                                        <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
-                                                    class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
-                                        {{ count($entry->likes()) }}
+                                    <div class="like" data-id="{{ $entry->id }}">
+                                        <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i>
+                                        <span>{{ count($entry->likes()) }}</span>
                                     </div>
                                     @if (Auth::check() && Auth::user()->can("board"))
                                         <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}"
@@ -93,68 +91,45 @@
 
 @endsection
 
-@section('stylesheet')
+@section('javascript')
 
     @parent
 
-    <style type="text/css">
+    <script>
 
-        #bigquote {
-            font-size: 50px;
-            position: relative;
-        }
+        $(".like").click(function (event) {
+            var id = $(event.target).parent().attr('data-id');
+            if (id === undefined) throw new Error("Can\'t find id");
+            if ($(event.target).hasClass('liked')) {
+                $(event.target).next().html(parseInt($(event.target).next().html())-1);
+            } else {
+                $(event.target).next().html(parseInt($(event.target).next().html())+1);
+            }
+            $(event.target).toggleClass('liked');
+            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
+            $.ajax({
+                type: "GET",
+                url: '/quotes/like/' + id,
+                success: function () {
+                    if ($(event.target).hasClass('liked')) {
+                        console.log('Liked quote ' + id);
+                    } else {
+                        console.log('Unliked quote ' + id);
+                    }
+                },
+                error: function () {
+                    console.log('Couldn\'t like quote ' + id);
+                    window.alert('Couldn\'t like quote!');
+                    if ($(event.target).hasClass('liked')) {
+                        $(event.target).next().html(parseInt($(event.target).next().html())-1);
+                    } else {
+                        $(event.target).next().html(parseInt($(event.target).next().html())+1);
+                    }
+                    $(event.target).toggleClass('liked');
+                }
+            });
+        });
 
-        #bigquote::before {
-            content: "“";
-            position: absolute;
-            top: 0;
-        }
-
-        #bigquote::after {
-            content: "”";
-            position: absolute;
-            bottom: 0;
-        }
-
-        #bigquote * {
-            display: inline-block;
-            word-wrap: break-word;
-            padding-left: 20px;
-            padding-bottom: 30px;
-            padding-top: 10px;
-            padding-right: 15px;
-            max-width: 100%;
-        }
-
-        #bigquote div {
-            max-width: calc(100% - 18px);
-        }
-
-        .timestamp {
-            color: #ccc;
-            margin-left: 5px;
-            font-size: 12px;
-        }
-
-        h4 {
-            word-wrap: break-word;
-        }
-
-        .like {
-            float: left;
-            color: #ccc;
-        }
-
-        .like i {
-            font-size: 25px;
-            margin-right: 5px;
-            color: #ccc;
-        }
-
-        .liked {
-            color: #7FBA00 !important;
-        }
-
-    </style>
+    </script>
 
 @endsection
