@@ -28,11 +28,16 @@ class ProfilePictureController extends Controller
 
         $image = $request->file('image');
         if ($image) {
-            $file = new StorageEntry();
-            $file->createFromFile($image);
+            if (substr($image->getMimeType(), 0, 5) == 'image') {
+                $file = new StorageEntry();
+                $file->createFromFile($image);
 
-            $user->photo()->associate($file);
-            $user->save();
+                $user->photo()->associate($file);
+                $user->save();
+            } else {
+                Session::flash("flash_message", "This is not an image file!");
+                return Redirect::back();
+            }
         } else {
             Session::flash("flash_message", "You forget an image to upload, silly!");
             return Redirect::back();

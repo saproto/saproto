@@ -11,13 +11,9 @@
                 <img class="profile__photo" src="{{ $user->generatePhotoPath(200, 200) }}" alt="">
             </div>
 
-            <div>Select an image file: <input type="file" id="fileInput"/></div>
-            <!-- <div class="cropArea">
-              <img-crop image="myImage" area-type="square" result-image="myCroppedImage"></img-crop>
-            </div> -->
-            <!-- <hr>
+            <hr>
 
-            <input type="file" id="fileInput" name="image" class="form-control" required /> -->
+            <p>Update your profile picture: <input type="file" name="image" required/></p>
 
         </div>
 
