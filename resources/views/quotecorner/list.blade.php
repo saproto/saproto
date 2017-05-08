@@ -111,15 +111,11 @@
                 type: "GET",
                 url: '/quotes/like/' + id,
                 success: function () {
-                    if ($(event.target).hasClass('liked')) {
-                        console.log('Liked quote ' + id);
-                    } else {
-                        console.log('Unliked quote ' + id);
-                    }
+                    console.log('(Un)Liked quote ' + id);
                 },
                 error: function () {
-                    console.log('Couldn\'t like quote ' + id);
-                    window.alert('Couldn\'t like quote!');
+                    console.log('Couldn\'t (un)like quote ' + id);
+                    window.alert('Couldn\'t (un)like quote!');
                     if ($(event.target).hasClass('liked')) {
                         $(event.target).next().html(parseInt($(event.target).next().html())-1);
                     } else {
