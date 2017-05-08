@@ -128,7 +128,6 @@ return [
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        // Illuminate\Mail\MailServiceProvider::class,
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
@@ -166,6 +165,7 @@ return [
         Mollie\Laravel\MollieServiceProvider::class,
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
+        willvincent\Feeds\FeedsServiceProvider::class
     ],
 
     /*
@@ -267,6 +267,8 @@ return [
         'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
 
         'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
+
+        'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class
 
     ],
 

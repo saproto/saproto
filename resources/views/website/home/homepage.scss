@@ -1,20 +1,20 @@
 
 .media__icon {
-    background-color: $proto-darker;
-    text-align: center;
-    color: #fff;
-    padding: .5rem;
-    border-radius: 50%;
-    width: 4rem;
-    height: 4rem;
-    display: block;
+  background-color: $proto-darker;
+  text-align: center;
+  color: #fff;
+  padding: .5rem;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: block;
 }
 
 .homepage {
 
-    .main__header .container {
-        margin-top: 6rem;
-    }
+  .main__header .container {
+    margin-top: 6rem;
+  }
 
   &__companyimage {
     margin: 0 20px;
@@ -49,71 +49,32 @@
       overflow: hidden;
     }
   }
-
-  // &__calendar {
-  //   min-height: 300px;
-  //   max-height: 300px;
-  //   overflow: hidden;
-  // }
-  //
-  // &__calendar:hover {
-  //   max-height: none;
-  // }
 }
 
-.carousel {
-    background: #fff;
+.protoink__article {
+  height: 150px;
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  margin-bottom: 40px;
+  display: table;
+  transition: all 0.1s;
 
-    i {
-        margin-top: 5rem;
-    }
+  &:hover {
+    transform: scale(1.05, 1.05);
+  }
 
-    .item {
-        border-radius: 3px 0 0 3px;
-        overflow: hidden;
-    }
+  a {
+    display: table-cell;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    padding: 0px 50px;
+    vertical-align: middle;
+    font-size: 25px;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 0 5px #000;
+  }
 
-    .carousel-caption {
-        left:0;
-    	right:0;
-    	bottom:0;
-    	text-align:left;
-    	padding:10px;
-    	background:rgba(0,0,0,0.6);
-    	text-shadow:none;
-    }
-
-    h5 {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .list-group {
-    	position: absolute;
-        background-color: #fff;
-        transition: all 0.3s ease-out;
-    	top:0;
-    	right:0;
-        width: 50%;
-        border-color: #eee;
-    }
-    .list-group-item {
-    	border-radius:0px;
-    	cursor:pointer;
-    }
-    .list-group .active {
-        transition: all 0.3s ease-out;
-    	background-color: $primary-color;
-        border: none;
-    }
-}
-
-@media (min-width: 992px) {
-	#myCarousel {padding-right:50%;}
-	#myCarousel .carousel-controls {display:none;}
-}
-@media (max-width: 991px) {
-	.carousel-caption p,
-	#myCarousel .list-group {display:none;}
 }

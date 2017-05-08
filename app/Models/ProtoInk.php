@@ -4,6 +4,9 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Feeds;
+use Exception;
+
 class ProtoInk extends Model
 {
     /**
@@ -15,18 +18,17 @@ class ProtoInk extends Model
     {
         try {
 
-            $xml = simplexml_load_string(file_get_contents("http://proto.ink/feed/"));
+            $feed = Feeds::make('http://proto.ink/feed');
 
-            // dd($xml);
             $data = [];
-            foreach ($xml->channel->item as $item) {
+            foreach ($feed->get_items() as $item) {
                 $data[] = (object)[
-                    'title' => (string)$item->title,
-                    'description' => (string)$item->description,
-                    'link' => (string)$item->link,
-                    'date' => strtotime((string)$item->pubDate)
+                    'title' => $item->get_title(),
+                    'description' => $item->get_description(),
+                    'link' => $item->get_permalink(),
+                    'date' => $item->get_date('U'),
+                    'thumbnail' => ProtoInk::extractThumbFromItem($item)
                 ];
-                // dd($item->description);
             }
 
             return $data;
@@ -37,6 +39,16 @@ class ProtoInk extends Model
 
         }
 
+    }
+
+    public static function extractThumbFromItem($item)
+    {
+        try {
+            $raw = (array)$item;
+            return $raw['data']['child']['http://search.yahoo.com/mrss/']['content'][0]['attribs']['']['url'];
+        } catch (Exception $e) {
+            return asset('images/protoink-placeholder.png');
+        }
     }
 
 }
