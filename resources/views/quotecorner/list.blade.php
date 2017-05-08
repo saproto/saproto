@@ -21,21 +21,20 @@
 
                 <div class="panel-body">
 
-                    <div id="latest">
+                    <div id="qq_latest">
 
                         @if(count($data) > 0)
                             <?php $entry = $data[0] ?>
                             <h4 style="margin-top: 0;">
                                 <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>
+                                <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>
                             </h4>
-                            <div id="bigquote">
+                            <div id="qq_bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
                             </div>
-                            <div class="like">
-                                <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
-                                            class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
-                                {{ count($entry->likes()) }}
+                            <div class="qq_like" data-id="{{ $entry->id }}">
+                                <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
+                                <span>{{ count($entry->likes()) }}</span>
                             </div>
                             @if (Auth::check() && Auth::user()->can("board"))
                                 <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}" style="float:right;">Remove</a>
@@ -64,13 +63,12 @@
                                 <div>
                                     <p>
                                         <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                        <span class="timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
+                                        <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
                                     </p>
                                     <h4>{!! $entry["quote"] !!}</h4>
-                                    <div class="like">
-                                        <a href="{{ route('quotes::like', ['id' => $entry->id]) }}"><i
-                                                    class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "liked" : "" }}"></i></a>
-                                        {{ count($entry->likes()) }}
+                                    <div class="qq_like" data-id="{{ $entry->id }}">
+                                        <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
+                                        <span>{{ count($entry->likes()) }}</span>
                                     </div>
                                     @if (Auth::check() && Auth::user()->can("board"))
                                         <a href="{{ route('quotes::delete', ['id' => $entry->id]) }}"
@@ -93,68 +91,41 @@
 
 @endsection
 
-@section('stylesheet')
+@section('javascript')
 
     @parent
 
-    <style type="text/css">
+    <script>
 
-        #bigquote {
-            font-size: 50px;
-            position: relative;
-        }
+        $(".qq_like").click(function (event) {
+            var id = $(event.target).parent().attr('data-id');
+            if (id === undefined) throw new Error("Can\'t find id");
+            if ($(event.target).hasClass('qq_liked')) {
+                $(event.target).next().html(parseInt($(event.target).next().html())-1);
+            } else {
+                $(event.target).next().html(parseInt($(event.target).next().html())+1);
+            }
+            $(event.target).toggleClass('qq_liked');
+            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
+            $.ajax({
+                type: "GET",
+                url: '/quotes/like/' + id,
+                success: function () {
+                    console.log('(Un)Liked quote ' + id);
+                },
+                error: function () {
+                    console.log('Couldn\'t (un)like quote ' + id);
+                    window.alert('Couldn\'t (un)like quote!');
+                    if ($(event.target).hasClass('qq_liked')) {
+                        $(event.target).next().html(parseInt($(event.target).next().html())-1);
+                    } else {
+                        $(event.target).next().html(parseInt($(event.target).next().html())+1);
+                    }
+                    $(event.target).toggleClass('qq_liked');
+                }
+            });
+        });
 
-        #bigquote::before {
-            content: "“";
-            position: absolute;
-            top: 0;
-        }
-
-        #bigquote::after {
-            content: "”";
-            position: absolute;
-            bottom: 0;
-        }
-
-        #bigquote * {
-            display: inline-block;
-            word-wrap: break-word;
-            padding-left: 20px;
-            padding-bottom: 30px;
-            padding-top: 10px;
-            padding-right: 15px;
-            max-width: 100%;
-        }
-
-        #bigquote div {
-            max-width: calc(100% - 18px);
-        }
-
-        .timestamp {
-            color: #ccc;
-            margin-left: 5px;
-            font-size: 12px;
-        }
-
-        h4 {
-            word-wrap: break-word;
-        }
-
-        .like {
-            float: left;
-            color: #ccc;
-        }
-
-        .like i {
-            font-size: 25px;
-            margin-right: 5px;
-            color: #ccc;
-        }
-
-        .liked {
-            color: #7FBA00 !important;
-        }
-
-    </style>
+    </script>
 
 @endsection
