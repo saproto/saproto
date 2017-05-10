@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("quotes::add") }}" id="qq_addquote">
+<form class="form-horizontal" method="post" action="{{ route("quotes::add") }}" id="addquote">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Post your own quote</strong>
