@@ -103,9 +103,9 @@
                                     <td>{{ $purchase->user->name }}</td>
                                     <td>&euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
                                     <td>{{ $purchase->created_at }}</td>
-                                    <td>
+                                    <td class="events__scanned">
                                         @if ($purchase->scanned === null)
-                                            <a href="{{ route('tickets::scan', ['barcode' => $purchase->barcode]) }}">
+                                            <a data-id="{{ $purchase->barcode }}" class="events__scannedButton" href="#">
                                                 Scan Manually
                                             </a>
                                         @else
@@ -155,5 +155,35 @@
         </p>
 
     @endif
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script>
+
+        $(".events__scannedButton").click(function (event) {
+            event.preventDefault();
+            var barcode = $(this).attr('data-id');
+            var parent = $(this).parent();
+            if (barcode === undefined) throw new Error("Can\'t find barcode");
+            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
+            $.ajax({
+                type: "GET",
+                url: '{!! route('api::scan', ['event' => $event->id]) !!}',
+                data: { 'barcode' : barcode },
+                success: function () {
+                    console.log('Scanned barcode ' + barcode);
+                    parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan', ['barcode' => '']) }}/" + barcode + "'>Unscan</a>");
+                },
+                error: function () {
+                    window.alert('Couldn\'t register scan.');
+                }
+            });
+        });
+
+    </script>
 
 @endsection
