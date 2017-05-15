@@ -14,7 +14,7 @@
                 <a class="btn btn-info btn-lg"
                    href="https://github.com/saproto/saproto/wiki/Creating-Issues-101">
                     <i class="fa fa-graduation-cap" aria-hidden="true" style="margin-right: 20px;"></i>
-                    Click here to learn how to report errors!
+                    Learn how to report errors!
                 </a>
             </div>
 
