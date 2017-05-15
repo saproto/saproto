@@ -106,7 +106,6 @@
                 $(event.target).next().html(parseInt($(event.target).next().html())+1);
             }
             $(event.target).toggleClass('qq_liked');
-            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
             $.ajax({
                 type: "GET",
                 url: '/quotes/like/' + id,
