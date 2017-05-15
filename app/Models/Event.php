@@ -128,6 +128,11 @@ class Event extends Model
         return User::whereIn('id', array_unique($users))->get();
     }
 
+    public function getAllEmails()
+    {
+        return $this->returnAllUsers()->pluck('email')->toArray();
+    }
+
     protected $guarded = ['id'];
 
 }

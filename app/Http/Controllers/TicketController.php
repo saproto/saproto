@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Http\Controllers\MollieController;
+
 use Proto\Models\OrderLine;
 use Proto\Models\Ticket;
 use Proto\Models\Event;
@@ -58,6 +60,7 @@ class TicketController extends Controller
         $ticket->event_id = Event::findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
+        $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
         $ticket->save();
@@ -93,6 +96,7 @@ class TicketController extends Controller
         $ticket->event_id = Event::findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::findOrFail($request->input('product'))->id;
         $ticket->members_only = $request->has('is_members_only');
+        $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
         $ticket->available_to = strtotime($request->input('available_to'));
         $ticket->save();
@@ -182,6 +186,13 @@ class TicketController extends Controller
                     'data' => $ticket
                 ];
             }
+            if ($ticket->canBeDownloaded() === false) {
+                return [
+                    'code' => 500,
+                    'message' => 'Ticket Not Paid For',
+                    'data' => $ticket
+                ];
+            }
             $ticket->scanned = date('Y-m-d H:i:s');
             $ticket->save();
             return [
@@ -220,6 +231,9 @@ class TicketController extends Controller
         $ticket = TicketPurchase::findOrFail($id);
         if ($ticket->user->id != Auth::id()) {
             abort(403, "This is not your ticket!");
+        } elseif (!$ticket->canBeDownloaded()) {
+            Session::flash("flash_message", "You need to pay for this ticket before you can download it.");
+            return Redirect::back();
         }
         return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream();
     }
@@ -233,11 +247,6 @@ class TicketController extends Controller
      */
     public function buyForEvent(Request $request, $id)
     {
-
-        if (!Auth::user()->bank()) {
-            Session::flash("flash_message", "You can only buy event tickets if you have an active withdrawal organization. Please .");
-            return Redirect::back();
-        }
 
         $event = Event::findOrFail($id);
         if ($event->tickets->count() < 1) {
@@ -276,6 +285,8 @@ class TicketController extends Controller
 
         $sold = false;
 
+        $prepaid_tickets = [];
+
         foreach ($request->get('tickets') as $ticket_id => $amount) {
 
             $ticket = Ticket::find($ticket_id);
@@ -283,6 +294,10 @@ class TicketController extends Controller
             for ($i = 0; $i < $amount; $i++) {
 
                 $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price);
+
+                if ($ticket->is_prepaid) {
+                    $prepaid_tickets[] = $oid;
+                }
 
                 $purchase = TicketPurchase::create([
                     'ticket_id' => $ticket_id,
@@ -301,6 +316,15 @@ class TicketController extends Controller
         if (!$sold) {
             Session::flash("flash_message", "You didn't select any tickets to buy. Maybe buy some tickets?");
             return Redirect::back();
+        }
+
+        if (count($prepaid_tickets) > 0) {
+            Session::set('prepaid_tickets', $event->id);
+            $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets);
+
+            OrderLine::whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
+
+            return Redirect::to($transaction->payment_url);
         }
 
         Session::flash("flash_message", "Order completed succesfully! You can find your tickets on this event page.");

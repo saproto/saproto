@@ -30,9 +30,19 @@ class OrderLine extends Model
         return $this->belongsTo('Proto\Models\Withdrawal', 'payed_with_withdrawal');
     }
 
+    public function ticketPurchase()
+    {
+        return $this->hasOne('Proto\Models\TicketPurchase', 'orderline_id');
+    }
+
     public function isPayed()
     {
         return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null);
+    }
+
+    public function molliePayment()
+    {
+        return $this->belongsTo('Proto\Models\MollieTransaction', 'payed_with_mollie');
     }
 
     public function generateHistoryStatus()

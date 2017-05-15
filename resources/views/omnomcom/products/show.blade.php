@@ -31,9 +31,21 @@
 
             <div class="btn-group-justified">
                 <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}" class="btn btn-success">
-                    Edit
+                    Edit OmNomCom Product
                 </a>
             </div>
+
+            @if ($product->ticket)
+
+                <hr>
+
+                <div class="btn-group-justified">
+                    <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-success">
+                        Edit Associated Event Ticket
+                    </a>
+                </div>
+
+            @endif
 
 
         </div>

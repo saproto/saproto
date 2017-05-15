@@ -38,6 +38,11 @@ class Product extends Model
         return true;
     }
 
+    public function ticket()
+    {
+        return $this->hasOne('Proto\Models\Ticket', 'product_id');
+    }
+
     public function buyForUser(User $user, $amount, $total, $withCash = false)
     {
 

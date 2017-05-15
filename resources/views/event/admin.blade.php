@@ -6,15 +6,22 @@
 
 @section('content')
 
-    @if ($event->activity)
+    <p style="text-align: center;">
+        <a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant Checklist</a>
+    </p>
 
+    @if(Auth::user()->can('board'))
         <p style="text-align: center;">
-            <a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant Checklist</a>
+            <strong>Contact details</strong>
         </p>
-
-        <hr>
-
+        <p style="text-align: center;">
+            Please remember to always use the BCC field (not the to or CC field) when sending emails to participants!
+        </p>
+        <textarea class="form-control">{{ implode(',', $event->getAllEmails()) }}</textarea>
     @endif
+
+
+    <hr>
 
     @if ($event->involves_food && $event->end > strtotime('-1 week'))
 
@@ -105,7 +112,8 @@
                                     <td>{{ $purchase->created_at }}</td>
                                     <td class="events__scanned">
                                         @if ($purchase->scanned === null)
-                                            <a data-id="{{ $purchase->barcode }}" class="events__scannedButton" href="#">
+                                            <a data-id="{{ $purchase->barcode }}" class="events__scannedButton"
+                                               href="#">
                                                 Scan Manually
                                             </a>
                                         @else
@@ -173,7 +181,7 @@
             $.ajax({
                 type: "GET",
                 url: '{!! route('api::scan', ['event' => $event->id]) !!}',
-                data: { 'barcode' : barcode },
+                data: {'barcode': barcode},
                 success: function () {
                     console.log('Scanned barcode ' + barcode);
                     parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan', ['barcode' => '']) }}/" + barcode + "'>Unscan</a>");
