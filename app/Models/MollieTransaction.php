@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Mollie;
+use Proto\Http\Controllers\MollieController;
 
 class MollieTransaction extends Model
 {
@@ -44,9 +45,12 @@ class MollieTransaction extends Model
 
         $mollie = Mollie::api()->payments()->get($this->mollie_id);
 
+        $oldstatus = $this->status;
         $newstatus = MollieTransaction::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
+        $this->payment_url = $mollie->getPaymentUrl();
+
         $this->save();
 
         if ($newstatus == "failed") {
@@ -57,9 +61,35 @@ class MollieTransaction extends Model
                     continue;
                 }
 
+                /**
+                 * Handles the case where an orderline was an unpaid event ticket for which prepayment is required.
+                 * If statement components:
+                 * - The orderline should refer to a product which is a ticket.
+                 * - The ticket should be a pre-paid ticket.
+                 * - The ticket should not already been paid for. This would indicate someone charging back their payment. If this is the case someone should still pay.
+                 */
+                if ($orderline->product->ticket && $orderline->product->ticket->is_prepaid && $orderline->ticketPurchase->payment_complete == false) {
+                    if ($orderline->ticketPurchase) {
+                        $orderline->ticketPurchase->delete();
+                    }
+                    $orderline->product->stock += 1;
+                    $orderline->product->save();
+                    $orderline->delete();
+                    continue;
+                }
+
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
 
+            }
+        }
+
+        if ($newstatus == "paid") {
+            foreach ($this->orderlines as $orderline) {
+                if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
+                    $orderline->ticketPurchase->payment_complete = true;
+                    $orderline->ticketPurchase->save();
+                }
             }
         }
 

@@ -26,12 +26,6 @@ class MollieController extends Controller
         $cap = floatval($request->cap);
         $total = 0;
 
-        $transaction = MollieTransaction::create([
-            'user_id' => Auth::id(),
-            'mollie_id' => 'temp',
-            'status' => 'draft'
-        ]);
-
         $orderlines = [];
 
         foreach (OrderLine::where('user_id', Auth::id())->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->orderBy('created_at', 'asc')->get() as $orderline) {
@@ -43,31 +37,22 @@ class MollieController extends Controller
         }
 
         if ($total <= 0) {
-            $transaction->delete();
             Session::flash("flash_message", "You cannot complete a purchase using this cap. Please try to increase the maximum amount you wish to pay!");
             return Redirect::back();
         }
 
-        OrderLine::whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
-
         $fee = config('omnomcom.mollie')['fixed_fee'] + $total * config('omnomcom.mollie')['variable_fee'];
 
         $orderline = OrderLine::findOrFail(Product::findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(Auth::user(), 1, $fee));
-        $orderline->payed_with_mollie = $transaction->id;
         $orderline->save();
 
-        $mollie = Mollie::api()->payments()->create([
-            "amount" => $total + $fee,
-            "description" => "Balance (€" . number_format($total, 2) . ") + Fee (€" . number_format($fee, 2) . ")",
-            "redirectUrl" => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-            "webhookUrl" => route('webhook::mollie', ['id' => $transaction->id])
-        ]);
+        $orderlines[] = $orderline->id;
 
-        $transaction->mollie_id = $mollie->id;
-        $transaction->amount = $mollie->amount;
-        $transaction->save();
+        $transaction = MollieController::createPaymentForOrderlines($orderlines);
 
-        return Redirect::to($mollie->getPaymentUrl());
+        OrderLine::whereIn('id', $orderlines)->update(['payed_with_mollie' => $transaction->id]);
+
+        return Redirect::to($transaction->payment_url);
 
     }
 
@@ -154,14 +139,27 @@ class MollieController extends Controller
         $transaction = MollieTransaction::findOrFail($id);
         $transaction = $transaction->updateFromWebhook();
 
+        $completed = true;
+
         if ($transaction->user->id == Auth::id()) {
             if (MollieTransaction::translateStatus($transaction->status) == 'failed') {
                 Session::flash("flash_message", "Your payment was cancelled.");
+                $completed = false;
             } elseif (MollieTransaction::translateStatus($transaction->status) == 'paid') {
                 Session::flash("flash_message", "Your payment was completed successfully!");
             }
         }
 
+        if (Session::has('prepaid_tickets')) {
+            $event_id = Session::get('prepaid_tickets');
+            Session::remove('prepaid_tickets');
+            if ($completed) {
+                Session::flash("flash_message", "Order completed succesfully! You can find your tickets on this event page.");
+            } else {
+                Session::flash("flash_message", "Order failed. Pre-paid tickets where not bought. Please try your purchase again.");
+            }
+            return Redirect::route('event::show', ['id' => $event_id]);
+        }
         return Redirect::route('omnomcom::orders::list');
     }
 
@@ -170,5 +168,32 @@ class MollieController extends Controller
         $transaction = MollieTransaction::findOrFail($id);
         $transaction->updateFromWebhook();
         abort(200, "Mollie webhook processed correctly!");
+    }
+
+    public static function createPaymentForOrderlines($orderlines)
+    {
+
+        $transaction = MollieTransaction::create([
+            'user_id' => Auth::id(),
+            'mollie_id' => 'temp',
+            'status' => 'draft'
+        ]);
+
+        $total = OrderLine::whereIn('id', $orderlines)->sum('total_price');
+
+        $mollie = Mollie::api()->payments()->create([
+            "amount" => $total,
+            "description" => "OmNomCom Settlement (€" . number_format($total, 2) . ")",
+            "redirectUrl" => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
+            "webhookUrl" => route('webhook::mollie', ['id' => $transaction->id])
+        ]);
+
+        $transaction->mollie_id = $mollie->id;
+        $transaction->amount = $mollie->amount;
+        $transaction->payment_url = $mollie->getPaymentUrl();
+        $transaction->save();
+
+        return $transaction;
+
     }
 }

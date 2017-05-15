@@ -62,6 +62,14 @@
             </label>
         </div>
 
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"
+                       name="is_prepaid" {{ ($ticket && $ticket->is_prepaid ? 'checked' : '') }}>
+                This ticket should be prepaid.
+            </label>
+        </div>
+
         @endsection
 
         @section('panel-footer')

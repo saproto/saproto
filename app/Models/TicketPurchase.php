@@ -26,4 +26,16 @@ class TicketPurchase extends Model
         return $this->belongsTo('Proto\Models\User', 'user_id')->withTrashed();
     }
 
+    public function canBeDownloaded()
+    {
+        if (!$this->ticket->is_prepaid) {
+            return true;
+        } elseif ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) {
+            return true;
+        } elseif ($this->orderline->molliePayment && $this->orderline->molliePayment->status == 'paid') {
+            return true;
+        }
+        return false;
+    }
+
 }

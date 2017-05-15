@@ -2,6 +2,8 @@
 
     @if(Auth::check() && count($event->getTicketPurchasesFor(Auth::user())) > 0)
 
+        <?php $has_unpaid_tickets = false; ?>
+
         <div class="panel panel-default">
 
             <div class="panel-heading" style="text-align: center;">
@@ -22,13 +24,20 @@
                                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ">
                                     <strong>{{ $purchase->ticket->product->name }}</strong>
                                     <br>
-                                    <a href="{{ route("tickets::download", ['id'=>$purchase->id]) }}"
-                                       style="text-decoration: none;">
+                                    @if($purchase->canBeDownloaded())
+                                        <a href="{{ route("tickets::download", ['id'=>$purchase->id]) }}"
+                                           style="text-decoration: none;">
                                         <span class="label label-success">
                                             Download PDF
                                         </span>
-                                    </a>
-                                    &nbsp;
+                                        </a>
+                                    @else
+                                        <?php $has_unpaid_tickets = true; ?>
+                                        <a href="{{ $purchase->orderline->molliePayment->payment_url or route("omnomcom::orders::list") }}"
+                                           style="text-decoration: none;">
+                                            <span class="label label-danger">Payment Required</span>
+                                        </a>
+                                    @endif
                                     <span class="label label-default">#{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}</span>
                                     &nbsp;
                                     <span class="label label-info">&euro;{{ number_format($purchase->orderline->total_price, 2) }}</span>
@@ -45,9 +54,22 @@
 
             </div>
 
+            @if($has_unpaid_tickets)
+                <div class="panel-footer">
+
+                    <p style="text-align: center">
+                        You have unpaid tickets. You need to pay for your tickets before you can download and use them.
+                        Unpaid tickets will be removed and invalidated after the payment opportunity has expired.
+                    </p>
+
+                </div>
+            @endif
+
         </div>
 
     @endif
+
+    <?php $has_prepay_tickets = false; ?>
 
     <form method="post" action="{{ route('event::buytickets', ['id'=>$event->id]) }}">
 
@@ -69,15 +91,9 @@
                     <p>
                         Please <a href="{{ route('login::show') }}">log-in</a> to buy tickets.
                     </p>
-                @elseif(!Auth::user()->bank)
-                    <p>
-                        You need to to have an active withdrawal authorization to buy tickets.<br>
-                        Please <a href="{{ route('user::bank::add', ['id' => Auth::id()]) }}">authorize us for an
-                            automatic withdrawal</a> to buy tickets.
-                    </p>
                 @else
                     <div class="form-horizontal">
-                        <? $tickets_available = 0; ?>
+                        <?php $tickets_available = 0; ?>
                         @foreach($event->tickets as $ticket)
                             <div class="form-group"
                                  style="opacity: {{ ($ticket->isAvailable(Auth::user()) ? '1' : '0.5') }};">
@@ -96,6 +112,11 @@
                                 <div class="col-md-8 control-label" style="text-align: left;">
                                     @if ($ticket->isAvailable(Auth::user()))
                                         <strong>{{ $ticket->product->name }}</strong>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        @if ($ticket->is_prepaid)
+                                            <?php $has_prepay_tickets = true; ?>
+                                            <span class="label label-info">Pre-Pay Ticket</span>
+                                        @endif
                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                         {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                         available
@@ -139,11 +160,21 @@
                 @endif
             </div>
 
-            @if(Auth::check() && Auth::user()->bank && $tickets_available > 0)
+            @if(Auth::check() && $tickets_available > 0)
                 <div class="panel-footer">
 
                     <input type="submit" class="form-control btn btn-success" value="Purchase Tickets"
                            onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
+
+                    @if($has_prepay_tickets)
+                        <hr>
+                        <p style="text-align: center">
+                            If you buy one or more <span class="label label-info">Pre-Pay Ticket</span> you will need to
+                            pay for them immediately using our digital payment system. We accept multiple providers
+                            including iDeal, Credit Card and BitCoin. If you cancel your payment half-way any non
+                            Pre-Pay tickets will still be ordered!
+                        </p>
+                    @endif
 
                 </div>
             @endif
