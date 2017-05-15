@@ -420,29 +420,9 @@
 
                     </div>
 
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading">
-                            Participant details
-                        </div>
-
-                        <div class="panel-body">
-                            <p><a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant checklist</a>
-                            </p>
-                            <p><strong>Contact details</strong></p>
-                            <p>Please remember to always use the BCC field (not the to or CC field) when sending emails
-                                to participants!</p>
-                            <textarea
-                                    class="form-control">@foreach($event->activity->allUsers as $user){{ $user->email }}
-                                , @endforeach</textarea>
-                        </div>
-
-                    </div>
-
                 @endif
 
             @endif
-
 
         </div>
 

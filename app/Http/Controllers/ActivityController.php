@@ -109,9 +109,6 @@ class ActivityController extends Controller
         if (!(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
             abort(403, 'You may not see this page.');
         }
-        if (!$event->activity) {
-            abort(404, 'This event has no participant list.');
-        }
         return view('event.checklist', ['event' => $event]);
     }
 
