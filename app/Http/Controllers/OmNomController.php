@@ -136,6 +136,14 @@ class OmNomController extends Controller
     {
 
         $products = Product::where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
+        foreach ($products as $product) {
+            $product->category = $product->categories()->first();
+            if (!$product->category) {
+                $product->category = 'Undefined';
+            } else {
+                $product->category = $product->category->name;
+            }
+        }
         return view('omnomcom.products.generateorder', ['products' => $products]);
     }
 
