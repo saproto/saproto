@@ -152,6 +152,8 @@ class MenuController extends Controller
 
         $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', $menuItem->order - 1)->first();
 
+        if(!$menuItemAbove) abort(500, 'Unable to change order.');
+
         $menuItemAbove->order++;
         $menuItemAbove->save();
 
@@ -168,6 +170,8 @@ class MenuController extends Controller
         if ($menuItem->order >= MenuItem::all()->count() - 1) abort(500);
 
         $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', $menuItem->order + 1)->first();
+
+        if(!$menuItemAbove) abort(500, 'Unable to change order.');
 
         $menuItemAbove->order--;
         $menuItemAbove->save();
