@@ -37,38 +37,56 @@
 
             </thead>
 
-            @foreach($products as $product)
+            <?php
+            $category = null;
+            ?>
 
-                <?php
+            @while(count($products) > 0)
 
-                if ($product->supplier_collo == 0) {
-                    $needToOrder = 999999;
-                } else {
-                    $needToOrder = ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo);
-                }
+                <?php $category = $products->first()->category; ?>
 
-                ?>
+                <th colspan="10"><?echo $category;?></th>
 
-                <tr>
+                @foreach($products as $key => $product)
 
-                    <td>{{ $product->id }}</td>
-                    <td>
-                        <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">{{ $product->name }}</a>
-                    </td>
-                    <td style="opacity: 0.5;">{{ $product->supplier_collo }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>{{ $product->preferred_stock }}</td>
-                    <td>&nbsp;</td>
-                    <td><strong>{{ $needToOrder }}</strong></td>
-                    <td style="opacity: 0.5;">{{ ($needToOrder * $product->supplier_collo) }} units</td>
-                    <td>{{ $product->stock + ($product->supplier_collo * $needToOrder) }}</td>
-                    <td style="opacity: 0.5;">
-                        + {{ ($product->stock + ($product->supplier_collo * $needToOrder)) - $product->preferred_stock }}
-                    </td>
+                    @if($product->category == $category)
 
-                </tr>
+                        <?php
 
-            @endforeach
+                        if ($product->supplier_collo == 0) {
+                            $needToOrder = 999999;
+                        } else {
+                            $needToOrder = ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo);
+                        }
+
+                        ?>
+
+                        <tr>
+
+                            <td>{{ $product->id }}</td>
+                            <td>
+                                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">{{ $product->name }}</a>
+                            </td>
+                            <td style="opacity: 0.5;">{{ $product->supplier_collo }}</td>
+                            <td>{{ $product->stock }}</td>
+                            <td>{{ $product->preferred_stock }}</td>
+                            <td>&nbsp;</td>
+                            <td><strong>{{ $needToOrder }}</strong></td>
+                            <td style="opacity: 0.5;">{{ ($needToOrder * $product->supplier_collo) }} units</td>
+                            <td>{{ $product->stock + ($product->supplier_collo * $needToOrder) }}</td>
+                            <td style="opacity: 0.5;">
+                                + {{ ($product->stock + ($product->supplier_collo * $needToOrder)) - $product->preferred_stock }}
+                            </td>
+
+                        </tr>
+
+                        <?php unset($products[$key]); ?>
+
+                    @endif
+
+                @endforeach
+
+            @endwhile
 
         </table>
 
