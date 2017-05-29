@@ -153,6 +153,10 @@
 
                                 @foreach($committee->helpedEvents() as $key => $event)
 
+                                    @if($key % 2 == 0 && $key > 1)
+                                        <? echo '</div><div class="row">'?>
+                                    @endif
+
                                     <div class="col-md-6">
 
                                         <a class="activity"
@@ -164,7 +168,8 @@
                                                 </p>
                                                 <p>
                                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                    {{ date('l j F Y', $event['start']) }}, {{ date('H:i', $event['start']) }}
+                                                    {{ date('l j F Y', $event['start']) }}
+                                                    , {{ date('H:i', $event['start']) }}
                                                     -
                                                     @if (($event['end'] - $event['start']) < 3600 * 24)
                                                         {{ date('H:i', $event['end']) }}
