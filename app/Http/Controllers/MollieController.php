@@ -90,7 +90,9 @@ class MollieController extends Controller
             ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->whereNotNull('orderlines.payed_with_mollie')
-            ->where('mollie_transactions.status', '=', 'paid')
+            ->where(function ($query) {
+                $query->where('mollie_transactions.status', '=', 'paid')->orWhere('mollie_transactions.status', '=', 'paidout');
+            })
             ->get();
 
         $accounts = [];
