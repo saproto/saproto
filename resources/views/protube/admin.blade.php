@@ -62,13 +62,24 @@
                 <div class="panel-body">
                     <div class="btn-group btn-group-justified" role="group" aria-label="ProTube controls">
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="skip">Skip</button>
+                            <button type="button" class="btn btn-default" id="skip">
+                                <i class="fa fa-fast-forward" aria-hidden="true"></i>
+                            </button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="playpause">Play / Pause</button>
+                            <button type="button" class="btn btn-default" id="playpause">
+                                ?
+                            </button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="reload">Reload</button>
+                            <button type="button" class="btn btn-default" id="reload">
+                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" id="togglephotos">
+                                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                     <div id="nowPlaying">
@@ -320,6 +331,27 @@
                 $("#currentPin").html("PIN: " + data);
             });
 
+            admin.on("playerState", function (data) {
+                if (data.slideshow) {
+                    $("#togglephotos").html('<i class="fa fa-youtube-play" aria-hidden="true"></i>');
+                } else {
+                    $("#togglephotos").html('<i class="fa fa-picture-o" aria-hidden="true"></i>');
+                }
+                if (data.playing) {
+                    if (data.paused) {
+                        $("#playpause").html('<i class="fa fa-play" aria-hidden="true"></i>');
+                    } else {
+                        $("#playpause").html('<i class="fa fa-pause" aria-hidden="true"></i>');
+                    }
+                    $("#skip").html('<i class="fa fa-fast-forward" aria-hidden="true"></i>');
+                } else {
+                    $("#playpause").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
+                    $("#togglephotos").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
+                    $("#skip").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
+                }
+            });
+
+
             $('#searchForm').bind('submit', function (e) {
                 e.preventDefault();
                 admin.emit("search", $("#searchBox").val());
@@ -368,7 +400,7 @@
                     }
 
                 }
-            })
+            });
 
             $("#clearSearch").click(function (e) {
                 e.preventDefault();
@@ -389,6 +421,11 @@
             $("#reload").click(function (e) {
                 e.preventDefault();
                 admin.emit("reload");
+            });
+
+            $("#togglephotos").click(function (e) {
+                e.preventDefault();
+                admin.emit("togglePhotos");
             });
 
             $("#protubeToggle").click(function (e) {
