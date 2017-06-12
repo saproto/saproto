@@ -4,6 +4,7 @@ namespace Proto\Http\Middleware;
 
 use Auth;
 use Closure;
+use Proto\Models\HashMapItem;
 use Redirect;
 
 class EnforceWizard
@@ -17,13 +18,11 @@ class EnforceWizard
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->wizard) {
+        if (Auth::check() && HashMapItem::key('wizard')->subkey(Auth::user()->id)->first() && !$request->is('api/*')) {
             if (!$request->is('becomeamember')) {
                 return Redirect::route('becomeamember');
             }
-            $user = Auth::user();
-            $user->wizard = false;
-            $user->save();
+            HashMapItem::key('wizard')->subkey(Auth::user()->id)->first()->delete();
         }
         return $next($request);
     }
