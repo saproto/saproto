@@ -501,12 +501,20 @@
 
     @foreach($categories as $category)
 
+        <?php $products_in_category = []; ?>
+
         <div class="category_view {{ ($category == $categories[0] ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
 
             @foreach($category->products as $product)
 
                 @if($product->isVisible())
+
+                    <?php
+                    if ($product->stock > 0) {
+                        $products_in_category[] = $product->id;
+                    }
+                    ?>
 
                     <div class="product {{ ($product->stock <= 0 ? 'nostock' : '') }}"
                          data-id="{{ $product->id }}" data-stock="{{ $product->stock }}"
@@ -546,6 +554,40 @@
                 @endif
 
             @endforeach
+
+            @if (count($products_in_category) > 0)
+
+                <div class="product random {{ (count($products_in_category) <= 1 ? 'nostock' : '') }}"
+                data-list="{{ implode(" ", $products_in_category) }}">
+
+                    <div class="product-inner">
+
+                        <div class="product-image">
+                            {{--<div class="product-image-inner"--}}
+                            {{--style="background-image: url('{!! $product->image->generateImagePath(100, null) !!}');"></div>--}}
+                        </div>
+
+                        <div class="product-details">
+
+                            <div class="product-name">
+                                Random
+                            </div>
+
+                            <div class="product-price">
+                                &euro;?,??
+                            </div>
+
+                            <div class="product-stock">
+                                ?x
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @endif
 
         </div>
 
@@ -672,14 +714,16 @@
 
     //--formatter:off
     @foreach($categories as $category)
-        @foreach($category->products as $product)
+            @foreach($category->products as $product)
             @if($product->isVisible())
-                @if($product->image)
-                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-                @endif
-                cart[{{ $product->id }}] = 0; stock[{{ $product->id }}] = {{ $product->stock }}; price[{{ $product->id }}] = {{ $product->price }};
-            @endif
-        @endforeach
+            @if($product->image)
+        images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+    @endif
+        cart[{{ $product->id }}] = 0;
+    stock[{{ $product->id }}] = {{ $product->stock }};
+    price[{{ $product->id }}] = {{ $product->price }};
+    @endif
+    @endforeach
     @endforeach
     //--formatter:on
 
@@ -704,20 +748,40 @@
 
     $('.product').on('click', function () {
 
-        if (stock[$(this).attr('data-id')] <= 0) {
+        if ($(this).hasClass('random')) {
 
-            $("#modal-overlay").show();
-            $("#outofstock-modal").removeClass('inactive');
+            var list = $(this).attr('data-list');
+            var data = list.split(" ");
+            var selected = Math.floor(Math.random()*data.length);
+
+            cart[data[selected]]++;
+            stock[data[selected]]--;
+
+            console.log(data[selected]);
+
+            var s = stock[data[selected]];
+            $('.product[data-id=' + data[selected] + '] .product-stock').html(s + ' x');
+
+            update();
 
         } else {
 
-            cart[$(this).attr('data-id')]++;
-            stock[$(this).attr('data-id')]--;
+            if (stock[$(this).attr('data-id')] <= 0) {
 
-            var s = stock[$(this).attr('data-id')];
-            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+                $("#modal-overlay").show();
+                $("#outofstock-modal").removeClass('inactive');
 
-            update();
+            } else {
+
+                cart[$(this).attr('data-id')]++;
+                stock[$(this).attr('data-id')]--;
+
+                var s = stock[$(this).attr('data-id')];
+                $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+
+                update();
+
+            }
 
         }
 
