@@ -249,33 +249,6 @@
                             <hr>
                         @endif
 
-                        <p>
-                        <div class="alert alert-{{ ($event->activity->price > 0 ? 'info' : 'success') }}" role="alert"
-                             style="text-align: center;">
-                            @if ($event->activity->price > 0)
-                                This activity costs &euro;{{ number_format($event->activity->price, 2, '.', ',') }}.
-                            @else
-                                This activity is free!
-                            @endif
-                        </div>
-                        </p>
-
-                        @if ($event->activity->no_show_fee > 0)
-                            <p>
-                            <div class="alert alert-warning" data-toggle="modal" style="text-align: center;"
-                                 data-target="#noshow-modal">
-                                Not showing up can cost you
-                                &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
-                                .
-                                <span class="pull-right" style="cursor: pointer;">
-                                        <strong>?</strong>
-                                    </span>
-                            </div>
-                            </p>
-                        @endif
-
-                        <hr>
-
                         <p style="text-align: center;">
                             @if($event->activity->getParticipation(Auth::user()) !== null)
                                 @if ($event->activity->getParticipation(Auth::user())->backup)
@@ -302,31 +275,57 @@
                                 @endif
                             @else
                                 @if($event->activity->canSubscribeBackup())
-                                    <a class="btn btn-{{ ($event->activity->isFull() ? 'warning' : 'success') }}"
+                                    <a class="btn btn-{{ ($event->activity->isFull() || !$event->activity->canSubscribe() ? 'warning' : 'success') }}"
                                        style="width: 100%;"
                                        href="{{ route('event::addparticipation', ['id' => $event->id]) }}">
                                         @if ($event->activity->isFull() || !$event->activity->canSubscribe())
-                                            {{ ($event->activity->isFull() ? 'Activity is full.' : 'Sign-up closed.') }}
-                                            Sign me up for the back-up list.
+                                            {{ ($event->activity->isFull() ? 'Full!' : 'Closed!') }}
+                                            Put me on the back-up list.
                                         @else
                                             Sign me up!
                                         @endif
+
+                                        <span class="badge">
+                                            @if ($event->activity->price > 0)
+                                            &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
+                                            @else
+                                                free
+                                            @endif
+                                        </span>
                                     </a>
                                 @endif
                             @endif
                         </p>
 
+                        @if ($event->activity->no_show_fee > 0)
+                            <p>
+                            <div class="btn btn-warning" data-toggle="modal" data-target="#noshow-modal"
+                                 style="text-align: center; width: 100%;">
+
+                                Not showing up can cost you
+                                &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
+
+                                &nbsp;&nbsp;&nbsp;
+                                <span class="badge" style="cursor: pointer;">
+                                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                </span>
+
+                            </div>
+                            </p>
+                        @endif
+
                         <hr>
 
                         <p style="text-align: center;">
-                            <strong>Sign up
-                                opens:</strong> {{ date('F j, H:i', $event->activity->registration_start) }}
+                            <strong>Participation:</strong>
+                            &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             <br>
-                            <strong>Sign up
-                                closes:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
+                            <strong>Sign up opens:</strong> {{ date('F j, H:i', $event->activity->registration_start) }}
                             <br>
-                            <strong>Sign out
-                                possible until:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
+                            <strong>Sign up closes:</strong> {{ date('F j, H:i', $event->activity->registration_end) }}
+                            <br>
+                            <strong>Sign out possible
+                                until:</strong> {{ date('F j, H:i', $event->activity->deregistration_end) }}
                         </p>
 
                         @if($event->activity->users->count() > 0)

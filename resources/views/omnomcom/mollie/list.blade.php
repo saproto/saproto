@@ -34,7 +34,7 @@
 
                             @foreach($transactions as $transaction)
 
-                                @if($transaction->status == "paid" || $transaction->status == "open")
+                                @if($transaction->status == "paid" || $transaction->status == "paidout" || $transaction->status == "open")
 
                                     <tr>
                                         <td>
@@ -118,7 +118,7 @@
 
                             @foreach($transactions as $transaction)
 
-                                @if($transaction->status != "paid" && $transaction->status != "open")
+                                @if($transaction->status != "paid" && $transaction->status != "paidout" && $transaction->status != "open")
 
                                     <tr>
                                         <td>
@@ -218,6 +218,11 @@
                         </tbody>
 
                     </table>
+
+                    <p>
+                        <strong>Important</strong> Remember that this overview calculates the totals based on the
+                        transaction date of the <strong>orderline</strong>, not the <strong>Mollie payment</strong>.
+                    </p>
 
                 </div>
             </div>

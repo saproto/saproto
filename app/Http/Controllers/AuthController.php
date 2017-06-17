@@ -18,6 +18,7 @@ use Proto\Models\PasswordReset;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use Proto\Models\Member;
+use Proto\Models\HashMapItem;
 
 use Auth;
 use Proto\Models\WelcomeMessage;
@@ -184,7 +185,14 @@ class AuthController extends Controller
 
         $user = User::create($request->except('g-recaptcha-response'));
 
-        if (Session::get('wizard')) $user->wizard = true;
+        if(Session::get('wizard')) {
+
+            HashMapItem::create([
+                'key' => 'wizard',
+                'subkey' =>  $user->id,
+                'value' => 1
+            ]);
+        }
 
         $user->save();
 

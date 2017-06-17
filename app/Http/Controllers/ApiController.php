@@ -77,21 +77,23 @@ class ApiController extends Controller
     {
         $token = Token::where('token', $token)->first();
 
-        if (!$token) return ("{\"is_admin\":false}");
-
-        $user = $token->user()->first();
-
-        if (!$user) return ("{\"is_admin\":false}");
-
         $adminInfo = new \stdClass();
 
-        if ($user->can('protube') || $user->isTempadmin()) {
-            $adminInfo->is_admin = true;
-        } else {
+        if (!$token) {
             $adminInfo->is_admin = false;
+        } else {
+            $user = $token->user;
+            if (!$user) {
+                $adminInfo->is_admin = false;
+            } else {
+                $adminInfo->user_id = $user->id;
+                $adminInfo->user_name = $user->name;
+                $adminInfo->is_admin = $user->can('protube') || $user->isTempadmin();
+            }
         }
 
         return (json_encode($adminInfo));
+
     }
 
     public function protubePlayed(Request $request)

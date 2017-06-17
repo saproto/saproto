@@ -102,7 +102,7 @@
 
                     for (i in data) {
                         var item = data[i];
-                        $("#protoink").append("<div class='col-md-6 col-xs-12'><div class='protoink__article' style='background-image: url(\"" + item.thumbnail + "\");'><a target='_blank' href='" + item.link + "' class='protoink__title'>" + item.title + "</a></div></div>")
+                        $("#protoink").append("<div class='col-md-6 col-xs-12'><div class='protoink__article' style='background-image: url(\"" + item.thumbnail.replace('http://', 'https://') + "\");'><a target='_blank' href='" + item.link.replace('http://', 'https://') + "' class='protoink__title'>" + item.title + "</a></div></div>")
                     }
 
                 },
