@@ -558,7 +558,7 @@
             @if (count($products_in_category) > 0)
 
                 <div class="product random {{ (count($products_in_category) <= 1 ? 'nostock' : '') }}"
-                data-list="{{ implode(" ", $products_in_category) }}">
+                data-list="{{ implode(",", $products_in_category) }}" data-stock="{{ count($products_in_category) }}">
 
                     <div class="product-inner">
 
@@ -578,7 +578,7 @@
                             </div>
 
                             <div class="product-stock">
-                                ?x
+                                {{ count($products_in_category) }} x
                             </div>
 
                         </div>
@@ -749,20 +749,21 @@
     $('.product').on('click', function () {
 
         if ($(this).hasClass('random')) {
+            if ($(this).attr('data-stock') > 0) {
+                var list = $(this).attr('data-list');
+                var data = list.split(",");
+                var selected = Math.floor(Math.random() * data.length);
 
-            var list = $(this).attr('data-list');
-            var data = list.split(" ");
-            var selected = Math.floor(Math.random()*data.length);
+                if (stock[data[selected]] < 1) {
+                    $(this).click();
+                    return;
+                }
 
-            cart[data[selected]]++;
-            stock[data[selected]]--;
-
-            console.log(data[selected]);
-
-            var s = stock[data[selected]];
-            $('.product[data-id=' + data[selected] + '] .product-stock').html(s + ' x');
-
-            update();
+                $(this).siblings("div.product[data-id=" + data[selected] + "]").first().click();
+            } else {
+                $("#modal-overlay").show();
+                $("#outofstock-modal").removeClass('inactive');
+            }
 
         } else {
 
@@ -777,6 +778,12 @@
                 stock[$(this).attr('data-id')]--;
 
                 var s = stock[$(this).attr('data-id')];
+//                if (s < 1) {
+//                    var list = $(this).siblings(".random").attr('data-list');
+//                    var data = list.split(",");
+//                    data.splice(data.indexOf($(this).attr('data-id')), 1);
+//                    $(this).siblings(".random").first().attr('data-list', data);
+//                }
                 $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
                 update();
@@ -880,6 +887,18 @@
             $("#purchase").addClass("inactive");
         }
         $("#total").html(ordertotal.toFixed(2));
+
+
+        var lists = $('.random');
+        for (var i = 0; i < lists.length; i++) {
+            var count = 0;
+            var products = $(lists[i]).siblings();
+            for (var j = 0; j < products.length; j++) {
+                if (stock[$(products[j]).attr('data-id')] > 0) count++;
+            }
+            $(lists[i]).attr('data-stock', count);
+            $(lists[i]).find('.product-stock').first().html(count + ' x');
+        }
     }
 
     /*
