@@ -565,21 +565,17 @@
 
                         <div class="product-image">
                             <div class="product-image-inner"
-                                 style="background-image: url('{{ asset('images/omnomcom/dice.png')}}');"></div>
+                                 style="background-image: url('{{ asset('images/omnomcom/dice_v2.png')}}');"></div>
                         </div>
 
                         <div class="product-details">
 
                             <div class="product-name">
-                                Random
+                                I'm feeling lucky!
                             </div>
 
                             <div class="product-price">
-                                &euro; ?.??
-                            </div>
-
-                            <div class="product-stock">
-                                {{ count($products_in_category) }} x
+                                Who knows?
                             </div>
 
                         </div>
@@ -779,12 +775,6 @@
                 stock[$(this).attr('data-id')]--;
 
                 var s = stock[$(this).attr('data-id')];
-//                if (s < 1) {
-//                    var list = $(this).siblings(".random").attr('data-list');
-//                    var data = list.split(",");
-//                    data.splice(data.indexOf($(this).attr('data-id')), 1);
-//                    $(this).siblings(".random").first().attr('data-list', data);
-//                }
                 $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
                 update();
@@ -898,7 +888,6 @@
                 if (stock[$(products[j]).attr('data-id')] > 0) count++;
             }
             $(lists[i]).attr('data-stock', count);
-            $(lists[i]).find('.product-stock').first().html(count + ' x');
         }
     }
 
