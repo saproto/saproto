@@ -10,6 +10,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
+use Proto\Models\ProductCategoryEntry;
 use Proto\Models\StorageEntry;
 
 use Redirect;
@@ -231,5 +232,35 @@ class ProductController extends Controller
         $request->session()->flash('flash_message', "The product has been deleted.");
         return Redirect::back();
 
+    }
+
+    public function rank($category_id, $product_id, $direction)
+    {
+        $relation = ProductCategoryEntry::where('product_id', $product_id)->where('category_id', $category_id)->first();
+        if (!$relation) return Redirect::route('omnomcom::categories', ['id' => $category_id]);
+        $rank = $relation->rank;
+        $rows = ProductCategoryEntry::where('category_id', $category_id)->orderBy('rank')->get();
+        foreach ($rows as $key => $row) {
+            if ($row->rank == $rank) {
+                if ($direction == 'up') {
+                    if ($key < count($rows)-1) {
+                        $relation->rank = $rows[$key+1]->rank;
+                        $relation->save();
+                        $rows[$key+1]->rank = $rank;
+                        $rows[$key+1]->save();
+                        return Redirect::back();
+                    }
+                } else {
+                    if ($key > 0) {
+                        $relation->rank = $rows[$key-1]->rank;
+                        $relation->save();
+                        $rows[$key-1]->rank = $rank;
+                        $rows[$key-1]->save();
+                        return Redirect::back();
+                    }
+                }
+            }
+        }
+        return Redirect::back();
     }
 }
