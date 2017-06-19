@@ -558,13 +558,14 @@
             @if (count($products_in_category) > 0)
 
                 <div class="product random {{ (count($products_in_category) <= 1 ? 'nostock' : '') }}"
-                data-list="{{ implode(",", $products_in_category) }}" data-stock="{{ count($products_in_category) }}">
+                     data-list="{{ implode(",", $products_in_category) }}"
+                     data-stock="{{ count($products_in_category) }}">
 
                     <div class="product-inner">
 
                         <div class="product-image">
-                            {{--<div class="product-image-inner"--}}
-                            {{--style="background-image: url('{!! $product->image->generateImagePath(100, null) !!}');"></div>--}}
+                            <div class="product-image-inner"
+                                 style="background-image: url('{{ asset('images/omnomcom/dice.png')}}');"></div>
                         </div>
 
                         <div class="product-details">
@@ -574,7 +575,7 @@
                             </div>
 
                             <div class="product-price">
-                                &euro;?,??
+                                &euro; ?.??
                             </div>
 
                             <div class="product-stock">
