@@ -269,6 +269,10 @@ class ProductController extends Controller
     }
 
     private function setRanks() {
-
+        $newEntries = ProductCategoryEntry::where('rank', 0)->get();
+        foreach($newEntries as $entry) {
+            $entry->rank = $entry->id;
+            $entry->save();
+        }
     }
 }
