@@ -58,6 +58,13 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label for="isPrize">Is prize:</label>
+                        <br>
+                        <input type="hidden" name="isPrize" value="0">
+                        <input type="checkbox" id="isPrize" name="isPrize" value="1" {{ ($achievement->isPrize ? 'checked' : '') }}>
+                    </div>
+
                     @if(!$new)
 
                         <div class="form-group">
@@ -123,32 +130,6 @@
                         </div>
 
                         <input type="hidden" name="fa_icon" id="icon">
-
-                        {{--@if($achievement->image)--}}
-
-                        {{--<img src="{!! $achievement->image->generateImagePath(700,null) !!}" width="100%;">--}}
-
-                        {{--@else--}}
-                        {{--<p>--}}
-                        {{--&nbsp;--}}
-                        {{--</p>--}}
-                        {{--<p style="text-align: center;">--}}
-                        {{--This achievement has no icon yet. Upload one now!--}}
-                        {{--</p>--}}
-                        {{--@endif--}}
-
-                        {{--<hr>--}}
-
-                        {{--<div class="form-horizontal">--}}
-
-                        {{--<div class="form-group">--}}
-                        {{--<label for="image" class="col-sm-4 control-label">New achievement icon</label>--}}
-                        {{--<div class="col-sm-8">--}}
-                        {{--<input class="form-control" id="image" type="file" name="image">--}}
-                        {{--</div>--}}
-                        {{--</div>--}}
-
-                        {{--</div>--}}
 
                     </div>
 

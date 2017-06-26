@@ -234,8 +234,12 @@
                         <strong>Activity Sign-up</strong>
                         <br>
                         @if($event->activity->canSubscribe())
-                            {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
-                            out of {{ $event->activity->participants }} places available
+                            @if($event->activity->participants != -1)
+                                {{ ($event->activity->freeSpots() == -1 ? 'unlimited' : $event->activity->freeSpots()) }}
+                                out of {{ $event->activity->participants }} places available
+                            @else
+                                unlimited places available
+                            @endif
                         @endif
                     </div>
 
