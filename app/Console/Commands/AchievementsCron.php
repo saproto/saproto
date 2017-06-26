@@ -411,6 +411,7 @@ class AchievementsCron extends Command
                 $selected[] = $user;
             }
         }
+        return $selected;
     }
 
 }
