@@ -21,7 +21,7 @@
             <div class="col-md-6">
 
                 <div class="form-group">
-                    <label for="name">Account name:</label>
+                    <label for="name">Category name:</label>
                     <input type="text" class="form-control" id="name" name="name"
                            placeholder="Special Products for Unicorns" value="{{ $category->name or '' }}" required>
                 </div>
