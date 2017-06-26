@@ -125,7 +125,7 @@ class Event extends Model
         if ($this->activity) {
             $users = array_merge($users, $this->activity->allUsers->pluck('id')->toArray());
         }
-        return User::whereIn('id', array_unique($users))->get();
+        return User::whereIn('id', array_unique($users))->get()->sortBy('name');
     }
 
     public function getAllEmails()
