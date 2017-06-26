@@ -100,6 +100,12 @@ class ProductController extends Controller
         }
         $product->categories()->sync($categories);
 
+        $newEntries = ProductCategoryEntry::where('rank', 0)->get();
+        foreach($newEntries as $entry) {
+            $entry->rank = $entry->id;
+            $entry->save();
+        }
+
         $product->save();
 
         $request->session()->flash('flash_message', 'The new product has been created!');
@@ -263,4 +269,5 @@ class ProductController extends Controller
         }
         return Redirect::back();
     }
+
 }
