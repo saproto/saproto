@@ -100,11 +100,7 @@ class ProductController extends Controller
         }
         $product->categories()->sync($categories);
 
-        $newEntries = ProductCategoryEntry::where('rank', 0)->get();
-        foreach($newEntries as $entry) {
-            $entry->rank = $entry->id;
-            $entry->save();
-        }
+        $this->setRanks();
 
         $product->save();
 
@@ -181,6 +177,8 @@ class ProductController extends Controller
             }
         }
         $product->categories()->sync($categories);
+
+        $this->setRanks();
 
         $product->save();
 
@@ -270,4 +268,7 @@ class ProductController extends Controller
         return Redirect::back();
     }
 
+    private function setRanks() {
+
+    }
 }
