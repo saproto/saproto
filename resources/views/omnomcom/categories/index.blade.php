@@ -16,7 +16,7 @@
 
             <hr>
 
-            @if ($categories->count() > 0)
+            @if (count($categories) > 0)
 
                 <table class="table">
 
@@ -43,7 +43,7 @@
                                 </a>
                             </td>
                             <td>
-                                {{ $category->products->count() }}
+                                {{ count($category->products()) }}
                             </td>
                             <td>
                                 <a class="btn btn-xs btn-default"

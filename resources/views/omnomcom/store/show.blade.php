@@ -501,12 +501,20 @@
 
     @foreach($categories as $category)
 
+        <?php $products_in_category = []; ?>
+
         <div class="category_view {{ ($category == $categories[0] ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
 
             @foreach($category->products as $product)
 
                 @if($product->isVisible())
+
+                    <?php
+                    if ($product->stock > 0) {
+                        $products_in_category[] = $product->id;
+                    }
+                    ?>
 
                     <div class="product {{ ($product->stock <= 0 ? 'nostock' : '') }}"
                          data-id="{{ $product->id }}" data-stock="{{ $product->stock }}"
@@ -546,6 +554,37 @@
                 @endif
 
             @endforeach
+
+            @if (count($products_in_category) > 0)
+
+                <div class="product random {{ (count($products_in_category) <= 1 ? 'nostock' : '') }}"
+                     data-list="{{ implode(",", $products_in_category) }}"
+                     data-stock="{{ count($products_in_category) }}">
+
+                    <div class="product-inner">
+
+                        <div class="product-image">
+                            <div class="product-image-inner"
+                                 style="background-image: url('{{ asset('images/omnomcom/dice_v2.png')}}');"></div>
+                        </div>
+
+                        <div class="product-details">
+
+                            <div class="product-name">
+                                I'm feeling lucky!
+                            </div>
+
+                            <div class="product-price">
+                                Who knows?
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @endif
 
         </div>
 
@@ -672,14 +711,16 @@
 
     //--formatter:off
     @foreach($categories as $category)
-        @foreach($category->products as $product)
+            @foreach($category->products as $product)
             @if($product->isVisible())
-                @if($product->image)
-                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-                @endif
-                cart[{{ $product->id }}] = 0; stock[{{ $product->id }}] = {{ $product->stock }}; price[{{ $product->id }}] = {{ $product->price }};
-            @endif
-        @endforeach
+            @if($product->image)
+        images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+    @endif
+        cart[{{ $product->id }}] = 0;
+    stock[{{ $product->id }}] = {{ $product->stock }};
+    price[{{ $product->id }}] = {{ $product->price }};
+    @endif
+    @endforeach
     @endforeach
     //--formatter:on
 
@@ -704,20 +745,41 @@
 
     $('.product').on('click', function () {
 
-        if (stock[$(this).attr('data-id')] <= 0) {
+        if ($(this).hasClass('random')) {
+            if ($(this).attr('data-stock') > 0) {
+                var list = $(this).attr('data-list');
+                var data = list.split(",");
+                var selected = Math.floor(Math.random() * data.length);
 
-            $("#modal-overlay").show();
-            $("#outofstock-modal").removeClass('inactive');
+                if (stock[data[selected]] < 1) {
+                    $(this).click();
+                    return;
+                }
+
+                $(this).siblings("div.product[data-id=" + data[selected] + "]").first().click();
+            } else {
+                $("#modal-overlay").show();
+                $("#outofstock-modal").removeClass('inactive');
+            }
 
         } else {
 
-            cart[$(this).attr('data-id')]++;
-            stock[$(this).attr('data-id')]--;
+            if (stock[$(this).attr('data-id')] <= 0) {
 
-            var s = stock[$(this).attr('data-id')];
-            $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+                $("#modal-overlay").show();
+                $("#outofstock-modal").removeClass('inactive');
 
-            update();
+            } else {
+
+                cart[$(this).attr('data-id')]++;
+                stock[$(this).attr('data-id')]--;
+
+                var s = stock[$(this).attr('data-id')];
+                $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+
+                update();
+
+            }
 
         }
 
@@ -816,6 +878,17 @@
             $("#purchase").addClass("inactive");
         }
         $("#total").html(ordertotal.toFixed(2));
+
+
+        var lists = $('.random');
+        for (var i = 0; i < lists.length; i++) {
+            var count = 0;
+            var products = $(lists[i]).siblings();
+            for (var j = 0; j < products.length; j++) {
+                if (stock[$(products[j]).attr('data-id')] > 0) count++;
+            }
+            $(lists[i]).attr('data-stock', count);
+        }
     }
 
     /*
