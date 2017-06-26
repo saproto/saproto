@@ -16,7 +16,12 @@ class ProductCategory extends Model
 
     public function products()
     {
-        return $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id');
+        $products = $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
+        foreach ($products as $product) {
+            $product->rank = ProductCategoryEntry::where('category_id', $this->id)->where('product_id', $product->id)->first()->rank;
+        }
+        $products = $products->sortByDesc('rank');
+        return $products;
     }
 
 }
