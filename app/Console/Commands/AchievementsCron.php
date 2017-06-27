@@ -267,7 +267,7 @@ class AchievementsCron extends Command
     {
         $users = User::all();
         $selected = array();
-        $merch = ProductCategory::find(9)->products->pluck('id');
+        $merch = ProductCategory::find(9)->products()->pluck('id');
         foreach ($users as $user) {
             $merchorders = OrderLine::where('user_id', $user->id)->whereIn('product_id', $merch)->get();
             if (count($merchorders) > 3) $selected[] = $user;
@@ -329,10 +329,10 @@ class AchievementsCron extends Command
     {
         $selected = array();
         if (Carbon::now()->day == 1) {
-            $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
+            $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products()->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products()->pluck('id')->toArray());
             $users = User::all();
             foreach ($users as $user) {
                 $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
@@ -356,10 +356,10 @@ class AchievementsCron extends Command
     {
         $selected = array();
         if (Carbon::now()->day == 1) {
-            $beerIDs = ProductCategory::find(11)->products->pluck('id')->toArray();
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products->pluck('id')->toArray());
+            $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products()->pluck('id')->toArray());
+            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products()->pluck('id')->toArray());
             $users = User::all();
             foreach ($users as $user) {
                 $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
@@ -383,7 +383,7 @@ class AchievementsCron extends Command
     {
         $selected = array();
         if (Carbon::now()->day == 1) {
-            $kidIDs = ProductCategory::find(21)->products->pluck('id')->toArray();
+            $kidIDs = ProductCategory::find(21)->products()->pluck('id')->toArray();
             $users = User::all();
             foreach ($users as $user) {
                 $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
