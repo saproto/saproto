@@ -22,11 +22,11 @@
 
             <h3>Products linked to this category</h3>
 
-            @if ($category->products->count() > 0)
+            @if (count($category->products()) > 0)
 
                 <div class="row">
 
-                    @foreach($category->products as $product)
+                    @foreach($category->products() as $product)
 
                         <div class="col-md-4 product__account">
 
@@ -44,13 +44,19 @@
 
                             <div class="product__account__name">
 
+                                <a href="{{ route("omnomcom::products::show",['id' => $product->id]) }}"
+                                   title="{{ $product->name }}" style="display:block; float:none; max-height:55px; overflow:hidden;">
+                                    {{ $product->name }}
+                                </a>
+                                <a href="{{ route("omnomcom::products::rank",['category' => $category->id, 'id' => $product->id, 'direction' => 'up']) }}">
+                                    <i class="fa arrow fa-arrow-left" aria-hidden="true"></i>
+                                </a>
                                 <a href="{{ route("omnomcom::products::edit",['id' => $product->id]) }}">
                                     <i class="fa fa-pencil-square" aria-hidden="true"></i>
                                 </a>
-                                <a href="{{ route("omnomcom::products::show",['id' => $product->id]) }}">
-                                    {{ $product->name }}
+                                <a href="{{ route("omnomcom::products::rank",['category' => $category->id, 'id' => $product->id, 'direction' => 'down']) }}">
+                                    <i class="fa arrow fa-arrow-right" aria-hidden="true"></i>
                                 </a>
-
 
                             </div>
 
