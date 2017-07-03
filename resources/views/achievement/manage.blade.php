@@ -62,7 +62,8 @@
                         <label for="isPrize">Is prize:</label>
                         <br>
                         <input type="hidden" name="isPrize" value="0">
-                        <input type="checkbox" id="isPrize" name="isPrize" value="1" {{ ($achievement->isPrize ? 'checked' : '') }}>
+                        <input type="checkbox" id="isPrize" name="isPrize"
+                               value="1" {{ (!$new && $achievement->isPrize ? 'checked' : '') }}>
                     </div>
 
                     @if(!$new)
