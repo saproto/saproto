@@ -12,7 +12,7 @@
 
             <div class="btn-group btn-group-justified" style="margin-bottom: 30px;">
                 <a class="btn btn-info btn-lg"
-                   href="https://github.com/saproto/saproto/wiki/Creating-Issues-101">
+                   href="https://wiki.proto.utwente.nl/ict/issues">
                     <i class="fa fa-graduation-cap" aria-hidden="true" style="margin-right: 20px;"></i>
                     Learn how to report errors!
                 </a>
