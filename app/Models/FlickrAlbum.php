@@ -10,7 +10,8 @@ class FlickrAlbum extends Model
 
     public $timestamps = false;
 
-    public function items() {
+    public function items()
+    {
         return $this->hasMany('Proto\Models\FlickrItem', 'album_id');
     }
 

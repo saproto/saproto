@@ -31,7 +31,13 @@
                     <div class="col-md-3 col-xs-6">
 
                         <a href="{!! ($photo->url) !!}" class="photo-link chocolat-image">
-                            <div class="photo" style="background-image: url('{!! $photo->thumb !!}')"></div>
+                            <div class="photo" style="background-image: url('{!! $photo->thumb !!}')">
+                                @if ($photo->private)
+                                    <div class="photo__hidden">
+                                        <i class="fa fa-low-vision" aria-hidden="true"></i>
+                                    </div>
+                                @endif
+                            </div>
                         </a>
 
                     </div>

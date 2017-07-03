@@ -31,14 +31,14 @@
   }
 
   &:hover {
-      .album,
-      .photo {
-          opacity: .8;
-      }
+    .album,
+    .photo {
+      opacity: .8;
+    }
   }
 
   &:after {
-      content: none;
+    content: none;
   }
 }
 
@@ -93,6 +93,17 @@
   text-align: center;
   font-size: 120px;
 
+  color: #fff;
+}
+
+.photo__hidden {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  margin: 10px;
+
+  text-shadow: 0 0 5px #000;
   color: #fff;
 }
 

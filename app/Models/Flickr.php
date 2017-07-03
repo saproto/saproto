@@ -11,18 +11,39 @@ class Flickr extends Model
 {
     public static function getAlbums($max = null)
     {
-        if (Auth::check() && count(Auth::user()->member()->get()) > 0) {
-            $albums = ($max == null) ? FlickrAlbum::orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::orderBy('date_taken', 'desc')->paginate($max);
+        $include_private = (Auth::check() && Auth::user()->member() !== null);
+
+        $base = FlickrAlbum::orderBy('date_taken', 'desc');
+        if (!$include_private) {
+            $base = $base->where('private', '=', false);
+        }
+        if ($max != 0) {
+            $albums = $base->paginate($max);
         } else {
-            $albums = ($max == null) ? FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->get() : $albums = FlickrAlbum::where('private', false)->orderBy('date_taken', 'desc')->paginate($max);
+            $albums = $base->get();
         }
         return $albums;
     }
 
-    public static function getPhotos($albumID)
+    public static function getPhotos($albumID, $include_private = false)
     {
-        $items = FlickrItem::where("album_id", "=", $albumID)->orderBy('date_taken', 'asc')->get();
-        if (count($items) == 0) abort(404, "Album not found.");
+        $include_private = (Auth::check() && Auth::user()->member() !== null);
+
+        $album = FlickrAlbum::where('id', $albumID);
+        if (!$include_private) {
+            $album->where('private', '=', false);
+        }
+        $album = $album->get();
+
+        if ($album == null) {
+            abort(404, "This album does not exist.");
+        }
+
+        $items = FlickrItem::where('album_id', $albumID);
+        if (!$include_private) {
+            $items = $items->where('private', '=', false);
+        }
+        $items = $items->orderBy('date_taken', 'asc')->get();
 
         $data = new \stdClass();
         $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
@@ -33,6 +54,51 @@ class Flickr extends Model
         return $data;
     }
 
+    public static function constructAPIUri($method, array $params)
+    {
+        // Base URI
+        $uri = "https://api.flickr.com/services/rest";
+
+        // Generate Query String
+        $default_params = array(
+            'user_id' => urlencode(env('FLICKR_USER')),
+            'api_key' => env('FLICKR_CLIENT'),
+            'format' => 'json',
+            'nojsoncallback' => '1',
+            'method' => $method,
+
+            // OAuth Parameters
+            'oauth_consumer_key' => env('FLICKR_CLIENT'),
+            'oauth_nonce' => str_random(32),
+            'oauth_token' => env('FLICKR_ACCESS'),
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_timestamp' => date('U'),
+            'oauth_version' => '1.0'
+        );
+
+        $query_string = "";
+
+        $query = array_merge($params, $default_params);
+        ksort($query);
+
+        foreach ($query as $key => $value) {
+            $query_string .= "&$key=$value";
+        }
+
+        $query_string = substr($query_string, 1);
+
+        // Generate Signature
+        $sig_base_string = "GET&" . urlencode($uri) . "&" . urlencode($query_string);
+
+        $sig_key = urlencode(getenv('FLICKR_SECRET')) . '&' . urlencode(getenv('FLICKR_ACCESS_SECRET'));
+
+        $sig = "oauth_signature=" . base64_encode(hash_hmac('sha1', $sig_base_string, $sig_key, true));
+
+        $return_uri = $uri . '?' . $query_string . '&' . $sig;
+
+        return $return_uri;
+
+    }
 
     /**
      * Returns Flickr albums
@@ -43,7 +109,9 @@ class Flickr extends Model
     {
         try {
 
-            $albums = json_decode(file_get_contents("https://api.flickr.com/services/rest/?method=flickr.photosets.getList&user_id=" . env('FLICKR_USER') . "&format=json&primary_photo_extras=url_o,url_m&nojsoncallback=1&api_key=" . env('FLICKR_KEY')))->photosets->photoset;
+            $albums = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.photosets.getList', array(
+                'primary_photo_extras' => 'url_o,url_m'
+            ))))->photosets->photoset;
 
             $data = [];
             foreach (array_slice($albums, 0, $max) as $album) {
@@ -52,7 +120,7 @@ class Flickr extends Model
                     'thumb' => $album->primary_photo_extras->url_m,
                     'id' => $album->id,
                     'date_create' => $album->date_create,
-                    'date_update' => $album->date_update
+                    'date_update' => $album->date_update,
                 ];
             }
             return $data;
@@ -76,7 +144,11 @@ class Flickr extends Model
     {
         try {
 
-            $photos = json_decode(file_get_contents('https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=' . env('FLICKR_KEY') . '&photoset_id=' . $albumId . '&format=json&extras=url_o,url_m,url_l,date_taken&nojsoncallback=1'));
+            $photos = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.photosets.getPhotos', array(
+                'photoset_id' => $albumId,
+                'extras' => 'url_o,url_m,url_l,date_taken'
+            ))));
+
             $data = [];
 
             if ($photos->stat == 'ok') {
@@ -86,7 +158,8 @@ class Flickr extends Model
                             'id' => $photo->id,
                             'url' => $photo->url_m,
                             'thumb' => $photo->url_m,
-                            'timestamp' => $photo->datetaken
+                            'timestamp' => $photo->datetaken,
+                            'private' => (boolean)(1 - $photo->ispublic)
                         ];
                         if (property_exists($photo, 'url_l')) {
                             $p->url = $photo->url_l;

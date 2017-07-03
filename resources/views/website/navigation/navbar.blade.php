@@ -83,7 +83,6 @@
                             <li><a href="{{ route("user::admin::list") }}">Users</a></li>
                             <li><a href="{{ route("study::list") }}">Studies</a></li>
                             <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
-                            <li><a href="{{ route("photo::manage") }}">Photo Albums</a></li>
                             <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
                             <li><a href="{{ route("tempadmin::index") }}">Temp Admin Admin</a></li>
 
@@ -155,7 +154,7 @@
                         </span>-->
                         <span class="input-group-btn">
                             <button type="submit" class="navbar__search__icon" style=""><i class="fa fa-search"
-                                                                                               aria-hidden="true"></i></button>
+                                                                                           aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </form>
@@ -164,7 +163,8 @@
                     <li>
                         <a href="#" data-toggle="modal" data-target="#slack-modal">
                             Slack
-                            <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span id="slack__online">...</span></span>
+                            <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span
+                                        id="slack__online">...</span></span>
                         </a>
                     </li>
                 @endif
@@ -180,7 +180,9 @@
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false"><img class="profile__photo profile__photo--small" src="{{ Auth::user()->generatePhotoPath(64, 64) }}" alt="{{ Auth::user()->name }}"> <span class="caret"></span></a>
+                           aria-expanded="false"><img class="profile__photo profile__photo--small"
+                                                      src="{{ Auth::user()->generatePhotoPath(64, 64) }}"
+                                                      alt="{{ Auth::user()->name }}"> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('user::dashboard') }}">Dashboard</a></li>
                             <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>

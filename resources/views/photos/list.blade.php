@@ -14,6 +14,11 @@
                     <div class="album-name">
                         {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
                     </div>
+                    @if ($album->private)
+                        <div class="photo__hidden">
+                            <i class="fa fa-low-vision" aria-hidden="true"></i>
+                        </div>
+                    @endif
                 </div>
             </a>
         </div>

@@ -165,7 +165,8 @@ return [
         Mollie\Laravel\MollieServiceProvider::class,
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-        willvincent\Feeds\FeedsServiceProvider::class
+        willvincent\Feeds\FeedsServiceProvider::class,
+        Artdarek\OAuth\OAuthServiceProvider::class,
     ],
 
     /*
@@ -268,7 +269,9 @@ return [
 
         'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
-        'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class
+        'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
+
+        'OAuth' => Artdarek\OAuth\Facade\OAuth::class,
 
     ],
 

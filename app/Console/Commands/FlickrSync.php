@@ -8,6 +8,8 @@ use Proto\Models\Flickr;
 use Proto\Models\FlickrAlbum;
 use Proto\Models\FlickrItem;
 
+use Proto\Http\Controllers\SlackController;
+
 class FlickrSync extends Command
 {
     /**
@@ -41,6 +43,20 @@ class FlickrSync extends Command
      */
     public function handle()
     {
+
+        $this->info('Testing if API key still works.');
+
+        $test = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.test.login', [])));
+        if ($test->stat != "ok") {
+            $this->error('API key is not valid!');
+            SlackController::sendNotification('[console *proto:flickr*] API key is not valid.');
+            return;
+        } elseif ($test->user->id != getenv('FLICKR_USER')) {
+            $this->error('API key is for the wrong user!');
+            SlackController::sendNotification('[console *proto:flickr*] API key is for the wrong user.');
+            return;
+        }
+
         $albums = Flickr::getAlbumsFromAPI();
         $dbAlbums = FlickrAlbum::all();
 
@@ -104,28 +120,37 @@ class FlickrSync extends Command
                 continue;
             }
 
-            $count = 0;
+            $new_count = 0;
+            $public_count = 0;
 
             $this->info('  looking for new photos.');
 
             foreach ($items->photos as $item) {
-                if (!FlickrItem::where('id', '=', $item->id)->exists()) {
+                $flickrPhoto = FlickrItem::where('id', '=', $item->id)->first();
+                if ($flickrPhoto == null) {
                     $itemObject = new FlickrItem();
                     $itemObject->id = $item->id;
                     $itemObject->url = $item->url;
                     $itemObject->thumb = $item->thumb;
                     $itemObject->album_id = $album->id;
                     $itemObject->date_taken = strtotime($item->timestamp);
-                    $itemObject->save();
-                    $count++;
+                    $new_count++;
+                } else {
+                    $itemObject = $flickrPhoto;
                 }
+                $itemObject->private = $item->private;
+                $itemObject->save();
+                $public_count += (1 - $item->private);
             }
 
-            if ($count > 0) {
-                $this->info("  added " . $count . " items to album.");
+            if ($new_count > 0) {
+                $this->info("  added " . $new_count . " items to album.");
                 $dbAlbum->date_update = $album->date_update;
-                $dbAlbum->save();
             }
+
+            $dbAlbum->private = ($public_count == 0);
+            $this->info("  album set as " . ($dbAlbum->private ? "private" : "public") . ".");
+            $dbAlbum->save();
 
             $dbItems = $dbAlbum->items;
 

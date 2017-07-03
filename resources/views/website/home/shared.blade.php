@@ -59,6 +59,7 @@
         </h1>
 
         <div class="row">
+
             @foreach(Flickr::getAlbums(6) as $key => $album)
 
                 <div class="col-md-4 col-xs-6">
@@ -68,6 +69,11 @@
                              style="background-image: url('{!! $album->thumb !!}')">
                             <div class="album-name">
                                 {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
+                                @if ($album->private)
+                                    <div class="photo__hidden">
+                                        <i class="fa fa-low-vision" aria-hidden="true"></i>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </a>

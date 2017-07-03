@@ -600,14 +600,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
 
-        Route::group(['middleware' => ['auth', 'permission:board']], function () {
-            Route::get('manage', ['as' => 'manage', 'uses' => 'PhotoController@manage']);
-            Route::get('toggleprivate/{id}', ['as' => 'toggleprivate', 'uses' => 'PhotoController@toggleprivate']);
-        });
-
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
         });
+    });
+    Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
+        Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);
     });
 
     /*

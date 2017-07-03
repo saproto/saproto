@@ -27,26 +27,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * Display the admin toolie
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function manage()
-    {
-        $albums = Flickr::getAlbums(null);
-
-        return view('photos.manage', ['albums' => $albums]);
-    }
-
-    public function toggleprivate($id)
-    {
-        $album = FlickrAlbum::find($id);
-        $album->private = !$album->private;
-        $album->save();
-        return Redirect::route("photo::manage");
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int $id
