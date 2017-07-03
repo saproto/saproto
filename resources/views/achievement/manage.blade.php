@@ -62,8 +62,7 @@
                         <label for="isPrize">Is prize:</label>
                         <br>
                         <input type="hidden" name="isPrize" value="0">
-                        <input type="checkbox" id="isPrize" name="isPrize"
-                               value="1" {{ (!$new && $achievement->isPrize ? 'checked' : '') }}>
+                        <input type="checkbox" id="isPrize" name="isPrize" value="1" {{ ($achievement->isPrize ? 'checked' : '') }}>
                     </div>
 
                     @if(!$new)
@@ -346,8 +345,8 @@
         });
     </script>
 
-    <script src="//itsjavi.com/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
-    <link rel="stylesheet" href="//itsjavi.com/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css">
+    <script src="//farbelous.github.io/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.js"></script>
+    <link rel="stylesheet" href="//farbelous.github.io/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css">
 
     <script>
         $('.icp-auto').iconpicker();
