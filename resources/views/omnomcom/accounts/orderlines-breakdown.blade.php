@@ -1,7 +1,7 @@
 @extends('website.layouts.default')
 
 @section('page-title')
-    Accounts of Mollie transactions in {{ date('F Y', strtotime($month)) }}
+    {{ $title }}
 @endsection
 
 @section('content')

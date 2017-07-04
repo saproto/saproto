@@ -10,6 +10,7 @@ use Proto\Models\Bank;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
 use Proto\Models\Withdrawal;
+use Proto\Models\Account;
 
 use Redirect;
 use Response;
@@ -152,7 +153,11 @@ class WithdrawalController extends Controller
 
         ksort($accounts);
 
-        return view("omnomcom.withdrawals.show-accounts", ['accounts' => $accounts, 'withdrawal' => $withdrawal]);
+
+        return view("omnomcom.accounts.orderlines-breakdown", [
+            'accounts' => Account::generateAccountOverviewFromOrderliens($orderlines),
+            'title' => "Accounts of withdrawal of " . date('d-m-Y', strtotime($withdrawal->date))
+        ]);
     }
 
     /**
