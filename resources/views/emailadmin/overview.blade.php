@@ -36,6 +36,14 @@
                     <td><i>Not editable</i></td>
                 </tr>
 
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>All active members</td>
+                    <td><i>System managed</i></td>
+                    <td>{{ Member::countActiveMembers() }}</td>
+                    <td><i>Not editable</i></td>
+                </tr>
+
                 @foreach(EmailList::all() as $list)
 
                     <tr>
@@ -103,6 +111,8 @@
                                 all users
                             @elseif($email->to_member)
                                 all members
+                            @elseif($email->to_active)
+                                all active members
                             @elseif($email->to_list)
                                 lists:
                                 @foreach($email->lists as $list)

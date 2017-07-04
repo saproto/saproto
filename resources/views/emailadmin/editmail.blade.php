@@ -107,6 +107,15 @@
 
                                     <div class="radio">
                                         <label>
+                                            <input type="radio" name="destinationType" id="destinationActiveMembers"
+                                                   required
+                                                   value="active" {{ ($email && $email->to_active ? 'checked' : '') }}>
+                                            All active members
+                                        </label>
+                                    </div>
+
+                                    <div class="radio">
+                                        <label>
                                             <input type="radio" name="destinationType" id="destinationEvent" required
                                                    value="event" {{ ($email && $email->to_event ? 'checked' : '') }}>
                                             This event:
@@ -362,6 +371,10 @@
             $("#eventSelect").prop('disabled', true);
         });
         $("#destinationUsers").click(function () {
+            $("#listSelect").prop('disabled', true);
+            $("#eventSelect").prop('disabled', true);
+        });
+        $("#destinationActiveMembers").click(function () {
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', true);
         });

@@ -18,4 +18,13 @@ class Member extends Model
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
+
+    public static function countActiveMembers()
+    {
+        $userids = [];
+        foreach (Committee::all() as $committee) {
+            $userids = array_merge($userids, $committee->users->lists('id')->toArray());
+        }
+        return User::whereIn('id', $userids)->orderBy('name', 'asc')->count();
+    }
 }

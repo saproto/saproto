@@ -130,7 +130,6 @@ class DirectAdminSync extends Command
 
             if (count($destinations) > 0) {
                 $data[$committee->slug] = $destinations;
-                $data['committees'][] = $committee->slug . '@' . config('proto.emaildomain');
             }
 
         }

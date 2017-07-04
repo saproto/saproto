@@ -28,6 +28,8 @@ class Email extends Model
             return 'users';
         } elseif ($this->to_member) {
             return 'members';
+        } elseif ($this->to_active) {
+            return 'active members';
         } elseif ($this->to_list) {
             return $this->lists->toArray();
         } elseif ($this->to_event != false) {
@@ -39,14 +41,24 @@ class Email extends Model
     {
         if ($this->to_user) {
             return User::orderBy('name', 'asc')->get();
+
         } elseif ($this->to_member) {
             return User::has('member')->orderBy('name', 'asc')->get();
+
+        } elseif ($this->to_active) {
+            $userids = [];
+            foreach (Committee::all() as $committee) {
+                $userids = array_merge($userids, $committee->users->lists('id')->toArray());
+            }
+            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+
         } elseif ($this->to_list) {
             $userids = [];
             foreach ($this->lists as $list) {
                 $userids = array_merge($userids, $list->users->lists('id')->toArray());
             }
             return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+
         } elseif ($this->to_event != false) {
             $event = Event::find($this->to_event);
             if ($event && $event->activity) {
@@ -55,6 +67,7 @@ class Email extends Model
             } else {
                 return collect([]);
             }
+
         } else {
             return collect([]);
         }

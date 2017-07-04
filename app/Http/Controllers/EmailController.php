@@ -237,30 +237,55 @@ class EmailController extends Controller
             case 'members':
                 $email->to_user = false;
                 $email->to_member = true;
+                $email->to_active = false;
+
                 $email->to_list = false;
                 $email->to_event = false;
+
+                $email->lists()->sync([]);
+                break;
+
+            case 'active':
+                $email->to_user = false;
+                $email->to_member = false;
+                $email->to_active = true;
+
+                $email->to_list = false;
+                $email->to_event = false;
+
                 $email->lists()->sync([]);
                 break;
 
             case 'lists':
                 $email->to_user = false;
                 $email->to_member = false;
+                $email->to_active = false;
+
                 $email->to_list = true;
                 $email->to_event = false;
+
                 $email->lists()->sync((gettype($lists) == "array" ? $lists : []));
                 break;
 
             case 'event':
                 $email->to_user = false;
                 $email->to_member = false;
+                $email->to_active = false;
+
                 $email->to_list = false;
                 $email->to_event = $event;
+
+                $email->lists()->sync([]);
                 break;
 
             default:
                 $email->to_user = false;
                 $email->to_member = false;
+                $email->to_active = false;
+
                 $email->to_list = false;
+                $email->to_event = false;
+
                 $email->lists()->sync([]);
                 break;
 
