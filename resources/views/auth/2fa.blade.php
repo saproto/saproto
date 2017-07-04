@@ -14,7 +14,16 @@
 
             <div class="form-group">
                 <input type="text" class="form-control" id="code" name="2fa_totp_token"
-                       placeholder="Time Based Auth Token">
+                       placeholder="Enter Time Based Auth Token">
+            </div>
+
+        @endif
+
+        @if(Request::session()->get('2fa_user')->tfa_totp_key && Request::session()->get('2fa_user')->tfa_yubikey_identity)
+
+
+            <div class="form-group">
+                or
             </div>
 
         @endif
@@ -23,7 +32,7 @@
 
             <div class="form-group">
                 <input type="password" class="form-control" id="code" name="2fa_yubikey_token"
-                       placeholder="YubiKey One Time Password" autofocus>
+                       placeholder="Enter YubiKey One Time Password" autofocus>
             </div>
 
         @endif
