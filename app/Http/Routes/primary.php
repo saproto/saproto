@@ -610,6 +610,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to Spotify
+     */
+    Route::group(['prefix' => 'spotify', 'middleware' => ['auth', 'permission:board'], 'as' => 'spotify::'], function () {
+        Route::get('oauth', ['as' => 'oauth', 'uses' => 'SpotifyController@oauthTool']);
+    });
+
+    /*
      * Routes related to roles and permissions.
      */
     Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'authorization::'], function () {

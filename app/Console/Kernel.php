@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
         Commands\FileCleanup::class,
         Commands\FeeCron::class,
         Commands\UserCleanup::class,
-        Commands\CheckUtwenteAccounts::class
+        Commands\CheckUtwenteAccounts::class,
+        Commands\SpotifySync::class
     ];
 
     /**
@@ -48,5 +49,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
         $schedule->command('proto:feecron')->daily()->at('02:00');
         $schedule->command('proto:checkutaccounts')->monthly();
+        $schedule->command('proto:spotifysync')->daily()->at('00:00');
     }
 }
