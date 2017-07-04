@@ -330,13 +330,13 @@
             color: #fff;
         }
 
-        #purchase {
+        #purchase, #purchase-cash-initiate {
             transition: all 0.5s;
             transform: translate(0, 0);
             opacity: 1;
         }
 
-        #purchase.inactive {
+        #purchase.inactive, #purchase-cash-initiate.inactive {
             transform: translate(200px, 0);
             opacity: 0;
         }
@@ -597,6 +597,9 @@
     <div id="buttons">
 
         <span id="purchase" class="button inactive">Complete order</span>
+        @if($store->cash_allowed)
+            <span id="purchase-cash-initiate" class="button inactive">Complete with cash</span>
+        @endif
         <span id="rfid" class="button">Link RFID card</span>
         <span class="info" style="font-weight: bold;">Order total: &euro;<span id="total">0.00</span></span>
         <span id="status" class="info inactive">RFID Service: Disconnected</span>
@@ -711,16 +714,16 @@
 
     //--formatter:off
     @foreach($categories as $category)
-            @foreach($category->products as $product)
+        @foreach($category->products as $product)
             @if($product->isVisible())
-            @if($product->image)
-        images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-    @endif
-        cart[{{ $product->id }}] = 0;
-    stock[{{ $product->id }}] = {{ $product->stock }};
-    price[{{ $product->id }}] = {{ $product->price }};
-    @endif
-    @endforeach
+                @if($product->image)
+                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+                @endif
+                cart[{{ $product->id }}] = 0;
+                stock[{{ $product->id }}] = {{ $product->stock }};
+                price[{{ $product->id }}] = {{ $product->price }};
+            @endif
+        @endforeach
     @endforeach
     //--formatter:on
 
@@ -874,8 +877,10 @@
         }
         if (anythingincart) {
             $("#purchase").removeClass("inactive");
+            $("#purchase-cash-initiate").removeClass("inactive");
         } else {
             $("#purchase").addClass("inactive");
+            $("#purchase-cash-initiate").addClass("inactive");
         }
         $("#total").html(ordertotal.toFixed(2));
 
@@ -977,6 +982,7 @@
         $("#modal-overlay").hide();
         $(".modal-input").val('');
         $("#osk-container .osk-hide").trigger('click');
+        $("#purchase-cash").removeClass('modal-toggle-true');
         modal_status = null;
     });
 
@@ -989,6 +995,13 @@
     $("#purchase").on("click", function () {
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
+        modal_status = 'purchase';
+    });
+
+    $("#purchase-cash-initiate").on("click", function () {
+        $("#modal-overlay").show();
+        $("#purchase-modal").removeClass('inactive');
+        $("#purchase-cash").addClass('modal-toggle-true');
         modal_status = 'purchase';
     });
 
