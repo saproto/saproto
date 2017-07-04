@@ -74,6 +74,59 @@ class MollieController extends Controller
         ]);
     }
 
+    public function monthly(Request $request, $month)
+    {
+
+        if (strtotime($month) === false) {
+            $request->session()->flash('flash_message', 'Invalid date: ' . $month);
+            return Redirect::back();
+        }
+
+        // We do one massive query to reduce the number of queries.
+        $orderlines = DB::table('orderlines')
+            ->join('products', 'orderlines.product_id', '=', 'products.id')
+            ->join('accounts', 'products.account_id', '=', 'accounts.id')
+            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
+            ->whereNotNull('orderlines.payed_with_mollie')
+            ->where('orderlines.created_at', 'like', $month . '-%')
+            ->get();
+
+        $accounts = [];
+
+        foreach ($orderlines as $orderline) {
+            // We sort by date, where a date goes from 6am - 6am.
+            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
+
+            // Shorthand variable names.
+            $accnr = $orderline->account_number;
+
+            // Add account to dataset if not existing yet.
+            if (!isset($accounts[$accnr])) {
+                $accounts[$accnr] = (object)[
+                    'byDate' => [],
+                    'name' => $orderline->name,
+                    'total' => 0
+                ];
+            }
+
+            // Add orderline to total account price.
+            $accounts[$accnr]->total += $orderline->total_price;
+
+            // Add date to account data if not existing yet.
+            if (!isset($accounts[$accnr]->byDate[$sortDate])) {
+                $accounts[$accnr]->byDate[$sortDate] = 0;
+            }
+
+            // Add orderline to account-on-date total.
+            $accounts[$accnr]->byDate[$sortDate] += $orderline->total_price;
+        }
+
+        ksort($accounts);
+
+        return view("omnomcom.mollie.show-accounts", ['accounts' => $accounts, 'month' => $month]);
+
+    }
+
     /**
      * Display the accounts associated with mollie payments.
      *

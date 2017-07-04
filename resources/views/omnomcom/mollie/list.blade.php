@@ -194,6 +194,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Total</th>
+                            <th>&nbsp;</th>
                         </tr>
                         </thead>
 
@@ -204,7 +205,11 @@
                             <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
                                 <th>{{ $month->name }}</th>
                                 <th>&euro; {{ number_format($month->total, 2) }}</th>
-
+                                <th>
+                                    <a href="{{ route("omnomcom::mollie::monthly",['month'=>date('Y-m', strtotime($month->name))]) }}">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </a>
+                                </th>
                             </tr>
 
                             @foreach($month->byAccounts as $account => $data)
