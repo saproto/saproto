@@ -155,7 +155,7 @@ class WithdrawalController extends Controller
 
 
         return view("omnomcom.accounts.orderlines-breakdown", [
-            'accounts' => Account::generateAccountOverviewFromOrderliens($orderlines),
+            'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
             'title' => "Accounts of withdrawal of " . date('d-m-Y', strtotime($withdrawal->date))
         ]);
     }

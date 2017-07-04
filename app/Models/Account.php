@@ -17,7 +17,7 @@ class Account extends Model
         return $this->hasMany('Proto\Models\Product');
     }
 
-    public static function generateAccountOverviewFromOrderliens($orderlines)
+    public static function generateAccountOverviewFromOrderlines($orderlines)
     {
 
         $accounts = [];

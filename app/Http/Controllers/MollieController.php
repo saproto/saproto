@@ -94,7 +94,7 @@ class MollieController extends Controller
 
 
         return view("omnomcom.accounts.orderlines-breakdown", [
-            'accounts' => Account::generateAccountOverviewFromOrderliens($orderlines),
+            'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
             'title' => "Account breakdown for Mollie transactions in " . date('F Y', strtotime($month))
         ]);
 
