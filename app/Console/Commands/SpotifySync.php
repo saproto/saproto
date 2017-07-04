@@ -86,13 +86,13 @@ class SpotifySync extends Command
         // All-time
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(25)->get());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(25)->get());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
