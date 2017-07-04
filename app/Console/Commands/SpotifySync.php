@@ -121,7 +121,7 @@ class SpotifySync extends Command
             }
         }
 
-        $this->info('Matching to Spotify music.\n---');
+        $this->info("Matching to Spotify music.\n---");
 
         $new_songs = [];
 
@@ -130,7 +130,7 @@ class SpotifySync extends Command
             foreach ($titles as $t => $title) {
                 $song = $spotify->search($title->title_formatted, 'track', ['limit' => 1])->tracks->items;
                 if (count($song) < 1) {
-                    $this->error("Could not match <$title->title | $title->title_formatted> to a Spotify track.");
+                    $this->error("Could not match < $title->title | $title->title_formatted > to a Spotify track . ");
                 } else {
                     $new_songs[] = $song[0]->id;
                 }
@@ -145,7 +145,7 @@ class SpotifySync extends Command
 
         $this->info("---");
 
-        $this->info("Composing playlist.");
+        $this->info("Composing playlist . ");
 
         try {
 
