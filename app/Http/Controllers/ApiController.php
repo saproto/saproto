@@ -110,9 +110,11 @@ class ApiController extends Controller
         }
 
         $playedVideo->video_id = $request->video_id;
-        $playedVideo->video_title = $request->video_title;
+        $playedVideo->video_title = urldecode($request->video_title);
 
         $playedVideo->save();
+
+        PlayedVideo::where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
     }
 
     public function getToken(Request $request)
