@@ -134,7 +134,6 @@ class SpotifySync extends Command
 
             } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
 
-                dd($e);
                 $this->error('Error during track search.');
                 SlackController::sendNotification('[console *proto:spotify*] Exception during track search. Please investigate.');
 
