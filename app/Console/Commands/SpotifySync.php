@@ -82,19 +82,19 @@ class SpotifySync extends Command
         // All-time
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
         $titles = [];
 
@@ -140,60 +140,28 @@ class SpotifySync extends Command
             }
         }
 
-        $new_songs = array_unique($new_songs);
+        $new_songs = array_values(array_unique($new_songs));
 
         $this->info("---");
 
-        $this->info("Composing playlist. ");
-
-        $current_songs = [];
+        $this->info("Updating playlist with " . count($new_songs) . " songs.");
 
         try {
 
-            foreach ($spotify->getUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), ['fields' => 'items.track.uri'])->items as $s) {
-                $current_songs[] = $s->track->uri;
+            $spotify->replaceUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), []);
+
+            $slice = 0;
+            $batch_size = 75;
+            while ($slice < count($new_songs)) {
+                $add = array_values(array_slice($new_songs, $slice, $batch_size));
+                $slice += $batch_size;
+                $spotify->addUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $add);
             }
 
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
 
-            $this->error('Error during playlist check.');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist check. Please investigate.');
-
-        }
-
-        $delete_songs = array_values(array_diff($current_songs, $new_songs));
-        $add_songs = array_values(array_diff($new_songs, $current_songs));
-
-        $this->info("Deleting " . count($delete_songs) . " songs.");
-
-        try {
-
-            $arr = [];
-            foreach ($delete_songs as $i => $s) {
-                $arr[] = (object)[
-                    'id' => $s
-                ];
-            }
-
-            $spotify->deleteUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $arr);
-
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-
-            $this->error('Error during playlist update (delete old songs).');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update (delete old songs). Please investigate.');
-
-        }
-
-        $this->info("Adding " . count($add_songs) . " songs.");
-
-        try {
-
-            $spotify->addUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $add_songs);
-
-        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-
-            $this->error('Error during playlist update (add new songs).');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update (add new songs). Please investigate.');
+            $this->error('Error during playlist update.');
+            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update. Please investigate.');
 
         }
 
