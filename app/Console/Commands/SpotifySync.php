@@ -4,10 +4,6 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Proto\Models\Flickr;
-use Proto\Models\FlickrAlbum;
-use Proto\Models\FlickrItem;
-
 use Proto\Http\Controllers\SpotifyController;
 use Proto\Http\Controllers\SlackController;
 
@@ -56,7 +52,7 @@ class SpotifySync extends Command
         try {
             if ($spotify->me()->id != getenv('SPOTIFY_USER')) {
                 $this->error('API key is for the wrong user!');
-                //SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
+                SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -86,13 +82,13 @@ class SpotifySync extends Command
         // All-time
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(25)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('video_title, count(*) as count'))
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(25)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(50)->get());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
@@ -103,10 +99,10 @@ class SpotifySync extends Command
         $titles = [];
 
         $strip = [
-            "  ", "-", "official", "video", "original", "optional", "subs", "feat", "ft.", "tekst", "ondertiteld", " music", " hd", " lyrics", " lyric", " sing", " along", " audio", "bløf"
+            "  ", "-", "official", "video", "original", "optional", "subs", "feat", "ft.", "tekst", "ondertiteld", " music", " hd", " lyrics", " lyric", " sing", " along", " audio"
         ];
         $replace = [
-            " ", " ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "blof"
+            " ", " ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
         ];
 
         foreach ($videos as $video) {
@@ -125,36 +121,80 @@ class SpotifySync extends Command
 
         $new_songs = [];
 
-        try {
+        foreach ($titles as $t => $title) {
 
-            foreach ($titles as $t => $title) {
+            try {
+
                 $song = $spotify->search($title->title_formatted, 'track', ['limit' => 1])->tracks->items;
                 if (count($song) < 1) {
-                    $this->error("Could not match < $title->title | $title->title_formatted > to a Spotify track . ");
+                    $this->error("Could not match < $title->title | $title->title_formatted > to a Spotify track.");
                 } else {
-                    $new_songs[] = $song[0]->id;
+                    $new_songs[] = $song[0]->uri;
                 }
+
+            } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
+
+                dd($e);
+                $this->error('Error during track search.');
+                SlackController::sendNotification('[console *proto:spotify*] Exception during track search. Please investigate.');
+
+            }
+        }
+
+        $new_songs = array_unique($new_songs);
+
+        $this->info("---");
+
+        $this->info("Composing playlist. ");
+
+        $current_songs = [];
+
+        try {
+
+            foreach ($spotify->getUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), ['fields' => 'items.track.uri'])->items as $s) {
+                $current_songs[] = $s->track->uri;
             }
 
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
 
-            $this->error('Error during track search.');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during track search. Please investigate.');
+            $this->error('Error during playlist check.');
+            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist check. Please investigate.');
 
         }
 
-        $this->info("---");
+        $delete_songs = array_values(array_diff($current_songs, $new_songs));
+        $add_songs = array_values(array_diff($new_songs, $current_songs));
 
-        $this->info("Composing playlist . ");
+        $this->info("Deleting " . count($delete_songs) . " songs.");
 
         try {
 
-            $spotify->replaceUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $new_songs);
+            $arr = [];
+            foreach ($delete_songs as $i => $s) {
+                $arr[] = (object)[
+                    'id' => $s
+                ];
+            }
+
+            $spotify->deleteUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $arr);
 
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
 
-            $this->error('Error during playlist update.');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update. Please investigate.');
+            $this->error('Error during playlist update (delete old songs).');
+            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update (delete old songs). Please investigate.');
+
+        }
+
+        $this->info("Adding " . count($add_songs) . " songs.");
+
+        try {
+
+            $spotify->addUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $add_songs);
+
+        } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
+
+            $this->error('Error during playlist update (add new songs).');
+            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update (add new songs). Please investigate.');
 
         }
 
