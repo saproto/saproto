@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Redirect;
 
+use Proto\Models\HashMapItem;
+
 class FlickrController extends Controller
 {
     /**
@@ -44,8 +46,32 @@ class FlickrController extends Controller
 
             $request->session()->forget('flickr_token');
 
-            abort(200, "Successfully authenticated. AccessToken = " . $token->getAccessToken() . ", AccessTokenSecret = " . $token->getAccessTokenSecret());
+            FlickrController::setToken($token);
+
+            $request->session()->flash('flash_message', 'Successfully saved Flickr credentials.');
+            return Redirect::route('homepage');
 
         }
+    }
+
+    public static function setToken($api)
+    {
+        $dbApi = HashMapItem::where('key', 'flickr')->where('subkey', 'token')->first();
+        if ($dbApi == null) {
+            $dbApi = HashMapItem::create([
+                'key' => 'flickr',
+                'subkey' => 'token'
+            ]);
+        }
+        $dbApi->value = serialize($api);
+        $dbApi->save();
+    }
+
+    public static function getToken()
+    {
+        return unserialize(
+            HashMapItem::where('key', 'flickr')->where('subkey', 'token')
+                ->first()->value
+        );
     }
 }

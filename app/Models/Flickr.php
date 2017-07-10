@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 
 use Exception;
+use Proto\Http\Controllers\FlickrController;
 
 class Flickr extends Model
 {
@@ -59,6 +60,9 @@ class Flickr extends Model
         // Base URI
         $uri = "https://api.flickr.com/services/rest";
 
+        // Token
+        $token = FlickrController::getToken();
+
         // Generate Query String
         $default_params = array(
             'user_id' => urlencode(env('FLICKR_USER')),
@@ -70,7 +74,7 @@ class Flickr extends Model
             // OAuth Parameters
             'oauth_consumer_key' => env('FLICKR_CLIENT'),
             'oauth_nonce' => str_random(32),
-            'oauth_token' => env('FLICKR_ACCESS'),
+            'oauth_token' => $token->getAccessToken(),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => date('U'),
             'oauth_version' => '1.0'
@@ -90,7 +94,7 @@ class Flickr extends Model
         // Generate Signature
         $sig_base_string = "GET&" . urlencode($uri) . "&" . urlencode($query_string);
 
-        $sig_key = urlencode(getenv('FLICKR_SECRET')) . '&' . urlencode(getenv('FLICKR_ACCESS_SECRET'));
+        $sig_key = urlencode(getenv('FLICKR_SECRET')) . '&' . urlencode($token->getAccessTokenSecret());
 
         $sig = "oauth_signature=" . base64_encode(hash_hmac('sha1', $sig_base_string, $sig_key, true));
 

@@ -97,7 +97,7 @@
 </footer>
 
 @if(!App::isDownForMaintenance())
-    
+
 @section('javascript')
     @include('website.layouts.assets.javascripts')
 @show
