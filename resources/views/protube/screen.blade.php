@@ -20,7 +20,7 @@
             font-family: 'Roboto', sans-serif;
         }
 
-        #connecting {
+        .inactive {
             z-index: 100000;
 
             position: absolute;
@@ -38,7 +38,7 @@
             padding: 0;
         }
 
-        #connecting p {
+        .inactive p {
             position: absolute;
             top: 48%;
             left: 0;
@@ -50,6 +50,18 @@
             padding: 0;
 
             color: #c1ff00;
+        }
+
+        #protubeOff {
+            width: 100%;
+            height: 100%;
+
+            background-image: url('{{ asset('images/application/protube_offline.png') }}');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            display: none;
         }
 
         #progressBar {
@@ -322,6 +334,12 @@
                     stopProgressBar(true);
                     startIdle();
                 }
+
+                if(data.protubeOn) {
+                    $("#protubeOff").hide(0);
+                }else{
+                    $("#protubeOff").show(0);
+                }
             });
 
             screen.on("volume", function(data) {
@@ -437,9 +455,11 @@
 
 <body>
 
-<div id="connecting">
+<div id="connecting" class="inactive">
     <p>Connecting to Herbert...</p>
 </div>
+
+<div id="protubeOff" class="inactive"></div>
 
 <div id="playerContainer">
     <div id="nowPlaying">Loading...</div>
