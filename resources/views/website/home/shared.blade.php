@@ -42,6 +42,9 @@
     @endif
 
     <div class="container" style="margin-top: 30px;">
+
+        @include('kickin.notice')
+
         @section('visitor-specific')
         @show
 

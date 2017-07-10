@@ -4,6 +4,8 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Activity extends Validatable
 {
 
@@ -144,6 +146,9 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
+        if (Auth::check() && Auth::user()->isElegibleForKickInCamp() && $this->event->id == config('proto.kickinEvent')->event) {
+            return true;
+        }
         if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }

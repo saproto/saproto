@@ -366,4 +366,10 @@ class User extends Model implements AuthenticatableContract,
     {
         return nl2br($this->diet);
     }
+
+    public function isElegibleForKickInCamp()
+    {
+        return $this->member && date('U') > config('proto.kickinEvent')->start && date('U') < config('proto.kickinEvent')->end
+            && $this->member->created_at->format('U') > config('proto.kickinEvent')->start;
+    }
 }
