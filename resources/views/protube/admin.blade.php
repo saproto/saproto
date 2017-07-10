@@ -49,7 +49,7 @@
                         </tr>
                     </table>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="protubeToggle">Toggle ProTube</button>
+                        <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...</button>
                     </div>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default" id="shuffleRadio">Shuffle radio</button>
@@ -348,6 +348,11 @@
                     $("#playpause").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
                     $("#togglephotos").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
                     $("#skip").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
+                }
+                if(data.protubeOn) {
+                    $("#protubeToggle").html('Turn ProTube off');
+                }else{
+                    $("#protubeToggle").html('Turn ProTube on');
                 }
             });
 
