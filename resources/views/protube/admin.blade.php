@@ -48,11 +48,13 @@
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
                     </table>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...</button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="shuffleRadio">Shuffle radio</button>
+                    <div class="btn-group btn-group-justified" role="group">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default" id="shuffleRadio"><i class="fa fa-random" aria-hidden="true"></i> Radio</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -350,9 +352,9 @@
                     $("#skip").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
                 }
                 if(data.protubeOn) {
-                    $("#protubeToggle").html('Turn ProTube off');
+                    $("#protubeToggle").html('<i class="fa fa-toggle-on" aria-hidden="true"></i> ProTube');
                 }else{
-                    $("#protubeToggle").html('Turn ProTube on');
+                    $("#protubeToggle").html('<i class="fa fa-toggle-off" aria-hidden="true"></i> ProTube');
                 }
             });
 
@@ -587,6 +589,10 @@
         #queue .item h2 {
             font-size: 12px;
             margin: 2px 0;
+        }
+
+        .soundboard {
+            width: 48%;
         }
     </style>
 @endsection
