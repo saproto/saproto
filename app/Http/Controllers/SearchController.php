@@ -141,7 +141,7 @@ class SearchController extends Controller
                     (
                         (strlen($string) >= 3 && strpos(strtolower($user->name), $string) > -1)
                         || strtolower($user->calling_name) == $string
-                        || ($user->utwente_username && strlen($string) >= 5 && strpos(strtolower($user->utwente_username), $string) > -1)
+                        || ($user->utwente_username && strlen($string) >= 5 && strpos(strtolower($user->utwente_username), $string) > -1) && Auth::check() && Auth::user()->can('board')
                         || (intval($string) > 0 && $user->id == $string)
                     ) && $user->member && Auth::check() && Auth::user()->member
                 ) {
