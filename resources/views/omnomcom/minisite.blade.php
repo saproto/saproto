@@ -51,8 +51,8 @@
     <style type="text/css">
 
         html {
-          box-sizing: border-box;
-          font: 14px sans-serif;
+            box-sizing: border-box;
+            font: 14px sans-serif;
         }
 
         body {
@@ -180,10 +180,17 @@
     </style>
 
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-36196842-4', 'auto');
         ga('send', 'pageview');
@@ -196,7 +203,12 @@
     What would you like to eat?<br>
     <input type="text" id="search_query">
     <div id="results">
-        @foreach(Product::where('is_visible_when_no_stock', true)->where('is_visible', true)->get() as $i => $product)
+        @foreach(Product::where('is_visible', true)
+                ->where(function ($query) {
+                    $query->where('is_visible_when_no_stock', true)
+                    ->orWhere('stock','>',0);
+                })
+                ->get() as $i => $product)
 
             @if(count(array_intersect($product->categories->pluck('id')->toArray(), config('omnomcom.stores')['protopolis']->categories)) > 0)
 
