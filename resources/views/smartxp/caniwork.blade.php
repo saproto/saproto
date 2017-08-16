@@ -105,10 +105,17 @@
     </style>
 
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-36196842-3', 'auto');
         ga('send', 'pageview');
@@ -124,7 +131,15 @@
     <div class="row" style="margin-bottom: 50px;">
 
         <div class="box-header">
-            The SmartXP timetable for this week:
+            The SmartXp is currently
+
+            @if($answer)
+                <span class="green">not occupied!</span>
+            @else
+                <span style="color: red;">occupied.</span>
+            @endif
+
+            Here's the timetable for this week:
         </div>
 
     </div>

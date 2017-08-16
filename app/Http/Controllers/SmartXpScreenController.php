@@ -79,6 +79,8 @@ class SmartXpScreenController extends Controller
             'weekend' => []
         ];
 
+        $answer = true;
+
         foreach ($data->items as $entry) {
 
             $endtime = (isset($entry->end->date) ? $entry->end->date : $entry->end->dateTime);
@@ -96,17 +98,23 @@ class SmartXpScreenController extends Controller
 
             preg_match("/Type: (.*)/", $entry->description, $type);
 
+            $current = (strtotime($starttime) < time() && strtotime($endtime) > time() ? true : false);
+
+            if ($current) {
+                $answer = false;
+            }
+
             $roster[strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($starttime))))][] = (object)array(
                 'title' => $name,
                 'start' => strtotime($starttime),
                 'end' => strtotime($endtime),
                 'type' => $type[1],
                 'over' => (strtotime($endtime) < time() ? true : false),
-                'current' => (strtotime($starttime) < time() && strtotime($endtime) > time() ? true : false)
+                'current' => $current
             );
         }
 
-        return $roster;
+        return (object)['roster' => $roster, 'answer' => $answer];
 
     }
 
@@ -131,6 +139,7 @@ class SmartXpScreenController extends Controller
 
     public function canWork()
     {
-        return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()]);
+        return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()->roster,
+            'answer' => $this->smartxpTimetable()->answer]);
     }
 }
