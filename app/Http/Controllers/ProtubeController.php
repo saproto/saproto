@@ -13,16 +13,16 @@ class ProtubeController extends Controller
 {
     public function admin()
     {
-        if(Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
+        if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
             return view('protube.admin');
-        }else{
+        } else {
             abort(403);
         }
     }
 
-    public function screen()
+    public function screen(Request $request)
     {
-        return view('protube.screen');
+        return view('protube.screen', ['showPin' => $request->has('showPin')]);
     }
 
     public function offline()

@@ -96,7 +96,6 @@
             right: 0;
         }
 
-
         #nowPlaying {
             position: absolute;
             z-index: 9999;
@@ -104,9 +103,9 @@
             right: 20px;
             top: 20px;
             padding: 15px 20px;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             color: #FFFFFF;
-            text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
             font-size: 26px;
             border: 1px solid #c1ff00;
         }
@@ -146,7 +145,7 @@
             margin: 0;
             padding: 0;
 
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         #pin h1 {
@@ -216,7 +215,6 @@
             height: 135px;
         }
 
-
         #slideshow {
             position: absolute;
             top: 0;
@@ -265,7 +263,7 @@
         var screen = io(server + '/protube-screen');
         var pin = io(server + '/protube-pin');
 
-        pin.on("pin", function(data) {
+        pin.on("pin", function (data) {
             $("#pinCode").html(data);
         });
 
@@ -277,9 +275,9 @@
 
         var idle = true;
 
-        screen.on("radioStation", function(data) {
+        screen.on("radioStation", function (data) {
             radioStation = data;
-            if(idle) startRadio();
+            if (idle) startRadio();
         });
 
         function onYouTubePlayerReady() {
@@ -287,45 +285,45 @@
 
             screen.emit("screenReady");
 
-            screen.on("disconnect", function() {
+            screen.on("disconnect", function () {
                 $("#connecting").show(0);
             });
 
-            screen.on("reconnect", function() {
+            screen.on("reconnect", function () {
                 $("#connecting").hide(0);
                 screen.emit("screenReady");
             });
 
-            screen.on("ytInfo", function(data) {
+            screen.on("ytInfo", function (data) {
                 nowPlaying = data;
                 setNowPlaying(nowPlaying.title);
                 player.cueVideoById(nowPlaying.id);
                 player.setPlaybackQuality('highres');
             });
 
-            screen.on("queue", function(data) {
+            screen.on("queue", function (data) {
                 $("#queue ul").html("");
-                for(var i in data) {
+                for (var i in data) {
                     var invisible = (data[i].showVideo ? '' : '<i class="fa fa-eye-slash" aria-hidden="true"></i>');
                     $("#queue ul").append(`<li><img src="http://img.youtube.com/vi/${data[i].id}/0.jpg" /><h1>${data[i].title}${invisible}</h1></li>`);
                 }
             });
 
-            screen.on("progress", function(data) {
+            screen.on("progress", function (data) {
                 var progress = parseInt(data);
-                if(player.getCurrentTime() != progress+1 || progress == 0) {
+                if (player.getCurrentTime() != progress + 1 || progress == 0) {
                     player.seekTo(progress);
                     setProgressBar(player.getDuration(), progress);
                 }
             });
 
-            screen.on("playerState", function(data) {
+            screen.on("playerState", function (data) {
                 console.log("playerState", data);
-                if(data.playing && !data.paused) {
+                if (data.playing && !data.paused) {
                     stopIdle(data.slideshow);
                     player.playVideo();
 
-                } else if(data.playing && data.paused) {
+                } else if (data.playing && data.paused) {
                     player.pauseVideo();
                     stopProgressBar(false);
 
@@ -335,25 +333,25 @@
                     startIdle();
                 }
 
-                if(data.protubeOn) {
+                if (data.protubeOn) {
                     $("#protubeOff").hide(0);
-                }else{
+                } else {
                     $("#protubeOff").show(0);
                 }
             });
 
-            screen.on("volume", function(data) {
+            screen.on("volume", function (data) {
                 player.setVolume(data.youtube);
                 radio.volume = data.radio / 100;
             });
 
-            screen.on("reload", function() {
+            screen.on("reload", function () {
                 location.reload();
             });
         }
 
         function onYouTubePlayerStateChange(newState) {
-            if(newState.data == 1) setProgressBar();
+            if (newState.data == 1) setProgressBar();
         }
 
         function setProgressBar() {
@@ -361,7 +359,7 @@
             var total = player.getDuration();
 
             var progressBar = $("#progressBar");
-            var percentage = current/total * 100;
+            var percentage = current / total * 100;
 
             progressBar.stop();
 
@@ -371,7 +369,7 @@
 
             progressBar.animate({
                 width: '100%'
-            }, (total - current) * 1000, 'linear', function(){
+            }, (total - current) * 1000, 'linear', function () {
                 $(this).css({
                     width: '0%'
                 });
@@ -381,12 +379,12 @@
         function stopProgressBar(reset) {
             var progressBar = $("#progressBar");
             progressBar.stop();
-            if(reset) progressBar.css({ width: '0%' });
+            if (reset) progressBar.css({width: '0%'});
         }
 
         function startSlideshow() {
             var slideshow = $("#slideshow");
-            if(slideshow.html() == "") slideshow.html('<iframe src="/photos/slideshow" width="100%" height="100%" frameborder="0"></iframe>');
+            if (slideshow.html() == "") slideshow.html('<iframe src="/photos/slideshow" width="100%" height="100%" frameborder="0"></iframe>');
             slideshow.show(0);
         }
 
@@ -422,9 +420,9 @@
         function stopIdle(slideshow) {
             idle = false;
 
-            if(!slideshow) {
+            if (!slideshow) {
                 stopSlideshow();
-            }else{
+            } else {
                 startSlideshow();
             }
             stopRadio();
@@ -438,13 +436,45 @@
         function setNowPlaying(title) {
             $("#nowPlaying").html(title);
         }
+
+        @if($showPin)
+            $(document).ready(function () {
+                $.ajax({
+                    url: "{!! env('APP_URL') !!}/api/token",
+                    dataType: "jsonp",
+                    success: function (_token) {
+
+                        token = _token.token;
+
+                        var admin = io(server + '/protube-admin');
+
+                        admin.on("connect", function () {
+                            admin.emit("authenticate", token);
+                        });
+
+                        admin.on("pin", function (data) {
+                            $("#pinCode").html(data);
+                        });
+
+                    }
+                });
+            });
+        @endif
+
     </script>
 
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-36196842-5', 'auto');
         ga('send', 'pageview');
