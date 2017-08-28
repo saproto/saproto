@@ -305,7 +305,7 @@
                 $("#queue ul").html("");
                 for (var i in data) {
                     var invisible = (data[i].showVideo ? '' : '<i class="fa fa-eye-slash" aria-hidden="true"></i>');
-                    $("#queue ul").append(`<li><img src="http://img.youtube.com/vi/${data[i].id}/0.jpg" /><h1>${data[i].title}${invisible}</h1></li>`);
+                    $("#queue ul").append(`<li><img src="https://img.youtube.com/vi/${data[i].id}/0.jpg" /><h1>${data[i].title}${invisible}</h1></li>`);
                 }
             });
 
@@ -439,26 +439,26 @@
 
         @if($showPin)
             $(document).ready(function () {
-                $.ajax({
-                    url: "{!! env('APP_URL') !!}/api/token",
-                    dataType: "jsonp",
-                    success: function (_token) {
+            $.ajax({
+                url: "{!! env('APP_URL') !!}/api/token",
+                dataType: "jsonp",
+                success: function (_token) {
 
-                        token = _token.token;
+                    token = _token.token;
 
-                        var admin = io(server + '/protube-admin');
+                    var admin = io(server + '/protube-admin');
 
-                        admin.on("connect", function () {
-                            admin.emit("authenticate", token);
-                        });
+                    admin.on("connect", function () {
+                        admin.emit("authenticate", token);
+                    });
 
-                        admin.on("pin", function (data) {
-                            $("#pinCode").html(data);
-                        });
+                    admin.on("pin", function (data) {
+                        $("#pinCode").html(data);
+                    });
 
-                    }
-                });
+                }
             });
+        });
         @endif
 
     </script>
