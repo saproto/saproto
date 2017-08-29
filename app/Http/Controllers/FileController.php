@@ -89,6 +89,10 @@ class FileController extends Controller
     public static function requestPrint($printer, $url, $copies = 1)
     {
 
+        if ($printer == 'document') {
+            return 'You cannot do this at the moment. Please use the network printer.';
+        }
+
         $payload = base64_encode(json_encode((object)[
             'secret' => env('PRINTER_SECRET'),
             'url' => $url,
