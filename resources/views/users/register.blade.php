@@ -43,7 +43,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-5">
-                    <label for="name" class="control-label">Your full name</label>
+                    <label for="name" class="control-label">Your first and last name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="John Doe"
                            value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}"
                            required>
