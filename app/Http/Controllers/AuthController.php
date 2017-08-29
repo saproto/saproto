@@ -185,11 +185,11 @@ class AuthController extends Controller
 
         $user = User::create($request->except('g-recaptcha-response'));
 
-        if(Session::get('wizard')) {
+        if (Session::get('wizard')) {
 
             HashMapItem::create([
                 'key' => 'wizard',
-                'subkey' =>  $user->id,
+                'subkey' => $user->id,
                 'value' => 1
             ]);
         }
@@ -395,7 +395,11 @@ class AuthController extends Controller
             $user->utwente_username = $remoteUsername;
             $user->save();
             Session::flash('flash_message', 'We linked your UTwente account ' . $remoteUsername . ' to your Proto account.');
-            return Redirect::route('user::dashboard', ['id' => $user->id]);
+            if (Session::has('link_wizard')) {
+                return Redirect::route('becomeamember');
+            } else {
+                return Redirect::route('user::dashboard', ['id' => $user->id]);
+            }
         }
 
         // Reason 2: we were trying to login using a UTwente account

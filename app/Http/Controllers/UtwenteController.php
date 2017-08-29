@@ -33,6 +33,10 @@ class UtwenteController extends Controller
 
         Session::flash('link_utwente_to_user', $user);
 
+        if ($request->has('wizard')) {
+            Session::flash('link_wizard', true);
+        }
+
         return Redirect::route('login::utwente');
     }
 
