@@ -27,7 +27,7 @@
                             <?php $entry = $data[0] ?>
                             <h4 style="margin-top: 0;">
                                 <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m")  }}</span>
+                                <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:i")  }}</span>
                             </h4>
                             <div id="qq_bigquote">
                                 <div><h1>{!! $entry["quote"] !!}</h1></div>
@@ -63,7 +63,7 @@
                                 <div>
                                     <p>
                                         <a href="{{ route('user::profile', ['id' => $entry->user->id]) }}">{{ $entry->user->name }}</a>
-                                        <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:m") }}</span>
+                                        <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:i") }}</span>
                                     </p>
                                     <h4>{!! $entry["quote"] !!}</h4>
                                     <div class="qq_like" data-id="{{ $entry->id }}">
