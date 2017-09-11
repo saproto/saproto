@@ -11,7 +11,7 @@ use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Account;
 
-class PilscieController extends Controller
+class TIPCieController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,15 +22,15 @@ class PilscieController extends Controller
     {
         $date = $request->has('date') ? $request->date : null;
 
-        $pilscieProducts = Account::find(config('omnomcom.pilscie-account'))->products;
+        $tipcieProducts = Account::find(config('omnomcom.tipcie-account'))->products;
 
-        $pilscieOrders = [];
+        $tipcieOrders = [];
 
         $dailyAmount = 0;
         $dailyTotal = 0;
 
-        foreach($pilscieProducts as $pilscieProduct) {
-            $orders = $pilscieProduct->orderlines()
+        foreach($tipcieProducts as $tipcieProduct) {
+            $orders = $tipcieProduct->orderlines()
                 ->where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
                 ->where('created_at', '<', ($date ? Carbon::parse($date)->addHours(30)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
                 ->get();
@@ -38,7 +38,7 @@ class PilscieController extends Controller
             if(count($orders) > 0) {
                 $productInfo = new \stdClass();
 
-                $productInfo->name = $pilscieProduct->name;
+                $productInfo->name = $tipcieProduct->name;
                 $productInfo->amount = 0;
                 $productInfo->totalPrice = 0;
 
@@ -49,10 +49,10 @@ class PilscieController extends Controller
 
                 $dailyAmount += $productInfo->amount;
                 $dailyTotal += $productInfo->totalPrice;
-                $pilscieOrders[] = $productInfo;
+                $tipcieOrders[] = $productInfo;
             }
         }
 
-        return view('omnomcom.pilscie.orderhistory', ['orders' => $pilscieOrders, 'date' => $date, 'dailyTotal' => $dailyTotal, 'dailyAmount' => $dailyAmount]);
+        return view('omnomcom.tipcie.orderhistory', ['orders' => $tipcieOrders, 'date' => $date, 'dailyTotal' => $dailyTotal, 'dailyAmount' => $dailyAmount]);
     }
 }

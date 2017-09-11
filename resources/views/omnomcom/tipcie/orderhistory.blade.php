@@ -1,7 +1,7 @@
 @extends('website.layouts.default-nobg')
 
 @section('page-title')
-    PilsCie Order History
+    TIPCie Order History
 @endsection
 
 @section('content')
@@ -10,13 +10,13 @@
 
         <div class="col-md-3 col-md-push-9">
 
-            <form method="get" action="{{ route('omnomcom::pilscie::orderhistory') }}">
+            <form method="get" action="{{ route('omnomcom::tipcie::orderhistory') }}">
 
                 <div class="panel panel-default">
 
                     <div class="panel-heading" style="padding: 10px; text-align: center;">
 
-                        Pilscie Orderline History
+                        TIPCie Orderline History
 
                     </div>
 

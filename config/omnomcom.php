@@ -20,11 +20,11 @@ return [
             'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,
         ],
-        'pilscie' => (object)[
-            'name' => 'PilsCie',
+        'tipcie' => (object)[
+            'name' => 'TIPCie',
             'categories' => [15, 18],
             'addresses' => [],
-            'roles' => ['board', 'pilscie', 'drafters'],
+            'roles' => ['board', 'tipcie', 'drafters'],
             'cash_allowed' => true
         ]
     ],
@@ -42,14 +42,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | PilsCie Account
+    | TIPCie Account
     |--------------------------------------------------------------------------
     |
-    | Defines the financial account used by the PilsCie
+    | Defines the financial account used by the TIPCie
     |
     */
 
-    'pilscie-account' => 4,
+    'tipcie-account' => 4,
 
     /*
     |--------------------------------------------------------------------------

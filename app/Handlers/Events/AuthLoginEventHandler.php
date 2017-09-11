@@ -38,7 +38,7 @@ class AuthLoginEventHandler
         $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
         $boardcommittee = Committee::find(config('proto.committee')['board']);
         $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
-        $pilscie = Committee::find(config('proto.committee')['pilscie']);
+        $tipcie = Committee::find(config('proto.committee')['tipcie']);
         $drafters = Committee::find(config('proto.committee')['drafters']);
 
         if ($user->isInCommittee($rootcommittee)) {
@@ -71,13 +71,13 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($pilscie)) {
-            if (!$user->hasRole('pilscie')) {
-                $user->attachRole(Role::where('name', '=', 'pilscie')->first());
+        if ($user->isInCommittee($tipcie)) {
+            if (!$user->hasRole('tipcie')) {
+                $user->attachRole(Role::where('name', '=', 'tipcie')->first());
             }
         } else {
-            if ($user->hasRole('pilscie')) {
-                $user->detachRole(Role::where('name', '=', 'pilscie')->first());
+            if ($user->hasRole('tipcie')) {
+                $user->detachRole(Role::where('name', '=', 'tipcie')->first());
             }
         }
 

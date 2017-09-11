@@ -85,11 +85,11 @@ class GenerateRoles extends Command
             $permissions['finadmin']->save();
             $this->info('Added finadmin permission.');
         }
-        $permissions['pilscie'] = Permission::where('name', '=', 'pilscie')->first();
-        if ($permissions['pilscie'] == null) {
-            $permissions['pilscie'] = new Permission(array('name' => 'pilscie', 'display_name' => 'PilsCie Access', 'description' => 'Gives access to the PilsCie tools.'));
-            $permissions['pilscie']->save();
-            $this->info('Added pilscie permission.');
+        $permissions['tipcie'] = Permission::where('name', '=', 'tipcie')->first();
+        if ($permissions['tipcie'] == null) {
+            $permissions['tipcie'] = new Permission(array('name' => 'tipcie', 'display_name' => 'TIPCie Access', 'description' => 'Gives access to the TIPCie tools.'));
+            $permissions['tipcie']->save();
+            $this->info('Added tipcie permission.');
         }
         $permissions['drafters'] = Permission::where('name', '=', 'drafters')->first();
         if ($permissions['drafters'] == null) {
@@ -140,11 +140,11 @@ class GenerateRoles extends Command
             $roles['finadmin']->save();
             $this->info('Added finadmin role.');
         }
-        $roles['pilscie'] = Role::where('name', '=', 'pilscie')->first();
-        if ($roles['pilscie'] == null) {
-            $roles['pilscie'] = new Role(array('name' => 'pilscie', 'display_name' => 'PilsCie', 'description' => 'PilsCie member'));
-            $roles['pilscie']->save();
-            $this->info('Added pilscie role.');
+        $roles['tipcie'] = Role::where('name', '=', 'tipcie')->first();
+        if ($roles['tipcie'] == null) {
+            $roles['tipcie'] = new Role(array('name' => 'tipcie', 'display_name' => 'TIPCie', 'description' => 'TIPCie member'));
+            $roles['tipcie']->save();
+            $this->info('Added tipcie role.');
         }
         $roles['drafters'] = Role::where('name', '=', 'drafters')->first();
         if ($roles['drafters'] == null) {
@@ -161,20 +161,20 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id, $permissions['protube']->id));
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id));
         $this->info('Synced sysadmin role with permissions.');
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['pilscie']->id, $permissions['protube']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
         $roles['protube']->perms()->sync(array($permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['pilscie']->id, $permissions['protube']->id));
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['tipcie']->id, $permissions['protube']->id));
         $this->info('Synced board role with permissions.');
         $roles['finadmin']->perms()->sync(array($permissions['finadmin']->id));
         $this->info('Synced finadmin role with permissions.');
         $roles['omnomcom']->perms()->sync(array($permissions['omnomcom']->id));
         $this->info('Synced omnomcom role with permissions.');
-        $roles['pilscie']->perms()->sync(array($permissions['pilscie']->id, $permissions['drafters']->id));
-        $this->info('Synced pilscie role with permissions.');
+        $roles['tipcie']->perms()->sync(array($permissions['tipcie']->id, $permissions['drafters']->id, $permissions['omnomcom']->id));
+        $this->info('Synced tipcie role with permissions.');
         $roles['drafters']->perms()->sync(array($permissions['drafters']->id));
         $this->info('Synced drafters role with permissions.');
         $roles['alfred']->perms()->sync(array($permissions['alfred']->id, $permissions['omnomcom']->id));

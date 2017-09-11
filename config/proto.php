@@ -35,7 +35,7 @@ return [
     |
     */
 
-    'tfaroles' => ['sysadmin', 'admin', 'board', 'finadmin'],
+    'tfaroles' => ['sysadmin', 'admin', 'board', 'finadmin', 'omnomcom', 'tipcie'],
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return [
     'committee' => [
         'board' => 2108,
         'omnomcom' => 26,
-        'pilscie' => 22,
+        'tipcie' => 3583,
         'drafters' => 3336,
         'ero' => 1364,
     ],
