@@ -193,6 +193,10 @@ class UserAdminController extends Controller
                 preg_replace('/\PL/u', '', $name[0])
             ));
         }
+
+        # make sure usernames are max 20 characters long (windows limitation)
+        $aliasbase = substr($aliasbase, 0, 17);
+
         $alias = $aliasbase;
         $i = 0;
 
