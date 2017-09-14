@@ -127,6 +127,19 @@ class StudyController extends Controller
             return Redirect::back();
         }
 
+        if ($link->deleted_at && $link->created_at >= $link->deleted_at) {
+            Session::flash("flash_message", "The end date of your study can't be before or on the start date.");
+            return Redirect::back();
+        }
+
+        if (
+            strtotime($link->created_at) > strtotime('+3 years') ||
+            ($link->deleted_at && strtotime($link->deleted_at) > strtotime('+3 years'))
+        ) {
+            Session::flash("flash_message", "You can't use a date that far in the future.");
+            return Redirect::back();
+        }
+
         $link->user()->associate($user);
         $link->study()->associate($study);
 
@@ -151,6 +164,19 @@ class StudyController extends Controller
         $link->deleted_at = null;
         if ($request->end != "" && ($link->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash("flash_message", "Ill-formatted end date.");
+            return Redirect::back();
+        }
+
+        if ($link->deleted_at && $link->created_at >= $link->deleted_at) {
+            Session::flash("flash_message", "The end date of your study can't be before or on the start date.");
+            return Redirect::back();
+        }
+
+        if (
+            strtotime($link->created_at) > strtotime('+3 years') ||
+            ($link->deleted_at && strtotime($link->deleted_at) > strtotime('+3 years'))
+        ) {
+            Session::flash("flash_message", "You can't use a date that far in the future.");
             return Redirect::back();
         }
 
