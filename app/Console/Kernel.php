@@ -27,7 +27,8 @@ class Kernel extends ConsoleKernel
         Commands\FeeCron::class,
         Commands\UserCleanup::class,
         Commands\CheckUtwenteAccounts::class,
-        Commands\SpotifySync::class
+        Commands\SpotifySync::class,
+        Commands\TestIBANs::class,
     ];
 
     /**

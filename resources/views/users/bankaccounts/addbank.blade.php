@@ -30,7 +30,7 @@
                     <div class="panel-body">
 
                         <p style="text-align: center">
-                            <strong>{{ $user->bank->iban }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ $user->bank->bic }}<br>
+                            <strong>{{ iban_to_human_format($user->bank->iban) }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ iban_to_human_format($user->bank->bic) }}<br>
                         </p>
 
                         <p style="text-align: center">

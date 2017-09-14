@@ -32,7 +32,7 @@ class ActiveDirectorySync extends Command
      *
      * @var string
      */
-    protected $description = 'Manages e-mail accounts and lists via DirectAdmin.';
+    protected $description = 'Synchronize Active Directory against user/member database.';
 
     /**
      * Create a new command instance.

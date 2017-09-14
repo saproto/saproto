@@ -36,7 +36,7 @@
     "laravelcollective/html": "5.1.*",
     "doctrine/dbal": "^2.5",
     "zizaco/entrust": "dev-laravel-5",
-    "s-ichikawa/laravel-sendgrid-driver": "dev-master",
+    "s-ichikawa/laravel-sendgrid-driver": "~1.0",
     "nesbot/carbon": "^1.21",
     "pragmarx/google2fa": "^0.7.1",
     "bitbeans/yubikey": "dev-master",
@@ -61,7 +61,8 @@
     "aacotroneo/laravel-saml2": "^0.8.1",
     "willvincent/feeds": "^1.1",
     "oriceon/oauth-5-laravel": "dev-master",
-    "jwilsson/spotify-web-api-php": "^1.11"
+    "jwilsson/spotify-web-api-php": "^1.11",
+    "globalcitizen/php-iban": "^2.6"
   },
   "require-dev": {
   },

@@ -33,7 +33,7 @@ class BankController extends Controller
             return Redirect::route('user::dashboard', ['id' => $id]);
         }
 
-        if($request->wizard > 0) Session::flash("wizard", true);
+        if ($request->wizard > 0) Session::flash("wizard", true);
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => true]);
     }
@@ -42,13 +42,17 @@ class BankController extends Controller
     {
 
         $newbankdata = array(
-            'iban' => strtoupper(str_replace(' ', '', $data['iban'])),
             'bic' => strtoupper(str_replace(' ', '', $data['bic'])),
             'machtigingid' => "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0")
         );
 
+        if (!verify_iban($data['iban'])) {
+            return false;
+        } else {
+            $newbankdata['iban'] = iban_to_machine_format($data['iban']);
+        }
+
         $v = Validator::make($newbankdata, [
-            'iban' => 'required|regex:([A-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16})',
             'bic' => 'required|regex:([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)',
             'machtigingid' => 'required|unique:bankaccounts,machtigingid|regex:((PROTO)(X)([0-9]{5})(X)([0-9]{5}))'
         ]);
@@ -79,13 +83,17 @@ class BankController extends Controller
             Session::flash("flash_message", "Your IBAN and/or BIC are invalid. Please check again.");
             return Redirect::back();
         }
+        if (!iban_country_is_sepa(iban_get_country_part($bankdata['iban']))) {
+            Session::flash("flash_message", "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use your bank account here. Please try another one.");
+            return Redirect::back();
+        }
         $bank = Bank::create($bankdata);
         $bank->user()->associate($user);
         $bank->save();
 
         Session::flash("flash_message", "New withdrawal authorization added.");
 
-        if(Session::get('wizard')) return Redirect::route('becomeamember');
+        if (Session::get('wizard')) return Redirect::route('becomeamember');
 
         return Redirect::route('user::dashboard', ['id' => $id]);
 
@@ -121,6 +129,10 @@ class BankController extends Controller
         $bankdata = BankController::validateBankInput($request->all(), $user);
         if ($bankdata == false) {
             Session::flash("flash_message", "Your IBAN and/or BIC are invalid. Please check again.");
+            return Redirect::back();
+        }
+        if (!iban_country_is_sepa(iban_get_country_part($bankdata['iban']))) {
+            Session::flash("flash_message", "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use your bank account here. Please try another one.");
             return Redirect::back();
         }
         $bank = Bank::create($bankdata);
