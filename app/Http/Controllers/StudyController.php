@@ -134,9 +134,10 @@ class StudyController extends Controller
 
         if (
             strtotime($link->created_at) > strtotime('+3 years') ||
+            strtotime($link->created_at) < strtotime($user->birthdate) ||
             ($link->deleted_at && strtotime($link->deleted_at) > strtotime('+3 years'))
         ) {
-            Session::flash("flash_message", "You can't use a date that far in the future.");
+            Session::flash("flash_message", "You can't use a date that far from now.");
             return Redirect::back();
         }
 
@@ -174,9 +175,10 @@ class StudyController extends Controller
 
         if (
             strtotime($link->created_at) > strtotime('+3 years') ||
+            strtotime($link->created_at) < strtotime($link->user->birthdate) ||
             ($link->deleted_at && strtotime($link->deleted_at) > strtotime('+3 years'))
         ) {
-            Session::flash("flash_message", "You can't use a date that far in the future.");
+            Session::flash("flash_message", "You can't use a date that far from now.");
             return Redirect::back();
         }
 
