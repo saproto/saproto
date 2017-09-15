@@ -374,6 +374,10 @@ class AuthController extends Controller
     public function utwenteAuthPost()
     {
 
+        if (!Session::has('utwente_sso_user')) {
+            return Redirect::route('login::show');
+        }
+
         $remoteUser = Session::get('utwente_sso_user');
         $remoteData = [
             'uid' => $remoteUser['urn:mace:dir:attribute-def:uid'][0],
@@ -403,6 +407,7 @@ class AuthController extends Controller
         // Reason 2: we were trying to login using a UTwente account
         Session::keep('incoming_saml_request');
         $localUser = User::where('utwente_username', $remoteUsername)->first();
+
         if ($localUser == null) {
             Session::flash('flash_message', 'Could not find a Proto account for your UTwente account ' . $remoteUsername . ', ' . $remoteData["givenname"] . '. Did you link it already?');
             return Redirect::route('login::show');
