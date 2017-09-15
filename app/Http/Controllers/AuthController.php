@@ -23,7 +23,6 @@ use Proto\Models\HashMapItem;
 use Auth;
 use Proto\Models\WelcomeMessage;
 use Redirect;
-use Yubikey;
 use Hash;
 use Mail;
 use Session;
@@ -258,7 +257,6 @@ class AuthController extends Controller
         $user->website = null;
         $user->utwente_username = null;
         $user->tfa_totp_key = null;
-        $user->tfa_yubikey_identity = null;
 
         $user->phone_visible = 0;
         $user->address_visible = 0;
@@ -513,13 +511,6 @@ class AuthController extends Controller
             return AuthController::continueLogin($user);
         }
 
-        if (preg_match('/[mxs][0-9]{7}/i', $username)) {
-            $request->session()->flash('flash_message', '<p>It looks like you are trying to log-in to the website using your University of Twente account.</p>
-<p>The login form on the Proto website, where you enter a username and password, should only be used with a Proto account. If you don\'t know your Proto username or password, or need more information on what a Proto account is, please see the help buttons below the log-in form.</p>
-<p>If you want to login to the website using your University of Twente account, please click the appropriate button on the log-in screen to be taken to the University of Twente Single Sign-On.</p>');
-            return Redirect::route('login::show');
-        }
-
         $request->session()->flash('flash_message', 'Invalid username of password provided.');
         return Redirect::route('login::show');
 
@@ -536,7 +527,7 @@ class AuthController extends Controller
     {
 
         // Catch users that have 2FA enabled.
-        if ($user->tfa_totp_key || $user->tfa_yubikey_identity) {
+        if ($user->tfa_totp_key) {
             Session::flash('2fa_user', $user);
             return view('auth.2fa');
         } else {
@@ -566,32 +557,7 @@ class AuthController extends Controller
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
                 return AuthController::loginUser($user);
             } else {
-                $request->session()->flash('flash_message', 'Invalid TOTP. Please try again.');
-                $request->session()->reflash();
-                return view('auth.2fa');
-            }
-
-        }
-
-        /*
-         * YubiKey Authentication (yay!)
-         */
-        if ($request->session()->get('2fa_user')->tfa_yubikey_identity && $request->has('2fa_yubikey_token') && $request->input('2fa_yubikey_token') != '') {
-
-            // Try statement because YubiKey uses an external API that may fail to respond.
-            try {
-
-                // Verify if the response is valid.
-                if (Yubikey::verify($request->input('2fa_yubikey_token'))) {
-                    return AuthController::loginUser($user);
-                } else {
-                    $request->session()->flash('flash_message', 'Invalid YubiKey token. Please try again.');
-                    $request->session()->reflash();
-                    return view('auth.2fa');
-                }
-
-            } catch (\Exception $e) {
-                $request->session()->flash('flash_message', $e->getMessage());
+                $request->session()->flash('flash_message', 'Your code is invalid. Please try again.');
                 $request->session()->reflash();
                 return view('auth.2fa');
             }
@@ -601,7 +567,7 @@ class AuthController extends Controller
         /*
          * Something we don't recognize
          */
-        $request->session()->flash('flash_message', 'Please complete either of the requested challenges.');
+        $request->session()->flash('flash_message', 'Please complete the requested challenge.');
         $request->session()->reflash();
         return view('auth.2fa');
 

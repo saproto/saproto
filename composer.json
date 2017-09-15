@@ -39,7 +39,6 @@
     "s-ichikawa/laravel-sendgrid-driver": "~1.0",
     "nesbot/carbon": "^1.21",
     "pragmarx/google2fa": "^0.7.1",
-    "bitbeans/yubikey": "dev-master",
     "intervention/image": "^2.3",
     "intervention/imagecache": "^2.3",
     "greggilbert/recaptcha": "^2.1",

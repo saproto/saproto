@@ -13,8 +13,10 @@
 
                 <div class="modal-body">
 
+                    <hr>
+
                     <p style="text-align: center;">
-                        Scan the code below with your favorite 2FA app and enter your code below to verify.
+                        Scan the code below with your 2FA app and enter your code below to verify.
                     </p>
 
                     {!! csrf_field() !!}

@@ -154,7 +154,6 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         Sichikawa\LaravelSendgridDriver\MailServiceProvider::class, /* We really need this for SMTP, for some reason. Do not remove. */
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
-        Bitbeans\Yubikey\YubikeyServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
@@ -224,8 +223,6 @@ return [
         'role' => Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => Zizaco\Entrust\Middleware\EntrustAbility::class,
-
-        'Yubikey' => Bitbeans\Yubikey\YubikeyFacade::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
 

@@ -372,4 +372,9 @@ class User extends Model implements AuthenticatableContract,
         return $this->member && date('U') > config('proto.kickinEvent')->start && date('U') < config('proto.kickinEvent')->end
             && $this->member->created_at->format('U') > config('proto.kickinEvent')->start;
     }
+
+    public function hasTFAEnabled()
+    {
+        return $this->tfa_totp_key !== null;
+    }
 }

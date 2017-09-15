@@ -159,8 +159,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => '{user_id}/2fa', 'as' => '2fa::'], function () {
             Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
             Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
-            Route::post('yubikey', ['as' => 'addyubikey', 'uses' => 'TFAController@yubikeyPost']);
-            Route::get('deleteyubikey', ['as' => 'deleteyubikey', 'uses' => 'TFAController@yubikeyDelete']);
         });
     });
 

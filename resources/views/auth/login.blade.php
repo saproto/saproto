@@ -11,6 +11,16 @@
         {!! csrf_field() !!}
 
         <p>
+            <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
+                Login with UTwente Account
+            </a>
+        </p>
+
+        <p>
+            - or -
+        </p>
+
+        <p>
             <input type="text" class="form-control" id="username" name="email" placeholder="Proto Username or E-mail"
                    value="{{ (Session::has('login_username') ? Session::get('login_username') : '') }}">
         </p>
@@ -33,21 +43,6 @@
         <p>
             <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
                 Forgot your Proto password?
-            </a>
-        </p>
-
-        <p>
-            <a class="btn btn-default" href="https://github.com/saproto/saproto/wiki/The-Proto-Account" target="_blank"
-               style="width: 100%;">
-                What is a Proto account?
-            </a>
-        </p>
-
-        <hr>
-
-        <p>
-            <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
-                Login with UTwente Account
             </a>
         </p>
 

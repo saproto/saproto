@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4d041ce8813f2aaa13744dd6a50fca80",
-    "content-hash": "6c5d1f950ead3a335c7bf7c244e618a7",
+    "hash": "1af0d0bafcf1c584bbd3529cfb2f6451",
+    "content-hash": "960f7c92902dd2857fc7b9e7458ae6d3",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -368,56 +368,6 @@
                 }
             ],
             "time": "2016-06-13 19:28:20"
-        },
-        {
-            "name": "bitbeans/yubikey",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bitbeans/Yubikey.git",
-                "reference": "60d4d5ae6a505eee0b8472790b039dcd15b810ab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bitbeans/Yubikey/zipball/60d4d5ae6a505eee0b8472790b039dcd15b810ab",
-                "reference": "60d4d5ae6a505eee0b8472790b039dcd15b810ab",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "~5",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Bitbeans\\Yubikey\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jonathan Thuau",
-                    "email": "jonathan@monarobase.net",
-                    "homepage": "http://monarobase.net",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Christian Hermann",
-                    "email": "c.hermann@bitbeans.de",
-                    "homepage": "https://github.com/bitbeans",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Yubikey for Laravel 5",
-            "keywords": [
-                "laravel",
-                "laravel5",
-                "yubikey"
-            ],
-            "time": "2016-04-01 08:08:28"
         },
         {
             "name": "christian-riesen/base32",
@@ -4859,7 +4809,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "zizaco/entrust": 20,
-        "bitbeans/yubikey": 20,
         "directadmin/directadmin": 20,
         "oriceon/oauth-5-laravel": 20
     },
