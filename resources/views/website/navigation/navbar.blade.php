@@ -74,43 +74,54 @@
                     </li>
                 @endif
 
-                @if (Auth::check() && Auth::user()->can("board"))
+                @if (Auth::check() && (Auth::user()->can("board") || Auth::user()->can("finadmin")))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">Association Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("user::admin::list") }}">Users</a></li>
-                            <li><a href="{{ route("study::list") }}">Studies</a></li>
-                            <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
-                            <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
-                            <li><a href="{{ route("tempadmin::index") }}">Temp Admin Admin</a></li>
+                            @if (Auth::user()->can("board"))
 
-                            <li role="separator" class="divider"></li>
+                                <li><a href="{{ route("user::admin::list") }}">Users</a></li>
+                                <li><a href="{{ route("study::list") }}">Studies</a></li>
+                                <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
+                                <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
+                                <li><a href="{{ route("tempadmin::index") }}">Temp Admin Admin</a></li>
 
-                            <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
-                            <li><a href="{{ route("event::add") }}">Add Event</a></li>
+                                <li role="separator" class="divider"></li>
 
-                            <li role="separator" class="divider"></li>
+                                <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
+                                <li><a href="{{ route("event::add") }}">Add Event</a></li>
 
-                            <li><a class="navbar-title">External Affairs:</a></li>
-                            <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
-                            <li><a href="{{ route("companies::admin") }}">Companies</a></li>
-                            <li><a href="{{ route("joboffers::admin") }}">Job offers</a></li>
+                                <li role="separator" class="divider"></li>
 
-                            <li role="separator" class="divider"></li>
+                                <li><a class="navbar-title">External Affairs:</a></li>
+                                <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
+                                <li><a href="{{ route("companies::admin") }}">Companies</a></li>
+                                <li><a href="{{ route("joboffers::admin") }}">Job offers</a></li>
 
-                            <li><a class="navbar-title">Internal Affairs:</a></li>
-                            <li><a href="{{ route("newsletter::show") }}">Edit Newsletter</a></li>
+                                <li role="separator" class="divider"></li>
+
+                                <li><a class="navbar-title">Internal Affairs:</a></li>
+                                <li><a href="{{ route("newsletter::show") }}">Edit Newsletter</a></li>
+
+                            @endif
+
+                            @if (Auth::user()->can("board") && Auth::user()->can("finadmin"))
+
+                                <li role="separator" class="divider"></li>
+
+                            @endif
 
                             @if (Auth::user()->can("finadmin"))
-                                <li role="separator" class="divider"></li>
+
                                 <li><a class="navbar-title">Financial:</a></li>
                                 <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
                                 <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
                                 <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
                                 <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
                                 <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
+
                             @endif
 
                         </ul>

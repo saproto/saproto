@@ -567,8 +567,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('pay', ['as' => 'pay', 'uses' => 'MollieController@pay']);
             Route::get('status/{id}', ['as' => 'status', 'uses' => 'MollieController@status']);
             Route::get('receive/{id}', ['as' => 'receive', 'uses' => 'MollieController@receive']);
-            Route::get('list', ['as' => 'list', 'middleware' => ['permission:board'], 'uses' => 'MollieController@index']);
-            Route::get('monthly/{month}', ['as' => 'monthly', 'middleware' => ['permission:board'], 'uses' => 'MollieController@monthly']);
+            Route::get('list', ['as' => 'list', 'middleware' => ['permission:finadmin'], 'uses' => 'MollieController@index']);
+            Route::get('monthly/{month}', ['as' => 'monthly', 'middleware' => ['permission:finadmin'], 'uses' => 'MollieController@monthly']);
         });
 
         Route::get('mywithdrawal/{id}', ['as' => 'mywithdrawal', 'middleware' => ['auth'], 'uses' => 'WithdrawalController@showForUser']);
