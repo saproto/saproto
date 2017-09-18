@@ -38,33 +38,6 @@ class BankController extends Controller
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => true]);
     }
 
-    public static function validateBankInput($data, $user)
-    {
-
-        $newbankdata = array(
-            'bic' => strtoupper(str_replace(' ', '', $data['bic'])),
-            'machtigingid' => "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0")
-        );
-
-        if (!verify_iban($data['iban'])) {
-            return false;
-        } else {
-            $newbankdata['iban'] = iban_to_machine_format($data['iban']);
-        }
-
-        $v = Validator::make($newbankdata, [
-            'bic' => 'required|regex:([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)',
-            'machtigingid' => 'required|unique:bankaccounts,machtigingid|regex:((PROTO)(X)([0-9]{5})(X)([0-9]{5}))'
-        ]);
-
-        if ($v->fails()) {
-            return false;
-        }
-
-        return $newbankdata;
-
-    }
-
     public function add($id, Request $request)
     {
 
@@ -78,16 +51,19 @@ class BankController extends Controller
             abort(403);
         }
 
-        $bankdata = BankController::validateBankInput($request->all(), $user);
-        if ($bankdata == false) {
-            Session::flash("flash_message", "Your IBAN and/or BIC are invalid. Please check again.");
+        $bankdata = BankController::doVerifyIban($request->input('iban'), $request->input('bic'));
+        if ($bankdata->status == false) {
+            Session::flash("flash_message", $bankdata->message);
             return Redirect::back();
         }
-        if (!iban_country_is_sepa(iban_get_country_part($bankdata['iban']))) {
-            Session::flash("flash_message", "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use your bank account here. Please try another one.");
-            return Redirect::back();
-        }
-        $bank = Bank::create($bankdata);
+
+        $bank = Bank::create([
+            'iban' => $bankdata->iban,
+            'bic' => $bankdata->bic,
+            'machtigingid' => BankController::generateAuthorizationId($user)
+        ]);
+
+        $user->bank()->delete();
         $bank->user()->associate($user);
         $bank->save();
 
@@ -126,16 +102,18 @@ class BankController extends Controller
             return Redirect::route('user::dashboard', ['id' => $id]);
         }
 
-        $bankdata = BankController::validateBankInput($request->all(), $user);
-        if ($bankdata == false) {
-            Session::flash("flash_message", "Your IBAN and/or BIC are invalid. Please check again.");
+        $bankdata = BankController::doVerifyIban($request->input('iban'), $request->input('bic'));
+        if ($bankdata->status == false) {
+            Session::flash("flash_message", $bankdata->message);
             return Redirect::back();
         }
-        if (!iban_country_is_sepa(iban_get_country_part($bankdata['iban']))) {
-            Session::flash("flash_message", "Your bank is not a member of SEPA (Single Euro Payments Area) so you can't use your bank account here. Please try another one.");
-            return Redirect::back();
-        }
-        $bank = Bank::create($bankdata);
+
+        $bank = Bank::create([
+            'iban' => $bankdata->iban,
+            'bic' => $bankdata->bic,
+            'machtigingid' => BankController::generateAuthorizationId($user)
+        ]);
+
         $user->bank()->delete();
         $bank->user()->associate($user);
         $bank->save();
@@ -166,6 +144,73 @@ class BankController extends Controller
 
         Session::flash("flash_message", "Deleted bank account.");
         return Redirect::route('user::dashboard', ['id' => $id]);
+    }
+
+    public function verifyIban(Request $request)
+    {
+        return json_encode(BankController::doVerifyIban($request->input('iban'), $request->input('bic')));
+    }
+
+    public static function doVerifyIban($iban, $bic = null)
+    {
+        $response = (object)[
+            'status' => true,
+            'message' => 'Valid',
+            'iban' => iban_to_machine_format($iban),
+            'bic' => str_replace(' ', '', strtoupper($bic))
+        ];
+
+        if (!verify_iban($response->iban)) {
+            $response->status = false;
+            $response->message = 'Your IBAN is not valid.';
+            return $response;
+        }
+
+        if (!iban_country_is_sepa(iban_get_country_part($response->iban))) {
+            $response->status = false;
+            $response->message = 'Your bank is not a member of SEPA (Single Euro Payments Area) so you can\'t use this bank account here. Please try another one.';
+            return $response;
+        }
+
+        try {
+
+            $openiban_response = json_decode(file_get_contents('https://openiban.com/validate/' . $response->iban . '?validateBankCode=true&getBIC=true'));
+
+            if (property_exists($openiban_response->bankData, 'bic')) {
+
+                $response->bic = $openiban_response->bankData->bic;
+
+            } else {
+
+                if ($response->bic != '' && BankController::verifyBic($response->bic)) {
+                    $response->status = false;
+                    $response->message = 'Your BIC is not valid.';
+                    return $response;
+                }
+            }
+
+        } catch (\ErrorException $e) {
+
+            if ($response->bic != '' && BankController::verifyBic($response->bic)) {
+                $response->status = false;
+                $response->message = 'Your BIC is not valid.';
+                return $response;
+            }
+
+        }
+
+        return $response;
+
+    }
+
+    public static function verifyBic($bic)
+    {
+        return preg_match('/([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)/', $bic) !== 1;
+    }
+
+    public static function generateAuthorizationId($user)
+    {
+        return "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0");
     }
 
 }
