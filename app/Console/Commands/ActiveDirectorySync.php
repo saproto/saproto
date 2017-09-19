@@ -102,10 +102,14 @@ class ActiveDirectorySync extends Command
             $ldapuser->displayName = trim($user->name);
             $ldapuser->givenName = trim($user->calling_name);
 
+            $lastnameGuess = explode(" ", $user->name);
+            array_shift($lastnameGuess);
+            $ldapuser->sn = trim(implode(" ", $lastnameGuess));
+
             $ldapuser->mail = $user->email;
             $ldapuser->wWWHomePage = $user->website;
 
-            if ($user->address) {
+            if ($user->address && $user->address_visible) {
 
                 $ldapuser->l = $user->address->city;
                 $ldapuser->postalCode = $user->address->zipcode;
@@ -121,7 +125,15 @@ class ActiveDirectorySync extends Command
 
             }
 
-            $ldapuser->telephoneNumber = $user->phone;
+            if ($user->phone_visible) {
+
+                $ldapuser->telephoneNumber = $user->phone;
+
+            } else {
+
+                $ldapuser->telephoneNumber = null;
+
+            }
 
             $ldapuser->setAttribute('sAMAccountName', $username);
             $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
