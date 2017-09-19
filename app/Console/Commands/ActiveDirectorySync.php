@@ -114,25 +114,31 @@ class ActiveDirectorySync extends Command
                 $ldapuser->l = $user->address->city;
                 $ldapuser->postalCode = $user->address->zipcode;
                 $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
-                $ldapuser->preferredLanguage = $user->address->country;
+                $ldapuser->co = $user->address->country;
 
             } else {
 
                 $ldapuser->l = null;
                 $ldapuser->postalCode = null;
                 $ldapuser->streetAddress = null;
-                $ldapuser->preferredLanguage = null;
+                $ldapuser->co = null;
 
             }
 
             if ($user->phone_visible) {
-
                 $ldapuser->telephoneNumber = $user->phone;
-
             } else {
-
                 $ldapuser->telephoneNumber = null;
+            }
 
+            if ($user->photo) {
+                try {
+                    $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
+                } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                    $ldapuser->jpegPhoto = null;
+                }
+            } else {
+                $ldapuser->jpegPhoto = null;
             }
 
             $ldapuser->setAttribute('sAMAccountName', $username);
