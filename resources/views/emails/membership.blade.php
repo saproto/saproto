@@ -26,7 +26,9 @@
         <strong>{{ $user->member->proto_username }}</strong>. On the website and the OmNomCom, you can use this username
         instead of your e-mail address to log-in. For all other Proto services, you have to use this username and your
         Proto password to log-in. On these other services, your University of Twente credentials won't work
-        unfortunately.
+        unfortunately. Before you can start using your Proto username for anything other than the website, you have to
+        change your password once via the website to activate your new member account. Don't worry, you can just set the
+        same password you are already using.
     </p>
 
     <p>

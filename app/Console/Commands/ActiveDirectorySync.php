@@ -84,71 +84,71 @@ class ActiveDirectorySync extends Command
 
         foreach (User::all() as $user) {
 
-            $activeIds[] = $user->id;
-            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
+            if ($user->member) {
 
-            $username = ($user->member ? $user->member->proto_username : "user-" . $user->id);
+                $activeIds[] = $user->id;
+                $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
 
-            if ($ldapuser == null) {
-                $this->info('Creating LDAP user for ' . $user->name . '.');
-                $ldapuser = $provider->make()->user();
-                $ldapuser->cn = $username;
-                $ldapuser->description = $user->id;
-                $ldapuser->save();
-            }
+                $username = $user->member->proto_username;
 
-            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
+                if ($ldapuser == null) {
+                    $this->info('Creating LDAP user for ' . $user->name . '.');
+                    $ldapuser = $provider->make()->user();
+                    $ldapuser->cn = $username;
+                    $ldapuser->description = $user->id;
+                    $ldapuser->save();
+                }
 
-            $ldapuser->displayName = trim($user->name);
-            $ldapuser->givenName = trim($user->calling_name);
+                $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
 
-            $lastnameGuess = explode(" ", $user->name);
-            array_shift($lastnameGuess);
-            $ldapuser->sn = trim(implode(" ", $lastnameGuess));
+                $ldapuser->displayName = trim($user->name);
+                $ldapuser->givenName = trim($user->calling_name);
 
-            $ldapuser->mail = $user->email;
-            $ldapuser->wWWHomePage = $user->website;
+                $lastnameGuess = explode(" ", $user->name);
+                array_shift($lastnameGuess);
+                $ldapuser->sn = trim(implode(" ", $lastnameGuess));
 
-            if ($user->address && $user->address_visible) {
+                $ldapuser->mail = $user->email;
+                $ldapuser->wWWHomePage = $user->website;
 
-                $ldapuser->l = $user->address->city;
-                $ldapuser->postalCode = $user->address->zipcode;
-                $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
-                $ldapuser->co = $user->address->country;
+                if ($user->address && $user->address_visible) {
 
-            } else {
+                    $ldapuser->l = $user->address->city;
+                    $ldapuser->postalCode = $user->address->zipcode;
+                    $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
+                    $ldapuser->co = $user->address->country;
 
-                $ldapuser->l = null;
-                $ldapuser->postalCode = null;
-                $ldapuser->streetAddress = null;
-                $ldapuser->co = null;
+                } else {
 
-            }
+                    $ldapuser->l = null;
+                    $ldapuser->postalCode = null;
+                    $ldapuser->streetAddress = null;
+                    $ldapuser->co = null;
 
-            if ($user->phone_visible) {
-                $ldapuser->telephoneNumber = $user->phone;
-            } else {
-                $ldapuser->telephoneNumber = null;
-            }
+                }
 
-            if ($user->photo) {
-                try {
-                    $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
-                } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                if ($user->phone_visible) {
+                    $ldapuser->telephoneNumber = $user->phone;
+                } else {
+                    $ldapuser->telephoneNumber = null;
+                }
+
+                if ($user->photo) {
+                    try {
+                        $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
+                    } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                        $ldapuser->jpegPhoto = null;
+                    }
+                } else {
                     $ldapuser->jpegPhoto = null;
                 }
-            } else {
-                $ldapuser->jpegPhoto = null;
+
+                $ldapuser->setAttribute('sAMAccountName', $username);
+                $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
+
+                $ldapuser->save();
+
             }
-
-            $ldapuser->setAttribute('sAMAccountName', $username);
-            $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-            if (!$user->member) {
-                $ldapuser->setUserAccountControl(AccountControl::ACCOUNTDISABLE);
-            }
-
-            $ldapuser->save();
 
         }
 
