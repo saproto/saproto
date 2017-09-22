@@ -50,6 +50,14 @@
                             </label>
                         </div>
 
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="show_attachments"
+                                       @if(isset($item->show_attachments) && $item->show_attachments) checked @endif>
+                                Show attachments next to page
+                            </label>
+                        </div>
+
                         <div class="form-group">
                             <label for="editor">Content</label>
                             @if ($item == null)

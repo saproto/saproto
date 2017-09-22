@@ -61,6 +61,12 @@ class PageController extends Controller
             $page->is_member_only = false;
         }
 
+        if ($request->has('show_attachments')) {
+            $page->show_attachments = true;
+        } else {
+            $page->show_attachments = false;
+        }
+
         if (in_array($request->slug, $this->reservedSlugs)) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
 
@@ -204,6 +210,12 @@ class PageController extends Controller
             $page->is_member_only = true;
         } else {
             $page->is_member_only = false;
+        }
+
+        if ($request->has('show_attachments')) {
+            $page->show_attachments = true;
+        } else {
+            $page->show_attachments = false;
         }
 
         if (in_array($request->slug, $this->reservedSlugs)) {
