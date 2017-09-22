@@ -93,7 +93,7 @@ class Committee extends Model
     public function allmembers()
     {
 
-        $members = array('editions' => [], 'members' => ['current' => [], 'past' => []]);
+        $members = array('editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]);
 
         foreach (
             CommitteeMembership::withTrashed()->where('committee_id', $this->id)
@@ -114,6 +114,8 @@ class Committee extends Model
                     )
                 ) {
                     $members['members']['current'][] = $membership;
+                } elseif (strtotime($membership->created_at) > date('U')) {
+                    $members['members']['future'][] = $membership;
                 } else {
                     $members['members']['past'][] = $membership;
                 }
