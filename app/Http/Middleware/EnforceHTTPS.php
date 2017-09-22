@@ -11,14 +11,14 @@ class EnforceHTTPS
      *
      * Shamelessly copied from: http://stackoverflow.com/questions/28402726/laravel-5-redirect-to-https
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         if (!$request->secure() && env('SSL', true)) {
-            return redirect()->secure($request->getRequestUri());
+            return redirect()->secure($request->getRequestUri(), 301);
         }
 
         return $next($request);
