@@ -496,7 +496,7 @@
 
     @foreach($categories as $category)
 
-        <div class="category_button {{ ($category == $categories[0] && $storeslug != 'tipcie' ? '' : 'inactive') }}"
+        <div class="category_button {{ ($category == $categories[0] ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
             {{ $category->category->name }}
         </div>
@@ -504,10 +504,10 @@
     @endforeach
 
 <!-- This is for the minor member tool //-->
-    @if($storeslug == 'tipcie')
+    @if(count($minors) > 0)
 
-        <div class="category_button" data-id="static-minors">
-            Minor Members
+        <div class="category_button inactive" data-id="static-minors">
+            <strong>{{ count($minors) }}</strong> Minor Members
         </div>
 
     @endif
@@ -524,7 +524,7 @@
 
         <?php $products_in_category = []; ?>
 
-        <div class="category_view {{ ($category == $categories[0] && $storeslug != 'tipcie' ? '' : 'inactive') }}"
+        <div class="category_view {{ ($category == $categories[0] ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
 
             @foreach($category->products as $product)
@@ -612,11 +612,11 @@
     @endforeach
 
 <!-- This is for the minor member tool //-->
-    @if($storeslug == 'tipcie')
+    @if(count($minors) > 0)
 
-        <div class="category_view" data-id="static-minors">
+        <div class="category_view inactive" data-id="static-minors">
 
-            @foreach(User::where('birthdate','>',date('Y-m-d', strtotime('-18 years')))->has('member')->get() as $user)
+            @foreach($minors as $user)
 
                 <div class="product">
 

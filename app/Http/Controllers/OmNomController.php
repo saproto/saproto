@@ -10,6 +10,7 @@ use Proto\Http\Controllers\Controller;
 use Proto\Models\OrderLine;
 use Proto\Models\RfidCard;
 use Proto\Models\Product;
+use Proto\Models\User;
 
 use Auth;
 use Proto\Models\ProductCategory;
@@ -41,7 +42,13 @@ class OmNomController extends Controller
                 }
             }
 
-            return view('omnomcom.store.show', ['categories' => $categories, 'store' => $storedata, 'storeslug' => $store]);
+            if ($store == 'tipcie') {
+                $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get();
+            } else {
+                $minors = collect([]);
+            }
+
+            return view('omnomcom.store.show', ['categories' => $categories, 'store' => $storedata, 'storeslug' => $store, 'minors' => $minors]);
 
         } else {
             return view('omnomcom.store.pick', ['stores' => $stores]);
