@@ -224,6 +224,18 @@
             padding: 10px;
         }
 
+        .user-age {
+            color: #fff;
+            font-weight: bold;
+            background-color: #26ADE4;
+        }
+
+        .user-image {
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
         #controls {
             position: absolute;
 
@@ -484,12 +496,21 @@
 
     @foreach($categories as $category)
 
-        <div class="category_button {{ ($category == $categories[0] ? '' : 'inactive') }}"
+        <div class="category_button {{ ($category == $categories[0] && $storeslug != 'tipcie' ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
             {{ $category->category->name }}
         </div>
 
     @endforeach
+
+<!-- This is for the minor member tool //-->
+    @if($storeslug == 'tipcie')
+
+        <div class="category_button" data-id="static-minors">
+            Minor Members
+        </div>
+
+    @endif
 
     <div class="category_button inactive" id="reload-button">
         RELOAD BUTTON
@@ -503,7 +524,7 @@
 
         <?php $products_in_category = []; ?>
 
-        <div class="category_view {{ ($category == $categories[0] ? '' : 'inactive') }}"
+        <div class="category_view {{ ($category == $categories[0] && $storeslug != 'tipcie' ? '' : 'inactive') }}"
              data-id="{{ $category->category->id }}">
 
             @foreach($category->products as $product)
@@ -589,6 +610,44 @@
         </div>
 
     @endforeach
+
+<!-- This is for the minor member tool //-->
+    @if($storeslug == 'tipcie')
+
+        <div class="category_view" data-id="static-minors">
+
+            @foreach(User::where('birthdate','>',date('Y-m-d', strtotime('-18 years')))->has('member')->get() as $user)
+
+                <div class="product">
+
+                    <div class="product-inner">
+
+                        <div class="product-image user-image"
+                             style="background-image: url('{!! $user->generatePhotoPath(200, null) !!}');">
+                        </div>
+
+                        <div class="product-details">
+
+                            <div class="product-name">
+                                {{ $user->name }}
+                            </div>
+
+                            <div class="product-stock user-age">
+                                Age: {{ $user->age() }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    @endif
+
 
 </div>
 
