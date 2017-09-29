@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Object_;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 use Proto\Models\StorageEntry;
 use Proto\Models\Committee;
@@ -16,6 +17,7 @@ use Auth;
 use Entrust;
 use Session;
 use Redirect;
+use Mail;
 
 
 class CommitteeController extends Controller
@@ -200,6 +202,49 @@ class CommitteeController extends Controller
         $membership->forceDelete();
 
         return Redirect::route("committee::edit", ["id" => $committee_id]);
+
+    }
+
+    public function showAnonMailForm($id)
+    {
+
+        $committee = Committee::findOrFail($id);
+
+        if (!$committee->allow_anonymous_email) {
+            Session::flash("flash_message", "This committee does not accept anonymous e-mail at this time.");
+            return Redirect::back();
+        }
+
+        return view('committee.anonmail', ['committee' => $committee]);
+
+    }
+
+    public function postAnonMailForm(Request $request, $id)
+    {
+
+        $committee = Committee::findOrFail($id);
+
+        if (!$committee->allow_anonymous_email) {
+            Session::flash("flash_message", "This committee does not accept anonymous e-mail at this time.");
+            return Redirect::back();
+        }
+
+        $email = $committee->getEmailAddress();
+        $name = $committee->name;
+
+        $message_content = strip_tags($request->get('message'));
+        $message_hash = md5($message_content);
+
+        Log::info('Anonymous e-mail with hash ' . $message_hash . ' sent to ' . $name . ' by user #' . Auth::user()->id);
+
+        Mail::queueOn('low', 'emails.anonymous', ['message_content' => $message_content, 'hash' => $message_hash], function ($m) use ($email, $name) {
+            $m->to($email, $name);
+            $m->subject('Anonymous e-mail for the ' . $name . '.');
+        });
+
+        Session::flash("flash_message", "Your anonymous e-mail has been sent!");
+
+        return Redirect::route('committee::show', ['id' => $committee->id]);
 
     }
 

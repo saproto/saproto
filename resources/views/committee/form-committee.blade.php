@@ -41,6 +41,16 @@
             </div>
 
             <div class="form-group">
+                <label for="public">Users can send anonymous e-mail to committee</label>
+                <select class="form-control" id="allow_anonymous_email" name="allow_anonymous_email">
+                    <option value="0" {{ (!$new && $committee->allow_anonymous_email ? '' : 'selected') }}>No
+                    </option>
+                    <option value="1" {{ (!$new && $committee->allow_anonymous_email ? 'selected' : '') }}>Yes
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="editor">Description</label>
                 @if ($new)
                     <textarea id="editor" name="description"

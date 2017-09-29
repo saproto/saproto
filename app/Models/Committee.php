@@ -135,5 +135,10 @@ class Committee extends Model
         return $user->isInCommittee($this);
     }
 
+    public function getEmailAddress()
+    {
+        return $this->slug . '@' . config('proto.emaildomain');
+    }
+
     protected $guarded = [];
 }

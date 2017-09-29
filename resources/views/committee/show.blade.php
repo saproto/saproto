@@ -30,12 +30,28 @@
 
                 </div>
 
-                @if(Auth::check() && Auth::user()->can('board'))
+                @if(Auth::check() && ($committee->allow_anonymous_email || Auth::user()->can('board')))
 
                     <div class="panel-footer clearfix">
-                        <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-default">
-                            Edit
-                        </a>
+
+                        @if(Auth::check() && Auth::user()->can('board'))
+
+                            <a href="{{ route("committee::edit", ["id" => $committee->id]) }}"
+                               class="btn btn-default pull-right">
+                                Edit
+                            </a>
+
+                        @endif
+
+                        @if($committee->allow_anonymous_email)
+
+                            <a href="{{ route("committee::anonymousmail", ["id" => $committee->id]) }}"
+                               class="btn btn-info">
+                                Send this committee an anonymous e-mail
+                            </a>
+
+                        @endif
+
                     </div>
 
                 @endif
