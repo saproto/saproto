@@ -73,6 +73,14 @@
             margin: 0px 10px;
         }
 
+        .box-footer {
+            text-align: left;
+            font-weight: bold;
+            color: #fff;
+            padding: 15px;
+            font-size: 20px;
+        }
+
         .notice {
             text-align: center;
             font-size: 20px;
@@ -169,7 +177,7 @@
 
                 <div class="box-header">
 
-                    Board Room S.A. Proto (A124) <span id="boardroom__status">Checking...</span>
+                    Board Room of S.A. Proto (A124) <span id="boardroom__status">Checking...</span>
 
                 </div>
 
@@ -179,6 +187,11 @@
 
                 </div>
 
+            </div>
+
+            <div class="box-footer">
+                Reservations via the board of S.A. Proto (A230)
+                <span style="float: right">board@proto.utwente.nl &nbsp;&nbsp;&nbsp; 053 489 4423</span>
             </div>
 
         </div>
