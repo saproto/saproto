@@ -36,7 +36,7 @@ class Flickr extends Model
         }
         $album = $album->get();
 
-        if ($album == null) {
+        if ($album->count() == 0) {
             abort(404, "This album does not exist.");
         }
 
