@@ -74,7 +74,7 @@ class PageController extends Controller
         }
 
         if (Page::where('slug', $page->slug)->get()->count() > 0) {
-            Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
+            Session::flash('flash_message', 'This URL has already been used and can\'t be used again. Please choose a different URL.');
 
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
