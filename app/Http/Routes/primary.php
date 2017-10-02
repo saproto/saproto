@@ -656,6 +656,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
+    Route::get('boardroom', ['uses' => 'SmartXpScreenController@boardroomStatus']);
 
     /*
      * The routes for Protube.
@@ -689,6 +690,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
+        Route::get('timetable/boardroom', ['as' => 'timetable::boardroom', 'uses' => 'SmartXpScreenController@boardroomTimetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
         Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
         Route::get('users', ['as' => 'users', 'uses' => 'ApiController@users']);
