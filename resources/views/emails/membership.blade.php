@@ -23,12 +23,15 @@
 
     <p>
         With your membership also comes a Proto username. Your Proto username is
-        <strong>{{ $user->member->proto_username }}</strong>. On the website and the OmNomCom, you can use this username
-        instead of your e-mail address to log-in. For all other Proto services, you have to use this username and your
-        Proto password to log-in. On these other services, your University of Twente credentials won't work
-        unfortunately. Before you can start using your Proto username for anything other than the website, you have to
-        change your password once via the website to activate your new member account. Don't worry, you can just set the
-        same password you are already using.
+        <strong>{{ $user->member->proto_username }}</strong>. You can use this username instead of your e-mail address
+        to log-in.
+    </p>
+
+    <p>
+        For other Proto services outside the website, you have to use this username and your Proto password to log-in.
+        On these other services, your University of Twente account or your e-mail address don't work. Before you can
+        start using your Proto username outside of the website you'll need to activate your username. You do this by
+        synchronizing your password to your username <a href="{{ route('login::password::sync') }}">here</a>.
     </p>
 
     <p>

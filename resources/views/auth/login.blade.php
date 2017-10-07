@@ -12,7 +12,7 @@
 
         <p>
             <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
-                Login with UTwente Account
+                Login with UTwente account
             </a>
         </p>
 
@@ -21,28 +21,28 @@
         </p>
 
         <p>
-            <input type="text" class="form-control" id="username" name="email" placeholder="Proto Username or E-mail"
+            <input type="text" class="form-control" id="username" name="email" placeholder="Username or E-mail"
                    value="{{ (Session::has('login_username') ? Session::get('login_username') : '') }}">
         </p>
         <p>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Proto Password">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
         </p>
 
         <p>
             <button type="submit" class="btn btn-success" style="width: 100%;">
-                Login with Proto Account
+                Login with Proto account
             </button>
         </p>
 
         <p>
             <a class="btn btn-default" href="{{ route('login::requestusername') }}" style="width: 100%;">
-                Forgot your Proto username?
+                Forgot your username?
             </a>
         </p>
 
         <p>
             <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
-                Forgot your Proto password?
+                Forgot your password?
             </a>
         </p>
 

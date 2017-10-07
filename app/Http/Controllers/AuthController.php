@@ -89,45 +89,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a submitted password change form.
-     *
-     * @param Request $request The request object.
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updatePassword(Request $request)
-    {
-
-        $user = User::find($request->id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if ($user->id != Auth::id()) {
-            $request->session()->flash('flash_message', 'Sorry! You cannot change another user their password. If a user forgot their password, please let them use the \'forgot password\' form on the login screen.');
-            return Redirect::back();
-        }
-
-        if (AuthController::verifyCredentials($user->email, $request->oldpass)) {
-            if ($request->newpass1 !== $request->newpass2) {
-                $request->session()->flash('flash_message', 'The new passwords are not identical. Please try again!');
-                return Redirect::back();
-            } elseif (strlen($request->newpass1) < 8) {
-                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
-                return Redirect::back();
-            } else {
-                $user->setPassword($request->newpass1);
-                $request->session()->flash('flash_message', 'Your password has been changed.');
-                return Redirect::back();
-            }
-        }
-
-        $request->session()->flash('flash_message', 'Old password incorrect! Password not updated.');
-        return Redirect::back();
-
-    }
-
-    /**
      * Handle a request to the log-out URL.
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -277,7 +238,7 @@ class AuthController extends Controller
      */
     public function getEmail()
     {
-        return view('auth.password');
+        return view('auth.passreset_mail');
     }
 
     /**
@@ -314,7 +275,7 @@ class AuthController extends Controller
         PasswordReset::where('valid_to', '<', date('U'))->delete();
         $reset = PasswordReset::where('token', $token)->first();
         if ($reset !== null) {
-            return view('auth.reset', ['reset' => $reset]);
+            return view('auth.passreset_pass', ['reset' => $reset]);
         } else {
             $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
             return Redirect::route('login::resetpass');
@@ -336,9 +297,9 @@ class AuthController extends Controller
             if ($request->password !== $request->password_confirmation) {
                 $request->session()->flash('flash_message', 'Your passwords don\'t match.');
                 return Redirect::back();
-            } elseif (strlen($request->password) < 8) {
-                $request->session()->flash('flash_message', 'Your new password should be at least 8 characters long.');
-                return Redirect::route('user::dashboard');
+            } elseif (strlen($request->password) < 10) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
+                return Redirect::back();
             }
 
             $reset->user->setPassword($request->password);
@@ -353,6 +314,100 @@ class AuthController extends Controller
             return Redirect::route('login::resetpass');
         }
     }
+
+    public function passwordChangeGet(Request $request)
+    {
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Please log-in first.');
+            return Redirect::route('login::show');
+        }
+        return view('auth.passchange');
+    }
+
+    /**
+     * Handle a submitted password change form.
+     *
+     * @param Request $request The request object.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function passwordChangePost(Request $request)
+    {
+
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Please log-in first.');
+            return Redirect::route('login::show');
+        }
+
+        $user = Auth::user();
+
+        $pass_old = $request->get('old_password');
+        $pass_new1 = $request->get('new_password1');
+        $pass_new2 = $request->get('new_password2');
+
+        $user_verify = AuthController::verifyCredentials($user->email, $pass_old);
+
+        if ($user_verify && $user_verify->id === $user->id) {
+            if ($pass_new1 !== $pass_new2) {
+                $request->session()->flash('flash_message', 'The new passwords do not match.');
+                return view('auth.passchange');
+            } elseif (strlen($pass_new1) < 10) {
+                $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
+                return view('auth.passchange');
+            } else {
+                $user->setPassword($pass_new1);
+                $request->session()->flash('flash_message', 'Your password has been changed.');
+                return Redirect::route('user::dashboard');
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Old password incorrect.');
+        return view('auth.passchange');
+
+    }
+
+    /**
+     * Display the password sync form to users to allow them to sync their password between services.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function passwordSyncGet(Request $request)
+    {
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Please log-in first.');
+            return Redirect::route('login::show');
+        }
+        return view('auth.sync');
+    }
+
+    /**
+     * Process a request to synchronize ones password.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function passwordSyncPost(Request $request)
+    {
+        if (!Auth::check()) {
+            $request->session()->flash('flash_message', 'Please log-in first.');
+            return Redirect::route('login::show');
+        }
+
+        $pass = $request->get('password');
+        $user = Auth::user();
+
+        $user_verify = AuthController::verifyCredentials($user->email, $pass);
+
+        if ($user_verify && $user_verify->id === $user->id) {
+            $user->setPassword($pass);
+            $request->session()->flash('flash_message', 'Your password was successfully synchronized.');
+            return Redirect::route('user::dashboard');
+        } else {
+            $request->session()->flash('flash_message', 'Password incorrect.');
+            return view('auth.sync');
+        }
+
+        return view('auth.sync');
+    }
+
 
     /**
      * Handle a request for UTwente SSO auth.

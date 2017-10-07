@@ -1,7 +1,7 @@
 @extends('auth.template')
 
 @section('page-title')
-    Proto Password Reset
+    Password Reset
 @endsection
 
 @section('login-body')
@@ -14,23 +14,23 @@
             Please enter your e-mail address.
         </p>
 
-        <div class="form-group">
+        <p>
             <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}"
                    placeholder="garrus.vakarian@example.com">
-        </div>
+        </p>
 
         <p>
             <button type="submit" class="btn btn-success" style="width: 100%;">
-                Send Password Reset Link
+                Send password reset link
             </button>
         </p>
 
         <hr>
 
         <p>
-            <a class="btn btn-default" href="https://utpm.utwente.nl/pmuser" target="_blank"
+            <a class="btn btn-default" href="https://tap.utwente.nl/tap/pwman/index.php" target="_blank"
                style="width: 100%;">
-                Reset UTwente Password
+                Reset UTwente password
             </a>
         </p>
 

@@ -102,9 +102,7 @@ class User extends Model implements AuthenticatableContract,
         $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
         if ($ldapuser !== null) {
             $ldapuser->setPassword($password);
-            if ($this->member) {
-                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
-            }
+            $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
             $ldapuser->save();
         }
     }

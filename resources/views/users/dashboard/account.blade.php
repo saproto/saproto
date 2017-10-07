@@ -25,7 +25,8 @@
                 <label for="calling_name" class="col-sm-4 control-label">Display name</label>
 
                 <div class="col-sm-8">
-                    <input type="calling_name" class="form-control" id="calling_name" name="calling_name" value="{{ $user->calling_name }}"
+                    <input type="calling_name" class="form-control" id="calling_name" name="calling_name"
+                           value="{{ $user->calling_name }}"
                            required>
                 </div>
             </div>
@@ -98,78 +99,22 @@
         <div class="panel-body">
 
             <p>
-                This changes the password for your Proto account across all of our systems. Your new password should be
-                at least eight (8) characters in length.
-            </p>
-
-            <hr>
-
-            {!! csrf_field() !!}
-
-
-            @if($user->member)
-
-                <div class="form-group">
-                    <label for="member_proto_mail" class="col-sm-4 control-label">Username</label>
-                    <div class="col-sm-8 control-label" style="text-align: left;">
-                        {{ $user->member->proto_username }}
-                    </div>
-                </div>
-
-            @else
-
-                <div class="form-group">
-                    <label for="member_proto_mail" class="col-sm-4 control-label">Email</label>
-                    <div class="col-sm-8 control-label" style="text-align: left;">
-                        {{ $user->email }}
-                    </div>
-                </div>
-
-            @endif
-
-            <div class="form-group">
-                <label for="oldpass" class="col-sm-4 control-label">Current</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="oldpass" name="oldpass" required>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="form-group">
-                <label for="newpass1" class="col-sm-4 control-label">New</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpass1" name="newpass1" required minlength="8">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="newpass2" class="col-sm-4 control-label">Repeat</label>
-
-                <div class="col-sm-8">
-                    <input type="password" class="form-control" id="newpass2" name="newpass2" required minlength="8">
-                </div>
-            </div>
-
-            <hr>
-
-            <p>
                 <i>This will not change your University of Twente password.</i> You can change that password <a
-                        href="https://tap.utwente.nl/tap/">here</a>.
+                        href="https://tap.utwente.nl/tap/" target="_blank">here</a>.
             </p>
 
         </div>
 
         <div class="panel-footer">
+
             <div class="btn-group btn-group-justified" role="group">
                 <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-success">
+                    <a href="{{ route('login::password::change') }}" class="btn btn-success">
                         Update password
-                    </button>
+                    </a>
                 </div>
             </div>
+
         </div>
 
     </div>

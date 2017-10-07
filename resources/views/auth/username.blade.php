@@ -1,7 +1,7 @@
 @extends('auth.template')
 
 @section('page-title')
-    Request Proto Username
+    Request Username
 @endsection
 
 @section('login-body')
@@ -21,7 +21,7 @@
 
         <p>
             <button type="submit" class="btn btn-success" style="width: 100%;">
-                What is my Proto username?
+                What is my username?
             </button>
         </p>
 
