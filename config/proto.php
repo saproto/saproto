@@ -211,7 +211,7 @@ return [
     |
     */
 
-    'slackchannel' => '#hyttioaoac-public',
+    'slackchannel' => '#hyttioaoac-logs',
 
     /*
     |--------------------------------------------------------------------------
