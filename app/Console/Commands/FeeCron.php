@@ -62,8 +62,8 @@ class FeeCron extends Command
         $usernames = [];
 
         foreach ($ldap_students as $student) {
-            $names[] = $student->givenname[0] . ' ' . $student->sn[0];
-            $emails[] = $student->mail[0];
+            $names[] = strtolower($student->givenname[0] . ' ' . $student->sn[0]);
+            $emails[] = strtolower($student->mail[0]);
             $usernames[] = $student->uid[0];
         }
 
@@ -99,7 +99,7 @@ class FeeCron extends Command
                     $email_remmitance_reason = 'you are a donator of the association, and your donation is not handled via the membership fee system';
                 }
                 $charged->remitted[] = $member->user->name . " (#" . $member->user->id . ") - $reason";
-            } elseif (in_array($member->user->email, $emails) || in_array($member->user->utwente_username, $usernames) || in_array($member->user->name, $names)) {
+            } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {
                 $fee = config('omnomcom.fee')['regular'];
                 $email_fee = 'regular';
                 $charged->regular[] = $member->user->name . " (#" . $member->user->id . ")";
