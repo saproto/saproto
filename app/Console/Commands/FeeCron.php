@@ -82,21 +82,30 @@ class FeeCron extends Command
                 continue;
             }
 
+            $email_remmitance_reason = null;
+            $email_fee = null;
+
             if ($member->is_lifelong || $member->is_honorary || $member->is_donator) {
                 $fee = config('omnomcom.fee')['remitted'];
+                $email_fee = 'remitted';
                 if ($member->is_honorary) {
                     $reason = "Honorary Member";
+                    $email_remmitance_reason = 'you are an honorary member';
                 } elseif ($member->is_lifelong) {
                     $reason = "Lifelong Member";
+                    $email_remmitance_reason = 'you signed up for life-long membership when you became a member';
                 } else {
                     $reason = "Donator";
+                    $email_remmitance_reason = 'you are a donator of the association, and your donation is not handled via the membership fee system';
                 }
                 $charged->remitted[] = $member->user->name . " (#" . $member->user->id . ") - $reason";
             } elseif (in_array($member->user->email, $emails) || in_array($member->user->utwente_username, $usernames) || in_array($member->user->name, $names)) {
                 $fee = config('omnomcom.fee')['regular'];
+                $email_fee = 'regular';
                 $charged->regular[] = $member->user->name . " (#" . $member->user->id . ")";
             } else {
                 $fee = config('omnomcom.fee')['reduced'];
+                $email_fee = 'reduced';
                 $charged->reduced[] = $member->user->name . " (#" . $member->user->id . ")";
             }
 
@@ -104,6 +113,25 @@ class FeeCron extends Command
 
             $product = Product::findOrFail($fee);
             $product->buyForUser($member->user, 1, $product->price);
+
+            $email_fee_amount = $product->price;
+
+            $email = $member->user->email;
+            $name = $member->user->name;
+
+            $treasurer = config('proto.treasurer');
+
+            Mail::queueOn('high', 'emails.fee_for_users', [
+                'treasurer' => $treasurer,
+                'fee' => $email_fee,
+                'remitted_reason' => $email_remmitance_reason,
+                'fee_amount' => $email_fee_amount,
+                'user' => $member->user
+            ], function ($message) use ($charged, $member, $email, $name, $treasurer) {
+                $message->to($email, $name);
+                $message->from('treasurer@proto.utwente.nl', $treasurer);
+                $message->subject('Information on your membership fee for S.A. Proto');
+            });
 
         }
 
