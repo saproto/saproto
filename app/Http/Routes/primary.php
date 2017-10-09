@@ -683,6 +683,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
         });
+        Route::group(['prefix' => 'display', 'middleware' => ['permission:admin'], 'as' => 'display::'], function () {
+            Route::get('index', ['as' => 'index', 'uses' => 'DisplayController@index']);
+            Route::post('store', ['as' => 'store', 'uses' => 'DisplayController@store']);
+            Route::post('update/{id}', ['as' => 'update', 'uses' => 'DisplayController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DisplayController@destroy']);
+        });
     });
 
     /*
@@ -719,6 +725,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
             Route::get('radiostations', ['uses' => 'RadioController@api']);
+            Route::get('displays', ['uses' => 'DisplayController@api']);
         });
 
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);

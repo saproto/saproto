@@ -143,6 +143,7 @@
 
                             @if(Auth::user()->can('sysadmin'))
                                 <li><a href="{{ route("protube::radio::index") }}">ProTube Radio Stations</a></li>
+                                <li><a href="{{ route("protube::display::index") }}">ProTube Displays</a></li>
                                 <li><a href="{{ route("alias::index") }}">Aliases</a></li>
                                 <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
                             @endif
