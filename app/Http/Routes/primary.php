@@ -540,6 +540,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductController@destroy']);
+
+            Route::get('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
+            Route::post('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
+
             Route::get('{id}', ['as' => 'show', 'uses' => 'ProductController@show']);
 
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
