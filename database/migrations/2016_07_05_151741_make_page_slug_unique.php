@@ -25,7 +25,7 @@ class MakePageSlugUnique extends Migration
     public function down()
     {
         Schema::table('pages', function ($table) {
-            $table->dropUnique('slug');
+            $table->dropUnique('pages_slug_unique');
         });
     }
 }

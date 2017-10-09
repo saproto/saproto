@@ -22,6 +22,13 @@ class RemoveObsoleteTool extends Migration
      */
     public function down()
     {
-        //
+        Schema::create('pastries', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id_a');
+            $table->integer('user_id_b')->nullable();
+            $table->string('person_b')->nullable();
+            $table->integer('pastry');
+            $table->timestamps();
+        });
     }
 }

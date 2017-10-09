@@ -36,11 +36,11 @@ class Initialmigration extends Migration
             $table->string('utwente_username')->nullable();
         });
 
-	Schema::create('sessions', function ($table) {
-	    $table->string('id')->unique();
-	    $table->text('payload');
-    	    $table->integer('last_activity');
-	});
+        Schema::create('sessions', function ($table) {
+            $table->string('id')->unique();
+            $table->text('payload');
+            $table->integer('last_activity');
+        });
 
         Schema::create('addresses', function ($table) {
             $table->increments('id');
@@ -110,7 +110,7 @@ class Initialmigration extends Migration
 
             $table->string('organisational_unit');
             $table->string('mail');
-            
+
             $table->string('room_number')->nullable();
             $table->string('phone_number')->nullable();
 
@@ -126,6 +126,12 @@ class Initialmigration extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('sessions');
+        Schema::drop('addresses');
+        Schema::drop('bankaccounts');
+        Schema::drop('members');
+        Schema::drop('studies');
+        Schema::drop('studies_users');
+        Schema::drop('utwentes');
     }
 }

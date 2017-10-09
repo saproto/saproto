@@ -29,6 +29,6 @@ class AddTempadminTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tempadmin');
+        Schema::drop('tempadmins');
     }
 }

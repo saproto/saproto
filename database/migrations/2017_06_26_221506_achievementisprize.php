@@ -24,7 +24,7 @@ class Achievementisprize extends Migration
      */
     public function down()
     {
-        Schema::table('products_categories', function ($table) {
+        Schema::table('achievement', function ($table) {
             $table->dropColumn('isPrize');
         });
     }
