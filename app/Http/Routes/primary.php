@@ -678,7 +678,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
         Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
         Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
-        Route::group(['prefix' => 'radio', 'middleware' => ['permission:board'], 'as' => 'radio::'], function () {
+        Route::group(['prefix' => 'radio', 'middleware' => ['permission:admin'], 'as' => 'radio::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'RadioController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
