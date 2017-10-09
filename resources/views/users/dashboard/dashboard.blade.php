@@ -57,6 +57,7 @@
             @if (count($user->roles) > 0)
                 @include('users.dashboard.roleinfo')
             @endif
+            @include('users.dashboard.personal_key')
         </div>
         <div class="col-md-7">
             @include('users.dashboard.cardinfo')

@@ -64,6 +64,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('delete/{id}', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
         Route::post('password', ['as' => 'changepassword', 'uses' => 'AuthController@updatePassword']);
 
+        Route::get('personal_key/{id}', ['as' => 'personal_key::generate', 'uses' => 'UserDashboardController@generateKey']);
+
         /*
          * Routes related to members.
          */
@@ -714,6 +716,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
 
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
+
+        Route::get('export_data/{table}/{personal_key}', ['as' => 'export', 'uses' => 'ExportController@export']);
 
     });
 

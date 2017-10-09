@@ -142,4 +142,18 @@ class UserDashboardController extends Controller
         return view("users.becomeamember", ['user' => $user]);
     }
 
+    public function generateKey($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
+            abort(403);
+        }
+
+        $user->personal_key = str_random(64);
+        $user->save();
+
+        Session::flash("flash_message", "New personal key generated.");
+        return Redirect::route('user::dashboard', ['id' => $user->id]);
+    }
+
 }
