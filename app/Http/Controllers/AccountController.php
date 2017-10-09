@@ -69,7 +69,8 @@ class AccountController extends Controller
      * Display aggregated results of sales. Per product to value that has been sold in the specified period.
      *
      * @param Request $request
-     * @param $id
+     * @param $account
+     * @return \Illuminate\Http\Response
      */
     public function showAggregation(Request $request, $account)
     {
@@ -93,6 +94,44 @@ class AccountController extends Controller
         }
 
         return view('omnomcom.accounts.aggregation', ['account' => $account, 'products' => $products, 'totals' => $totals, 'start' => $request->start, 'end' => $request->end]);
+    }
+
+    /**
+     * Display aggregated results of sales for OmNomCom products. Per product to value that has been sold in the specified period.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showOmnomcomStatistics(Request $request)
+    {
+        if($request->has('start') && $request->has('end')) {
+
+            $account = Account::findOrFail(config('omnomcom.omnomcom-account'));
+
+            $orderlines = OrderLine::where('created_at', '>=', Carbon::parse($request->start)->format('Y-m-d H:i:s'))
+                ->where('created_at', '<', Carbon::parse($request->end)->format('Y-m-d H:i:s'))->get();
+
+            $products = [];
+            $totals = [];
+            $amounts = [];
+
+            foreach ($orderlines as $orderline) {
+                if ($orderline->product->account->account_number == $account->account_number) {
+                    $p = $orderline->product;
+                    if (!array_key_exists($p->id, $products)) {
+                        $products[$p->id] = $p;
+                        $totals[$p->id] = 0;
+                        $amounts[$p->id] = 0;
+                    }
+                    $totals[$p->id] += $orderline->total_price;
+                    $amounts[$p->id]++;
+                }
+            }
+
+            return view('omnomcom.statistics.show', ['products' => $products, 'amounts' => $amounts, 'totals' => $totals, 'start' => $request->start, 'end' => $request->end]);
+        }else{
+            return view('omnomcom.statistics.date-select');
+        }
     }
 
     /**
