@@ -42,7 +42,7 @@ class ExportController extends Controller
             case 'accounts':
                 $data = Account::all();
                 break;
-            case 'achievements':
+            case 'achievement':
                 $data = Achievement::all();
                 break;
             case 'activities':
@@ -78,7 +78,7 @@ class ExportController extends Controller
                     $data = EmailList::where('is_member_only', 0);
                 }
                 break;
-            case 'permission':
+            case 'permissions':
                 $data = Permission::all();
                 break;
             case 'products':
