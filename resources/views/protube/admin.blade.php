@@ -50,10 +50,14 @@
                     </table>
                     <div class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...</button>
+                            <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...
+                            </button>
                         </div>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="shuffleRadio"><i class="fa fa-random" aria-hidden="true"></i> Radio</button>
+                            <button type="button" class="btn btn-default" id="shuffleRadio"><i class="fa fa-random"
+                                                                                               aria-hidden="true"></i>
+                                Radio
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -351,9 +355,9 @@
                     $("#togglephotos").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
                     $("#skip").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
                 }
-                if(data.protubeOn) {
+                if (data.protubeOn) {
                     $("#protubeToggle").html('<i class="fa fa-toggle-on" aria-hidden="true"></i> ProTube');
-                }else{
+                } else {
                     $("#protubeToggle").html('<i class="fa fa-toggle-off" aria-hidden="true"></i> ProTube');
                 }
             });
@@ -427,7 +431,7 @@
 
             $("#reload").click(function (e) {
                 e.preventDefault();
-                admin.emit("reload");
+                admin.emit("fullReload");
             });
 
             $("#togglephotos").click(function (e) {
