@@ -36,6 +36,9 @@ class ExportController extends Controller
         $data = null;
 
         switch ($table) {
+            case 'user':
+                $data = $user;
+                break;
             case 'accounts':
                 $data = Account::all();
                 break;
