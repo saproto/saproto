@@ -64,6 +64,7 @@
     "globalcitizen/php-iban": "^2.6"
   },
   "require-dev": {
+    "fzaninotto/faker": "~1.4"
   },
   "autoload": {
     "classmap": [
