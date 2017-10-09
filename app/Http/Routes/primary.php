@@ -678,6 +678,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
         Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
         Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
+        Route::group(['prefix' => 'radio', 'middleware' => ['permission:board'], 'as' => 'radio::'], function () {
+            Route::get('index', ['as' => 'index', 'uses' => 'RadioController@index']);
+            Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
+        });
     });
 
     /*
@@ -713,6 +718,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
             Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
+            Route::get('radiostations', ['uses' => 'RadioController@api']);
         });
 
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
