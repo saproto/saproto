@@ -65,7 +65,7 @@
 
         @endif
 
-        <form method="post" action="{{ route('protube::radio::store') }}">
+        <form method="post" action="{{ route('protube::display::store') }}">
 
             {!! csrf_field() !!}
 
