@@ -39,6 +39,14 @@ After this is done we can install, and later update, our project using our own u
 
 This update utility will initialize the website for you. It can also be used to update to a newer version of our code.
 
+Next on the list is to initialize the database. The following command rebuilds the database from scratch (**warning**: this will completely empty the database, only use when you are sure!) and fills it with some dummy data:
+
+```
+php artisan migrate:refresh --seed
+```
+
+The database seeder copies some non-sensitive data from the live website (*be sure to add your personal key to your `.env` file, you can find your personal key on your dashboard at the bottom*), add your user account and display the randomly generated password in the console and finally adds more dummy users, orders and the likes. If you need more dummy data, feel free to improve the database seeder.
+
 Now you have set-up your website correctly. The only thing that remains is pointing your web directory to the `public` directory of the website. This is where the front-facing controllers reside. The rest of the project is then shielded from public access. You could do this using symlinks. An example command on a webserver running DirectAdmin could like like this:
 
 ```
