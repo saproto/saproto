@@ -63,6 +63,7 @@
                                 <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
                                 <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
                                 <li><a href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a></li>
+                                <li><a href="{{ route("omnomcom::products::statistics") }}">Sales statistics</a></li>
                             @endif
 
                             <li role="separator" class="divider"></li>
