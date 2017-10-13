@@ -16,13 +16,21 @@
     <p>
         Just as a heads-up, registering an account doesn't make you a member of Study Association Proto. If you're
         interested in becoming a member, please do follow the instructions over <a href="{{ route('becomeamember') }}">here</a>.
-        Should this e-mail raise any question, please don't hestitate to get in touch.
+        Should this e-mail raise any questions, please don't hesitate to get in touch.
+    </p>
+
+    <p>
+        Please note: by creating a user account you accepted the <a
+                href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy policy</a>
+        of S.A. Proto. Please know that if you want to be updated when changes to the privacy policy are made, you
+        should subscribe for notifications in the <i>e-mail lists</i> section of your <a
+                href="{{ route('user::dashboard') }}">dashboard</a>.
     </p>
 
     <p>
         Kind regards,
         <br>
-        The board of Study Association Proto
+        S.A. Proto
     </p>
 
 @endsection

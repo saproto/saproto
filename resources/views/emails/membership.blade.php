@@ -35,6 +35,14 @@
     </p>
 
     <p>
+        Please note: as a member of S.A. Proto you accept our <a
+                href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy policy</a>.
+        Please know that if you want to be updated when changes to the privacy policy are made, you
+        should subscribe for notifications in the <i>e-mail lists</i> section of your <a
+                href="{{ route('user::dashboard') }}">dashboard</a>.
+    </p>
+
+    <p>
         I hope to have informed you well via this e-mail, but should you have any questions left you can always come by
         at the Protopolis or send me an e-mail.
     </p>

@@ -96,6 +96,16 @@
 
         <hr>
 
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="privacy_policy_acceptance" required>
+                I have read and agree with the <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+                                                  target="_blank">privacy policy</a> of S.A. Proto.
+            </label>
+        </div>
+
+        <hr>
+
         {!! Recaptcha::render() !!}
 
         @endsection

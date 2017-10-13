@@ -140,10 +140,11 @@ class AuthController extends Controller
             'gender' => 'required|in:1,2,9',
             'nationality' => 'required|string',
             'phone' => 'required|regex:(\+[0-9]{8,16})',
-            'g-recaptcha-response' => 'required|recaptcha'
+            'g-recaptcha-response' => 'required|recaptcha',
+            'privacy_policy_acceptance' => 'required'
         ]);
 
-        $user = User::create($request->except('g-recaptcha-response'));
+        $user = User::create($request->except('g-recaptcha-response', 'privacy_policy_acceptance'));
 
         if (Session::get('wizard')) {
 

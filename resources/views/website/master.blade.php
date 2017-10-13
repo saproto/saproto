@@ -86,7 +86,9 @@
                         {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                     </a>.
                     The source is available on
-                    <a href="https://github.com/saproto/saproto" target="_blank">GitHub</a>.
+                    <a href="https://github.com/saproto/saproto" target="_blank">GitHub</a>. Please familiarize yourself
+                    with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy
+                        policy</a>.
                 </sub>
             </div>
             <div class="col-md-3 col-xs-6 footer__logo">
