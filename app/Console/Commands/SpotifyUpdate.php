@@ -82,20 +82,25 @@ class SpotifyUpdate extends Command
         $videos_to_search = [];
 
         $strip = [
-            "  ", "official", "video", "original", "optional", "subs", " feat", "-", " &", " ft.", " ft", "tekst", "ondertiteld", " music", " hd", "lyrics", "lyric", "sing  along", "singalong", "audio"
-        ];
-        $replace = [
-            " ", " ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+            #"  ",
+            " official", "official ", "original", "optional",
+            "video", "cover", "clip",
+            " - ", " + ", "|", "(", ")", ":", "\"", ".",
+            " &", " ft.", " ft", " feat",
+            "audio", " music",
+            " hd", "hq",
+            "lyrics", "lyric",
+            "sing  along", "singalong", "tekst", "ondertiteld", "subs",
         ];
 
         foreach ($videos as $video) {
-            if (!in_array($video->video_title, array_keys($videos_to_search))) {
+            if (!in_array($video->video_title, array_keys($videos_to_search)) && strlen($video->video_title) > 0) {
                 $videos_to_search[$video->video_title] = (object)[
                     'title' => $video->video_title,
                     'video_id' => $video->video_id,
                     'spotify_id' => $video->spotify_id,
                     'title_formatted' => preg_replace('/(\(.*|[^\S{2,}\s])/', '',
-                        str_replace($strip, $replace, strtolower($video->video_title))
+                        str_replace($strip, " ", strtolower($video->video_title))
                     ),
                     'count' => $video->count
                 ];
@@ -129,10 +134,9 @@ class SpotifyUpdate extends Command
                     }
 
                 } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-
-                    $this->error('Error during track search.');
-                    SlackController::sendNotification('[console *proto:spotify*] Exception during track search. Please investigate.');
-
+                    $err = $e->getCode() . ' error during search (' . $video->title_formatted . ') for track (' . $video->title . ').';
+                    $this->error($err);
+                    SlackController::sendNotification('[console *proto:spotify*] ' . $err);
                 }
 
             }
