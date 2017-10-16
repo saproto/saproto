@@ -98,7 +98,7 @@
 
             color: #fff;
             font-size: 35px;
-            width: 250px;
+            width: 185px;
 
             overflow: visible;
         }
@@ -212,7 +212,7 @@
 
                     <div class="box-header">
 
-                        📅 CreaTe Timetable
+                        CreaTe Timetable
 
                     </div>
 
@@ -276,7 +276,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            🚍 Hallenweg
+                            Hallenweg
                         </div>
 
                         <div id="businfo-hallen" class="businfo">
@@ -288,7 +288,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            🚍 Westerbegraafplaats
+                            Westerbegraafplaats
                         </div>
 
                         <div id="businfo-wester" class="businfo">
@@ -311,7 +311,7 @@
 
                     <div class="box-header">
 
-                        📅 Upcoming Activities
+                        Upcoming Activities
 
                     </div>
 
@@ -330,7 +330,7 @@
                 <div id="boardroom" class="box" style="height: 100%;">
 
                     <div id="boardroom-title" class="box-header small">
-                        📅 Boardroom Timetable
+                        Boardroom Timetable
                     </div>
 
                     <div id="boardroom-timetable"></div>
@@ -353,7 +353,7 @@
 
     function updateClock() {
         var now = moment();
-        $("#clock").html('⏰ ' + now.format('HH:mm:ss'));
+        $("#clock").html(now.format('HH:mm:ss'));
         $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
 
@@ -377,10 +377,10 @@
                         }
                     }
                     if (count == 0) {
-                        $("#timetable").html('<div class="notice">No more lectures today! 😃</div>');
+                        $("#timetable").html('<div class="notice">No more lectures today!</div>');
                     }
                 } else {
-                    $("#timetable").html('<div class="notice">No lectures today! 😃</div>');
+                    $("#timetable").html('<div class="notice">No lectures today!</div>');
                 }
                 setTimeout(updateTimetable, 60000);
             },
@@ -520,7 +520,7 @@
                 if (protopener !== null) {
                     $("#protopener").html('Your current Protopener is ' + protopener);
                 } else {
-                    $("#protopener").html('Nobody is Protopening right now. 😞');
+                    $("#protopener").html('Nobody is Protopening right now.');
                 }
                 setTimeout(updateProtopeners, 60000);
             },
@@ -558,7 +558,7 @@
 
         nowplaying = data;
         if (typeof data.title == "undefined") {
-            $("#protube-title").html("📺 ProTube Idle");
+            $("#protube-title").html("ProTube Idle");
             $("#protube-ticker").css("width", "100%");
             $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
