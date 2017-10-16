@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         Commands\UserCleanup::class,
         Commands\CheckUtwenteAccounts::class,
         Commands\SpotifySync::class,
+        Commands\SpotifyUpdate::class,
         Commands\TestIBANs::class,
     ];
 
@@ -51,5 +52,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:feecron')->daily()->at('02:00');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:spotifysync')->daily()->at('00:00');
+        $schedule->command('proto:spotifyupdate')->everyTenMinutes();
     }
 }

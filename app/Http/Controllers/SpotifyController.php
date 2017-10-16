@@ -32,6 +32,7 @@ class SpotifyController extends Controller
             $options = [
                 'scope' => [
                     'playlist-modify-public',
+                    'playlist-modify-private',
                 ]
             ];
 

@@ -81,70 +81,35 @@ class SpotifySync extends Command
 
         // All-time
         $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('video_title, count(*) as count'))
+            ->select(DB::raw('spotify_id, count(*) as count'))
+            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('video_title, count(*) as count'))
+            ->select(DB::raw('spotify_id, count(*) as count'))
+            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
-            ->select(DB::raw('video_title, count(*) as count'))
+            ->select(DB::raw('spotify_id, count(*) as count'))
+            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
 
-        $titles = [];
-
-        $strip = [
-            "  ", "-", "official", "video", "original", "optional", "subs", "feat", "ft.", "tekst", "ondertiteld", " music", " hd", " lyrics", " lyric", " sing", " along", " audio"
-        ];
-        $replace = [
-            " ", " ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
-        ];
+        $uris = [];
 
         foreach ($videos as $video) {
-            if (!in_array($video->video_title, array_keys($titles))) {
-                $titles[$video->video_title] = (object)[
-                    'title' => $video->video_title,
-                    'title_formatted' => preg_replace('/(\(.*|[^a-z0-9\s])/', '',
-                        str_replace($strip, $replace, strtolower($video->video_title))
-                    ),
-                    'count' => $video->count
-                ];
-            }
+            $uris[] = $video->spotify_id;
         }
 
-        $this->info("Matching to Spotify music.\n---");
-
-        $new_songs = [];
-
-        foreach ($titles as $t => $title) {
-
-            try {
-
-                $song = $spotify->search($title->title_formatted, 'track', ['limit' => 1])->tracks->items;
-                if (count($song) < 1) {
-                    $this->error("Could not match < $title->title | $title->title_formatted > to a Spotify track.");
-                } else {
-                    $new_songs[] = $song[0]->uri;
-                }
-
-            } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-
-                $this->error('Error during track search.');
-                SlackController::sendNotification('[console *proto:spotify*] Exception during track search. Please investigate.');
-
-            }
-        }
-
-        $new_songs = array_values(array_unique($new_songs));
+        $uris = array_values(array_unique($uris));
 
         $this->info("---");
 
-        $this->info("Updating playlist with " . count($new_songs) . " songs.");
+        $this->info("Updating playlist with " . count($uris) . " songs.");
 
         try {
 
@@ -152,8 +117,8 @@ class SpotifySync extends Command
 
             $slice = 0;
             $batch_size = 75;
-            while ($slice < count($new_songs)) {
-                $add = array_values(array_slice($new_songs, $slice, $batch_size));
+            while ($slice < count($uris)) {
+                $add = array_values(array_slice($uris, $slice, $batch_size));
                 $slice += $batch_size;
                 $spotify->addUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $add);
             }
