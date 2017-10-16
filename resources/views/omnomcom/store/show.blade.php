@@ -124,7 +124,7 @@
         }
 
         .product {
-            width: 20%;
+            width: {{ (property_exists($store, 'col_override') ? 100/$store->col_override : 20) }}%;
             height: 150px;
 
             padding: 20px 0 0 20px;

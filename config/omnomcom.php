@@ -25,7 +25,8 @@ return [
             'categories' => [15, 18, 25],
             'addresses' => [],
             'roles' => ['board', 'tipcie', 'drafters'],
-            'cash_allowed' => true
+            'cash_allowed' => true,
+            'col_override' => 3,
         ]
     ],
 
