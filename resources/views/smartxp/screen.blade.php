@@ -98,7 +98,7 @@
 
             color: #fff;
             font-size: 35px;
-            width: 185px;
+            width: 250px;
 
             overflow: visible;
         }
@@ -206,17 +206,31 @@
 
         <div class="col-md-4">
 
-            <div class="box" style="height: 100%;">
+            <div class="box-partial" style="height: 90%;">
 
-                <div class="box-header">
+                <div class="box" style="height: 100%;">
 
-                    CreaTe Timetable
+                    <div class="box-header">
+
+                        📅 CreaTe Timetable
+
+                    </div>
+
+                    <div id="timetable">
+
+                        <div class="notice">Loading timetable...</div>
+
+                    </div>
 
                 </div>
 
-                <div id="timetable">
+            </div>
 
-                    <div class="notice">Loading timetable...</div>
+            <div class="box-partial" style="height: 10%;">
+
+                <div class="box" style="height: 100%;">
+
+                    <div id="protopener" class="notice">Loading Protopener...</div>
 
                 </div>
 
@@ -262,7 +276,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            Hallenweg
+                            🚍 Hallenweg
                         </div>
 
                         <div id="businfo-hallen" class="businfo">
@@ -274,7 +288,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            Westerbegraafplaats
+                            🚍 Westerbegraafplaats
                         </div>
 
                         <div id="businfo-wester" class="businfo">
@@ -291,17 +305,35 @@
 
         <div class="col-md-4">
 
-            <div class="box" style="height: 100%;">
+            <div class="box-partial" style="height: 66.66%;">
 
-                <div class="box-header">
+                <div class="box" style="height: 100%;">
 
-                    Upcoming Activities
+                    <div class="box-header">
+
+                        📅 Upcoming Activities
+
+                    </div>
+
+                    <div id="activities">
+
+                        <div class="notice">Loading activities...</div>
+
+                    </div>
 
                 </div>
 
-                <div id="activities">
+            </div>
 
-                    <div class="notice">Loading activities...</div>
+            <div class="box-partial" style="height: 33.33%;">
+
+                <div id="boardroom" class="box" style="height: 100%;">
+
+                    <div id="boardroom-title" class="box-header small">
+                        📅 Boardroom Timetable
+                    </div>
+
+                    <div id="boardroom-timetable"></div>
 
                 </div>
 
@@ -321,7 +353,7 @@
 
     function updateClock() {
         var now = moment();
-        $("#clock").html(now.format('HH:mm:ss'));
+        $("#clock").html('⏰ ' + now.format('HH:mm:ss'));
         $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
 
@@ -334,14 +366,21 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#timetable").html('');
+                    var count = 0;
                     for (i in data) {
-                        var start = moment.unix(data[i].start);
-                        var end = moment.unix(data[i].end);
-                        var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                        $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
+                        if (!data[i].over) {
+                            var start = moment.unix(data[i].start);
+                            var end = moment.unix(data[i].end);
+                            var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+                            $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
+                            count++;
+                        }
+                    }
+                    if (count == 0) {
+                        $("#timetable").html('<div class="notice">No more lectures today! 😃</div>');
                     }
                 } else {
-                    $("#timetable").html('<div class="notice">No lectures today!</div>');
+                    $("#timetable").html('<div class="notice">No lectures today! 😃</div>');
                 }
                 setTimeout(updateTimetable, 60000);
             },
@@ -389,6 +428,7 @@
         updateBus('bushalte-ut-hallenweg', '#businfo-hallen');
         updateBus('bushalte-westerbegraafplaats-ut', '#businfo-wester');
     }
+
     function updateBus(stop, element) {
         $.ajax({
             url: "{{ urldecode(route('api::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
@@ -412,6 +452,86 @@
 
     updateBuses();
     setInterval(updateBuses, 60000);
+
+    function updateBoardroom() {
+        $.ajax({
+            url: '{{ route('api::timetable::boardroom') }}',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    var count = 0;
+                    $("#boardroom-timetable").html('');
+                    var occupied = false;
+                    for (i in data) {
+                        if (data[i].over) {
+                            continue;
+                        }
+
+                        count++;
+
+                        var start = moment.unix(data[i].start);
+                        var end = moment.unix(data[i].end);
+
+                        var day = start.format("dddd");
+                        var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+
+                        if (data[i].current) {
+                            occupied = true;
+                        }
+
+                        $("#boardroom-timetable").append('' +
+                            '<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' +
+                            '<div class="pull-left" style="width: 125px;"><strong>' + day + '</strong></div>' +
+                            time +
+                            '<div class="pull-right"><strong>' + data[i].title + '</strong></div>' +
+                            '</div>');
+                        $("#boardroom__status").html(occupied ? 'Occupied' : 'Available');
+                    }
+                    if (count == 0) {
+                        $("#timetable").html('<div class="notice">No reservations in the next 7 days!</div>');
+                    }
+                } else {
+                    $("#boardroom-timetable").html('<div class="notice">No reservations today!</div>');
+                }
+                setTimeout(updateBoardroom, 60000);
+            },
+            error: function () {
+                $("#boardroom-timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
+                setTimeout(updateBoardroom, 5000);
+            }
+        })
+    }
+
+    updateBoardroom();
+
+    function updateProtopeners() {
+        $.ajax({
+            url: '{{ route('api::timetable::protopeners') }}',
+            dataType: 'json',
+            success: function (data) {
+                var protopener = null;
+                if (data.length > 0) {
+                    for (i in data) {
+                        if (data[i].current) {
+                            protopener = data[i].title
+                        }
+                    }
+                }
+                if (protopener !== null) {
+                    $("#protopener").html('Your current Protopener is ' + protopener);
+                } else {
+                    $("#protopener").html('Nobody is Protopening right now. 😞');
+                }
+                setTimeout(updateProtopeners, 60000);
+            },
+            error: function () {
+                $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
+                setTimeout(updateProtopeners, 5000);
+            }
+        })
+    }
+
+    updateProtopeners();
 
     // ProTube
     var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
@@ -438,7 +558,7 @@
 
         nowplaying = data;
         if (typeof data.title == "undefined") {
-            $("#protube-title").html("ProTube Idle");
+            $("#protube-title").html("📺 ProTube Idle");
             $("#protube-ticker").css("width", "100%");
             $("#protube").addClass('inactive').css("background-image", "auto");
         } else {

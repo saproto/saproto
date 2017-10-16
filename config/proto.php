@@ -138,6 +138,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Protopeners Calendar
+    |--------------------------------------------------------------------------
+    |
+    | The Google calendar ID for the Protopeners.
+    |
+    */
+
+    'protopeners-google-timetable-id' => 'student.utwente.nl_fnulbjgdr41qdppgdv4asa17ck@group.calendar.google.com',
+
+    /*
+    |--------------------------------------------------------------------------
     | Internal Name
     |--------------------------------------------------------------------------
     |

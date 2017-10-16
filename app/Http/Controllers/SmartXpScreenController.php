@@ -36,6 +36,13 @@ class SmartXpScreenController extends Controller
 
     }
 
+    public function protopenersTimetable()
+    {
+
+        return CalendarController::returnGoogleCalendarEvents(config('proto.protopeners-google-timetable-id'), date('c', strtotime("today")), date('c', strtotime("tomorrow")));
+
+    }
+
     public function smartxpTimetable()
     {
 
