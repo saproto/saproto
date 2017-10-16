@@ -77,7 +77,7 @@ class SpotifyUpdate extends Command
 
         $this->info('Constructing ProTube hitlist.');
 
-        $videos = PlayedVideo::whereNull('spotify_id')->orderBy('id', 'asc')->limit(100)->get();
+        $videos = PlayedVideo::whereNull('spotify_id')->orderBy('id', 'asc')->limit(1000)->get();
 
         $videos_to_search = [];
 
