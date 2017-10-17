@@ -330,7 +330,7 @@
                 <div id="boardroom" class="box" style="height: 100%;">
 
                     <div id="boardroom-title" class="box-header small">
-                        Boardroom Timetable
+                        Boardroom Timetable (<span id="boardroom-status">Checking</span>)
                     </div>
 
                     <div id="boardroom-timetable"></div>
@@ -485,10 +485,14 @@
                             time +
                             '<div class="pull-right"><strong>' + data[i].title + '</strong></div>' +
                             '</div>');
-                        $("#boardroom__status").html(occupied ? 'Occupied' : 'Available');
                     }
                     if (count == 0) {
                         $("#timetable").html('<div class="notice">No reservations in the next 7 days!</div>');
+                    }
+                    if (occupied) {
+                        $("#boardroom-status").removeClass('green').html("Occupied");
+                    } else {
+                        $("#boardroom-status").addClass('green').html("Available");
                     }
                 } else {
                     $("#boardroom-timetable").html('<div class="notice">No reservations today!</div>');
@@ -518,7 +522,7 @@
                     }
                 }
                 if (protopener !== null) {
-                    $("#protopener").html('Your current Protopener is ' + protopener);
+                    $("#protopener").html('Your current Protopener is <span class="green">' + protopener + '</span>');
                 } else {
                     $("#protopener").html('Nobody is Protopening right now.');
                 }
