@@ -66,10 +66,10 @@
 
         #progressBar {
             position: absolute;
-            bottom: 135px;
+            bottom: 105px;
             left: 0;
             width: 0;
-            height: 5px;
+            height: 2px;
 
             background-color: #c1ff00;
 
@@ -78,10 +78,10 @@
 
         #progressBarBackground {
             position: absolute;
-            bottom: 135px;
+            bottom: 105px;
             left: 0;
             width: 100%;
-            height: 5px;
+            height: 2px;
 
             background-color: #222222;
 
@@ -91,7 +91,7 @@
         #playerContainer {
             position: absolute;
             top: 0px;
-            bottom: 140px;
+            bottom: 108px;
             left: 0;
             right: 0;
         }
@@ -100,14 +100,23 @@
             position: absolute;
             z-index: 9999;
             display: block;
-            right: 20px;
-            top: 20px;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.8);
+            right: 30px;
+            top: 30px;
             color: #FFFFFF;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
-            font-size: 26px;
-            border: 1px solid #c1ff00;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        #addedBy {
+            position: absolute;
+            z-index: 9998;
+            display: block;
+            right: 30px;
+            top: 68px;
+            color: #FFFFFF;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            font-size: 20px;
         }
 
         #player {
@@ -121,7 +130,7 @@
             left: 0;
 
             width: 100%;
-            height: 135px;
+            height: 105px;
 
             overflow: hidden;
 
@@ -139,7 +148,7 @@
             left: 0;
 
             width: 200px;
-            height: 135px;
+            height: 105px;
             text-align: center;
 
             margin: 0;
@@ -155,7 +164,7 @@
             margin: 0;
             padding: 0;
 
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         #pin p {
@@ -164,7 +173,8 @@
 
             margin: 0;
             padding: 0;
-            padding-top: 5px;
+
+            margin-top: -15px;
         }
 
         #queue {
@@ -173,9 +183,9 @@
             left: 200px;
             right: -3000px;
 
-            height: 135px;
+            height: 105px;
 
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         #queue ul {
@@ -187,7 +197,7 @@
         #queue ul li {
             position: relative;
             width: 180px;
-            height: 135px;
+            height: 105px;
             display: inline-block;
             padding: 0;
             margin: 0;
@@ -212,6 +222,8 @@
             position: absolute;
             top: 0;
             left: 0;
+            margin-top: -15px;
+            margin-bottom: -15px;
             height: 135px;
         }
 
@@ -296,7 +308,7 @@
 
             screen.on("ytInfo", function (data) {
                 nowPlaying = data;
-                setNowPlaying(nowPlaying.title);
+                setNowPlaying(nowPlaying.title, nowPlaying.callingName);
                 player.cueVideoById(nowPlaying.id);
                 player.setPlaybackQuality('highres');
             });
@@ -433,8 +445,9 @@
             $("#bottomBar").addClass("blackBg");
         }
 
-        function setNowPlaying(title) {
+        function setNowPlaying(title, callingName) {
             $("#nowPlaying").html(title);
+            $("#addedBy").html(callingName ? 'added by ' + callingName : '');
         }
 
         @if($showPin)
@@ -493,6 +506,7 @@
 
 <div id="playerContainer">
     <div id="nowPlaying">Loading...</div>
+    <div id="addedBy">&nbsp;</div>
     <div id="player"></div>
 </div>
 

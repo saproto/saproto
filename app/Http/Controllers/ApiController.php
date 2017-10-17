@@ -88,6 +88,7 @@ class ApiController extends Controller
             } else {
                 $adminInfo->user_id = $user->id;
                 $adminInfo->user_name = $user->name;
+                $adminInfo->calling_name = $user->calling_name;
                 $adminInfo->is_admin = $user->can('protube') || $user->isTempadmin();
             }
         }

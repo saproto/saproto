@@ -96,14 +96,11 @@
             position: absolute;
             z-index: 999999;
             display: block;
-            left: 20px;
-            top: 20px;
-            padding: 15px 20px;
-            background: rgba(0, 0, 0, 0.8);
+            left: 30px;
+            top: 30px;
             color: #FFFFFF;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
-            font: 26px 'Roboto';
-            border: 1px solid #c1ff00;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            font: 30px 'Roboto';
         }
     </style>
 

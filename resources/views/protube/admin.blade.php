@@ -275,9 +275,10 @@
 
                     queue.append('<div class="item" data-ytId="' + data[i].id + '">' +
                         '<img src="//img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
+                        '<div class="time">' + prettifyDuration(data[i].duration) + '</div>' +
                         '<div>' +
                         '<h1>' + data[i].title + '</h1>' +
-                        '<h2>' + prettifyDuration(data[i].duration) + '</h2>' +
+                        '<h2>added by ' + (data[i].name ? data[i].name : 'anonymous') + '</h2>' +
                         '<h3>' + controls + '</h3>' +
                         '</div>' +
                         '<div style="clear: both;"></div>' +
@@ -314,8 +315,9 @@
                 if (!$.isEmptyObject(data)) {
                     $("#nowPlaying").html('<img src="//img.youtube.com/vi/' + data.id + '/0.jpg" width="100px" class="pull-left img-thumbnail" />' +
                         '<h1>' + data.title + '</h1>' +
-                        '<strong id="current_time">0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
-                        '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>' + prettifyDuration(data.duration) + '</strong>');
+                        '<h2>added by ' + (data.name ? data.name : 'anonymous') + '</h2>' +
+                        '<div style="clear: both; margin-top: 15px; text-align: center;"><strong id="current_time">0:00</strong> <input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration +
+                        '" data-slider-step="1" data-slider-value="' + data.progress + '"/> <strong>' + prettifyDuration(data.duration) + '</strong></div>');
                     $("#progress").slider({
                         formatter: function (value) {
                             return prettifyDuration(value);
@@ -516,6 +518,10 @@
             display: none;
         }
 
+        #progressSlider {
+            width: 65%;
+        }
+
         #progressSlider .slider-selection {
             background: #BABABA;
         }
@@ -528,6 +534,12 @@
             padding: 0;
             margin: 10px 0;
             font-size: 18px;
+        }
+
+        #nowPlaying h2{
+            padding: 0;
+            margin: 2% 0;
+            font-size: 12px;
         }
 
         #nowPlaying img {
@@ -574,20 +586,40 @@
         #queue {
         }
 
+        #queue .item {
+            position: relative;
+        }
+
         #queue .item:hover {
-            cursor: pointer;
             background-color: #eee;
         }
 
         #queue .item img {
             width: 100px;
+            height: 75px;
             float: left;
-            margin-right: 10px;
+            top: 0px;
+            left: 0px;
+        }
+
+        #queue .item .time {
+            position: absolute;
+            left: 0px;
+            top: 50px;
+            font-size: 10px;
+            color: #ffffff;
+            background-color: #000;
+            padding: 5px;
+        }
+
+        #queue .item div {
+            position: relative;
+            left: 10px;
         }
 
         #queue .item h1 {
             font-size: 16px;
-            margin: 5px 0;
+            margin: 0;
         }
 
         #queue .item h2 {
