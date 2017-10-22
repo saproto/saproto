@@ -81,7 +81,7 @@
                     )
                         <?php
                         $url = 'https://' .
-                            ($route->domain() == null ? getenv('PRIMARY_DOMAIN') : $route->domain()) .
+                            ($route->domain() == null ? config('app-proto.primary-domain') : $route->domain()) .
                             '/' .
                             ($route->uri() == '/' ? '' : $route->uri());
                         ?>

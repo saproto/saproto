@@ -19,8 +19,8 @@ return [
     'consumers' => [
 
         'Flickr' => [
-            'client_id' => getenv('FLICKR_CLIENT'),
-            'client_secret' => getenv('FLICKR_SECRET')
+            'client_id' => env('FLICKR_CLIENT'),
+            'client_secret' => env('FLICKR_SECRET')
         ],
 
     ]

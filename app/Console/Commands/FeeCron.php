@@ -55,7 +55,7 @@ class FeeCron extends Command
             $yearstart = intval(date('Y')) - 1;
         }
 
-        $ldap_students = json_decode(file_get_contents(env('LDAP_URL_UTWENTE') . '?filter=department=*B-CREA*'));
+        $ldap_students = json_decode(file_get_contents(config('app-proto.utwente-ldap-hook') . '?filter=department=*B-CREA*'));
 
         $names = [];
         $emails = [];

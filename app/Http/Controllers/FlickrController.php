@@ -39,7 +39,7 @@ class FlickrController extends Controller
             $xml = simplexml_load_string($flickr->request('flickr.test.login'));
 
             $flickr_user = (string)$xml->user->attributes()->id;
-            $right_user = getenv('FLICKR_USER');
+            $right_user = config('app-proto.flickr-user');
             if ($flickr_user != $right_user) {
                 abort(404, "You authenticated as the wrong user. (Authenticated as $flickr_user but should authenticate as $right_user.)");
             }

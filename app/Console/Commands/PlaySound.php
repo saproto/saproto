@@ -37,7 +37,7 @@ class PlaySound extends Command
      */
     public function handle()
     {
-        file_get_contents(env('HERBERT_SERVER') . '/soundboard?secret=' . env('HERBERT_SECRET') . '&sound=' . $this->argument('sound'));
+        file_get_contents(config('herbert.server') . '/soundboard?secret=' . config('herbert.secret') . '&sound=' . $this->argument('sound'));
         $this->info("Playing sound.");
     }
 }

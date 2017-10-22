@@ -51,12 +51,12 @@ class DirectAdminSync extends Command
     {
 
         $da = new DirectAdmin;
-        $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
-        $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
+        $da->connect(config('app-proto.directadmin-hostname'), config('app-proto.directadmin-port'));
+        $da->set_login(config('app-proto.directadmin-username'), config('app-proto.directadmin-password'));
 
         $da->set_method('get');
         $da->query($this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-            'domain' => getenv('DA_DOMAIN')
+            'domain' => config('app-proto.directadmin-domain')
         ]));
 
         $current = $this->decodeForwarders($da->fetch_body());
@@ -205,7 +205,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['add'] as $alias => $destination) {
             $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
+                'domain' => config('app-proto.directadmin-domain'),
                 'action' => 'create',
                 'user' => $alias,
                 'email' => implode(',', $destination)
@@ -214,7 +214,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['mod'] as $alias => $destination) {
             $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
+                'domain' => config('app-proto.directadmin-domain'),
                 'action' => 'modify',
                 'user' => $alias,
                 'email' => implode(',', $destination)
@@ -223,7 +223,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['del'] as $del) {
             $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
+                'domain' => config('app-proto.directadmin-domain'),
                 'action' => 'delete',
                 'select0' => $del,
             ]);

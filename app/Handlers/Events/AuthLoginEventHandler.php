@@ -28,8 +28,9 @@ class AuthLoginEventHandler
      * @param  Events $event
      * @return void
      */
-    public function handle(User $user, $remember)
+    public function handle($event)
     {
+        $user = $event->user;
         $token = new Token();
         $token->generate($user);
         Session::put('token', $token->token);

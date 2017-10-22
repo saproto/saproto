@@ -14,7 +14,7 @@ class DevelopmentAccess
     protected $except = [
         'webhook/*'
     ];
-    
+
     /**
      * Client IPs allowed to access the app.
      * Defaults are loopback IPv4 and IPv6 for use in local development.
@@ -32,7 +32,7 @@ class DevelopmentAccess
      */
     public function handle($request, Closure $next)
     {
-        $this->ipWhitelist = explode(',', getenv('DEV_ALLOWED'));
+        $this->ipWhitelist = explode(',', config('app-proto.debug-whitelist'));
 
         if (app()->environment() != 'production' && $this->clientNotAllowed()) {
             config(['app.debug' => false]);

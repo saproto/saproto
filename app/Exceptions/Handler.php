@@ -11,6 +11,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Session\TokenMismatchException;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Validation\ValidationException;
+
 use App;
 use Auth;
 
@@ -27,7 +30,9 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         HttpException::class,
-        NotReadableException::class
+        NotReadableException::class,
+        ValidationException::class,
+        AuthorizationException::class
     ];
 
     private $sentryID;

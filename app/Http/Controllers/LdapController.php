@@ -13,7 +13,7 @@ class LdapController extends Controller
     public static function searchUtwente($query, $onlyactive = false)
     {
         $data = (array)json_decode(file_get_contents(
-            getenv("LDAP_URL_UTWENTE") . "?filter=" . urlencode($query)
+            config('app-proto.utwente-ldap-hook') . "?filter=" . urlencode($query)
         ));
         $response = [];
         foreach ($data as $entry) {

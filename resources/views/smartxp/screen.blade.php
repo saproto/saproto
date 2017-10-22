@@ -171,7 +171,7 @@
         }
 
         #protube.inactive {
-            background-image: url('{{ getenv('FISHCAM_URL') }}') !important;
+            background-image: url('{{ getconfig('app-proto.fishcam-url') }}') !important;
         }
 
         #protube-title {
@@ -538,7 +538,7 @@
     updateProtopeners();
 
     // ProTube
-    var screen = io('{!! env('HERBERT_SERVER') !!}/protube-screen');
+    var screen = io('{!! config('herbert.server') !!}/protube-screen');
     var nowplaying;
 
     screen.on("connect", function () {

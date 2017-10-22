@@ -47,7 +47,7 @@ class TempAdminController extends Controller
 
         // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
         // temporary adminpowers were removed.
-        file_get_contents(env('HERBERT_SERVER') . "/adminCheck");
+        file_get_contents(config('herbert.server') . "/adminCheck");
 
         return redirect()->back();
     }
@@ -64,7 +64,7 @@ class TempAdminController extends Controller
 
             // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
             // temporary adminpowers were removed.
-            file_get_contents(env('HERBERT_SERVER') . "/adminCheck");
+            file_get_contents(config('herbert.server') . "/adminCheck");
         }
 
         return redirect()->back();

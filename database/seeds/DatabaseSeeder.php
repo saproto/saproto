@@ -7,18 +7,15 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
+     * @return string
      */
     public function run()
     {
-        if (getenv('APP_ENV') !== 'debug') {
+        if (config('app.env') !== 'debug') {
             return "You cannot seed your database outside the development environment.";
         }
 
         echo "Starting database seeding." . PHP_EOL;
-
-        Model::unguard();
 
         $this->call(ImportLiveDataSeeder::class);
         $this->call(OtherDataSeeder::class);
@@ -26,8 +23,6 @@ class DatabaseSeeder extends Seeder
         echo "Fixing roles." . PHP_EOL;
 
         Artisan::call('proto:generateroles');
-
-        Model::reguard();
 
         echo "Done!" . PHP_EOL;
     }

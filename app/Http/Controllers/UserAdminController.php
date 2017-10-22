@@ -257,7 +257,7 @@ class UserAdminController extends Controller
     public function showForm(Request $request, $id)
     {
 
-        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != env('PRINTER_HOST')) {
+        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
             abort(403);
         }
 
@@ -272,7 +272,7 @@ class UserAdminController extends Controller
 
         $form = $form->setPaper('a4');
 
-        if ($request->ip() != env('PRINTER_HOST')) {
+        if ($request->ip() != config('app-proto.printer-host')) {
             return $form->stream();
         } else {
             return $form->download();

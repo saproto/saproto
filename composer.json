@@ -31,9 +31,9 @@
   "type": "project",
   "require": {
     "php": ">=5.5.9",
-    "laravel/framework": "5.1.*",
+    "laravel/framework": "5.2.*",
     "barryvdh/laravel-ide-helper": "^2.1",
-    "laravelcollective/html": "5.1.*",
+    "laravelcollective/html": "5.2.*",
     "doctrine/dbal": "^2.5",
     "zizaco/entrust": "dev-laravel-5",
     "s-ichikawa/laravel-sendgrid-driver": "~1.0",
@@ -64,7 +64,9 @@
     "globalcitizen/php-iban": "^2.6"
   },
   "require-dev": {
-    "fzaninotto/faker": "~1.4"
+    "fzaninotto/faker": "~1.4",
+    "symfony/dom-crawler": "~3.0",
+    "symfony/css-selector": "~3.0"
   },
   "autoload": {
     "classmap": [

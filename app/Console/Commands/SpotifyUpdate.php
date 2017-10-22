@@ -50,7 +50,7 @@ class SpotifyUpdate extends Command
         $this->info('Testing if API key still works.');
 
         try {
-            if ($spotify->me()->id != getenv('SPOTIFY_USER')) {
+            if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
                 SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
                 return;
