@@ -5,6 +5,7 @@ return [
     'env' => env('APP_ENV', 'debug'),
     'ssl' => env('SSL', true),
     'forcedomain' => env('FORCE_DOMAIN', null),
+    'name' => 'S.A. Proto',
 
     /*
     |--------------------------------------------------------------------------
@@ -139,6 +140,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -147,6 +149,7 @@ return [
         Proto\Providers\AuthServiceProvider::class,
         Proto\Providers\EventServiceProvider::class,
         Proto\Providers\RouteServiceProvider::class,
+        Proto\Providers\BroadcastServiceProvider::class,
 
         /*
          * External Service Providers
@@ -202,6 +205,7 @@ return [
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
