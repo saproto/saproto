@@ -577,11 +577,10 @@ class AuthController extends Controller
      *
      * @param User $user The username to be logged in.
      * @param Request $request Thje request object for the data.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return null
      */
     public static function continueLogin(User $user)
     {
-
         // Catch users that have 2FA enabled.
         if ($user->tfa_totp_key) {
             Session::flash('2fa_user', $user);
