@@ -93,17 +93,19 @@ class User extends Model implements AuthenticatableContract,
         $this->password = Hash::make($password);
         $this->save();
 
-        // Update Active Directory Password
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
+        if (config('app.env') !== 'debug') {
+            // Update Active Directory Password
+            $ad = new Adldap();
+            $provider = new Provider(config('adldap.proto'));
+            $ad->addProvider('proto', $provider);
+            $ad->connect('proto');
 
-        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
-        if ($ldapuser !== null) {
-            $ldapuser->setPassword($password);
-            $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
-            $ldapuser->save();
+            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
+            if ($ldapuser !== null) {
+                $ldapuser->setPassword($password);
+                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
+                $ldapuser->save();
+            }
         }
     }
 
