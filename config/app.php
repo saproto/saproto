@@ -2,10 +2,28 @@
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    */
+
+    'name' => 'S.A. Proto',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Misc
+    |--------------------------------------------------------------------------
+    |
+    */
+
     'env' => env('APP_ENV', 'debug'),
     'ssl' => env('SSL', true),
     'forcedomain' => env('FORCE_DOMAIN', null),
-    'name' => 'S.A. Proto',
 
     /*
     |--------------------------------------------------------------------------

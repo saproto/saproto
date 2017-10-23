@@ -5,6 +5,7 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 
 use Proto\Http\Controllers\LdapController;
+use Proto\Mail\UtwenteCleanup;
 use Proto\Models\User;
 
 use Mail;
@@ -70,13 +71,7 @@ class CheckUtwenteAccounts extends Command
             }
         }
 
-        // For some super strange reason we cannot queue this e-mail... Well...
-        Mail::queueOn('high', 'emails.utwente_cleanup', ['unlinked' => $unlinked], function ($message) {
-            $message
-                ->to('secretary@' . config('proto.emaildomain'), 'S.A. Proto Secretary')
-                ->cc('sysadmin@' . config('proto.emaildomain'), 'S.A. Proto System Admins')
-                ->subject('UTwente Account Clean-Up');
-        });
+        Mail::queue((new UtwenteCleanup($unlinked))->onQueue('high'));
 
         $this->info("Done");
 

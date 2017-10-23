@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
+use Proto\Mail\OmnomcomWithdrawalNotification;
 use Proto\Models\Bank;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
@@ -326,17 +327,7 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            $data = [
-                'name' => $user->name,
-                'email' => $user->email,
-                'date' => $withdrawal->date
-            ];
-            Mail::queueOn('medium', 'emails.omnomcom.withdrawalnotification', ['user' => $user, 'withdrawal' => $withdrawal], function ($message) use ($data) {
-                $message
-                    ->to($data['email'], $data['name'])
-                    ->from('treasurer@' . config('proto.emaildomain'), config('proto.treasurer'))
-                    ->subject('S.A. Proto Withdrawal Announcement for ' . date('d-m-Y', strtotime($data['date'])));
-            });
+            Mail::to($user)->queue((new OmnomcomWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
         }
 
         $request->session()->flash('flash_message', 'All e-mails have been queued.');

@@ -49,7 +49,7 @@
 
     <p>
         Kind regards,<br>
-        {{ $internal }}<br>
+        {{ config('proto.internal') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

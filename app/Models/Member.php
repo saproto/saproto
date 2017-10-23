@@ -23,7 +23,7 @@ class Member extends Model
     {
         $userids = [];
         foreach (Committee::all() as $committee) {
-            $userids = array_merge($userids, $committee->users->lists('id')->toArray());
+            $userids = array_merge($userids, $committee->users->pluck('id')->toArray());
         }
         return User::whereIn('id', $userids)->orderBy('name', 'asc')->count();
     }

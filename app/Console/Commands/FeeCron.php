@@ -3,8 +3,9 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
+use Proto\Mail\FeeEmail;
+use Proto\Mail\FeeEmailForBoard;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -114,32 +115,12 @@ class FeeCron extends Command
             $product = Product::findOrFail($fee);
             $product->buyForUser($member->user, 1, $product->price);
 
-            $email_fee_amount = $product->price;
-
-            $email = $member->user->email;
-            $name = $member->user->name;
-
-            $treasurer = config('proto.treasurer');
-
-            Mail::queueOn('high', 'emails.fee_for_users', [
-                'treasurer' => $treasurer,
-                'fee' => $email_fee,
-                'remitted_reason' => $email_remmitance_reason,
-                'fee_amount' => $email_fee_amount,
-                'user' => $member->user
-            ], function ($message) use ($charged, $member, $email, $name, $treasurer) {
-                $message->to($email, $name);
-                $message->from('treasurer@proto.utwente.nl', $treasurer);
-                $message->subject('Information on your membership fee for S.A. Proto');
-            });
+            Mail::to($member->user)->queue((new FeeEmail($member->user, $email_fee, $product->price, $email_remmitance_reason))->onQueue('high'));
 
         }
 
         if ($charged->count > 0) {
-            Mail::queueOn('high', 'emails.fee', ['data' => $charged], function ($message) use ($charged) {
-                $message->to('payments@proto.utwente.nl', 'S.A. Proto Payments Update');
-                $message->subject('Membership Fee Cron Update for ' . date('d-m-Y') . '. (' . $charged->count . ' transactions)');
-            });
+            Mail::queue((new FeeEmailForBoard($charged))->onQueue('high'));
         }
 
         $this->info("Charged " . $charged->count . " of " . Member::count() . " members their fee.");

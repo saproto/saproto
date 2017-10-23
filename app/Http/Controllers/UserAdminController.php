@@ -10,6 +10,9 @@ use Proto\Http\Controllers\EmailListController;
 
 use Carbon\Carbon;
 
+use Proto\Mail\MembershipEnded;
+use Proto\Mail\MembershipStarted;
+use Proto\Mail\UserReactivated;
 use Proto\Models\Member;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
@@ -103,14 +106,7 @@ class UserAdminController extends Controller
 
         AuthController::makeLdapAccount($user);
 
-        $email = $user->email;
-        $name = $user->mail;
-
-        Mail::queueOn('high', 'emails.reactivation', ['user' => $user], function ($m) use ($email, $name) {
-            $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
-            $m->to($email, $name);
-            $m->subject('Account re-activation at Study Association Proto');
-        });
+        Mail::to($user)->queue((new UserReactivated($user))->onQueue('high'));
 
         AuthController::dispatchPasswordEmailFor($user);
 
@@ -211,14 +207,7 @@ class UserAdminController extends Controller
 
         $member->save();
 
-        $name = $user->name;
-        $email = $user->email;
-
-        Mail::queueOn('high', 'emails.membership', ['user' => $user, 'internal' => config('proto.internal')], function ($m) use ($name, $email) {
-            $m->replyTo('internal@proto.utwente.nl', config('proto.internal') . ' (Officer Internal Affairs)');
-            $m->to($email, $name);
-            $m->subject('Start of your membership of Study Association Proto');
-        });
+        Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
@@ -240,14 +229,7 @@ class UserAdminController extends Controller
 
         $user->member()->delete();
 
-        $name = $user->name;
-        $email = $user->email;
-
-        Mail::queueOn('high', 'emails.membershipend', ['user' => $user, 'secretary' => config('proto.secretary')], function ($m) use ($name, $email) {
-            $m->replyTo('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)');
-            $m->to($email, $name);
-            $m->subject('Termination of your membership of Study Association Proto');
-        });
+        Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
         Session::flash("flash_message", "Membership of " . $user->name . " has been termindated.");
 

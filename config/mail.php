@@ -33,6 +33,20 @@ return [
     |
     */
 
-    'from' => ['address' => 'webmaster@proto.utwente.nl', 'name' => 'S.A. Proto Webmaster'],
+    'from' => ['address' => 'haveyoutriedturningitoffandonagain@proto.utwente.nl', 'name' => 'S.A. Proto Have You Tried Turning It Off And On Again committee'],
+
+    /*
+     * In order to provide support for Laravel 5.4's new Markdown mail components,
+     * you should add the following block of configuration to the bottom of your
+     * mail configuration file:
+     */
+
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
 
 ];

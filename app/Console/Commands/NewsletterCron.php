@@ -3,8 +3,8 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
+use Proto\Mail\Newsletter;
 use Proto\Models\EmailList;
 use Proto\Models\Event;
 
@@ -53,20 +53,7 @@ class NewsletterCron extends Command
 
             foreach ($newsletterlist->users as $user) {
 
-                $email = $user->email;
-                $name = $user->name;
-
-                Mail::queueOn('low', 'emails.newsletter', [
-                    'user' => $user,
-                    'list' => $newsletterlist
-                ], function ($message) use ($email, $name) {
-
-                    $message
-                        ->to($email, $name)
-                        ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
-                        ->subject('S.A. Proto Weekly Newsletter (Week ' . date("W") . ')');
-
-                });
+                Mail::to($user)->queue((new Newsletter($user, $newsletterlist))->onQueue('low'));
 
             }
 

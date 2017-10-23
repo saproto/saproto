@@ -9,6 +9,8 @@ use PragmaRX\Google2FA\Google2FA;
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
 
+use Proto\Mail\PasswordResetEmail;
+use Proto\Mail\RegistrationConfirmation;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\Alias;
@@ -159,14 +161,7 @@ class AuthController extends Controller
 
         AuthController::makeLdapAccount($user);
 
-        $email = $user->email;
-        $name = $user->mail;
-
-        Mail::queueOn('high', 'emails.registration', ['user' => $user], function ($m) use ($email, $name) {
-            $m->replyTo('board@proto.utwente.nl', 'Study Association Proto');
-            $m->to($email, $name);
-            $m->subject('Account registration at Study Association Proto');
-        });
+        Mail::to($user)->queue((new RegistrationConfirmation($user))->onQueue('high'));
 
         AuthController::dispatchPasswordEmailFor($user);
 
@@ -668,15 +663,7 @@ class AuthController extends Controller
             'valid_to' => strtotime('+1 hour')
         ]);
 
-        $name = $user->name;
-        $email = $user->email;
-
-        Mail::queueOn('high', 'emails.password', ['token' => $reset->token, 'name' => $user->calling_name], function ($message) use ($name, $email) {
-            $message
-                ->to($email, $name)
-                ->from('webmaster@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
-                ->subject('Your password reset request for S.A. Proto.');
-        });
+        Mail::to($user)->queue((new PasswordResetEmail($user, $reset->token))->onQueue('high'));
 
     }
 

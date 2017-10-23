@@ -41,7 +41,7 @@ class Event extends Model
 
     public function getTicketPurchasesFor(User $user)
     {
-        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->lists('id'))->get();
+        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->pluck('id'))->get();
     }
 
     /**
