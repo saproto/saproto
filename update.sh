@@ -33,9 +33,6 @@ php artisan ide-helper:generate
 php artisan ide-helper:models --nowrite
 php artisan ide-helper:meta
 
-# Optimize application.
-php artisan optimize
-
 # Reload worker queues.
 php artisan queue:restart
 

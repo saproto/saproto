@@ -84,8 +84,8 @@ class ImportLiveDataSeeder extends Seeder
 
     public static function getDataFromExportApi($table)
     {
-        $local_url = route('api::export', ['personal_key' => getenv('PERSONAL_PROTO_KEY'), 'table' => $table]);
-        $remote_url = str_replace(getenv('APP_URL'), 'https://www.proto.utwente.nl', $local_url);
+        $local_url = route('api::export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $table]);
+        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl', $local_url);
         $encoded_data = file_get_contents($remote_url);
         return json_decode($encoded_data);
     }

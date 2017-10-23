@@ -3,9 +3,9 @@
 return [
 
     'idp' => [
-        'issuer' => getenv('SAML2_IDP_ENTITY_ID'),
-        'cert' => getenv('SAML2_IDP_CERT'),
-        'key' => getenv('SAML2_IDP_KEY'),
+        'issuer' => env('SAML2_IDP_ENTITY_ID'),
+        'cert' => env('SAML2_IDP_CERT'),
+        'key' => env('SAML2_IDP_KEY'),
     ],
 
     'sp' => [

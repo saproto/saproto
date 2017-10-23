@@ -17,10 +17,10 @@ class ForceDomain
      */
     public function handle($request, Closure $next)
     {
-        $force = env('FORCE_DOMAIN', null);
+        $force = config('app.forcedomain');
 
         if ($force != null && $request->getHttpHost() != $force) {
-            return redirect()->to(env('APP_URL') . '/' . ($request->path() == '/' ? '' : $request->path()), 301);
+            return redirect()->to(config('app-proto.app-url') . '/' . ($request->path() == '/' ? '' : $request->path()), 301);
         }
 
         return $next($request);

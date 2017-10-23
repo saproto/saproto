@@ -33,7 +33,7 @@
 
         $("#fishcam__activate").click(function () {
 
-            $("#fishcam").css('background-image', 'url(\'{{ env('FISHCAM_URL') }}\')').html('');
+            $("#fishcam").css('background-image', 'url(\'{{ config('app-proto.fishcam-url') }}\')').html('');
 
         });
 

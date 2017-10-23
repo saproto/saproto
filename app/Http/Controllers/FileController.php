@@ -94,7 +94,7 @@ class FileController extends Controller
         }
 
         $payload = base64_encode(json_encode((object)[
-            'secret' => env('PRINTER_SECRET'),
+            'secret' => config('app-proto.printer-secret'),
             'url' => $url,
             'printer' => $printer,
             'copies' => $copies
@@ -102,7 +102,7 @@ class FileController extends Controller
 
         $result = null;
         try {
-            $result = file_get_contents('http://' . env('PRINTER_HOST') . ':' . env('PRINTER_PORT') . '/?data=' . $payload);
+            $result = file_get_contents('http://' . config('app-proto.printer-host') . ':' . config('app-proto.printer-port') . '/?data=' . $payload);
         } catch (\Exception $e) {
             return "Exception while connecting to the printer server: " . $e->getMessage();
         }

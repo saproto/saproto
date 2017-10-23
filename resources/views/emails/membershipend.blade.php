@@ -24,7 +24,7 @@
 
     <p>
         Kind regards,<br>
-        {{ $secretary }}<br>
+        {{ config('proto.secretary') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

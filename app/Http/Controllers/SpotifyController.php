@@ -20,8 +20,8 @@ class SpotifyController extends Controller
     public function oauthTool(Request $request)
     {
         $session = new \SpotifyWebAPI\Session(
-            getenv('SPOTIFY_CLIENT'),
-            getenv('SPOTIFY_SECRET'),
+            config('app-proto.spotify-clientkey'),
+            config('app-proto.spotify-secretkey'),
             route("spotify::oauth")
         );
 
@@ -44,7 +44,7 @@ class SpotifyController extends Controller
             $api->setAccessToken($session->getAccessToken());
 
             $spotify_user = $api->me()->id;
-            $right_user = getenv('SPOTIFY_USER');
+            $right_user = config('app-proto.spotify-user');
             if ($spotify_user != $right_user) {
                 abort(404, "You authenticated as the wrong user. (Authenticated as $spotify_user but should authenticate as $right_user.)");
             }

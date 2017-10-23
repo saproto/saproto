@@ -46,7 +46,7 @@ class SmartXpScreenController extends Controller
     public function smartxpTimetable()
     {
 
-        $url = "https://www.googleapis.com/calendar/v3/calendars/" . config('proto.smartxp-google-timetable-id') . "/events?singleEvents=true&orderBy=startTime&key=" . env('GOOGLE_KEY_PRIVATE') . "&timeMin=" . urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))) . "&timeMax=" . urlencode(date('c', strtotime('next monday'))) . "";
+        $url = "https://www.googleapis.com/calendar/v3/calendars/" . config('proto.smartxp-google-timetable-id') . "/events?singleEvents=true&orderBy=startTime&key=" . config('app-proto.google-key-private') . "&timeMin=" . urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))) . "&timeMax=" . urlencode(date('c', strtotime('next monday'))) . "";
 
         $data = json_decode(str_replace("$", "", file_get_contents($url)));
 

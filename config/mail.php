@@ -33,19 +33,20 @@ return [
     |
     */
 
-    'from' => ['address' => 'webmaster@proto.utwente.nl', 'name' => 'S.A. Proto Webmaster'],
+    'from' => ['address' => 'haveyoutriedturningitoffandonagain@proto.utwente.nl', 'name' => 'S.A. Proto Have You Tried Turning It Off And On Again committee'],
 
     /*
-    |--------------------------------------------------------------------------
-    | Mail "Pretend"
-    |--------------------------------------------------------------------------
-    |
-    | When this option is enabled, e-mail will not actually be sent over the
-    | web and will instead be written to your application's logs files so
-    | you may inspect the message. This is great for local development.
-    |
-    */
+     * In order to provide support for Laravel 5.4's new Markdown mail components,
+     * you should add the following block of configuration to the bottom of your
+     * mail configuration file:
+     */
 
-    'pretend' => env('MAIL_PRETEND', true),
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
 
 ];

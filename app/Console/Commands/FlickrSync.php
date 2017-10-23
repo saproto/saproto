@@ -51,7 +51,7 @@ class FlickrSync extends Command
             $this->error('API key is not valid!');
             SlackController::sendNotification('[console *proto:flickr*] API key is not valid.');
             return;
-        } elseif ($test->user->id != getenv('FLICKR_USER')) {
+        } elseif ($test->user->id != config('app-proto.flickr-user')) {
             $this->error('API key is for the wrong user!');
             SlackController::sendNotification('[console *proto:flickr*] API key is for the wrong user.');
             return;

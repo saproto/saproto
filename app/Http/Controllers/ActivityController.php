@@ -4,8 +4,8 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
+use Proto\Mail\CommitteeHelpNeeded;
+use Proto\Mail\CommitteeHelpNotNeeded;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
@@ -135,14 +135,7 @@ class ActivityController extends Controller
         ]);
 
         foreach ($committee->users as $user) {
-            $name = $user->name;
-            $email = $user->email;
-            $helptitle = $help->activity->event->title;
-            Mail::queueOn('medium', 'emails.committeehelpneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
-                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                $m->to($email, $name);
-                $m->subject('The activity ' . $helptitle . ' needs your help.');
-            });
+            Mail::to($user)->queue((new CommitteeHelpNeeded($user, $help))->onQueue('medium'));
         }
 
         $request->session()->flash('flash_message', 'Added ' . $committee->name . ' as helping committee.');
@@ -154,14 +147,7 @@ class ActivityController extends Controller
         $help = HelpingCommittee::findOrFail($id);
 
         foreach ($help->users as $user) {
-            $name = $user->name;
-            $email = $user->email;
-            $helptitle = $help->activity->event->title;
-            Mail::queueOn('medium', 'emails.committeehelpnotneeded', ['user' => $user, 'help' => $help], function ($m) use ($name, $email, $helptitle) {
-                $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                $m->to($email, $name);
-                $m->subject('The activity ' . $helptitle . ' doesn\'t need your help anymore.');
-            });
+            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help))->onQueue('medium'));
         }
 
         foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {

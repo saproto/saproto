@@ -1,5 +1,5 @@
 <?php
 
 return array(
-    'KEY' => env('GOOGLE_KEY_PRIVATE')
+    'KEY' => config('app-proto.google-key-private')
 );

@@ -17,7 +17,7 @@ class MemberCardController extends Controller
     public function download(Request $request, $id)
     {
 
-        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != env('PRINTER_HOST')) {
+        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
             abort(403);
         }
 
@@ -33,7 +33,7 @@ class MemberCardController extends Controller
             ->setOption('page-width', 86)->setOption('page-height', 54)
             ->setOption('margin-bottom', 0)->setOption('margin-left', 0)->setOption('margin-right', 0)->setOption('margin-top', 0);
 
-        if ($request->ip() != env('PRINTER_HOST')) {
+        if ($request->ip() != config('app-proto.printer-host')) {
             return $card->stream();
         } else {
             return $card->download();

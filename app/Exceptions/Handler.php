@@ -11,6 +11,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Session\TokenMismatchException;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Validation\ValidationException;
+
+use Illuminate\Auth\AuthenticationException;
+
 use App;
 use Auth;
 
@@ -27,7 +32,9 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         HttpException::class,
-        NotReadableException::class
+        NotReadableException::class,
+        ValidationException::class,
+        AuthorizationException::class
     ];
 
     private $sentryID;
@@ -138,4 +145,21 @@ class Handler extends ExceptionHandler
         }
 
     }
+
+    /**
+     * Convert an authentication exception into an unauthenticated response.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Auth\AuthenticationException $exception
+     * @return \Illuminate\Http\Response
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        return redirect()->guest('login');
+    }
+
 }

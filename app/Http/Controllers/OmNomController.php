@@ -130,7 +130,7 @@ class OmNomController extends Controller
                 $product = Product::find($id);
                 $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false));
                 if ($product->id == config('omnomcom.protube-skip')) {
-                    file_get_contents(env('HERBERT_SERVER') . "/skip?secret=" . env('HERBERT_SECRET'));
+                    file_get_contents(config('herbert.server') . "/skip?secret=" . config('herbert.secret'));
                 }
             }
         }

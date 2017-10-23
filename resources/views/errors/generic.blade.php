@@ -35,7 +35,7 @@
                             eventId: '{{ $sentryID }}',
 
                             // use the public DSN (dont include your secret!)
-                            dsn: '{{ env('SENTRY_PUBLIC_DSN') }}'
+                            dsn: '{{ config('app-proto.sentry-dsn') }}'
                         });
                     </script>
                 @elseif($statuscode == 404)

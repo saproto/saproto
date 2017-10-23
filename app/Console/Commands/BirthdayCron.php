@@ -3,10 +3,9 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
-use Proto\Models\EmailList;
-use Proto\Models\Event;
+use Proto\Mail\BirthdayEmail;
+use Proto\Mail\BirthdayEmailForBoard;
 
 use Mail;
 use Proto\Models\User;
@@ -60,24 +59,11 @@ class BirthdayCron extends Command
                     'age' => $user->age()
                 ];
 
-                $name = $user->name;
-                $email = $user->email;
-
-                Mail::queueOn('medium', 'emails.users.birthdayemail', ['user' => $user], function ($message) use ($name, $email) {
-                    $message
-                        ->to($email, $name)
-                        ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
-                        ->subject('Happy birthday!');
-                });
+                Mail::to($user)->queue((new BirthdayEmail($user))->onQueue('medium'));
 
             }
 
-            // For some super strange reason we cannot queue this e-mail... Well...
-            Mail::queueOn('low', 'emails.users.birthdaylist', ['users' => $adminoverview], function ($message) {
-                $message
-                    ->to('board@' . config('proto.emaildomain'), 'S.A. Proto Board')
-                    ->subject('Birthdays of today!');
-            });
+            Mail::to('board@' . config('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
 
             $this->info("Done!");
 

@@ -8,6 +8,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
+use Proto\Mail\AnonymousEmail;
 use Proto\Models\StorageEntry;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
@@ -237,10 +238,10 @@ class CommitteeController extends Controller
 
         Log::info('Anonymous e-mail with hash ' . $message_hash . ' sent to ' . $name . ' by user #' . Auth::user()->id);
 
-        Mail::queueOn('low', 'emails.anonymous', ['message_content' => $message_content, 'hash' => $message_hash], function ($m) use ($email, $name) {
-            $m->to($email, $name);
-            $m->subject('Anonymous e-mail for the ' . $name . '.');
-        });
+        Mail::to((object)[
+            'name' => $committee->name,
+            'email' => $committee->getEmailAddress()
+        ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
 
         Session::flash("flash_message", "Your anonymous e-mail has been sent!");
 

@@ -3,7 +3,7 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
+use Proto\Mail\TestMail;
 
 use Mail;
 
@@ -42,10 +42,7 @@ class TestEmail extends Command
 
         $email = $this->ask('What is the destination for this e-mail?');
 
-        Mail::queueOn('high', 'emails.test', [], function ($message) use ($email) {
-            $message->to($email, 'S.A. Proto Test Message');
-            $message->subject("Verifying that the e-mailing service works.");
-        });
+        Mail::to($email)->queue((new TestMail())->onQueue('high'));
 
         $this->info('Sent!');
 

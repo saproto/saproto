@@ -13,7 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'auth.login' => [
+        'Illuminate\Auth\Events\Login' => [
             'Proto\Handlers\Events\AuthLoginEventHandler',
         ],
         'Aacotroneo\Saml2\Events\Saml2LoginEvent' => [
@@ -27,10 +27,8 @@ class EventServiceProvider extends ServiceProvider
      * @param  \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot()
     {
-        parent::boot($events);
-
-        //
+        parent::boot();
     }
 }

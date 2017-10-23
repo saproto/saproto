@@ -52,7 +52,7 @@
 
     <p>
         Kind regards,<br>
-        {{ $treasurer }}<br>
+        {{ config('proto.treasurer') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

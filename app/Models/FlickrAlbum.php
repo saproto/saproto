@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FlickrAlbum extends Model
 {
     protected $table = 'flickr_albums';
+    public $incrementing = false;
 
     public $timestamps = false;
 

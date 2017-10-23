@@ -4,12 +4,12 @@
     <script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
 
     <script>
-        var server = "{!! env('HERBERT_SERVER') !!}";
+        var server = "{!! config('herbert.server') !!}";
         var token = 0;
 
         $(document).ready(function() {
             $.ajax({
-                url: "{!! env('APP_URL') !!}/api/token",
+                url: "{!! config('app-proto.app-url') !!}/api/token",
                 dataType: "jsonp",
                 success: function(_token) {
 

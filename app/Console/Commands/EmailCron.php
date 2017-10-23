@@ -5,6 +5,7 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
+use Proto\Mail\ManualEmail;
 use Proto\Models\Email;
 
 use Mail;
@@ -55,33 +56,18 @@ class EmailCron extends Command
             $email->sent_to = $email->recipients()->count();
             $email->save();
 
-            $emaildata = (object)[
-                'sender_address' => $email->sender_address,
-                'sender_name' => $email->sender_name,
-                'subject' => $email->subject,
-                'attachments' => $email->attachments
-            ];
-
             foreach ($email->recipients() as $recipient) {
 
-                Mail::queueOn('medium', 'emails.manualemail', [
-                    'body' => $email->parseBodyFor($recipient),
-                    'attachments' => $email->attachments,
-                    'destination' => $email->destinationForBody(),
-                    'user_id' => $recipient->id,
-                    'event_name' => $email->getEventName()
-                ], function ($message) use ($emaildata, $recipient) {
-
-                    $message
-                        ->to($recipient->email, $recipient->name)
-                        ->from($emaildata->sender_address . '@' . config('proto.emaildomain'), $emaildata->sender_name)
-                        ->subject($emaildata->subject);
-
-                    foreach ($emaildata->attachments as $attachment) {
-                        $message->attach($attachment->generateLocalPath(), ['as' => $attachment->original_filename, 'mime' => $attachment->mime]);
-                    }
-
-                });
+                Mail::to($recipient)
+                    ->queue((new ManualEmail(
+                        ['email' => $email->sender_address . '@' . config('proto.emaildomain'), 'name' => $email->sender_name],
+                        $email->subject,
+                        $email->parseBodyFor($recipient),
+                        $email->attachments,
+                        $email->destinationForBody(),
+                        $recipient->id,
+                        $email->getEventName())
+                    )->onQueue('medium'));
 
             }
 

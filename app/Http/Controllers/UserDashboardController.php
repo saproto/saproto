@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
+use Proto\Mail\UserMailChange;
 use Redirect;
 
 use Proto\Models\User;
@@ -86,25 +87,30 @@ class UserDashboardController extends Controller
         }
 
         if ($userdata['email'] !== $user->email) {
+
             $email = [
                 'old' => $user->email,
                 'new' => $userdata['email']
             ];
-            $name = $user->name;
-            Mail::queueOn('high', 'emails.emailchange', [
-                'changer' => [
-                    'name' => Auth::user()->name,
-                    'ip' => $request->ip()
+
+            $to = [
+                (object)[
+                    'email' => $email['old'],
+                    'name' => $user->name
                 ],
-                'email' => $email,
-                'user' => $user
-            ], function ($message) use ($name, $email) {
-                $message
-                    ->to($email['old'], $name)
-                    ->to($email['new'], $name)
-                    ->from('security@' . config('proto.emaildomain'), 'Have You Tried Turning It Off And On Again committee')
-                    ->subject('Your e-mail address for S.A. Proto has been changed.');
-            });
+                (object)[
+                    'email' => $email['new'],
+                    'name' => $user->name
+                ]
+            ];
+
+            $changer = [
+                'name' => Auth::user()->name,
+                'ip' => $request->ip()
+            ];
+
+            Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
+
         }
 
         $user->fill($userdata);

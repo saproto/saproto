@@ -4,6 +4,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to place the application's name in a notification or
+    | any other location as required by the application or its packages.
+    */
+
+    'name' => 'S.A. Proto',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Misc
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'env' => env('APP_ENV', 'debug'),
+    'ssl' => env('SSL', true),
+    'forcedomain' => env('FORCE_DOMAIN', null),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |
@@ -114,13 +137,11 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
-        Illuminate\Routing\ControllerServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
@@ -137,6 +158,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Illuminate\Notifications\NotificationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -145,6 +167,7 @@ return [
         Proto\Providers\AuthServiceProvider::class,
         Proto\Providers\EventServiceProvider::class,
         Proto\Providers\RouteServiceProvider::class,
+        Proto\Providers\BroadcastServiceProvider::class,
 
         /*
          * External Service Providers
@@ -152,8 +175,8 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class, /* We really need this for SMTP, for some reason. Do not remove. */
-        PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
+        Illuminate\Mail\MailServiceProvider::class,
+        PragmaRX\Google2FALaravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
@@ -165,7 +188,6 @@ return [
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
-        Artdarek\OAuth\OAuthServiceProvider::class,
     ],
 
     /*
@@ -200,6 +222,7 @@ return [
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
@@ -267,8 +290,6 @@ return [
         'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
-
-        'OAuth' => Artdarek\OAuth\Facade\OAuth::class,
 
     ],
 

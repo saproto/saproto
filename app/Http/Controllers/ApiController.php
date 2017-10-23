@@ -99,7 +99,7 @@ class ApiController extends Controller
 
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != env('HERBERT_SECRET')) abort(403);
+        if ($request->secret != config('herbert.secret')) abort(403);
 
         $playedVideo = new PlayedVideo();
 

@@ -242,7 +242,7 @@
     </style>
 
     <script>
-        var server = "{!! env('HERBERT_SERVER') !!}";
+        var server = "{!! config('herbert.server') !!}";
 
         var tag = document.createElement('script');
 
@@ -453,7 +453,7 @@
         @if($showPin)
             $(document).ready(function () {
             $.ajax({
-                url: "{!! env('APP_URL') !!}/api/token",
+                url: "{!! config('app-proto.app-url') !!}/api/token",
                 dataType: "jsonp",
                 success: function (_token) {
 

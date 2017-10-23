@@ -65,16 +65,16 @@ class Flickr extends Model
 
         // Generate Query String
         $default_params = array(
-            'user_id' => urlencode(env('FLICKR_USER')),
-            'api_key' => env('FLICKR_CLIENT'),
+            'user_id' => urlencode(config('flickr.user')),
+            'api_key' => config('flickr.client-id'),
             'format' => 'json',
             'nojsoncallback' => '1',
             'method' => $method,
 
             // OAuth Parameters
-            'oauth_consumer_key' => env('FLICKR_CLIENT'),
+            'oauth_consumer_key' => config('flickr.client-id'),
             'oauth_nonce' => str_random(32),
-            'oauth_token' => $token->getAccessToken(),
+            'oauth_token' => $token->getIdentifier(),
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_timestamp' => date('U'),
             'oauth_version' => '1.0'
@@ -94,7 +94,7 @@ class Flickr extends Model
         // Generate Signature
         $sig_base_string = "GET&" . urlencode($uri) . "&" . urlencode($query_string);
 
-        $sig_key = urlencode(getenv('FLICKR_SECRET')) . '&' . urlencode($token->getAccessTokenSecret());
+        $sig_key = urlencode(config('flickr.client-secret')) . '&' . urlencode($token->getSecret());
 
         $sig = "oauth_signature=" . base64_encode(hash_hmac('sha1', $sig_base_string, $sig_key, true));
 
@@ -156,7 +156,7 @@ class Flickr extends Model
             $data = [];
 
             if ($photos->stat == 'ok') {
-                if ($photos->photoset->owner == env('FLICKR_USER')) {
+                if ($photos->photoset->owner == config('app-proto.flickr-user')) {
                     foreach ($photos->photoset->photo as $photo) {
                         $p = (object)[
                             'id' => $photo->id,

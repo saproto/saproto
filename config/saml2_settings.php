@@ -70,12 +70,12 @@ return $settings = array(
 
         // Usually x509cert and privateKey of the SP are provided by files placed at
         // the certs folder. But we can also provide them with the following parameters
-        'x509cert' => getenv('SAML2_SP_CERT'),
-        'privateKey' => getenv('SAML2_SP_KEY'),
+        'x509cert' => env('SAML2_SP_CERT'),
+        'privateKey' => env('SAML2_SP_KEY'),
 
         // Identifier (URI) of the SP entity.
         // Leave blank to use the 'saml_metadata' route.
-        'entityId' => getenv('SAML2_SP_ENTITY_ID'),
+        'entityId' => env('SAML2_SP_ENTITY_ID'),
 
         // Specifies info about where and how the <AuthnResponse> message MUST be
         // returned to the requester, in this case our SP.
@@ -83,7 +83,7 @@ return $settings = array(
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-POST binding.
             // Leave blank to use the 'saml_acs' route
-            'url' => getenv('APP_URL') . '/saml2/acs',
+            'url' => env('APP_URL') . '/saml2/acs',
         ),
         // Specifies info about where and how the <Logout Response> message MUST be
         // returned to the requester, in this case our SP.
@@ -91,28 +91,28 @@ return $settings = array(
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-Redirect binding.
             // Leave blank to use the 'saml_sls' route
-            'url' => getenv('APP_URL') . '/saml2/logout',
+            'url' => env('APP_URL') . '/saml2/logout',
         ),
     ),
 
     // Identity Provider Data that we want connect with our SP
     'idp' => array(
         // Identifier of the IdP entity  (must be a URI)
-        'entityId' => getenv('SAML2_SP_REMOTE_ENTITY_ID'),
+        'entityId' => env('SAML2_SP_REMOTE_ENTITY_ID'),
         // SSO endpoint info of the IdP. (Authentication Request protocol)
         'singleSignOnService' => array(
             // URL Target of the IdP where the SP will send the Authentication Request Message,
             // using HTTP-Redirect binding.
-            'url' => getenv('SAML2_SP_REMOTE_SOS'),
+            'url' => env('SAML2_SP_REMOTE_SOS'),
         ),
         // SLO endpoint info of the IdP.
         'singleLogoutService' => array(
             // URL Location of the IdP where the SP will send the SLO Request,
             // using HTTP-Redirect binding.
-            'url' => getenv('SAML2_SP_REMOTE_SLS'),
+            'url' => env('SAML2_SP_REMOTE_SLS'),
         ),
         // Public x509 certificate of the IdP
-        'x509cert' => getenv('SAML2_SP_REMOTE_CERT'),
+        'x509cert' => env('SAML2_SP_REMOTE_CERT'),
         'validate.authnrequest' => true,
         'saml20.sign.assertion' => true,
     ),
@@ -183,7 +183,7 @@ return $settings = array(
         'en-US' => array(
             'name' => 'S.A. Proto SAML 2.0 Service Provider / UTwente SSO',
             'displayname' => 'S.A. Proto SAML 2.0 SP',
-            'url' => getenv('APP_URL')
+            'url' => env('APP_URL')
         ),
     ),
 

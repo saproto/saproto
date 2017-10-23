@@ -8,5 +8,5 @@ return [
     |-------------------------------------------------------------
     */
 
-    'token' => getenv('SLACK_TOKEN'),
+    'token' => env('SLACK_TOKEN'),
 ];

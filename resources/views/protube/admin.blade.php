@@ -225,7 +225,7 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.1.1/bootstrap-slider.min.js"></script>
 
     <script>
-        var server = "{!! env('HERBERT_SERVER') !!}";
+        var server = "{!! config('herbert.server') !!}";
         var token = "{!! Session::get('token') !!}";
 
         $(document).ready(function () {
@@ -536,7 +536,7 @@
             font-size: 18px;
         }
 
-        #nowPlaying h2{
+        #nowPlaying h2 {
             padding: 0;
             margin: 2% 0;
             font-size: 12px;

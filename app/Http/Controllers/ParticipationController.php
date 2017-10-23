@@ -5,6 +5,10 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Mail\ActivityMovedFromBackup;
+use Proto\Mail\ActivitySubscribedTo;
+use Proto\Mail\ActivityUnsubscribedFrom;
+use Proto\Mail\ActivityUnsubscribedToHelp;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
@@ -98,23 +102,9 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        $name = $participation->user->name;
-        $calling_name = $participation->user->calling_name;
-        $email = $participation->user->email;
-        $activitytitle = $participation->activity->event->title;
         $helpcommittee = ($request->has('helping_committee_id') ? $helping->committee->name : null);
-        $eventid = $participation->activity->event->id;
 
-        Mail::queueOn('high', 'emails.subscribeactivity', ['activity' => [
-            'id' => $eventid,
-            'title' => $activitytitle,
-            'name' => $calling_name,
-            'help' => $helpcommittee
-        ]], function ($m) use ($name, $email, $activitytitle) {
-            $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-            $m->to($email, $name);
-            $m->subject('You have been signed up for ' . $activitytitle . '.');
-        });
+        Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $helpcommittee))->onQueue('high'));
 
         return Redirect::back();
 
@@ -151,23 +141,7 @@ class ParticipationController extends Controller
             }
 
             if ($notify) {
-
-                $name = $participation->user->name;
-                $email = $participation->user->email;
-                $activitytitle = $participation->activity->event->title;
-                $eventid = $participation->activity->event->id;
-                $calling_name = $participation->user->calling_name;
-
-                Mail::queueOn('high', 'emails.unsubscribeactivity', ['activity' => [
-                    'id' => $eventid,
-                    'title' => $activitytitle,
-                    'name' => $calling_name
-                ]], function ($m) use ($name, $email, $activitytitle) {
-                    $m->replyTo('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($email, $name);
-                    $m->subject('You have been signed out for ' . $activitytitle . '.');
-                });
-
+                Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
             }
 
             $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
@@ -183,26 +157,7 @@ class ParticipationController extends Controller
             $request->session()->flash('flash_message', $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.');
 
             if ($notify) {
-
-                $name = $participation->user->name;
-                $email = $participation->user->email;
-                $activitytitle = $participation->activity->event->title;
-                $calling_name = $participation->user->calling_name;
-                $committee_name = $participation->help->committee->name;
-                $event_id = $participation->activity->event->id;
-                $event_title = $participation->activity->event->title;
-
-                Mail::queueOn('high', 'emails.unsubscribehelpactivity', [
-                    'calling_name' => $calling_name,
-                    'committee_name' => $committee_name,
-                    'event_id' => $event_id,
-                    'event_title' => $event_title
-                ], function ($m) use ($name, $email, $activitytitle) {
-                    $m->from('board@proto.utwente.nl', 'S.A. Proto');
-                    $m->to($email, $name);
-                    $m->subject('You don\'t help with ' . $activitytitle . ' anymore.');
-                });
-
+                Mail::to($participation->user)->queue((new ActivityUnsubscribedToHelp($participation))->onQueue('high'));
             }
 
             $participation->delete();
@@ -232,25 +187,7 @@ class ParticipationController extends Controller
         if ($backupparticipation !== null) {
             $backupparticipation->backup = false;
             $backupparticipation->save();
-
-            $name = $backupparticipation->user->name;
-            $email = $backupparticipation->user->email;
-            $activitytitle = $backupparticipation->activity->event->title;
-
-            $calling_name = $backupparticipation->user->calling_name;
-            $event_id = $backupparticipation->activity->event->id;
-            $event_title = $backupparticipation->activity->event->title;
-
-            Mail::queueOn('high', 'emails.takenfrombackup', [
-                'calling_name' => $calling_name,
-                'event_id' => $event_id,
-                'event_title' => $event_title
-            ], function ($m) use ($name, $email, $activitytitle) {
-                $m->replyTo('board@' . config('proto.emaildomain'), 'S.A. Proto');
-                $m->to($email, $name);
-                $m->bcc('board@' . config('proto.emaildomain'));
-                $m->subject('Moved from back-up list to participants for ' . $activitytitle . '.');
-            });
+            Mail::to($backupparticipation->user)->queue((new ActivityMovedFromBackup($backupparticipation))->onQueue('high'));
         }
 
     }

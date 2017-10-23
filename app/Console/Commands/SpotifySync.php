@@ -50,7 +50,7 @@ class SpotifySync extends Command
         $this->info('Testing if API key still works.');
 
         try {
-            if ($spotify->me()->id != getenv('SPOTIFY_USER')) {
+            if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
                 SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
                 return;
@@ -113,14 +113,14 @@ class SpotifySync extends Command
 
         try {
 
-            $spotify->replaceUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), []);
+            $spotify->replaceUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), []);
 
             $slice = 0;
             $batch_size = 75;
             while ($slice < count($uris)) {
                 $add = array_values(array_slice($uris, $slice, $batch_size));
                 $slice += $batch_size;
-                $spotify->addUserPlaylistTracks(getenv("SPOTIFY_USER"), getenv("SPOTIFY_PLAYLIST"), $add);
+                $spotify->addUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
             }
 
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {

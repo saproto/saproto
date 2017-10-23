@@ -8,10 +8,12 @@ class FlickrItem extends Model
 {
     protected $table = 'flickr_items';
     protected $primaryKey = 'id';
+    public $incrementing = false;
 
     public $timestamps = false;
 
-    public function album() {
+    public function album()
+    {
         return $this->belongsTo('Proto\Models\FlickrAlbum', 'album_id');
     }
 }
