@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
     public function report(Exception $e)
     {
 
-        if ($this->shouldReport($e) && App::environment('production')) {
+        if (app()->bound('sentry') && $this->shouldReport($e) && App::environment('production')) {
 
             $sentry = app('sentry');
 
@@ -88,6 +88,8 @@ class Handler extends ExceptionHandler
         } else {
             return parent::report($e);
         }
+
+        parent::report($e);
 
     }
 

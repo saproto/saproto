@@ -37,7 +37,7 @@ return [
     */
 
     // This is handled in the Handler class. On production, a nice page is shown. On other environments (which should always be well protected!) the stacktrace is shown.
-    'debug' => true,
+    'debug' => env('DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,7 +182,6 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
-        Sentry\SentryLaravel\SentryLaravelServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
@@ -240,8 +239,6 @@ return [
         'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-
-        'Sentry' => Sentry\SentryLaravel\SentryFacade::class,
 
         'role' => Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => Zizaco\Entrust\Middleware\EntrustPermission::class,
