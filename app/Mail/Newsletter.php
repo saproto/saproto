@@ -25,6 +25,7 @@ class Newsletter extends Mailable
     {
         return $this
             ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
-            ->subject('S.A. Proto Weekly Newsletter (Week ' . date("W") . ')');
+            ->subject('S.A. Proto Weekly Newsletter (Week ' . date("W") . ')')
+            ->view('emails.newsletter');
     }
 }

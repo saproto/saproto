@@ -175,7 +175,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Sichikawa\LaravelSendgridDriver\MailServiceProvider::class, /* We really need this for SMTP, for some reason. Do not remove. */
+        Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FALaravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,

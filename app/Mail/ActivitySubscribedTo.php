@@ -6,10 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
-use Proto\Models\HelpingCommittee;
-use Proto\Models\User;
 
 class ActivitySubscribedTo extends Mailable
 {
@@ -22,7 +19,7 @@ class ActivitySubscribedTo extends Mailable
      *
      * @return void
      */
-    public function __construct(ActivityParticipation $participation, HelpingCommittee $help)
+    public function __construct(ActivityParticipation $participation, $help)
     {
         $this->activity = [
             'id' => $participation->activity->event->id,

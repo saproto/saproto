@@ -11,16 +11,16 @@ class UtwenteCleanup extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $accounts;
+    public $unlinked;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($accounts)
+    public function __construct($unlinked)
     {
-        $this->accounts = $accounts;
+        $this->unlinked = $unlinked;
     }
 
     /**

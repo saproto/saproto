@@ -1,6 +1,6 @@
 <!-- Form JS //-->
 <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key={{ getconfig('app-proto.google-key-public') }}&libraries=places"></script>
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app-proto.google-key-public') }}&libraries=places"></script>
 
 <script type="text/javascript">
 
