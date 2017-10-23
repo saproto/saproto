@@ -14,6 +14,8 @@ use Illuminate\Session\TokenMismatchException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Validation\ValidationException;
 
+use Illuminate\Auth\AuthenticationException;
+
 use App;
 use Auth;
 

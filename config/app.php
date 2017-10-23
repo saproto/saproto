@@ -176,7 +176,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
         Sichikawa\LaravelSendgridDriver\MailServiceProvider::class, /* We really need this for SMTP, for some reason. Do not remove. */
-        PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
+        PragmaRX\Google2FALaravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
@@ -188,7 +188,6 @@ return [
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
-        Artdarek\OAuth\OAuthServiceProvider::class,
     ],
 
     /*
@@ -291,8 +290,6 @@ return [
         'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
-
-        'OAuth' => Artdarek\OAuth\Facade\OAuth::class,
 
     ],
 

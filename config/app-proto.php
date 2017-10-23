@@ -52,11 +52,6 @@ return [
     'directadmin-domain' => env('DA_DOMAIN', null),
 
     /*
-     * Flickr config
-     */
-    'flickr-user' => env('FLICKR_USER', null),
-
-    /*
      * Spotify config
      */
     'spotify-clientkey' => env('SPOTIFY_CLIENT', null),
