@@ -51,7 +51,10 @@ class ExportController extends Controller
                 } else {
                     $data = Activity::with('event')->get()->filter(function ($val) {
                         return $val->event && $val->event->secret == 0;
-                    })->except('event');
+                    });
+                    foreach ($data as $key => $val) {
+                        unset($data[$key]->event);
+                    }
                 }
                 break;
             case 'committees':
