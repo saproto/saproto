@@ -83,21 +83,21 @@ class SpotifySync extends Command
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
             ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
             ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
             ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
-            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get());
+            ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
         $uris = [];
 
