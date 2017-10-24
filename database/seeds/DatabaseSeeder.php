@@ -11,14 +11,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (config('app.env') !== 'debug') {
-            return "You cannot seed your database outside the development environment.";
+        if (config('app.env') !== 'local') {
+            echo "You cannot seed your database outside the development environment.";
+            return;
         }
 
         echo "Starting database seeding." . PHP_EOL;
 
-        $this->call(ImportLiveDataSeeder::class);
-        $this->call(OtherDataSeeder::class);
+        $this->call([
+            ImportLiveDataSeeder::class,
+            OtherDataSeeder::class
+        ]);
 
         echo "Fixing roles." . PHP_EOL;
 

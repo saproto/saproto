@@ -21,7 +21,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'debug'),
+    'env' => env('APP_ENV', 'local'),
     'ssl' => env('SSL', true),
     'forcedomain' => env('FORCE_DOMAIN', null),
 

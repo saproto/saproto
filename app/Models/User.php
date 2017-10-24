@@ -93,7 +93,7 @@ class User extends Model implements AuthenticatableContract,
         $this->password = Hash::make($password);
         $this->save();
 
-        if (config('app.env') !== 'debug') {
+        if (config('app.env') !== 'local') {
             // Update Active Directory Password
             $ad = new Adldap();
             $provider = new Provider(config('adldap.proto'));
