@@ -635,17 +635,17 @@ class AuthController extends Controller
      */
     public static function makeLdapAccount($user)
     {
+        if (config('app.env') !== 'local') {
+            $ad = new Adldap();
+            $provider = new Provider(config('adldap.proto'));
+            $ad->addProvider('proto', $provider);
+            $ad->connect('proto');
 
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->make()->user();
-        $ldapuser->cn = "user-" . $user->id;
-        $ldapuser->description = $user->id;
-        $ldapuser->save();
-
+            $ldapuser = $provider->make()->user();
+            $ldapuser->cn = "user-" . $user->id;
+            $ldapuser->description = $user->id;
+            $ldapuser->save();
+        }
     }
 
     /**
