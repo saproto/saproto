@@ -121,7 +121,7 @@ class Flickr extends Model
             foreach (array_slice($albums, 0, $max) as $album) {
                 $data[] = (object)[
                     'name' => $album->title->_content,
-                    'thumb' => $album->primary_photo_extras->url_m,
+                    'thumb' => (count($album->primary_photo_extras) > 0 ? $album->primary_photo_extras->url_m : asset('images/logo/inverse.png')),
                     'id' => $album->id,
                     'date_create' => $album->date_create,
                     'date_update' => $album->date_update,
@@ -156,7 +156,7 @@ class Flickr extends Model
             $data = [];
 
             if ($photos->stat == 'ok') {
-                if ($photos->photoset->owner == config('app-proto.flickr-user')) {
+                if ($photos->photoset->owner == config('flickr.user')) {
                     foreach ($photos->photoset->photo as $photo) {
                         $p = (object)[
                             'id' => $photo->id,
