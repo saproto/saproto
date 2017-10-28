@@ -39,20 +39,20 @@
                     You are about to deactivate your account. Every user of this website that doesn't have an active
                     membership can deactivate their account. By deactivating your account, your account will be marked
                     as deleted in the database and all data associated with your account will be deleted. The following
-                    data associated with your account will NOT be deleted:
+                    data associated with your account will however NOT be deleted:
                 </p>
 
                 <ul>
                     <li>
-                        Your name and e-mail address.<br>
-                        (As stated in the Rules and Regulations, article 28 sub 3.)
+                        Your name.<br>
+                        (As stated in the Privacy Policy, section Specific Usage, for historical purposes.)
                     </li>
                     <li>
-                        Your committee participation, if any.<bR>
-                        (As stated in the Rules and Regulations, article 28 sub 3.)
+                        Your association participation (committees, activities etc.), if any.<bR>
+                        (As stated in the Privacy Policy, section Specific Usage, for historical purposes.)
                     </li>
                     <li>
-                        Your purchases (OmNomCom history) and activity participation, if any.<br>
+                        Your purchases, if any.<br>
                         (As required for the financial administration.)
                     </li>
                 </ul>

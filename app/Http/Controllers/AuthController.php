@@ -138,13 +138,65 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'name' => 'required|string',
             'calling_name' => 'required|string',
-            'birthdate' => 'required|date_format:Y-m-d',
-            'gender' => 'required|in:1,2,9',
-            'nationality' => 'required|string',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
             'g-recaptcha-response' => 'required|recaptcha',
             'privacy_policy_acceptance' => 'required'
         ]);
+
+        $this->registerAccount($request);
+
+        $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
+        return Redirect::route('homepage');
+    }
+
+    /**
+     * Handle a submission of the register-an-account-with-a-university-account page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postRegisterSurfConext(Request $request)
+    {
+        if (Auth::check()) {
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
+            return Redirect::route('user::dashboard');
+        }
+
+        if (!Session::has('surfconext_create_account')) {
+            $request->session()->flash('flash_message', 'Account creation expired. Please try again.');
+            return Redirect::route('login::show');
+        }
+
+        $remote_data = Session::get('surfconext_create_account');
+
+        $request->request->add([
+            'email' => $remote_data['mail'],
+            'name' => $remote_data['givenname'] . " " . $remote_data['surname'],
+            'calling_name' => $remote_data['givenname'],
+            'edu_username' => $remote_data['uid-full'],
+            'utwente_username' => $remote_data['org'] == 'utwente.nl' ? $remote_data['uid'] : null
+        ]);
+
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+            'name' => 'required|string',
+            'calling_name' => 'required|string',
+            'privacy_policy_acceptance' => 'required'
+        ]);
+
+        $this->registerAccount($request);
+
+        $request->session()->flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
+        return Redirect::route('login::edu');
+    }
+
+    /**
+     * Shared logic for creating and verifying a user account.
+     *
+     * @param $request
+     * @return $this|\Illuminate\Database\Eloquent\Model
+     */
+    private function registerAccount($request)
+    {
 
         $user = User::create($request->except('g-recaptcha-response', 'privacy_policy_acceptance'));
 
@@ -167,10 +219,8 @@ class AuthController extends Controller
 
         EmailListController::autoSubscribeToLists('autoSubscribeUser', $user);
 
-        if (!Auth::check()) {
-            $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
-            return Redirect::route('homepage');
-        }
+        return $user;
+
     }
 
     /**
@@ -213,11 +263,14 @@ class AuthController extends Controller
         $user->phone = null;
         $user->website = null;
         $user->utwente_username = null;
+        $user->edu_username = null;
         $user->tfa_totp_key = null;
 
         $user->phone_visible = 0;
         $user->address_visible = 0;
         $user->receive_sms = 0;
+
+        $user->email = 'deleted-' . $user->id . '@deleted.' . config('proto.emaildomain');
 
         $user->save();
 
@@ -410,44 +463,44 @@ class AuthController extends Controller
      *
      * @return Redirect
      */
-    public function startUtwenteAuth()
+    public function startSurfConextAuth()
     {
         Session::reflash();
         return redirect('saml2/login');
     }
 
     /**
-     * This is where we land after a successfull UTwente SSO auth.
+     * This is where we land after a successfull SurfConext SSO auth.
      * We do the authentication here because only using the Event handler for the SAML login doesn't let us do the proper redirects.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function utwenteAuthPost()
+    public function surfConextAuthPost()
     {
 
-        if (!Session::has('utwente_sso_user')) {
+        if (!Session::has('surfconext_sso_user')) {
             return Redirect::route('login::show');
         }
 
-        $remoteUser = Session::get('utwente_sso_user');
+        $remoteUser = Session::get('surfconext_sso_user');
         $remoteData = [
-            'uid' => $remoteUser['urn:mace:dir:attribute-def:uid'][0],
-            'surname' => $remoteUser['urn:mace:dir:attribute-def:sn'][0],
-            'mail' => $remoteUser['urn:mace:dir:attribute-def:mail'][0],
-            'displayname' => $remoteUser['urn:mace:dir:attribute-def:displayName'][0],
-            'utwente_role' => $remoteUser['urn:mace:dir:attribute-def:eduPersonAffiliation'][0],
-            'givenname' => $remoteUser['urn:mace:dir:attribute-def:givenName'][0],
-            'commonname' => $remoteUser['urn:mace:dir:attribute-def:cn'][0],
+            'uid' => $remoteUser[config('saml2-attr.uid')][0],
+            'surname' => $remoteUser[config('saml2-attr.surname')][0],
+            'mail' => $remoteUser[config('saml2-attr.email')][0],
+            'givenname' => $remoteUser[config('saml2-attr.givenname')][0],
+            'org' => isset($remoteUser[config('saml2-attr.institute')]) ? $remoteUser[config('saml2-attr.institute')][0] : 'utwente.nl'
         ];
-        $remoteUsername = $remoteData['uid'];
+        $remoteEduUsername = $remoteData['uid'] . '@' . $remoteData['org'];
+        $remoteData['uid-full'] = $remoteEduUsername;
 
         // We can be here for two reasons:
-        // Reason 1: we were trying to link a UTwente account to a user
-        if (Session::has('link_utwente_to_user')) {
-            $user = Session::get('link_utwente_to_user');
-            $user->utwente_username = $remoteUsername;
+        // Reason 1: we were trying to link a university account to a user
+        if (Session::has('link_edu_to_user')) {
+            $user = Session::get('link_edu_to_user');
+            $user->utwente_username = ($remoteData['org'] == 'utwente.nl' ? $remoteData['uid'] : null);
+            $user->edu_username = $remoteEduUsername;
             $user->save();
-            Session::flash('flash_message', 'We linked your UTwente account ' . $remoteUsername . ' to your Proto account.');
+            Session::flash('flash_message', 'We linked your institution account ' . $remoteEduUsername . ' to your Proto account.');
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
             } else {
@@ -455,14 +508,27 @@ class AuthController extends Controller
             }
         }
 
-        // Reason 2: we were trying to login using a UTwente account
+        // Reason 2: we were trying to login using a university account
         Session::keep('incoming_saml_request');
-        $localUser = User::where('utwente_username', $remoteUsername)->first();
+        $localUser = User::where('edu_username', $remoteEduUsername)->first();
 
+        // If we can't find a user account to login to, we have to options:
         if ($localUser == null) {
-            Session::flash('flash_message', 'Could not find a Proto account for your UTwente account ' . $remoteUsername . ', ' . $remoteData["givenname"] . '. Did you link it already?');
-            return Redirect::route('login::show');
+            $localUser = User::where('email', $remoteData['mail'])->first();
+            // If we recognize the e-mail address, reminder the user they may already have an account.
+            if ($localUser) {
+                Session::flash('flash_message', 'We recognize your e-mail address, but you have not explicitly allowed authentication to your account using your university account. You can link your university account on your dashboard after you have logged in.');
+                return Redirect::route('login::show');
+            } // Else, we'll allow them to create an account using their university account
+            else {
+                Session::flash('surfconext_create_account', $remoteData);
+                return view('users.registersurfconext', ['remote_data' => $remoteData]);
+            }
         }
+
+        $localUser->name = $remoteData['givenname'] . " " . $remoteData['surname'];
+        $localUser->calling_name = $remoteData['givenname'];
+        $localUser->save();
 
         return AuthController::continueLogin($localUser);
 

@@ -67,6 +67,7 @@ class User extends Model implements AuthenticatableContract,
     public function isStale()
     {
         if ($this->password) return false;
+        if ($this->edu_username) return false;
         if (strtotime($this->created_at) > strtotime('-1 hour')) return false;
         if (Member::withTrashed()->where('user_id', $this->id)->first()) return false;
         if (Bank::where('user_id', $this->id)->first()) return false;
@@ -376,5 +377,10 @@ class User extends Model implements AuthenticatableContract,
     public function hasTFAEnabled()
     {
         return $this->tfa_totp_key !== null;
+    }
+
+    public function hasCompletedProfile()
+    {
+        return $this->birthdate !== null && $this->gender !== null && $this->nationality !== null & $this->phone !== null;
     }
 }

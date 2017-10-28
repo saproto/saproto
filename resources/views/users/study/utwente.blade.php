@@ -10,7 +10,7 @@
 
 @section('panel-body')
 
-    <form method="post" action="{{ route('user::utwente::add', ['id'=> $user->id]) }}" class="form-horizontal">
+    <form method="post" action="{{ route('user::edu::add', ['id'=> $user->id]) }}" class="form-horizontal">
 
         {!! csrf_field() !!}
 

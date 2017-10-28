@@ -71,22 +71,29 @@ class UserDashboardController extends Controller
 
 
         $userdata['email'] = $request->input('email');
-        $userdata['calling_name'] = $request->input('calling_name');
-        $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
         $userdata['website'] = $request->input('website');
-        $userdata['phone_visible'] = $request->has('phone_visible');
-        $userdata['receive_sms'] = $request->has('receive_sms');
 
-        $validator = Validator::make($userdata, [
-            'email' => 'required|email',
-            'phone' => 'required|regex:(\+[0-9]{8,16})'
-        ]);
-
-        if ($validator->fails()) {
-            return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
+        if ($user->phone) {
+            $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
+            $userdata['phone_visible'] = $request->has('phone_visible');
+            $userdata['receive_sms'] = $request->has('receive_sms');
+            $validator = Validator::make($userdata, [
+                'phone' => 'required|regex:(\+[0-9]{8,16})'
+            ]);
+            if ($validator->fails()) {
+                return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
+            }
         }
 
         if ($userdata['email'] !== $user->email) {
+
+
+            $validator = Validator::make($userdata, [
+                'email' => 'required|email|unique:users',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
+            }
 
             $email = [
                 'old' => $user->email,
@@ -146,6 +153,76 @@ class UserDashboardController extends Controller
             $user = null;
         }
         return view("users.becomeamember", ['user' => $user]);
+    }
+
+    public function getCompleteProfile(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->hasCompletedProfile()) {
+            abort(403, "You already completed your membership profile.");
+        }
+
+        return view("users.dashboard.completeprofile");
+    }
+
+    public function postCompleteProfile(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->hasCompletedProfile()) {
+            abort(403, "You already completed your membership profile.");
+        }
+
+        $userdata = $request->only(['birthdate', 'gender', 'phone', 'nationality']);
+
+        $validator = Validator::make($userdata, [
+            'birthdate' => 'required|date',
+            'gender' => 'required|integer',
+            'phone' => 'required|regex:(\+[0-9]{8,16})',
+            'nationality' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+
+        $user->fill($userdata);
+        $user->save();
+
+        Session::flash("flash_message", "Completed profile.");
+        return Redirect::route('becomeamember');
+    }
+
+    public function getClearProfile()
+    {
+        $user = Auth::user();
+        if (!$user->hasCompletedProfile()) {
+            abort(403, "You have not yet completed your membership profile.");
+        }
+        if ($user->member) {
+            abort(403, "You cannot clear your membership profile while your membership is active.");
+        }
+
+        return view("users.dashboard.clearprofile", ['user' => $user]);
+    }
+
+    public function postClearProfile()
+    {
+        $user = Auth::user();
+        if (!$user->hasCompletedProfile()) {
+            abort(403, "You have not yet completed your membership profile.");
+        }
+        if ($user->member) {
+            abort(403, "You cannot clear your membership profile while your membership is active.");
+        }
+
+        $user = Auth::user();
+        $user->birthdate = null;
+        $user->gender = null;
+        $user->nationality = null;
+        $user->phone = null;
+        $user->save();
+
+        Session::flash("flash_message", "Profile cleared.");
+        return Redirect::route('user::dashboard');
     }
 
     public function generateKey($id)

@@ -66,8 +66,10 @@ class UserAdminController extends Controller
         $user->name = $request->name;
         $user->gender = $request->gender;
         $user->nationality = $request->nationality;
-        if (strtotime($user->birthdate) !== false) {
+        if (strtotime($request->birthdate) !== false) {
             $user->birthdate = $request->birthdate;
+        } else {
+            $user->birthdate = null;
         }
         $user->save();
         Session::flash("flash_message", "User updated!");

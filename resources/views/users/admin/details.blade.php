@@ -71,7 +71,7 @@
                         Make member
                     </li>
                 @endif
-                @if($user->address)
+                @if($user->address&&$user->hasCompletedProfile())
                     <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
                         Show membership form
                     </a>
@@ -100,34 +100,48 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="gender" class="col-sm-4 control-label">Gender</label>
-
-                    <div class="col-md-8">
-                        <select id="gender" name="gender" class="form-control" required>
-                            <option value="1" {{$user->gender==1?'selected':''}}>Male</option>
-                            <option value="2" {{$user->gender==2?'selected':''}}>Female</option>
-                            <option value="9" {{$user->gender==9?'selected':''}}>More complicated</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="nationality" class="col-sm-4 control-label">Nationality</label>
+                    <label for="name" class="col-sm-4 control-label">Calling name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="nationality" name="nationality"
-                               value="{{ $user->nationality }}">
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->calling_name }}"
+                               required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="birthdate" class="col-sm-4 control-label">Birthday</label>
+                @if($user->hasCompletedProfile())
 
-                    <div class="col-sm-8">
-                        <input type="date" class="form-control" id="birthdate" name="birthdate"
-                               value="{{ $user->birthdate }}">
+                    <div class="form-group">
+                        <label for="gender" class="col-sm-4 control-label">Gender</label>
+
+                        <div class="col-md-8">
+                            <select id="gender" name="gender" class="form-control">
+                                <option value="0">Unknown</option>
+                                <option value="1" {{$user->gender==1?'selected':''}}>Male</option>
+                                <option value="2" {{$user->gender==2?'selected':''}}>Female</option>
+                                <option value="9" {{$user->gender==9?'selected':''}}>More complicated</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="nationality" class="col-sm-4 control-label">Nationality</label>
+
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="nationality" name="nationality"
+                                   value="{{ $user->nationality }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthdate" class="col-sm-4 control-label">Birthday</label>
+
+                        <div class="col-sm-8">
+                            <input type="date" class="form-control" id="birthdate" name="birthdate"
+                                   value="{{ $user->birthdate }}">
+                        </div>
+                    </div>
+
+                @endif
 
                 <div class="col-sm-8 col-sm-offset-4">
                     <button type="submit" class="btn btn-success">Update User Account</button>
@@ -147,20 +161,24 @@
                         {{ $user->email }}
                     </div>
 
-                    <label class="col-sm-4 control-label">Phone</label>
-                    <div class="col-sm-8 control-label" style="text-align: left;">
-                        {{ $user->phone }}
-                    </div>
+                    @if($user->phone)
+                        <label class="col-sm-4 control-label">Phone</label>
+                        <div class="col-sm-8 control-label" style="text-align: left;">
+                            {{ $user->phone }}
+                        </div>
+                    @endif
 
-                    <label class="col-sm-4 control-label">Address</label>
-                    <div class="col-sm-8 control-label" style="text-align: left;">
-                        @if ($user->address)
-                            {{ $user->address->street }} {{ $user->address->number }}<br>
-                            {{ $user->address->zipcode }} {{ $user->address->city }} ({{ $user->address->country }})
-                        @else
-                            <i>n/a</i>
-                        @endif
-                    </div>
+                    @if($user->address)
+                        <label class="col-sm-4 control-label">Address</label>
+                        <div class="col-sm-8 control-label" style="text-align: left;">
+                            @if ($user->address)
+                                {{ $user->address->street }} {{ $user->address->number }}<br>
+                                {{ $user->address->zipcode }} {{ $user->address->city }} ({{ $user->address->country }})
+                            @else
+                                <i>n/a</i>
+                            @endif
+                        </div>
+                    @endif
 
                 </div>
             </div>
@@ -171,9 +189,9 @@
 
             <br>
 
-                <div class="profile__photo-wrapper">
-                    <img class="profile__photo" src="{{ $user->generatePhotoPath(200, 200) }}" alt="">
-                </div>
+            <div class="profile__photo-wrapper">
+                <img class="profile__photo" src="{{ $user->generatePhotoPath(200, 200) }}" alt="">
+            </div>
 
         </div>
 

@@ -22,16 +22,6 @@
             @endif
 
             <div class="form-group">
-                <label for="calling_name" class="col-sm-4 control-label">Display name</label>
-
-                <div class="col-sm-8">
-                    <input type="calling_name" class="form-control" id="calling_name" name="calling_name"
-                           value="{{ $user->calling_name }}"
-                           required>
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label for="email" class="col-sm-4 control-label">E-mail</label>
 
                 <div class="col-sm-8">
@@ -40,28 +30,30 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="phone" class="col-sm-4 control-label">Phone</label>
+            @if($user->phone)
+                <div class="form-group">
+                    <label for="phone" class="col-sm-4 control-label">Phone</label>
 
-                <div class="col-sm-8">
-                    <input type="phone" class="form-control" id="phone" name="phone" value="{{ $user->phone }}">
+                    <div class="col-sm-8">
+                        <input type="phone" class="form-control" id="phone" name="phone" value="{{ $user->phone }}">
 
-                    <div class="checkbox">
-                        <label>
-                            <input name="phone_visible"
-                                   type="checkbox" {{ ($user->phone_visible == 1 ? 'checked' : '') }}>
-                            Show to members
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input name="receive_sms"
-                                   type="checkbox" {{ ($user->receive_sms == 1 ? 'checked' : '') }}>
-                            Receive text messages
-                        </label>
+                        <div class="checkbox">
+                            <label>
+                                <input name="phone_visible"
+                                       type="checkbox" {{ ($user->phone_visible == 1 ? 'checked' : '') }}>
+                                Show to members
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input name="receive_sms"
+                                       type="checkbox" {{ ($user->receive_sms == 1 ? 'checked' : '') }}>
+                                Receive text messages
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
 
             <div class="form-group">
                 <label for="website" class="col-sm-4 control-label">Homepage</label>

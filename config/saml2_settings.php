@@ -37,7 +37,7 @@ return $settings = array(
     /**
      * Where to redirect after login if no other option was provided
      */
-    'loginRoute' => '/auth/utwente/post',
+    'loginRoute' => '/auth/edu/post',
 
 
     /**

@@ -13,7 +13,7 @@ class Alias extends Model
 
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed();
+        return $this->belongsTo('Proto\Models\User');
     }
 
 }

@@ -29,6 +29,6 @@ class SamlLoginEventHandler
     public function handle($event)
     {
         $remoteUser = $event->getSaml2User()->getAttributes();
-        Session::flash('utwente_sso_user', $remoteUser);
+        Session::flash('surfconext_sso_user', $remoteUser);
     }
 }

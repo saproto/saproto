@@ -13,8 +13,7 @@
     <form method="POST" action="{{ route('login::register') }}">
 
         <p>
-            Using this form you can register a new account on the S.A. Proto website. You can use this account to buy
-            tickets for public Proto events and to do certain other stuff.
+            Using this form you can register a new account on the S.A. Proto website.
         </p>
 
         <p style="font-weight: bold;">
@@ -33,8 +32,7 @@
                    required>
             <p class="help-block">
                 Your e-mail address will also be your username. Please enter a valid e-mail address as your password
-                will be sent to this e-mail address. You can configure authentication with your University of Twente
-                credentials later.
+                will be sent to this e-mail address.
             </p>
         </div>
 
@@ -57,43 +55,6 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label for="birthdate" class="control-label">Birthdate</label>
-                    <input type="text" class="form-control datetime-picker" id="birthdate" name="birthdate"
-                           placeholder="2011-04-20"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['birthdate'] : '') }}"
-                           required>
-                </div>
-                <div class="col-md-5">
-                    <label for="gender" class="control-label">Gender</label>
-                    <select id="gender" name="gender" class="form-control" required>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                        <option value="9">More complicated</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label for="nationality" class="control-label">Nationality</label>
-                    <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Dutch"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['nationality'] : '') }}"
-                           required>
-                </div>
-                <div class="col-md-5">
-                    <label for="phone" class="control-label">Phone</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="+31534894423"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['phone'] : '') }}"
-                           required>
-                </div>
-            </div>
-        </div>
-
         <hr>
 
         <div class="checkbox">
@@ -111,28 +72,7 @@
         @endsection
 
         @section('panel-footer')
-            <button type="submit" class="btn btn-success pull-right">COMPLETE REGISTRATION</button>
+            <button type="submit" class="btn btn-success pull-right">Create my account</button>
 
     </form>
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
-            },
-            format: 'YYYY-MM-DD'
-        });
-    </script>
-
 @endsection

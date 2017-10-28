@@ -13,7 +13,7 @@ use Auth;
 use Redirect;
 use Session;
 
-class UtwenteController extends Controller
+class SurfConextController extends Controller
 {
 
     /**
@@ -31,13 +31,13 @@ class UtwenteController extends Controller
 
         if ($request->wizard > 0) Session::flash("wizard", true);
 
-        Session::flash('link_utwente_to_user', $user);
+        Session::flash('link_edu_to_user', $user);
 
         if ($request->has('wizard')) {
             Session::flash('link_wizard', true);
         }
 
-        return Redirect::route('login::utwente');
+        return Redirect::route('login::edu');
     }
 
     /**
@@ -55,9 +55,10 @@ class UtwenteController extends Controller
         }
 
         $user->utwente_username = null;
+        $user->edu_username = null;
         $user->save();
 
-        $request->session()->flash('flash_message', 'The link with your University of Twente account has been deleted.');
+        $request->session()->flash('flash_message', 'The link with your university account has been deleted.');
         return Redirect::route('user::dashboard', ['id' => $user->id]);
     }
 }

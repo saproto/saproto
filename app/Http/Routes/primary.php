@@ -48,9 +48,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
         Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
+        Route::post('auth/register/surfconext', ['as' => 'register::surfconext', 'uses' => 'AuthController@postRegisterSurfConext']);
 
-        Route::get('auth/utwente', ['as' => 'utwente', 'uses' => 'AuthController@startUtwenteAuth']);
-        Route::get('auth/utwente/post', ['as' => 'utwentepost', 'uses' => 'AuthController@utwenteAuthPost']);
+        Route::get('auth/edu', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
+        Route::get('auth/edu/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
 
         Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
         Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
@@ -74,6 +75,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
             Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+        });
+
+        Route::group(['prefix' => 'memberprofile', 'as' => 'memberprofile::', 'middleware' => ['auth']], function () {
+            Route::get('complete', ['as' => 'complete', 'uses' => 'UserDashboardController@getCompleteProfile']);
+            Route::post('complete', ['as' => 'complete', 'uses' => 'UserDashboardController@postCompleteProfile']);
+            Route::get('clear', ['as' => 'clear', 'uses' => 'UserDashboardController@getClearProfile']);
+            Route::post('clear', ['as' => 'clear', 'uses' => 'UserDashboardController@postClearProfile']);
         });
 
         Route::group(['prefix' => 'admin', 'as' => 'admin::', 'middleware' => ['auth', 'permission:board']], function () {
@@ -142,10 +150,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to UT accounts
          */
-        Route::group(['prefix' => '{id}/utwente', 'as' => 'utwente::'], function () {
-            Route::get('delete', ['as' => 'delete', 'uses' => 'UtwenteController@destroy']);
-            Route::get('add', ['as' => 'add', 'uses' => 'UtwenteController@create']);
-            Route::post('add', ['as' => 'add', 'uses' => 'UtwenteController@store']);
+        Route::group(['prefix' => '{id}/edu', 'as' => 'edu::'], function () {
+            Route::get('delete', ['as' => 'delete', 'uses' => 'SurfConextController@destroy']);
+            Route::get('add', ['as' => 'add', 'uses' => 'SurfConextController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'SurfConextController@store']);
         });
 
         /*

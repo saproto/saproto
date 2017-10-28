@@ -11,8 +11,8 @@
         {!! csrf_field() !!}
 
         <p>
-            <a href="{{ route('login::utwente') }}" class="btn btn-success" style="width: 100%;">
-                Login with UTwente account
+            <a href="{{ route('login::edu') }}" class="btn btn-success" style="width: 100%;">
+                Login with university account
             </a>
         </p>
 

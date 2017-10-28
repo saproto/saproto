@@ -42,7 +42,7 @@
 
                                 @if($destination->destination)
                                     {{ $destination->destination }}
-                                @else
+                                @elseif($destination->user)
                                     <a href="{{ route('user::profile', ['id' => $destination->user->id]) }}">
                                         @if($destination->user->trashed())
                                             <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
@@ -50,6 +50,8 @@
                                             {{ $destination->user->name }}
                                         @endif
                                     </a>
+                                @else
+                                    <i>deleted user</i>
                                 @endif
 
                                 <a href="{{ route('alias::delete', ['idOrAlias' => $destination->id]) }}">

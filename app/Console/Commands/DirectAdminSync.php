@@ -139,7 +139,7 @@ class DirectAdminSync extends Command
         foreach ($aliases as $alias) {
             if ($alias->destination) {
                 $data[$alias->alias][] = $alias->destination;
-            } else {
+            } elseif ($alias->user) {
                 $data[$alias->alias][] = $alias->user->email;
             }
         }
