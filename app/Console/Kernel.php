@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         Commands\SpotifySync::class,
         Commands\SpotifyUpdate::class,
         Commands\TestIBANs::class,
+        Commands\ClearSessionTable::class,
     ];
 
     /**
@@ -42,6 +43,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('proto:dasync')->everyMinute();
         $schedule->command('proto:adsync')->everyTenMinutes();
+        $schedule->command('proto:clearsessions')->everyFiveMinutes();
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:flickrsync')->hourly();
