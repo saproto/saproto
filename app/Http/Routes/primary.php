@@ -685,7 +685,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
         Route::get('offline', ['as' => 'offline', 'uses' => 'ProtubeController@offline']);
+        Route::get('dashboard', ['as' => 'dashboard', 'middleware' => ['auth'], 'uses' => 'ProtubeController@dashboard']);
+        Route::get('togglehistory', ['as' => 'togglehistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@toggleHistory']);
+        Route::get('clearhistory', ['as' => 'clearhistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@clearHistory']);
+        Route::get('top', ['as' => 'top', 'uses' => 'ProtubeController@topVideos']);
         Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
+
         Route::group(['prefix' => 'radio', 'middleware' => ['permission:admin'], 'as' => 'radio::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'RadioController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);

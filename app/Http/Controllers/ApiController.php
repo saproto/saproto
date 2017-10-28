@@ -107,7 +107,9 @@ class ApiController extends Controller
 
         if ($token) {
             $user = $token->user()->first();
-            $playedVideo->user()->associate($user);
+            if ($user->keep_protube_history) {
+                $playedVideo->user()->associate($user);
+            }
         }
 
         $playedVideo->video_id = $request->video_id;
