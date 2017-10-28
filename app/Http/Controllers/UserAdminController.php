@@ -64,6 +64,7 @@ class UserAdminController extends Controller
     {
         $user = User::findOrFail($id);
         $user->name = $request->name;
+        $user->calling_name = $request->calling_name;
         $user->gender = $request->gender;
         $user->nationality = $request->nationality;
         if (strtotime($request->birthdate) !== false) {

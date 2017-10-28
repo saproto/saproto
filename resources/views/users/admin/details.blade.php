@@ -103,7 +103,7 @@
                     <label for="name" class="col-sm-4 control-label">Calling name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->calling_name }}"
+                        <input type="text" class="form-control" id="calling_name" name="calling_name" value="{{ $user->calling_name }}"
                                required>
                     </div>
                 </div>
