@@ -12,6 +12,12 @@
 
     <form method="POST" action="{{ route('login::register') }}">
 
+        <a href="{{ route('login::edu') }}" class="btn btn-success" style="width: 100%;">
+            Create an account with your university account
+        </a>
+
+        <hr>
+
         <p>
             Using this form you can register a new account on the S.A. Proto website.
         </p>
