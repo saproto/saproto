@@ -24,6 +24,7 @@ class Kernel extends HttpKernel
         \Proto\Http\Middleware\DevelopmentAccess::class,
         \Proto\Http\Middleware\EnforceTFA::class,
         \Proto\Http\Middleware\EnforceWizard::class,
+        \Proto\Http\Middleware\ApiMiddleware::class,
     ];
 
     /**

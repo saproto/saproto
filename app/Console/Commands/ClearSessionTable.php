@@ -39,7 +39,7 @@ class ClearSessionTable extends Command
      */
     public function handle()
     {
-        DB::table('sessions')->truncate();
+        DB::table('sessions')->where('last_activity', '<', strtotime('-1 week'))->delete();
         $this->info('Done!');
     }
 }
