@@ -9,6 +9,16 @@
             </div>
             <div class="modal-body">
 
+                @if($user->hasUnpaidOrderlines())
+                    <p style="color: red;">
+                        You have unpaid orderlines. You cannot revoke your authorization until you have settled all your
+                        purhcases with Proto. You can await the next withdrawal, or head over to your
+                        <a href="{{ route("omnomcom::orders::list") }}">purchase history</a> to pay manually via
+                        iDeal.
+                    </p>
+                    <hr>
+                @endif
+
                 <p>
                     This action will cancel your current automatic withdrawal authorization. Everything bought
                     up until now will still be withdrawn from this bank account, but no more purchases can be
@@ -28,7 +38,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Keep my authorization active
                     </button>
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-danger" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
                         Cancel my authorization
                     </button>
                 </form>

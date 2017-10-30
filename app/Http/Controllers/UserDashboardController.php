@@ -215,11 +215,7 @@ class UserDashboardController extends Controller
         }
 
         $user = Auth::user();
-        $user->birthdate = null;
-        $user->gender = null;
-        $user->nationality = null;
-        $user->phone = null;
-        $user->save();
+        $user->clearMemberProfile();
 
         Session::flash("flash_message", "Profile cleared.");
         return Redirect::route('user::dashboard');

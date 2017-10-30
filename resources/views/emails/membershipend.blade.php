@@ -8,9 +8,13 @@
 
     <p>
         I'm writing to let you know we have officially terminated your membership at Study Association Proto. Any
-        remaining purchases will be settled using the last withdrawal authorization on file. Your user account on the
-        website will remain active. If you wish to delete your account or any data associated with your account, please
-        head over to the dashboard.
+        remaining purchases will be settled using the last withdrawal authorization on file. We also removed the
+        information on your gender, nationality, birthdate and phone number from your user profile. Should wish to add
+        these again, please visit your dashboard.
+
+    <p>
+        Your user account on the website will remain active. If you wish to delete your account or any data associated
+        with your account, please head over to the dashboard.
     </p>
 
     <p>

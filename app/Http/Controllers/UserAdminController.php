@@ -231,6 +231,7 @@ class UserAdminController extends Controller
         $user = User::findOrFail($id);
 
         $user->member()->delete();
+        $user->clearMemberProfile();
 
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 

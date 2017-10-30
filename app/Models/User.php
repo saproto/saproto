@@ -383,4 +383,13 @@ class User extends Model implements AuthenticatableContract,
     {
         return $this->birthdate !== null && $this->gender !== null && $this->nationality !== null & $this->phone !== null;
     }
+
+    public function clearMemberProfile()
+    {
+        $this->nationality = null;
+        $this->birthdate = null;
+        $this->gender = null;
+        $this->phone = null;
+        $this->save();
+    }
 }
