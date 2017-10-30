@@ -130,4 +130,16 @@ return [
 
     'safe' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | HTML Input
+    |--------------------------------------------------------------------------
+    |
+    | This option specifies how to handle untrusted HTML input.
+    |
+    | Default: 'strip'
+    |
+    */
+    'html_input' => 'allow',
+
 ];
