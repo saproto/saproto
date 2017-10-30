@@ -319,7 +319,7 @@ class TicketController extends Controller
         }
 
         if (count($prepaid_tickets) > 0) {
-            Session::set('prepaid_tickets', $event->id);
+            Session::put('prepaid_tickets', $event->id);
             $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets);
 
             OrderLine::whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
