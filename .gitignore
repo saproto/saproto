@@ -29,3 +29,6 @@ composer.phar
 
 # Dammit, Mac users
 .DS_Store
+
+storage/oauth-private.key
+storage/oauth-public.key

@@ -2,8 +2,10 @@
 
 namespace Proto\Providers;
 
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+use Laravel\Passport\Passport;
+use Carbon;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,5 +27,9 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        Passport::routes();
+        Passport::tokensExpireIn(Carbon::now()->addDays(7));
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(14));
     }
 }

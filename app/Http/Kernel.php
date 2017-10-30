@@ -13,18 +13,24 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \Proto\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \Proto\Http\Middleware\VerifyCsrfToken::class,
+    ];
 
-        // Our own middleware
-        \Proto\Http\Middleware\EnforceHTTPS::class,
-        \Proto\Http\Middleware\DevelopmentAccess::class,
-        \Proto\Http\Middleware\EnforceTFA::class,
-        \Proto\Http\Middleware\EnforceWizard::class,
-        \Proto\Http\Middleware\ApiMiddleware::class,
+    protected $middlewareGroups = [
+        'web' => [
+            \Proto\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Proto\Http\Middleware\VerifyCsrfToken::class,
+            \Proto\Http\Middleware\EnforceHTTPS::class,
+            \Proto\Http\Middleware\DevelopmentAccess::class,
+            \Proto\Http\Middleware\EnforceTFA::class,
+            \Proto\Http\Middleware\EnforceWizard::class,
+            \Proto\Http\Middleware\ApiMiddleware::class,
+        ],
+        'api' => [
+            'throttle:60,1',
+        ]
     ];
 
     /**
@@ -33,12 +39,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Proto\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \Proto\Http\Middleware\RedirectIfAuthenticated::class,
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'member' => \Proto\Http\Middleware\Member::class,
         'utwente' => \Proto\Http\Middleware\Utwente::class,
         'forcedomain' => \Proto\Http\Middleware\ForceDomain::class,
         'saml' => \Proto\Http\Middleware\Saml::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

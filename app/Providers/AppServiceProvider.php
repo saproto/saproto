@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('website.navigation.navbar', function($view) {
+        view()->composer('website.navigation.navbar', function ($view) {
             $menuItems = MenuItem::where('parent', null)->orderBy('order')->get();
             $view->with('menuItems', $menuItems);
         });

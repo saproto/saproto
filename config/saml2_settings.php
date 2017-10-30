@@ -21,7 +21,7 @@ return $settings = array(
      * which middleware group to use for the saml routes
      * Laravel 5.2 will need a group which includes StartSession
      */
-    'routesMiddleware' => ['saml'],
+    'routesMiddleware' => ['saml', 'web'],
 
     /**
      * Indicates how the parameters will be
@@ -37,7 +37,7 @@ return $settings = array(
     /**
      * Where to redirect after login if no other option was provided
      */
-    'loginRoute' => '/auth/edu/post',
+    'loginRoute' => '/surfconext/post',
 
 
     /**

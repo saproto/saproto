@@ -20,28 +20,15 @@ use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
+use Laravel\Passport\HasApiTokens;
+
 /**
- * Proto\User
- *
- * @property integer $id
- * @property string $name
- * @property string $email
- * @property string $password
- * @property string $remember_token
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @property string $utwente_username
- * @property-read \Proto\Models\Member $member
- * @property-read \Proto\Models\Bank $bank
- * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Address[] $address
- * @property-read \Proto\Models\Utwente $utwente
- * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Study[] $study
- * @property-read \Illuminate\Database\Eloquent\Collection|\Proto\Models\Role[] $roles
+ * Class User
+ * @package Proto\Models
  */
-class User extends Model implements AuthenticatableContract,
-    CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes;
+    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes, HasApiTokens;
     protected $dates = ['deleted_at'];
 
     /**
@@ -58,7 +45,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at'];
 
     /**
      * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS

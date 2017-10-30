@@ -43,29 +43,6 @@ class ApiController extends Controller
 
     }
 
-    public function users(Request $request)
-    {
-
-        if (!Auth::check() || !Auth::user()->member) {
-            abort(403);
-        }
-
-        $users = User::all();
-        $data = array();
-
-        foreach ($users as $user) {
-            if ($request->has('term') && strpos(strtolower($user->name), strtolower($request->term)) === false) continue;
-
-            $member = new \stdClass();
-            $member->name = $user->name;
-            $member->id = $user->id;
-            $data[] = $member;
-        }
-
-        return $data;
-
-    }
-
     public function train(Request $request)
     {
 
@@ -135,6 +112,11 @@ class ApiController extends Controller
         } else {
             return json_encode($response);
         }
+    }
+
+    public function getUser()
+    {
+        return Auth::user();
     }
 
 }

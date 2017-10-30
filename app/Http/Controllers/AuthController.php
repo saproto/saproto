@@ -482,7 +482,7 @@ class AuthController extends Controller
             return Redirect::route('login::show');
         }
 
-        $remoteUser = Session::get('surfconext_sso_user');
+        $remoteUser = Session::pull('surfconext_sso_user');
         $remoteData = [
             'uid' => $remoteUser[config('saml2-attr.uid')][0],
             'surname' => $remoteUser[config('saml2-attr.surname')][0],
@@ -612,7 +612,7 @@ class AuthController extends Controller
      */
     private static function postLoginRedirect()
     {
-        return Redirect::route('homepage');
+        return Redirect::intended('homepage');
     }
 
     /**

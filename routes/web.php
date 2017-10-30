@@ -1,5 +1,12 @@
 <?php
 
+require 'minisites.php';
+
+/* Pass viewname to body class */
+View::composer('*', function ($view) {
+    View::share('viewName', $view->getName());
+});
+
 Route::group(['middleware' => ['forcedomain']], function () {
 
     /*
@@ -30,9 +37,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Routes related to authentication.
      */
     Route::group(['as' => 'login::'], function () {
-        Route::get('auth/login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
-        Route::post('auth/login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
-        Route::get('auth/logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
+        Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
+        Route::post('login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
+        Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getReset']);
         Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'AuthController@postReset']);
@@ -46,12 +53,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangeGet']);
         Route::post('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangePost']);
 
-        Route::get('auth/register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
-        Route::post('auth/register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
-        Route::post('auth/register/surfconext', ['as' => 'register::surfconext', 'uses' => 'AuthController@postRegisterSurfConext']);
+        Route::get('register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
+        Route::post('register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
+        Route::post('register/surfconext', ['as' => 'register::surfconext', 'uses' => 'AuthController@postRegisterSurfConext']);
 
-        Route::get('auth/edu', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
-        Route::get('auth/edu/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
+        Route::get('surfconext', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
+        Route::get('surfconext/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
 
         Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
         Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
@@ -702,54 +709,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'DisplayController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DisplayController@destroy']);
         });
-    });
-
-    /*
-     * Routes related to the API.
-     */
-    Route::group(['prefix' => 'api', 'as' => 'api::'], function () {
-
-        Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
-        Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
-
-        Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
-            Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
-            Route::get('', ['as' => 'list', 'uses' => 'EventController@apiEvents']);
-            Route::get('{id}', ['as' => 'get', 'uses' => 'EventController@apiEventsSingle']);
-            Route::get('{id}/members', ['as' => 'getMembers', 'uses' => 'EventController@apiEventsMembers']);
-        });
-
-        Route::group(['prefix' => 'slack', 'as' => 'slack::'], function () {
-            Route::get('count', ['as' => 'count', 'uses' => 'SlackController@getOnlineCount']);
-            Route::get('invite', ['as' => 'invite', 'middleware' => ['member'], 'uses' => 'SlackController@inviteUser']);
-        });
-
-        Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
-        Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
-        Route::get('timetable/boardroom', ['as' => 'timetable::boardroom', 'uses' => 'SmartXpScreenController@boardroomTimetable']);
-        Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
-        Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
-        Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
-        Route::get('users', ['as' => 'users', 'uses' => 'ApiController@users']);
-        Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
-
-        Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
-
-        Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
-            Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
-            Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
-            Route::get('radiostations', ['uses' => 'RadioController@api']);
-            Route::get('displays', ['uses' => 'DisplayController@api']);
-        });
-
-        Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
-
-        Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
-
-        Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
-
-        Route::get('export_data/{table}/{personal_key}', ['as' => 'export', 'uses' => 'ExportController@export']);
-
     });
 
     /*
