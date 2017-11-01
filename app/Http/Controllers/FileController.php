@@ -43,7 +43,7 @@ class FileController extends Controller
             'h' => $h
         ];
 
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
 
         return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
