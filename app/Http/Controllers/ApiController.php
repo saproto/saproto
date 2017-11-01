@@ -126,7 +126,8 @@ class ApiController extends Controller
             abort(403, 'You do not have access to this data. You need to be a member and have a valid UT account linked.');
         }
         $query = (isset($_GET['filter']) ? $_GET['filter'] : '|(false)');
-        return LdapController::searchUtwente(urldecode($query));
+        $url = config('app-proto.utwente-ldap-hook') . "?filter=" . $query;
+        return file_get_contents($url);
     }
 
 }
