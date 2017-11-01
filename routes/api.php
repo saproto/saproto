@@ -38,6 +38,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
 
+        Route::get('ldapproxy/{personal_key}', ['as' => 'ldapproxy', 'uses' => 'ApiController@ldapProxy']);
+
         Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
 
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);

@@ -119,4 +119,14 @@ class ApiController extends Controller
         return Auth::user();
     }
 
+    public function ldapProxy($personal_key)
+    {
+        $user = User::where('personal_key', $personal_key)->first();
+        if (!$user || !$user->member || !$user->utwente_username) {
+            abort(403, 'You do not have access to this data. You need to be a member and have a valid UT account linked.');
+        }
+        $query = (isset($_GET['query']) ? $_GET['query'] : '|(false)');
+        return LdapController::searchUtwente(urldecode($query));
+    }
+
 }
