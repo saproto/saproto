@@ -612,7 +612,7 @@ class AuthController extends Controller
      */
     private static function postLoginRedirect()
     {
-        return Redirect::intended('homepage');
+        return Redirect::intended('/');
     }
 
     /**
