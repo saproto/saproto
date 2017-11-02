@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Youtube;
+use Exception;
 
 class NarrowcastingItem extends Model
 {
@@ -21,7 +22,11 @@ class NarrowcastingItem extends Model
     public function video()
     {
         if ($this->youtube_id !== null) {
-            return Youtube::getVideoInfo($this->youtube_id);
+            try {
+                return Youtube::getVideoInfo($this->youtube_id);
+            } catch (Exception $e) {
+                return null;
+            }
         }
         return null;
     }

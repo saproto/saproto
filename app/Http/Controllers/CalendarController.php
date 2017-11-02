@@ -7,14 +7,24 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Exception;
+
 class CalendarController extends Controller
 {
     public static function returnGoogleCalendarEvents($google_calendar_id, $start, $end)
     {
 
-        $url = "https://www.googleapis.com/calendar/v3/calendars/" . $google_calendar_id . "/events?singleEvents=true&orderBy=startTime&key=" . config('app-proto.google-key-private') . "&timeMin=" . urlencode($start) . "&timeMax=" . urlencode($end) . "";
+        try {
 
-        $data = json_decode(str_replace("$", "", file_get_contents($url)));
+            $url = "https://www.googleapis.com/calendar/v3/calendars/" . $google_calendar_id . "/events?singleEvents=true&orderBy=startTime&key=" . config('app-proto.google-key-private') . "&timeMin=" . urlencode($start) . "&timeMax=" . urlencode($end) . "";
+
+            $data = json_decode(str_replace("$", "", file_get_contents($url)));
+
+        } catch (Exception $e) {
+
+            return [];
+
+        }
 
         $results = [];
 
