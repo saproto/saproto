@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DateInterval;
 
 use Youtube;
 use Exception;
@@ -29,6 +30,15 @@ class NarrowcastingItem extends Model
             }
         }
         return null;
+    }
+
+    public function videoDuration()
+    {
+        if ($this->video()) {
+            return date_create('@0')->add(new DateInterval($this->video()->contentDetails->duration))->getTimestamp();
+        } else {
+            return 0;
+        }
     }
 
     protected $guarded = ['id'];

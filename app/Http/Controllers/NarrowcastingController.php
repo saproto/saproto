@@ -47,7 +47,7 @@ class NarrowcastingController extends Controller
             if ($item->video()) {
                 $data[] = [
                     // Because this is the fucking only shortest way to convert an interval to seconds. Wtf.
-                    'slide_duration' => date_create('@0')->add(new DateInterval($item->video()->contentDetails->duration))->getTimestamp(),
+                    'slide_duration' => $item->videoDuration(),
                     'video' => $item->video()->id
                 ];
             } elseif ($item->image) {
@@ -99,7 +99,7 @@ class NarrowcastingController extends Controller
 
         }
 
-        if ($request->has('youtube_id')) {
+        if ($request->has('youtube_id') && strlen($request->get('youtube_id')) > 0) {
 
             $video = Youtube::getVideoInfo($request->get('youtube_id'));
 
@@ -164,7 +164,7 @@ class NarrowcastingController extends Controller
             $narrowcasting->image()->associate($file);
         }
 
-        if ($request->has('youtube_id')) {
+        if ($request->has('youtube_id') && strlen($request->get('youtube_id')) > 0) {
 
             $video = Youtube::getVideoInfo($request->get('youtube_id'));
 

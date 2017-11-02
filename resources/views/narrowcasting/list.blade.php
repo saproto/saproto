@@ -31,11 +31,25 @@
                 <tr {!! ($message->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
 
                     <td>{{ $message->id }}</td>
-                    <td>{!! $message->video() ? '<i class="fa fa-youtube-play" aria-hidden="true"></i>' : '<i class="fa fa-picture-o" aria-hidden="true"></i>' !!}</td>
+                    <td>
+                        @if($message->video())
+                            <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                        @elseif($message->image)
+                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                        @endif
+                    </td>
                     <td>{{ $message->name }}</td>
                     <td>{{ date('l F j Y, H:i', $message->campaign_start) }}</td>
                     <td>{{ date('l F j Y, H:i', $message->campaign_end) }}</td>
-                    <td>{{ $message->slide_duration }} seconds</td>
+                    <td>
+                        @if($message->video())
+                            {{ $message->videoDuration() }} seconds
+                        @elseif($message->image)
+                            {{ $message->slide_duration }} seconds
+                        @else
+                            <p style="color: red;">no content</p>
+                        @endif
+                    </td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}" role="button">
