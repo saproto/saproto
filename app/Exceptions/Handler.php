@@ -103,48 +103,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $e)
     {
 
-        $reported = true;
-        $message = "Something is wrong with the website.";
-        $statuscode = 500;
-
-        if ($e instanceof HttpException) {
-            $reported = false;
-            $message = $e->getMessage();
-            $statuscode = $e->getStatusCode();
-        } elseif ($e instanceof NotFoundHttpException) {
-            $reported = false;
-            $message = "The page you requested does not exist.";
-            $statuscode = 404;
-        } elseif ($e instanceof ModelNotFoundException) {
-            $reported = false;
-            $message = "You requested an database entry that does not exist.";
-            $statuscode = 404;
-        } elseif ($e instanceof NotReadableException) {
-            $reported = false;
-            $message = "Unable to read the requested file from disk.";
-            $statuscode = 500;
-        } elseif ($e instanceof TokenMismatchException) {
-            $reported = false;
-            $message = "Token does not match. O behave, you cross-site scripter!";
-            $statuscode = 403;
-        }
-
-        if ($statuscode == 503) {
-            return response()->view('errors.503');
-        }
-
-        if (App::environment('production')) {
-
-            return response()->view('errors.generic', [
-                'reported' => $reported,
-                'message' => $message,
-                'statuscode' => $statuscode,
-                'sentryID' => $this->sentryID
-            ], $statuscode);
-
-        } else {
-            return parent::render($request, $e);
-        }
+        return parent::render($request, $e);
 
     }
 

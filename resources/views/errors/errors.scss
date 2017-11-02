@@ -1,0 +1,37 @@
+#error {
+
+  &__header {
+    margin-top: 100px;
+    text-align: center;
+  }
+
+  &__container {
+    margin-top: 25px;
+    clear: both;
+    text-align: center;
+
+    .form-control {
+      background-color: #fafafa;
+      border-color: #fafafa;
+      color: #000;
+    }
+
+    .btn-default {
+      background-color: #222;
+      border-color: #222;
+      color: #fff;
+    }
+
+  }
+
+  &__header, &__container {
+    color: #fff;
+  }
+
+  &__logo {
+    margin-top: 100px;
+    margin-bottom: 25px;
+    width: 50%;
+  }
+
+}

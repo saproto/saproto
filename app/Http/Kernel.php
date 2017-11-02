@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Proto\Http\Middleware\Authenticate::class,
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'member' => \Proto\Http\Middleware\Member::class,
         'utwente' => \Proto\Http\Middleware\Utwente::class,
         'forcedomain' => \Proto\Http\Middleware\ForceDomain::class,

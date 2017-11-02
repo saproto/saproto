@@ -24,7 +24,7 @@ class MemberCardController extends Controller
         $user = User::findOrFail($id);
 
         if (!$user->member) {
-            abort(500, "Only members can have a member card printed.");
+            abort(403, "Only members can have a member card printed.");
         }
 
         $card = PDF::loadView('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]);
