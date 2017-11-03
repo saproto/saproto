@@ -45,18 +45,37 @@ class CalendarController extends Controller
 
             if (property_exists($entry, 'description')) {
                 preg_match("/Type: (.*)/", $entry->description, $type);
+                preg_match('/Student set\(s\):.*(CRE MOD[0-9]{2}|HMI M [0-9]{1}[a-zA-Z]{1}).*/', $entry->description, $study);
             } else {
                 $type = null;
+                $study = null;
+            }
+
+            $year = null;
+            $studyShort = null;
+            if ($study) {
+                $study = $study[1];
+                if (substr($study, 0, 3) == "CRE") {
+                    $year = ceil(intval(str_replace("CRE MOD", "", $study)) / 4);
+                    $study = "Creative Technology";
+                    $studyShort = "CreaTe";
+                } elseif (substr($study, 0, 3) == "HMI") {
+                    $study = "Human Media Interaction";
+                    $studyShort = "HMI";
+                }
             }
 
             $results[] = array(
-                'title' => $name,
-                'place' => isset($entry->location) ? $entry->location : "somewhere",
+                'title' => trim($name),
+                'place' => isset($entry->location) ? trim($entry->location) : "Unknown",
                 'start' => strtotime($starttime),
                 'end' => strtotime($endtime),
                 'type' => ($type ? $type[1] : null),
+                'year' => $year,
+                'study' => $study,
+                'studyShort' => $studyShort,
                 'over' => (strtotime($endtime) < time() ? true : false),
-                'current' => (strtotime($starttime) < time() && strtotime($endtime) > time() ? true : false)
+                'current' => (strtotime($starttime) < time() && strtotime($endtime) > time() ? true : false),
             );
         }
 

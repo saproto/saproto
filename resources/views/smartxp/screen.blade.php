@@ -212,7 +212,7 @@
 
                     <div class="box-header">
 
-                        CreaTe Timetable
+                        Timetable
 
                     </div>
 
@@ -311,7 +311,7 @@
 
                     <div class="box-header">
 
-                        Upcoming Activities
+                        Activities
 
                     </div>
 
@@ -372,7 +372,13 @@
                             var start = moment.unix(data[i].start);
                             var end = moment.unix(data[i].end);
                             var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                            $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' (' + data[i].type + ') @ ' + data[i].place + '<br><strong>' + data[i].title + '</strong></div>');
+                            var title = (data[i].studyShort ? '<span style="color: #c1ff00;">' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) + data[i].title;
+                            var displayTime = time + ' @ ' + data[i].place + ' (' + data[i].type + ')';
+                            $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : "") + '">' +
+                                '<strong>' + title + '</strong>' +
+                                '<br>' +
+                                displayTime + '' +
+                                '</div>');
                             count++;
                         }
                     }
