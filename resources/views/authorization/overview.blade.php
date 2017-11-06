@@ -67,7 +67,7 @@
 
                             @foreach($role->users as $user)
                                 <span class="list-group-item">
-                                    {{ $user->name }}
+                                    {{ $user->name }} {!! $user->signed_nda ? '<span class="label label-success">NDA</span>' : '' !!}
                                     <span class="pull-right">
                                         <a href="{{ route("authorization::revoke", ['id' => $role->id, 'user' => $user->id]) }}">
                                            X
@@ -79,7 +79,9 @@
 
                         <select class="form-control" name="user">
                             @foreach(User::orderBy('name', 'asc')->get() as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
+                                <option value="{{ $user->id }}">
+                                    {{ $user->name }} (#{{ $user->id }}{{ $user->signed_nda ? ', NDA' : '' }})
+                                </option>
                             @endforeach
                         </select>
                         <br>

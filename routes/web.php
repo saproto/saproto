@@ -97,6 +97,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
             Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePage']);
             Route::post('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePost']);
+
+            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
         });
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);

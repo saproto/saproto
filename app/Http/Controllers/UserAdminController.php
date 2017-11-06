@@ -240,6 +240,19 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
+    public function toggleNda($id)
+    {
+        if (!Auth::user()->can('sysadmin')) {
+            abort(403, "Only system administrators can do this.");
+        }
+        $user = User::findOrFail($id);
+        $user->signed_nda = !$user->signed_nda;
+        $user->save();
+
+        Session::flash("flash_message", "Toggled NDA status of " . $user->name . ". Please verify if it is correct.");
+        return redirect()->back();
+    }
+
     public function showForm(Request $request, $id)
     {
 

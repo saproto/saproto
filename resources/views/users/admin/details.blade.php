@@ -12,7 +12,14 @@
 
             <ul class="list-group">
 
-                <!-- Quicklinks //-->
+                @if(Auth::user()->can('sysadmin'))
+                    <a class="list-group-item list-group-item-{{ $user->signed_nda ? 'success' : 'warning' }}"
+                       href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
+                        User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
+                    </a>
+                @endif
+
+            <!-- Quicklinks //-->
                 <li class="list-group-item list-group-item-success">Quicklinks</li>
                 <a class="list-group-item" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
                     Dashboard
@@ -103,7 +110,8 @@
                     <label for="name" class="col-sm-4 control-label">Calling name</label>
 
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="calling_name" name="calling_name" value="{{ $user->calling_name }}"
+                        <input type="text" class="form-control" id="calling_name" name="calling_name"
+                               value="{{ $user->calling_name }}"
                                required>
                     </div>
                 </div>

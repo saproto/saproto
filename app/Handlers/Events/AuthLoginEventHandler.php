@@ -42,7 +42,7 @@ class AuthLoginEventHandler
         $tipcie = Committee::find(config('proto.committee')['tipcie']);
         $drafters = Committee::find(config('proto.committee')['drafters']);
 
-        if ($user->isInCommittee($rootcommittee)) {
+        if ($user->isInCommittee($rootcommittee) && $user->signed_nda) {
             if (!$user->hasRole('protube')) {
                 $user->attachRole(Role::where('name', '=', 'protube')->first());
             }
@@ -52,7 +52,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($boardcommittee)) {
+        if ($user->isInCommittee($boardcommittee) && $user->signed_nda) {
             if (!$user->hasRole('board')) {
                 $user->attachRole(Role::where('name', '=', 'board')->first());
             }
@@ -62,7 +62,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($omnomcom)) {
+        if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
             if (!$user->hasRole('omnomcom')) {
                 $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
             }
@@ -72,7 +72,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($tipcie)) {
+        if ($user->isInCommittee($tipcie) && $user->signed_nda) {
             if (!$user->hasRole('tipcie')) {
                 $user->attachRole(Role::where('name', '=', 'tipcie')->first());
             }
