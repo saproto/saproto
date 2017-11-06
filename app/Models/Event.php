@@ -118,14 +118,16 @@ class Event extends Model
 
     public function returnAllUsers()
     {
-        $users = [];
+        $users = collect([]);
         foreach ($this->tickets as $ticket) {
-            $users = array_merge($users, $ticket->getUsers()->pluck('id')->toArray());
+            $users = $users->merge($ticket->getUsers());
         }
         if ($this->activity) {
-            $users = array_merge($users, $this->activity->allUsers->pluck('id')->toArray());
+            $users = $users->merge($this->activity->allUsers);
         }
-        return User::whereIn('id', array_unique($users))->get()->sortBy('name');
+        return $users->sort(function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
     }
 
     public function getAllEmails()
@@ -134,5 +136,10 @@ class Event extends Model
     }
 
     protected $guarded = ['id'];
+
+    public function shouldShowDietInfo()
+    {
+        return $this->involves_food && $this->end > strtotime('-1 week');
+    }
 
 }

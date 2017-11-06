@@ -168,6 +168,20 @@ class ParticipationController extends Controller
 
     }
 
+    public function togglePresence($participation_id, Request $request)
+    {
+        $participation = ActivityParticipation::findOrFail($participation_id);
+
+        if (!$participation->activity->event->isEventAdmin(Auth::user())) {
+            abort(403, "You are not an organizer for this event.");
+        }
+
+        $participation->is_present = !$participation->is_present;
+        $participation->save();
+
+        return Redirect::back();
+    }
+
     public static function processBackupQueue(Activity $activity)
     {
 

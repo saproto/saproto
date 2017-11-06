@@ -326,6 +326,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
 
+        // Related to presence
+        Route::get('togglepresence/{id}', ['as' => 'togglepresence', 'middleware' => ['auth'], 'uses' => 'ParticipationController@togglePresence']);
+
         // Related to participation
         Route::get('participate/{id}', ['as' => 'addparticipation', 'middleware' => ['member'], 'uses' => 'ParticipationController@create']);
         Route::get('unparticipate/{participation_id}', ['as' => 'deleteparticipation', 'uses' => 'ParticipationController@destroy']);

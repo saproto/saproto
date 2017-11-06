@@ -23,7 +23,7 @@
 
     <hr>
 
-    @if ($event->involves_food && $event->end > strtotime('-1 week'))
+    @if ($event->shouldShowDietInfo())
 
         <p style="text-align: center;">
             Diet and alergy information for Event.
@@ -95,11 +95,14 @@
                             <tr>
                                 <th>#</th>
                                 <th>User</th>
-                                <th>Price</th>
-                                <th>Date of Purchase</th>
+                                @if($event->shouldShowDietInfo())
+                                    <th>Diet</th>
+                                @endif
+                                <th class="dontprint">Price</th>
+                                <th class="dontprint">Date of Purchase</th>
                                 <th>Ticket Scanned</th>
                                 @if (Auth::user()->can('board'))
-                                    <th>Delete Ticket</th>
+                                    <th class="dontprint">Delete Ticket</th>
                                 @endif
                             </tr>
                             </thead>
@@ -107,13 +110,38 @@
                             @foreach($ticket->purchases as $purchase)
                                 <tr>
                                     <td>{{ $purchase->id }}</td>
-                                    <td>{{ $purchase->user->name }}</td>
-                                    <td>&euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
-                                    <td>{{ $purchase->created_at }}</td>
+                                    <td>
+                                        {{ $purchase->user->name }}
+                                        @if($purchase->user->age() >= 18)
+                                            <span class="label label-success">
+                                                <i class="fa fa-check" aria-hidden="true"></i> 18+
+                                            </span>
+                                        @else
+                                            <span class="label label-danger">
+                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 18-
+                                            </span>
+                                        @endif
+                                    </td>
+                                    @if($event->shouldShowDietInfo())
+                                        <td>
+                                            @if ($purchase->user->hasDiet())
+                                                <span class="label label-danger">
+                                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> yes
+                                                </span>
+                                            @else
+                                                <span class="label label-success">
+                                                    <i class="fa fa-check" aria-hidden="true"></i> no
+                                                </span>
+                                            @endif
+                                        </td>
+                                    @endif
+                                    <td class="dontprint">
+                                        &euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
+                                    <td class="dontprint">{{ $purchase->created_at }}</td>
                                     <td class="events__scanned">
                                         @if ($purchase->scanned === null)
-                                            <a data-id="{{ $purchase->barcode }}" class="events__scannedButton"
-                                               href="#">
+                                            <a data-id="{{ $purchase->barcode }}"
+                                               class="events__scannedButton dontprint" href="#">
                                                 Scan Manually
                                             </a>
                                         @else
@@ -124,7 +152,7 @@
                                         @endif
                                     </td>
                                     @if (Auth::user()->can('board'))
-                                        <td>
+                                        <td class="dontprint">
                                             @if($purchase->orderline->isPayed())
                                                 Already Paid
                                             @elseif($purchase->scanned)
@@ -194,4 +222,19 @@
 
     </script>
 
+@endsection
+
+@section('stylesheet')
+    @parent
+    <style type="text/css">
+        @media print {
+            a[href]:after {
+                content: none !important;
+            }
+
+            #footer, #header, p, textarea, hr, .dontprint {
+                display: none !important;
+            }
+        }
+    </style>
 @endsection

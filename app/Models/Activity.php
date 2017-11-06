@@ -39,7 +39,7 @@ class Activity extends Validatable
      */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withTimestamps();
     }
 
     /**
@@ -47,7 +47,17 @@ class Activity extends Validatable
      */
     public function allUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->where('backup', false)->withPivot('id')->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->where('backup', false)->withTimestamps();
+    }
+
+    /**
+     * @return mixed A sorted list of participants, not as a relation!
+     */
+    public function allUsersSorted()
+    {
+        return $this->allUsers->sort(function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
     }
 
     /**
