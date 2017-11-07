@@ -43,7 +43,7 @@
 
                         </p>
 
-                        @if($event->activity)
+                        @if($event->activity && $event->activity->participants != 0)
 
                             <p>
                                 <strong>Sign-up required!</strong><br>
@@ -62,6 +62,12 @@
 
                             </p>
 
+                        @else
+
+                            <p>
+                                <i>No sign-up required.</i>
+                            </p>
+
                         @endif
 
                         <p>
@@ -69,6 +75,14 @@
                                 Learn more! >>
                             </a>
                         </p>
+
+                        @if($event->is_external)
+
+                            <p>
+                                <i><sub>This activity is not organized by S.A. Proto.</sub></i>
+                            </p>
+
+                        @endif
 
                     </td>
 
