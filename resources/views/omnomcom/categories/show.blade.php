@@ -28,7 +28,7 @@
 
                     @foreach($category->products() as $product)
 
-                        <div class="col-md-4 product__account">
+                        <div class="col-md-4 col-xs-12 product__account">
 
                             <div class="product__account__image">
 
