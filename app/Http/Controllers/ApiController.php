@@ -102,7 +102,7 @@ class ApiController extends Controller
         $response = new \stdClass();
 
         if (Auth::check()) {
-            $response->token = Session::get('token');
+            $response->token = Auth::user()->getToken()->token;
         } else {
             $response->token = 0;
         }

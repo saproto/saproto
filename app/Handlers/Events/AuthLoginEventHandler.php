@@ -4,11 +4,8 @@ namespace Proto\Handlers\Events;
 
 use Proto\Models\Committee;
 use Proto\Models\Role;
-use Proto\Models\User;
-use Proto\Models\Token;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Session;
 
 class AuthLoginEventHandler
 {
@@ -31,9 +28,7 @@ class AuthLoginEventHandler
     public function handle($event)
     {
         $user = $event->user;
-        $token = new Token();
-        $token->generate($user);
-        Session::put('token', $token->token);
+        $user->generateNewToken();
 
         // We will grant the user all roles to which he is entitled!
         $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();

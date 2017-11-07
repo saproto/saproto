@@ -226,7 +226,7 @@
 
     <script>
         var server = "{!! config('herbert.server') !!}";
-        var token = "{!! Session::get('token') !!}";
+        var token = "{!! Auth::user()->getToken()->token !!}";
 
         $(document).ready(function () {
             var errorElement = $("body");
