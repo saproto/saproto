@@ -29,7 +29,7 @@ class Withdrawal extends Model
 
         foreach ($data as $entry) {
             $response[$entry->user_id] = (object)[
-                'user' => User::findOrFail($entry->user_id),
+                'user' => User::withTrashed()->findOrFail($entry->user_id),
                 'count' => $entry->orderline_count,
                 'sum' => $entry->total_price
             ];
