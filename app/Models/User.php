@@ -380,23 +380,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
-    public function token()
-    {
-        return $this->hasOne('Proto\Models\Token');
-    }
-
     public function getToken()
     {
-        if ($this->token === null) {
-            return $this->generateNewToken();
+        if (count($this->tokens) > 0) {
+            $token = $this->tokens->last();
         } else {
-            return $this->token;
+            $token = $this->generateNewToken();
         }
+        $token->touch();
+        return $token;
     }
 
     public function generateNewToken()
     {
-        Token::where('user_id', $this->id)->delete();
         $token = new Token();
         $token->generate($this);
         return $token;

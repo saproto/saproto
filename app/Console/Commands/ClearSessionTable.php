@@ -5,6 +5,7 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 
 use DB;
+use Proto\Models\Token;
 
 class ClearSessionTable extends Command
 {
@@ -40,6 +41,7 @@ class ClearSessionTable extends Command
     public function handle()
     {
         DB::table('sessions')->where('last_activity', '<', strtotime('-1 week'))->delete();
+        Token::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 week')))->delete();
         $this->info('Done!');
     }
 }
