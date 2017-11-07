@@ -108,6 +108,7 @@
                     <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
                     <button type="button" class="btn btn-default soundboard" rel="sad-trombone">Fail</button>
                     <button type="button" class="btn btn-default soundboard" rel="gay">Hah... Gay!</button>
+                    <button type="button" class="btn btn-default soundboard" rel="okaybye">Okay bye. :(</button>
                     <button type="button" class="btn btn-default soundboard" rel="zoenen">Zoenen!</button>
                     <button type="button" class="btn btn-default soundboard" rel="tongen">Lekker tongen</button>
                     <button type="button" class="btn btn-default soundboard" rel="raar">RAARRR</button>
