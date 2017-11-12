@@ -13,6 +13,7 @@ use Proto\Models\Committee;
 use Proto\Http\Controllers\SlackController;
 
 use Adldap\Exceptions\Auth\BindException;
+use ErrorException;
 
 /**
  * TODO
@@ -69,7 +70,7 @@ class ActiveDirectorySync extends Command
             $this->syncCommitteeMembers($provider);
 
             $this->info("Done!");
-        } catch (BindException $e) {
+        } catch (BindException | ErrorException $e) {
             $this->error('Could not bind with LDAP server!');
             SlackController::sendNotification('[console *proto:adsync*] Could not bind with LDAP Server.');
         }
