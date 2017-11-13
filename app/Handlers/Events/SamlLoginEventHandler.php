@@ -30,5 +30,6 @@ class SamlLoginEventHandler
     {
         $remoteUser = $event->getSaml2User()->getAttributes();
         Session::flash('surfconext_sso_user', $remoteUser);
+        Session::reflash();
     }
 }
