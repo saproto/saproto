@@ -103,6 +103,7 @@
                     <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
                     <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>
                     <button type="button" class="btn btn-default soundboard" rel="mickey">Mickey Mouse</button>
+                    <button type="button" class="btn btn-default soundboard" rel="chapeau">Chapeau</button>
                     <button type="button" class="btn btn-default soundboard" rel="erg">Echt Erg!</button>
                     <button type="button" class="btn btn-default soundboard" rel="prachtig">Omdat Prachtig!</button>
                     <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
