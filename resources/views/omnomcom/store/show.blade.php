@@ -872,6 +872,12 @@
 
     function purchase(card) {
 
+        if (modal_status != 'purchase') {
+            return;
+        }
+
+        modal_status = 'purchase_pending';
+
         $.ajax({
             url: '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}',
             method: 'post',
@@ -889,8 +895,10 @@
             success: function (data) {
                 if (data == "OK") {
                     finishPurchase();
+                    modal_status = null;
                 } else {
                     $("#purchase-modal .modal-status").html(data);
+                    modal_status = 'purchase';
                 }
             },
             error: function (xhr, status) {
@@ -899,6 +907,7 @@
                 } else {
                     $("#purchase-modal .modal-status").html("There is something wrong with the website, call someone to help!");
                 }
+                modal_status = 'purchase';
             }
         })
         ;
