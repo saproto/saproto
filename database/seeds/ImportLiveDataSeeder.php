@@ -22,9 +22,9 @@ class ImportLiveDataSeeder extends Seeder
         unset($userData['member']);
         unset($userData['created_at']);
         unset($memberData['created_at']);
+        $userData['id'] = 1;
 
         $newUser = User::create($userData);
-        $newUser->id = 1;
         $newUser->save();
 
         $newPassword = str_random(16);
