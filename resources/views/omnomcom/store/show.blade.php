@@ -732,12 +732,6 @@
 
         <div class="qrAuth">Loading QR authentication...</div>
 
-        @if($store->cash_allowed)
-            <hr>
-
-            <div class="modal-input modal-toggle" id="purchase-cash">Pay with Cash</div>
-
-        @endif
         <hr>
 
         <span class="modal-status">
@@ -758,6 +752,8 @@
     var purchase_processing = null;
 
     var rfid_link_card = null;
+
+    var cash = false;
 
     /*
      Loading the necessary data.
@@ -885,7 +881,7 @@
                     username: $("#purchase-username").val(),
                     password: $("#purchase-password").val()
                 }),
-                cash: {!! ($store->cash_allowed ? "$('#purchase-cash').hasClass('modal-toggle-true')" : "false") !!},
+                cash: {!! ($store->cash_allowed ? "cash" : "false") !!},
                 cart: cart
             },
             dataType: 'html',
@@ -1113,6 +1109,9 @@
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
         doQrAuth($("#purchase-modal .qrAuth"), "Payment for purchases in Omnomcom", purchase);
+
+        $("#purchase-modal h1").html("Complete your purchase");
+        cash = false;
         modal_status = 'purchase';
     });
 
@@ -1120,6 +1119,10 @@
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
         $("#purchase-cash").addClass('modal-toggle-true');
+        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for purchases in Omnomcom", purchase);
+
+        $("#purchase-modal h1").html("Complete purchase as cashier");
+        cash = true;
         modal_status = 'purchase';
     });
 
