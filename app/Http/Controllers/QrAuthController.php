@@ -66,10 +66,6 @@ class QrAuthController extends Controller
         }
     }
 
-    public function form() {
-        //
-    }
-
     public function getAuthUser($authToken) {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $authToken)->first();
 

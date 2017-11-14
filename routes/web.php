@@ -775,7 +775,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('isApproved', ['as' => 'approved', 'uses' => 'QrAuthController@isApproved']);
 
         Route::group(['middleware' => ['auth']], function() {
-            Route::get('', ['as' => 'form', 'uses' => 'QrAuthController@form']);
             Route::get('{code}', ['as' => 'dialog', 'uses' => 'QrAuthController@showDialog']);
             Route::get('{code}/approve', ['as' => 'approve', 'uses' => 'QrAuthController@approve']);
         });
