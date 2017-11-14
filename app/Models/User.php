@@ -309,7 +309,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function withdrawals()
     {
         $withdrawals = [];
-        foreach (Withdrawal::all() as $withdrawal) {
+        foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
             if ($withdrawal->orderlinesForUser($this)->count() > 0) {
                 $withdrawals[] = $withdrawal;
             }
