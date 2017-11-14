@@ -507,7 +507,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
-    /**
+    /*
      * Routes related to the Quote Corner.
      */
     Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
@@ -517,7 +517,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
     });
 
-    /**
+    /*
      * Routes related to the OmNomCom.
      */
     Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
@@ -612,7 +612,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
-    /**
+    /*
      * Routes related to webhooks.
      */
     Route::group(['prefix' => 'webhook', 'as' => 'webhook::'], function () {
@@ -723,7 +723,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('calendar', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
     });
 
-    /**
+    /*
      * Routes related to the Achievement system.
      */
     Route::group(['prefix' => 'achievement', 'as' => 'achievement::'], function () {
@@ -742,7 +742,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('gallery', ['as' => 'gallery', 'uses' => 'AchievementController@gallery']);
     });
 
-    /**
+    /*
      * Routes related to the welcome message system.
      */
     Route::group(['prefix' => 'welcomeMessages', 'middleware' => ['auth', 'permission:board'], 'as' => 'welcomeMessages::'], function () {
@@ -751,7 +751,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WelcomeController@destroy']);
     });
 
-    /**
+    /*
      * Tempadmin
      */
     Route::group(['prefix' => 'tempadmin', 'as' => 'tempadmin::', 'middleware' => ['auth', 'permission:board']], function () {
@@ -763,6 +763,23 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('add', ['as' => 'add', 'uses' => 'TempAdminController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'TempAdminController@store']);
         Route::get('', ['as' => 'index', 'uses' => 'TempAdminController@index']);
+    });
+
+    /*
+     * QR Auth
+     */
+    Route::group(['prefix' => 'qr', 'as' => 'qr::'], function() {
+
+        Route::get('code/{code}', ['as' => 'code', 'uses' => 'QrAuthController@showCode']);
+        Route::post('generate', ['as' => 'generate', 'uses' => 'QrAuthController@generateRequest']);
+        Route::get('isApproved', ['as' => 'approved', 'uses' => 'QrAuthController@isApproved']);
+
+        Route::group(['middleware' => ['auth']], function() {
+            Route::get('', ['as' => 'form', 'uses' => 'QrAuthController@form']);
+            Route::get('{code}', ['as' => 'dialog', 'uses' => 'QrAuthController@showDialog']);
+            Route::get('{code}/approve', ['as' => 'approve', 'uses' => 'QrAuthController@approve']);
+        });
+
     });
 
 });

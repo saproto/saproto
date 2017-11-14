@@ -477,6 +477,18 @@
             margin: 40px 0;
         }
 
+        .modal .qrAuth {
+            /*background-color: #eeeeee;*/
+            text-align: center;
+            color: #eeeeee;
+            font-size: 20px;
+        }
+
+        .modal .qrAuth img {
+            background-color: #eeeeee;
+            padding: 15px;
+        }
+
     </style>
 
     <style type="text/css">
@@ -691,17 +703,7 @@
 
     <div id="rfid-modal" class="modal inactive">
 
-        <h1>Link an RFID card to your account.</h1>
-
-        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-username"
-               type="text" placeholder="Proto username">
-        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="rfid-password"
-               type="password"
-               placeholder="Proto password">
-
-        <span class="modal-status">
-            First enter your <strong>Proto</strong> username and password, then present an RFID card.
-        </span>
+        <h1>Present your RFID card</h1>
 
     </div>
 
@@ -726,23 +728,20 @@
 
     <div id="purchase-modal" class="modal inactive">
 
-        <h1>Complete your purchase.</h1>
+        <h1>Complete your purchase</h1>
 
-        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-username"
-               type="text"
-               placeholder="Proto username">
-        <input class="modal-input with-keyboard" data-osk-options="disableReturn disableTab" id="purchase-password"
-               type="password"
-               placeholder="Proto password">
+        <div class="qrAuth">Loading QR authentication...</div>
 
-        <div class="modal-input modal-button" id="purchase-button">Complete order</div>
         @if($store->cash_allowed)
+            <hr>
+
             <div class="modal-input modal-toggle" id="purchase-cash">Pay with Cash</div>
+
         @endif
         <hr>
 
         <span class="modal-status">
-            Enter your <strong>Proto</strong> credentials above, or present an RFID card.
+            Authenticate using the QR code or present an RFID card.
         </span>
 
     </div>
@@ -755,13 +754,10 @@
 
 <script type="text/javascript">
 
-    $('.with-keyboard').onScreenKeyboard({
-        'topPosition': '50%',
-        'leftPosition': '25%'
-    });
-
     var modal_status = null;
     var purchase_processing = null;
+
+    var rfid_link_card = null;
 
     /*
      Loading the necessary data.
@@ -863,7 +859,7 @@
     $("#purchase-button").on("click", function () {
 
         $("#rfid-modal .modal-status").html("<span style='color: orange;'>Working on your purchase...<span>");
-        purchase(null);
+        purchase(null, 'account');
 
     });
 
@@ -871,7 +867,7 @@
      Purchase logic.
      */
 
-    function purchase(card) {
+    function purchase(credential, type) {
 
         if (purchase_processing != null) {
             return;
@@ -884,8 +880,8 @@
             method: 'post',
             data: {
                 _token: '{{ csrf_token() }}',
-                credentialtype: (card !== null ? 'card' : 'account'),
-                credentials: (card !== null ? card : {
+                credentialtype: type,
+                credentials: (type !== 'account' ? credential : {
                     username: $("#purchase-username").val(),
                     password: $("#purchase-password").val()
                 }),
@@ -986,32 +982,36 @@
 
             if (modal_status == 'rfid') {
 
-                if ($("#rfid-username").val() == '' || $("#rfid-password").val() == '') {
-                    $("#rfid-modal .modal-status").html("<span style='color: red;'>Enter your account details before presenting an RFID card.<span>");
-                } else {
-
-                    $("#rfid-modal .modal-status").html("<span style='color: orange;'>Trying to register your card...<span>");
-
-                    $.ajax({
-                        url: '{{ route('omnomcom::store::rfidadd') }}',
-                        method: 'post',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            card: data,
-                            username: $("#rfid-username").val(),
-                            password: $("#rfid-password").val()
-                        },
-                        dataType: 'html',
-                        success: function (data) {
-                            $("#rfid-modal .modal-status").html(data);
-                        }
+                if(rfid_link_card == null) {
+                    rfid_link_card = data;
+                    $("#rfid-modal").html('<div class="qrAuth">Loading QR authentication...</div>\n' +
+                        '\n' +
+                        '        <hr>\n' +
+                        '\n' +
+                        '        <span class="modal-status">\n' +
+                        '            Authenticate using the QR code above to link RFID card.\n' +
+                        '        </span>');
+                    doQrAuth($("#rfid-modal .qrAuth"), "Link RFID card to account", function (auth_token, credentialtype) {
+                        $.ajax({
+                            url: '{{ route('omnomcom::store::rfidadd') }}',
+                            method: 'post',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                card: rfid_link_card,
+                                credentialtype: credentialtype,
+                                credentials: auth_token,
+                            },
+                            dataType: 'html',
+                            success: function (data) {
+                                $("#rfid-modal .modal-status").html(data);
+                            }
+                        });
                     });
-
                 }
 
             } else if (modal_status == 'purchase') {
 
-                purchase(data);
+                purchase(data, 'card');
 
             } else {
 
@@ -1025,7 +1025,7 @@
 
                 if (anythingincart) {
                     $("#purchase").trigger('click');
-                    purchase(data);
+                    purchase(data, 'card');
                 } else {
                     $("#modal-overlay").show();
                     $("#emptycart-modal").removeClass('inactive');
@@ -1034,6 +1034,50 @@
             }
 
         };
+
+    }
+
+    function doQrAuth(element, description, onComplete) {
+        var auth_token = null;
+
+        $.ajax({
+            url: '{{ route('qr::generate') }}',
+            method: 'post',
+            data: {
+                _token: '{{ csrf_token() }}',
+                description: description
+            },
+            dataType: 'json',
+            success: function (data) {
+                element.html('Scan this QR code<br><br><img src="{{ route('qr::code', '') }}/' + data.qr_token + '" width="200px" height="200px"><br><br>or go to<br><strong>{{ route('qr::dialog', '') }}/' + data.qr_token + "</strong>");
+                auth_token = data.auth_token;
+
+                var qrAuthInterval = setInterval(function() {
+                    // Stop checking if the modal has been dismissed.
+                    if(modal_status == null) {
+                        clearInterval(qrAuthInterval);
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '{{ route('qr::approved') }}',
+                        method: 'get',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            code: auth_token
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data) {
+                                element.html('Successfully authenticated :)');
+                                clearInterval(qrAuthInterval);
+                                onComplete(auth_token, 'qr');
+                            }
+                        }
+                    });
+                }, 1000);
+            }
+        });
 
     }
 
@@ -1055,14 +1099,20 @@
     });
 
     $("#rfid").on("click", function () {
+        console.log($("#rfid-modal").get());
         $("#modal-overlay").show();
         $("#rfid-modal").removeClass('inactive');
+
+        rfid_link_card = null;
+        $("#rfid-modal").html("<h1>Please present your RFID card</h1>");
+
         modal_status = 'rfid';
     });
 
     $("#purchase").on("click", function () {
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
+        doQrAuth($("#purchase-modal .qrAuth"), "Payment for purchases in Omnomcom", purchase);
         modal_status = 'purchase';
     });
 
@@ -1119,7 +1169,6 @@
             }
         }
     }
-
 
 </script>
 

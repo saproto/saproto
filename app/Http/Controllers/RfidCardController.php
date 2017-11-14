@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\RfidCard;
+use Proto\Models\QrAuthRequest;
 
 use Redirect;
 use Auth;
@@ -22,11 +23,36 @@ class RfidCardController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $user = AuthController::verifyCredentials($request->input('username'), $request->input('password'));
 
-        if (!$user) {
-            return "<span style='color: red;'>Invalid credentials.</span>";
+        switch ($request->input('credentialtype')) {
+            case 'qr':
+                $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
+                if(!$qrAuthRequest) {
+                    return "<span style='color: red;'>Invalid authentication token.</span>";
+                }
+
+                $user = $qrAuthRequest->authUser();
+                if(!$user) {
+                    return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
+                }
+
+                break;
+
+//            case 'account':
+//                $credentials = $request->input('credentials');
+//
+//                $user = AuthController::verifyCredentials($credentials['username'], $credentials['password']);
+//
+//                if (!$user) {
+//                    return "<span style='color: red;'>Invalid credentials.</span>";
+//                }
+//
+//                break;
+
+            default:
+                return "<span style='color: red;'>Invalid credential type.</span>";
+
+                break;
         }
 
         if (!$user->member) {
