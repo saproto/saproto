@@ -16,10 +16,11 @@ class QrAuthRequest extends Model
      * Returns true is QrAuthRequest has been approved
      * @return bool
      */
-    public function isApproved() {
-        if($this->approved_at) {
+    public function isApproved()
+    {
+        if ($this->approved_at) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -28,8 +29,9 @@ class QrAuthRequest extends Model
      * Returns the user is request has been approved.
      * @return mixed
      */
-    public function authUser() {
-        if($this->approved_at) {
+    public function authUser()
+    {
+        if ($this->approved_at) {
             $returnUser = User::findOrFail($this->user_id);
             $this->delete();
             return $returnUser;

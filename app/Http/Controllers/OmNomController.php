@@ -85,12 +85,12 @@ class OmNomController extends Controller
 
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
-                if(!$qrAuthRequest) {
+                if (!$qrAuthRequest) {
                     return "<span style='color: red;'>Invalid authentication token.</span>";
                 }
 
                 $user = $qrAuthRequest->authUser();
-                if(!$user) {
+                if (!$user) {
                     return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                 }
                 break;
