@@ -11,6 +11,7 @@ use Proto\Models\OrderLine;
 use Proto\Models\RfidCard;
 use Proto\Models\Product;
 use Proto\Models\User;
+use Proto\Models\QrAuthRequest;
 
 use Auth;
 use Proto\Models\ProductCategory;
@@ -70,15 +71,7 @@ class OmNomController extends Controller
         }
 
         switch ($request->input('credentialtype')) {
-            case 'account':
-                $credentials = $request->input('credentials');
-                $user = AuthController::verifyCredentials($credentials['username'], $credentials['password']);
-                if (!$user) {
-                    return "<span style='color: red;'>Invalid credentials.</span>";
-                }
-                break;
-
-            case'card':
+            case 'card':
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (!$card) {
                     return "<span style='color: red;'>Unknown card.</span>";
@@ -87,6 +80,18 @@ class OmNomController extends Controller
                 $user = $card->user;
                 if (!$user) {
                     return "<span style='color: red;'>Unknown user.</span>";
+                }
+                break;
+
+            case 'qr':
+                $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
+                if (!$qrAuthRequest) {
+                    return "<span style='color: red;'>Invalid authentication token.</span>";
+                }
+
+                $user = $qrAuthRequest->authUser();
+                if (!$user) {
+                    return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                 }
                 break;
 
