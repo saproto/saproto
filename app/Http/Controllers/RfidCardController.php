@@ -38,17 +38,6 @@ class RfidCardController extends Controller
 
                 break;
 
-//            case 'account':
-//                $credentials = $request->input('credentials');
-//
-//                $user = AuthController::verifyCredentials($credentials['username'], $credentials['password']);
-//
-//                if (!$user) {
-//                    return "<span style='color: red;'>Invalid credentials.</span>";
-//                }
-//
-//                break;
-
             default:
                 return "<span style='color: red;'>Invalid credential type.</span>";
 

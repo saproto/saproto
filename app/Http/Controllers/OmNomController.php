@@ -71,14 +71,6 @@ class OmNomController extends Controller
         }
 
         switch ($request->input('credentialtype')) {
-            case 'account':
-                $credentials = $request->input('credentials');
-                $user = AuthController::verifyCredentials($credentials['username'], $credentials['password']);
-                if (!$user) {
-                    return "<span style='color: red;'>Invalid credentials.</span>";
-                }
-                break;
-
             case 'card':
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (!$card) {
