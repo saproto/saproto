@@ -61,7 +61,6 @@
         "./resources/assets/bower/simplemde/dist/simplemde.min.js",
         "./resources/assets/bower/angular/angular.js",
         "./resources/assets/bower/socket.io-client/dist/socket.io.js",
-        "./resources/assets/bower/on-screen-keyboard/jquery.onScreenKeyboard.min.js",
         "./resources/assets/bower/chocolat/dist/js/jquery.chocolat.min.js",
         "./resources/assets/bower/Croppie/croppie.min.js",
         "./resources/assets/bower/ng-img-crop/compile/minified/ng-img-crop.js",

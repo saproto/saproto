@@ -77,9 +77,17 @@
 
                             <td>{{ $orderline->created_at }}</td>
                             <td>
-                                <a href="{{ route('user::profile', ['id' => $orderline->user->id]) }}">
-                                    {{ $orderline->user->name }}
-                                </a>
+                                @if($orderline->user)
+
+                                    <a href="{{ route('user::profile', ['id' => $orderline->user->id]) }}">
+                                        {{ $orderline->user->name }}
+                                    </a>
+
+                                @else
+
+                                    [Cashier: {{ $orderline->cashier->name }}]
+
+                                @endif
                             </td>
                             <td>{{ $orderline->units }}x</td>
                             <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>
