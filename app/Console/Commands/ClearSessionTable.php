@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use DB;
 use Proto\Models\Token;
+use Proto\Models\QrAuthRequest;
 
 class ClearSessionTable extends Command
 {
@@ -42,6 +43,7 @@ class ClearSessionTable extends Command
     {
         DB::table('sessions')->where('last_activity', '<', strtotime('-1 week'))->delete();
         Token::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-1 week')))->delete();
+        QrAuthRequest::where('updated_at', '<', date('Y-m-d H:i:s', strtotime('-10 minutes')))->delete();
         $this->info('Done!');
     }
 }
