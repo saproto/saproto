@@ -761,6 +761,7 @@
     });
 
     var modal_status = null;
+    var purchase_processing = null;
 
     /*
      Loading the necessary data.
@@ -872,6 +873,12 @@
 
     function purchase(card) {
 
+        if (purchase_processing != null) {
+            return;
+        } else {
+            purchase_processing = true;
+        }
+
         $.ajax({
             url: '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}',
             method: 'post',
@@ -891,9 +898,11 @@
                     finishPurchase();
                 } else {
                     $("#purchase-modal .modal-status").html(data);
+                    purchase_processing = null;
                 }
             },
             error: function (xhr, status) {
+                purchase_processing = null;
                 if (xhr.status == 503) {
                     $("#purchase-modal .modal-status").html("The website is currently in maintenance. Please try again in 30 seconds.");
                 } else {
