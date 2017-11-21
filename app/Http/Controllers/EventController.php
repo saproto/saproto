@@ -355,12 +355,33 @@ class EventController extends Controller
 
     public function apiEvents(Request $request)
     {
-
-        if (!Auth::check() || !Auth::user()->member) {
+        // API Auth
+        if (!($request->has('username') && $request->has('password')) &&
+            !(Auth::check() && Auth::user()->member)) {
             abort(403);
+        } else {
+            if ($request->username == 'yolouser' && $request->password == 'yoloswak') {
+                // Auth success
+            } else {
+                abort(403);
+            }
         }
 
-        $events = Event::all();
+        // Check if we should return all events,
+        // or a subset from a particular data and with a specific count.
+        if ($request->has('start')) {
+            $events = Event::where('start', '>=', $request->start)->get();
+            if ($request->has('count')) {
+                $events = Event::where('start', '>=', $request->start)
+                    ->take($request->count)->get();
+            }
+        } else {
+            $events = Event::all();
+            if ($request->has('count')) {
+                $events = Event::take($request->count)->get();
+            }
+        }
+
         $data = array();
 
         foreach ($events as $event) {
