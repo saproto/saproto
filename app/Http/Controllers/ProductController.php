@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Mail\ProductBulkUpdateNotification;
 use Proto\Models\Account;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
@@ -14,6 +15,8 @@ use Proto\Models\ProductCategoryEntry;
 use Proto\Models\StorageEntry;
 
 use Redirect;
+use Auth;
+use Mail;
 
 class ProductController extends Controller
 {
@@ -212,6 +215,8 @@ class ProductController extends Controller
         }
         $request->session()->flash('flash_message', $feedback);
 
+        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $feedback))->onQueue('low'));
+
         return Redirect::back();
     }
 
@@ -247,19 +252,19 @@ class ProductController extends Controller
         foreach ($rows as $key => $row) {
             if ($row->rank == $rank) {
                 if ($direction == 'up') {
-                    if ($key < count($rows)-1) {
-                        $relation->rank = $rows[$key+1]->rank;
+                    if ($key < count($rows) - 1) {
+                        $relation->rank = $rows[$key + 1]->rank;
                         $relation->save();
-                        $rows[$key+1]->rank = $rank;
-                        $rows[$key+1]->save();
+                        $rows[$key + 1]->rank = $rank;
+                        $rows[$key + 1]->save();
                         return Redirect::back();
                     }
                 } else {
                     if ($key > 0) {
-                        $relation->rank = $rows[$key-1]->rank;
+                        $relation->rank = $rows[$key - 1]->rank;
                         $relation->save();
-                        $rows[$key-1]->rank = $rank;
-                        $rows[$key-1]->save();
+                        $rows[$key - 1]->rank = $rank;
+                        $rows[$key - 1]->save();
                         return Redirect::back();
                     }
                 }
@@ -268,9 +273,10 @@ class ProductController extends Controller
         return Redirect::back();
     }
 
-    private function setRanks() {
+    private function setRanks()
+    {
         $newEntries = ProductCategoryEntry::where('rank', 0)->get();
-        foreach($newEntries as $entry) {
+        foreach ($newEntries as $entry) {
             $entry->rank = $entry->id;
             $entry->save();
         }
