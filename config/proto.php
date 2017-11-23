@@ -252,6 +252,20 @@ return [
             'haveyoutriedturningitoffandonagain.nl',
             'www.haveyoutriedturningitoffandonagain.nl'
         ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Soundboard Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Some Soundboard sounds are played automatially. Here, the corresponding
+    | IDs are being set.
+    |
+    */
+
+    'soundboardSounds' => [
+        '1337' => 9
     ]
 
 ];
