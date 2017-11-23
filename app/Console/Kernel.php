@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:flickrsync')->hourly();
-        $schedule->command('proto:playsound ganaarjecollege')->daily()->at('13:37');
+        $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
