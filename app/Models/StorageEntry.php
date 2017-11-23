@@ -17,6 +17,7 @@ use Proto\Models\Company;
 use Proto\Models\NarrowcastingItem;
 use Proto\Models\Page;
 use Proto\Models\Product;
+use Proto\Models\SoundboardSound;
 
 class StorageEntry extends Model
 {
@@ -43,7 +44,8 @@ class StorageEntry extends Model
             DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
             Committee::where('image_id', $id)->count() == 0 &&
             Event::where('image_id', $id)->count() == 0 &&
-            Newsitem::where('featured_image_id', $id)->count() == 0;
+            Newsitem::where('featured_image_id', $id)->count() == 0 &&
+            SoundboardSound::where('file_id', $id)->count() == 0;
     }
 
     public function createFromFile($file)
@@ -80,7 +82,7 @@ class StorageEntry extends Model
 
     private function generateHash()
     {
-        return sha1(date('U') . mt_rand(1, 99999999999));
+        return sha1(date('U') . mt_rand(1, intval(99999999999)));
     }
 
     public function generatePath()

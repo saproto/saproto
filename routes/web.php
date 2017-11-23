@@ -708,11 +708,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
         });
+
         Route::group(['prefix' => 'display', 'middleware' => ['permission:admin'], 'as' => 'display::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'DisplayController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'DisplayController@store']);
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'DisplayController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DisplayController@destroy']);
+        });
+
+        Route::group(['prefix' => 'soundboard', 'middleware' => ['permission:admin'], 'as' => 'soundboard::'], function () {
+            Route::get('index', ['as' => 'index', 'uses' => 'SoundboardController@index']);
+            Route::post('store', ['as' => 'store', 'uses' => 'SoundboardController@store']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'SoundboardController@destroy']);
         });
     });
 

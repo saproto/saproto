@@ -34,6 +34,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
             Route::get('radiostations', ['uses' => 'RadioController@api']);
             Route::get('displays', ['uses' => 'DisplayController@api']);
+            Route::get('sounds', ['as' => 'sounds', 'uses' => 'SoundboardController@apiIndex']);
         });
 
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
