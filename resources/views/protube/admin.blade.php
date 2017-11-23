@@ -47,6 +47,11 @@
                             <td><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text"
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
+                        <tr>
+                            <td>Sounds</td>
+                            <td><input class="slider" id="soundboardV" data-slider-id="soundboardVSlider" type="text"
+                                       data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
+                        </tr>
                     </table>
                     <div class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
@@ -99,46 +104,13 @@
                 <div class="panel-body">
 
 
-                    <button type="button" class="btn btn-default soundboard" rel="airhorn">Horn</button>
-                    <button type="button" class="btn btn-default soundboard" rel="rimshot">Rimshot</button>
-                    <button type="button" class="btn btn-default soundboard" rel="baby">Huil Baby</button>
-                    <button type="button" class="btn btn-default soundboard" rel="mickey">Mickey Mouse</button>
-                    <button type="button" class="btn btn-default soundboard" rel="chapeau">Chapeau</button>
-                    <button type="button" class="btn btn-default soundboard" rel="sosad">So sad...</button>
-                    <button type="button" class="btn btn-default soundboard" rel="erg">Echt Erg!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="prachtig">Omdat Prachtig!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="drama">Drama</button>
-                    <button type="button" class="btn btn-default soundboard" rel="sad-trombone">Fail</button>
-                    <button type="button" class="btn btn-default soundboard" rel="gay">Hah... Gay!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="okaybye">Okay bye. :(</button>
-                    <button type="button" class="btn btn-default soundboard" rel="zoenen">Zoenen!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="tongen">Lekker tongen</button>
-                    <button type="button" class="btn btn-default soundboard" rel="raar">RAARRR</button>
-                    <button type="button" class="btn btn-default soundboard" rel="ovation">Applaus</button>
-                    <button type="button" class="btn btn-default soundboard" rel="slowclap">Slow clap</button>
-                    <button type="button" class="btn btn-default soundboard" rel="fluitje">NS</button>
-                    <button type="button" class="btn btn-default soundboard" rel="porno">Porno</button>
-                    <button type="button" class="btn btn-default soundboard" rel="keiharde_porno">Keiharde porno
-                    </button>
-                    <button type="button" class="btn btn-default soundboard" rel="laura">Laura</button>
-                    <button type="button" class="btn btn-default soundboard" rel="jammer_joh">Jammer joh</button>
-                    <button type="button" class="btn btn-default soundboard" rel="groen">GROEN!!!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="moan">Moan</button>
-                    <button type="button" class="btn btn-default soundboard" rel="doodle">Doodle?</button>
-                    <button type="button" class="btn btn-default soundboard" rel="wat-ik-voor-je-kan-doen">Zoek het maar
-                        uit
-                    </button>
-                    <button type="button" class="btn btn-default soundboard" rel="tanman">Tan man!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="inception">BRAAAAAAM</button>
-                    <button type="button" class="btn btn-default soundboard" rel="nooo">NOOOOO</button>
-                    <button type="button" class="btn btn-default soundboard" rel="evil">MUHAHAHA</button>
-                    <button type="button" class="btn btn-default soundboard" rel="boo">BOOOOOO</button>
-                    <button type="button" class="btn btn-default soundboard" rel="chewbacca">Chewie</button>
-                    <button type="button" class="btn btn-default soundboard" rel="batman">Batman</button>
-                    <button type="button" class="btn btn-default soundboard" rel="IK_BEN_REINIER">IK BEN REINIER!!!
-                    </button>
-                    <button type="button" class="btn btn-default soundboard" rel="Liefje_aandacht">Aandacht!</button>
-                    <button type="button" class="btn btn-default soundboard" rel="bestuuuuuuuuur">Bestuuuuur!</button>
+                    @foreach($sounds as $sound)
+
+                        <button type="button" class="btn btn-default soundboard" rel="{{ $sound->id }}">{{ $sound->name }}</button>
+
+                    @endforeach
+
+
                 </div>
             </div>
 
@@ -265,6 +237,10 @@
             $("#radioV").slider().on("slideStop", function (event) {
                 admin.emit("setRadioVolume", event.value);
             });
+            $("#soundboardV").slider().on("slideStop", function (event) {
+                admin.emit("setSoundboardVolume", event.value);
+            });
+
 
             admin.on("queue", function (data) {
                 var queue = $("#queue");
@@ -472,6 +448,7 @@
             admin.on("volume", function (data) {
                 $("#youtubeV").slider('setValue', data.youtube);
                 $("#radioV").slider('setValue', data.radio);
+                $("#soundboardV").slider('setValue', data.soundboard);
             });
         });
 

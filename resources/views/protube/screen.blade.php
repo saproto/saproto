@@ -244,6 +244,18 @@
     <script>
         var server = "{!! config('herbert.server') !!}";
 
+        var soundboardSounds;
+        var soundboardVolume = 0;
+        var soundboardPlayers = [];
+
+        $.getJSON('{{ route('api::protube::sounds') }}', function(data) {
+            soundboardSounds = data;
+
+            for(var property in soundboardSounds) {
+                $.ajax({ url: soundboardSounds[property].file });
+            }
+        });
+
         var tag = document.createElement('script');
 
         tag.src = "https://www.youtube.com/iframe_api";
@@ -355,11 +367,34 @@
             screen.on("volume", function (data) {
                 player.setVolume(data.youtube);
                 radio.volume = data.radio / 100;
+                soundboardVolume = data.soundboard / 100;
+
+                // Update existing players
+                for(var i = soundboardPlayers.length - 1; i >= 0; i--) {
+                    soundboardPlayers[i].volume = soundboardVolume;
+                }
             });
 
             screen.on("reload", function () {
                 location.reload();
             });
+
+            screen.on("soundboard", function(data) {
+                console.log("playing sound", soundboardSounds[data].file);
+                soundboardPlayer = document.createElement("AUDIO");
+                soundboardPlayer.src = soundboardSounds[data].file;
+                soundboardPlayer.volume = soundboardVolume;
+                soundboardPlayer.play();
+                soundboardPlayers.push(soundboardPlayer);
+
+                // clean up soundboardplayers
+                for(var i = soundboardPlayers.length - 1; i >= 0; i--) {
+                    if(soundboardPlayers[i].paused) {
+                        soundboardPlayers.splice(i, 1);
+                    }
+                }
+            });
+
         }
 
         function onYouTubePlayerStateChange(newState) {

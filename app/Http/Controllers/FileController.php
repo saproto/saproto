@@ -28,6 +28,7 @@ class FileController extends Controller
 
         $response = new Response($file, 200);
         $response->header('Content-Type', $entry->mime);
+        $response->header('Cache-Control', 'max-age=86400');
 
         return $response;
 

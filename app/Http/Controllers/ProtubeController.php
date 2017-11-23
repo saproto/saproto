@@ -12,13 +12,15 @@ use Redirect;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 use Proto\Models\PlayedVideo;
+use Proto\Models\SoundboardSound;
 
 class ProtubeController extends Controller
 {
     public function admin()
     {
         if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
-            return view('protube.admin');
+            $sounds = SoundboardSound::where('hidden', '=', false)->get();
+            return view('protube.admin', ['sounds' => $sounds]);
         } else {
             abort(403);
         }
