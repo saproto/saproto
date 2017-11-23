@@ -19,7 +19,7 @@ class ProtubeController extends Controller
     public function admin()
     {
         if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
-            $sounds = SoundboardSound::all();
+            $sounds = SoundboardSound::where('hidden', '=', false)->get();
             return view('protube.admin', ['sounds' => $sounds]);
         } else {
             abort(403);

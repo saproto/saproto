@@ -33,6 +33,10 @@
                             {{ $sound->name }}
                         </td>
                         <td>
+                            <a class="btn btn-success"
+                               href="{{ route('protube::soundboard::togglehidden', ['id' => $sound->id]) }}" role="button">
+                                @if($sound->hidden) <i class="fa fa-eye"></i> Unhide @else <i class="fa fa-eye-slash"></i> Hide @endif
+                            </a>
                             <a class="btn btn-danger"
                                onclick="return confirm('Are you sure you want to delete {{ $sound->name }}?');"
                                href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}" role="button">

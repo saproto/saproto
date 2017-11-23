@@ -61,6 +61,14 @@ class SoundboardController extends Controller
         return Redirect::back();
     }
 
+    public function toggleHidden($id) {
+        $sound = SoundboardSound::findOrFail($id);
+        $sound->hidden = !$sound->hidden;
+        $sound->save();
+
+        return Redirect::back();
+    }
+
     public function apiIndex() {
         $sounds = SoundboardSound::all();
 

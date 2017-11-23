@@ -16,6 +16,7 @@ class AddSoundboardSoundsTable extends Migration
         Schema::create('soundboard_sounds', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('file_id');
+            $table->boolean('hidden');
             $table->text('name');
         });
     }

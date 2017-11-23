@@ -720,6 +720,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'SoundboardController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'SoundboardController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'SoundboardController@destroy']);
+            Route::get('togglehidden/{id}', ['as' => 'togglehidden', 'uses' => 'SoundboardController@toggleHidden']);
         });
     });
 
