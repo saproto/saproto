@@ -145,7 +145,7 @@
 
         <div class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">Light control</div>
+                <div class="panel-heading">Protopolis control</div>
                 <div class="panel-body">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -166,6 +166,16 @@
                             <div class="btn-group btn-group-justified" role="group">
                                 <a class="btn btn-default lampOn" href="#" rel="2">On</a>
                                 <a class="btn btn-default lampOff" href="#" rel="2">Off</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Omnomcom</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="btn-group btn-group-justified" role="group">
+                                <a class="btn btn-danger" href="#" id="omnomcomReboot">Reboot</a>
                             </div>
                         </div>
                     </div>
@@ -443,6 +453,11 @@
             $(".lampOff").click(function (e) {
                 e.preventDefault();
                 admin.emit("lampOff", $(this).attr("rel"));
+            });
+
+            $("#omnomcomReboot").click(function (e) {
+                e.preventDefault();
+                if(confirm('Are you sure you want to restart the Omnomcom?')) admin.emit("omnomcomReboot");
             });
 
             admin.on("volume", function (data) {
