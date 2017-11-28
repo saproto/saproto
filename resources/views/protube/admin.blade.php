@@ -179,6 +179,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Protube</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="btn-group btn-group-justified" role="group">
+                                <a class="btn btn-danger" href="#" id="protubeReboot">Reboot</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -458,6 +468,11 @@
             $("#omnomcomReboot").click(function (e) {
                 e.preventDefault();
                 if(confirm('Are you sure you want to restart the Omnomcom?')) admin.emit("omnomcomReboot");
+            });
+
+            $("#protubeReboot").click(function (e) {
+                e.preventDefault();
+                if(confirm('Are you sure you want to restart the Protube system?')) admin.emit("protubeReboot");
             });
 
             admin.on("volume", function (data) {
