@@ -129,6 +129,18 @@
                     </li>
                 @endif
 
+                @if (Auth::check() && Auth::user()->can(["alfred","sysadmin"]))
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">SmartXp Admin <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            <li><a href="{{ route("dmx::index") }}">DMX Fixtures</a></li>
+
+                        </ul>
+                    </li>
+                @endif
+
                 @if (Auth::check() && Auth::user()->can("board"))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

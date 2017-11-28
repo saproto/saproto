@@ -776,17 +776,33 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * QR Auth
      */
-    Route::group(['prefix' => 'qr', 'as' => 'qr::'], function() {
+    Route::group(['prefix' => 'qr', 'as' => 'qr::'], function () {
 
         Route::get('code/{code}', ['as' => 'code', 'uses' => 'QrAuthController@showCode']);
         Route::post('generate', ['as' => 'generate', 'uses' => 'QrAuthController@generateRequest']);
         Route::get('isApproved', ['as' => 'approved', 'uses' => 'QrAuthController@isApproved']);
 
-        Route::group(['middleware' => ['auth']], function() {
+        Route::group(['middleware' => ['auth']], function () {
             Route::get('{code}', ['as' => 'dialog', 'uses' => 'QrAuthController@showDialog']);
             Route::get('{code}/approve', ['as' => 'approve', 'uses' => 'QrAuthController@approve']);
         });
 
     });
+
+    /*
+     * DMX Management
+     */
+    Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:sysadmin|alfred']], function () {
+
+        Route::get('/', ['as' => 'index', 'uses' => 'DmxController@index']);
+        Route::get('/add', ['as' => 'add', 'uses' => 'DmxController@create']);
+        Route::post('/add', ['as' => 'add', 'uses' => 'DmxController@store']);
+        Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@edit']);
+        Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@update']);
+        Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@delete']);
+
+    });
+
+    Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
 
 });
