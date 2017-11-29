@@ -7,14 +7,54 @@ use Illuminate\Http\Request;
 use Proto\Models\DmxChannel;
 use Proto\Models\DmxFixture;
 
+use Proto\Http\Controllers\CalendarController;
+
 use Session;
 use Redirect;
 
 class DmxController extends Controller
 {
+    public function valueApi()
+    {
+        // Get the events.
+        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime("last week")), date('c', strtotime("tomorrow")));
+
+        // Determine if any event is currently going on.
+        $current_event = null;
+        foreach ($events as $event) {
+            if ($event['current']) {
+                $current_event = $event;
+            }
+        }
+
+        // Determine what preset to use.
+        $preset = 'free';
+        if (in_array($event['type'], config('dmx.lecture_types'))) {
+            $preset = 'lecture';
+        } elseif ($current_event !== null) {
+            $preset = 'tutorial';
+        }
+
+        // Now we fill the preset channels.
+        $channel_values = [];
+        $preset_colors = config('dmx.colors')[$preset];
+        foreach (config('dmx.preset_fixtures') as $fixture_id => $fixture_channel_mapping) {
+            $fixture = DmxFixture::where('id', $fixture_id)->first();
+            if ($fixture !== null) {
+                foreach ($fixture_channel_mapping as $i => $offset) {
+                    if ($i < count($preset_colors)) {
+                        $channel_values[$fixture->channel_start + $offset] = $preset_colors[$i];
+                    }
+                }
+            }
+        }
+
+        return $channel_values;
+    }
+
     public function index()
     {
-        return view('dmx.index', ['fixtures' => DmxFixture::all()]);
+        return view('dmx.index', ['fixtures' => DmxFixture::orderBy('name', 'asc')->get()]);
     }
 
     public function create()
