@@ -47,6 +47,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
         Route::get('export_data/{table}/{personal_key}', ['as' => 'export', 'uses' => 'ExportController@export']);
 
+        Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
+
     });
 
     Route::group(['middleware' => ['auth:api']], function () {

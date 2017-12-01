@@ -13,7 +13,7 @@ class DmxFixture extends Model
     public function getChannelNames()
     {
         $channels = [];
-        foreach (range($this->channel_start, $this->channel_end) as $channel) {
+        foreach ($this->getChannelNumbers() as $channel) {
             $channels[$channel] = 'Unnamed Channel';
         }
 
@@ -24,5 +24,10 @@ class DmxFixture extends Model
         }
 
         return $channels;
+    }
+
+    public function getChannelNumbers()
+    {
+        return range($this->channel_start, $this->channel_end);
     }
 }
