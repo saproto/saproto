@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
         Commands\SpotifyUpdate::class,
         Commands\TestIBANs::class,
         Commands\ClearSessionTable::class,
+        Commands\CountPrimaryMembers::class
     ];
 
     /**
