@@ -33,7 +33,11 @@ class CalendarController extends Controller
             $endtime = (isset($entry->end->date) ? $entry->end->date : $entry->end->dateTime);
             $starttime = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
 
-            $name = $entry->summary;
+            if (property_exists($entry, 'summary')) {
+                $name = $entry->summary;
+            } else {
+                $name = "(no name)";
+            }
             $name_exp = explode(" ", $name);
             if (is_numeric($name_exp[0])) {
                 $name_exp[0] = "";
@@ -44,7 +48,7 @@ class CalendarController extends Controller
             }
 
             if (property_exists($entry, 'description')) {
-                preg_match("/Type: (.*)/", $entry->description, $type);
+                preg_match(" / Type: (.*)/", $entry->description, $type);
                 preg_match('/Student set\(s\):.*(CRE MOD[0-9]{2}|HMI M [0-9]{1}[a-zA-Z]{1}).*/', $entry->description, $study);
             } else {
                 $type = null;
