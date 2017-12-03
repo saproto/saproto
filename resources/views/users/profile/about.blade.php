@@ -12,7 +12,7 @@
         <table class="table borderless">
             <tr>
                 <td style="text-align: right;"><strong>E-mail</strong></td>
-                <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
+                <td><a href="mailto:{{ $user->getDisplayEmail() }}">{{ $user->getDisplayEmail() }}</a></td>
             </tr>
             @if($user->website)
                 <tr>

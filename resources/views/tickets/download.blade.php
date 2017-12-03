@@ -86,7 +86,7 @@
     <p>
         <strong>{{ $ticket->user->name }}</strong>
         <br>
-        {{ $ticket->user->email }}
+        {{ $ticket->user->getDisplayEmail() }}
     </p>
 
     <p>
