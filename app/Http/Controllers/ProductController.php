@@ -243,6 +243,35 @@ class ProductController extends Controller
 
     }
 
+    /**
+     * Return a CSV file with all product info.
+     */
+    public function generateCsv()
+    {
+
+        $headers = [
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=products.csv',
+            'Expires' => '0',
+            'Pragma' => 'public'
+        ];
+
+        $data = Product::all()->toArray();
+        array_unshift($data, array_keys($data[0]));
+
+        $callback = function () use ($data) {
+            $f = fopen('php://output', 'w');
+            foreach ($data as $row) {
+                fputcsv($f, $row);
+            }
+            fclose($f);
+        };
+
+        return response()->stream($callback, 200, $headers);
+
+    }
+
     public function rank($category_id, $product_id, $direction)
     {
         $relation = ProductCategoryEntry::where('product_id', $product_id)->where('category_id', $category_id)->first();

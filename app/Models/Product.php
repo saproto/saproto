@@ -8,7 +8,7 @@ class Product extends Model
 {
 
     protected $table = 'products';
-    protected $guarded = [/*'id'*/];
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function categories()
     {

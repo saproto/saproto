@@ -62,6 +62,15 @@
 
             </form>
 
+            <hr>
+
+            <div class="btn-group btn-group-justified">
+
+                <a href="{{ route('omnomcom::products::export_csv') }}" class="btn btn-success">Export all as CSV</a>
+
+            </div>
+
+
         </div>
 
         <div class="col-md-8 col-md-offset-1">
