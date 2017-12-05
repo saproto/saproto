@@ -8,24 +8,13 @@
 
             <div class="col-md-12">
 
-                @if($user->personal_key)
+                <p style="text-align: center;">
+                    Your personal key is:
+                </p>
 
-                    <p style="text-align: center;">
-                        Your personal key is:
-                    </p>
-
-                    <p style="text-align: center; font-size: 10px;">
-                        {{ $user->personal_key }}
-                    </p>
-
-                @else
-
-                    <p>
-                        A personal key is used for some functionality mainly aimed at developers. If you don't know what
-                        you need it for, you probably don't need it.
-                    </p>
-
-                @endif
+                <p style="text-align: center; font-size: 10px;">
+                    {{ $user->getPersonalKey() }}
+                </p>
 
             </div>
 
@@ -36,7 +25,7 @@
     <div class="panel-footer">
 
         <div class="btn-group btn-group-justified" role="group"
-             onclick="confirm('Are you sure? Any previous key will not work anymore.'   );">
+             onclick="return confirm('Are you sure? This will invalidate any personal links including your personalized calendar.');">
             <div class="btn-group" role="group">
                 <a href="{{ route('user::personal_key::generate', ['user' => $user->id]) }}"
                    class="btn btn-warning">
