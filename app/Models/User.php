@@ -403,4 +403,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $token;
     }
 
+    public function generateNewPersonalKey()
+    {
+        $this->personal_key = str_random(64);
+        $this->save();
+    }
+
+    public function getPersonalKey()
+    {
+        if ($this->personal_key == null) {
+            $this->generateNewPersonalKey();
+        }
+        return $this->personal_key;
+    }
+
 }

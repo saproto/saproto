@@ -60,7 +60,7 @@ class EventController extends Controller
             }
         }
 
-        $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->personal_key : null)]);
+        $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
         return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url]);
     }

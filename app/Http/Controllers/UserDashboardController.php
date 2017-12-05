@@ -228,8 +228,7 @@ class UserDashboardController extends Controller
             abort(403);
         }
 
-        $user->personal_key = str_random(64);
-        $user->save();
+        $user->generateNewPersonalKey();
 
         Session::flash("flash_message", "New personal key generated.");
         return Redirect::route('user::dashboard', ['id' => $user->id]);
