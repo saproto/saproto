@@ -124,11 +124,26 @@ class Activity extends Validatable
     }
 
     /**
-     * @return null If this activity is associated with an event,
+     * @param User $user
+     * @return bool Return whether the user is participating in the activity.
      */
-    public function organizingCommittee()
+    public function isParticipating(User $user)
     {
-        $this->hasOne('Proto\Models\Committee', 'organizing_committee');
+        return $this->getParticipation($user) !== null;
+    }
+
+    /**
+     * @param User $user
+     * @param HelpingCommittee|null $h
+     * @return bool Return whether the user is helping at the activity, optionally constraining whether it is for a committee.
+     */
+    public function isHelping(User $user, HelpingCommittee $h = null)
+    {
+        if ($h) {
+            return $this->getParticipation($user, $h) !== null;
+        } else {
+            return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)->whereNotNull('committees_activities_id')->count() > 0;
+        }
     }
 
     /**

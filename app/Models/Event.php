@@ -34,6 +34,11 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\Committee');
     }
 
+    public function isOrganizing(User $user)
+    {
+        return $this->committee && $user->isInCommittee($this->committee);
+    }
+
     public function tickets()
     {
         return $this->hasMany('Proto\Models\Ticket', 'event_id');

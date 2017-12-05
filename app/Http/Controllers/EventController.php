@@ -14,6 +14,7 @@ use Proto\Models\FlickrAlbum;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
+use Proto\Models\User;
 
 use Session;
 use Redirect;
@@ -59,7 +60,9 @@ class EventController extends Controller
             }
         }
 
-        return view('event.calendar', ['events' => $data, 'years' => $years]);
+        $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->personal_key : null)]);
+
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url]);
     }
 
     /**
@@ -436,10 +439,16 @@ class EventController extends Controller
 
     }
 
-    public function icalCalendar(Request $request)
+    public function icalCalendar(Request $request, $personal_key = null)
     {
+        $user = ($personal_key ? User::where('personal_key', $personal_key)->first() : null);
+
         $calendar = new IcalCalendar('-//HYTTIOAOAc//S.A. Proto Calendar//EN');
-        $calendar->setName('S.A. Proto Calendar');
+        if ($user) {
+            $calendar->setName(sprintf('S.A. Proto Calendar for %s', $user->calling_name));
+        } else {
+            $calendar->setName('S.A. Proto Calendar');
+        }
         $calendar->setDescription('All of Proto\'s events and happenings, straight from the website!');
         $calendar->setCalendarColor('#C1FF00');
         $calendar->setCalendarScale('GREGORIAN');
@@ -447,11 +456,6 @@ class EventController extends Controller
 
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
 
-            if ($event->is_external && !$request->has('with_external')) {
-                continue;
-            }
-
-            $infotext = '';
             if ($event->over()) {
                 $infotext = 'This activity is over.';
             } elseif ($event->activity !== null && $event->activity->participants == -1) {
@@ -462,10 +466,32 @@ class EventController extends Controller
                 $infotext = 'No sign-up necessary.';
             }
 
+            $status = null;
+
+            if ($event->is_external) {
+                $status = 'External';
+                $infotext .= ' This activity is not organised by S.A. Proto';
+            }
+
+            if ($user) {
+                if ($event->isOrganizing($user)) {
+                    $status = 'Organizing';
+                    $infotext .= ' You are organizing this activity.';
+                } elseif ($event->activity) {
+                    if ($event->activity->isHelping($user)) {
+                        $status = 'Helping';
+                        $infotext .= ' You are helping with this activity.';
+                    } elseif ($event->activity->isParticipating($user)) {
+                        $status = 'Participating';
+                        $infotext .= ' You are participating in this activity.';
+                    }
+                }
+            }
+
             $component = (new IcalEvent())
                 ->setDtStart(new DateTime(date('d-m-Y H:i:s', $event->start)))
                 ->setDtEnd(new DateTime(date('d-m-Y H:i:s', $event->end)))
-                ->setSummary($event->title)
+                ->setSummary($status ? sprintf('[%s] %s', $status, $event->title) : $event->title)
                 ->setDescription($infotext . ' More information: ' . route("event::show", ['id' => $event->id]))
                 ->setUseTimezone(true)
                 ->setLocation($event->location);

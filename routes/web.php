@@ -730,7 +730,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Routes related to calendars.
      */
     Route::group(['prefix' => 'ical', 'as' => 'ical::'], function () {
-        Route::get('calendar', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
+        Route::get('calendar/{personal_key?}', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
     });
 
     /*

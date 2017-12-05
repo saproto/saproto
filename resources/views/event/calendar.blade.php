@@ -138,39 +138,21 @@
                     <p>
                         If you want to, you can import our calendar into yours. This can be easily done by going to your
                         favorite calendar application and looking for an option similar to <i>Import calendar by URL</i>.
-                        You can then copy and paste the link below.
+                        You can then to copy the URL below.
                     </p>
-
-                    <p style="text-align: center;">
-                        <strong>{{ str_replace('https', 'http', route("ical::calendar")) }}</strong>
-                    </p>
-
                     <p>
-                        If you also want to include external activies (not organized by S.A. Proto) in your calendar,
-                        please use the URL below.
-                    </p>
-
-                    <p style="text-align: center;">
-                        <strong>{{ str_replace('https', 'http', route("ical::calendar", ["with_external" => true])) }}</strong>
+                        <input class="form-control" onclick="this.select()"
+                               value="{{ $ical_url }}">
                     </p>
 
                     <hr>
 
                     <div class="btn-group btn-lg btn-group-justified">
                         <a class="btn btn-info" target="_blank"
-                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar"))) }}">
+                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode($ical_url)) }}">
                             <i class="fa fa-google" aria-hidden="true"></i>
                             &nbsp;&nbsp;&nbsp;
                             Import to Google Calendar
-                        </a>
-                    </div>
-
-                    <div class="btn-group btn-lg btn-group-justified">
-                        <a class="btn btn-default" target="_blank"
-                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode(route("ical::calendar", ["with_external" => true]))) }}">
-                            <i class="fa fa-google" aria-hidden="true"></i>
-                            &nbsp;&nbsp;&nbsp;
-                            Import to Google Calendar with External Activities
                         </a>
                     </div>
 
