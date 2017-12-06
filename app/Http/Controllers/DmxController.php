@@ -39,7 +39,7 @@ class DmxController extends Controller
         $channel_values = [];
 
         // Now we fill the preset channels.
-        $preset_colors = config('dmx.colors')[$preset];
+        $preset_colors = (6 < date('G') && date('G') < 20 ? array_merge(config('dmx.colors')[$preset], [100]) : [0, 0, 0, 0]);
         foreach (DmxFixture::where('follow_timetable', true)->get() as $fixture) {
             // Set red
             foreach ($fixture->getChannels('red') as $channel) {
@@ -55,7 +55,7 @@ class DmxController extends Controller
             }
             // Set brightness
             foreach ($fixture->getChannels('brightness') as $channel) {
-                $channel_values[$channel->id] = (6 < date('G') && date('G') < 19 ? 100 : 0);
+                $channel_values[$channel->id] = $preset_colors[3];
             }
         }
 
