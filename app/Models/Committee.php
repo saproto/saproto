@@ -64,7 +64,7 @@ class Committee extends Model
         $events = array();
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event) $events[] = $event;
+            if ($event && !$event->secret) $events[] = $event;
         }
         return $events;
     }
