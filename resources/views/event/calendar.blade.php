@@ -141,20 +141,8 @@
                         You can then to copy the URL below.
                     </p>
                     <p>
-                        <input class="form-control" onclick="this.select()"
-                               value="{{ $ical_url }}">
+                        <input class="form-control" onclick="this.select()" value="{{ $ical_url }}">
                     </p>
-
-                    <hr>
-
-                    <div class="btn-group btn-lg btn-group-justified">
-                        <a class="btn btn-info" target="_blank"
-                           href="https://calendar.google.com/calendar/render?cid={{ str_replace('https','http',urlencode($ical_url)) }}">
-                            <i class="fa fa-google" aria-hidden="true"></i>
-                            &nbsp;&nbsp;&nbsp;
-                            Import to Google Calendar
-                        </a>
-                    </div>
 
                 </div>
             </div>
