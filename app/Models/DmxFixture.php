@@ -10,20 +10,16 @@ class DmxFixture extends Model
     protected $guarded = ['id'];
     public $timestamps = false;
 
-    public function getChannelNames()
+    public function getChannels($special_func = null)
     {
-        $channels = [];
-        foreach ($this->getChannelNumbers() as $channel) {
-            $channels[$channel] = 'Unnamed Channel';
+        $query = DmxChannel::where('id', '>=', $this->channel_start)
+            ->where('id', '<=', $this->channel_end);
+
+        if ($special_func) {
+            $query = $query->where('special_function', $special_func);
         }
 
-        $channel_names = DmxChannel::whereIn('id', array_keys($channels))->get();
-
-        foreach ($channel_names as $channel) {
-            $channels[$channel->id] = $channel->name;
-        }
-
-        return $channels;
+        return $query->orderBy('id', 'asc')->get();
     }
 
     public function getChannelNumbers()

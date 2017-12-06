@@ -803,6 +803,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@update']);
         Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@delete']);
 
+        Route::group(['prefix' => 'override', 'as' => 'override::'], function () {
+
+            Route::get('/', ['as' => 'index', 'uses' => 'DmxController@overrideIndex']);
+            Route::get('/add', ['as' => 'add', 'uses' => 'DmxController@overrideCreate']);
+            Route::post('/add', ['as' => 'add', 'uses' => 'DmxController@overrideStore']);
+            Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@overrideEdit']);
+            Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@overrideUpdate']);
+            Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@overrideDelete']);
+
+        });
+
     });
 
     Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);

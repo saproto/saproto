@@ -23,6 +23,16 @@
         </div>
 
         <div class="form-group">
+            <label for="channel_start">Fixture behavior:</label>
+            <select class="form-control" name="follow_timetable">
+                <option value="0" {{ $fixture && !$fixture->follow_timetable ? 'selected' : '' }}>Manual</option>
+                <option value="1" {{ $fixture && $fixture->follow_timetable ? 'selected' : '' }}>
+                    Automatic via timetable
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="channel_start">First channel:</label>
             <input type="number" class="form-control" id="channel_start" name="channel_start"
                    value="{{ $fixture->channel_start or '' }}" required>
@@ -38,12 +48,38 @@
 
             <hr>
 
-            @foreach($fixture->getChannelNames() as $channel_id => $channel_name)
+            @foreach($fixture->getChannels() as $channel)
 
                 <div class="form-group">
-                    <label>Name for channel {{ $channel_id }}:</label>
-                    <input type="text" class="form-control" name="channel_name[{{ $channel_id }}]"
-                           value="{{ $channel_name }}" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name for channel {{ $channel->id }}:</label>
+                            <input type="text" class="form-control" name="channel_name[{{ $channel->id }}]"
+                                   value="{{ $channel->name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="channel_start">Channel type:</label>
+                                <select class="form-control" name="special_function[{{ $channel->id }}]">
+                                    <option value="none">
+                                        None
+                                    </option>
+                                    <option value="red" {{ $channel->special_function == 'red' ? 'selected' : '' }}>
+                                        Red
+                                    </option>
+                                    <option value="green" {{ $channel->special_function == 'green' ? 'selected' : '' }}>
+                                        Green
+                                    </option>
+                                    <option value="blue" {{ $channel->special_function == 'blue' ? 'selected' : '' }}>
+                                        Blue
+                                    </option>
+                                    <option value="brightness" {{ $channel->special_function == 'brightness' ? 'selected' : '' }}>
+                                        Brightness
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             @endforeach

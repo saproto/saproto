@@ -135,7 +135,8 @@
                            aria-expanded="false">SmartXp Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("dmx::index") }}">DMX Fixtures</a></li>
+                            <li><a href="{{ route("dmx::index") }}">Fixtures</a></li>
+                            <li><a href="{{ route("dmx::override::index") }}">Override</a></li>
 
                         </ul>
                     </li>
