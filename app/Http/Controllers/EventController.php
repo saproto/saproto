@@ -21,10 +21,6 @@ use Redirect;
 use Auth;
 use Response;
 use Markdown;
-
-use IcalCalendar;
-use IcalEvent;
-use IcalOrganizer;
 use DateTime;
 
 class EventController extends Controller
@@ -439,20 +435,40 @@ class EventController extends Controller
 
     }
 
-    public function icalCalendar(Request $request, $personal_key = null)
+    public function icalCalendar($personal_key = null)
     {
+
         $user = ($personal_key ? User::where('personal_key', $personal_key)->first() : null);
 
-        $calendar = new IcalCalendar('-//HYTTIOAOAc//S.A. Proto Calendar//EN');
         if ($user) {
-            $calendar->setName(sprintf('S.A. Proto Calendar for %s', $user->calling_name));
+            $calendar_name = sprintf('S.A. Proto Calendar for %s', $user->calling_name);
         } else {
-            $calendar->setName('S.A. Proto Calendar');
+            $calendar_name = 'S.A. Proto Calendar';
         }
-        $calendar->setDescription('All of Proto\'s events and happenings, straight from the website!');
-        $calendar->setCalendarColor('#C1FF00');
-        $calendar->setCalendarScale('GREGORIAN');
-        $calendar->setMethod('PUBLISH');
+
+        $calendar = "BEGIN:VCALENDAR" . PHP_EOL .
+            "VERSION:2.0" . PHP_EOL .
+            "PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN" . PHP_EOL .
+            "CALSCALE:GREGORIAN" . PHP_EOL .
+            "X-WR-CALNAME:" . $calendar_name . PHP_EOL .
+            "X-WR-CALDESC:All of Proto's events and happenings, straight from the website!" . PHP_EOL .
+            "BEGIN:VTIMEZONE" . PHP_EOL .
+            "TZID:Central European Standard Time" . PHP_EOL .
+            "BEGIN:STANDARD" . PHP_EOL .
+            "DTSTART:20161002T030000" . PHP_EOL .
+            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10" . PHP_EOL .
+            "TZNAME:Central European Standard Time" . PHP_EOL .
+            "TZOFFSETFROM:+0200" . PHP_EOL .
+            "TZOFFSETTO:+0100" . PHP_EOL .
+            "END:STANDARD" . PHP_EOL .
+            "BEGIN:DAYLIGHT" . PHP_EOL .
+            "DTSTART:20160301T020000" . PHP_EOL .
+            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3" . PHP_EOL .
+            "TZNAME:Central European Daylight Time" . PHP_EOL .
+            "TZOFFSETFROM:+0100" . PHP_EOL .
+            "TZOFFSETTO:+0200" . PHP_EOL .
+            "END:DAYLIGHT" . PHP_EOL .
+            "END:VTIMEZONE" . PHP_EOL;
 
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
 
@@ -488,24 +504,26 @@ class EventController extends Controller
                 }
             }
 
-            $component = (new IcalEvent())
-                ->setDtStart(new DateTime(date('d-m-Y H:i:s', $event->start)))
-                ->setDtEnd(new DateTime(date('d-m-Y H:i:s', $event->end)))
-                ->setSummary($status ? sprintf('[%s] %s', $status, $event->title) : $event->title)
-                ->setDescription($infotext . ' More information: ' . route("event::show", ['id' => $event->id]))
-                ->setUseTimezone(true)
-                ->setLocation($event->location);
+            $calendar .= "BEGIN:VEVENT" . PHP_EOL .
+                sprintf("UID:%s@proto.utwente.nl", $event->id) . PHP_EOL .
+                sprintf("DTSTART:%s", date('Ymd\THis', $event->start)) . PHP_EOL .
+                sprintf("DTEND:%s", date('Ymd\THis', $event->end)) . PHP_EOL .
+                sprintf("SUMMARY:%s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title) . PHP_EOL .
+                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->id])) . PHP_EOL .
+                sprintf("LOCATION:%s", $event->location) . PHP_EOL .
+                sprintf("ORGANIZER:CN=%s:MAILTO:%s",
+                    ($event->committee ? $event->committee->name : 'S.A. Proto'),
+                    ($event->committee ? $event->committee->getEmailAddress() : 'board@proto.utwente.nl')) . PHP_EOL .
+                "END:VEVENT" . PHP_EOL;
 
-            if ($event->committee !== null) {
-                $component->setOrganizer(new IcalOrganizer($event->committee->name));
-            }
-
-            $calendar->addComponent($component);
         }
 
-        return Response::make($calendar->render())
+        $calendar .= "END:VCALENDAR";
+
+        return Response::make($calendar)
             ->header('Content-Type', 'text/calendar; charset=utf-8')
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
+
     }
 
 }
