@@ -55,7 +55,7 @@ class DmxController extends Controller
             }
             // Set brightness
             foreach ($fixture->getChannels('brightness') as $channel) {
-                $channel_values[$channel->id] = (6 < date('G') && date('G') < 19 ? 100 : 0);
+                $channel_values[$channel->id] = (6 < date('G') && date('G') < 20 ? 100 : 0);
             }
         }
 
