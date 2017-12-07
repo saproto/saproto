@@ -27,13 +27,13 @@
 
   .album,
   .photo {
-    transition: opacity 0.3s;
+    transition: all 0.1s;
   }
 
   &:hover {
     .album,
     .photo {
-      opacity: .8;
+      transform: scale(1.05, 1.05);
     }
   }
 
