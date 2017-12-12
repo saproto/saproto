@@ -36,7 +36,11 @@
         }
 
         body {
-            background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+            @if(date('U') >  strtotime('December 6') && date('U') < strtotime('December 31'))
+                background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+            @else
+                background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+            @endif
             background-position: center 115%;
             background-repeat: no-repeat;
         }
@@ -978,7 +982,7 @@
 
             if (modal_status == 'rfid') {
 
-                if(rfid_link_card == null) {
+                if (rfid_link_card == null) {
                     rfid_link_card = data;
                     $("#rfid-modal").html('<div class="qrAuth">Loading QR authentication...</div>\n' +
                         '\n' +
@@ -1048,9 +1052,9 @@
                 element.html('Scan this QR code<br><br><img src="{{ route('qr::code', '') }}/' + data.qr_token + '" width="200px" height="200px"><br><br>or go to<br><strong>{{ route('qr::dialog', '') }}/' + data.qr_token + "</strong>");
                 auth_token = data.auth_token;
 
-                var qrAuthInterval = setInterval(function() {
+                var qrAuthInterval = setInterval(function () {
                     // Stop checking if the modal has been dismissed.
-                    if(modal_status == null) {
+                    if (modal_status == null) {
                         clearInterval(qrAuthInterval);
                         return;
                     }
@@ -1064,7 +1068,7 @@
                         },
                         dataType: 'json',
                         success: function (data) {
-                            if(data) {
+                            if (data) {
                                 element.html('Successfully authenticated :)');
                                 clearInterval(qrAuthInterval);
                                 onComplete(auth_token, 'qr');
