@@ -195,7 +195,8 @@ class ProductController extends Controller
     {
         $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
 
-        $feedback = "";
+        $log = "";
+        $errors = "";
         foreach ($input as $lineRaw) {
             $line = explode(',', $lineRaw);
             if (count($line) == 2) {
@@ -204,18 +205,18 @@ class ProductController extends Controller
                     $oldstock = $product->stock;
                     $newstock = $oldstock + $line[1];
                     $product->stock = $newstock;
-                    $feedback .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
+                    $log .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
                     $product->save();
                 } else {
-                    $feedback .= "Product ID <strong>" . $line[0] . "</strong> not recognized.<br>";
+                    $errors .= "<span style='color: red;'>Product ID <strong>" . $line[0] . "</strong> not recognized.</span><br>";
                 }
             } else {
-                $feedback .= "Incorrect format for line <strong>" . $lineRaw . "</strong>.<br>";
+                $errors .= "<span style='color: red;'>Incorrect format for line <strong>" . $lineRaw . "</strong>.</span><br>";
             }
         }
-        $request->session()->flash('flash_message', $feedback);
+        $request->session()->flash('flash_message', $errors);
 
-        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $feedback))->onQueue('low'));
+        Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors . $log))->onQueue('low'));
 
         return Redirect::back();
     }
