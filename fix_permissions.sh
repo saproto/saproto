@@ -2,8 +2,8 @@
 
 echo "Starting fix...";
 
-chgrp -R www-data storage bootstrap/cache
-chmod -R ug+rwx storage bootstrap/cache
+chmod -R 755 .
+chmod -R 700 .env .git storage
 
 # Notify end
 echo "Done!";
