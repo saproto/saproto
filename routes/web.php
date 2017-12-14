@@ -794,7 +794,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * DMX Management
      */
-    Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:sysadmin|alfred']], function () {
+    Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:board|alfred']], function () {
 
         Route::get('/', ['as' => 'index', 'uses' => 'DmxController@index']);
         Route::get('/add', ['as' => 'add', 'uses' => 'DmxController@create']);
