@@ -98,6 +98,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePage']);
             Route::post('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePost']);
 
+            Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
         });
 

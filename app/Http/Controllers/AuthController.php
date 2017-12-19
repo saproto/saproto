@@ -264,8 +264,10 @@ class AuthController extends Controller
         $user->website = null;
         $user->utwente_username = null;
         $user->edu_username = null;
+        $user->utwente_department = null;
         $user->tfa_totp_key = null;
 
+        $user->did_study_create = 0;
         $user->phone_visible = 0;
         $user->address_visible = 0;
         $user->receive_sms = 0;

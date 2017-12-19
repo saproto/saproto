@@ -5,13 +5,7 @@
     <div class="panel-body">
         @if ($user->utwente_username)
             <p style="text-align: center;">
-                @if($utwente->uid[0])
-                    <strong>{{ $utwente->givenname[0] }} {{ $utwente->sn[0]}}</strong><br>
-                    <i>{{ $utwente->description[0] }}</i><br>
-                @else
-                    Unknown UT Account<br>
-                @endif
-                {{ $user->utwente_username }}
+                {{ $user->utwente_username }} ({{ $user->utwente_department }})
             </p>
         @elseif($user->edu_username)
             <p style="text-align: center;">{{$user->edu_username}}</p>
@@ -20,7 +14,7 @@
                 You can link a university account to your Proto account for easier log-in.
             </p>
             <p style="text-align: center;">
-                Linking a UTwente account also unlocks more possibilities.
+                Linking a UTwente account also unlocks more functionality on the site.
             </p>
         @endif
     </div>

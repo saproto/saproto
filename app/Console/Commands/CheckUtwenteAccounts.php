@@ -25,7 +25,7 @@ class CheckUtwenteAccounts extends Command
      *
      * @var string
      */
-    protected $description = 'Verifies all currently linked UT accounts for being valid.';
+    protected $description = 'Verifies all currently linked UT accounts for being valid, and check studies.';
 
     /**
      * Create a new command instance.
@@ -64,9 +64,17 @@ class CheckUtwenteAccounts extends Command
                 $active = false;
             }
 
+            // See if user studies CreaTe
+            if (strpos($remoteusers[0]->department, "CREA") > 0) {
+                $user->did_study_create = true;
+            }
+            $user->utwente_department = $remoteusers[0]->department;
+            $user->save();
+
             // Act
             if (!$active) {
                 $user->utwente_username = null;
+                $user->utwente_department = null;
                 $user->save();
             }
         }

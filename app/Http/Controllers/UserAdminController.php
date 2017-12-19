@@ -253,6 +253,16 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
+    public function toggleStudiedCreate($id)
+    {
+        $user = User::findOrFail($id);
+        $user->did_study_create = !$user->did_study_create;
+        $user->save();
+
+        Session::flash("flash_message", "Toggled CreaTe status of " . $user->name . ".");
+        return redirect()->back();
+    }
+
     public function showForm(Request $request, $id)
     {
 

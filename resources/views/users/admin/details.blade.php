@@ -19,7 +19,14 @@
                     </a>
                 @endif
 
-            <!-- Quicklinks //-->
+            <!-- Study details //-->
+                <li class="list-group-item list-group-item-success">Study</li>
+                <a class="list-group-item"
+                   href="{{ route('user::admin::toggle_studied_create', ['id' => $user->id]) }}">
+                    Has {!! $user->did_study_create ? '' : '<strong>not</strong>' !!} studied CreaTe.
+                </a>
+
+                <!-- Quicklinks //-->
                 <li class="list-group-item list-group-item-success">Quicklinks</li>
                 <a class="list-group-item" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
                     Dashboard

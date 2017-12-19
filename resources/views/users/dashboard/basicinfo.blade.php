@@ -16,6 +16,16 @@
                 <div class="col-sm-7 control-label" style="text-align: left;">{{ $user->calling_name }}</div>
             </div>
 
+            @if($user->did_study_create)
+
+                <p style="text-align: center;" title="Is this incorrect? Let the board know.">
+                    <sup>
+                        You are studying or have studied CreaTe.
+                    </sup>
+                </p>
+
+            @endif
+
             @if($user->hasCompletedProfile())
 
                 <hr>
@@ -63,6 +73,7 @@
                 @endif
 
             @endif
+
 
         </div>
 
