@@ -129,7 +129,7 @@
                     </li>
                 @endif
 
-                @if (Auth::check() && Auth::user()->can(["alfred","sysadmin"]))
+                @if (Auth::check() && Auth::user()->can(["alfred","board"]))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">SmartXp Admin <span class="caret"></span></a>
