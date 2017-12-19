@@ -65,6 +65,9 @@ class DmxController extends Controller
                 continue;
             }
             foreach ($override->getFixtures() as $fixture) {
+                if ($override->justOver() && $fixture->follow_timetable) {
+                    continue;
+                }
                 $color = ($override->justOver() && !$fixture->follow_timetable ? [0, 0, 0, 0] : $override->colorArray());
                 // Set red
                 foreach ($fixture->getChannels('red') as $channel) {

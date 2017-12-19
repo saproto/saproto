@@ -42,7 +42,7 @@ class DmxOverride extends Model
 
     public function justOver()
     {
-        return date('U') < $this->end + 600;
+        return date('U') > $this->end && date('U') < $this->end + 600;
     }
 
     public function getFixtureIds()
