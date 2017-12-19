@@ -11,6 +11,7 @@ use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\FlickrAlbum;
+use Proto\Models\HashMapItem;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
@@ -56,9 +57,16 @@ class EventController extends Controller
             }
         }
 
+
+        if (Auth::check()) {
+            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', Auth::user()->id)->first();
+        } else {
+            $reminder = null;
+        }
+
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
     }
 
     /**
@@ -435,6 +443,36 @@ class EventController extends Controller
 
     }
 
+    public function setReminder(Request $request)
+    {
+        $user = Auth::user();
+
+        $hours = floatval($request->get('hours'));
+
+        if ($request->has('delete') || $hours <= 0) {
+
+            HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->delete();
+            Session::flash('flash_message', 'Reminder removed.');
+            return Redirect::back();
+
+        } elseif ($hours > 0) {
+
+            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
+            if (!$reminder) {
+                $reminder = HashMapItem::create(['key' => 'calendar_alarm', 'subkey' => $user->id]);
+            }
+            $reminder->value = $request->get('hours');
+            $reminder->save();
+            Session::flash('flash_message', sprintf('Reminder set to %s hours.', $reminder->value));
+            return Redirect::back();
+
+        } else {
+
+            abort(500, "Invalid request.");
+
+        }
+    }
+
     public function icalCalendar($personal_key = null)
     {
 
@@ -446,29 +484,31 @@ class EventController extends Controller
             $calendar_name = 'S.A. Proto Calendar';
         }
 
-        $calendar = "BEGIN:VCALENDAR" . PHP_EOL .
-            "VERSION:2.0" . PHP_EOL .
-            "PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN" . PHP_EOL .
-            "CALSCALE:GREGORIAN" . PHP_EOL .
-            "X-WR-CALNAME:" . $calendar_name . PHP_EOL .
-            "X-WR-CALDESC:All of Proto's events and happenings, straight from the website!" . PHP_EOL .
-            "BEGIN:VTIMEZONE" . PHP_EOL .
-            "TZID:Central European Standard Time" . PHP_EOL .
-            "BEGIN:STANDARD" . PHP_EOL .
-            "DTSTART:20161002T030000" . PHP_EOL .
-            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10" . PHP_EOL .
-            "TZNAME:Central European Standard Time" . PHP_EOL .
-            "TZOFFSETFROM:+0200" . PHP_EOL .
-            "TZOFFSETTO:+0100" . PHP_EOL .
-            "END:STANDARD" . PHP_EOL .
-            "BEGIN:DAYLIGHT" . PHP_EOL .
-            "DTSTART:20160301T020000" . PHP_EOL .
-            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3" . PHP_EOL .
-            "TZNAME:Central European Daylight Time" . PHP_EOL .
-            "TZOFFSETFROM:+0100" . PHP_EOL .
-            "TZOFFSETTO:+0200" . PHP_EOL .
-            "END:DAYLIGHT" . PHP_EOL .
-            "END:VTIMEZONE" . PHP_EOL;
+        $calendar = "BEGIN:VCALENDAR" . "\r\n" .
+            "VERSION:2.0" . "\r\n" .
+            "PRODID:-//HYTTIOAOAc//S.A. Proto Calendar//EN" . "\r\n" .
+            "CALSCALE:GREGORIAN" . "\r\n" .
+            "X-WR-CALNAME:" . $calendar_name . "\r\n" .
+            "X-WR-CALDESC:All of Proto's events, straight from the website!" . "\r\n" .
+            "BEGIN:VTIMEZONE" . "\r\n" .
+            "TZID:Central European Standard Time" . "\r\n" .
+            "BEGIN:STANDARD" . "\r\n" .
+            "DTSTART:20161002T030000" . "\r\n" .
+            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=3;BYMINUTE=0;BYMONTH=10" . "\r\n" .
+            "TZNAME:Central European Standard Time" . "\r\n" .
+            "TZOFFSETFROM:+0200" . "\r\n" .
+            "TZOFFSETTO:+0100" . "\r\n" .
+            "END:STANDARD" . "\r\n" .
+            "BEGIN:DAYLIGHT" . "\r\n" .
+            "DTSTART:20160301T020000" . "\r\n" .
+            "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYHOUR=2;BYMINUTE=0;BYMONTH=3" . "\r\n" .
+            "TZNAME:Central European Daylight Time" . "\r\n" .
+            "TZOFFSETFROM:+0100" . "\r\n" .
+            "TZOFFSETTO:+0200" . "\r\n" .
+            "END:DAYLIGHT" . "\r\n" .
+            "END:VTIMEZONE" . "\r\n";
+
+        $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
 
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
 
@@ -504,23 +544,43 @@ class EventController extends Controller
                 }
             }
 
-            $calendar .= "BEGIN:VEVENT" . PHP_EOL .
-                sprintf("UID:%s@proto.utwente.nl", $event->id) . PHP_EOL .
-                sprintf("DTSTART:%s", date('Ymd\THis', $event->start)) . PHP_EOL .
-                sprintf("DTEND:%s", date('Ymd\THis', $event->end)) . PHP_EOL .
-                sprintf("SUMMARY:%s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title) . PHP_EOL .
-                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->id])) . PHP_EOL .
-                sprintf("LOCATION:%s", $event->location) . PHP_EOL .
-                sprintf("ORGANIZER:CN=%s:MAILTO:%s",
+            $calendar .= "BEGIN:VEVENT" . "\r\n" .
+                sprintf("UID:%s@proto.utwente.nl", $event->id) . "\r\n" .
+                sprintf("DTSTAMP:%s", gmdate('Ymd\THis\Z', strtotime($event->created_at))) . "\r\n" .
+                sprintf("DTSTART:%s", date('Ymd\THis', $event->start)) . "\r\n" .
+                sprintf("DTEND:%s", date('Ymd\THis', $event->end)) . "\r\n" .
+                sprintf("SUMMARY:%s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title) . "\r\n" .
+                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->id])) . "\r\n" .
+                sprintf("LOCATION:%s", $event->location) . "\r\n" .
+                sprintf("ORGANIZER;CN=%s:MAILTO:%s",
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
-                    ($event->committee ? $event->committee->getEmailAddress() : 'board@proto.utwente.nl')) . PHP_EOL .
-                "END:VEVENT" . PHP_EOL;
+                    ($event->committee ? $event->committee->getEmailAddress() : 'board@proto.utwente.nl')) . "\r\n";
+
+            if ($reminder && $status) {
+                $calendar .= "BEGIN:VALARM" . "\r\n" .
+                    sprintf("TRIGGER:-PT%dM", ceil($reminder->value * 60)) . "\r\n" .
+                    "ACTION:DISPLAY" . "\r\n" .
+                    sprintf("DESCRIPTION:%s at %s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title, date('l F j, H:i:s', $event->start)) . "\r\n" .
+                    "END:VALARM" . "\r\n";
+            }
+
+            $calendar .= "END:VEVENT" . "\r\n";
 
         }
 
         $calendar .= "END:VCALENDAR";
 
-        return Response::make($calendar)
+        $calendar_wrapped = "";
+        foreach (explode("\r\n", $calendar) as $line) {
+            if (preg_match('(SUMMARY|DESCRIPTION|LOCATION)', $line) === 1) {
+                $search = [';', ','];
+                $replace = ['\;', '\,'];
+                $line = str_replace($search, $replace, $line);
+            }
+            $calendar_wrapped .= wordwrap($line, 75, "\r\n ", true) . "\r\n";
+        }
+
+        return Response::make($calendar_wrapped)
             ->header('Content-Type', 'text/calendar; charset=utf-8')
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
 
