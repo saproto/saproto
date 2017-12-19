@@ -508,8 +508,12 @@ class EventController extends Controller
             "END:DAYLIGHT" . "\r\n" .
             "END:VTIMEZONE" . "\r\n";
 
-        $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
-
+        if ($user) {
+            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
+        } else {
+            $reminder = null;
+        }
+        
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
 
             if ($event->over()) {
