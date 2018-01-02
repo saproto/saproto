@@ -18,7 +18,7 @@ class DmxController extends Controller
     public function valueApi()
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime("last week")), date('c', strtotime("tomorrow")));
+        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime("last week")), date('c', strtotime("next week")));
 
         // Determine if any event is currently going on.
         $current_event = null;
@@ -30,10 +30,12 @@ class DmxController extends Controller
 
         // Determine what preset to use.
         $preset = 'free';
-        if (in_array($event['type'], config('dmx.lecture_types'))) {
-            $preset = 'lecture';
-        } elseif ($current_event !== null) {
-            $preset = 'tutorial';
+        if ($current_event !== null) {
+            if (in_array($event['type'], config('dmx.lecture_types'))) {
+                $preset = 'lecture';
+            } else {
+                $preset = 'tutorial';
+            }
         }
 
         $channel_values = [];
