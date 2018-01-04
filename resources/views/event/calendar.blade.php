@@ -163,7 +163,7 @@
                                     activity you participate in.
                                 @else
                                     You are currently <strong>not</strong> receiving a reminder before an activity you
-                                    partiicpate in.
+                                    participate in.
                                 @endif
                             </sub>
                         </p>
