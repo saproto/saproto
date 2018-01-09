@@ -6,8 +6,6 @@ use Proto\Models\User;
 use Proto\Models\Committee;
 use Proto\Models\Address;
 use Proto\Models\Bank;
-use Proto\Models\Study;
-use Proto\Models\StudyEntry;
 use Proto\Models\Member;
 use Proto\Models\Activity;
 use Proto\Models\OrderLine;
@@ -27,21 +25,16 @@ class OtherDataSeeder extends Seeder
         // List of valid ID's
         $products = Product::all()->pluck('id')->toArray();
         $committees = Committee::all()->pluck('id')->toArray();
-        $studies = Study::all()->pluck('id')->toArray();
-        $activities = Activity::all()->pluck('id')->toArray();
 
         // Create users
         $n = 500;
         echo "Creating $n users" . PHP_EOL;
-        factory(User::class, $n)->create()->each(function ($u) use ($studies) {
+        factory(User::class, $n)->create()->each(function ($u) {
             if (mt_rand(1, 5) > 1) {
                 $u->address()->save(factory(Address::class)->make());
             }
             if (mt_rand(1, 5) > 1) {
                 $u->bank()->save(factory(Bank::class)->make());
-            }
-            if (mt_rand(1, 5) > 1) {
-                $u->studies()->save(factory(StudyEntry::class)->make(['study_id' => $studies[array_rand($studies)]]));
             }
             if (mt_rand(1, 5) > 1) {
                 $u->member()->save(factory(Member::class)->make());

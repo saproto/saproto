@@ -20,23 +20,6 @@
 
         <ul>
             <li>Birthdate: <strong>{{ $user->birthdate }}</strong></li>
-            <li>Nationality: <strong>{{ $user->nationality }}</strong></li>
-            <li>
-                Gender:
-                <strong>
-                    @if($user->gender == 1)
-                        Male
-                    @elseif($user->gender == 2)
-                        Female
-                    @elseif($user->gender == 0)
-                        Unknown
-                    @elseif($user->gender == 9)
-                        Not applicable
-                    @else
-                        Invalid gender value
-                    @endif
-                </strong>
-            </li>
             <li>Phone: <strong>{{ $user->phone }}</strong></li>
         </ul>
 

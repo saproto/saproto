@@ -36,24 +36,6 @@
                     </td>
                 </tr>
             @endif
-            @if(count($user->studies) > 0)
-                <tr>
-                    <td style="text-align: right;"><strong>Studies</strong></td>
-                    <td>
-                        @foreach($user->studies as $study)
-                            <span style="width: 100%;">
-                                {{ $study->name }}
-                                (
-                                {{ date('M \'y',strtotime($study->pivot->created_at)) }}
-                                -
-                                {{ ($study->pivot->deleted_at == null ? 'now' : date('M \'y',strtotime($study->pivot->deleted_at))) }}
-                                )
-                            </span>
-                            <br>
-                        @endforeach
-                    </td>
-                </tr>
-            @endif
             <tr>
                 <td colspan="2">
                     @if($user->member == null)

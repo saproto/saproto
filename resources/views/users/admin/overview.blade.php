@@ -36,6 +36,7 @@
             <th>E-mail</th>
             <th>Username</th>
             <th>UTwente</th>
+            <th>&nbsp;</th>
             <th>Controls</th>
         </tr>
         </thead>
@@ -55,7 +56,7 @@
                     @endif
                 </td>
                 <td>
-                    {{ $user->email }}
+                    {{ $user->deleted_at ? '' : $user->email }}
                 </td>
                 <td>
                     @if($user->member)
@@ -64,6 +65,9 @@
                 </td>
                 <td>
                     {{ $user->utwente_username }}
+                </td>
+                <td>
+                    {{ $user->utwente_department }}
                 </td>
                 <td>
                     @if(!$user->deleted_at)
@@ -91,10 +95,6 @@
                                 <i class="fa fa-user-plus" aria-hidden="true"></i>
                             </a>
                         @endif
-                    @else
-                        <a class="btn btn-default btn-xs" href="{{ route('user::admin::restore', ['id'=>$user->id]) }}">
-                            <i class="fa fa-refresh" aria-hidden="true"></i>
-                        </a>
                     @endif
                 </td>
             </tr>

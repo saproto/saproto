@@ -174,9 +174,7 @@ class UserDashboardController extends Controller
 
         $validator = Validator::make($userdata, [
             'birthdate' => 'required|date',
-            'gender' => 'required|integer',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
-            'nationality' => 'required|string'
+            'phone' => 'required|regex:(\+[0-9]{8,16})'
         ]);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);

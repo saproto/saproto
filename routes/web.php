@@ -95,8 +95,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'UserAdminController@index']);
             Route::get('details/{id}', ['as' => 'details', 'uses' => 'UserAdminController@details']);
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
-            Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePage']);
-            Route::post('restore/{id}', ['as' => 'restore', 'uses' => 'UserAdminController@restorePost']);
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
@@ -164,19 +162,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete', ['as' => 'delete', 'uses' => 'SurfConextController@destroy']);
             Route::get('add', ['as' => 'add', 'uses' => 'SurfConextController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'SurfConextController@store']);
-        });
-
-        /*
-         * Routes related to studies
-         */
-        Route::group(['prefix' => '{user_id}/study', 'as' => 'study::'], function () {
-            Route::get('link', ['as' => 'add', 'uses' => 'StudyController@linkForm']);
-            Route::post('link', ['as' => 'add', 'uses' => 'StudyController@link']);
-
-            Route::get('unlink/{link_id}', ['as' => 'delete', 'uses' => 'StudyController@unlink']);
-
-            Route::get('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLinkForm']);
-            Route::post('edit/{link_id}', ['as' => 'edit', 'uses' => 'StudyController@editLink']);
         });
 
         /*
@@ -424,20 +409,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'MenuController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
-    });
-
-    /*
-     * Routes related to studies.
-     */
-    Route::group(['prefix' => 'study', 'middleware' => ['auth', 'permission:board'], 'as' => 'study::'], function () {
-
-        Route::get('', ['as' => 'list', 'uses' => 'StudyController@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'StudyController@create']);
-        Route::post('add', ['as' => 'add', 'uses' => 'StudyController@store']);
-        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@edit']);
-        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'StudyController@update']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'StudyController@destroy']);
-
     });
 
     /*

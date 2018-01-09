@@ -8,14 +8,11 @@ use Carbon\Carbon;
 
 use Proto\Models\Achievement;
 use Proto\Models\ProductCategory;
-use Proto\Models\StudyEntry;
 use Proto\Models\User;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\OrderLine;
 use Proto\Models\Member;
 use Proto\Models\CommitteeMembership;
-
-use Proto\Http\Controllers\AchievementController;
 
 class AchievementsCron extends Command
 {
@@ -283,14 +280,7 @@ class AchievementsCron extends Command
         $selected = array();
         $fristies = OrderLine::where('product_id', 180)->get();
         foreach ($fristies as $fristi) {
-            $studies = StudyEntry::where('user_id', $fristi->user_id)->get();
-            $creater = false;
-            foreach ($studies as $study) {
-                if ($study->study_id == 1) {
-                    $creater = true;
-                }
-            }
-            if (!$creater) {
+            if (!$fristi->user->did_study_create) {
                 $selected[] = User::find($fristi->user_id);
             }
         }
@@ -406,7 +396,7 @@ class AchievementsCron extends Command
     private function collector()
     {
         $selected = array();
-        foreach(User::all() as $user) {
+        foreach (User::all() as $user) {
             if (count($user->achieved()) == count(Achievement::where('isPrize', 0)->get())) {
                 $selected[] = $user;
             }

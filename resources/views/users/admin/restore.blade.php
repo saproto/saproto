@@ -49,25 +49,11 @@
                            value="{{ (Session::has('register_persist') ? Session::get('register_persist')['birthdate'] : '') }}"
                            required>
                 </div>
-                <div class="col-md-5">
-                    <label for="gender" class="control-label">Gender</label>
-                    <select id="gender" name="gender" class="form-control" required>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                        <option value="9">More complicated</option>
-                    </select>
-                </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="row">
-                <div class="col-md-5">
-                    <label for="nationality" class="control-label">Nationality</label>
-                    <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Dutch"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['nationality'] : '') }}"
-                           required>
-                </div>
                 <div class="col-md-5">
                     <label for="phone" class="control-label">Phone</label>
                     <input type="tel" class="form-control" id="phone" name="phone" placeholder="+31534894423"

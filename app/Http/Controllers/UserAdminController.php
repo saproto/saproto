@@ -65,8 +65,6 @@ class UserAdminController extends Controller
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->calling_name = $request->calling_name;
-        $user->gender = $request->gender;
-        $user->nationality = $request->nationality;
         if (strtotime($request->birthdate) !== false) {
             $user->birthdate = $request->birthdate;
         } else {
@@ -75,47 +73,6 @@ class UserAdminController extends Controller
         $user->save();
         Session::flash("flash_message", "User updated!");
         return Redirect::back();
-    }
-
-    /**
-     * Restore user
-     */
-    public function restorePage($id)
-    {
-        $user = User::onlyTrashed()->findOrFail($id);
-        return view('users.admin.restore', ['user' => $user]);
-    }
-
-    public function restorePost(Request $request, $id)
-    {
-
-        $user = User::onlyTrashed()->findOrFail($id);
-
-        $request->session()->flash('register_persist', $request->all());
-
-        $this->validate($request, [
-            'email' => 'required|email|unique:users',
-            'name' => 'required|string',
-            'calling_name' => 'required|string',
-            'birthdate' => 'required|date_format:Y-m-d',
-            'gender' => 'required|in:1,2,9',
-            'nationality' => 'required|string',
-            'phone' => 'required|regex:(\+[0-9]{8,16})',
-        ]);
-
-        $user->fill($request->all());
-        $user->save();
-        $user->restore();
-
-        AuthController::makeLdapAccount($user);
-
-        Mail::to($user)->queue((new UserReactivated($user))->onQueue('high'));
-
-        AuthController::dispatchPasswordEmailFor($user);
-
-        $request->session()->flash('flash_message', 'Account reactivated.');
-        return Redirect::route('user::admin::details', ['id' => $id]);
-
     }
 
     /**

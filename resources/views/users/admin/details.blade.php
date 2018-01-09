@@ -126,28 +126,6 @@
                 @if($user->hasCompletedProfile())
 
                     <div class="form-group">
-                        <label for="gender" class="col-sm-4 control-label">Gender</label>
-
-                        <div class="col-md-8">
-                            <select id="gender" name="gender" class="form-control">
-                                <option value="0">Unknown</option>
-                                <option value="1" {{$user->gender==1?'selected':''}}>Male</option>
-                                <option value="2" {{$user->gender==2?'selected':''}}>Female</option>
-                                <option value="9" {{$user->gender==9?'selected':''}}>More complicated</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="nationality" class="col-sm-4 control-label">Nationality</label>
-
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="nationality" name="nationality"
-                                   value="{{ $user->nationality }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="birthdate" class="col-sm-4 control-label">Birthday</label>
 
                         <div class="col-sm-8">

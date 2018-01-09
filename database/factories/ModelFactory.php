@@ -3,9 +3,7 @@
 use Proto\Models\User;
 use Proto\Models\Address;
 use Proto\Models\Bank;
-use Proto\Models\StudyEntry;
 use Proto\Models\Member;
-use Proto\Models\OrderLine;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +25,6 @@ $factory->define(User::class, function (Faker\Generator $faker) {
         'password' => bcrypt(str_random(16)),
         'remember_token' => str_random(10),
         'birthdate' => $faker->date('Y-m-d', '-16 years'),
-        'gender' => $gender,
-        'nationality' => $faker->country,
         'phone' => $faker->e164PhoneNumber,
         'diet' => $faker->sentence,
         'website' => $faker->url,
@@ -53,14 +49,6 @@ $factory->define(Bank::class, function (Faker\Generator $faker) {
         'iban' => $faker->iban(null),
         'bic' => $faker->swiftBicNumber,
         'machtigingid' => 'PROTOX' . mt_rand(10000, 99999) . 'X' . mt_rand(10000, 99999)
-    ];
-});
-
-$factory->define(StudyEntry::class, function (Faker\Generator $faker) {
-    return [
-        'study_id' => 0,
-        'created_at' => $faker->date('Y-m-d'),
-        'deleted_at' => $faker->date('Y-m-d', '+2 years')
     ];
 });
 

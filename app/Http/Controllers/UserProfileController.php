@@ -4,16 +4,10 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Proto\Models\CommitteeMembership;
-use Redirect;
-use Hash;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\User;
 
 use Auth;
-use Session;
 
 class UserProfileController extends Controller
 {

@@ -16,12 +16,8 @@ use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
 use Proto\Models\Role;
-use Proto\Models\Study;
 use Proto\Models\Ticket;
 use Proto\Models\User;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 class ExportController extends Controller
 {
@@ -95,9 +91,6 @@ class ExportController extends Controller
                 break;
             case 'roles':
                 $data = Role::all();
-                break;
-            case 'studies':
-                $data = Study::all();
                 break;
             case 'tickets':
                 if ($user->member) {

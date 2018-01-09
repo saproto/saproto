@@ -258,8 +258,6 @@ class AuthController extends Controller
         $user->password = null;
         $user->remember_token = null;
         $user->birthdate = null;
-        $user->gender = null;
-        $user->nationality = null;
         $user->phone = null;
         $user->website = null;
         $user->utwente_username = null;

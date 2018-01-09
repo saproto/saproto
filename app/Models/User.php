@@ -61,7 +61,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (Address::where('user_id', $this->id)->first()) return false;
         if (OrderLine::where('user_id', $this->id)->count() > 0) return false;
         if (CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
-        if (StudyEntry::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
         if (Quote::where('user_id', $this->id)->count() > 0) return false;
         if (EmailListSubscription::where('user_id', $this->id)->count() > 0) return false;
         if (RfidCard::where('user_id', $this->id)->count() > 0) return false;
@@ -172,17 +171,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if ($this->photo) {
             return $this->photo->generateImagePath($x, $y);
         } else {
-            switch ($this->gender) {
-                case 1:
-                    return asset('images/default-avatars/male.png');
-                    break;
-                case 2:
-                    return asset('images/default-avatars/female.png');
-                    break;
-                default:
-                    return asset('images/default-avatars/other.png');
-                    break;
-            }
+            return asset('images/default-avatars/other.png');
         }
     }
 
@@ -373,14 +362,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasCompletedProfile()
     {
-        return $this->birthdate !== null && $this->gender !== null && $this->nationality !== null & $this->phone !== null;
+        return $this->birthdate !== null && $this->phone !== null;
     }
 
     public function clearMemberProfile()
     {
-        $this->nationality = null;
         $this->birthdate = null;
-        $this->gender = null;
         $this->phone = null;
         $this->save();
     }

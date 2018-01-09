@@ -32,26 +32,6 @@
 
                 <p style="text-align: center;"><i>Member profile:</i></p>
 
-                @if ($user->gender)
-                    <div class="form-group">
-                        <label for="gender" class="col-sm-5 control-label">Gender</label>
-
-                        <div class="col-sm-7 control-label" style="text-align: left;">
-                            @if($user->gender == 1)
-                                Male
-                            @elseif($user->gender == 2)
-                                Female
-                            @elseif($user->gender == 0)
-                                Unknown
-                            @elseif($user->gender == 9)
-                                Not applicable
-                            @else
-                                Invalid gender value
-                            @endif
-                        </div>
-                    </div>
-                @endif
-
                 @if($user->birthdate)
                     <div class="form-group">
                         <label for="birthdate" class="col-sm-5 control-label">Birthday</label>
@@ -61,17 +41,7 @@
                         </div>
                     </div>
                 @endif
-
-                @if($user->nationality)
-                    <div class="form-group">
-                        <label for="nationality" class="col-sm-5 control-label">Nationality</label>
-
-                        <div class="col-sm-7 control-label" style="text-align: left;">
-                            {{ $user->nationality }}
-                        </div>
-                    </div>
-                @endif
-
+                
             @endif
 
 

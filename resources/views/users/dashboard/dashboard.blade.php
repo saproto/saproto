@@ -21,6 +21,7 @@
         <div class="col-md-4">
             @include('users.dashboard.profilepic')
             @include('users.dashboard.account')
+            @include('users.dashboard.utwenteinfo')
         </div>
         <div class="col-md-4">
             @include('users.dashboard.maillists')
@@ -30,19 +31,6 @@
     @if($user->bank != null)
         @include("users.dashboard.deletebank")
     @endif
-
-    <h2 class="dashboard__divider">
-        Study information
-    </h2>
-
-    <div class="row">
-        <div class="col-md-4">
-            @include('users.dashboard.utwenteinfo')
-        </div>
-        <div class="col-md-8">
-            @include('users.dashboard.studyinfo')
-        </div>
-    </div>
 
     <h2 class="dashboard__divider">
         Account details

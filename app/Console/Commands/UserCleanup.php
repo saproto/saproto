@@ -3,19 +3,6 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-
-use Proto\Models\Member;
-use Proto\Models\AchievementOwnership;
-use Proto\Models\Address;
-use Proto\Models\Bank;
-use Proto\Models\CommitteeMembership;
-use Proto\Models\EmailListSubscription;
-use Proto\Models\OrderLine;
-use Proto\Models\PlayedVideo;
-use Proto\Models\Quote;
-use Proto\Models\RfidCard;
-use Proto\Models\StudyEntry;
 use Proto\Models\User;
 
 class UserCleanup extends Command

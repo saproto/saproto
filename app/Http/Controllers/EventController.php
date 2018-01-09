@@ -434,8 +434,6 @@ class EventController extends Controller
             $item->id = $activity->id;
             $item->email = $activity->email;
             $item->name = $activity->name;
-            $item->birthdate = $activity->birthdate;
-            $item->gender = $activity->gender;
             $data[] = $item;
         }
 
