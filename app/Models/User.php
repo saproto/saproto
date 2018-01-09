@@ -184,14 +184,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
-     * @return mixed All associated studies, if any.
-     */
-    public function studies()
-    {
-        return $this->belongsToMany('Proto\Models\Study', 'studies_users')->withPivot(array('id', 'deleted_at'))->withTimestamps();
-    }
-
-    /**
      * @return mixed Returns all committees a user is currently a member of.
      */
     public function committees()
