@@ -16,8 +16,16 @@
 
 }
 
-.member:hover .activity__admin-controls {
-  display: block;
+.member {
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover .activity__admin-controls {
+    display: block;
+  }
+
 }
 
 .calendar {
