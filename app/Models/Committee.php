@@ -32,7 +32,7 @@ class Committee extends Model
      */
     public function pastEvents()
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->get();
+        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->get();
 
         if (Auth::check() && Auth::user()->can('board')) {
             return $events;
