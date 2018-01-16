@@ -432,20 +432,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
-     * Routes related to courses
-     */
-    Route::group(['prefix' => 'course', 'as' => 'course::', 'middleware' => ['auth']], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'CourseController@index']);
-
-        Route::group(['middleware' => ['permission:board']], function () {
-            Route::get('add', ['as' => 'add', 'uses' => 'CourseController@create']);
-            Route::post('add', ['as' => 'add', 'uses' => 'CourseController@store']);
-
-            Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CourseController@destroy']);
-        });
-    });
-
-    /*
      * Routes related to e-mail.
      */
     Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
