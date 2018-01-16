@@ -9,52 +9,43 @@
 
         <hr class="rule">
 
-        <table class="table borderless">
-            <tr>
-                <td style="text-align: right;"><strong>E-mail</strong></td>
-                <td><a href="mailto:{{ $user->getDisplayEmail() }}">{{ $user->getDisplayEmail() }}</a></td>
-            </tr>
-            @if($user->website)
-                <tr>
-                    <td style="text-align: right;"><strong>Website</strong></td>
-                    <td><a href="{{ $user->websiteUrl() }}">{{ $user->websiteDisplay() }}</a></td>
-                </tr>
+        <p class="ellipsis">
+            <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;
+            <a href="mailto:{{ $user->getDisplayEmail() }}">{{ $user->getDisplayEmail() }}</a>
+        </p>
+
+        @if($user->website)
+            <p class="ellipsis">
+                <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+                <a href="{{ $user->websiteUrl() }}">{{ $user->websiteDisplay() }}</a>
+            </p>
+        @endif
+        @if($user->phone_visible)
+            <p class="ellipsis">
+                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;
+                <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>
+            </p>
+        @endif
+        @if($user->address_visible && $user->address != null)
+            <p class="ellipsis">
+                <i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;
+                {{ $user->address->street }} {{ $user->address->number }}, {{ $user->address->city }}
+            </p>
+        @endif
+
+        <p class="ellipsis">
+            <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
+            @if($user->member == null)
+                Not a member
+            @else
+                Member
+                @if(date('U', strtotime($user->member->created_at)) > 0)
+                    as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+                @else
+                    since <strong>ancient times</strong>!
+                @endif
             @endif
-            @if($user->phone_visible)
-                <tr>
-                    <td style="text-align: right;"><strong>Phone</strong></td>
-                    <td><a href="tel:{{ $user->phone }}">{{ $user->phone }}</a></td>
-                </tr>
-            @endif
-            @if($user->address_visible && $user->address != null)
-                <tr>
-                    <td style="text-align: right;"><strong>Address</strong></td>
-                    <td>
-                        {{ $user->address->street }} {{ $user->address->number }}<br>
-                        {{ $user->address->zipcode }}, {{ $user->address->city }}<br>
-                        {{ $user->address->country }}
-                    </td>
-                </tr>
-            @endif
-            <tr>
-                <td colspan="2">
-                    @if($user->member == null)
-                        <span class="text-info">
-                        {{ $user->calling_name }} is not a member of S.A. Proto.
-                    </span>
-                    @else
-                        <span class="text-success">
-                        {{ $user->calling_name }} is a member
-                            @if(date('U', strtotime($user->member->created_at)) > 0)
-                                as of {{ date('F j, Y', strtotime($user->member->created_at)) }}.
-                            @else
-                                since <strong>ancient times</strong>!
-                            @endif
-                    </span>
-                    @endif
-                </td>
-            </tr>
-        </table>
+        </p>
 
     </div>
 </div>

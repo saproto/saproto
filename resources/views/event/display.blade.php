@@ -139,7 +139,7 @@
                                         @endif
 
                                         @foreach($event->activity->helpingUsers($instance->id) as $participation)
-                                            <div class="member">
+                                            <div class="member ellipsis">
                                                 <div class="member-picture"
                                                      style="background-image:url('{!! $participation->user->generatePhotoPath(100, 100) !!}');">
                                                 </div>
@@ -343,7 +343,7 @@
 
                         @foreach($event->activity->users as $user)
 
-                            <div class="member">
+                            <div class="member ellipsis">
                                 <div class="member-picture"
                                      style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                 <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
@@ -370,7 +370,7 @@
 
                             @foreach($event->activity->backupUsers as $user)
 
-                                <div class="member">
+                                <div class="member ellipsis">
                                     <div class="member-picture"
                                          style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
                                     <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
