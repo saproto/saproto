@@ -12,7 +12,7 @@
 
             <div class="row">
 
-                <div class="col-md-5 col-xs-6">
+                <div class="col-md-5 col-xs-12">
 
                     <div class="company__row__image">
 
@@ -24,7 +24,7 @@
 
                 </div>
 
-                <div class="col-md-7 col-xs-6 company__row__excerpt">
+                <div class="col-md-7 col-xs-12 company__row__excerpt">
 
                     <div class="panel panel-default">
 
