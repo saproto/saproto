@@ -35,7 +35,7 @@
 
             <div class="row">
 
-        @endif
+                @endif
 
                 <div class="col-md-4">
 
@@ -43,28 +43,21 @@
 
                         <div class="panel panel-default news__card">
 
-                            <div class="panel-body ">
+                            <div class="panel-body">
 
-                                    @if ($newsitem->featuredImage)
+                                <p>
+                                    <strong>
+                                        {{ $newsitem->title }}
+                                    </strong>
+                                    <br/>
+                                    <em>
+                                        Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
+                                    </em>
+                                </p>
 
-                                        <img src="{{ $newsitem->featuredImage->generateImagePath(125,150) }}"
-                                             class="news__card__photo"/>
-
-                                    @endif
-
-                                    <p>
-                                        <strong>
-                                            {{ $newsitem->title }}
-                                        </strong>
-                                        <br />
-                                        <em>
-                                            Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
-                                        </em>
-                                    </p>
-
-                                        <p>
-                                            {{ $newsitem->content }}
-                                        </p>
+                                <p>
+                                    {{ $newsitem->content }}
+                                </p>
 
                             </div>
 
