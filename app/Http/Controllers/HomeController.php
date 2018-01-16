@@ -30,7 +30,7 @@ class HomeController extends Controller
     public function show()
     {
 
-        $events = Event::where('secret', false)->where('start', '>=', date('U'))->orderBy('start')->limit(5)->get();
+        $events = Event::where('secret', false)->where('end', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->orderBy('published_at', 'desc')->take(3)->get();
 
