@@ -38,10 +38,7 @@ class ProtubeController extends Controller
 
     public function remote()
     {
-        return view('protube.remote', ['alltime' => $this->getTopVideos(3),
-            'month' => $this->getTopVideos(3, '-1 month'),
-            'week' => $this->getTopVideos(3, '-1 week'),
-            'usertop' => $this->getTopVideos(3, null, Auth::user())]);
+        return view('protube.remote');
     }
 
     public function loginRedirect()
