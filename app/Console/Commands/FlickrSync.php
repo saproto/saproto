@@ -10,8 +10,6 @@ use Proto\Models\FlickrItem;
 
 use Proto\Http\Controllers\SlackController;
 
-use Exception;
-
 class FlickrSync extends Command
 {
     /**
@@ -47,27 +45,19 @@ class FlickrSync extends Command
     {
 
         $this->info('Testing if API key still works.');
-        try {
-            $test = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.test.login', [])));
-        } catch (Exception $e) {
-            $this->error("Flickr API not responsive when testing API key.");
-            return;
-        }
+
+        $test = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.test.login', [])));
         if ($test->stat != "ok") {
             $this->error('API key is not valid!');
             SlackController::sendNotification('[console *proto:flickr*] API key is not valid.');
             return;
-        } elseif ($test->user->id != config('flickr.user')) {
-            $this->error('API key is for the wrong user (' . $test->user->id . ' instead of ' . config("app-proto.flickr-user") . ')!');
+        } elseif (false&&$test->user->id != config('app-proto.flickr-user')) {
+            $this->error('API key is for the wrong user!');
             SlackController::sendNotification('[console *proto:flickr*] API key is for the wrong user.');
             return;
         }
 
         $albums = Flickr::getAlbumsFromAPI();
-        if ($albums === false) {
-            $this->error("Flickr API not responsive when grabbing albums.");
-            return;
-        }
         $dbAlbums = FlickrAlbum::all();
 
         // Album cleanup
@@ -126,7 +116,7 @@ class FlickrSync extends Command
             $items = Flickr::getPhotosFromAPI($album->id);
 
             if ($items === false) {
-                $this->error('Flickr API not available when requesting photos.');
+                $this->error('Flickr API not available.');
                 continue;
             }
 

@@ -30,8 +30,15 @@
 
                     <div class="col-md-3 col-xs-6">
 
-                        <a href="{!! ($photo->url) !!}" class="photo-link chocolat-image">
+                        <a href="{{route("photo::view", ["id"=> $photo->id])}}" class="photo-link">
                             <div class="photo" style="background-image: url('{!! $photo->thumb !!}')">
+                                <div class="album-name">
+
+
+                               Likes: {{$photo->getLikes()}}
+
+
+                                </div>
                                 @if ($photo->private)
                                     <div class="photo__hidden">
                                         <i class="fa fa-low-vision" aria-hidden="true"></i>
@@ -60,6 +67,26 @@
         $(document).ready(function () {
             $('#album').Chocolat();
         });
+
+
+
+
+    </script>
+
+    <script>
+        (function(window, location) {
+            history.replaceState(null, document.title, location.pathname+"#!/stealingyourhistory");
+            history.pushState(null, document.title, location.pathname);
+
+            window.addEventListener("popstate", function() {
+                if(location.hash === "#!/stealingyourhistory") {
+                    history.replaceState(null, document.title, location.pathname);
+                    setTimeout(function(){
+                        location.replace("{{ route('photo::albums')}}");
+                    },0);
+                }
+            }, false);
+        }(window, location));
     </script>
 
 @endsection

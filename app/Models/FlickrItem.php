@@ -47,4 +47,9 @@ class FlickrItem extends Model
     {
         return $this->getAdjacentPhoto(false);
     }
+
+    public function getLikes()
+    {
+        return PhotoLikes::where("photo_id","=", $this->id)->count();
+    }
 }

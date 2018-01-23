@@ -41,11 +41,13 @@ class Flickr extends Model
         }
 
         $items = FlickrItem::where('album_id', $albumID);
+
+
+
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
         $items = $items->orderBy('date_taken', 'asc')->get();
-
         $data = new \stdClass();
         $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
         $data->album_date = FlickrAlbum::where("id", "=", $albumID)->first()->date_taken;
@@ -54,6 +56,31 @@ class Flickr extends Model
 
         return $data;
     }
+
+    public static function getPhoto($photoID)
+    {
+        $photo = FlickrItem::where('id', $photoID)->first();
+
+        $data = new \stdClass();
+        $data->photo_url = FlickrItem::where("id", "=", $photoID)->first()->url;
+        $data->album_id = FlickrItem::where("id", "=", $photoID)->first()->album_id;
+        $data->album_name = FlickrAlbum::where("id", "=", $data->album_id)->first()->name;
+        $data->likes = PhotoLikes::where("photo_id", "=", $photoID)->count();
+        $data->liked = PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count();
+
+        if ($photo->getNextPhoto() != null) {
+            $data->next = $photo->getNextPhoto()->id;
+        } else { $data->next = null; }
+
+        if ($photo->getPreviousPhoto() != null) {
+            $data->previous = $photo->getPreviousPhoto()->id;
+        } else { $data->previous = null; }
+
+        $data->id = $photoID;
+
+        return $data;
+    }
+
 
     public static function constructAPIUri($method, array $params)
     {
