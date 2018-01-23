@@ -102,6 +102,8 @@ class ApiController extends Controller
         $response = new \stdClass();
 
         if (Auth::check()) {
+            $response->name = Auth::user()->name;
+            $response->photo = Auth::user()->generatePhotoPath(250,250);
             $response->token = Auth::user()->getToken()->token;
         } else {
             $response->token = 0;
