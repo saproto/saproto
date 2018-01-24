@@ -819,7 +819,8 @@
                     e.preventDefault();
                     remote.emit("search", encodeURIComponent($("#protube__remote__ytSearch").val()));
                     $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px;\"><i class=\"fa fa-spinner fa-pulse fa-fw\"></i><br />\n" +
-                        "Loading...</div>")
+                        "Loading...</div>");
+                    window.scrollTo(0, 0);
                 });
 
                 $('#protube__remote__pin_form').bind('submit', function(e){
