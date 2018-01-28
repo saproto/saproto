@@ -57,5 +57,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:spotifysync')->daily()->at('00:00');
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
+        $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
     }
 }
