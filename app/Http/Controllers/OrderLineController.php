@@ -118,7 +118,7 @@ class OrderLineController extends Controller
 
             $user = User::findOrFail($request->input('user')[$i]);
             $product = Product::findOrFail($request->input('product')[$i]);
-            $price = ($request->input('price')[$i] != "" ? $request->input('price')[$i] : $product->price);
+            $price = ($request->input('price')[$i] != "" ? floatval(str_replace(",", ".", $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
 
             $product->buyForUser($user, $units, $price * $units);
