@@ -285,6 +285,7 @@
         #protube__remote__queue__container {
             text-align: left;
             overflow-x: auto;
+            overflow-y: hidden;
 
             height: 105px;
 
