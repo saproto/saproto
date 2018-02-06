@@ -227,6 +227,24 @@
             height: 135px;
         }
 
+        #clock {
+            position: absolute;
+
+            bottom: 30px;
+            right: 30px;
+
+            z-index: 9999;
+
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+
+            font-size: 62px;
+
+            padding-top: 10px;
+
+            text-align: center;
+        }
+
         #slideshow {
             position: absolute;
             top: 0;
@@ -308,6 +326,30 @@
             $("#connecting").hide(0);
 
             screen.emit("screenReady");
+
+            var t;
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                // add a zero in front of numbers<10
+                h = checkTime(h);
+                m = checkTime(m);
+                $('#clock').html(h + ":" + m);
+                t = setTimeout(function() {
+                    startTime()
+                }, 500);
+            }
+
+            startTime();
 
             screen.on("disconnect", function () {
                 $("#connecting").show(0);
@@ -542,6 +584,7 @@
 <div id="playerContainer">
     <div id="nowPlaying">Loading...</div>
     <div id="addedBy">&nbsp;</div>
+    <div id="clock"> 00:00 </div>
     <div id="player"></div>
 </div>
 
