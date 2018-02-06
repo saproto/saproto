@@ -633,7 +633,7 @@ class AuthController extends Controller
             return AuthController::continueLogin($user);
         }
 
-        $request->session()->flash('flash_message', 'Invalid username of password provided.');
+        $request->session()->flash('flash_message', 'Invalid username or password provided.');
         return Redirect::route('login::show');
 
     }
