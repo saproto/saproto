@@ -32,12 +32,12 @@ class Committee extends Model
      */
     public function pastEvents()
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->get();
+        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
 
         if (Auth::check() && Auth::user()->can('board')) {
-            return $events;
+            return $events->get();
         } else {
-            return $events->where('secret', '=', 0);
+            return $events->where('secret', '=', 0)->get();
         }
     }
 
@@ -46,12 +46,12 @@ class Committee extends Model
      */
     public function upcomingEvents()
     {
-        $events = $this->organizedEvents()->where('end', '>', time())->get();
+        $events = $this->organizedEvents()->where('end', '>', time());
 
         if (Auth::check() && Auth::user()->can('board')) {
-            return $events;
+            return $events->get();
         } else {
-            return $events->where('secret', '=', 0);
+            return $events->where('secret', '=', 0)->get();
         }
     }
 

@@ -18,7 +18,7 @@ class ProtoInk extends Model
     {
         try {
 
-            $feed = Feeds::make('http://proto.ink/feed');
+            $feed = Feeds::make('https://proto.ink/feed');
 
             $data = [];
             foreach ($feed->get_items() as $item) {

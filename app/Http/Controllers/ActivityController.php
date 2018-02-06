@@ -106,8 +106,11 @@ class ActivityController extends Controller
     public function checklist($id)
     {
         $event = Event::findOrFail($id);
-        if (!(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
+        if (!Auth::check() || !(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
             abort(403, 'You may not see this page.');
+        }
+        if (!$event->activity) {
+            abort(404, 'This event has no activity.');
         }
         return view('event.checklist', ['event' => $event]);
     }

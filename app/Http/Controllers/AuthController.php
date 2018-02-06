@@ -198,7 +198,7 @@ class AuthController extends Controller
     private function registerAccount($request)
     {
 
-        $user = User::create($request->except('g-recaptcha-response', 'privacy_policy_acceptance'));
+        $user = User::create($request->only(['email', 'name', 'calling_name']));
 
         if (Session::get('wizard')) {
 
