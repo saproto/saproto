@@ -34,7 +34,7 @@ class DropNationalityGenderStudyhistory extends Migration
             $table->string('nationality')->nullable()->default(null);
         });
 
-        Schema::table('studies_users', function (Blueprint $table) {
+        Schema::create('studies_users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('study_id');
             $table->integer('user_id');
@@ -50,7 +50,7 @@ class DropNationalityGenderStudyhistory extends Migration
             $table->timestamps();
         });
 
-        Schema::table('studies', function (Blueprint $table) {
+        Schema::create('studies', function (Blueprint $table) {
             $table->increments('id');
             $table->text('name')->nullable(false);
             $table->text('faculty')->nullable(false);
