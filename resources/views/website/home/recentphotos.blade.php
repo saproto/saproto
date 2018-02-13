@@ -6,7 +6,7 @@
 
     @foreach(Flickr::getAlbums(6) as $key => $album)
 
-        @if(count($newsitems) <= 2)
+        @if(isset($newsitems) && count($newsitems) <= 2)
             <div class="col-md-6 col-xs-6">
                 @else
                     <div class="col-md-4 col-xs-6">
