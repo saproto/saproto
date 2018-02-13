@@ -32,7 +32,7 @@ class HomeController extends Controller
 
         $events = Event::where('secret', false)->where('end', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
-        $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->orderBy('published_at', 'desc')->take(3)->get();
+        $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subMonths(1))->orderBy('published_at', 'desc')->take(3)->get();
 
         if (Auth::check()) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
