@@ -49,7 +49,7 @@
             margin: 0;
             padding: 0;
 
-            color: #c1ff00;
+            color: #80B823;
         }
 
         #protubeOff {
@@ -64,24 +64,35 @@
             display: none;
         }
 
+        #topBar {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 35px;
+        }
+
         #progressBar {
             position: absolute;
-            bottom: 105px;
+            bottom: 60px;
             left: 0;
-            width: 0;
-            height: 2px;
 
-            background-color: #c1ff00;
+            width: 0;
+            height: 5px;
+
+            background-color: #80B823;
 
             z-index: 500;
         }
 
         #progressBarBackground {
             position: absolute;
-            bottom: 105px;
+            bottom: 60px;
             left: 0;
+
             width: 100%;
-            height: 2px;
+            height: 5px;
 
             background-color: #222222;
 
@@ -90,32 +101,35 @@
 
         #playerContainer {
             position: absolute;
-            top: 0px;
-            bottom: 108px;
+            top: 40px;
+            bottom: 65px;
             left: 0;
             right: 0;
         }
 
         #nowPlaying {
             position: absolute;
+
             z-index: 9999;
-            display: block;
-            right: 30px;
-            top: 30px;
+
+            display: inline-block;
+            left: 10px;
+            top: 5px;
+
             color: #FFFFFF;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-            font-size: 30px;
-            font-weight: 500;
+            font-size: 24px;
         }
 
         #addedBy {
             position: absolute;
+
             z-index: 9998;
-            display: block;
-            right: 30px;
-            top: 68px;
+
+            display: inline-block;
+            right: 90px;
+            top: 7px;
+
             color: #FFFFFF;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
             font-size: 20px;
         }
 
@@ -130,7 +144,7 @@
             left: 0;
 
             width: 100%;
-            height: 105px;
+            height: 65px;
 
             overflow: hidden;
 
@@ -147,8 +161,8 @@
             bottom: 0;
             left: 0;
 
-            width: 200px;
-            height: 105px;
+            width: 100px;
+            height: 45px;
             text-align: center;
 
             margin: 0;
@@ -158,18 +172,18 @@
         }
 
         #pin h1 {
-            color: #c1ff00;
-            font-size: 16px;
+            color: #80B823;
+            font-size: 10px;
 
             margin: 0;
             padding: 0;
 
-            margin-top: 10px;
+            margin-top: -10px;
         }
 
         #pin p {
             color: #fff;
-            font-size: 72px;
+            font-size: 42px;
 
             margin: 0;
             padding: 0;
@@ -180,10 +194,10 @@
         #queue {
             position: absolute;
             bottom: 0;
-            left: 200px;
+            left: 100px;
             right: -3000px;
 
-            height: 105px;
+            height: 60px;
 
             overflow: hidden;
         }
@@ -196,51 +210,55 @@
 
         #queue ul li {
             position: relative;
-            width: 180px;
-            height: 105px;
+            width: 220px;
+            height: 60px;
             display: inline-block;
+            overflow: hidden;
             padding: 0;
             margin: 0;
         }
 
         #queue ul li h1 {
             position: absolute;
-            top: 10px;
+            top: 5px;
             left: 10px;
-            width: 160px;
-            height: 115px;
-            overflow: hidden;
-            font-size: 16px;
+            width: 200px;
+            height: 45px;
+            font-size: 18px;
             font-weight: normal;
             color: #fff;
             text-shadow: #000 1px 1px;
             margin: 0;
             padding: 0;
+
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         #queue img {
             position: absolute;
             top: 0;
             left: 0;
-            margin-top: -15px;
-            margin-bottom: -15px;
-            height: 135px;
+            margin: -25px;
+            height: 110px;
+            width: 250px;
+            filter: blur(7px) contrast(115%) brightness(80%);
         }
 
         #clock {
             position: absolute;
 
-            bottom: 30px;
-            right: 30px;
+            top: 0;
+            right: 0;
+
+            padding: 4px 10px;
 
             z-index: 9999;
 
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            background-color: #80B823;
+            color: #000;
 
-            font-size: 62px;
-
-            padding-top: 10px;
+            font-size: 24px;
 
             text-align: center;
         }
@@ -581,19 +599,23 @@
 
 <div id="protubeOff" class="inactive"></div>
 
-<div id="playerContainer">
+<div id="topBar">
     <div id="nowPlaying">Loading...</div>
     <div id="addedBy">&nbsp;</div>
+
     <div id="clock"> 00:00 </div>
+</div>
+
+<div id="playerContainer">
     <div id="player"></div>
 </div>
 
-<div id="progressBar"></div>
-<div id="progressBarBackground"></div>
-
 <div id="bottomBar">
+    <div id="progressBar"></div>
+    <div id="progressBarBackground"></div>
+
     <div id="pin">
-        <h1>www.protube.nl</h1>
+        <h1>protube.nl/</h1>
         <p id="pinCode">...</p>
     </div>
     <div id="queue">
