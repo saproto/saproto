@@ -31,7 +31,11 @@ class ProtoInk extends Model
                 ];
             }
 
-            return $data;
+            if ($max !== null) {
+                return array_slice($data, 0, $max);
+            } else {
+                return $data;
+            }
 
         } catch (Exception $e) {
 

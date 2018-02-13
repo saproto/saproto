@@ -71,7 +71,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '{{ route('api::protoink') }}',
+                url: '{{ route('api::protoink') }}?max=4',
                 dataType: 'json',
                 success: function (data) {
 
