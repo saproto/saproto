@@ -49,7 +49,7 @@
             margin: 0;
             padding: 0;
 
-            color: #80B823;
+            color: #c1ff00;
         }
 
         #protubeOff {
@@ -64,35 +64,24 @@
             display: none;
         }
 
-        #topBar {
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 35px;
-        }
-
         #progressBar {
             position: absolute;
-            bottom: 60px;
+            bottom: 105px;
             left: 0;
-
             width: 0;
-            height: 5px;
+            height: 2px;
 
-            background-color: #80B823;
+            background-color: #c1ff00;
 
             z-index: 500;
         }
 
         #progressBarBackground {
             position: absolute;
-            bottom: 60px;
+            bottom: 105px;
             left: 0;
-
             width: 100%;
-            height: 5px;
+            height: 2px;
 
             background-color: #222222;
 
@@ -101,35 +90,32 @@
 
         #playerContainer {
             position: absolute;
-            top: 40px;
-            bottom: 65px;
+            top: 0px;
+            bottom: 108px;
             left: 0;
             right: 0;
         }
 
         #nowPlaying {
             position: absolute;
-
             z-index: 9999;
-
-            display: inline-block;
-            left: 10px;
-            top: 5px;
-
+            display: block;
+            right: 30px;
+            top: 30px;
             color: #FFFFFF;
-            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+            font-size: 30px;
+            font-weight: 500;
         }
 
         #addedBy {
             position: absolute;
-
             z-index: 9998;
-
-            display: inline-block;
-            right: 90px;
-            top: 7px;
-
+            display: block;
+            right: 30px;
+            top: 68px;
             color: #FFFFFF;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
             font-size: 20px;
         }
 
@@ -144,7 +130,7 @@
             left: 0;
 
             width: 100%;
-            height: 65px;
+            height: 105px;
 
             overflow: hidden;
 
@@ -161,8 +147,8 @@
             bottom: 0;
             left: 0;
 
-            width: 100px;
-            height: 45px;
+            width: 200px;
+            height: 105px;
             text-align: center;
 
             margin: 0;
@@ -172,18 +158,18 @@
         }
 
         #pin h1 {
-            color: #80B823;
-            font-size: 10px;
+            color: #c1ff00;
+            font-size: 16px;
 
             margin: 0;
             padding: 0;
 
-            margin-top: -10px;
+            margin-top: 10px;
         }
 
         #pin p {
             color: #fff;
-            font-size: 42px;
+            font-size: 72px;
 
             margin: 0;
             padding: 0;
@@ -194,10 +180,10 @@
         #queue {
             position: absolute;
             bottom: 0;
-            left: 100px;
+            left: 200px;
             right: -3000px;
 
-            height: 60px;
+            height: 105px;
 
             overflow: hidden;
         }
@@ -210,55 +196,51 @@
 
         #queue ul li {
             position: relative;
-            width: 220px;
-            height: 60px;
+            width: 180px;
+            height: 105px;
             display: inline-block;
-            overflow: hidden;
             padding: 0;
             margin: 0;
         }
 
         #queue ul li h1 {
             position: absolute;
-            top: 5px;
+            top: 10px;
             left: 10px;
-            width: 200px;
-            height: 45px;
-            font-size: 18px;
+            width: 160px;
+            height: 115px;
+            overflow: hidden;
+            font-size: 16px;
             font-weight: normal;
             color: #fff;
             text-shadow: #000 1px 1px;
             margin: 0;
             padding: 0;
-
-            text-overflow: ellipsis;
-            overflow: hidden;
         }
 
         #queue img {
             position: absolute;
             top: 0;
             left: 0;
-            margin: -25px;
-            height: 110px;
-            width: 250px;
-            filter: blur(7px) contrast(115%) brightness(80%);
+            margin-top: -15px;
+            margin-bottom: -15px;
+            height: 135px;
         }
 
         #clock {
             position: absolute;
 
-            top: 0;
-            right: 0;
-
-            padding: 4px 10px;
+            bottom: 30px;
+            right: 30px;
 
             z-index: 9999;
 
-            background-color: #80B823;
-            color: #000;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
 
-            font-size: 24px;
+            font-size: 62px;
+
+            padding-top: 10px;
 
             text-align: center;
         }
@@ -546,7 +528,7 @@
         }
 
         @if($showPin)
-            $(document).ready(function () {
+        $(document).ready(function () {
             $.ajax({
                 url: "{!! config('app-proto.app-url') !!}/api/token",
                 dataType: "jsonp",
@@ -575,8 +557,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -599,23 +581,19 @@
 
 <div id="protubeOff" class="inactive"></div>
 
-<div id="topBar">
+<div id="playerContainer">
     <div id="nowPlaying">Loading...</div>
     <div id="addedBy">&nbsp;</div>
-
     <div id="clock"> 00:00 </div>
-</div>
-
-<div id="playerContainer">
     <div id="player"></div>
 </div>
 
-<div id="bottomBar">
-    <div id="progressBar"></div>
-    <div id="progressBarBackground"></div>
+<div id="progressBar"></div>
+<div id="progressBarBackground"></div>
 
+<div id="bottomBar">
     <div id="pin">
-        <h1>protube.nl/</h1>
+        <h1>www.protube.nl</h1>
         <p id="pinCode">...</p>
     </div>
     <div id="queue">
