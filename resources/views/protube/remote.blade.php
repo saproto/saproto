@@ -848,6 +848,8 @@
                         $("#protube__remote__login").hide(0);
                         $("#protube__remote__loggedIn").show(0);
 
+                        $("#protube__remote__ytSearch").focus();
+
                         interactiveSearchResults();
                     }
                     else{
