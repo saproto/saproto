@@ -113,11 +113,6 @@
                                     @if ($ticket->isAvailable(Auth::user()))
                                         <strong>{{ $ticket->product->name }}</strong>
                                         &nbsp;&nbsp;&nbsp;&nbsp;
-                                        @if ($ticket->is_prepaid)
-                                            <?php $has_prepay_tickets = true; ?>
-                                            <span class="label label-info">Pre-Pay Ticket</span>
-                                        @endif
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
                                         {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                         available
                                     @else
@@ -143,8 +138,16 @@
                                 </div>
                                 <div class="col-md-2 control-label" style="text-align: left;">
                                     <strong>&euro;{{ number_format($ticket->product->price, 2) }}</strong>
+                                    <br>
+                                    @if ($ticket->is_prepaid)
+                                        <?php $has_prepay_tickets = true; ?>
+                                        <span class="label label-danger">Pre-Paid</span>
+                                    @else
+                                        <span class="label label-success">OmNomCom</span>
+                                    @endif
                                 </div>
                             </div>
+                            <hr>
                         @endforeach
                         @if ($tickets_available > 0)
                             <div class="form-group">
@@ -169,10 +172,13 @@
                     @if($has_prepay_tickets)
                         <hr>
                         <p style="text-align: center">
-                            If you buy one or more <span class="label label-info">Pre-Pay Ticket</span> you will need to
+                            If you buy one or more <span class="label label-danger">Pre-Paid</span> tickets you will need
+                            to
                             pay for them immediately using our digital payment system. We accept multiple providers
-                            including iDeal, Credit Card and BitCoin. If you cancel your payment half-way any non
-                            Pre-Pay tickets will still be ordered!
+                            including iDeal, Credit Card and BitCoin. If you cancel your payment half-way any <span
+                                    class="label label-success">OmNomCom</span> tickets will still be ordered! <span
+                                    class="label label-success">OmNomCom</span> tickets are paid via automatic
+                            withdrawal, just like your other purhcases.
                         </p>
                     @endif
 
@@ -187,6 +193,7 @@
 <script type="text/javascript">
 
     var total = 0;
+
     function updateOrderTotal() {
         total = 0;
         $('.ticket-select').each(function () {
