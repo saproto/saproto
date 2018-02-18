@@ -305,6 +305,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
         Route::post('set_reminder', ['as' => 'set_reminder', 'middleware' => ['auth'], 'uses' => 'EventController@setReminder']);
+        Route::get('toggle_relevant_only', ['as' => 'toggle_relevant_only', 'middleware' => ['auth'], 'uses' => 'EventController@toggleRelevantOnly']);
 
         Route::post('album/{event}/link', ['as' => 'linkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@linkAlbum']);
         Route::get('album/unlink/{album}', ['as' => 'unlinkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@unlinkAlbum']);

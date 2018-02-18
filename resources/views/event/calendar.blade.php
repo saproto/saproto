@@ -157,6 +157,30 @@
                         <hr>
 
                         <p style="text-align: center;">
+                            @if ($relevant_only)
+                                <strong>Your are currently only syncing relevant events.</strong>
+                            @else
+                                You are currently syncing all events.
+                            @endif
+
+                            <a class="btn btn-{{ $relevant_only ? 'success':'danger' }}" type="button"
+                               style="width: 100%;" href="{{ route('event::toggle_relevant_only') }}">
+                                @if ($relevant_only)
+                                    Sync all my events.
+                                @else
+                                    Sync only relevant events.
+                                @endif
+                            </a>
+
+                            <sub>
+                                Relevant events are events you either attend, organize or help with.
+                            </sub>
+
+                        </p>
+
+                        <hr>
+
+                        <p style="text-align: center;">
                             <sub>
                                 @if ($reminder)
                                     You are currently recieving a reminder {{ $reminder->value }} hours before an
