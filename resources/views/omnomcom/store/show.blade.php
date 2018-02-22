@@ -886,7 +886,7 @@
                     password: $("#purchase-password").val()
                 }),
                 cash: {!! ($store->cash_allowed ? "cash" : "false") !!},
-                cart: cart
+                cart: cart_to_object(cart)
             },
             dataType: 'html',
             success: function (data) {
@@ -1175,6 +1175,22 @@
                 }, 10000);
             }
         }
+    }
+
+    function cart_to_object(cart) {
+
+        object_cart = {};
+
+        for (product_id in cart) {
+
+            if (cart[product_id] > 0) {
+                object_cart[product_id] = cart[product_id]
+            }
+
+        }
+
+        return object_cart;
+
     }
 
 </script>
