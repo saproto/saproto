@@ -59,14 +59,16 @@ class EventController extends Controller
 
 
         if (Auth::check()) {
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', Auth::user()->id)->first();
+            $reminder = Auth::user()->getCalendarAlarm();
         } else {
             $reminder = null;
         }
 
+        $relevant_only = Auth::check() && Auth::user()->getCalendarRelevantSetting() ? true : false;
+
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'relevant_only' => $relevant_only]);
     }
 
     /**
@@ -449,19 +451,14 @@ class EventController extends Controller
 
         if ($request->has('delete') || $hours <= 0) {
 
-            HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->delete();
+            $user->setCalendarAlarm(null);
             Session::flash('flash_message', 'Reminder removed.');
             return Redirect::back();
 
         } elseif ($hours > 0) {
 
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
-            if (!$reminder) {
-                $reminder = HashMapItem::create(['key' => 'calendar_alarm', 'subkey' => $user->id]);
-            }
-            $reminder->value = $request->get('hours');
-            $reminder->save();
-            Session::flash('flash_message', sprintf('Reminder set to %s hours.', $reminder->value));
+            $user->setCalendarAlarm($hours);
+            Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
             return Redirect::back();
 
         } else {
@@ -469,6 +466,18 @@ class EventController extends Controller
             abort(500, "Invalid request.");
 
         }
+    }
+
+    public function toggleRelevantOnly()
+    {
+        $user = Auth::user();
+        $newSetting = $user->toggleCalendarRelevantSetting();
+        if ($newSetting === true) {
+            Session::flash('flash_message', 'From now on your calendar will only sync events relevant to you.');
+        } else {
+            Session::flash('flash_message', 'From now on your calendar will sync all events.');
+        }
+        return Redirect::back();
     }
 
     public function icalCalendar($personal_key = null)
@@ -511,8 +520,14 @@ class EventController extends Controller
         } else {
             $reminder = null;
         }
-        
+
+        $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
+
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            if ($relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+                continue;
+            }
 
             if ($event->over()) {
                 $infotext = 'This activity is over.';
@@ -520,6 +535,8 @@ class EventController extends Controller
                 $infotext = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
                 $infotext = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
+            } elseif ($event->tickets->count() > 0) {
+                $infotext = 'Ticket purchase required.';
             } else {
                 $infotext = 'No sign-up necessary.';
             }
@@ -539,7 +556,7 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $infotext .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isParticipating($user)) {
+                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $infotext .= ' You are participating in this activity.';
                     }

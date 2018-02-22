@@ -121,6 +121,11 @@ class Event extends Model
         }
     }
 
+    public function hasBoughtTickets(User $user)
+    {
+        return $this->getTicketPurchasesFor($user)->count() > 0;
+    }
+
     public function returnAllUsers()
     {
         $users = collect([]);

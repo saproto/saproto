@@ -19,9 +19,11 @@ class ProtoInkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = ProtoInk::getPostsFromFeed();
+
+        $max = $request->has('max') ? $request->get('max') : null;
+        $posts = ProtoInk::getPostsFromFeed($max);
 
         return json_encode($posts);
     }
