@@ -1,6 +1,12 @@
 <script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
 
 <script type="text/javascript">
+    moment.updateLocale('en', {
+        week: { dow: 1 }
+    });
+</script>
+
+<script type="text/javascript">
     $(document).ready(function () {
 
         // Enables tooltips
