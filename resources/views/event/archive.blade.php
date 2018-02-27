@@ -64,7 +64,7 @@
                                         <hr>
                                     @endif
 
-                                    <a class="activity" href="{{ route('event::show', ['id' => $event->id]) }}">
+                                    <a class="activity" href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                         <div class="activity {{ ($i % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                             <p><strong>{{ $event->title }}</strong></p>
                                             <p><i class="fa fa-map-marker"

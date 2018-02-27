@@ -4,15 +4,11 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\FlickrAlbum;
-use Proto\Models\HashMapItem;
-use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
@@ -21,8 +17,6 @@ use Session;
 use Redirect;
 use Auth;
 use Response;
-use Markdown;
-use DateTime;
 
 class EventController extends Controller
 {
@@ -159,7 +153,7 @@ class EventController extends Controller
         $event->save();
 
         Session::flash("flash_message", "Your event '" . $event->title . "' has been added.");
-        return Redirect::route('event::show', ['id' => $event->id]);
+        return Redirect::route('event::show', ['id' => $event->getPublicId()]);
 
     }
 
@@ -171,7 +165,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::fromPublicId($id);
         return view('event.display', ['event' => $event]);
     }
 
@@ -571,7 +565,7 @@ class EventController extends Controller
                 sprintf("DTSTART:%s", date('Ymd\THis', $event->start)) . "\r\n" .
                 sprintf("DTEND:%s", date('Ymd\THis', $event->end)) . "\r\n" .
                 sprintf("SUMMARY:%s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title) . "\r\n" .
-                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->id])) . "\r\n" .
+                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->getPublicId()])) . "\r\n" .
                 sprintf("LOCATION:%s", $event->location) . "\r\n" .
                 sprintf("ORGANIZER;CN=%s:MAILTO:%s",
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),

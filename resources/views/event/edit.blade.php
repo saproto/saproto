@@ -208,7 +208,7 @@
                                class="btn btn-danger pull-left">Delete</a>
                         @endif
 
-                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}"
+                        <a href="{{ $event ? route('event::show', ['id' => $event->getPublicId()]) : URL::previous() }}"
                            class="btn btn-default pull-right">Cancel</a>
 
                     </div>

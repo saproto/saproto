@@ -186,7 +186,7 @@ class MollieController extends Controller
             } else {
                 Session::flash("flash_message", "Order failed. Pre-paid tickets where not bought. Please try your purchase again.");
             }
-            return Redirect::route('event::show', ['id' => $event_id]);
+            return Redirect::route('event::show', ['id' => Event::findOrFail($event_id)->getPublicId()]);
         }
         return Redirect::route('omnomcom::orders::list');
     }

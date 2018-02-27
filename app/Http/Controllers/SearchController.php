@@ -54,10 +54,11 @@ class SearchController extends Controller
         }
         $events = [];
         foreach ($data['events'] as $id => $count) {
+            $event = Event::findOrFail($id);
             $events[] = [
                 'score' => $count,
-                'object' => Event::findOrFail($id),
-                'href' => route('event::show', ['id' => $id])
+                'object' => $event,
+                'href' => route('event::show', ['id' => $event->getPublicId()])
             ];
         }
 

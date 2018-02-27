@@ -24,7 +24,7 @@ class ActivityMovedFromBackup extends Mailable
     public function __construct(ActivityParticipation $participation)
     {
         $this->calling_name = $participation->user->calling_name;
-        $this->event_id = $participation->activity->event->id;
+        $this->event_id = $participation->activity->event->getPublicId();
         $this->event_title = $participation->activity->event->title;
     }
 

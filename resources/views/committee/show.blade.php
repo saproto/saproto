@@ -77,7 +77,7 @@
                                     <div class="col-md-6">
 
                                         <a class="activity"
-                                           href="{{ route('event::show', ['id' => $event->id]) }}">
+                                           href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                             <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event->title }}</strong></p>
                                                 <p><i class="fa fa-map-marker"
@@ -156,7 +156,7 @@
                                 <div class="col-md-6">
 
                                     <a class="activity"
-                                       href="{{ route('event::show', ['id' => $event->id]) }}">
+                                       href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                         <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                             <p><strong>{{ $event->title }}</strong></p>
                                             <p>
@@ -211,7 +211,7 @@
                                     <div class="col-md-6">
 
                                         <a class="activity"
-                                           href="{{ route('event::show', ['id' => $event['id']]) }}">
+                                           href="{{ route('event::show', ['id' => Event::find($event['id'])->getPublicId()]) }}">
                                             <div class="activity" {!! ($event['secret'] ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event['title'] }}</strong></p>
                                                 <p><i class="fa fa-map-marker"

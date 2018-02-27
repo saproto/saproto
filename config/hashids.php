@@ -39,13 +39,8 @@ return [
 
     'connections' => [
 
-        'user' => [
-            'salt' => '3DdRqOjccvY7dewz',
-            'length' => '16',
-        ],
-
         'event' => [
-            'salt' => 'bXMqoNWAre6aPdo9',
+            'salt' => getenv('HASHIDS_SECRET_EVENTS'),
             'length' => '16',
         ],
 

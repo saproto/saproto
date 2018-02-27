@@ -71,7 +71,7 @@
                         @endif
 
                         <p>
-                            <a style="color: #000;" href="{{ route('event::show', ['id' => $event->id]) }}">
+                            <a style="color: #000;" href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                 Learn more! >>
                             </a>
                         </p>

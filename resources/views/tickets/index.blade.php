@@ -38,7 +38,7 @@
 
                     <td class="hidden-sm hidden-xs">{{ $ticket->id }}</td>
                     <td class="hidden-sm hidden-xs">
-                        <a href="{{ route('event::show', ['id'=>$ticket->event->id]) }}">
+                        <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
                             {{ $ticket->event->title }}
                         </a>
                     </td>
