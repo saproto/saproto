@@ -59,7 +59,7 @@
                         <hr>
                         <p>
                             This activity is brought to you by the
-                            <a href="{{ route('committee::show', ['id' => $event->committee->id]) }}">
+                            <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">
                                 {{ $event->committee->name }}
                             </a>.
                         </p>

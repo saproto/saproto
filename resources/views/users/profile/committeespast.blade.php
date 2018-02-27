@@ -5,7 +5,7 @@
     <ul class="list-group">
         @foreach($pastcommittees as $committeeparticipation)
             <li class="list-group-item">
-                {!! ($committeeparticipation->committee->public ? '<a href="' . route("committee::show", ["id" => $committeeparticipation->committee->id]) . '">' : '') !!}
+                {!! ($committeeparticipation->committee->public ? '<a href="' . route("committee::show", ["id" => $committeeparticipation->committee->getPublicId()]) . '">' : '') !!}
                 <strong>
                     {{ $committeeparticipation->committee->name }}
                 </strong>

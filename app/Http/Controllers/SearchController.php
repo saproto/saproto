@@ -46,10 +46,11 @@ class SearchController extends Controller
         }
         $committees = [];
         foreach ($data['committees'] as $id => $count) {
+            $committee = Committee::findOrFail($id);
             $committees[] = [
                 'score' => $count,
-                'object' => Committee::findOrFail($id),
-                'href' => route('committee::show', ['id' => $id])
+                'object' => $committee,
+                'href' => route('committee::show', ['id' => $committee->getPublicId()])
             ];
         }
         $events = [];

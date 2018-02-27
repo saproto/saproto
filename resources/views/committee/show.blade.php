@@ -45,7 +45,7 @@
 
                         @if($committee->allow_anonymous_email)
 
-                            <a href="{{ route("committee::anonymousmail", ["id" => $committee->id]) }}"
+                            <a href="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}"
                                class="btn btn-info">
                                 Send this committee an anonymous e-mail
                             </a>

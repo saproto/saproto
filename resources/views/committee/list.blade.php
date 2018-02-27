@@ -9,7 +9,7 @@
     @foreach($data as $key => $committee)
         <div class="col-md-4 col-xs-6">
 
-            <a href="{{ route('committee::show', ['id' => $committee->id]) }}" class="committee-link">
+            <a href="{{ route('committee::show', ['id' => $committee->getPublicId()]) }}" class="committee-link">
                 <div class="committee"
                      style="{{ ($committee->image ? "background-image: url(".$committee->image->generateImagePath(450, 300).");" : '') }}">
                     <div class="committee-name">

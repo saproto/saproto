@@ -10,7 +10,7 @@
 
         <div class="col-md-6 col-md-offset-1">
 
-            <form method="post" action="{{ route("committee::anonymousmail", ["id" => $committee->id]) }}">
+            <form method="post" action="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}">
 
                 {!! csrf_field() !!}
 

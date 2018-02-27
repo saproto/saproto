@@ -44,6 +44,11 @@ return [
             'length' => '16',
         ],
 
+        'committee' => [
+            'salt' => getenv('HASHIDS_SECRET_COMMITTEE'),
+            'length' => '8',
+        ],
+
     ],
 
 ];

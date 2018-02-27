@@ -33,7 +33,7 @@
 
                     <p>
                         The website is open source and actively maintained by a dedicated committee of the association:
-                        the <a href="{{ route('committee::show', ['id'=>$committee->id]) }}">{{ $committee->name }}</a>.
+                        the <a href="{{ route('committee::show', ['id'=>$committee->getPublicId()]) }}">{{ $committee->name }}</a>.
                         You will find the current members of this committee on your right. Below this piece of prose you
                         will also find a list of the developers who have been contributing to the association's ICT in
                         the past.

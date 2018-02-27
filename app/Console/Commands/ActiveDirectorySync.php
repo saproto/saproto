@@ -203,7 +203,7 @@ class ActiveDirectorySync extends Command
             $group->displayName = trim($committee->name);
             $group->description = $committee->id;
             $group->mail = $committee->slug . '@' . config('proto.emaildomain');
-            $group->url = route("committee::show", ['id' => $committee->id]);
+            $group->url = route("committee::show", ['id' => $committee->getPublicId()]);
 
             $group->setAttribute('sAMAccountName', $committee->slug);
 

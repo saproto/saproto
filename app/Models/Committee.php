@@ -4,6 +4,8 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 use Carbon\Carbon;
 
 use Auth;
@@ -18,6 +20,16 @@ class Committee extends Model
      * @var string
      */
     protected $table = 'committees';
+
+    public function getPublicId()
+    {
+        return $this->slug;
+    }
+
+    public static function fromPublicId($public_id)
+    {
+        return Committee::where('slug', $public_id)->firstOrFail();
+    }
 
     /**
      * @return mixed All events organized by this committee.
