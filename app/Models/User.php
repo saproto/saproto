@@ -400,38 +400,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getCalendarAlarm()
     {
-        return HashMapItem::where('key', 'calendar_alarm')->where('subkey', $this->id)->first();
+        return $this->pref_calendar_alarm;
     }
 
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);
-        if ($hours > 0) {
-            $reminder = $this->getCalendarAlarm();
-            if (!$reminder) {
-                $reminder = HashMapItem::create(['key' => 'calendar_alarm', 'subkey' => $this->id]);
-            }
-            $reminder->value = $hours;
-            $reminder->save();
-        } elseif ($this->getCalendarAlarm()) {
-            $this->getCalendarAlarm()->delete();
-        }
+        $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
+        $this->save();
     }
 
     public function getCalendarRelevantSetting()
     {
-        return HashMapItem::where('key', 'calendar_relevant_only')->where('subkey', $this->id)->first() !== null;
+        return $this->pref_calendar_relevant_only;
     }
 
     public function toggleCalendarRelevantSetting()
     {
-        if ($this->getCalendarRelevantSetting() === true) {
-            HashMapItem::where('key', 'calendar_relevant_only')->where('subkey', $this->id)->first()->delete();
-            return false;
-        } else {
-            HashMapItem::create(['key' => 'calendar_relevant_only', 'subkey' => $this->id, 'value' => true]);
-            return true;
-        }
+        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->save();
     }
 
 }

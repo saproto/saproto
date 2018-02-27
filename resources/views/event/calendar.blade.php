@@ -183,7 +183,7 @@
                         <p style="text-align: center;">
                             <sub>
                                 @if ($reminder)
-                                    You are currently recieving a reminder {{ $reminder->value }} hours before an
+                                    You are currently recieving a reminder {{ $reminder }} hours before an
                                     activity you participate in.
                                 @else
                                     You are currently <strong>not</strong> receiving a reminder before an activity you
@@ -202,7 +202,7 @@
                                 <div class="{{ $reminder ? 'col-md-4' : 'col-md-4 col-md-offset-2' }}">
                                     <div class="input-group">
                                         <input class="form-control" type="number" step="0.01" placeholder="0.5"
-                                               name="hours" value="{{ $reminder ? $reminder->value : '' }}">
+                                               name="hours" value="{{ $reminder ? $reminder : '' }}">
                                         <div class="input-group-addon">hours</div>
                                     </div>
                                 </div>

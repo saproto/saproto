@@ -516,7 +516,7 @@ class EventController extends Controller
             "END:VTIMEZONE" . "\r\n";
 
         if ($user) {
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
+            $reminder = $user->getCalendarAlarm();
         } else {
             $reminder = null;
         }
@@ -577,7 +577,7 @@ class EventController extends Controller
 
             if ($reminder && $status) {
                 $calendar .= "BEGIN:VALARM" . "\r\n" .
-                    sprintf("TRIGGER:-PT%dM", ceil($reminder->value * 60)) . "\r\n" .
+                    sprintf("TRIGGER:-PT%dM", ceil($reminder * 60)) . "\r\n" .
                     "ACTION:DISPLAY" . "\r\n" .
                     sprintf("DESCRIPTION:%s at %s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title, date('l F j, H:i:s', $event->start)) . "\r\n" .
                     "END:VALARM" . "\r\n";
