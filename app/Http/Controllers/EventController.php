@@ -144,6 +144,7 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -207,6 +208,7 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -525,7 +527,7 @@ class EventController extends Controller
 
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
 
-            if ($relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;
             }
 
