@@ -42,6 +42,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('ldapproxy/{personal_key}', ['as' => 'ldapproxy', 'uses' => 'ApiController@ldapProxy']);
 
         Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
+        Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
 
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
 
