@@ -10,6 +10,7 @@ use Adldap\Adldap;
 use Adldap\Connections\Provider;
 
 use Proto\Mail\PasswordResetEmail;
+use Proto\Mail\UsernameReminderEmail;
 use Proto\Mail\RegistrationConfirmation;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
@@ -300,16 +301,10 @@ class AuthController extends Controller
     {
         $user = User::where('email', $request->email)->first();
         if ($user !== null) {
-
             AuthController::dispatchPasswordEmailFor($user);
-
-            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
-            return Redirect::route('login::show');
-
-        } else {
-            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
-            return Redirect::back();
         }
+        $request->session()->flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
+        return Redirect::route('login::show');
     }
 
     /**
@@ -544,18 +539,13 @@ class AuthController extends Controller
         if ($request->has('email')) {
             $user = User::whereEmail($request->get('email'))->first();
             if ($user) {
-                if ($user->member) {
-                    Session::flash('flash_message', 'Your Proto username is <strong>' . $user->member->proto_username . '</strong>');
-                    Session::flash('login_username', $user->member->proto_username);
-                } else {
-                    Session::flash('flash_message', 'Only members have a Proto username. You can login using your e-mail address.');
-                }
-            } else {
-                Session::flash('flash_message', 'We could not find a user with that e-mail address.');
+                AuthController::dispatchUsernameEmailFor($user);
             }
+            Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
             return Redirect::route('login::show');
+        } else {
+            return view('auth.username');
         }
-        return view('auth.username');
     }
 
     /******************************************************
@@ -729,6 +719,18 @@ class AuthController extends Controller
         ]);
 
         Mail::to($user)->queue((new PasswordResetEmail($user, $reset->token))->onQueue('high'));
+
+    }
+
+    /**
+     * Static helper function that will dispatch a username reminder for a user.
+     *
+     * @param User $user
+     */
+    public static function dispatchUsernameEmailFor(User $user)
+    {
+
+        Mail::to($user)->queue((new UsernameReminderEmail($user))->onQueue('high'));
 
     }
 

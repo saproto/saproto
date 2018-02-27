@@ -61,10 +61,18 @@ class SearchController extends Controller
             ];
         }
 
-        usort($users, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($pages, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($committees, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($events, function ($a, $b) { return $b['score'] - $a['score'];});
+        usort($users, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($pages, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($committees, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($events, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
 
         return view('website.search', [
             'term' => $term,
@@ -146,10 +154,10 @@ class SearchController extends Controller
                     ) && $user->member && Auth::check() && Auth::user()->member
                 ) {
 
-                    if (array_key_exists($user->id, $data['users'])) {
-                        $data['users'][$user->id]++;
+                    if (array_key_exists($user->getPublicId(), $data['users'])) {
+                        $data['users'][$user->getPublicId()]++;
                     } else {
-                        $data['users'][$user->id] = 1;
+                        $data['users'][$user->getPublicId()] = 1;
                     }
 
                 }

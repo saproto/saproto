@@ -49,6 +49,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at'];
 
+    public function getPublicId()
+    {
+        return ($this->member ? $this->member->proto_username : null);
+    }
+
+    public static function fromPublicId($public_id)
+    {
+        $member = Member::where('proto_username', $public_id)->first();
+        return ($member ? $member->user : null);
+    }
+
     /**
      * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
      * @return bool whether or not the user is stale (not in use, can be *really* deleted safely)

@@ -89,7 +89,7 @@
                     <h3>Developers from days past</h3>
 
                     @foreach($developers['old'] as $i => $dev)
-                        <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">
+                        <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                             {{ $dev->user->name }}
                         </a>
                         @if ($i + 1 < count($developers['old']))
@@ -124,7 +124,7 @@
                                  style="background-image: url('{!! $dev->user->generatePhotoPath(250, 250) !!}');">
 
                                 <span>
-                                    <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">
+                                    <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                                         {{ $dev->user->name }}
                                     </a>
                                 </span>

@@ -143,7 +143,7 @@
                                                 <div class="member-picture"
                                                      style="background-image:url('{!! $participation->user->generatePhotoPath(100, 100) !!}');">
                                                 </div>
-                                                <a href="{{ route("user::profile", ['id'=>$participation->user->id]) }}">{{ $participation->user->name }}</a>
+                                                <a href="{{ route("user::profile", ['id'=>$participation->user->getPublicId()]) }}">{{ $participation->user->name }}</a>
 
                                                 @if(Auth::user()->can('board'))
                                                     <p class="pull-right activity__admin-controls">
@@ -346,7 +346,7 @@
                             <div class="member ellipsis">
                                 <div class="member-picture"
                                      style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
-                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
 
                                 @if(Auth::user()->can('board') && !$event->activity->closed)
                                     <p class="pull-right activity__admin-controls">
@@ -373,7 +373,7 @@
                                 <div class="member ellipsis">
                                     <div class="member-picture"
                                          style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
-                                    <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
 
                                     @if(Auth::user()->can('board'))
                                         <p class="pull-right activity__admin-controls">

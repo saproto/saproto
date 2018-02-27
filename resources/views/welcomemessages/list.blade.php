@@ -32,7 +32,7 @@
                 <tr>
 
                     <td>{{ $message->id }}</td>
-                    <td><a href="{{ route('user::profile', ['id' => $message->user->id]) }}">{{ $message->user->name }}</a></td>
+                    <td><a href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}">{{ $message->user->name }}</a></td>
 
                     <td>{{ $message->message }}</td>
 

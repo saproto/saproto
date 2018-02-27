@@ -18,7 +18,7 @@
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
                 ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
@@ -60,7 +60,7 @@
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
                 ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
@@ -103,7 +103,7 @@
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
                 ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 
@@ -146,7 +146,7 @@
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $membership->user->id]) }}">{{ $membership->user->name }}</a>
+                <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
                 ({{ ($membership->role ? $membership->role : 'General Member') }})
                 <br>
 

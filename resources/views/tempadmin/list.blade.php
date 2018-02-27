@@ -29,8 +29,8 @@
             @foreach($tempadmins as $tempadmin)
 
                 <tr>
-                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->user->id]) }}">{{ $tempadmin->user->name }}</a></td>
-                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->creator->id]) }}">{{ $tempadmin->creator->name }}</a></td>
+                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->user->getPublicId()]) }}">{{ $tempadmin->user->name }}</a></td>
+                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->creator->getPublicId()]) }}">{{ $tempadmin->creator->name }}</a></td>
                     <td @if(Carbon::parse($tempadmin->start_at)->isPast()) style="color: lightgray" @endif>{{ $tempadmin->start_at }}</td>
                     <td>{{ $tempadmin->end_at }}</td>
                     <td>
@@ -52,8 +52,8 @@
             @foreach($pastTempadmins as $pastTempadmin)
 
                 <tr class="tempadmin__past">
-                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->user->id]) }}">{{ $pastTempadmin->user->name }}</a></td>
-                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->creator->id]) }}">{{ $pastTempadmin->creator->name }}</a></td>
+                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->user->getPublicId()]) }}">{{ $pastTempadmin->user->name }}</a></td>
+                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->creator->getPublicId()]) }}">{{ $pastTempadmin->creator->name }}</a></td>
                     <td>{{ $pastTempadmin->start_at }}</td>
                     <td>{{ $pastTempadmin->end_at }}</td>
                     <td>

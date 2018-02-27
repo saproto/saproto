@@ -79,7 +79,7 @@
                             <td>
                                 @if($orderline->user)
 
-                                    <a href="{{ route('user::profile', ['id' => $orderline->user->id]) }}">
+                                    <a href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}">
                                         {{ $orderline->user->name }}
                                     </a>
 
