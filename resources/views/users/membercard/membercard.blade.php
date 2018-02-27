@@ -80,7 +80,7 @@
         #barcode {
             position: absolute;
 
-            bottom: 15.7%;
+            bottom: 19%;
             left: 5.8%;
             width: 40.7%;
             height: 9.3%;
