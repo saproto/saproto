@@ -185,7 +185,7 @@ class NewsController extends Controller
                 $returnItem->title = $newsitem->title;
                 $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
                 $returnItem->content = $newsitem->content;
-                $returnItem->published_at = $newsitem->published_at;
+                $returnItem->published_at = strtotime($newsitem->published_at);
 
                 $return[] = $returnItem;
             }
