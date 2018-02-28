@@ -150,7 +150,7 @@ class ActivityController extends Controller
         $help = HelpingCommittee::findOrFail($id);
 
         foreach ($help->users as $user) {
-            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help))->onQueue('medium'));
+            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help->activity->event->title, $help->committee->name))->onQueue('medium'));
         }
 
         foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
