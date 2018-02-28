@@ -29,7 +29,7 @@ class UserDashboardController extends Controller
         if ($id == null) {
             $id = Auth::id();
         } else {
-            if (!Auth::user()->can('board')) {
+            if ($id != Auth::id() && !Auth::user()->can('board')) {
                 abort(403);
             }
         }
