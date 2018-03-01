@@ -79,21 +79,27 @@
             </div>
             <div class="col-md-4 col-xs-6">
 
-                &copy; {{ date('Y') }} S.A. Proto. All rights reserved.<br>
-                <sub>
-                    This website has been created with ♥ by the folks of the
-                    <a href="{{ route('developers') }}">
-                        {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
-                    </a>.
-                    The source is available on
-                    <a href="https://github.com/saproto/saproto" target="_blank">GitHub</a>. Please familiarize yourself
-                    with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy
-                        policy</a>.
-                </sub>
+                <br>
+
             </div>
             <div class="col-md-3 col-xs-6 footer__logo">
                 <img src="{{ asset('images/logo/inverse.png') }}" width="57%">
             </div>
+        </div>
+        <div class="row">
+            <p style="text-align: center;">
+                <sub>
+                    &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself
+                    with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy
+                        policy</a>. The website source is available on <a href="https://github.com/saproto/saproto"
+                                                                          target="_blank">GitHub</a>.
+                    <br>
+                    This website has been created with ♥ by the folks of the
+                    <a href="{{ route('developers') }}">
+                        {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                    </a>and is hosted with courtesy of <a target="_blank" href="https://www.transip.nl/">TransIP</a>.
+                </sub>
+            </p>
         </div>
     </div>
 </footer>
