@@ -67,7 +67,7 @@ class CountPrimaryMembers extends Command
 
             $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
 
-            $is_ut = $has_ut_mail || $member->user->utwente_username !== null;
+            $is_ut = $is_create_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             $display_fields = (object)[
                 'status' => $is_create_student ? '[P]' : '   ',
