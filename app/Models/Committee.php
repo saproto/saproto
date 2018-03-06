@@ -20,6 +20,7 @@ class Committee extends Model
      * @var string
      */
     protected $table = 'committees';
+    protected $hidden = ['id', 'image_id'];
 
     public function getPublicId()
     {

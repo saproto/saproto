@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CommitteeMembership extends Model
 {
     use SoftDeletes;
+
+    protected $hidden = ['id', 'committee_id', 'user_id'];
     protected $dates = ['deleted_at'];
 
     /**

@@ -103,7 +103,7 @@ class ApiController extends Controller
 
         if (Auth::check()) {
             $response->name = Auth::user()->name;
-            $response->photo = Auth::user()->generatePhotoPath(250,250);
+            $response->photo = Auth::user()->generatePhotoPath(250, 250);
             $response->token = Auth::user()->getToken()->token;
         } else {
             $response->token = 0;
@@ -115,12 +115,7 @@ class ApiController extends Controller
             return json_encode($response);
         }
     }
-
-    public function getUser()
-    {
-        return Auth::user();
-    }
-
+    
     public function ldapProxy($personal_key)
     {
         $user = User::where('personal_key', $personal_key)->first();
