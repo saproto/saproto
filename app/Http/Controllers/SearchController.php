@@ -29,10 +29,11 @@ class SearchController extends Controller
 
         $users = [];
         foreach ($data['users'] as $id => $count) {
+            $user = User::findOrFail($id);
             $users[] = [
                 'score' => $count,
-                'object' => User::findOrFail($id),
-                'href' => route('user::profile', ['id' => $id])
+                'object' => $user,
+                'href' => route('user::profile', ['id' => $user->getPublicId()])
             ];
         }
         $pages = [];
@@ -156,10 +157,10 @@ class SearchController extends Controller
                     ) && $user->member && Auth::check() && Auth::user()->member
                 ) {
 
-                    if (array_key_exists($user->getPublicId(), $data['users'])) {
-                        $data['users'][$user->getPublicId()]++;
+                    if (array_key_exists($user->id, $data['users'])) {
+                        $data['users'][$user->id]++;
                     } else {
-                        $data['users'][$user->getPublicId()] = 1;
+                        $data['users'][$user->id] = 1;
                     }
 
                 }
