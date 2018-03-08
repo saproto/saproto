@@ -107,6 +107,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ldapuser->save();
             }
         }
+
+        // Remove breach notification flag
+        HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
     /**

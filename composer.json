@@ -60,7 +60,8 @@
     "jwilsson/spotify-web-api-php": "1.12.*",
     "globalcitizen/php-iban": "2.6.*",
     "laravel/passport": "4.*",
-    "vinkla/hashids": "3.3.*"
+    "vinkla/hashids": "3.3.*",
+    "nickurt/laravel-pwned-passwords": "1.*"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

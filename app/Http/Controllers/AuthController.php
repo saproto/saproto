@@ -9,7 +9,10 @@ use PragmaRX\Google2FA\Google2FA;
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
 
+use nickurt\PwnedPasswords\PwnedPasswords;
+
 use Proto\Mail\PasswordResetEmail;
+use Proto\Mail\PwnedPasswordNotification;
 use Proto\Mail\UsernameReminderEmail;
 use Proto\Mail\RegistrationConfirmation;
 use Proto\Models\AchievementOwnership;
@@ -397,6 +400,9 @@ class AuthController extends Controller
             } elseif (strlen($pass_new1) < 10) {
                 $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
                 return view('auth.passchange');
+            } elseif ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
+                $request->session()->flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
+                return view('auth.passchange');
             } else {
                 $user->setPassword($pass_new1);
                 $request->session()->flash('flash_message', 'Your password has been changed.');
@@ -572,6 +578,10 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
+            if ((new PwnedPasswords())->setPassword($password)->isPwnedPassword() && HashMapItem::where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null) {
+                Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
+                HashMapItem::create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
+            }
             return $user;
         }
 
