@@ -32,7 +32,7 @@ class TicketPurchase extends Model
             return true;
         } elseif ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) {
             return true;
-        } elseif ($this->orderline->molliePayment && $this->orderline->molliePayment->status == 'paid') {
+        } elseif ($this->orderline->molliePayment && $this->orderline->molliePayment->translatedStatus() == 'paid') {
             return true;
         }
         return false;

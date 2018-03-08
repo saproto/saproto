@@ -40,6 +40,11 @@ class MollieTransaction extends Model
         }
     }
 
+    public function translatedStatus()
+    {
+        return MollieTransaction::translateStatus($this->status);
+    }
+
     public function updateFromWebhook()
     {
 

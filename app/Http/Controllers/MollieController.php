@@ -13,6 +13,7 @@ use Proto\Models\MollieTransaction;
 use Auth;
 use Mollie;
 use Proto\Models\Product;
+use Proto\Models\Event;
 use Redirect;
 use Session;
 
