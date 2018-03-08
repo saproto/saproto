@@ -578,7 +578,7 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
-            if ((new PwnedPasswords())->setPassword($password)->isPwnedPassword() && HashMapItem::where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null) {
+            if (HashMapItem::where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords())->setPassword($password)->isPwnedPassword()) {
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
                 HashMapItem::create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
             }
