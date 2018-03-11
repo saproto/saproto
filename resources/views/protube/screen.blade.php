@@ -621,7 +621,7 @@
     <div id="progressBarBackground"></div>
 
     <div id="pin">
-        <h1>protube.nl/</h1>
+        <h1>protu.be/</h1>
         <p id="pinCode">...</p>
     </div>
 
