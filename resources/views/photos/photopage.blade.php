@@ -6,28 +6,33 @@
 
 @section('content')
 
+    <div class="header">
+
     <div class="photo_right">
     @if ($photo->previous != null)
         <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="photo_move">
-            Previous
+            <i class="fa fa-arrow-left"></i>
         </a>
     @endif
+        @if (!$photo->previous)
+            <p></p>
+            @endif
     </div>
 
-    @if ($photo->liked == null)
+
     <div class="photo_likebutton">
+        @if ($photo->liked == null)
         <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="photo_move">
             <i class="fa fa-heart-o"></i>
         </a>
+        @endif
+        @if($photo-> liked != null)
+         <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="photo_move">
+             <i class="fa fa-heart"></i>
+         </a>
+            @endif
     </div>
-    @endif
-    @if ($photo->liked != null)
-        <div class="photo_likebutton">
-            <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="photo_move">
-                <i class="fa fa-heart"></i>
-            </a>
-        </div>
-    @endif
+
 
     <div class="photo_likes">
       <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="photo_move">{{ $photo->likes }}</a>
@@ -35,18 +40,26 @@
 
 
     <div class="photo_next">
-    @if($photo-> next != null)
+    @if($photo->next != null)
         <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="photo_move">
-           Next
+            <i class="fa fa-arrow-right"></i>
         </a>
     @endif
+        @if (!$photo->next)
+            <p></p>
+        @endif
     </div>
 
+    </div>
 
+    <div>
     <img id="photo_size" src="{!! $photo->photo_url !!}" >
+    </div>
 
     <style type="text/css">
-
+        .header {
+            width: 100%;
+        }
         .photo_right {
             float: left;
             text-align: left;
@@ -73,8 +86,15 @@
         }
 
         #photo_size {
-        width: 100%;
+        display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: 80vh;
+            max-width:99%;
+
+
         }
+
     </style>
 
 @endsection

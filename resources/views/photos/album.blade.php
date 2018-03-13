@@ -35,7 +35,7 @@
                                 <div class="album-name">
 
 
-                               Likes: {{$photo->getLikes()}}
+                                    <i class="fa fa-heart"></i> {{$photo->getLikes()}}
 
 
                                 </div>
