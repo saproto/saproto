@@ -28,6 +28,17 @@
                     </div>
                 </div>
             @endforeach
+
+        </div>
+
+        <div class="panel-footer">
+
+            <div class="btn-group btn-lg btn-group-justified">
+                <a class="btn btn-info" href="{{ route("news::list") }}">
+                    View more news!
+                </a>
+            </div>
+
         </div>
 
     </div>
