@@ -149,7 +149,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to profile pictures
          */
-        Route::group(['prefix' => '{id}/profilepic', 'as' => 'pic::'], function () {
+        Route::group(['prefix' => 'profilepic', 'as' => 'pic::'], function () {
             Route::post('update', ['as' => 'update', 'uses' => 'ProfilePictureController@update']);
             Route::get('delete', ['as' => 'delete', 'uses' => 'ProfilePictureController@destroy']);
         });

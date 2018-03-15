@@ -13,6 +13,8 @@ use Proto\Models\StorageEntry;
 use Session;
 use Redirect;
 
+use Auth;
+
 class ProfilePictureController extends Controller
 {
     /**
@@ -22,9 +24,9 @@ class ProfilePictureController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
 
         $image = $request->file('image');
         if ($image) {
@@ -52,9 +54,9 @@ class ProfilePictureController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
 
         $user->photo()->dissociate();
         $user->save();

@@ -1,4 +1,4 @@
-<form method="post" enctype="multipart/form-data" action="{{ route("user::pic::update", ["id"=>$user->id]) }}"
+<form method="post" enctype="multipart/form-data" action="{{ route("user::pic::update") }}"
       ng-app="app" ng-controller="Ctrl">
 
     {!! csrf_field() !!}
@@ -37,7 +37,7 @@
 
                     <div class="btn-group btn-group-justified" role="group">
                         <div class="btn-group" role="group">
-                            <a href="{{ route("user::pic::delete", ["id"=>$user->id]) }}" class="btn btn-danger">
+                            <a href="{{ route("user::pic::delete") }}" class="btn btn-danger">
                                 Delete
                             </a>
                         </div>
