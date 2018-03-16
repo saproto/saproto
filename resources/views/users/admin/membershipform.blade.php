@@ -7,10 +7,10 @@
         }
 
         body {
-            width: 210mm;
-            height: 297mm;
+            width: 100%;
+            height: 100%;
             font-family: Arial;
-            padding: 60px 40px;
+            padding: 60px 80px;
         }
 
         h2 {
@@ -19,6 +19,7 @@
 
         p {
             margin: 40px auto;
+            font-size: 16px;
         }
     </style>
 
