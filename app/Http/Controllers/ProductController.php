@@ -253,7 +253,7 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -268,7 +268,7 @@ class ProductController extends Controller
         $product->delete();
 
         $request->session()->flash('flash_message', "The product has been deleted.");
-        return Redirect::back();
+        return Redirect::route('omnomcom::products::list');
 
     }
 
