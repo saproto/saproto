@@ -117,7 +117,9 @@
                                 <a class="btn btn-xs btn-{{ ($orderline->isPayed() ? 'default' : 'danger') }}"
                                    style="margin-left: 10px;"
                                    href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
-                                   role="button" {{ ($orderline->isPayed() ? 'disabled' : '') }}>
+                                   role="button"
+                                   onclick="javascript:return confirm('You are about to delete an onrderline for {{ $orderline->user->name }}. Are you sure? ');"
+                                        {{ ($orderline->isPayed() ? 'disabled' : '') }}>
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </div>

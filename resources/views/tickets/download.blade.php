@@ -8,27 +8,31 @@
         }
 
         body {
-            width: 210mm;
-            height: 297mm;
+            width: 100%;
+            height: 100%;
             font-family: Arial;
-            margin: 0;
+            margin: 0 auto;
         }
 
         .half {
-            position: relative;
+            position: absolute;
 
-            width: 210mm;
-            height: 148mm;
+            left: 10%;
+            right: 10%;
+
+            height: 49%;
             margin: 0;
 
             text-align: center;
         }
 
         #half1 {
+            top: 0;
             border-bottom: 3px dashed #000000;
         }
 
         #half2 {
+            bottom: 0;
             padding-top: 45mm;
         }
 
@@ -65,7 +69,7 @@
 
 <div id="half1" class="half">
 
-    <p style="text-align: left;">
+    <p>
         <img id="barcode1" class="barcode"
              src="data:image/png;base64,{!! DNS1D::getBarcodePNG($ticket->barcode, "CODABAR") !!}">
     </p>
@@ -93,7 +97,7 @@
         <sub>#{{ str_pad($ticket->id, 5, '0', STR_PAD_LEFT) }}</sub>
     </p>
 
-    <p style="text-align: right;">
+    <p>
         <img id="barcode2" class="barcode"
              src="data:image/png;base64,{!! DNS1D::getBarcodePNG($ticket->barcode, "CODABAR") !!}">
     </p>

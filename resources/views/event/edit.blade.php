@@ -476,6 +476,7 @@
             },
             format: 'DD-MM-YYYY HH:mm'
         });
+
     </script>
 
 @endsection
