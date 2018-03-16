@@ -47,7 +47,7 @@
             @else
                   background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
-             background-position: center 50px;
+             background-position: center 220%;
             background-repeat: no-repeat;
         }
 
