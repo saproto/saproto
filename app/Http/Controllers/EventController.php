@@ -140,6 +140,11 @@ class EventController extends Controller
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
+        if ($event->end < $event->start) {
+            Session::flash("flash_message", "You cannot let the event end before it starts.");
+            return Redirect::back();
+        }
+
         if ($request->file('image')) {
             $file = new StorageEntry();
             $file->createFromFile($request->file('image'));
@@ -205,6 +210,11 @@ class EventController extends Controller
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
+
+        if ($event->end < $event->start) {
+            Session::flash("flash_message", "You cannot let the event end before it starts.");
+            return Redirect::back();
+        }
 
         if ($request->file('image')) {
             $file = new StorageEntry();
