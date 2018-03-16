@@ -122,7 +122,7 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -186,12 +186,14 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
 
         $event = Event::findOrFail($id);
+
+        $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location ? true : false;
 
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -216,8 +218,13 @@ class EventController extends Controller
 
         $event->save();
 
-        Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
-        return Redirect::route('event::edit', ['id' => $event->id]);
+        if ($changed_important_details) {
+            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. You updated some important information. Don't forget to update your participants with this info!");
+            return Redirect::route('email::add');
+        } else {
+            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
+            return Redirect::route('event::edit', ['id' => $event->id]);
+        }
 
     }
 
