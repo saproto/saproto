@@ -235,6 +235,8 @@ return [
 
     'domains' => [
         'protube' => [
+            'protu.be',
+            'www.protu.be',
             'protube.nl',
             'www.protube.nl'
         ],

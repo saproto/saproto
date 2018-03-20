@@ -150,6 +150,22 @@
 
                         </div>
 
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="force_calendar_sync"
+                                                {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
+                                        Always sync this event to user calendars.
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                         <div class="form-group">
                             <label for="editor">Description</label>
                             @if (!$event)
@@ -192,7 +208,7 @@
                                class="btn btn-danger pull-left">Delete</a>
                         @endif
 
-                        <a href="{{ $event ? route('event::show', ['id' => $event->id]) : URL::previous() }}"
+                        <a href="{{ $event ? route('event::show', ['id' => $event->getPublicId()]) : URL::previous() }}"
                            class="btn btn-default pull-right">Cancel</a>
 
                     </div>
@@ -460,6 +476,7 @@
             },
             format: 'DD-MM-YYYY HH:mm'
         });
+
     </script>
 
 @endsection

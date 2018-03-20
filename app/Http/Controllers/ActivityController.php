@@ -106,8 +106,11 @@ class ActivityController extends Controller
     public function checklist($id)
     {
         $event = Event::findOrFail($id);
-        if (!(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
+        if (!Auth::check() || !(Auth::user()->can('board') || $event->isEventAdmin(Auth::user()))) {
             abort(403, 'You may not see this page.');
+        }
+        if (!$event->activity) {
+            abort(404, 'This event has no activity.');
         }
         return view('event.checklist', ['event' => $event]);
     }
@@ -147,7 +150,7 @@ class ActivityController extends Controller
         $help = HelpingCommittee::findOrFail($id);
 
         foreach ($help->users as $user) {
-            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help))->onQueue('medium'));
+            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help->activity->event->title, $help->committee->name))->onQueue('medium'));
         }
 
         foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {

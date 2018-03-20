@@ -114,6 +114,7 @@
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
                                 <a class="btn btn-xs btn-danger"
+                                   onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
                                    href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}"
                                    role="button">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>

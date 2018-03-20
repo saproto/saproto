@@ -48,43 +48,13 @@
         @section('visitor-specific')
         @show
 
+        <hr>
+
         <h1 style="text-align: center; color: #fff; margin: 30px;">
             Recent <img src="{{ asset('images/application/protoink.png') }}" alt="/Proto/.Ink" width="160"> articles
         </h1>
 
         <div class="row" id="protoink">
-        </div>
-
-        <hr>
-
-        <h1 style="text-align: center; color: #fff; margin: 30px;">
-            Recent photo albums
-        </h1>
-
-        <div class="row">
-
-            @foreach(Flickr::getAlbums(6) as $key => $album)
-
-                <div class="col-md-4 col-xs-6">
-
-                    <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
-                        <div class="album"
-                             style="background-image: url('{!! $album->thumb !!}')">
-                            <div class="album-name">
-                                {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
-                                @if ($album->private)
-                                    <div class="photo__hidden">
-                                        <i class="fa fa-low-vision" aria-hidden="true"></i>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-
-            @endforeach
-
         </div>
 
     </div>
@@ -101,7 +71,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '{{ route('api::protoink') }}',
+                url: '{{ route('api::protoink') }}?max=4',
                 dataType: 'json',
                 success: function (data) {
 

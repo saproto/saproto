@@ -5,6 +5,8 @@ namespace Proto\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 class Event extends Model
 {
     use SoftDeletes;
@@ -17,6 +19,17 @@ class Event extends Model
      * @var string
      */
     protected $table = 'events';
+
+    public function getPublicId()
+    {
+        return Hashids::connection('event')->encode($this->id);
+    }
+
+    public static function fromPublicId($public_id)
+    {
+        $id = Hashids::connection('event')->decode($public_id);
+        return Event::findOrFail(count($id) > 0 ? $id[0] : 0);
+    }
 
     /**
      * @return mixed The activity associated with this event, if any.
@@ -119,6 +132,11 @@ class Event extends Model
         } else {
             return false;
         }
+    }
+
+    public function hasBoughtTickets(User $user)
+    {
+        return $this->getTicketPurchasesFor($user)->count() > 0;
     }
 
     public function returnAllUsers()

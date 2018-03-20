@@ -149,7 +149,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to profile pictures
          */
-        Route::group(['prefix' => '{id}/profilepic', 'as' => 'pic::'], function () {
+        Route::group(['prefix' => 'profilepic', 'as' => 'pic::'], function () {
             Route::post('update', ['as' => 'update', 'uses' => 'ProfilePictureController@update']);
             Route::get('delete', ['as' => 'delete', 'uses' => 'ProfilePictureController@destroy']);
         });
@@ -305,6 +305,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'EventController@destroy']);
 
         Route::post('set_reminder', ['as' => 'set_reminder', 'middleware' => ['auth'], 'uses' => 'EventController@setReminder']);
+        Route::get('toggle_relevant_only', ['as' => 'toggle_relevant_only', 'middleware' => ['auth'], 'uses' => 'EventController@toggleRelevantOnly']);
 
         Route::post('album/{event}/link', ['as' => 'linkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@linkAlbum']);
         Route::get('album/unlink/{album}', ['as' => 'unlinkalbum', 'middleware' => ['permission:board'], 'uses' => 'EventController@unlinkAlbum']);
@@ -667,6 +668,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('togglehistory', ['as' => 'togglehistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@toggleHistory']);
         Route::get('clearhistory', ['as' => 'clearhistory', 'middleware' => ['auth'], 'uses' => 'ProtubeController@clearHistory']);
         Route::get('top', ['as' => 'top', 'uses' => 'ProtubeController@topVideos']);
+        Route::get('login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'ProtubeController@loginRedirect']);
         Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
 
         Route::group(['prefix' => 'radio', 'middleware' => ['permission:admin'], 'as' => 'radio::'], function () {

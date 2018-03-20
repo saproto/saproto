@@ -6,9 +6,10 @@ use Adldap\Adldap;
 use Adldap\Connections\Provider;
 use Adldap\Objects\AccountControl;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Proto\Models\User;
 use Proto\Models\Committee;
+use Proto\Models\Member;
 
 use Proto\Http\Controllers\SlackController;
 
@@ -26,7 +27,7 @@ class ActiveDirectorySync extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:adsync';
+    protected $signature = 'proto:adsync {--full}';
 
     /**
      * The console command description.
@@ -52,6 +53,9 @@ class ActiveDirectorySync extends Command
      */
     public function handle()
     {
+        $full = $this->option('full');
+        $this->info(sprintf("Performing %s LDAP sync.", $full ? 'full' : 'partial'));
+
         try {
             $ad = new Adldap();
             $provider = new Provider(config('adldap.proto'));
@@ -60,8 +64,11 @@ class ActiveDirectorySync extends Command
 
             $this->info("Connected to LDAP server.");
 
+            $this->info("Removing non-members from LDAP.");
+            $this->removeObsoleteUsers($provider);
+
             $this->info("Synchronizing users to LDAP.");
-            $this->syncUsers($provider);
+            $this->syncUsers($provider, $full);
 
             $this->info("Synchronizing committees to LDAP.");
             $this->syncCommittees($provider);
@@ -76,86 +83,12 @@ class ActiveDirectorySync extends Command
         }
     }
 
-    private function syncUsers($provider)
+    private function removeObsoleteUsers($provider)
     {
 
-        $activeIds = [];
-
-        $this->info("Make sure all users exist in LDAP.");
-
-        foreach (User::all() as $user) {
-
-            if ($user->member) {
-
-                $activeIds[] = $user->id;
-                $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
-
-                $username = $user->member->proto_username;
-
-                if ($ldapuser == null) {
-                    $this->info('Creating LDAP user for ' . $user->name . '.');
-                    $ldapuser = $provider->make()->user();
-                    $ldapuser->cn = $username;
-                    $ldapuser->description = $user->id;
-                    $ldapuser->save();
-                }
-
-                $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
-
-                $ldapuser->displayName = trim($user->name);
-                $ldapuser->givenName = trim($user->calling_name);
-
-                $lastnameGuess = explode(" ", $user->name);
-                array_shift($lastnameGuess);
-                $ldapuser->sn = trim(implode(" ", $lastnameGuess));
-
-                $ldapuser->mail = $user->email;
-                $ldapuser->wWWHomePage = $user->website;
-
-                if ($user->address && $user->address_visible) {
-
-                    $ldapuser->l = $user->address->city;
-                    $ldapuser->postalCode = $user->address->zipcode;
-                    $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
-                    $ldapuser->co = $user->address->country;
-
-                } else {
-
-                    $ldapuser->l = null;
-                    $ldapuser->postalCode = null;
-                    $ldapuser->streetAddress = null;
-                    $ldapuser->co = null;
-
-                }
-
-                if ($user->phone_visible) {
-                    $ldapuser->telephoneNumber = $user->phone;
-                } else {
-                    $ldapuser->telephoneNumber = null;
-                }
-
-                if ($user->photo) {
-                    try {
-                        $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
-                    } catch (\Intervention\Image\Exception\NotReadableException $e) {
-                        $ldapuser->jpegPhoto = null;
-                    }
-                } else {
-                    $ldapuser->jpegPhoto = null;
-                }
-
-                $ldapuser->setAttribute('sAMAccountName', $username);
-                $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-                $ldapuser->save();
-
-            }
-
-        }
-
-        $this->info("Removing obsolete users from LDAP.");
-
         $users = $provider->search()->users()->get();
+
+        $activeIds = Member::with('user')->get()->pluck('user.id')->toArray();
 
         foreach ($users as $user) {
             if (!$user->description[0] || !in_array($user->description[0], $activeIds)) {
@@ -164,14 +97,94 @@ class ActiveDirectorySync extends Command
             }
         }
 
+        $this->info("Removed non-members from LDAP.");
+
+    }
+
+    private function syncUsers($provider, $full = false)
+    {
+
+        $c = 0;
+
+        foreach (Member::with('user')->get() as $member) {
+
+            $user = $member->user;
+
+            if (!$full && strtotime($user->updated_at) < date('U', strtotime('-15 minutes'))) continue;
+
+            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
+
+            $username = $user->member->proto_username;
+
+            if ($ldapuser == null) {
+                $this->info('Creating LDAP user for ' . $user->name . '.');
+                $ldapuser = $provider->make()->user();
+                $ldapuser->cn = $username;
+                $ldapuser->description = $user->id;
+                $ldapuser->save();
+            }
+
+            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
+
+            $ldapuser->displayName = trim($user->name);
+            $ldapuser->givenName = trim($user->calling_name);
+
+            $lastnameGuess = explode(" ", $user->name);
+            array_shift($lastnameGuess);
+            $ldapuser->sn = trim(implode(" ", $lastnameGuess));
+
+            $ldapuser->mail = $user->email;
+            $ldapuser->wWWHomePage = $user->website;
+
+            if ($user->address && $user->address_visible) {
+
+                $ldapuser->l = $user->address->city;
+                $ldapuser->postalCode = $user->address->zipcode;
+                $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
+                $ldapuser->co = $user->address->country;
+
+            } else {
+
+                $ldapuser->l = null;
+                $ldapuser->postalCode = null;
+                $ldapuser->streetAddress = null;
+                $ldapuser->co = null;
+
+            }
+
+            if ($user->phone_visible) {
+                $ldapuser->telephoneNumber = $user->phone;
+            } else {
+                $ldapuser->telephoneNumber = null;
+            }
+
+            if ($user->photo) {
+                try {
+                    $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
+                } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                    $ldapuser->jpegPhoto = null;
+                }
+            } else {
+                $ldapuser->jpegPhoto = null;
+            }
+
+            $ldapuser->setAttribute('sAMAccountName', $username);
+            $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
+
+            $ldapuser->save();
+
+            $c++;
+
+        }
+
+        $this->info(sprintf("User sync complete. (%d users)", $c));
+
     }
 
     private function syncCommittees($provider)
     {
 
         $activeIds = [];
-
-        $this->info("Make sure all committees exist in LDAP.");
 
         foreach (Committee::all() as $committee) {
 
@@ -190,7 +203,7 @@ class ActiveDirectorySync extends Command
             $group->displayName = trim($committee->name);
             $group->description = $committee->id;
             $group->mail = $committee->slug . '@' . config('proto.emaildomain');
-            $group->url = route("committee::show", ['id' => $committee->id]);
+            $group->url = route("committee::show", ['id' => $committee->getPublicId()]);
 
             $group->setAttribute('sAMAccountName', $committee->slug);
 
@@ -198,7 +211,7 @@ class ActiveDirectorySync extends Command
 
         }
 
-        $this->info("Removing obsolete committees from LDAP.");
+        $this->info("Committee sync complete.");
 
         $committees = $provider->search()->groups()->get();
 
@@ -208,6 +221,8 @@ class ActiveDirectorySync extends Command
                 $group->delete();
             }
         }
+
+        $this->info("Removed obsolete committees.");
 
     }
 
@@ -219,8 +234,6 @@ class ActiveDirectorySync extends Command
         $user2ldap = [];
 
         foreach ($groups as $group) {
-
-            $this->info('Setting members for ' . $group->name[0] . '.');
 
             $committee = Committee::findOrFail($group->description[0]);
 
@@ -250,6 +263,8 @@ class ActiveDirectorySync extends Command
             $group->save();
 
         }
+
+        $this->info('Committee member sync complete.');
 
     }
 

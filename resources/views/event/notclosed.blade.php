@@ -42,7 +42,7 @@
 
                         @if ($activity->event)
                             <td>
-                                <a href="{{ route("event::show", ['id' => $activity->event->id]) }}">{{ $activity->event->title }}</a><br>
+                                <a href="{{ route("event::show", ['id' => $activity->event->getPublicId()]) }}">{{ $activity->event->title }}</a><br>
                                 {{ date('D j F Y', $activity->event->start) }}
                             </td>
                         @else

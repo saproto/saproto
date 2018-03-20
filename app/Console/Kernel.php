@@ -45,6 +45,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('proto:dasync')->everyMinute();
         $schedule->command('proto:adsync')->everyTenMinutes();
+        $schedule->command('proto:adsync --full')->daily()->at('04:00');
         $schedule->command('proto:clearsessions')->daily();
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
@@ -57,5 +58,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:spotifysync')->daily()->at('00:00');
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
+        $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
     }
 }

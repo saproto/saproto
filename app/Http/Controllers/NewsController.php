@@ -172,4 +172,26 @@ class NewsController extends Controller
 
         return Redirect::route('news::edit', ['id' => $id]);
     }
+
+    public function apiIndex() {
+        $newsitems = Newsitem::all()->sortByDesc('published_at');
+
+        $return = [];
+
+        foreach($newsitems as $newsitem) {
+            if($newsitem->isPublished()) {
+                $returnItem = new \stdClass();
+                $returnItem->id = $newsitem->id;
+                $returnItem->title = $newsitem->title;
+                $returnItem->featured_image_url = $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(700, null) : null;
+                $returnItem->content = $newsitem->content;
+                $returnItem->published_at = strtotime($newsitem->published_at);
+
+                $return[] = $returnItem;
+            }
+        }
+
+        return $return;
+    }
 }
+

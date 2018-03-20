@@ -86,7 +86,7 @@
                                 @endif
 
                                 <a class="activity"
-                                   href="{{ route('event::show', ['id' => $event->id]) }}">
+                                   href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                     <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                         <p><strong>{{ $event->title }}</strong></p>
                                         <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
@@ -157,9 +157,33 @@
                         <hr>
 
                         <p style="text-align: center;">
+                            @if ($relevant_only)
+                                <strong>Your are currently only syncing relevant events.</strong>
+                            @else
+                                You are currently syncing all events.
+                            @endif
+
+                            <a class="btn btn-{{ $relevant_only ? 'success':'danger' }}" type="button"
+                               style="width: 100%;" href="{{ route('event::toggle_relevant_only') }}">
+                                @if ($relevant_only)
+                                    Sync all my events.
+                                @else
+                                    Sync only relevant events.
+                                @endif
+                            </a>
+
+                            <sub>
+                                Relevant events are events you either attend, organize or help with.
+                            </sub>
+
+                        </p>
+
+                        <hr>
+
+                        <p style="text-align: center;">
                             <sub>
                                 @if ($reminder)
-                                    You are currently recieving a reminder {{ $reminder->value }} hours before an
+                                    You are currently recieving a reminder {{ $reminder }} hours before an
                                     activity you participate in.
                                 @else
                                     You are currently <strong>not</strong> receiving a reminder before an activity you
@@ -178,7 +202,7 @@
                                 <div class="{{ $reminder ? 'col-md-4' : 'col-md-4 col-md-offset-2' }}">
                                     <div class="input-group">
                                         <input class="form-control" type="number" step="0.01" placeholder="0.5"
-                                               name="hours" value="{{ $reminder ? $reminder->value : '' }}">
+                                               name="hours" value="{{ $reminder ? $reminder : '' }}">
                                         <div class="input-group-addon">hours</div>
                                     </div>
                                 </div>

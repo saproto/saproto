@@ -36,12 +36,18 @@
         }
 
         body {
-            @if(date('U') >  strtotime('December 6') && date('U') < strtotime('December 31'))
-                background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+            @if(date('U') > strtotime('December 6') && date('U') < strtotime('December 31'))
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+            @elseif(date('U') > strtotime('November 25') && date('U') < strtotime('December 6'))
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
+            @elseif(date('U') > (easter_date() - 3600*24*7) && date('U') < (easter_date() + 3600*24))
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
+            @elseif(date('U') > strtotime('March 10') && date('U') < strtotime('March 18'))
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
             @else
-                background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
-            background-position: center 115%;
+             background-position: center 220%;
             background-repeat: no-repeat;
         }
 
@@ -770,16 +776,16 @@
 
     //--formatter:off
     @foreach($categories as $category)
-        @foreach($category->products as $product)
+            @foreach($category->products as $product)
             @if($product->isVisible())
-                @if($product->image)
-                    images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-                @endif
-                cart[{{ $product->id }}] = 0;
-                stock[{{ $product->id }}] = {{ $product->stock }};
-                price[{{ $product->id }}] = {{ $product->price }};
-            @endif
-        @endforeach
+            @if($product->image)
+        images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+    @endif
+        cart[{{ $product->id }}] = 0;
+    stock[{{ $product->id }}] = {{ $product->stock }};
+    price[{{ $product->id }}] = {{ $product->price }};
+    @endif
+    @endforeach
     @endforeach
     //--formatter:on
 
@@ -886,7 +892,7 @@
                     password: $("#purchase-password").val()
                 }),
                 cash: {!! ($store->cash_allowed ? "cash" : "false") !!},
-                cart: cart
+                cart: cart_to_object(cart)
             },
             dataType: 'html',
             success: function (data) {
@@ -1175,6 +1181,22 @@
                 }, 10000);
             }
         }
+    }
+
+    function cart_to_object(cart) {
+
+        object_cart = {};
+
+        for (product_id in cart) {
+
+            if (cart[product_id] > 0) {
+                object_cart[product_id] = cart[product_id]
+            }
+
+        }
+
+        return object_cart;
+
     }
 
 </script>

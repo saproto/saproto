@@ -268,7 +268,7 @@
                             <div class="member">
                                 <div class="member-picture"
                                      style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');"></div>
-                                <a href="{{ route("user::profile", ['id'=>$user->id]) }}">{{ $user->name }}</a>
+                                <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
 
                                 <p class="pull-right activity__admin-controls">
                                     <a class="activity__admin-controls__button--delete"

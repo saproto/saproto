@@ -187,6 +187,9 @@ return [
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
+        nickurt\PwnedPasswords\ServiceProvider::class,
+
     ],
 
     /*
@@ -284,6 +287,10 @@ return [
         'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
+
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
+
+        'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class
 
     ],
 

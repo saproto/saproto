@@ -18,7 +18,7 @@ class ProtoInk extends Model
     {
         try {
 
-            $feed = Feeds::make('http://proto.ink/feed');
+            $feed = Feeds::make('https://proto.ink/feed');
 
             $data = [];
             foreach ($feed->get_items() as $item) {
@@ -31,7 +31,11 @@ class ProtoInk extends Model
                 ];
             }
 
-            return $data;
+            if ($max !== null) {
+                return array_slice($data, 0, $max);
+            } else {
+                return $data;
+            }
 
         } catch (Exception $e) {
 

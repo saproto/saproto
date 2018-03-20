@@ -45,7 +45,7 @@
 
                         @if($committee->allow_anonymous_email)
 
-                            <a href="{{ route("committee::anonymousmail", ["id" => $committee->id]) }}"
+                            <a href="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}"
                                class="btn btn-info">
                                 Send this committee an anonymous e-mail
                             </a>
@@ -77,8 +77,8 @@
                                     <div class="col-md-6">
 
                                         <a class="activity"
-                                           href="{{ route('event::show', ['id' => $event->id]) }}">
-                                            <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
+                                           href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
+                                            <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event->title }}</strong></p>
                                                 <p><i class="fa fa-map-marker"
                                                       aria-hidden="true"></i> {{ $event->location }}
@@ -156,7 +156,7 @@
                                 <div class="col-md-6">
 
                                     <a class="activity"
-                                       href="{{ route('event::show', ['id' => $event->id]) }}">
+                                       href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                         <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                             <p><strong>{{ $event->title }}</strong></p>
                                             <p>
@@ -211,7 +211,7 @@
                                     <div class="col-md-6">
 
                                         <a class="activity"
-                                           href="{{ route('event::show', ['id' => $event['id']]) }}">
+                                           href="{{ route('event::show', ['id' => Event::find($event['id'])->getPublicId()]) }}">
                                             <div class="activity" {!! ($event['secret'] ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event['title'] }}</strong></p>
                                                 <p><i class="fa fa-map-marker"

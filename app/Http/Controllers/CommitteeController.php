@@ -4,8 +4,6 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\Cast\Object_;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
 use Proto\Mail\AnonymousEmail;
@@ -15,7 +13,6 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\User;
 
 use Auth;
-use Entrust;
 use Session;
 use Redirect;
 use Mail;
@@ -35,7 +32,7 @@ class CommitteeController extends Controller
 
     public function show($id)
     {
-        $committee = Committee::findOrFail($id);
+        $committee = Committee::fromPublicId($id);
 
         if (!$committee->public && (!Auth::check() || !Auth::user()->can('board'))) {
             abort(404);
@@ -54,7 +51,7 @@ class CommitteeController extends Controller
 
         Session::flash("flash_message", "Your new committee has been added!");
 
-        return Redirect::route('committee::show', ['id' => $committee->id]);
+        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
 
     }
 
@@ -98,7 +95,7 @@ class CommitteeController extends Controller
             $committee->save();
         }
 
-        return Redirect::route('committee::show', ['id' => $id]);
+        return Redirect::route('committee::show', ['id' => Event::findOrFail($id)->getPublicId()]);
 
     }
 
@@ -209,7 +206,7 @@ class CommitteeController extends Controller
     public function showAnonMailForm($id)
     {
 
-        $committee = Committee::findOrFail($id);
+        $committee = Committee::fromPublicId($id);
 
         if (!$committee->allow_anonymous_email) {
             Session::flash("flash_message", "This committee does not accept anonymous e-mail at this time.");
@@ -223,7 +220,7 @@ class CommitteeController extends Controller
     public function postAnonMailForm(Request $request, $id)
     {
 
-        $committee = Committee::findOrFail($id);
+        $committee = Committee::fromPublicId($id);
 
         if (!$committee->allow_anonymous_email) {
             Session::flash("flash_message", "This committee does not accept anonymous e-mail at this time.");
@@ -245,7 +242,7 @@ class CommitteeController extends Controller
 
         Session::flash("flash_message", "Your anonymous e-mail has been sent!");
 
-        return Redirect::route('committee::show', ['id' => $committee->id]);
+        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
 
     }
 

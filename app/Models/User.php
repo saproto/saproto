@@ -2,6 +2,8 @@
 
 namespace Proto\Models;
 
+use Proto\Models\HashMapItem;
+
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
 use Adldap\Objects\AccountControl;
@@ -45,7 +47,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at'];
+    protected $hidden = ['id', 'password', 'remember_token', 'personal_key', 'deleted_at', 'created_at', 'image_id', 'tfa_totp_key', 'updated_at'];
+
+    public function getPublicId()
+    {
+        return ($this->member ? $this->member->proto_username : null);
+    }
+
+    public static function fromPublicId($public_id)
+    {
+        $member = Member::where('proto_username', $public_id)->first();
+        return ($member ? $member->user : null);
+    }
 
     /**
      * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
@@ -94,6 +107,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 $ldapuser->save();
             }
         }
+
+        // Remove breach notification flag
+        HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
     }
 
     /**
@@ -394,6 +410,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $this->generateNewPersonalKey();
         }
         return $this->personal_key;
+    }
+
+    public function getCalendarAlarm()
+    {
+        return $this->pref_calendar_alarm;
+    }
+
+    public function setCalendarAlarm($hours)
+    {
+        $hours = floatval($hours);
+        $this->pref_calendar_alarm = ($hours > 0 ? $hours : null);
+        $this->save();
+    }
+
+    public function getCalendarRelevantSetting()
+    {
+        return $this->pref_calendar_relevant_only;
+    }
+
+    public function toggleCalendarRelevantSetting()
+    {
+        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->save();
     }
 
 }

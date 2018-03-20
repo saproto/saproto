@@ -192,6 +192,15 @@
 
         @section('panel-footer')
 
+            @if($product)
+                <a class="btn btn-danger"
+                   onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
+                   href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}"
+                   role="button">
+                    Delete
+                </a>
+            @endif
+
             <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
 
             <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default pull-right">Cancel</a>

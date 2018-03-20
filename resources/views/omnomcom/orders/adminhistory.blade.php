@@ -86,7 +86,7 @@
                             <div class="col-md-3">
                                 @if($orderline->user)
 
-                                    <a href="{{ route('user::profile', ['id' => $orderline->user->id]) }}">
+                                    <a href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}">
                                         {{ $orderline->user->name }}
                                     </a>
 
@@ -117,7 +117,9 @@
                                 <a class="btn btn-xs btn-{{ ($orderline->isPayed() ? 'default' : 'danger') }}"
                                    style="margin-left: 10px;"
                                    href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
-                                   role="button" {{ ($orderline->isPayed() ? 'disabled' : '') }}>
+                                   role="button"
+                                   onclick="javascript:return confirm('You are about to delete an onrderline for {{ $orderline->user->name }}. Are you sure? ');"
+                                        {{ ($orderline->isPayed() ? 'disabled' : '') }}>
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -203,7 +205,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon">&euro;</span>
-                                    <input type="text" name="price[]" placeholder="Price"
+                                    <input type="number" step="0.01" name="price[]" placeholder="Price"
                                            class="orderlineprice form-control">
                                 </div>
 

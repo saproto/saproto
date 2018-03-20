@@ -42,6 +42,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('ldapproxy/{personal_key}', ['as' => 'ldapproxy', 'uses' => 'ApiController@ldapProxy']);
 
         Route::get('protoink', ['as' => 'protoink', 'uses' => 'ProtoInkController@index']);
+        Route::get('news', ['as' => 'news', 'uses' => 'NewsController@apiIndex']);
 
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
 
@@ -51,8 +52,12 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     });
 
-    Route::group(['middleware' => ['auth:api']], function () {
-        Route::get('user', ['uses' => 'ApiController@getUser']);
+    Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
+        Route::get('info', ['uses' => 'UserApiController@getUser']);
+        Route::get('profile_picture', ['uses' => 'UserApiController@getUserProfilePicture']);
+        Route::get('address', ['uses' => 'UserApiController@getAddress']);
+        Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
+        Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
     });
 
 });

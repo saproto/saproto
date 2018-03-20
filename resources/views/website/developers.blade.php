@@ -33,7 +33,7 @@
 
                     <p>
                         The website is open source and actively maintained by a dedicated committee of the association:
-                        the <a href="{{ route('committee::show', ['id'=>$committee->id]) }}">{{ $committee->name }}</a>.
+                        the <a href="{{ route('committee::show', ['id'=>$committee->getPublicId()]) }}">{{ $committee->name }}</a>.
                         You will find the current members of this committee on your right. Below this piece of prose you
                         will also find a list of the developers who have been contributing to the association's ICT in
                         the past.
@@ -89,7 +89,7 @@
                     <h3>Developers from days past</h3>
 
                     @foreach($developers['old'] as $i => $dev)
-                        <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">
+                        <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                             {{ $dev->user->name }}
                         </a>
                         @if ($i + 1 < count($developers['old']))
@@ -124,7 +124,7 @@
                                  style="background-image: url('{!! $dev->user->generatePhotoPath(250, 250) !!}');">
 
                                 <span>
-                                    <a href="{{ route('user::profile', ['id' => $dev->user->id]) }}">
+                                    <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                                         {{ $dev->user->name }}
                                     </a>
                                 </span>

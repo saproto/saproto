@@ -34,6 +34,15 @@
 
         @section('panel-footer')
 
+            @if($category)
+                <a class="btn btn-danger"
+                   onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
+                   href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}"
+                   role="button">
+                    Delete
+                </a>
+            @endif
+
             <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
 
             <a href="{{ route("omnomcom::categories::list") }}" class="btn btn-default pull-right">Cancel</a>

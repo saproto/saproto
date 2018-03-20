@@ -4,15 +4,11 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\FlickrAlbum;
-use Proto\Models\HashMapItem;
-use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
@@ -21,8 +17,6 @@ use Session;
 use Redirect;
 use Auth;
 use Response;
-use Markdown;
-use DateTime;
 
 class EventController extends Controller
 {
@@ -59,14 +53,16 @@ class EventController extends Controller
 
 
         if (Auth::check()) {
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', Auth::user()->id)->first();
+            $reminder = Auth::user()->getCalendarAlarm();
         } else {
             $reminder = null;
         }
 
+        $relevant_only = Auth::check() && Auth::user()->getCalendarRelevantSetting() ? true : false;
+
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'relevant_only' => $relevant_only]);
     }
 
     /**
@@ -126,7 +122,7 @@ class EventController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -142,6 +138,12 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->force_calendar_sync = $request->has('force_calendar_sync');
+
+        if ($event->end < $event->start) {
+            Session::flash("flash_message", "You cannot let the event end before it starts.");
+            return Redirect::back();
+        }
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -156,7 +158,7 @@ class EventController extends Controller
         $event->save();
 
         Session::flash("flash_message", "Your event '" . $event->title . "' has been added.");
-        return Redirect::route('event::show', ['id' => $event->id]);
+        return Redirect::route('event::show', ['id' => $event->getPublicId()]);
 
     }
 
@@ -168,7 +170,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::fromPublicId($id);
         return view('event.display', ['event' => $event]);
     }
 
@@ -189,12 +191,14 @@ class EventController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
 
         $event = Event::findOrFail($id);
+
+        $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location ? true : false;
 
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -205,6 +209,12 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->force_calendar_sync = $request->has('force_calendar_sync');
+
+        if ($event->end < $event->start) {
+            Session::flash("flash_message", "You cannot let the event end before it starts.");
+            return Redirect::back();
+        }
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -218,8 +228,13 @@ class EventController extends Controller
 
         $event->save();
 
-        Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
-        return Redirect::route('event::edit', ['id' => $event->id]);
+        if ($changed_important_details) {
+            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. You updated some important information. Don't forget to update your participants with this info!");
+            return Redirect::route('email::add');
+        } else {
+            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
+            return Redirect::route('event::edit', ['id' => $event->id]);
+        }
 
     }
 
@@ -449,19 +464,14 @@ class EventController extends Controller
 
         if ($request->has('delete') || $hours <= 0) {
 
-            HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->delete();
+            $user->setCalendarAlarm(null);
             Session::flash('flash_message', 'Reminder removed.');
             return Redirect::back();
 
         } elseif ($hours > 0) {
 
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
-            if (!$reminder) {
-                $reminder = HashMapItem::create(['key' => 'calendar_alarm', 'subkey' => $user->id]);
-            }
-            $reminder->value = $request->get('hours');
-            $reminder->save();
-            Session::flash('flash_message', sprintf('Reminder set to %s hours.', $reminder->value));
+            $user->setCalendarAlarm($hours);
+            Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
             return Redirect::back();
 
         } else {
@@ -469,6 +479,18 @@ class EventController extends Controller
             abort(500, "Invalid request.");
 
         }
+    }
+
+    public function toggleRelevantOnly()
+    {
+        $user = Auth::user();
+        $newSetting = $user->toggleCalendarRelevantSetting();
+        if ($newSetting === true) {
+            Session::flash('flash_message', 'From now on your calendar will only sync events relevant to you.');
+        } else {
+            Session::flash('flash_message', 'From now on your calendar will sync all events.');
+        }
+        return Redirect::back();
     }
 
     public function icalCalendar($personal_key = null)
@@ -507,12 +529,18 @@ class EventController extends Controller
             "END:VTIMEZONE" . "\r\n";
 
         if ($user) {
-            $reminder = HashMapItem::where('key', 'calendar_alarm')->where('subkey', $user->id)->first();
+            $reminder = $user->getCalendarAlarm();
         } else {
             $reminder = null;
         }
-        
+
+        $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
+
         foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+                continue;
+            }
 
             if ($event->over()) {
                 $infotext = 'This activity is over.';
@@ -520,6 +548,8 @@ class EventController extends Controller
                 $infotext = 'Sign-up required, but no participant limit.';
             } elseif ($event->activity !== null && $event->activity->participants > 0) {
                 $infotext = 'Sign-up required! There are roughly ' . $event->activity->freeSpots() . ' of ' . $event->activity->participants . ' places left.';
+            } elseif ($event->tickets->count() > 0) {
+                $infotext = 'Ticket purchase required.';
             } else {
                 $infotext = 'No sign-up necessary.';
             }
@@ -539,7 +569,7 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $infotext .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isParticipating($user)) {
+                    } elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
                         $status = 'Participating';
                         $infotext .= ' You are participating in this activity.';
                     }
@@ -552,7 +582,7 @@ class EventController extends Controller
                 sprintf("DTSTART:%s", date('Ymd\THis', $event->start)) . "\r\n" .
                 sprintf("DTEND:%s", date('Ymd\THis', $event->end)) . "\r\n" .
                 sprintf("SUMMARY:%s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title) . "\r\n" .
-                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->id])) . "\r\n" .
+                sprintf("DESCRIPTION:%s", $infotext . ' More information: ' . route("event::show", ['id' => $event->getPublicId()])) . "\r\n" .
                 sprintf("LOCATION:%s", $event->location) . "\r\n" .
                 sprintf("ORGANIZER;CN=%s:MAILTO:%s",
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
@@ -560,7 +590,7 @@ class EventController extends Controller
 
             if ($reminder && $status) {
                 $calendar .= "BEGIN:VALARM" . "\r\n" .
-                    sprintf("TRIGGER:-PT%dM", ceil($reminder->value * 60)) . "\r\n" .
+                    sprintf("TRIGGER:-PT%dM", ceil($reminder * 60)) . "\r\n" .
                     "ACTION:DISPLAY" . "\r\n" .
                     sprintf("DESCRIPTION:%s at %s", $status ? sprintf('[%s] %s', $status, $event->title) : $event->title, date('l F j, H:i:s', $event->start)) . "\r\n" .
                     "END:VALARM" . "\r\n";

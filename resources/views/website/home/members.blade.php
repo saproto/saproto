@@ -12,60 +12,19 @@
 @endsection
 
 @section('visitor-specific')
+
     <div class="row">
+
         <div class="col-md-8">
 
-            <div class="panel panel-default">
+            @include('website.home.news')
 
-                <div class="panel-body" style="padding: 1.8rem;">
-
-                    <p>
-                        Welcome to the new Proto website. You should find most of what you had on the old website around
-                        here somewhere, and the final missing features are coming soon. Should you miss something, do
-                        let us
-                        know!
-                    </p>
-
-                    <h3>Recent News Articles</h3>
-
-                    @if(count($newsitems) == 0)
-                        <p>
-                            &nbsp;
-                        </p>
-                        <p style="text-align: center">
-                            <strong>
-                                There are currently no news articles.
-                            </strong>
-                        </p>
-                    @endif
-
-                    @foreach($newsitems as $index => $newsitem)
-                        @if($index > 0)
-                            <hr class="rule">
-                        @endif
-
-                        <div class="media">
-                            @if ($newsitem->featuredImage)
-                                <div class="media-left">
-                                    <img src="{{ $newsitem->featuredImage->generateImagePath(192,192) }}" width="96"
-                                         height="96" alt="">
-                                </div>
-                            @endif
-                            <div class="media-body">
-                                <h5 class="media-heading"><a href="{{ $newsitem->url() }}">{{ $newsitem->title }}</a>
-                                </h5>
-                                <em class="small-text">
-                                    Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
-                                </em>
-                                <p class="medium-text">{!!  Markdown::convertToHtml(\Illuminate\Support\Str::words($newsitem->content, 50)) !!} </p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-            </div>
+            @if(count($newsitems) <= 2)
+                @include('website.home.recentphotos')
+            @endif
 
         </div>
+
         <div class="col-md-4">
 
             <div class="panel panel-default homepage__calendar">
@@ -87,7 +46,7 @@
                         @endif
 
                         <a class="activity"
-                           href="{{ route('event::show', ['id' => $event->id]) }}">
+                           href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                             <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                 <p><strong>{{ $event->title }}</strong></p>
                                 <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
@@ -115,8 +74,15 @@
                         events</a>
 
                 </div>
+
             </div>
+
         </div>
+
+        @if(count($newsitems) > 2)
+            @include('website.home.recentphotos')
+        @endif
+
     </div>
 
 @endsection

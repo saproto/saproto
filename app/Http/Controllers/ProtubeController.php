@@ -41,6 +41,11 @@ class ProtubeController extends Controller
         return view('protube.remote');
     }
 
+    public function loginRedirect()
+    {
+        return redirect(route("protube::remote"));
+    }
+
     public function topVideos()
     {
         $data = (object)[

@@ -4,6 +4,8 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Vinkla\Hashids\Facades\Hashids;
+
 use Carbon\Carbon;
 
 use Auth;
@@ -18,6 +20,17 @@ class Committee extends Model
      * @var string
      */
     protected $table = 'committees';
+    protected $hidden = ['id', 'image_id'];
+
+    public function getPublicId()
+    {
+        return $this->slug;
+    }
+
+    public static function fromPublicId($public_id)
+    {
+        return Committee::where('slug', $public_id)->firstOrFail();
+    }
 
     /**
      * @return mixed All events organized by this committee.
@@ -32,12 +45,12 @@ class Committee extends Model
      */
     public function pastEvents()
     {
-        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc')->get();
+        $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
 
         if (Auth::check() && Auth::user()->can('board')) {
-            return $events;
+            return $events->get();
         } else {
-            return $events->where('secret', '=', 0);
+            return $events->where('secret', '=', 0)->get();
         }
     }
 
@@ -46,12 +59,12 @@ class Committee extends Model
      */
     public function upcomingEvents()
     {
-        $events = $this->organizedEvents()->where('end', '>', time())->get();
+        $events = $this->organizedEvents()->where('end', '>', time());
 
         if (Auth::check() && Auth::user()->can('board')) {
-            return $events;
+            return $events->get();
         } else {
-            return $events->where('secret', '=', 0);
+            return $events->where('secret', '=', 0)->get();
         }
     }
 

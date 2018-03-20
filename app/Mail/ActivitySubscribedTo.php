@@ -22,7 +22,7 @@ class ActivitySubscribedTo extends Mailable
     public function __construct(ActivityParticipation $participation, $help)
     {
         $this->activity = [
-            'id' => $participation->activity->event->id,
+            'id' => $participation->activity->event->getPublicId(),
             'title' => $participation->activity->event->title,
             'name' => $participation->user->calling_name,
             'help' => $help

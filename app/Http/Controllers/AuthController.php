@@ -9,7 +9,11 @@ use PragmaRX\Google2FA\Google2FA;
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
 
+use nickurt\PwnedPasswords\PwnedPasswords;
+
 use Proto\Mail\PasswordResetEmail;
+use Proto\Mail\PwnedPasswordNotification;
+use Proto\Mail\UsernameReminderEmail;
 use Proto\Mail\RegistrationConfirmation;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
@@ -198,7 +202,7 @@ class AuthController extends Controller
     private function registerAccount($request)
     {
 
-        $user = User::create($request->except('g-recaptcha-response', 'privacy_policy_acceptance'));
+        $user = User::create($request->only(['email', 'name', 'calling_name']));
 
         if (Session::get('wizard')) {
 
@@ -300,16 +304,10 @@ class AuthController extends Controller
     {
         $user = User::where('email', $request->email)->first();
         if ($user !== null) {
-
             AuthController::dispatchPasswordEmailFor($user);
-
-            $request->session()->flash('flash_message', 'We\'ve dispatched an e-mail to you with instruction to reset your password.');
-            return Redirect::route('login::show');
-
-        } else {
-            $request->session()->flash('flash_message', 'We could not find a user with the e-mail address you entered.');
-            return Redirect::back();
         }
+        $request->session()->flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
+        return Redirect::route('login::show');
     }
 
     /**
@@ -401,6 +399,9 @@ class AuthController extends Controller
                 return view('auth.passchange');
             } elseif (strlen($pass_new1) < 10) {
                 $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
+                return view('auth.passchange');
+            } elseif ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
+                $request->session()->flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
                 return view('auth.passchange');
             } else {
                 $user->setPassword($pass_new1);
@@ -544,18 +545,13 @@ class AuthController extends Controller
         if ($request->has('email')) {
             $user = User::whereEmail($request->get('email'))->first();
             if ($user) {
-                if ($user->member) {
-                    Session::flash('flash_message', 'Your Proto username is <strong>' . $user->member->proto_username . '</strong>');
-                    Session::flash('login_username', $user->member->proto_username);
-                } else {
-                    Session::flash('flash_message', 'Only members have a Proto username. You can login using your e-mail address.');
-                }
-            } else {
-                Session::flash('flash_message', 'We could not find a user with that e-mail address.');
+                AuthController::dispatchUsernameEmailFor($user);
             }
+            Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
             return Redirect::route('login::show');
+        } else {
+            return view('auth.username');
         }
-        return view('auth.username');
     }
 
     /******************************************************
@@ -582,6 +578,10 @@ class AuthController extends Controller
         }
 
         if ($user != null && Hash::check($password, $user->password)) {
+            if (HashMapItem::where('key', 'pwned-pass')->where('subkey', $user->id)->first() === null && (new PwnedPasswords())->setPassword($password)->isPwnedPassword()) {
+                Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
+                HashMapItem::create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
+            }
             return $user;
         }
 
@@ -633,7 +633,7 @@ class AuthController extends Controller
             return AuthController::continueLogin($user);
         }
 
-        $request->session()->flash('flash_message', 'Invalid username of password provided.');
+        $request->session()->flash('flash_message', 'Invalid username or password provided.');
         return Redirect::route('login::show');
 
     }
@@ -729,6 +729,18 @@ class AuthController extends Controller
         ]);
 
         Mail::to($user)->queue((new PasswordResetEmail($user, $reset->token))->onQueue('high'));
+
+    }
+
+    /**
+     * Static helper function that will dispatch a username reminder for a user.
+     *
+     * @param User $user
+     */
+    public static function dispatchUsernameEmailFor(User $user)
+    {
+
+        Mail::to($user)->queue((new UsernameReminderEmail($user))->onQueue('high'));
 
     }
 

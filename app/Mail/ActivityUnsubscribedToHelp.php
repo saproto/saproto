@@ -26,7 +26,7 @@ class ActivityUnsubscribedToHelp extends Mailable
     {
         $this->calling_name = $participation->user->calling_name;
         $this->committee_name = $participation->help->committee->name;
-        $this->event_id = $participation->activity->event->id;
+        $this->event_id = $participation->activity->event->getPublicId();
         $this->event_title = $participation->activity->event->title;
     }
 

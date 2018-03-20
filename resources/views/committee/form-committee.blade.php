@@ -64,7 +64,7 @@
 
         <div class="panel-footer clearfix">
 
-            <a href="{{ ($new ? 'javascript:history.go(-1)' : route("committee::show", ["id" => $committee->id]) ) }}"
+            <a href="{{ ($new ? 'javascript:history.go(-1)' : route("committee::show", ["id" => $committee->getPublicId()]) ) }}"
                class="btn btn-default">
                 Cancel
             </a>

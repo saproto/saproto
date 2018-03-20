@@ -12,14 +12,14 @@
         #card {
             position: relative;
 
-            width: 86mm;
-            height: 52mm;
+            width: 100%;
+            height: 100%;
 
             font-family: 'Lato', Arial, sans-serif;
         }
 
         #name {
-            font-size: 13px;
+            font-size: 17px;
 
             overflow: hidden;
 
@@ -29,61 +29,61 @@
         #power-icons {
             position: absolute;
 
-            top: 11mm;
-            right: 1.0mm;
-            width: 3.5mm;
-            height: 30mm;
+            top: 20.4%;
+            right: 1.2%;
+            width: 4.1%;
+            height: 55.6%;
 
             text-align: center;
 
-            font-size: 11px;
+            font-size: 13px;
         }
 
         #power-icons i:nth-child(1) {
-            margin-top: 1.2mm;
+            margin-top: 2.2%;
         }
 
         #power-icons i {
-            margin-bottom: 1.2mm;
+            margin-bottom: 2.2%;
         }
 
         #details {
             position: absolute;
 
-            top: 15.5mm;
-            left: 5mm;
-            width: 50mm;
+            top: 28.7%;
+            left: 5.8%;
+            width: 58.1%;
 
             color: #000;
 
-            font-size: 9px;
+            font-size: 13px;
         }
 
         #details .heading {
             color: #aaa;
 
             text-transform: uppercase;
-            font-size: 7px;
+            font-size: 10px;
 
-            margin-top: 2mm;
+            margin-top: 3.7%;
         }
 
         #photo {
             position: absolute;
 
-            top: 11mm;
-            right: 5mm;
-            width: 22.5mm;
-            height: 30mm;
+            top: 20.4%;
+            right: 5.8%;
+            width: 26.5%;
+            height: 55.6%;
         }
 
         #barcode {
             position: absolute;
 
-            bottom: 8.5mm;
-            left: 5mm;
-            width: 35mm;
-            height: 5mm;
+            bottom: 19%;
+            left: 5.8%;
+            width: 40.7%;
+            height: 9.3%;
         }
     </style>
 </head>

@@ -13,7 +13,7 @@ class CountPrimaryMembers extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:countprimarymembers {--s|show : Also show a list of all primary members}';
+    protected $signature = 'proto:countprimarymembers {--show : Also show a list of all primary members} {--all : Also include secondary members}';
 
     /**
      * The console command description.
@@ -53,31 +53,42 @@ class CountPrimaryMembers extends Command
         }
 
         $print_members = $this->option('show');
+        $show_all_members = $this->option('all');
 
-        $count = 0;
+        $count_primary = 0;
+        $count_secondary = 0;
 
         // Loop over all members and determine if they are studying CreaTe.
         foreach (Member::all() as $member) {
 
-            if (
-                in_array(strtolower($member->user->email), $emails) ||
+            $is_create_student = in_array(strtolower($member->user->email), $emails) ||
                 in_array($member->user->utwente_username, $usernames) ||
-                in_array(strtolower($member->user->name), $names)
-            ) {
-                if ($print_members) {
-                    $utwente_username = $member->user->utwente_username !== null ? $member->user->utwente_username : 'no utwente username';
-                    if (substr($member->user->email, -10) == 'utwente.nl') {
-                        $this->info(sprintf('%s - %s (%s)', $member->user->name, $member->user->email, $utwente_username));
-                    } else {
-                        $this->info(sprintf('%s (%s)', $member->user->name, $utwente_username));
-                    }
-                }
-                $count++;
+                in_array(strtolower($member->user->name), $names);
+
+            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
+
+            $is_ut = $is_create_student || $has_ut_mail || $member->user->utwente_username !== null;
+
+            $display_fields = (object)[
+                'status' => $is_create_student ? '[P]' : '   ',
+                'name' => $is_ut ? $member->user->name : '***',
+                'email' => $has_ut_mail ? $member->user->email : '***@***.**',
+                'ut_account' => $member->user->utwente_username ? $member->user->utwente_username : 'n/a'
+            ];
+
+            if ($is_create_student) {
+                $count_primary++;
+            } else {
+                $count_secondary++;
+            }
+
+            if ($print_members && $show_all_members || $print_members && $is_create_student) {
+                $this->info(sprintf('%s %s - %s (%s)', $display_fields->status, $display_fields->name, $display_fields->email, $display_fields->ut_account));
             }
 
         }
 
-        $this->info(sprintf('I count %d primary members.', $count));
+        $this->info(sprintf('Total count: %d primary, %d secondary members (total: %d).', $count_primary, $count_secondary, $count_primary + $count_secondary));
 
     }
 }

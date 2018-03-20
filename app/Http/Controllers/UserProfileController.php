@@ -21,10 +21,10 @@ class UserProfileController extends Controller
     public function show($id = null)
     {
         if ($id == null) {
-            $id = Auth::id();
+            $user = Auth::user();
+        } else {
+            $user = User::fromPublicId($id);
         }
-
-        $user = User::find($id);
 
         if ($user == null) {
             abort(404);

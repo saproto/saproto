@@ -32,7 +32,7 @@
                     Dashboard
                 </a>
                 @if($user->member)
-                    <a class="list-group-item" href="{{ route('user::profile', ['id' => $user->id]) }}">
+                    <a class="list-group-item" href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
                         Profile
                     </a>
                 @endif

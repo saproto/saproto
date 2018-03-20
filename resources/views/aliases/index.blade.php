@@ -43,7 +43,7 @@
                                 @if($destination->destination)
                                     {{ $destination->destination }}
                                 @elseif($destination->user)
-                                    <a href="{{ route('user::profile', ['id' => $destination->user->id]) }}">
+                                    <a href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}">
                                         @if($destination->user->trashed())
                                             <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
                                         @else

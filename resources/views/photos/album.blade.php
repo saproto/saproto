@@ -10,7 +10,7 @@
 
         <p style="text-align: center;">
 
-            <a class="btn btn-info" href="{{ route('event::show', ['event_id'=>$photos->event->id]) }}">
+            <a class="btn btn-info" href="{{ route('event::show', ['event_id'=>$photos->event->getPublicId()]) }}">
                 Visit event information of {{ $photos->event->title }}
             </a>
 

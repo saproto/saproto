@@ -12,17 +12,19 @@ class CommitteeHelpNotNeeded extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $help;
+    public $help_title;
+    public $committee_name;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $help)
+    public function __construct($user, $help_title, $committee_name)
     {
         $this->user = $user;
-        $this->help = $help;
+        $this->help_title = $help_title;
+        $this->committee_name = $committee_name;
     }
 
     /**
@@ -34,7 +36,7 @@ class CommitteeHelpNotNeeded extends Mailable
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')
-            ->subject('The activity ' . $this->help->activity->event->title . ' doesn\'t need your help anymore.')
+            ->subject('The activity ' . $this->help_title . ' doesn\'t need your help anymore.')
             ->view('emails.committeehelpnotneeded');
     }
 }

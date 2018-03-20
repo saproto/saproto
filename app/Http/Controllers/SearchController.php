@@ -29,10 +29,11 @@ class SearchController extends Controller
 
         $users = [];
         foreach ($data['users'] as $id => $count) {
+            $user = User::findOrFail($id);
             $users[] = [
                 'score' => $count,
-                'object' => User::findOrFail($id),
-                'href' => route('user::profile', ['id' => $id])
+                'object' => $user,
+                'href' => route('user::profile', ['id' => $user->getPublicId()])
             ];
         }
         $pages = [];
@@ -46,25 +47,35 @@ class SearchController extends Controller
         }
         $committees = [];
         foreach ($data['committees'] as $id => $count) {
+            $committee = Committee::findOrFail($id);
             $committees[] = [
                 'score' => $count,
-                'object' => Committee::findOrFail($id),
-                'href' => route('committee::show', ['id' => $id])
+                'object' => $committee,
+                'href' => route('committee::show', ['id' => $committee->getPublicId()])
             ];
         }
         $events = [];
         foreach ($data['events'] as $id => $count) {
+            $event = Event::findOrFail($id);
             $events[] = [
                 'score' => $count,
-                'object' => Event::findOrFail($id),
-                'href' => route('event::show', ['id' => $id])
+                'object' => $event,
+                'href' => route('event::show', ['id' => $event->getPublicId()])
             ];
         }
 
-        usort($users, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($pages, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($committees, function ($a, $b) { return $b['score'] - $a['score'];});
-        usort($events, function ($a, $b) { return $b['score'] - $a['score'];});
+        usort($users, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($pages, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($committees, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
+        usort($events, function ($a, $b) {
+            return $b['score'] - $a['score'];
+        });
 
         return view('website.search', [
             'term' => $term,

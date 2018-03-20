@@ -12,6 +12,7 @@ class AchievementOwnership extends Model
      * @var string
      */
     protected $table = 'achievements_users';
+    protected $hidden = ['user_id'];
 
     /**
      * @return mixed The user owning the achievement.

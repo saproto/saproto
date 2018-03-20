@@ -54,7 +54,7 @@ class BirthdayCron extends Command
             foreach ($users as $user) {
 
                 $adminoverview[] = [
-                    'id' => $user->id,
+                    'id' => $user->getPublicId(),
                     'name' => $user->name,
                     'age' => $user->age()
                 ];

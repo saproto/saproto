@@ -193,28 +193,56 @@ class ProductController extends Controller
 
     public function bulkUpdate(Request $request)
     {
+
         $input = preg_split('/\r\n|\r|\n/', $request->input('update'));
 
         $log = "";
         $errors = "";
+
+        $products = [];
+        $deltas = [];
+
         foreach ($input as $lineRaw) {
+
             $line = explode(',', $lineRaw);
+
             if (count($line) == 2) {
+
                 $product = Product::find($line[0]);
+
                 if ($product) {
+
+                    $delta = intval($line[1]);
+
                     $oldstock = $product->stock;
-                    $newstock = $oldstock + $line[1];
-                    $product->stock = $newstock;
+                    $newstock = $oldstock + $delta;
+
                     $log .= "<strong>" . $product->name . "</strong> updated with delta <strong>" . $line[1] . "</strong>. Stock changed from $oldstock to <strong>$newstock</strong>.<br>";
-                    $product->save();
+
+                    $products[] = $product->id;
+                    $deltas[] = $delta;
+
                 } else {
+
                     $errors .= "<span style='color: red;'>Product ID <strong>" . $line[0] . "</strong> not recognized.</span><br>";
+
                 }
+
             } else {
+
                 $errors .= "<span style='color: red;'>Incorrect format for line <strong>" . $lineRaw . "</strong>.</span><br>";
+
             }
+
         }
-        $request->session()->flash('flash_message', $errors);
+
+        foreach ($products as $i => $product_id) {
+            $product = Product::find($product_id);
+            $product->stock += $deltas[$i];
+            $product->save();
+        }
+
+        $request->session()->flash('flash_message', 'Done. Errors:<br>' . $errors);
 
         Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors . $log))->onQueue('low'));
 
@@ -225,7 +253,7 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -240,7 +268,7 @@ class ProductController extends Controller
         $product->delete();
 
         $request->session()->flash('flash_message', "The product has been deleted.");
-        return Redirect::back();
+        return Redirect::route('omnomcom::products::list');
 
     }
 

@@ -49,7 +49,7 @@
             margin: 0;
             padding: 0;
 
-            color: #c1ff00;
+            color: #80B823;
         }
 
         #protubeOff {
@@ -64,24 +64,35 @@
             display: none;
         }
 
+        #topBar {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 15px;
+        }
+
         #progressBar {
             position: absolute;
-            bottom: 105px;
+            bottom: 100px;
             left: 0;
-            width: 0;
-            height: 2px;
 
-            background-color: #c1ff00;
+            width: 0;
+            height: 5px;
+
+            background-color: #80B823;
 
             z-index: 500;
         }
 
         #progressBarBackground {
             position: absolute;
-            bottom: 105px;
+            bottom: 100px;
             left: 0;
+
             width: 100%;
-            height: 2px;
+            height: 5px;
 
             background-color: #222222;
 
@@ -90,33 +101,38 @@
 
         #playerContainer {
             position: absolute;
-            top: 0px;
-            bottom: 108px;
+            top: 0;
+            bottom: 105px;
             left: 0;
             right: 0;
         }
 
         #nowPlaying {
             position: absolute;
+
             z-index: 9999;
-            display: block;
+
             right: 30px;
             top: 30px;
+
             color: #FFFFFF;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
             font-size: 30px;
-            font-weight: 500;
+
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
         }
 
         #addedBy {
             position: absolute;
+
             z-index: 9998;
-            display: block;
+
             right: 30px;
-            top: 68px;
+            top: 70px;
+
             color: #FFFFFF;
+            font-size: 24px;
+
             text-shadow: 0 0 10px rgba(0, 0, 0, 1);
-            font-size: 20px;
         }
 
         #player {
@@ -147,8 +163,8 @@
             bottom: 0;
             left: 0;
 
-            width: 200px;
-            height: 105px;
+            width: 120px;
+            height: 100px;
             text-align: center;
 
             margin: 0;
@@ -158,18 +174,18 @@
         }
 
         #pin h1 {
-            color: #c1ff00;
-            font-size: 16px;
+            color: #80B823;
+            font-size: 15px;
 
             margin: 0;
             padding: 0;
 
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         #pin p {
             color: #fff;
-            font-size: 72px;
+            font-size: 52px;
 
             margin: 0;
             padding: 0;
@@ -180,10 +196,10 @@
         #queue {
             position: absolute;
             bottom: 0;
-            left: 200px;
+            left: 120px;
             right: -3000px;
 
-            height: 105px;
+            height: 100px;
 
             overflow: hidden;
         }
@@ -196,9 +212,10 @@
 
         #queue ul li {
             position: relative;
-            width: 180px;
-            height: 105px;
+            width: 220px;
+            height: 100px;
             display: inline-block;
+            overflow: hidden;
             padding: 0;
             margin: 0;
         }
@@ -207,24 +224,51 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 160px;
-            height: 115px;
-            overflow: hidden;
-            font-size: 16px;
+            width: 200px;
+            height: 85px;
+            font-size: 20px;
             font-weight: normal;
             color: #fff;
             text-shadow: #000 1px 1px;
             margin: 0;
             padding: 0;
+
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         #queue img {
             position: absolute;
             top: 0;
             left: 0;
-            margin-top: -15px;
-            margin-bottom: -15px;
-            height: 135px;
+            margin: -25px;
+            height: 155px;
+            width: 250px;
+            filter: blur(7px) contrast(115%) brightness(80%);
+        }
+
+        #clock {
+            position: absolute;
+
+            bottom: 135px;
+            right: 30px;
+
+            z-index: 9999;
+
+            color: #FFF;
+
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+
+            font-size: 35px;
+
+            text-align: center;
+        }
+
+        #clock.slideshow {
+            position: absolute;
+
+            bottom: 30px;
+            right: 30px;
         }
 
         #slideshow {
@@ -308,6 +352,30 @@
             $("#connecting").hide(0);
 
             screen.emit("screenReady");
+
+            var t;
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                // add a zero in front of numbers<10
+                h = checkTime(h);
+                m = checkTime(m);
+                $('#clock').html(h + ":" + m);
+                t = setTimeout(function() {
+                    startTime()
+                }, 500);
+            }
+
+            startTime();
 
             screen.on("disconnect", function () {
                 $("#connecting").show(0);
@@ -433,12 +501,14 @@
             var slideshow = $("#slideshow");
             if (slideshow.html() == "") slideshow.html('<iframe src="/photos/slideshow" width="100%" height="100%" frameborder="0"></iframe>');
             slideshow.show(0);
+            $("#clock").addClass("slideshow");
         }
 
         function stopSlideshow() {
             var slideshow = $("#slideshow");
             slideshow.hide(0);
             slideshow.html("");
+            $("#clock").removeClass("slideshow");
         }
 
         function startRadio() {
@@ -486,7 +556,7 @@
         }
 
         @if($showPin)
-            $(document).ready(function () {
+        $(document).ready(function () {
             $.ajax({
                 url: "{!! config('app-proto.app-url') !!}/api/token",
                 dataType: "jsonp",
@@ -515,8 +585,8 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
             a = s.createElement(o),
                 m = s.getElementsByTagName(o)[0];
             a.async = 1;
@@ -542,17 +612,19 @@
 <div id="playerContainer">
     <div id="nowPlaying">Loading...</div>
     <div id="addedBy">&nbsp;</div>
+
     <div id="player"></div>
 </div>
 
-<div id="progressBar"></div>
-<div id="progressBarBackground"></div>
-
 <div id="bottomBar">
+    <div id="progressBar"></div>
+    <div id="progressBarBackground"></div>
+
     <div id="pin">
-        <h1>www.protube.nl</h1>
+        <h1>protu.be/</h1>
         <p id="pinCode">...</p>
     </div>
+
     <div id="queue">
         <ul>
             <!-- Filled by JS -->
@@ -561,6 +633,8 @@
 </div>
 
 <div id="slideshow"></div>
+
+<div id="clock"> 00:00 </div>
 
 </body>
 </html>

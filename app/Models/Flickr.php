@@ -173,11 +173,30 @@ class Flickr extends Model
      */
     public static function getPhotosFromAPI($albumId)
     {
+
+        $data = Flickr::getPhotosFromApiPerPage($albumId, 1);
+
+        while ($data->page < $data->pages) {
+
+            $extra_data = Flickr::getPhotosFromApiPerPage($albumId, $data->page + 1);
+            $data->page = $extra_data->page;
+            $data->photos = array_merge($data->photos, $extra_data->photos);
+
+        }
+        
+        return $data;
+
+    }
+
+    public static function getPhotosFromApiPerPage($albumId, $page)
+    {
+
         try {
 
             $photos = json_decode(file_get_contents(Flickr::constructAPIUri('flickr.photosets.getPhotos', array(
                 'photoset_id' => $albumId,
-                'extras' => 'url_o,url_m,url_l,date_taken'
+                'extras' => 'url_o,url_m,url_l,date_taken',
+                'page' => $page
             ))));
 
             $data = [];
@@ -204,7 +223,9 @@ class Flickr extends Model
 
             return (object)[
                 'album_title' => $photos->photoset->title,
-                'photos' => $data
+                'photos' => $data,
+                'page' => $photos->photoset->page,
+                'pages' => $photos->photoset->pages
             ];
 
         } catch (Exception $e) {
@@ -212,6 +233,7 @@ class Flickr extends Model
             return false;
 
         }
+
     }
 
 }
