@@ -109,6 +109,10 @@
     <script type="text/javascript">
         var slideInterval;
 
+        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
         var protoServer = '{{ URL::to('/') }}';
 
         $(document).ready(function () {
@@ -122,7 +126,8 @@
                 success: function (data) {
                     $('#albums').html('');
                     $(data).each(function () {
-                        $('#albums').append('<option value="' + this.id + '">' + this.name + '</option>')
+                        album_date = new Date(this.date_taken * 1000);
+                        $('#albums').append('<option value="' + this.id + '">' + this.name + ' (' + MONTH_NAMES[album_date.getMonth()] + ' ' + album_date.getFullYear() + ')</option>')
                     });
 
                     displayRandomAlbum();

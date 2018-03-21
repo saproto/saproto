@@ -38,6 +38,11 @@ class HelpingCommittee extends Validatable
             ->whereNull('activities_users.deleted_at')->withTrashed();
     }
 
+    public function getHelpingCount()
+    {
+        return ActivityParticipation::where('activity_id', $this->activity->id)->where('committees_activities_id', $this->id)->count();
+    }
+
     protected $guarded = ['id'];
 
     protected $rules = array(

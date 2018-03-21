@@ -30,16 +30,32 @@
 
                 </div>
 
-                @if(Auth::check() && ($committee->allow_anonymous_email || Auth::user()->can('board')))
+                @if(Auth::check() && ($committee->allow_anonymous_email || Auth::user()->can('board') || $committee->isMember(Auth::user())))
 
                     <div class="panel-footer clearfix">
 
                         @if(Auth::check() && Auth::user()->can('board'))
 
                             <a href="{{ route("committee::edit", ["id" => $committee->id]) }}"
-                               class="btn btn-default pull-right">
+                               class="btn btn-default pull-right" style="margin-left: 15px;">
                                 Edit
                             </a>
+
+                        @endif
+
+                        @if(Auth::check() && $committee->isMember(Auth::user()))
+
+                            @if($committee->wantsToReceiveHelperReminder(Auth::user()))
+                                <a href="{{ route('committee::toggle_helper_reminder', ['slug'=>$committee->slug]) }}"
+                                   class="btn btn-danger pull-right">
+                                    Don't receive helper reminders.
+                                </a>
+                            @else
+                                <a href="{{ route('committee::toggle_helper_reminder', ['slug'=>$committee->slug]) }}"
+                                   class="btn btn-success pull-right">
+                                    Subscribe for helper reminders.
+                                </a>
+                            @endif
 
                         @endif
 

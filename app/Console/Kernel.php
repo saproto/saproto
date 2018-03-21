@@ -32,7 +32,8 @@ class Kernel extends ConsoleKernel
         Commands\TestIBANs::class,
         Commands\ClearSessionTable::class,
         Commands\CountPrimaryMembers::class,
-        Commands\VerifyPersonalDetailsEmailCron::class
+        Commands\VerifyPersonalDetailsEmailCron::class,
+        Commands\HelperReminderCron::class
     ];
 
     /**
@@ -59,5 +60,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:spotifysync')->daily()->at('00:00');
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
+        $schedule->command('proto:helperremindercron')->daily()->at('08:00');
     }
 }

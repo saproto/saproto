@@ -153,5 +153,24 @@ class Committee extends Model
         return $this->slug . '@' . config('proto.emaildomain');
     }
 
+    public function helperReminderSubscribers()
+    {
+        return $this->hasMany('Proto\Models\HelperReminder');
+    }
+
+    public function getHelperReminderSubscribers()
+    {
+        $users = [];
+        foreach ($this->helperReminderSubscribers as $subscriber) {
+            $users[] = $subscriber->user;
+        }
+        return $users;
+    }
+
+    public function wantsToReceiveHelperReminder(User $user)
+    {
+        return HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->count() > 0;
+    }
+
     protected $guarded = [];
 }
