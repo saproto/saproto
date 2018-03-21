@@ -43,7 +43,7 @@ class HelperReminderCron extends Command
     public function handle()
     {
 
-        $events = Event::where('start', '>', strtotime('+3 days'))->where('start', '<', strtotime('+40 days'))->get();
+        $events = Event::where('start', '>', strtotime('+3 days'))->where('start', '<', strtotime('+4 days'))->get();
         if ($events->count() == 0) {
             $this->info('No events in three days. Exiting.');
             return;
