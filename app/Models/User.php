@@ -435,4 +435,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
     }
 
+    public function helperReminderSubscriptions()
+    {
+        return $this->belongsTo('Proto\Models\HelperReminder');
+    }
+
 }

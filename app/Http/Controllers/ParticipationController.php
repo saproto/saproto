@@ -9,6 +9,7 @@ use Proto\Mail\ActivityMovedFromBackup;
 use Proto\Mail\ActivitySubscribedTo;
 use Proto\Mail\ActivityUnsubscribedFrom;
 use Proto\Mail\ActivityUnsubscribedToHelp;
+use Proto\Mail\HelperMutation;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
@@ -51,6 +52,7 @@ class ParticipationController extends Controller
                 abort(403, "There are already enough people of your committee helping, thanks though!");
             }
             $data['committees_activities_id'] = $helping->id;
+            Mail::queue((new HelperMutation(Auth::user(), $helping, true))->onQueue('medium'));
         } else {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
@@ -86,6 +88,7 @@ class ParticipationController extends Controller
                 abort(403, $user->name . " is not a member of the " . $helping->committee->name . " and thus cannot help on behalf of it.");
             }
             $data['committees_activities_id'] = $helping->id;
+            Mail::queue((new HelperMutation($user, $helping, true))->onQueue('medium'));
         }
 
         if (!$event->activity) {
@@ -159,6 +162,9 @@ class ParticipationController extends Controller
             if ($notify) {
                 Mail::to($participation->user)->queue((new ActivityUnsubscribedToHelp($participation))->onQueue('high'));
             }
+
+            Mail::queue((new HelperMutation($participation->user, $participation->help, false))
+                    ->onQueue('medium'));
 
             $participation->delete();
 
