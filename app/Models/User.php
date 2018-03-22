@@ -354,7 +354,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getDisplayEmail()
     {
-        return $this->member ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return ($this->member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
     }
 
     public function isElegibleForKickInCamp()
