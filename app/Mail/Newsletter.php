@@ -14,11 +14,13 @@ class Newsletter extends Mailable
 
     public $user;
     public $list;
+    public $text;
 
-    public function __construct(User $user, $list)
+    public function __construct(User $user, $list, $text)
     {
         $this->user = $user;
         $this->list = $list;
+        $this->text = $text;
     }
 
     public function build()

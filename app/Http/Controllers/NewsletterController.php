@@ -40,7 +40,8 @@ class NewsletterController extends Controller
         return view('emails.newsletter', [
             'user' => Auth::user(),
             'list' => EmailList::find(config('proto.weeklynewsletter')),
-            'events' => Event::getEventsForNewsletter()
+            'events' => Event::getEventsForNewsletter(),
+            'text' => Newsletter::getText()->value
         ]);
     }
 
@@ -53,6 +54,14 @@ class NewsletterController extends Controller
         Newsletter::send();
 
         $request->session()->flash('flash_message', 'The weekly newsletter has been sent.');
+        return Redirect::back();
+    }
+
+    public function saveNewsletterText(Request $request)
+    {
+        Newsletter::updateText($request->text);
+
+        $request->session()->flash('flash_message', 'The newsletter text has been set.');
         return Redirect::back();
     }
 

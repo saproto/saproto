@@ -42,6 +42,26 @@
 
     <hr>
 
+    <form method="post"
+          action="{{ route("newsletter::text") }}">
+
+        {!! csrf_field() !!}
+
+        <div class="form-group">
+            <label for="newsletter-text">Text in newsletter</label>
+                <textarea id="newsletter-text" name="text"
+                          placeholder="Enter newsletter text here...">{{ Newsletter::getText()->value }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Save text
+        </button>
+
+    </form>
+
+    <div class="clearfix"></div>
+
+    <hr>
+
     @if (count($events) > 0)
 
         <table class="table">
@@ -94,5 +114,19 @@
         </p>
 
     @endif
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script>
+        var simplemde = new SimpleMDE({
+            element: $("#editor")[0],
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
+            spellChecker: false
+        });
+    </script>
 
 @endsection

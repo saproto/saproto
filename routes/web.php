@@ -350,6 +350,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('content', ['as' => 'show', 'uses' => 'NewsletterController@getInNewsletter']);
             Route::get('toggle/{id}', ['as' => 'toggle', 'uses' => 'NewsletterController@toggleInNewsletter']);
             Route::post('send', ['as' => 'send', 'uses' => 'NewsletterController@sendNewsletter']);
+            Route::post('text', ['as' => 'text', 'uses' => 'NewsletterController@saveNewsletterText']);
         });
     });
 
