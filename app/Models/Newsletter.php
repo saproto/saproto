@@ -27,7 +27,7 @@ class Newsletter extends Model
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
                 'key' => 'newsletter_text',
-                'value' => 0
+                'value' => null
             ]);
         }
         return $lastSent;
