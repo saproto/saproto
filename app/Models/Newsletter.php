@@ -21,9 +21,26 @@ class Newsletter extends Model
         return $lastSent;
     }
 
+    public static function getText()
+    {
+        $lastSent = HashMapItem::where('key', 'newsletter_text')->first();
+        if ($lastSent == null) {
+            $lastSent = HashMapItem::create([
+                'key' => 'newsletter_text',
+                'value' => 0
+            ]);
+        }
+        return $lastSent;
+    }
+
     public static function lastSent()
     {
         return Newsletter::getLastSent()->value;
+    }
+
+    public static function text()
+    {
+        return Newsletter::getText()->value;
     }
 
     public static function updateLastSent()
@@ -31,6 +48,16 @@ class Newsletter extends Model
         $lastSent = Newsletter::getLastSent();
 
         $lastSent->value = date('U');
+        $lastSent->save();
+
+        return $lastSent->value;
+    }
+
+    public static function updateText($text)
+    {
+        $lastSent = Newsletter::getText();
+
+        $lastSent->value = $text;
         $lastSent->save();
 
         return $lastSent->value;
