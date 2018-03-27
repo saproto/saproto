@@ -20,7 +20,7 @@
 
     @endif
 
-    <div id="album" data-chocolat-title="{{ $photos->album_title }}">
+    <div id="album">
 
         @foreach($photos->photos as $key => $photo)
 
@@ -30,8 +30,15 @@
 
                     <div class="col-md-3 col-xs-6">
 
-                        <a href="{!! ($photo->url) !!}" class="photo-link chocolat-image">
+                        <a href="{{route("photo::view", ["id"=> $photo->id])}}" class="photo-link">
                             <div class="photo" style="background-image: url('{!! $photo->thumb !!}')">
+                                <div class="album-name">
+
+
+                                    <i class="fa fa-heart"></i> {{$photo->getLikes()}}
+
+
+                                </div>
                                 @if ($photo->private)
                                     <div class="photo__hidden">
                                         <i class="fa fa-low-vision" aria-hidden="true"></i>
@@ -57,9 +64,19 @@
     @parent
 
     <script>
-        $(document).ready(function () {
-            $('#album').Chocolat();
-        });
+        (function(window, location) {
+            history.replaceState(null, document.title, location.pathname+"#!/stealingyourhistory");
+            history.pushState(null, document.title, location.pathname);
+
+            window.addEventListener("popstate", function() {
+                if(location.hash === "#!/stealingyourhistory") {
+                    history.replaceState(null, document.title, location.pathname);
+                    setTimeout(function(){
+                        location.replace("{{ route('photo::albums')}}");
+                    },0);
+                }
+            }, false);
+        }(window, location));
     </script>
 
 @endsection

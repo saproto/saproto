@@ -602,7 +602,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
         });
+        Route::get('/like/{id}', ['as' => 'likes', 'middleware' => ['auth'], 'uses' => 'PhotoController@likePhoto']);
+        Route::get('/dislike/{id}', ['as' => 'dislikes', 'middleware' => ['auth'], 'uses' => 'PhotoController@dislikePhoto']);
+        Route::get('/photo/{id}', ['as' => 'view', 'uses' => 'PhotoController@photo']);
     });
+
     Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
         Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);
     });
