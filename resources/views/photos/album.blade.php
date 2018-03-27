@@ -20,7 +20,7 @@
 
     @endif
 
-    <div id="album" data-chocolat-title="{{ $photos->album_title }}">
+    <div id="album">
 
         @foreach($photos->photos as $key => $photo)
 
@@ -62,16 +62,6 @@
 @section('javascript')
 
     @parent
-
-    <script>
-        $(document).ready(function () {
-            $('#album').Chocolat();
-        });
-
-
-
-
-    </script>
 
     <script>
         (function(window, location) {
