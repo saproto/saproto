@@ -4,9 +4,10 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use Proto\Mail\Newsletter;
+use Proto\Mail\Newsletter as NewsletterMail;
 use Proto\Models\EmailList;
 use Proto\Models\Event;
+use Proto\Models\Newsletter;
 
 use Mail;
 
@@ -47,17 +48,21 @@ class NewsletterCron extends Command
 
         $events = Event::getEventsForNewsletter();
 
+        $text = Newsletter::getText()->value;
+
         if ($events->count() > 0) {
 
             $this->info('Sending weekly newsletter to ' . $newsletterlist->users->count() . ' people.');
 
             foreach ($newsletterlist->users as $user) {
 
-                Mail::to($user)->queue((new Newsletter($user, $newsletterlist))->onQueue('low'));
+                Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $text))->onQueue('low'));
 
             }
 
             $this->info("Done!");
+
+            Newsletter::updateText(null);
 
         } else {
 

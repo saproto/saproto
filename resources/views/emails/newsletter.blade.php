@@ -12,6 +12,20 @@
         through to our website!
     </p>
 
+    @if($text != '')
+        <p>
+
+            <strong>And now, a special announcement by the board:</strong>
+
+        </p>
+
+        <p>
+
+            {!! Markdown::convertToHtml($text) !!}
+
+        </p>
+    @endif
+
     <p>
         &nbsp;
     </p>
