@@ -53,16 +53,23 @@
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
                     </table>
-                    <div class="btn-group btn-group-justified" role="group">
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle">...
+                    <div class="btn-group" role="group" style="width: 100%">
+                        <div class="btn-group" role="group" style="width: 50%;">
+                            <button type="button" class="btn btn-default" id="protubeToggle" id="protubeToggle" style="width: 100%;">...
                             </button>
                         </div>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-default" id="shuffleRadio"><i class="fa fa-random"
+                        <div class="btn-group" role="group" style="width: 50%;">
+                            <button type="button" class="btn btn-default" id="shuffleRadio" style="width: 80%;"><i class="fa fa-random"
                                                                                                aria-hidden="true"></i>
                                 Radio
                             </button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 20%;">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" id="radiostationDropdown">
+                                <li><a href="#">Loading...</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -412,6 +419,26 @@
                     }
 
                 }
+            });
+
+            admin.on("radiostations", function(data) {
+                var stationsHtml = "";
+
+                for (var i in data) {
+                    var station = data[i];
+
+                    stationsHtml += "<li><a href='#' data-id=" + i + ">" + station.name + "</a></li>";
+                }
+
+                $("#radiostationDropdown").html(stationsHtml);
+
+                $("#radiostationDropdown li a").each(function() {
+                    $(this).click(function(e) {
+                        e.preventDefault();
+
+                        admin.emit("setRadio", $(this).attr('data-id'));
+                    })
+                })
             });
 
             $("#clearSearch").click(function (e) {
