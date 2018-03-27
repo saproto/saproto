@@ -97,7 +97,7 @@ class PhotoController extends Controller
 
     public function slideshow()
     {
-        return view('photos.photopage');
+        return view('photos.slideshow');
     }
 
 
