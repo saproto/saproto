@@ -99,7 +99,7 @@ class CommitteeController extends Controller
             $committee->save();
         }
 
-        return Redirect::route('committee::show', ['id' => Event::findOrFail($id)->getPublicId()]);
+        return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
 
     }
 
