@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\GenerateRoles::class,
         Commands\TestEmail::class,
-        Commands\DirectAdminSync::class,
+        Commands\MailAliasSync::class,
         Commands\ActiveDirectorySync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('proto:dasync')->everyMinute();
+        $schedule->command('proto:aliassync')->everyMinute();
         $schedule->command('proto:adsync')->everyTenMinutes();
         $schedule->command('proto:adsync --full')->daily()->at('04:00');
         $schedule->command('proto:clearsessions')->daily();
