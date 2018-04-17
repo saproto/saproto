@@ -28,7 +28,7 @@ class CommitteeController extends Controller
             return view('committee.list', ['data' => Committee::orderby('name', 'asc')->get()]);
         } else {
             $publicCommittees = Committee::where('public', 1)->get();
-            $userCommittees = Auth::user()->committees;
+            $userCommittees = Auth::check() ? Auth::user()->committees : [];
 
             $mergedCommittees = $publicCommittees->merge($userCommittees)->sortBy('name');
 
