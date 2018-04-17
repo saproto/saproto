@@ -43,7 +43,6 @@ class Flickr extends Model
         $items = FlickrItem::where('album_id', $albumID);
 
 
-
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
@@ -66,15 +65,19 @@ class Flickr extends Model
         $data->album_id = FlickrItem::where("id", "=", $photoID)->first()->album_id;
         $data->album_name = FlickrAlbum::where("id", "=", $data->album_id)->first()->name;
         $data->likes = PhotoLikes::where("photo_id", "=", $photoID)->count();
-        $data->liked = PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count();
+        $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;
-        } else { $data->next = null; }
+        } else {
+            $data->next = null;
+        }
 
         if ($photo->getPreviousPhoto() != null) {
             $data->previous = $photo->getPreviousPhoto()->id;
-        } else { $data->previous = null; }
+        } else {
+            $data->previous = null;
+        }
 
         $data->id = $photoID;
 
@@ -183,7 +186,7 @@ class Flickr extends Model
             $data->photos = array_merge($data->photos, $extra_data->photos);
 
         }
-        
+
         return $data;
 
     }
