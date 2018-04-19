@@ -292,11 +292,11 @@
         var soundboardVolume = 0;
         var soundboardPlayers = [];
 
-        $.getJSON('{{ route('api::protube::sounds') }}', function(data) {
+        $.getJSON('{{ route('api::protube::sounds') }}', function (data) {
             soundboardSounds = data;
 
-            for(var property in soundboardSounds) {
-                $.ajax({ url: soundboardSounds[property].file });
+            for (var property in soundboardSounds) {
+                $.ajax({url: soundboardSounds[property].file});
             }
         });
 
@@ -370,7 +370,7 @@
                 h = checkTime(h);
                 m = checkTime(m);
                 $('#clock').html(h + ":" + m);
-                t = setTimeout(function() {
+                t = setTimeout(function () {
                     startTime()
                 }, 500);
             }
@@ -438,7 +438,7 @@
                 soundboardVolume = data.soundboard / 100;
 
                 // Update existing players
-                for(var i = soundboardPlayers.length - 1; i >= 0; i--) {
+                for (var i = soundboardPlayers.length - 1; i >= 0; i--) {
                     soundboardPlayers[i].volume = soundboardVolume;
                 }
             });
@@ -447,7 +447,7 @@
                 location.reload();
             });
 
-            screen.on("soundboard", function(data) {
+            screen.on("soundboard", function (data) {
                 console.log("playing sound", soundboardSounds[data].file);
                 soundboardPlayer = document.createElement("AUDIO");
                 soundboardPlayer.src = soundboardSounds[data].file;
@@ -456,8 +456,8 @@
                 soundboardPlayers.push(soundboardPlayer);
 
                 // clean up soundboardplayers
-                for(var i = soundboardPlayers.length - 1; i >= 0; i--) {
-                    if(soundboardPlayers[i].paused) {
+                for (var i = soundboardPlayers.length - 1; i >= 0; i--) {
+                    if (soundboardPlayers[i].paused) {
                         soundboardPlayers.splice(i, 1);
                     }
                 }
@@ -599,6 +599,26 @@
 
     </script>
 
+    <!-- Matomo -->
+    <script type="text/javascript">
+        var _paq = _paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "//metis.proto.utwente.nl/analytics/";
+            _paq.push(['setTrackerUrl', u + 'piwik.php']);
+            _paq.push(['setSiteId', '3']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript';
+            g.async = true;
+            g.defer = true;
+            g.src = u + 'piwik.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <!-- End Matomo Code -->
+
 </head>
 
 <body>
@@ -634,7 +654,7 @@
 
 <div id="slideshow"></div>
 
-<div id="clock"> 00:00 </div>
+<div id="clock"> 00:00</div>
 
 </body>
 </html>
