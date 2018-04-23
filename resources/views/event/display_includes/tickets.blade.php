@@ -130,7 +130,7 @@
                                         @elseif($ticket->product->stock <= 0)
                                             Sold-out!
                                         @else
-                                            <? $tickets_available++; ?>
+                                            <?php $tickets_available++; ?>
                                             <strong>On sale!</strong> Available
                                             until {{ date('d-m-Y H:i', $ticket->available_to) }}
                                         @endif
@@ -169,18 +169,19 @@
                     <input type="submit" class="form-control btn btn-success" value="Purchase Tickets"
                            onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
 
-                    @if($has_prepay_tickets)
                         <hr>
+                        <p style="text-align: center">
+                            <span
+                                    class="label label-success">OmNomCom</span> tickets are paid via automatic
+                        withdrawal, just like your other purchases.
+                        </p>
                         <p style="text-align: center">
                             If you buy one or more <span class="label label-danger">Pre-Paid</span> tickets you will need
                             to
                             pay for them immediately using our digital payment system. We accept multiple providers
                             including iDeal, Credit Card and BitCoin. If you cancel your payment half-way any <span
-                                    class="label label-success">OmNomCom</span> tickets will still be ordered! <span
-                                    class="label label-success">OmNomCom</span> tickets are paid via automatic
-                            withdrawal, just like your other purhcases.
+                                    class="label label-success">OmNomCom</span> tickets will still be ordered!
                         </p>
-                    @endif
 
                 </div>
             @endif
