@@ -552,7 +552,7 @@
             <img id="protube__remote__login__photo" src="{{ asset('images/protube/incognito.png') }}"
                  alt="Profile picture">
             <h2 id="protube__remote__login__status"><strong>You are not logged in</strong> <br/> <a
-                        class="btn btn-default" href="{{ route("protube::login") }}" data-toggle="tooltip"
+                        class="btn btn-default" href="{{ env('APP_URL') . route('protube::login', array(), false)  }}" data-toggle="tooltip"
                         data-placement="right"
                         title="Logging in will keep your personal ProTube history, and will show other members you entered a song into the queue.">Login</a>
             </h2>
