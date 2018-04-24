@@ -45,7 +45,7 @@
 
                 <?php $category = $products->first()->category; ?>
 
-                <th colspan="10"><?echo $category;?></th>
+                <th colspan="10"><?php echo $category; ?></th>
 
                 @foreach($products as $key => $product)
 

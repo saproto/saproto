@@ -221,7 +221,7 @@
                                 @foreach($committee->helpedEvents() as $key => $event)
 
                                     @if($key % 2 == 0 && $key > 1)
-                                        <? echo '</div><div class="row">'?>
+                                        <?php echo '</div><div class="row">'?>
                                     @endif
 
                                     <div class="col-md-6">
