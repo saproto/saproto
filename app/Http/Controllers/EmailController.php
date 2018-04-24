@@ -145,8 +145,8 @@ class EmailController extends Controller
             $request->session()->flash('flash_message', 'The e-mail has been put on hold.');
             return Redirect::route('email::admin');
         } else {
-            if ($email->time - date('U') < 15 * 60) {
-                $request->session()->flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 15 minutes in the future.');
+            if ($email->time - date('U') < 5 * 60) {
+                $request->session()->flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
                 return Redirect::route('email::admin');
             }
             $email->ready = true;
