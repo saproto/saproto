@@ -100,6 +100,9 @@
 @endsection
 
 @section('javascript')
+
+    @parent
+
     <script>
 
         document.onkeydown = checkKey;
