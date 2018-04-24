@@ -190,6 +190,7 @@ return [
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
 
+
     ],
 
     /*

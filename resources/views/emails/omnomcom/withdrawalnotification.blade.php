@@ -14,7 +14,7 @@
     </p>
 
     <p>
-        Our creditor ID: {{ config('proto.incassant-id') }}<br>
+        Our creditor ID: {{ config('proto.sepa_info')->creditor_id }}<br>
         Your authorization ID: {{ $user->bank->machtigingid }}<br>
         Withdrawal reference: {{ $withdrawal->withdrawalId() }}
     </p>

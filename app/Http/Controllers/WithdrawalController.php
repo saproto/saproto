@@ -20,6 +20,9 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 
+use AbcAeffchen\Sephpa\SephpaDirectDebit;
+use AbcAeffchen\SepaUtilities\SepaUtilities;
+
 class WithdrawalController extends Controller
 {
     /**
@@ -253,29 +256,43 @@ class WithdrawalController extends Controller
     {
         $withdrawal = Withdrawal::findOrFail($id);
 
-        $seperator = ',';
-        $response = implode($seperator, ['withdrawal_type', 'total', 'bank_machtigingid', 'signature_date', 'bank_bic', 'name', 'bank_iban', 'email']) . "\n";
+        $direct_debit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02, [
+            'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),
+            'lclInstrm' => SepaUtilities::LOCAL_INSTRUMENT_CORE_DIRECT_DEBIT,
+            'seqTp' => SepaUtilities::SEQUENCE_TYPE_FIRST,
+            'cdtr' => 'Study Association Proto',
+            'iban' => config('proto.sepa_info')->iban,
+            'bic' => config('proto.sepa_info')->bic,
+            'ci' => config('proto.sepa_info')->creditor_id,
+            'ccy' => 'EUR',
+            'ultmtCdtr' => 'S.A. Proto: Activities, Food and Services',
+            'reqdColltnDt' => $withdrawal->date
+        ]);
 
+        $i = 1;
         foreach ($withdrawal->users() as $user) {
-            $response .= implode($seperator, [
-                    ($user->bank ? 'FRST' : 'RCUR'),
-                    number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                    $user->bank->machtigingid,
-                    date('Y-m-d', strtotime($user->bank->created_at)),
-                    $user->bank->bic,
-                    $user->name,
-                    $user->bank->iban,
-                    $user->email
-                ]) . "\n";
+            $direct_debit->addPayment([
+                'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
+                'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
+                'mndtId' => $user->bank->machtigingid,
+                'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                'bic' => $user->bank->bic,
+                'dbtr' => $user->name,
+                'iban' => $user->bank->iban,
+                'ultmtDbtr' => 'Study Association Proto',  // just an information, this do not affect the payment (max 70 characters)
+            ]);
+            $i++;
         }
+
+        $response = $direct_debit->generateOutput([], false)[0];
 
         $headers = [
             'Content-Encoding' => 'UTF-8',
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="withdrawal-' . $withdrawal->id . '.csv"'
+            'Content-Type' => 'text/xml; charset=UTF-8',
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $response['name'])
         ];
 
-        return Response::make($response, 200, $headers);
+        return Response::make($response['data'], 200, $headers);
     }
 
     /**

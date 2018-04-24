@@ -51,7 +51,7 @@
                 <div class="btn-group-justified">
                     <a href="{{ route('omnomcom::withdrawal::export', ['id' => $withdrawal->id]) }}"
                        class="btn btn-success">
-                        Generate CSV
+                        Generate XML
                     </a>
                 </div>
             </div>
