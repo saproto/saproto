@@ -33,11 +33,6 @@ return [
     'google-key-private' => env('GOOGLE_KEY_PRIVATE'),
 
     /*
-     * Fishcam
-     */
-    'fishcam-url' => env('FISHCAM_URL'),
-
-    /*
      * UTwente LDAP webhook
      */
     'utwente-ldap-hook' => env('LDAP_URL_UTWENTE', null),

@@ -115,7 +115,7 @@ class ApiController extends Controller
             return json_encode($response);
         }
     }
-    
+
     public function ldapProxy($personal_key)
     {
         $user = User::where('personal_key', $personal_key)->first();
@@ -125,6 +125,20 @@ class ApiController extends Controller
         $query = (isset($_GET['filter']) ? $_GET['filter'] : '|(false)');
         $url = config('app-proto.utwente-ldap-hook') . "?filter=" . $query;
         return file_get_contents($url);
+    }
+
+    public function fishcamStream()
+    {
+        header("Content-Transfer-Encoding: binary");
+        header("Content-Type: multipart/x-mixed-replace; boundary=video-boundary--");
+        header('Cache-Control: no-cache');
+        $handle = fopen(env("FISHCAM_URL"), "r");
+        while ($data = fread($handle, 8192)) {
+            echo $data;
+            ob_flush();
+            flush();
+            set_time_limit(0);
+        }
     }
 
 }

@@ -37,6 +37,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('sounds', ['as' => 'sounds', 'uses' => 'SoundboardController@apiIndex']);
         });
 
+        Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'ApiController@fishcamStream']);
+
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
 
         Route::get('ldapproxy/{personal_key}', ['as' => 'ldapproxy', 'uses' => 'ApiController@ldapProxy']);

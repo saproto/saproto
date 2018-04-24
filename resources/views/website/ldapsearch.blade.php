@@ -39,8 +39,7 @@
 
                 <tr>
                     <td>
-                        {{ property_exists($result, 'givenname') ? $result->givenname : null }} {{ property_exists($result, 'sn') ? $result->sn : null }}
-                        , {{ property_exists($result, 'initials') ? $result->initials : null }}
+                        {{ property_exists($result, 'givenname') ? $result->givenname : null }} {{ property_exists($result, 'middlename') ? $result->middlename : null }} {{ property_exists($result, 'sn') ? $result->sn : null }}, {{ property_exists($result, 'initials') ? $result->initials : null }}
                     </td>
                     <td>
                         @if($result->type == 'student')

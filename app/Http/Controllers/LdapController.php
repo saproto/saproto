@@ -4,17 +4,49 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
+use Adldap\Adldap;
+use Adldap\Connections\Provider;
 
 class LdapController extends Controller
 {
 
     public static function searchUtwente($query, $onlyactive = false)
     {
-        $data = (array)json_decode(file_get_contents(
-            config('app-proto.utwente-ldap-hook') . "?filter=" . urlencode($query)
-        ));
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.utwente'));
+        $ad->addProvider('utwente', $provider);
+        $ad->connect('utwente');
+
+        $filter = [
+            '(objectClass=organizationalPerson)',
+            '(' . $query . ')'
+        ];
+
+        $select = [
+            'givenName',
+            'sn',
+            'initials',
+            'displayName',
+            'middleName',
+            'cn',
+            'userPrincipalName',
+            'uid',
+            'description',
+            'mail',
+            'department',
+            'telephoneNumber',
+            'physicaldeliveryofficename',
+            'postalCode',
+            'l',
+            'preferredLanguage',
+            'streetAddress',
+            'sAMAccountName',
+            'wWWHomePage',
+            'extensionAttribute6'
+        ];
+
+        $data = $provider->search()->select($select)->rawFilter($filter)->get()->jsonSerialize();
+
         $response = [];
         foreach ($data as $entry) {
             $object = [];
