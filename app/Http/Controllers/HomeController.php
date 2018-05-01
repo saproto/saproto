@@ -33,7 +33,7 @@ class HomeController extends Controller
         $events = Event::where('secret', false)->where('end', '>=', date('U'))->orderBy('start')->limit(5)->get();
         $companies = Company::where('in_logo_bar', true)->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subMonths(1))->orderBy('published_at', 'desc')->take(3)->get();
-        $birthdays = User::has('member')->where('birthdate', 'LIKE', date('%-m-d'))->get();
+        $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
 
         if (Auth::check() && Auth::user()->member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
