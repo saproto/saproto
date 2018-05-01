@@ -19,6 +19,19 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">Birthday</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        <div class="checkbox">
+                            <label>
+                                <input name="show_birthday"
+                                       type="checkbox" {{ ($user->show_birthday == 1 ? 'checked' : '') }}>
+                                Show to members
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
             @endif
 
             <div class="form-group">
