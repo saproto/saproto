@@ -27,7 +27,8 @@
     "Croppie": "croppie#^2.3.0",
     "jquery-dateFormat": "^1.0.2",
     "angular": "^1.6.4",
-    "TheaterJS": "theaterjs#^3.1.0"
+    "TheaterJS": "theaterjs#^3.1.0",
+    "select2": "~4.0"
   },
   "devDependencies": {
     "font-awesome": "^4.6.3",
