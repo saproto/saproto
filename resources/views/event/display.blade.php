@@ -187,18 +187,12 @@
                                                     {{ csrf_field() }}
 
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control member-name"
-                                                               placeholder="John Doe"
-                                                               required>
-                                                        <input type="hidden" class="member-id" name="user_id" required>
+                                                        <select class="form-control user-search" name="user_id" required></select>
                                                         <span class="input-group-btn">
-                                                    <button class="btn btn-danger member-clear" disabled>
-                                                        <i class="fa fa-eraser" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-success">
-                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    </button>
-                                                </span>
+                                                            <button type="submit" class="btn btn-success">
+                                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                            </button>
+                                                        </span>
                                                     </div>
 
                                                 </form>
@@ -403,18 +397,12 @@
                                         {{ csrf_field() }}
 
                                         <div class="input-group">
-                                            <input type="text" class="form-control member-name"
-                                                   placeholder="John Doe"
-                                                   required>
-                                            <input type="hidden" class="member-id" name="user_id" required>
+                                            <select class="form-control user-search" name="user_id" required></select>
                                             <span class="input-group-btn">
-                                                    <button class="btn btn-danger member-clear" disabled>
-                                                        <i class="fa fa-eraser" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="submit" class="btn btn-success">
-                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                                    </button>
-                                                </span>
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </button>
+                                            </span>
                                         </div>
 
                                     </form>
@@ -476,43 +464,6 @@
             </div>
         </div>
     </div>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-
-    <script>
-
-        $(".member-name").each(function () {
-            $(this).autocomplete({
-                minLength: 3,
-                source: "{{ route("api::members") }}",
-                select: function (event, ui) {
-                    $(this).val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
-                    $(this).next(".member-id").val(ui.item.id);
-                    $(this).parent().find(".member-clear").prop('disabled', false);
-                    return false;
-                }
-            }).autocomplete("instance")._renderItem = function (ul, item) {
-                console.log(ul);
-                return $("<li>").append(item.name).appendTo(ul);
-            };
-        });
-
-        $(".member-clear").each(function () {
-            $(this).click(function (e) {
-                e.preventDefault();
-                $(this).parent().parent().find(".member-name").val("").prop('disabled', false);
-                $(this).prop('disabled', true);
-                $("#member-id").val("");
-            });
-        });
-
-    </script>
 
 @endsection
 

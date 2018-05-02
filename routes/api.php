@@ -24,7 +24,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('timetable/boardroom', ['as' => 'timetable::boardroom', 'uses' => 'SmartXpScreenController@boardroomTimetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
-        Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);

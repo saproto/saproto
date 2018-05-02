@@ -42,6 +42,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $guarded = ['password', 'remember_token'];
 
+    protected $appends = ['is_member', 'photo_preview'];
+
     /**
      * The attributes excluded from the model's JSON form.
      *
@@ -438,6 +440,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function helperReminderSubscriptions()
     {
         return $this->belongsTo('Proto\Models\HelperReminder');
+    }
+
+    public function getIsMemberAttribute() {
+        return $this->member !== null;
+    }
+
+    public function getPhotoPreviewAttribute() {
+        return $this->generatePhotoPath();
     }
 
 }

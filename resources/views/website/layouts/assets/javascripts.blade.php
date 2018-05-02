@@ -123,3 +123,51 @@
     })();
 </script>
 <!-- End Matomo Code -->
+
+@if(Auth::user() && Auth::user()->can('admin'))
+    <script type="text/javascript">
+        $(".user-search").select2({
+            ajax: {
+                url: "{{ route('api::search::user') }}",
+                dataType: 'json',
+                delay: 50,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: false
+            },
+            placeholder: 'Start typing a name',
+            escapeMarkup: function (markup) {
+                return markup;
+            },
+            minimumInputLength: 1,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
+        });
+
+        function formatRepo(item) {
+            if (item.loading) {
+                return item.text;
+            } else if (item.is_member) {
+                opacity = 1;
+            } else {
+                opacity = 0.3;
+            }
+            return "<div class='member ellipsis'>" +
+                "<div class='member-picture' style='background-image:url(\"" + item.photo_preview + "\");'></div>" +
+                "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>" +
+                "</div>";
+        }
+
+        function formatRepoSelection(item) {
+            return item.name;
+        }
+    </script>
+@endif

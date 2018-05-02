@@ -66,43 +66,6 @@
         });
     </script>
 
-    <script type="text/javascript">
-        $("#member-search").select2({
-            ajax: {
-                url: "{{ route('api::search::user') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term
-                    };
-                },
-                processResults: function (data) {
-                    return {
-                        results: data
-                    };
-                },
-                cache: false
-            },
-            placeholder: 'Search for a user',
-            minimumInputLength: 1,
-            templateResult: formatRepo,
-            templateSelection: formatRepoSelection
-        });
-
-        function formatRepo(item) {
-            if (item.loading) {
-                return item.text;
-            } else {
-                return item.name + " (#" + item.id + ")";
-            }
-        }
-
-        function formatRepoSelection(item) {
-            return item.name;
-        }
-    </script>
-
 @endsection
 
 @section('stylesheet')

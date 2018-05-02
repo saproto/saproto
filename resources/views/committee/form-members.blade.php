@@ -15,9 +15,9 @@
                 <br>
 
                 <div class="form-group">
-                    <label for="member-search" class="col-sm-2 control-label">Member</label>
+                    <label class="col-sm-2 control-label">Member</label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="member-search" name="user_id" required></select>
+                        <select class="form-control user-search" name="user_id" required></select>
                         <input type="hidden" name="committee_id" value="{{ $committee->id }}">
                     </div>
                 </div>
