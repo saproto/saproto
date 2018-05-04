@@ -85,25 +85,6 @@
     }
 </script>
 
-<script>
-
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-36196842-2', 'auto');
-    ga('send', 'pageview');
-
-</script>
-
 <!-- Matomo -->
 <script type="text/javascript">
     var _paq = _paq || [];
@@ -126,6 +107,9 @@
 
 @if(Auth::user() && Auth::user()->can('admin'))
     <script type="text/javascript">
+
+        $.fn.select2.defaults.set("theme", "default");
+
         $(".user-search").select2({
             ajax: {
                 url: "{{ route('api::search::user') }}",
@@ -143,31 +127,170 @@
                 },
                 cache: false
             },
-            placeholder: 'Start typing a name',
+            placeholder: 'Start typing a name...',
             escapeMarkup: function (markup) {
                 return markup;
             },
-            minimumInputLength: 1,
-            templateResult: formatRepo,
-            templateSelection: formatRepoSelection
+            minimumInputLength: 3,
+            templateResult: function (item) {
+                if (item.loading) {
+                    return item.text;
+                } else if (item.is_member) {
+                    opacity = 1;
+                } else {
+                    opacity = 0.3;
+                }
+                return "<div class='member ellipsis'>" +
+                    "<div class='member-picture' style='background-image:url(\"" + item.photo_preview + "\");'></div>" +
+                    "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>" +
+                    "</div>";
+            },
+            templateSelection: function (item) {
+                if (item.id == "") {
+                    return item.text;
+                } else {
+                    return item.name + " (#" + item.id + ")";
+                }
+            }
         });
 
-        function formatRepo(item) {
-            if (item.loading) {
-                return item.text;
-            } else if (item.is_member) {
-                opacity = 1;
-            } else {
-                opacity = 0.3;
+        $(".event-search").select2({
+            ajax: {
+                url: "{{ route('api::search::event') }}",
+                dataType: 'json',
+                delay: 50,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: false
+            },
+            placeholder: 'Start typing...',
+            escapeMarkup: function (markup) {
+                return markup;
+            },
+            minimumInputLength: 3,
+            templateResult: function (item) {
+                if (item.loading) {
+                    return item.text;
+                } else if (item.is_future) {
+                    opacity = 1;
+                } else {
+                    opacity = 0.3;
+                }
+                return "<span style='opacity: " + opacity + "'>" + item.title + " (" + item.formatted_date.simple + ")</span>";
+            },
+            templateSelection: function (item) {
+                if (item.id == "") {
+                    return item.text;
+                } else {
+                    return item.title + " (" + item.formatted_date.simple + ")";
+                }
+            },
+            sorter: function (data) {
+                return data.sort(function (a, b) {
+                    if (a.start < b.start) {
+                        return 1;
+                    } else if (a.start > b.start) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
             }
-            return "<div class='member ellipsis'>" +
-                "<div class='member-picture' style='background-image:url(\"" + item.photo_preview + "\");'></div>" +
-                "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>" +
-                "</div>";
-        }
+        });
 
-        function formatRepoSelection(item) {
-            return item.name;
-        }
+        $(".product-search").select2({
+            ajax: {
+                url: "{{ route('api::search::product') }}",
+                dataType: 'json',
+                delay: 50,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: false
+            },
+            placeholder: 'Start typing a name...',
+            escapeMarkup: function (markup) {
+                return markup;
+            },
+            minimumInputLength: 3,
+            templateResult: function (item) {
+                if (item.loading) {
+                    return item.text;
+                } else if (item.is_visible) {
+                    opacity = 1;
+                } else {
+                    opacity = 0.3;
+                }
+                return "<span style='opacity: " + opacity + "'>" + item.name + " (€" + item.price.toFixed(2) + "; " + item.stock + " in stock)</div>";
+            },
+            templateSelection: function (item) {
+                if (item.id == "") {
+                    return item.text;
+                } else {
+                    return item.name;
+                }
+            },
+            sorter: function (data) {
+                return data.sort(function (a, b) {
+                    if (a.is_visible == 0 && b.is_visible == 1) {
+                        return 1;
+                    } else if (a.is_visible == 1 && b.is_visible == 0) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+            }
+        });
+
+        $(".committee-search").select2({
+            ajax: {
+                url: "{{ route('api::search::committee') }}",
+                dataType: 'json',
+                delay: 50,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: false
+            },
+            placeholder: 'Start typing a name...',
+            minimumInputLength: 1,
+            templateResult: function (item) {
+                if (item.loading) {
+                    return item.text;
+                }
+                return item.name;
+            },
+            templateSelection: function (item) {
+                if (item.id == "") {
+                    return item.text;
+                } else {
+                    return item.name;
+                }
+            }
+        });
+
     </script>
 @endif

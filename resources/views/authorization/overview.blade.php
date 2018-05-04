@@ -77,14 +77,10 @@
                             @endforeach
                         </div>
 
-                        <select class="form-control" name="user">
-                            @foreach(User::orderBy('name', 'asc')->get() as $user)
-                                <option value="{{ $user->id }}">
-                                    {{ $user->name }} (#{{ $user->id }}{{ $user->signed_nda ? ', NDA' : '' }})
-                                </option>
-                            @endforeach
-                        </select>
+                        <select class="form-control user-search" name="user"></select>
+
                         <br>
+
                         <input type="submit" class="btn btn-success" value="Grant">
 
                         {!! csrf_field() !!}

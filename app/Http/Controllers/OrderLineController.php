@@ -114,6 +114,8 @@ class OrderLineController extends Controller
      */
     public function bulkStore(Request $request)
     {
+
+        dd($request->all());
         for ($i = 0; $i < count($request->input('user')); $i++) {
 
             $user = User::findOrFail($request->input('user')[$i]);

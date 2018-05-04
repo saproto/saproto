@@ -52,14 +52,8 @@
 
                                 <div class="location-group">
                                     <label for="organisation">Organization:</label>
-                                    <select class="form-control" id="organisation" name="committee">
-                                        <option selected>None</option>
-                                        @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
-                                            <option value="{{ $committee->id }}" {{ ($event && $event->committee ? ($event->committee->id == $committee->id ? 'selected' : '') : '') }}>
-                                                {{ $committee->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    {!! $event && $event->committee ? sprintf('<br>%s', $event->committee->name) : '' !!}
+                                    <select class="form-control committee-search" id="organisation" name="committee"></select>
                                 </div>
 
                             </div>
@@ -394,12 +388,7 @@
                             <div class="panel-body">
 
                                 <div class="form-group">
-                                    <select class="form-control" name="committee">
-                                        <option disabled selected>Select a committee below:</option>
-                                        @foreach(Committee::orderBy('name', 'asc')->get() as $committee)
-                                            <option value="{{ $committee->id }}">{{ $committee->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <select class="form-control committee-search" name="committee" required></select>
                                 </div>
 
                                 <div class="row">

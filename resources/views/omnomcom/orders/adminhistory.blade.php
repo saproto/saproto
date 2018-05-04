@@ -167,53 +167,44 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="row orderlinerow" style="margin-bottom:10px;">
+                        <p>
+                            <strong>Users:</strong>
+                        </p>
+                        <div class="form-group">
+                            <select name="user[]" class="form-control orderlineuser user-search" required
+                                    style="width: 100%;" multiple="multiple"></select>
+                        </div>
+
+                        <p>
+                            <strong>Products:</strong>
+                        </p>
+                        <div class="form-group">
+                            <select name="product[]" class="form-control orderlineproduct product-search" required
+                                    style="width: 100%;" multiple="multiple"></select>
+                        </div>
+
+                        <p>
+                            <strong>Amount and price:</strong>
+                        </p>
+                        <div class="row">
 
                             <div class="col-md-3">
-
-                                <select name="user[]" class="form-control orderlineuser">
-                                    @foreach(Proto\Models\User::orderBy('name', 'asc')->has('member')->get() as $user)
-                                        <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
-                                    @endforeach
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-3">
-
-                                <select name="product[]" class="form-control orderlineproduct">
-                                    @foreach(Proto\Models\Product::orderBy('name', 'asc')->get() as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}
-                                            (&euro;{{ $product->price }}, #{{ $product->id }})
-                                        </option>
-                                    @endforeach
-                                </select>
-
-                            </div>
-
-                            <div class="col-md-2">
 
                                 <div class="input-group">
-                                    <input type="number" name="units[]" value="1"
-                                           class="orderlineunits form-control" required>
+                                    <input type="number" name="units" value="1"
+                                           class="form-control" required>
                                     <span class="input-group-addon">x</span>
                                 </div>
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-3">
 
                                 <div class="input-group">
                                     <span class="input-group-addon">&euro;</span>
-                                    <input type="number" step="0.01" name="price[]" placeholder="Price"
-                                           class="orderlineprice form-control">
+                                    <input type="number" step="0.01" name="price" placeholder="Price"
+                                           class="form-control">
                                 </div>
-
-                            </div>
-
-                            <div class="col-md-2">
-
-                                <button type="button" class="btn btn-danger orderlinedeleterow">Delete</button>
 
                             </div>
 
@@ -221,8 +212,6 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button id="orderlineaddrow" type="button" class="btn btn-default pull-left">Add another row
-                        </button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success">Save</button>
                     </div>
@@ -254,23 +243,6 @@
                 previous: "fa fa-chevron-left"
             },
             format: 'YYYY-MM-DD'
-        });
-
-        $('#orderlineaddrow').click(function () {
-
-            var oldrow = $('.orderlinerow').last();
-
-            $('#orderlinemodal .modal-body').append(oldrow.wrap('<p/>').parent().html());
-            oldrow.unwrap();
-
-            $(".orderlineuser:eq(-1)").val($(".orderlineuser:eq(-2)").val());
-            $(".orderlineproduct:eq(-1)").val($(".orderlineproduct:eq(-2)").val());
-            $(".orderlineunits:eq(-1)").val($(".orderlineunits:eq(-2)").val());
-            $(".orderlineprice:eq(-1)").val($(".orderlineprice:eq(-2)").val());
-        });
-
-        $('div').delegate('.orderlinedeleterow', 'click', function () {
-            $(this).parents('.orderlinerow').remove();
         });
 
     </script>
