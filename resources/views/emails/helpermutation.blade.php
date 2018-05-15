@@ -9,7 +9,7 @@
 
     <p>
         <strong>{{ $helper_name }}</strong> just {{ $helping ? 'subscribed' : 'unsubscribed' }} to help
-        the {{ $committee->name }} for the activity {{ $event->title }}.
+        the {{ $committee->name }} for the activity <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">{{ $event->title }}</a>.
     </p>
 
 @endsection
