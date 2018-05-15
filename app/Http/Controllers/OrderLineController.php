@@ -115,7 +115,6 @@ class OrderLineController extends Controller
     public function bulkStore(Request $request)
     {
 
-        dd($request->all());
         for ($i = 0; $i < count($request->input('user')); $i++) {
 
             $user = User::findOrFail($request->input('user')[$i]);
@@ -123,12 +122,37 @@ class OrderLineController extends Controller
             $price = ($request->input('price')[$i] != "" ? floatval(str_replace(",", ".", $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
 
-            $product->buyForUser($user, $units, $price * $units);
+            $product->buyForUser($user, $units);
 
         }
 
         $request->session()->flash('flash_message', 'Your manual orders have been added.');
         return Redirect::back();
+    }
+
+    /**
+     * Store (a) simple orderline(s).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+
+        for ($u = 0; $u < count($request->input('user')); $u++) {
+            for ($p = 0; $p < count($request->input('product')); $p++) {
+
+                $user = User::findOrFail($request->input('user')[$u]);
+                $product = Product::findOrFail($request->input('product')[$p]);
+
+                $product->buyForUser($user, 1);
+
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Your manual orders have been added.');
+        return Redirect::back();
+
     }
 
     /**

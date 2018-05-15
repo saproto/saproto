@@ -317,7 +317,7 @@ class EventController extends Controller
         $product->save();
 
         foreach ($activity->users as $user) {
-            $product->buyForUser($user, 1, $product->price);
+            $product->buyForUser($user, 1);
         }
 
         $activity->closed = true;

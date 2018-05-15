@@ -44,11 +44,13 @@ class Product extends Model
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    public function buyForUser(User $user, $amount, $total, $withCash = false)
+    public function buyForUser(User $user, $amount, $total = null, $withCash = false)
     {
 
         $this->stock -= $amount;
         $this->save();
+
+        $total = ($total ? $total : $this->price * $amount);
 
         $orderline = OrderLine::create([
             'user_id' => ($withCash ? null : $user->id),

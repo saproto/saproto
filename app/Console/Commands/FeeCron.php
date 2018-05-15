@@ -113,7 +113,7 @@ class FeeCron extends Command
             $charged->count++;
 
             $product = Product::findOrFail($fee);
-            $product->buyForUser($member->user, 1, $product->price);
+            $product->buyForUser($member->user, 1);
 
             Mail::to($member->user)->queue((new FeeEmail($member->user, $email_fee, $product->price, $email_remmitance_reason))->onQueue('high'));
 
