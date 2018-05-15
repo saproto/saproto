@@ -76,6 +76,13 @@
 
                             </p>
 
+                        @elseif($event->tickets && count($event->tickets))
+
+                            <p>
+                                <strong>Ticket purchase required!</strong>
+                            </p>
+
+
                         @else
 
                             <p>
