@@ -18,28 +18,12 @@
 
         <div class="form-group">
             <label for="product">Product:</label>
-            <select class="form-control" id="product" name="product" required>
-                <option disabled selected>-- Select a product:</option>
-                @foreach(Product::all() as $product)
-                    <option value="{{ $product->id }}"
-                            {{($ticket && $ticket->product->id == $product->id ? 'selected' : '')}}>
-                        {{ $product->name }} ({{ $product->id }})
-                    </option>
-                @endforeach
-            </select>
+            <select class="form-control product-search" id="product" name="product" required></select>
         </div>
 
         <div class="form-group">
             <label for="event">Event:</label>
-            <select class="form-control" id="event" name="event" required>
-                <option disabled selected>-- Select an event:</option>
-                @foreach(Event::where('end','>',date('U'))->orWhere('id', ($ticket == null ? 0 : $ticket->event->id))->orderBy('start','asc')->get() as $event)
-                    <option value="{{ $event->id }}"
-                            {{($ticket && $ticket->event->id == $event->id ? 'selected' : '')}}>
-                        {{ $event->title }} ({{ $event->id }})
-                    </option>
-                @endforeach
-            </select>
+            <select class="form-control event-search" id="event" name="event" required></select>
         </div>
 
         <div class="form-group">

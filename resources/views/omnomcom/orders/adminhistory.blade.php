@@ -10,6 +10,42 @@
 
         <div class="col-md-3 col-md-push-9">
 
+            <form method="post" action="{{ route('omnomcom::orders::add') }}">
+
+                {!! csrf_field() !!}
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading" style="padding: 10px; text-align: center;">
+
+                        Add simple orderline
+
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="date">User(s):</label>
+                            <select class="form-control user-search" id="user" name="user[]" multiple></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Product(s):</label>
+                            <select class="form-control product-search" id="product" name="product[]" multiple></select>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer clearfix">
+                        <input type="submit" class="btn btn-success pull-right" value="Save">
+                    </div>
+
+                </div>
+
+            </form>
+
+            <div class="btn-group btn-group-justified" role="group" style="margin-bottom:20px;">
+                <a class="btn btn-success" data-toggle="modal" data-target="#orderlinemodal">Add multiple/complex
+                    orderlines</a>
+            </div>
+
             <form method="get" action="{{ route('omnomcom::orders::adminlist') }}">
 
                 <div class="panel panel-default">
@@ -49,9 +85,6 @@
 
             </form>
 
-            <div class="btn-group btn-group-justified" role="group" style="margin-bottom:20px;">
-                <a class="btn btn-success" data-toggle="modal" data-target="#orderlinemodal">Add orderlines manually</a>
-            </div>
 
         </div>
 
@@ -118,7 +151,7 @@
                                    style="margin-left: 10px;"
                                    href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
                                    role="button"
-                                   onclick="javascript:return confirm('You are about to delete an onrderline for {{ $orderline->user->name }}. Are you sure? ');"
+                                   onclick="javascript:return confirm('You are about to delete an orderline for {{ $orderline->user->name }}. Are you sure? ');"
                                         {{ ($orderline->isPayed() ? 'disabled' : '') }}>
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
@@ -182,7 +215,7 @@
                             <div class="col-md-3">
 
                                 <select name="product[]" class="form-control orderlineproduct">
-                                    @foreach(Proto\Models\Product::orderBy('name', 'asc')->get() as $product)
+                                    @foreach(Proto\Models\Product::where('is_visible', true)->orderBy('name', 'asc')->get() as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}
                                             (&euro;{{ $product->price }}, #{{ $product->id }})
                                         </option>

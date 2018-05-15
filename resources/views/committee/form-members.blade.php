@@ -15,14 +15,10 @@
                 <br>
 
                 <div class="form-group">
-                    <label for="member-name" class="col-sm-2 control-label">Member</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="member-name" placeholder="John Doe" required>
-                        <input type="hidden" id="member-id" name="user_id" required>
+                    <label class="col-sm-2 control-label">Member</label>
+                    <div class="col-sm-10">
+                        <select class="form-control user-search" name="user_id" required></select>
                         <input type="hidden" name="committee_id" value="{{ $committee->id }}">
-                    </div>
-                    <div class="col-sm-2">
-                        <input type="button" class="form-control btn btn-success" id="member-clear" value="Clear">
                     </div>
                 </div>
                 <div class="form-group">

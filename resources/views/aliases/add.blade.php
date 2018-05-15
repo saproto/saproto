@@ -25,12 +25,7 @@
         </div>
 
         <label for="destination">Or forward to a member:</label>
-        <select class="form-control" id="user" name="user">
-            <option value="off">Forward to e-mail</option>
-            <option value="off" disabled>-- Select a user below --</option>
-            @foreach(User::orderBy('name', 'asc')->get() as $user)
-                <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
-            @endforeach
+        <select class="form-control user-search" id="user" name="user">
         </select>
 
         @endsection

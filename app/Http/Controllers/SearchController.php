@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Proto\Models\Product;
 use Proto\Models\User;
 use Proto\Models\Event;
 use Proto\Models\Page;
@@ -252,6 +253,45 @@ class SearchController extends Controller
     public function openSearch()
     {
         return Response::make(View::make('website.opensearch'))->header('Content-Type', 'text/xml');
+    }
+
+    public function getUserSearch(Request $request)
+    {
+        $search_attributes = ['id', 'name', 'calling_name', 'email', 'phone', 'edu_username'];
+        return $this->getGenericSearch(User::class, $request->get('q'), $search_attributes);
+    }
+
+    public function getEventSearch(Request $request)
+    {
+        $search_attributes = ['id', 'title', 'description'];
+        return $this->getGenericSearch(Event::class, $request->get('q'), $search_attributes);
+    }
+
+    public function getCommitteeSearch(Request $request)
+    {
+        $search_attributes = ['id', 'name', 'slug', 'description'];
+        return $this->getGenericSearch(Committee::class, $request->get('q'), $search_attributes);
+    }
+
+    public function getProductSearch(Request $request)
+    {
+        $search_attributes = ['id', 'name', 'nicename'];
+        return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
+    }
+
+    private function getGenericSearch($model, $query, $attributes)
+    {
+        $terms = explode(' ', $query);
+        $results = collect([]);
+        foreach ($terms as $term) {
+            $query = $model::query();
+            $t = sprintf('%%%s%%', $term);
+            foreach ($attributes as $attr) {
+                $query = $query->orWhere($attr, 'LIKE', $t);
+            }
+            $results = $results->merge($query->get());
+        }
+        return $results->unique();
     }
 
 }

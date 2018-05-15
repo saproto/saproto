@@ -103,7 +103,7 @@ class AliasController extends Controller
             return Redirect::route('alias::index');
 
 
-        } elseif ($request->input('user') != 'off') {
+        } elseif ($request->input('user') != '') {
 
             $user = User::findOrFail($request->input('user'));
 

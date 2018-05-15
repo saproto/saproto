@@ -19,29 +19,6 @@ use Session;
 
 class ApiController extends Controller
 {
-    public function members(Request $request)
-    {
-
-        if (!Auth::check() || !Auth::user()->member) {
-            abort(403);
-        }
-
-        $users = User::all();
-        $data = array();
-
-        foreach ($users as $user) {
-            if (!$user->member) continue;
-            if ($request->has('term') && strpos(strtolower($user->name), strtolower($request->term)) === false) continue;
-
-            $member = new \stdClass();
-            $member->name = $user->name;
-            $member->id = $user->id;
-            $data[] = $member;
-        }
-
-        return $data;
-
-    }
 
     public function train(Request $request)
     {

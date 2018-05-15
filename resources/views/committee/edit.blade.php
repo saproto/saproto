@@ -51,28 +51,6 @@
         })
     </script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-
-    <script>
-        $("#member-name").autocomplete({
-            minLength: 3,
-            source: "{{ route("api::members") }}",
-            select: function (event, ui) {
-                $("#member-name").val(ui.item.name + " (ID: " + ui.item.id + ")").prop('disabled', true);
-                ;
-                $("#member-id").val(ui.item.id);
-                return false;
-            }
-        }).autocomplete("instance")._renderItem = function (ul, item) {
-            return $("<li>").append(item.name).appendTo(ul);
-        };
-        $("#member-clear").click(function () {
-            $("#member-name").val("").prop('disabled', false);
-            ;
-            $("#member-id").val("");
-        });
-    </script>
-
     <script type="text/javascript">
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({

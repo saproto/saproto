@@ -20,6 +20,8 @@ class Event extends Model
      */
     protected $table = 'events';
 
+    protected $appends = ['is_future', 'formatted_date'];
+
     public function getPublicId()
     {
         return Hashids::connection('event')->encode($this->id);
@@ -163,6 +165,21 @@ class Event extends Model
     public function shouldShowDietInfo()
     {
         return $this->involves_food && $this->end > strtotime('-1 week');
+    }
+
+    public function getIsFutureAttribute()
+    {
+        return date('U') < $this->start;
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        return (object)[
+            'simple' => date('M d, Y', $this->start),
+            'year' => date('Y', $this->start),
+            'month' => date('M Y', $this->start),
+            'time' => date('H:i', $this->start)
+        ];
     }
 
 }

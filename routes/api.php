@@ -24,7 +24,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('timetable/boardroom', ['as' => 'timetable::boardroom', 'uses' => 'SmartXpScreenController@boardroomTimetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
-        Route::get('members', ['as' => 'members', 'uses' => 'ApiController@members']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
 
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
@@ -51,6 +50,13 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('export_data/{table}/{personal_key}', ['as' => 'export', 'uses' => 'ExportController@export']);
 
         Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
+
+        Route::group(['prefix' => 'search', 'as' => 'search::', 'middleware' => ['auth', 'permission:board']], function () {
+            Route::get('user', ['as' => 'user', 'uses' => 'SearchController@getUserSearch']);
+            Route::get('committee', ['as' => 'committee', 'uses' => 'SearchController@getCommitteeSearch']);
+            Route::get('event', ['as' => 'event', 'uses' => 'SearchController@getEventSearch']);
+            Route::get('product', ['as' => 'product', 'uses' => 'SearchController@getProductSearch']);
+        });
 
     });
 
