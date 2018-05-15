@@ -43,7 +43,7 @@
         <td style="color: #fff; margin: 0; padding: 0;" colspan="2">
             <br>
             <sub>
-                If you feel this e-mail violates the Dutch laws for electronic communication, please contact
+                If you feel that you should not have received this e-mail, please contact
                 <a href="mailto:abuse@proto.utwente.nl" style="color: #c1ff00; text-decoration: none;">abuse@proto.utwente.nl</a>.
             </sub>
         </td>
