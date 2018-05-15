@@ -27,6 +27,37 @@
 
         <div class="col-md-4">
 
+            @if (count($birthdays) > 0)
+
+
+                <div class="panel panel-default homepage__calendar">
+
+                    <div class="panel-body calendar">
+
+                        <h4 style="text-align: center;">
+                            Today's birthdays
+                        </h4>
+
+                        <hr>
+
+                        @foreach($birthdays as $key => $user)
+
+                            <div class="member ellipsis">
+                                <div class="member-picture"
+                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');">
+                                </div>
+                                <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
+            @endif
+
+
             <div class="panel panel-default homepage__calendar">
 
                 <div class="panel-body calendar">

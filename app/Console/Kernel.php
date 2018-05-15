@@ -33,7 +33,8 @@ class Kernel extends ConsoleKernel
         Commands\ClearSessionTable::class,
         Commands\CountPrimaryMembers::class,
         Commands\VerifyPersonalDetailsEmailCron::class,
-        Commands\HelperReminderCron::class
+        Commands\HelperReminderCron::class,
+        Commands\PrintActiveMembers::class
     ];
 
     /**

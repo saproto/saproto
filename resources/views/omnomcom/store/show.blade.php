@@ -46,6 +46,8 @@
                   background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
             @elseif(date('U') > strtotime('April 1') && date('U') < strtotime('April 21'))
                   background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
+            @elseif(date('U') > strtotime('May 4') && date('U') < strtotime('May 5'))
+                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
             @else
                   background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
