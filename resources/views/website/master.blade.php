@@ -97,7 +97,7 @@
                     This website has been created with ♥ by the folks of the
                     <a href="{{ route('developers') }}">
                         {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
-                    </a>and is hosted with courtesy of <a target="_blank" href="https://www.transip.nl/">TransIP</a>.
+                    </a>.
                 </sub>
             </p>
         </div>
