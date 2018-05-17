@@ -89,7 +89,7 @@
 </script>
 <!-- End Matomo Code -->
 
-@if(Auth::user() && Auth::user()->can('admin'))
+@if(Auth::user() && Auth::user()->can('board'))
     <script type="text/javascript">
 
         $.fn.select2.defaults.set("theme", "default");
