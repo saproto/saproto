@@ -51,7 +51,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
         Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
 
-        Route::group(['prefix' => 'search', 'as' => 'search::', 'middleware' => ['auth', 'permission:board']], function () {
+        Route::group(['prefix' => 'search', 'as' => 'search::', 'middleware' => ['auth', 'permission:board|omnomcom']], function () {
             Route::get('user', ['as' => 'user', 'uses' => 'SearchController@getUserSearch']);
             Route::get('committee', ['as' => 'committee', 'uses' => 'SearchController@getCommitteeSearch']);
             Route::get('event', ['as' => 'event', 'uses' => 'SearchController@getEventSearch']);

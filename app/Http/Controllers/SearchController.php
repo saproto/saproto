@@ -281,9 +281,13 @@ class SearchController extends Controller
 
     private function getGenericSearch($model, $query, $attributes)
     {
-        $terms = explode(' ', $query);
+
+        $terms = explode(' ', str_replace("*", "%", $query));
         $results = collect([]);
         foreach ($terms as $term) {
+            if (strlen(str_replace("%", "", $term)) < 3) {
+                continue;
+            }
             $query = $model::query();
             $t = sprintf('%%%s%%', $term);
             foreach ($attributes as $attr) {
