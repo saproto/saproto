@@ -81,6 +81,8 @@
 
                     </div>
 
+                    <div style="text-align: center;">{{ $data->links() }}</div>
+
                 </div>
 
             @endif
