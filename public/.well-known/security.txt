@@ -1,0 +1,4 @@
+Contact: https://wiki.proto.utwente.nl/ict/responsible-disclosure
+Encryption: https://wiki.proto.utwente.nl/ict/responsible-disclosure
+Acknowledgements: https://wiki.proto.utwente.nl/ict/responsible-disclosure
+Policy: https://wiki.proto.utwente.nl/ict/responsible-disclosure

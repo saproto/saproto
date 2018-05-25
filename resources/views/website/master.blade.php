@@ -89,10 +89,8 @@
         <div class="row">
             <p style="text-align: center;">
                 <sub>
-                    &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself
-                    with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy
-                        policy</a>. The website source is available on <a href="https://github.com/saproto/saproto"
-                                                                          target="_blank">GitHub</a>.
+                    &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy policy</a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure">responsible disclosure policy</a>.
+			The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank">GitHub</a>.
                     <br>
                     This website has been created with ♥ by the folks of the
                     <a href="{{ route('developers') }}">
