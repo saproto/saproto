@@ -16,6 +16,7 @@ use Proto\Models\PlayedVideo;
 
 use Auth;
 use Session;
+use Input;
 
 class ApiController extends Controller
 {
@@ -87,9 +88,9 @@ class ApiController extends Controller
         }
 
         if ($request->has('callback')) {
-            return $request->callback . "(" . json_encode($response) . ")";
+            return response()->json($response)->setCallback(Input::get('callback'));
         } else {
-            return json_encode($response);
+            return response()->json($response);
         }
     }
 
