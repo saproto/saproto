@@ -132,7 +132,7 @@ class ApiController extends Controller
         $user = Auth::user();
         $data = [];
 
-        $data['user'] = $user->makeHidden(['id', 'member', 'photo', 'address', 'member', 'bank']);
+        $data['user'] = $user->makeHidden(['id', 'member', 'photo', 'address', 'bank']);
 
         $data['member'] = $user->member ? $user->member->makeHidden(['id', 'user_id']) : null;
 
