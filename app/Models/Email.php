@@ -62,8 +62,7 @@ class Email extends Model
         } elseif ($this->to_event != false) {
             $event = Event::find($this->to_event);
             if ($event && $event->activity) {
-                $userids = ActivityParticipation::whereNull('committees_activities_id')->where('activity_id', $event->activity->id)->where('backup', false)->get()->pluck('user_id');
-                return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+                return $event->returnAllUsers()->unique('id');
             } else {
                 return collect([]);
             }
