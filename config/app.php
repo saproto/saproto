@@ -291,7 +291,9 @@ return [
 
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
-        'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class
+        'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
+
+        'NumberFormatter' => NumberFormatter::class
 
     ],
 
