@@ -41,11 +41,20 @@
                         </div>
                     </div>
                 @endif
-                
+
             @endif
 
 
         </div>
+
+        <hr>
+
+        <p style="text-align: center;">
+            <a href="{{ route('api::gdpr_export') }}" target="_blank"
+               onclick="return confirm('You are about to download all your personal data as a JSON file. This can take a few seconds. Continue?');">
+                Download all my personal information.
+            </a>
+        </p>
 
     </div>
 
