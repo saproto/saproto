@@ -16,6 +16,8 @@ use Proto\Models\QrAuthRequest;
 use Auth;
 use Proto\Models\ProductCategory;
 
+use Carbon;
+
 class OmNomController extends Controller
 {
     public function display(Request $request, $store = null)
@@ -126,6 +128,10 @@ class OmNomController extends Controller
                 }
                 if ($product->is_alcoholic && $user->age() < 18) {
                     return "<span style='color: red;'>You tried to buy alcohol, youngster!</span>";
+                }
+
+                if ($product->is_alcoholic && $stores[$store]->alcohol_time_constraint && !(date('Hi') > config('omnomcom.alcohol-start') || date('Hi') < config('omnomcom.alcohol-end'))) {
+                    return "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between " . config('omnomcom.alcohol-start') . " and " . config('omnomcom.alcohol-end') . ".</span>";
                 }
             }
         }
