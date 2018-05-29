@@ -16,8 +16,6 @@ use Proto\Models\QrAuthRequest;
 use Auth;
 use Proto\Models\ProductCategory;
 
-use Carbon;
-
 class OmNomController extends Controller
 {
     public function display(Request $request, $store = null)
