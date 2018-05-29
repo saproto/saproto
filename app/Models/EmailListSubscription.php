@@ -18,7 +18,7 @@ class EmailListSubscription extends Model
 
     public function emaillist()
     {
-        return $this->hasOne('Proto\Models\EmailList', 'list_id');
+        return $this->belongsTo('Proto\Models\EmailList', 'list_id');
     }
 
 }

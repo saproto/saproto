@@ -8,6 +8,14 @@ use Illuminate\Http\Response;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
+use Proto\Models\AchievementOwnership;
+use Proto\Models\ActivityParticipation;
+use Proto\Models\EmailListSubscription;
+use Proto\Models\OrderLine;
+use Proto\Models\PhotoLikes;
+use Proto\Models\Quote;
+use Proto\Models\QuoteLike;
+use Proto\Models\RfidCard;
 use Proto\Models\User;
 use Proto\Models\Event;
 use Proto\Models\Activity;
@@ -117,6 +125,102 @@ class ApiController extends Controller
             flush();
             set_time_limit(0);
         }
+    }
+
+    public function gdprExport()
+    {
+        $user = Auth::user();
+        $data = [];
+
+        $data['user'] = $user->makeHidden(['id', 'member', 'photo', 'address', 'member', 'bank']);
+
+        $data['member'] = $user->member ? $user->member->makeHidden(['id', 'user_id']) : null;
+
+        $data['address'] = $user->address ? $user->address->makeHidden(['user_id']) : null;
+
+        $data['bank_account'] = $user->bank ? $user->bank->makeHidden(['id', 'user_id']) : null;
+
+        foreach (RfidCard::where('user_id', $user->id)->get() as $rfid_card) {
+            $data['rfid_cards'][] = [
+                'card_id' => $rfid_card->card_id,
+                'name' => $rfid_card->name,
+                'added_at' => $rfid_card->created_at
+            ];
+        }
+
+        foreach (ActivityParticipation::where('user_id', $user->id)->get() as $activity_participation) {
+            $data['activities'][] = [
+                'name' => $activity_participation->activity && $activity_participation->activity->event ? $activity_participation->activity->event->title : null,
+                'date' => $activity_participation->activity && $activity_participation->activity->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'was_present' => $activity_participation->is_present,
+                'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
+                'backup' => $activity_participation->backup,
+                'created_at' => $activity_participation->created_at,
+                'updated_at' => $activity_participation->updated_at,
+                'deleted_at' => $activity_participation->deleted_at
+
+            ];
+        }
+
+        foreach (OrderLine::where('user_id', $user->id)->get() as $orderline) {
+            $payment_method = null;
+            if ($orderline->payed_with_cash) {
+                $payment_method = 'cash';
+            } elseif ($orderline->molliePayment) {
+                $payment_method = sprintf('mollie_%s', $orderline->molliePayment->mollie_id);
+            } elseif ($orderline->withdrawal) {
+                $payment_method = sprintf('withdrawal_%s', $orderline->withdrawal->id);
+            }
+            $data['orders'][] = [
+                'product' => $orderline->product->name,
+                'units' => $orderline->units,
+                'total_price' => $orderline->total_price,
+                'payed_with' => $payment_method,
+                'order_date' => $orderline->created_at
+            ];
+        }
+
+        foreach (PlayedVideo::where('user_id', $user->id)->get() as $playedvideo) {
+            $data['played_videos'][] = [
+                'youtube_id' => $playedvideo->video_id,
+                'youtube_name' => $playedvideo->video_title,
+                'spotify_id' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_id : null,
+                'spotify_name' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_name : null,
+                'played_at' => $playedvideo->created_at
+            ];
+        }
+
+        foreach (EmailListSubscription::where('user_id', $user->id)->get() as $list_subscription) {
+            $data['list_subscription'][] = $list_subscription->emaillist ? $list_subscription->emaillist->name : null;
+        }
+
+        foreach (AchievementOwnership::where('user_id', $user->id)->get() as $achievement_granted) {
+            $data['achievements'][] = [
+                'name' => $achievement_granted->achievement->name,
+                'description' => $achievement_granted->achievement->desc,
+                'granted_on' => $achievement_granted->created_at
+            ];
+        }
+
+        foreach (PhotoLikes::where('user_id', $user->id)->get() as $photo_like) {
+            $data['liked_photos'][] = $photo_like->flickrItem->url;
+        }
+
+        foreach (Quote::where('user_id', $user->id)->get() as $quote) {
+            $data['placed_quotes'][] = [
+                'quote' => $quote->quote,
+                'created_at' => $quote->created_at
+            ];
+        }
+
+        foreach (QuoteLike::where('user_id', $user->id)->get() as $quote) {
+            $data['liked_quotes'][] = [
+                'quote' => $quote->quote->quote,
+                'liked_at' => $quote->created_at
+            ];
+        }
+
+        return $data;
     }
 
 }
