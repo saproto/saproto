@@ -97,7 +97,7 @@
             z-index: 999999;
             display: block;
             left: 30px;
-            top: 30px;
+            bottom: 130px;
             color: #FFFFFF;
             text-shadow: 0 0 10px rgba(0, 0, 0, 1);
             font: 30px 'Roboto';
