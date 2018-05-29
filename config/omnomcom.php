@@ -19,6 +19,7 @@ return [
             'addresses' => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
             'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,
+            'alcohol_time_constraint' => true,
         ],
         'tipcie' => (object)[
             'name' => 'TIPCie',
@@ -27,6 +28,7 @@ return [
             'roles' => ['board', 'tipcie', 'drafters'],
             'cash_allowed' => true,
             'col_override' => 3,
+            'alcohol_time_constraint' => false,
         ]
     ],
 
@@ -103,5 +105,18 @@ return [
     */
 
     'protube-skip' => 40,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Times for buying alcoholic beverages
+    |--------------------------------------------------------------------------
+    |
+    | Defines the times between which alcohol can be bought in Omnomcom.
+    | The end-time needs to be a time on the next day.
+    |
+    */
+
+    'alcohol-start' => "15:30",
+    'alcohol-end' => "08:00",
 
 ];
