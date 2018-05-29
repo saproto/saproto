@@ -116,7 +116,7 @@ return [
     |
     */
 
-    'alcohol-start' => "1530",
-    'alcohol-end' => "0800",
+    'alcohol-start' => "15:30",
+    'alcohol-end' => "08:00",
 
 ];
