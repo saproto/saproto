@@ -37,12 +37,12 @@
 
         <div class="form-group">
             <label for="url">Start at:</label>
-            <input type="datetime" class="form-control" id="start_at" name="start_at" value="{{ $new ? Carbon::now() : $item->start_at }}">
+            <input type="datetime" class="form-control datetime-picker" id="start_at" name="start_at" value="{{ $new ? Carbon::now() : $item->start_at }}">
         </div>
 
         <div class="form-group">
             <label for="url">End at:</label>
-            <input type="datetime" class="form-control" id="end_at" name="end_at" value="{{ $new ? Carbon::tomorrow() : $item->end_at }}">
+            <input type="datetime" class="form-control datetime-picker" id="end_at" name="end_at" value="{{ $new ? Carbon::now()->endOfDay() : $item->end_at }}">
         </div>
 
         @endsection
@@ -54,5 +54,25 @@
             <a href="{{ route("tempadmin::index") }}" class="btn btn-default pull-right">Cancel</a>
 
     </form>
+
+@endsection
+
+@section('javascript')
+    @parent
+
+    <script>
+    // Initializes datetimepickers for consistent options
+    $('.datetime-picker').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            next: "fa fa-chevron-right",
+            previous: "fa fa-chevron-left"
+        },
+        format: 'YYYY-MM-DD HH:mm:ss'
+    });
+    </script>
 
 @endsection
