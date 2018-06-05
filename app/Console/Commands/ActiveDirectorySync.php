@@ -171,6 +171,10 @@ class ActiveDirectorySync extends Command
             $ldapuser->setAttribute('sAMAccountName', $username);
             $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
 
+            $uac = new AccountControl($ldapuser->getUserAccountControl());
+            $uac->passwordDoesNotExpire();
+            $ldapuser->setUserAccountControl($uac);
+
             $ldapuser->save();
 
             $c++;
