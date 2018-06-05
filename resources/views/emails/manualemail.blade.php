@@ -14,20 +14,18 @@
 
     <p>
         <sub>
-            @if(is_array($destination))
+            @if($destination == 'list')
                 You receive this e-mail because you are subscribed to one or more of the following e-mail lists:
-                @foreach($destination as $i => $list)
-                    {{ $list['name'] }}
-                    (
-                    <a href="{{ route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list['id'])]) }}">unsubscribe</a>
-                    ){{ ($i + 1 == count($destination) ? '' : ', ') }}
-                @endforeach
+                {!! Email::getListUnsubscribeFooter($user_id, $email_id) !!}.
             @elseif($destination == 'event')
-                This is an e-mail directed to all participants of the {{ $event_name }} activity. You receive this e-mail because you signed up as a participant.
+                You receive this e-mail because you signed up for any of the following events as a participant, helper
+                or by buying a ticket: {{ $event_name }}.
             @elseif($destination == 'users')
-                This is an e-mail directed to all user accounts on the website of S.A. Proto. You receive this e-mail because you have an active user account.
+                You receive this e-mail because you have an active user account at the website of S.A. Proto.
             @elseif($destination == 'members')
-                This is an e-mail directed to all members of S.A. Proto. You receive this e-mail because you have an active membership.
+                You receive this e-mail because you have an active membership with S.A. Proto.
+            @elseif($destination == 'active members')
+                You receive this e-mail because you are an active member (participate in a committee) of S.A. Proto.
             @endif
         </sub>
     </p>

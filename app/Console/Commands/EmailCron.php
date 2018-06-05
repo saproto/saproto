@@ -66,7 +66,8 @@ class EmailCron extends Command
                         $email->attachments,
                         $email->destinationForBody(),
                         $recipient->id,
-                        $email->getEventName())
+                        $email->getEventName(),
+                        $email->id)
                     )->onQueue('medium'));
 
             }

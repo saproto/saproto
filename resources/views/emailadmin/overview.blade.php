@@ -114,12 +114,9 @@
                             @elseif($email->to_active)
                                 all active members
                             @elseif($email->to_list)
-                                lists:
-                                @foreach($email->lists as $list)
-                                    {{ $list->id }}
-                                @endforeach
-                            @elseif($email->to_event != false)
-                                event {{ $email->getEventName() }}
+                                list(s) {{ $email->getListName() }}
+                            @elseif($email->to_event)
+                                event(s) {{ $email->getEventName() }}
                             @endif
                         </td>
                         <td>
