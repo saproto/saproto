@@ -6,7 +6,13 @@
 
 @section('content')
 
-    @if (count($products) > 0)
+    @if (count($orders) > 0)
+
+        <div class="btn-group btn-group-justified">
+            <a href="?csv" class="btn btn-success" target="_blank">Supplier CSV</a>
+        </div>
+
+        <hr>
 
         <p>
             This table shows how much of each products needs to be ordered to reach the preferred stock as set for that
@@ -26,6 +32,7 @@
 
                 <th>#</th>
                 <th>Product Name</th>
+                <th>Supplier ID</th>
                 <th>Collo</th>
                 <th>Stock</th>
                 <th>Target</th>
@@ -37,56 +44,35 @@
 
             </thead>
 
-            <?php
-            $category = null;
-            ?>
+            @foreach($orders as $order)
 
-            @while(count($products) > 0)
+                <tr>
 
-                <?php $category = $products->first()->category; ?>
-
-                <th colspan="10"><?php echo $category; ?></th>
-
-                @foreach($products as $key => $product)
-
-                    @if($product->category == $category)
-
-                        <?php
-
-                        if ($product->supplier_collo == 0) {
-                            $needToOrder = 999999;
-                        } else {
-                            $needToOrder = ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo);
-                        }
-
-                        ?>
-
-                        <tr>
-
-                            <td>{{ $product->id }}</td>
-                            <td>
-                                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">{{ $product->name }}</a>
-                            </td>
-                            <td style="opacity: 0.5;">{{ $product->supplier_collo }}</td>
-                            <td>{{ $product->stock }}</td>
-                            <td>{{ $product->preferred_stock }}</td>
-                            <td>&nbsp;</td>
-                            <td><strong>{{ $needToOrder }}</strong></td>
-                            <td style="opacity: 0.5;">{{ ($needToOrder * $product->supplier_collo) }} units</td>
-                            <td>{{ $product->stock + ($product->supplier_collo * $needToOrder) }}</td>
-                            <td style="opacity: 0.5;">
-                                + {{ ($product->stock + ($product->supplier_collo * $needToOrder)) - $product->preferred_stock }}
-                            </td>
-
-                        </tr>
-
-                        <?php unset($products[$key]); ?>
-
+                    <td>{{ $order->product->id }}</td>
+                    <td>
+                        <a href="{{ route('omnomcom::products::edit', ['id' => $order->product->id]) }}">{{ $order->product->name }}</a>
+                    </td>
+                    <td>
+                        {{ $order->product->supplier_id }}
+                    </td>
+                    @if ($order->order_collo > 0)
+                        <td style="opacity: 0.5;">
+                            {{ $order->product->supplier_collo > 0 ? $order->product->supplier_collo : null }}
+                        </td>
+                        <td>{{ $order->product->stock }}</td>
+                        <td>{{ $order->product->preferred_stock }}</td>
+                        <td>&nbsp;</td>
+                        <td><strong>{{ $order->order_collo }}</strong></td>
+                        <td style="opacity: 0.5;">{{ $order->order_products }} units</td>
+                        <td>{{ $order->new_stock }}</td>
+                        <td style="opacity: 0.5;"> + {{ $order->new_surplus }} </td>
+                    @else
+                        <td colspan="8" style="opacity: 0.5;">No need to order.</td>
                     @endif
 
-                @endforeach
+                </tr>
 
-            @endwhile
+            @endforeach
 
         </table>
 

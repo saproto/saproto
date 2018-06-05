@@ -31,9 +31,12 @@
             <div class="col-md-6">
 
                 <div class="form-group">
-                    <label for="nicename">Nicename:</label>
-                    <input type="text" class="form-control" id="nicename" name="nicename"
-                           placeholder="every-flavor-beans" value="{{ $product->nicename or '' }}" required>
+                    <label for="price">Unit price:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">&euro;</span>
+                        <input type="text" class="form-control" id="price" name="price"
+                               placeholder="0" value="{{ $product->price or '' }}" required>
+                    </div>
                 </div>
 
             </div>
@@ -45,12 +48,9 @@
             <div class="col-md-6">
 
                 <div class="form-group">
-                    <label for="price">Unit price:</label>
-                    <div class="input-group">
-                        <span class="input-group-addon">&euro;</span>
-                        <input type="text" class="form-control" id="price" name="price"
-                               placeholder="0" value="{{ $product->price or '' }}" required>
-                    </div>
+                    <label for="name">Supplier ID:</label>
+                    <input type="text" class="form-control" id="supplier_id" name="supplier_id"
+                           placeholder="12345678" value="{{ $product->supplier_id or '' }}">
                 </div>
 
             </div>
