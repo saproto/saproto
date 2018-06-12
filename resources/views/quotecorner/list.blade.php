@@ -26,7 +26,11 @@
                         @if(count($data) > 0)
                             <?php $entry = $data[0] ?>
                             <h4 style="margin-top: 0;">
-                                <a href="{{ route('user::profile', ['id' => $entry->user->getPublicId()]) }}">{{ $entry->user->name }}</a>
+                                @if($entry->user->isMember)
+                                    <a href="{{ route('user::profile', ['id' => $entry->user->getPublicId()]) }}">{{ $entry->user->name }}</a>
+                                @else
+                                    {{ $entry->user->name }}
+                                @endif
                                 <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:i")  }}</span>
                             </h4>
                             <div id="qq_bigquote">
@@ -62,7 +66,11 @@
                             @if($key > 0)
                                 <div>
                                     <p>
-                                        <a href="{{ route('user::profile', ['id' => $entry->user->getPublicId()]) }}">{{ $entry->user->name }}</a>
+                                        @if($entry->user->isMember)
+                                            <a href="{{ route('user::profile', ['id' => $entry->user->getPublicId()]) }}">{{ $entry->user->name }}</a>
+                                        @else
+                                            {{ $entry->user->name }}
+                                        @endif
                                         <span class="qq_timestamp">{{ $entry->created_at->format("j M Y, H:i") }}</span>
                                     </p>
                                     <h4>{!! $entry["quote"] !!}</h4>

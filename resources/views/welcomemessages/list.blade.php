@@ -32,7 +32,13 @@
                 <tr>
 
                     <td>{{ $message->id }}</td>
-                    <td><a href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}">{{ $message->user->name }}</a></td>
+                    <td>
+                        @if($message->user->isMember)
+                            <a href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}">{{ $message->user->name }}</a>
+                        @else
+                            {{ $message->user->name }}
+                        @endif
+                    </td>
 
                     <td>{{ $message->message }}</td>
 

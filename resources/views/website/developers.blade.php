@@ -89,9 +89,12 @@
                     <h3>Developers from days past</h3>
 
                     @foreach($developers['old'] as $i => $dev)
-                        <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
+                        @if($dev->user->isMember) <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                             {{ $dev->user->name }}
                         </a>
+                        @else
+                            {{ $dev->user->name }}
+                        @endif
                         @if ($i + 1 < count($developers['old']))
                             ,
                         @endif
