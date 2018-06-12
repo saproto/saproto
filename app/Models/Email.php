@@ -17,6 +17,11 @@ class Email extends Model
         return $this->belongsToMany('Proto\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
     }
 
+    public function events()
+    {
+        return $this->belongsToMany('Proto\Models\Event', 'emails_events', 'email_id', 'event_id');
+    }
+
     public function attachments()
     {
         return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
@@ -31,8 +36,8 @@ class Email extends Model
         } elseif ($this->to_active) {
             return 'active members';
         } elseif ($this->to_list) {
-            return $this->lists->toArray();
-        } elseif ($this->to_event != false) {
+            return 'list';
+        } elseif ($this->to_event) {
             return 'event';
         }
     }
@@ -60,13 +65,13 @@ class Email extends Model
             return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
 
         } elseif ($this->to_event != false) {
-            $event = Event::find($this->to_event);
-            if ($event && $event->activity) {
-                return $event->returnAllUsers()->unique('id');
-            } else {
-                return collect([]);
+            $userids = [];
+            foreach ($this->events as $event) {
+                if ($event && $event->activity) {
+                    $userids = array_merge($userids, $event->returnAllUsers()->pluck('id')->toArray());
+                }
             }
-
+            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
         } else {
             return collect([]);
         }
@@ -86,16 +91,43 @@ class Email extends Model
 
     public function getEventName()
     {
+        $events = [];
         if ($this->to_event == false) {
-            return 'No event.';
+            return '';
         } else {
-            $event = Event::find($this->to_event);
-            if ($event) {
-                return $event->title;
-            } else {
-                return 'Unknown Event';
+            foreach ($this->events as $event) {
+                if ($event) {
+                    $events[] = $event->title;
+                } else {
+                    $events[] = 'Unknown Event';
+                }
             }
         }
+        return implode(', ', $events);
+    }
+
+    public function getListName()
+    {
+        $lists = [];
+        if ($this->to_list == false) {
+            return '';
+        } else {
+            foreach ($this->lists as $list) {
+                $lists[] = $list->name;
+            }
+        }
+        return implode(', ', $lists);
+
+    }
+
+    public static function getListUnsubscribeFooter($user_id, $email_id)
+    {
+        $footer = [];
+        $lists = Email::whereId($email_id)->firstOrFail()->lists;
+        foreach ($lists as $list) {
+            $footer[] = sprintf('%s (<a href="%s">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
+        }
+        return implode(', ', $footer);
     }
 
 }

@@ -79,7 +79,8 @@ class EmailController extends Controller
             'attachments' => $email->attachments,
             'destination' => $email->destinationForBody(),
             'user_id' => Auth::user()->id,
-            'event_name' => $email->getEventName()
+            'event_name' => $email->getEventName(),
+            'email_id' => $email->id,
         ]);
     }
 
@@ -230,7 +231,7 @@ class EmailController extends Controller
         return Redirect::route('email::admin');
     }
 
-    private function updateEmailDestination(Email $email, $type, $lists = [], $event = 0)
+    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [])
     {
         switch ($type) {
 
@@ -243,6 +244,7 @@ class EmailController extends Controller
                 $email->to_event = false;
 
                 $email->lists()->sync([]);
+                $email->events()->sync([]);
                 break;
 
             case 'active':
@@ -254,6 +256,7 @@ class EmailController extends Controller
                 $email->to_event = false;
 
                 $email->lists()->sync([]);
+                $email->events()->sync([]);
                 break;
 
             case 'lists':
@@ -265,6 +268,7 @@ class EmailController extends Controller
                 $email->to_event = false;
 
                 $email->lists()->sync((gettype($lists) == "array" ? $lists : []));
+                $email->events()->sync([]);
                 break;
 
             case 'event':
@@ -273,9 +277,12 @@ class EmailController extends Controller
                 $email->to_active = false;
 
                 $email->to_list = false;
-                $email->to_event = $event;
+                $email->to_event = true;
 
                 $email->lists()->sync([]);
+                if (gettype($events) && count($events) > 0) {
+                    $email->events()->sync($events);
+                }
                 break;
 
             default:
@@ -287,6 +294,7 @@ class EmailController extends Controller
                 $email->to_event = false;
 
                 $email->lists()->sync([]);
+                $email->events()->sync([]);
                 break;
 
         }

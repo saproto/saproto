@@ -18,13 +18,14 @@ class ManualEmail extends Mailable
     public $destination;
     public $user_id;
     public $event_name;
+    public $email_id;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($from, $subject, $body, $attachments, $destination, $user_id, $event_name)
+    public function __construct($from, $subject, $body, $attachments, $destination, $user_id, $event_name, $email_id)
     {
         $this->from = $from;
         $this->subject = $subject;
@@ -33,6 +34,7 @@ class ManualEmail extends Mailable
         $this->destination = $destination;
         $this->user_id = $user_id;
         $this->event_name = $event_name;
+        $this->email_id = $email_id;
     }
 
     /**

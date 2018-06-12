@@ -311,7 +311,6 @@ class EventController extends Controller
         $product = Product::create([
             'account_id' => $account->id,
             'name' => 'Activity: ' . ($activity->event ? $activity->event->title : $activity->comment),
-            'nicename' => 'activity-' . $activity->id,
             'price' => $activity->price
         ]);
         $product->save();

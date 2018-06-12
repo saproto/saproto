@@ -31,7 +31,7 @@ class ProductController extends Controller
         $paginate = false;
         if ($request->has('search')) {
             $search = $request->get('search');
-            $products = Product::where('name', 'like', "%$search%")->orWhere('nicename', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->get();
+            $products = Product::where('name', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->get();
         } elseif ($request->has('filter')) {
             switch ($request->get('filter')) {
 
@@ -84,6 +84,7 @@ class ProductController extends Controller
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
         $product->price = str_replace(',', '.', $request->price);
+        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -109,7 +110,7 @@ class ProductController extends Controller
 
         $request->session()->flash('flash_message', 'The new product has been created!');
 
-        return Redirect::route('omnomcom::products::list', ['search' => $product->nicename]);
+        return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
 
     }
 
@@ -160,6 +161,7 @@ class ProductController extends Controller
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
         $product->price = str_replace(',', '.', $request->price);
+        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();

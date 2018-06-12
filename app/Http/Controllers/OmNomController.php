@@ -148,19 +148,31 @@ class OmNomController extends Controller
 
     }
 
-    public function generateOrder()
+    public function generateOrder(Request $request)
     {
 
         $products = Product::where('is_visible_when_no_stock', true)->whereRaw('stock < preferred_stock')->orderBy('name', 'ASC')->get();
+        $orders = [];
         foreach ($products as $product) {
-            $product->category = $product->categories()->first();
-            if (!$product->category) {
-                $product->category = 'Undefined';
-            } else {
-                $product->category = $product->category->name;
-            }
+            $order_collo = ($product->supplier_collo > 0 ? ceil(($product->preferred_stock - $product->stock) / $product->supplier_collo) : 0);
+            $order_products = $order_collo * $product->supplier_collo;
+            $new_stock = $product->stock + $order_products;
+            $new_surplus = $new_stock - $product->preferred_stock;
+
+            $orders[] = (object)[
+                'product' => $product,
+                'order_collo' => $order_collo,
+                'order_products' => $order_products,
+                'new_stock' => $new_stock,
+                'new_surplus' => $new_surplus
+            ];
         }
-        return view('omnomcom.products.generateorder', ['products' => $products]);
+
+        if ($request->has('csv')) {
+            return view('omnomcom.products.generateorder_csv', ['orders' => $orders]);
+        } else {
+            return view('omnomcom.products.generateorder', ['orders' => $orders]);
+        }
     }
 
     public function miniSite()

@@ -275,7 +275,7 @@ class SearchController extends Controller
 
     public function getProductSearch(Request $request)
     {
-        $search_attributes = ['id', 'name', 'nicename'];
+        $search_attributes = ['id', 'name'];
         return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
     }
 

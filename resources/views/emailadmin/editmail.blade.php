@@ -118,21 +118,32 @@
                                         <label>
                                             <input type="radio" name="destinationType" id="destinationEvent" required
                                                    value="event" {{ ($email && $email->to_event ? 'checked' : '') }}>
-                                            This event:
+                                            These events:
                                         </label>
                                     </div>
 
-                                    <select name="eventSelect" id="eventSelect" class="form-control"
-                                            {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }}>
+                                    @if($email && $email->to_event)
+                                        <p>
+                                            <strong>Current selection</strong>
+                                        </p>
 
-                                        @foreach(Event::has('activity')->where('end','>',strtotime('-1 month'))->orderBy('start', 'desc')->get() as $event)
-                                            <option value="{{ $event->id }}" {{ ($email && $email->to_event == $event->id ? 'selected' : '') }}>
-                                                [{{ ($event->end < date('U') ? 'p' : 'f') }}]
-                                                {{ date('d-m-Y', $event->start) }}: {{ $event->title }}
-                                            </option>
-                                        @endforeach
+                                        <p>
+                                        <ul class="list-group">
+                                            @foreach($email->events as $event)
+                                                <li class="list-group-item">
+                                                    {{ $event->title }} ({{ $event->formatted_date->simple }})
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        </p>
 
-                                    </select>
+                                        <p>
+                                            <strong>Replace selection</strong>
+                                        </p>
+                                    @endif
+
+                                    <select class="form-control event-search" id="eventSelect" name="eventSelect[]"
+                                            {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple></select>
 
                                     <div class="radio">
                                         <label>
