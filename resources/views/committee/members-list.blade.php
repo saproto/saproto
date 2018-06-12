@@ -146,8 +146,15 @@
                         <span class="label label-success"><i class="fa fa-pencil"></i></span>
                     </a>
                 @endif
-                <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
+
+                @if($membership->user->isMember)
+                    <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
+                @else
+                    {{ $membership->user->name }}
+                @endif
+
                 ({{ ($membership->role ? $membership->role : 'General Member') }})
+
                 <br>
 
                 @if ($membership->trashed())
