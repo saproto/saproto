@@ -119,9 +119,14 @@
                             <div class="col-md-3">
                                 @if($orderline->user)
 
-                                    <a href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}">
+                                    @if($orderline->user->isMember)
+                                        <a href="{{ route('user::profile', ['id' => $orderline->user->getPublicId()]) }}">
+                                            {{ $orderline->user->name }}
+                                        </a>
+                                    @else
                                         {{ $orderline->user->name }}
-                                    </a>
+                                    @endif
+
 
                                 @else
 
