@@ -1,5 +1,5 @@
-It should superfluous because Study Association Proto is an international association, but issues have to be written in English.
+**DON'T POST PERSONAL INFORMATION OR SECURITY VULNERABILITIES ON GITHUB, THESE ISSUES ARE PUBLIC.**
 
-Please provide us with enough information to respond to your issue. If you're unsure what this means, please see [this guide](https://wiki.proto.utwente.nl/ict/issues).
+First time submiting an issue? See [this guide](https://wiki.proto.utwente.nl/ict/issues). Incorrectly submitted issues will be closed without response.
 
-Issues with insufficient information will be rejected without a response. Please remove this text before submitting your issue.
+Need to submit a security vulnerability? You can find our responsible disclosure policy [here](https://wiki.proto.utwente.nl/ict/responsible-disclosure).
