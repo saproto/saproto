@@ -34,6 +34,11 @@ class Activity extends Validatable
         return $this->belongsTo('Proto\Models\Event');
     }
 
+    public function closedAccount()
+    {
+        return $this->belongsTo('Proto\Models\Account', 'closed_account');
+    }
+
     /**
      * @return mixed A list of participants to this activity.
      */

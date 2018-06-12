@@ -299,14 +299,15 @@ class EventController extends Controller
             return Redirect::back();
         }
 
+        $account = Account::findOrFail($request->input('account'));
+
         if (count($activity->users) == 0 || $activity->price == 0) {
             $activity->closed = true;
+            $activity->closed_account = $account->id;
             $activity->save();
             Session::flash("flash_message", "This activity is now closed. It either was free or had no participants, so no orderlines or products were created.");
             return Redirect::back();
         }
-
-        $account = Account::findOrFail($request->input('account'));
 
         $product = Product::create([
             'account_id' => $account->id,
@@ -320,6 +321,7 @@ class EventController extends Controller
         }
 
         $activity->closed = true;
+        $activity->closed_account = $account->id;
         $activity->save();
 
         Session::flash("flash_message", "This activity has been closed and the relevant orderlines were added.");

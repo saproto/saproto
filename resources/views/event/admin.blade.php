@@ -6,20 +6,23 @@
 
 @section('content')
 
-    <p style="text-align: center;">
-        <a href="{{ route("event::checklist", ['id' => $event->id]) }}">Participant Checklist</a>
-    </p>
-
-    @if(Auth::user()->can('board'))
+    @if(Auth::user()->can("finadmin") && $event->activity && $event->activity->closed)
         <p style="text-align: center;">
-            <strong>Contact details</strong>
+            @if ($event->activity->closedAccount)
+                This activity was closed on account {{ $event->activity->closedAccount->account_number }}
+                ({{ $event->activity->closedAccount->name }}).
+            @else
+                This activity is closed on an unknown account.
+            @endif
         </p>
-        <p style="text-align: center;">
-            Please remember to always use the BCC field (not the to or CC field) when sending emails to participants!
-        </p>
-        <textarea class="form-control">{{ implode(',', $event->getAllEmails()) }}</textarea>
+        <hr>
     @endif
 
+    <div class="btn-group btn-group-justified">
+        <a href="{{ route("event::checklist", ['id' => $event->id]) }}" class="btn btn-success">
+            Participant Checklist
+        </a>
+    </div>
 
     <hr>
 
@@ -62,9 +65,9 @@
 
     @endif
 
-    <hr>
-
     @if (count($event->tickets) > 0)
+
+        <hr>
 
         <p style="text-align: center;">
             <a class="form-control btn btn-success" href="{{ route('event::scan', ['id' => $event->id]) }}">
@@ -183,12 +186,6 @@
             </div>
 
         @endforeach
-
-    @else
-
-        <p style="text-align: center;">
-            This event has no ticket sale associated.
-        </p>
 
     @endif
 
