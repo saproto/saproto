@@ -68,10 +68,6 @@
                 <label for="iban">IBAN Bank Account Number</label>
                 <input type="text" class="form-control" id="iban" name="iban"
                        placeholder="NL42INGB0013371337" style="text-transform: uppercase;">
-                <sub>
-                    Your IBAN will be sent to <a href="https://openiban.com/" target="_blank">openiban.com</a> for
-                    verification and BIC autocomplete.
-                </sub>
             </div>
 
             <p>

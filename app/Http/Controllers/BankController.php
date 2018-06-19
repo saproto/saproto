@@ -178,7 +178,8 @@ class BankController extends Controller
 
         try {
 
-            $openiban_response = json_decode(file_get_contents('https://openiban.com/validate/' . $response->iban . '?validateBankCode=true&getBIC=true'));
+            $openiban_url = sprintf('%s/validate/' . $response->iban . '?validateBankCode=true&getBIC=true', config('proto.openiban_url'));
+            $openiban_response = json_decode(file_get_contents($openiban_url));
 
             if (property_exists($openiban_response->bankData, 'bic')) {
 

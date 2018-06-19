@@ -272,7 +272,17 @@ return [
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
         'creditor_id' => env('SEPA_CI')
-    ]
+    ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | SEPA Withdrawal Info
+    |--------------------------------------------------------------------------
+    |
+    | Info needed to construct SEPA withdrawals.
+    |
+    */
+
+    'openiban_url' => env('OPENIBAN_URL', 'https://openiban.proto.utwente.nl'),
 
 ];
