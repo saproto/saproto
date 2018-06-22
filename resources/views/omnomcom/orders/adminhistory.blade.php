@@ -156,8 +156,11 @@
                                    style="margin-left: 10px;"
                                    href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
                                    role="button"
-                                   onclick="javascript:return confirm('You are about to delete an orderline for {{ $orderline->user->name }}. Are you sure? ');"
-                                        {{ ($orderline->isPayed() ? 'disabled' : '') }}>
+                                   @if ($orderline->isPayed())
+                                   disabled
+                                   @else
+                                   onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');"
+                                        @endif>
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </div>
