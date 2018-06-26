@@ -32,7 +32,7 @@
     transition: all 0.2s;
   }
 
-  div.activity:nth-child(odd) {
+  a.activity:nth-child(even) div.activity {
     background-color: rgba(0, 0, 0, 0.04);
   }
 
