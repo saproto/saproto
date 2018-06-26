@@ -76,24 +76,7 @@
                             <hr>
                         @endif
 
-                        <a class="activity"
-                           href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
-                            <div class="activity {{ ($key % 2 == 1 ? 'odd' : '') }}" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
-                                <p><strong>{{ $event->title }}</strong></p>
-                                <p><i class="fa fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
-                                </p>
-                                <p>
-                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                    {{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}
-                                </p>
-                                @if($event->is_external)
-                                    <p>
-                                        <i class="fa fa-info-circle" aria-hidden="true"></i> Not Organized
-                                        by S.A. Proto
-                                    </p>
-                                @endif
-                            </div>
-                        </a>
+                        @include('event.display_includes.event_block', ['event'=> $event])
 
                         <?php $week = date('W', $event->start); ?>
 

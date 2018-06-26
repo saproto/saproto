@@ -82,6 +82,25 @@ class Activity extends Validatable
     }
 
     /**
+     * @param User|null $user
+     * @return bool True or false depending on whether the activity still needs help. If a user is specified, true will only be returned if the user can actually help.
+     */
+    public function inNeedOfHelp(User $user = null)
+    {
+        foreach ($this->helpingCommittees as $committee) {
+            $needed = $committee->pivot->amount;
+            $available = $this->helpingUsers($committee->pivot->id)->count();
+            if ($available < $needed) {
+                if ($user == null) {
+                    return true;
+                } elseif ($user !== null && $committee->isMember($user) && !$this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    /**
      * @return mixed A list of committees helping out at this activity.
      */
     public function helpingCommitteeInstances()
