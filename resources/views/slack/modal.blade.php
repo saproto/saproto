@@ -22,10 +22,6 @@
             </div>
             <div class="modal-footer">
 
-                <a href="#" class="btn btn-default pull-left" id="slack__hide">
-                    Hide
-                </a>
-
                 <a href="https://slack.com/is" class="btn btn-default pull-left" target="_blank">
                     About Slack
                 </a>

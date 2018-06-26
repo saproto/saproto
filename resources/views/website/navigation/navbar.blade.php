@@ -75,10 +75,10 @@
                     </li>
                 @endif
 
-                @if (Auth::check() && (Auth::user()->can("board") || Auth::user()->can("finadmin")))
+                @if (Auth::check() && (Auth::user()->can(["board","finadmin","alfred"])))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Association Admin <span class="caret"></span></a>
+                           aria-expanded="false">Admin Tools <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             @if (Auth::user()->can("board"))
@@ -124,18 +124,17 @@
 
                             @endif
 
-                        </ul>
-                    </li>
-                @endif
 
-                @if (Auth::check() && Auth::user()->can(["alfred","board"]))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">SmartXp Admin <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                            @if(Auth::user()->can(["alfred","board"]))
 
-                            <li><a href="{{ route("dmx::index") }}">Fixtures</a></li>
-                            <li><a href="{{ route("dmx::override::index") }}">Override</a></li>
+                                <li role="separator" class="divider"></li>
+
+                                <li><a class="navbar-title">SmartXp:</a></li>
+
+                                <li><a href="{{ route("dmx::index") }}">Fixtures</a></li>
+                                <li><a href="{{ route("dmx::override::index") }}">Override</a></li>
+
+                            @endif
 
                         </ul>
                     </li>
@@ -144,7 +143,7 @@
                 @if (Auth::check() && Auth::user()->can("board"))
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Website Admin <span class="caret"></span></a>
+                           aria-expanded="false">Web Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
@@ -186,16 +185,6 @@
                     </div>
                 </form>
 
-                @if (Auth::check() && Auth::user()->member && Cookie::get('hideSlack', 'show') === 'show')
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#slack-modal">
-                            Slack
-                            <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span
-                                        id="slack__online">...</span></span>
-                        </a>
-                    </li>
-                @endif
-
                 @if (Auth::check())
 
                     @if(Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board')))
@@ -218,6 +207,16 @@
                                 <li><a href="{{ route('user::profile') }}">My Profile</a></li>
                             @else
                                 <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
+                            @endif
+
+                            @if (Auth::check() && Auth::user()->member)
+                                <li>
+                                    <a href="#" data-toggle="modal" data-target="#slack-modal">
+                                        Slack
+                                        <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span
+                                                    id="slack__online">...</span></span>
+                                    </a>
+                                </li>
                             @endif
 
                             @if (Session::has('impersonator'))
