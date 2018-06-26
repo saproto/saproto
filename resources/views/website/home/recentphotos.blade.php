@@ -4,30 +4,14 @@
 
 <div class="row">
 
-    @foreach(Flickr::getAlbums(6) as $key => $album)
+    @foreach(Flickr::getAlbums(5) as $key => $album)
 
-        @if(isset($newsitems) && count($newsitems) <= 2)
-            <div class="col-md-6 col-xs-6">
-                @else
-                    <div class="col-md-4 col-xs-6">
-                        @endif
+        @include('website.home.recentphotos_include', ['colsize'=> isset($newsitems) && count($newsitems) <= 2 ? 6: 4,
+        'album'=>$album, 'link_to_photos' => false])
 
-                        <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
-                            <div class="album"
-                                 style="background-image: url('{!! $album->thumb !!}')">
-                                <div class="album-name">
-                                    {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
-                                    @if ($album->private)
-                                        <div class="photo__hidden">
-                                            <i class="fa fa-low-vision" aria-hidden="true"></i>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </a>
+    @endforeach
 
-                    </div>
+    @include('website.home.recentphotos_include', ['colsize'=> isset($newsitems) && count($newsitems) <= 2 ? 6: 4,
+     'link_to_photos' => true])
 
-                    @endforeach
-
-            </div>
+</div>
