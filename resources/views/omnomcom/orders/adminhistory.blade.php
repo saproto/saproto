@@ -167,6 +167,20 @@
 
                         </div>
 
+                        @if ($orderline->description)
+
+                            <div class="row">
+
+                                <div class="col-md-9 col-md-offset-3">
+                                    <span style="color: #ccc; font-size: 12px;">
+                                        {{ $orderline->description }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        @endif
+
                     </li>
 
                     @endforeach
@@ -254,7 +268,9 @@
 
                             <div class="col-md-2">
 
-                                <button type="button" class="btn btn-danger orderlinedeleterow">Delete</button>
+                                <button type="button" class="btn btn-danger orderlinedeleterow" style="width: 100%;">
+                                    Delete
+                                </button>
 
                             </div>
 
@@ -262,10 +278,22 @@
 
                     </div>
                     <div class="modal-footer">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" name="description"
+                                       placeholder="Description. This will be added to all the above orderlines. Can be left empty.">
+                            </div>
+                        </div>
+
+                        <hr>
+
                         <button id="orderlineaddrow" type="button" class="btn btn-default pull-left">Add another row
                         </button>
+
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success">Save</button>
+
                     </div>
 
                 </div>
@@ -298,7 +326,6 @@
         });
 
         $('#orderlineaddrow').click(function () {
-
             var oldrow = $('.orderlinerow').last();
 
             $('#orderlinemodal .modal-body').append(oldrow.wrap('<p/>').parent().html());

@@ -92,6 +92,12 @@
                                     [Cashier: {{ $orderline->cashier->name }}]
 
                                 @endif
+
+                                @if ($orderline->description)
+                                    <span style="color: #ccc; font-size: 12px;">
+                                        <br>{{ $orderline->description }}
+                                    </span>
+                                @endif
                             </td>
                             <td>{{ $orderline->units }}x</td>
                             <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>

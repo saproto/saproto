@@ -243,6 +243,20 @@
 
                         </div>
 
+                        @if ($orderline->description)
+
+                            <div class="row">
+
+                                <div class="col-md-10 col-md-offset-2">
+                                    <span style="color: #ccc; font-size: 12px;">
+                                        {{ $orderline->description }}
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        @endif
+
                     </li>
 
                     @endforeach
