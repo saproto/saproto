@@ -89,6 +89,7 @@ class UserDashboardController extends Controller
 
         if ($user->member) {
             $userdata['show_birthday'] = $request->has('show_birthday');
+            $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
         }
 
         if ($userdata['email'] !== $user->email) {

@@ -77,6 +77,23 @@
                 </div>
             </div>
 
+            @if($user->member)
+
+                <div class="form-group">
+                    <label for="member_proto_mail" class="col-sm-4 control-label">OmNomCom</label>
+                    <div class="col-sm-8 control-label" style="text-align: left;">
+                        <div class="checkbox">
+                            <label>
+                                <input name="show_omnomcom_total"
+                                       type="checkbox" {{ ($user->show_omnomcom_total == 1 ? 'checked' : '') }}>
+                                After checkout, show how much I've spent today.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            @endif
+
         </div>
 
         <div class="panel-footer">

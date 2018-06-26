@@ -37,21 +37,21 @@
 
         body {
             @if(date('U') > strtotime('December 6') && date('U') < strtotime('December 31'))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
             @elseif(date('U') > strtotime('November 25') && date('U') < strtotime('December 6'))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
             @elseif(date('U') > (easter_date() - 3600*24*7) && date('U') < (easter_date() + 3600*24))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
             @elseif(date('U') > strtotime('March 10') && date('U') < strtotime('March 18'))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
             @elseif(date('U') > strtotime('April 1') && date('U') < strtotime('April 21'))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
             @elseif(date('U') > strtotime('May 4') && date('U') < strtotime('May 5'))
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
             @else
-                  background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
-             background-position: center 220%;
+                    background-position: center 220%;
             background-repeat: no-repeat;
         }
 
@@ -437,10 +437,16 @@
             display: none;
         }
 
-        .modal h1 {
+        .modal h1, .modal h2 {
             color: #fff;
             font-size: 25px;
             margin-bottom: 50px;
+        }
+
+        .modal h2 {
+            margin-top: -25px;
+            margin-bottom: -25px;
+            font-size: 20px;
         }
 
         .modal .modal-status {
@@ -703,6 +709,8 @@
 
         <h1>Your purchase has completed.</h1>
 
+        <h2 id="finished-overlay-message"></h2>
+
         <div class="modal-input modal-button" id="logout-button">CONTINUE</div>
 
         <video id="purchase-movie" width="473" height="260">
@@ -902,6 +910,14 @@
             success: function (data) {
                 if (data == "OK") {
                     finishPurchase();
+                } else if (data.startsWith("OK")) {
+                    data = data.split(",");
+                    if (data[1] == 'TOTAL') {
+                        total = "You have spent a total of <strong>€" + parseFloat(data[3]).toFixed(2) + "</strong> today, " + data[2] + ".";
+                        finishPurchase(total);
+                    } else {
+                        finishPurchase("Unknown message type: " + data[1]);
+                    }
                 } else {
                     $("#purchase-modal .modal-status").html(data);
                     purchase_processing = null;
@@ -924,8 +940,11 @@
         window.location.reload();
     });
 
-    function finishPurchase() {
+    function finishPurchase(display_message = null) {
         $('#modal-overlay').trigger('click');
+        if (display_message) {
+            $("#finished-overlay-message").html(display_message);
+        }
         $("#finished-overlay").show();
         $("#finished-modal").removeClass('inactive');
         document.getElementById("purchase-movie").play();
