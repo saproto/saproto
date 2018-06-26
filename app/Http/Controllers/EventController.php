@@ -27,11 +27,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        if (Auth::check() && Auth::user()->can('board')) {
-            $events = Event::orderBy('start')->get();
-        } else {
-            $events = Event::where('secret', false)->orderBy('start')->get();
-        }
+
+        $events = Event::orderBy('start')->get();
         $data = [[], [], []];
         $years = [];
 
@@ -84,11 +81,7 @@ class EventController extends Controller
      */
     public function archive($year)
     {
-        if (Auth::check() && Auth::user()->can('board')) {
-            $events = Event::orderBy('start')->get();
-        } else {
-            $events = Event::where('secret', false)->orderBy('start')->get();
-        }
+        $events = Event::orderBy('start')->get();
 
         $months = [];
         $years = [];

@@ -127,6 +127,9 @@
                                     <div class="panel-heading">
 
                                         {{ $instance->committee->name }}
+                                        @if($instance->committee->isMember(Auth::user()) || Auth::user()->can('board'))
+                                            ({{ $instance->users->count() }}/{{ $instance->amount }})
+                                        @endif
 
                                     </div>
 
@@ -187,7 +190,8 @@
                                                     {{ csrf_field() }}
 
                                                     <div class="input-group">
-                                                        <select class="form-control user-search" name="user_id" required></select>
+                                                        <select class="form-control user-search" name="user_id"
+                                                                required></select>
                                                         <span class="input-group-btn">
                                                             <button type="submit" class="btn btn-success">
                                                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
