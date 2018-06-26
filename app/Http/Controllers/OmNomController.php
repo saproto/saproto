@@ -145,7 +145,7 @@ class OmNomController extends Controller
         }
 
         if ($user->show_omnomcom_total) {
-            return sprintf("OK,TOTAL2,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
+            return sprintf("OK,TOTAL,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
         } else {
             return "OK";
         }
