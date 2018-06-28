@@ -187,7 +187,14 @@ class AuthController extends Controller
             'privacy_policy_acceptance' => 'required'
         ]);
 
-        $this->registerAccount($request);
+        $new_user = $this->registerAccount($request);
+
+        $new_user->fill([
+            'edu_username' => $request->get('edu_username'),
+            'utwente_username' => $request->get('utwente_username')
+        ]);
+
+        $new_user->save();
 
         $request->session()->flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
         return Redirect::route('login::edu');
