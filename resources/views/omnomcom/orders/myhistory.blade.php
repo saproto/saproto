@@ -117,6 +117,9 @@
                                     <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
                                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                                     </a>
+                                    @if($withdrawal->getFailedWithdrawal($user))
+                                        <i class="fa fa-times" aria-hidden="true" style="color: red;"></i>
+                                    @endif
                                 </td>
                                 <td style="text-align: right;">
                                     &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}

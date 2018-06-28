@@ -10,6 +10,14 @@
 
         <div class="col-md-6 col-md-offset-3">
 
+            @if($withdrawal->getFailedWithdrawal(Auth::user()))
+
+                <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: red;">
+                    <i class="fa fa-times" aria-hidden="true"></i> This withdrawal has failed.
+                </p>
+
+            @endif
+
             <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: #222;">
                 Withdrawal total: &euro;{{ number_format($withdrawal->totalForUser(Auth::user()), 2, '.', ',') }}
             </p>

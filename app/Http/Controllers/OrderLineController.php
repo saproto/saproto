@@ -9,6 +9,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Auth;
+use Proto\Models\FailedWithdrawal;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\TicketPurchase;
@@ -174,6 +175,7 @@ class OrderLineController extends Controller
         $order->product->save();
 
         TicketPurchase::where('orderline_id', $id)->delete();
+        FailedWithdrawal::where('correction_orderline_id', $id)->delete();
 
         $order->delete();
 

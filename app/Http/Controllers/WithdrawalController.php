@@ -4,11 +4,11 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
+use Proto\Mail\OmnomcomFailedWithdrawalNotification;
 use Proto\Mail\OmnomcomWithdrawalNotification;
-use Proto\Models\Bank;
+use Proto\Models\FailedWithdrawal;
 use Proto\Models\OrderLine;
+use Proto\Models\Product;
 use Proto\Models\User;
 use Proto\Models\Withdrawal;
 use Proto\Models\Account;
@@ -237,13 +237,49 @@ class WithdrawalController extends Controller
 
         $user = User::findOrFail($user_id);
 
-        foreach ($withdrawal->orderlinesForUseR($user) as $orderline) {
+        foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
             $orderline->withdrawal()->dissociate();
             $orderline->save();
         }
 
         $request->session()->flash('flash_message', 'Orderlines for ' . $user->name . ' removed from this withdrawal.');
         return Redirect::back();
+    }
+
+    public static function markFailed(Request $request, $id, $user_id)
+    {
+
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            return Redirect::back();
+        }
+
+        $user = User::findOrFail($user_id);
+
+        if (FailedWithdrawal::where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
+            $request->session()->flash('flash_message', 'This withdrawal has already been marked as failed.');
+            return Redirect::back();
+        }
+
+        $product = Product::findOrFail(config('omnomcom.failed-withdrawal'));
+        $total = $withdrawal->totalForUser($user);
+
+        $failedOrderline = OrderLine::findOrFail($product->buyForUser($user, 1, $total, false,
+            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date)))));
+
+        FailedWithdrawal::create([
+            'user_id' => $user->id,
+            'withdrawal_id' => $withdrawal->id,
+            'correction_orderline_id' => $failedOrderline->id
+        ])->save();
+
+        Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
+
+        $request->session()->flash('flash_message', 'Withdrawal for ' . $user->name . ' marked as failed. User e-mailed.');
+        return Redirect::back();
+
     }
 
     /**

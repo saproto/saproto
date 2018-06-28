@@ -561,6 +561,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('email/{id}', ['as' => 'email', 'uses' => 'WithdrawalController@email']);
 
             Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
+            Route::get('markfailed/{id}/{user_id}', ['as' => 'markfailed', 'uses' => 'WithdrawalController@markFailed']);
         });
 
         Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);

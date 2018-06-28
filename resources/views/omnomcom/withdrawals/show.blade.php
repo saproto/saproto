@@ -123,9 +123,24 @@
                 <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
                 @if(!$withdrawal->closed)
                     <td>
-                        <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
-                            Remove
-                        </a>
+                        @if($withdrawal->getFailedWithdrawal($data->user))
+                            Failed
+                            <a onclick="return confirm('Are you sure? The user will NOT receive an e-mail about this?')"
+                               href="{{ route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]) }}">
+                                (Revert)
+                            </a>
+                        @else
+                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
+                                Remove
+                            </a>
+
+                            or
+
+                            <a href="{{ route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
+                               onclick="return confirm('You are about to mark the withdrawal for {{ $data->user->name }} as failed. They will receive an e-mail. Are you sure?');">
+                                Mark Failed
+                            </a>
+                        @endif
                     </td>
                 @endif
             </tr>

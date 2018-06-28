@@ -119,4 +119,15 @@ return [
     'alcohol-start' => "15:30",
     'alcohol-end' => "08:00",
 
+    /*
+    |--------------------------------------------------------------------------
+    | OmNomCom Failed Withdrawal Products
+    |--------------------------------------------------------------------------
+    |
+    | This product is used in the failed withdrawal functionality.
+    |
+    */
+
+    'failed-withdrawal' => 1055,
+
 ];

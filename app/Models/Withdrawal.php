@@ -48,6 +48,11 @@ class Withdrawal extends Model
         return OrderLine::where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
+    public function getFailedWithdrawal(User $user)
+    {
+        return FailedWithdrawal::where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
+    }
+
     public function userCount()
     {
         $data = DB::table('orderlines')

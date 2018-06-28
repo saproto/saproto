@@ -26,7 +26,7 @@
 
     <p>
         I hope to have informed you well via this e-mail, but should you have any questions left you can always send me
-        an e-mail.
+        a message.
     </p>
 
     <p>
