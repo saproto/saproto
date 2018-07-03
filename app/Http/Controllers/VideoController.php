@@ -44,6 +44,11 @@ class VideoController extends Controller
             return Redirect::back();
         }
 
+        if (Video::where('youtube_id', $youtube_video->id)->count() > 0) {
+            Session::flash("flash_message", "This video has already been added!");
+            return Redirect::back();
+        }
+
         $video = Video::create([
             'title' => $youtube_video->snippet->title,
             'youtube_id' => $youtube_video->id,
@@ -51,7 +56,7 @@ class VideoController extends Controller
             'youtube_length' => $youtube_video->contentDetails->duration,
             'youtube_user_id' => $youtube_video->snippet->channelId,
             'youtube_user_name' => $youtube_video->snippet->channelTitle,
-            'youtube_thumb_url' => $youtube_video->snippet->thumbnails->maxres->url,
+            'youtube_thumb_url' => $youtube_video->snippet->thumbnails->high->url,
             'video_date' => date('Y-m-d', strtotime($youtube_video->snippet->publishedAt))
         ])->save();
 
