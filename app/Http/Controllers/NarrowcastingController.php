@@ -108,6 +108,11 @@ class NarrowcastingController extends Controller
                 return Redirect::back();
             }
 
+            if (!$video->status->embeddable) {
+                Session::flash("flash_message", "This video is not embeddable and therefore cannot be used on the site!");
+                return Redirect::back();
+            }
+
             $narrowcasting->youtube_id = $video->id;
 
         }

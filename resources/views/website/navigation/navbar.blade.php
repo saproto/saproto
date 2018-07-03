@@ -147,6 +147,7 @@
                         <ul class="dropdown-menu">
 
                             <li><a href="{{ route("menu::list") }}">Menu</a></li>
+                            <li><a href="{{ route("video::admin::index") }}">Videos</a></li>
                             <li><a href="{{ route("page::list") }}">Pages</a></li>
                             <li><a href="{{ route("news::admin") }}">News</a></li>
                             <li><a href="{{ route("email::admin") }}">Email</a></li>

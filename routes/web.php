@@ -595,6 +595,21 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('', ['as' => 'print', 'uses' => 'PrintController@doPrint']);
     });
 
+    /**
+     * Routes related to YouTube videos.
+     */
+    Route::group(['prefix' => 'video', 'as' => 'video::'], function () {
+        Route::group(['prefix' => 'admin', 'middleware' => ['permission:board'], 'as' => 'admin::'], function () {
+            Route::get('', ['as' => 'index', 'uses' => 'VideoController@index']);
+            Route::post('add', ['as' => 'add', 'uses' => 'VideoController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'VideoController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'VideoController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'VideoController@destroy']);
+        });
+        Route::get('{id}', ['as' => 'view', 'uses' => 'VideoController@view']);
+        Route::get('', ['as' => 'index', 'uses' => 'VideoController@publicIndex']);
+    });
+
     /*
      * Routes related to Flickr photos.
      */

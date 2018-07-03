@@ -13,7 +13,8 @@
                 @if ($link_to_photos)
                     View all photo albums!
                 @else
-                    {{ date('M j, Y', $album->date_taken) }}: {{ $album->name }}
+                    {{ date('M j, Y', $album->date_taken) }}<br>
+                    <strong>{{ $album->name }}</strong>
                 @endif
                 @if ($album->private)
                     <div class="photo__hidden">

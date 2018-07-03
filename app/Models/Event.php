@@ -182,4 +182,9 @@ class Event extends Model
         ];
     }
 
+    public function videos()
+    {
+        return $this->hasMany('Proto\Models\Video');
+    }
+
 }

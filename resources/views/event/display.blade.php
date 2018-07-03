@@ -83,22 +83,25 @@
                         </p>
                     @endif
 
-                    @if($event->albums->count() > 0)
-
+                    @if($event->videos->count() || $event->albums->count())
                         <hr>
+                    @endif
+
+                    @if($event->videos->count() > 0)
+
+                        @foreach($event->videos as $video)
+
+                            @include('videos.include', ['colsize'=> 6, 'video' => $video])
+
+                        @endforeach
+
+                    @endif
+
+                    @if($event->albums->count() > 0)
 
                         @foreach($event->albums as $album)
 
-                            <div class="col-md-6 col-xs-6">
-                                <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="album-link">
-                                    <div class="album"
-                                         style="background-image: url('{!! $album->thumb !!}')">
-                                        <div class="album-name">
-                                            {{ $album->name }}
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+                            @include('website.home.recentphotos_include', ['colsize'=> 6, 'album'=> $album, 'link_to_photos' => false])
 
                         @endforeach
 
