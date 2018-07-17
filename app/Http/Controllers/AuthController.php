@@ -174,8 +174,8 @@ class AuthController extends Controller
 
         $request->request->add([
             'email' => $remote_data['mail'],
-            'name' => $remote_data['givenname'] . " " . $remote_data['surname'],
-            'calling_name' => $remote_data['givenname'],
+            'name' => $remote_data['name'],
+            'calling_name' => $remote_data['calling-name'],
             'edu_username' => $remote_data['uid-full'],
             'utwente_username' => $remote_data['org'] == 'utwente.nl' ? $remote_data['uid'] : null
         ]);
@@ -493,12 +493,23 @@ class AuthController extends Controller
         $remoteUser = Session::pull('surfconext_sso_user');
         $remoteData = [
             'uid' => $remoteUser[config('saml2-attr.uid')][0],
-            'surname' => $remoteUser[config('saml2-attr.surname')][0],
+            'surname' => array_key_exists(config('saml2-attr.surname'), $remoteUser) ? $remoteUser[config('saml2-attr.surname')][0] : null,
             'mail' => $remoteUser[config('saml2-attr.email')][0],
-            'givenname' => $remoteUser[config('saml2-attr.givenname')][0],
+            'givenname' => array_key_exists(config('saml2-attr.givenname'), $remoteUser) ? $remoteUser[config('saml2-attr.givenname')][0] : null,
             'org' => isset($remoteUser[config('saml2-attr.institute')]) ? $remoteUser[config('saml2-attr.institute')][0] : 'utwente.nl'
         ];
         $remoteEduUsername = $remoteData['uid'] . '@' . $remoteData['org'];
+        $remoteFullName = "User";
+        $remoteCallingName = "User";
+        if ($remoteData['surname'] && $remoteData['givenname']) {
+            $remoteFullName = $remoteData['givenname'] . " " . $remoteData['surname'];
+            $remoteCallingName = $remoteData['givenname'];
+        } elseif ($remoteData['surname'] || $remoteData['givenname']) {
+            $remoteFullName = $remoteData['surname'] ? $remoteData['surname'] : $remoteData['givenname'];
+            $remoteCallingName = $remoteFullName;
+        }
+        $remoteData['name'] = $remoteFullName;
+        $remoteData['calling-name'] = $remoteCallingName;
         $remoteData['uid-full'] = $remoteEduUsername;
 
         // We can be here for two reasons:
@@ -534,8 +545,7 @@ class AuthController extends Controller
             }
         }
 
-        $localUser->name = $remoteData['givenname'] . " " . $remoteData['surname'];
-        $localUser->calling_name = $remoteData['givenname'];
+        $localUser->name = $remoteData['name'];
         $localUser->save();
 
         return AuthController::continueLogin($localUser);
