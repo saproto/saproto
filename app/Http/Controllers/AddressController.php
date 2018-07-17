@@ -31,7 +31,11 @@ class AddressController extends Controller
             abort(403);
         }
 
-        if($request->wizard > 0) Session::flash("wizard", true);
+        if ($user->address) {
+            return Redirect::route('user::address::edit', ['id' => $user->id, 'wizard' => $request->wizard]);
+        }
+
+        if ($request->wizard) Session::flash("wizard", true);
 
         return view('users.addresses.add', ['user' => $user]);
     }
@@ -83,7 +87,7 @@ class AddressController extends Controller
 
         Session::flash("flash_message", "The address has been added.");
 
-        if(Session::get('wizard')) return Redirect::route('becomeamember');
+        if (Session::get('wizard')) return Redirect::route('becomeamember');
 
         return Redirect::route('user::dashboard', ['id' => $id]);
 
@@ -114,11 +118,14 @@ class AddressController extends Controller
         $address->save();
 
         Session::flash("flash_message", "The address has been edited.");
+
+        if (Session::get('wizard')) return Redirect::route('becomeamember');
+
         return Redirect::route('user::dashboard', ['id' => $id]);
 
     }
 
-    public function editForm($id)
+    public function editForm(Request $request, $id)
     {
 
         $user = User::findOrFail($id);
@@ -132,6 +139,8 @@ class AddressController extends Controller
         if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+
+        if ($request->wizard) Session::flash("wizard", true);
 
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
     }

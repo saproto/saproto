@@ -9,6 +9,9 @@
     <div class="panel panel-default">
         <div class="panel-heading">Add address for {{ $user->name }}</div>
         <div class="panel-body">
+            @if(Session::get('wizard'))
+                @include('users.registerwizard_macro')
+            @endif
             <form class="form-horizontal" method="POST" action="{{ route('user::address::add', ['id' => $user->id]) }}">
                 @include('users.addresses.form')
             </form>

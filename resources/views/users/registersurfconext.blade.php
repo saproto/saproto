@@ -12,17 +12,24 @@
 
     <form method="POST" action="{{ route('login::register::surfconext') }}">
 
-        <p>
-            You tried to login using a university account we don't recognize. If you wish to create an account on the
-            Proto website, you can use this here.
-        </p>
+        @if(Session::get('wizard'))
+            @include('users.registerwizard_macro')
+        @else
 
-        <p style="font-weight: bold;">
-            Creating and having an account on the website does not make you a member of S.A. Proto and is free of
-            charge.
-        </p>
+            <p>
+                You tried to login using a university account we don't recognize. If you wish to create an account on
+                the
+                Proto website, you can use this here.
+            </p>
 
-        <hr>
+            <p style="font-weight: bold;">
+                Creating and having an account on the website does not make you a member of S.A. Proto and is free of
+                charge.
+            </p>
+
+            <hr>
+
+        @endif
 
         {!! csrf_field() !!}
 

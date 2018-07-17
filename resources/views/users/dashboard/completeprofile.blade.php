@@ -12,6 +12,8 @@
 
     <form method="POST" action="{{ route('user::memberprofile::complete') }}">
 
+        @include('users.registerwizard_macro')
+
         {!! csrf_field() !!}
 
         <div class="form-group">

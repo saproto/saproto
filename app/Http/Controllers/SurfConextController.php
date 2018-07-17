@@ -29,7 +29,7 @@ class SurfConextController extends Controller
             abort(403);
         }
 
-        if ($request->wizard > 0) Session::flash("wizard", true);
+        if ($request->wizard) Session::flash("wizard", true);
 
         Session::flash('link_edu_to_user', $user);
 

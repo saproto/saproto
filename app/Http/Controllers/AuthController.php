@@ -196,7 +196,16 @@ class AuthController extends Controller
 
         $new_user->save();
 
+        if (Session::get('wizard')) {
+            HashMapItem::create([
+                'key' => 'wizard',
+                'subkey' => $new_user->id,
+                'value' => 1
+            ]);
+        }
+
         $request->session()->flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
+
         return Redirect::route('login::edu');
     }
 
@@ -212,7 +221,6 @@ class AuthController extends Controller
         $user = User::create($request->only(['email', 'name', 'calling_name']));
 
         if (Session::get('wizard')) {
-
             HashMapItem::create([
                 'key' => 'wizard',
                 'subkey' => $user->id,
@@ -483,7 +491,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function surfConextAuthPost()
+    public function surfConextAuthPost(Request $request)
     {
 
         if (!Session::has('surfconext_sso_user')) {
@@ -541,6 +549,7 @@ class AuthController extends Controller
             } // Else, we'll allow them to create an account using their university account
             else {
                 Session::flash('surfconext_create_account', $remoteData);
+                $request->session()->reflash();
                 return view('users.registersurfconext', ['remote_data' => $remoteData]);
             }
         }

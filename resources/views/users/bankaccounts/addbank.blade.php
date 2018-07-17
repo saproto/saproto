@@ -13,6 +13,10 @@
     <form method="POST" id="iban__form"
           action="{{ ($new ? route('user::bank::add', ['id' => $user->id]) : route('user::bank::edit', ['id' => $user->id])) }}">
 
+        @if(Session::get('wizard'))
+            @include('users.registerwizard_macro')
+        @endif
+
         @if($user->id != Auth::id())
 
             <p>

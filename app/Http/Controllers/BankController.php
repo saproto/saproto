@@ -33,7 +33,7 @@ class BankController extends Controller
             return Redirect::route('user::dashboard', ['id' => $id]);
         }
 
-        if ($request->wizard > 0) Session::flash("wizard", true);
+        if ($request->wizard) Session::flash("wizard", true);
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => true]);
     }

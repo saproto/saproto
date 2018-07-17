@@ -12,22 +12,30 @@
 
     <form method="POST" action="{{ route('login::register') }}">
 
+        @if(Session::get('wizard'))
+            @include('users.registerwizard_macro')
+        @endif
+
         <a href="{{ route('login::edu') }}" class="btn btn-success" style="width: 100%;">
             Create an account with your university account
         </a>
 
         <hr>
 
-        <p>
-            Using this form you can register a new account on the S.A. Proto website.
-        </p>
+        @if(!Session::get('wizard'))
 
-        <p style="font-weight: bold;">
-            Creating and having an account on the website does not make you a member of S.A. Proto and is free of
-            charge.
-        </p>
+            <p>
+                Using this form you can register a new account on the S.A. Proto website.
+            </p>
 
-        <hr>
+            <p style="font-weight: bold;">
+                Creating and having an account on the website does not make you a member of S.A. Proto and is free of
+                charge.
+            </p>
+
+            <hr>
+
+        @endif
 
         {!! csrf_field() !!}
 
