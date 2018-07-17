@@ -392,7 +392,7 @@
 
                     </div>
 
-                    @if(Auth::user()->can('board'))
+                    @if(Auth::user()->can('board') && !$event->activity->closed)
 
                         <div class="panel-footer clearfix">
                             <div class="form-group">
