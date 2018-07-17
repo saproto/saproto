@@ -65,7 +65,8 @@
         "./resources/assets/bower/Croppie/croppie.min.js",
         "./resources/assets/bower/ng-img-crop/compile/minified/ng-img-crop.js",
         "./resources/assets/bower/jquery-dateFormat/dist/jquery-dateFormat.min.js",
-        "./resources/assets/bower/select2/dist/js/select2.full.min.js"
+        "./resources/assets/bower/select2/dist/js/select2.full.min.js",
+        "./resources/assets/bower/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -94,7 +95,8 @@
         "./resources/assets/bower/chocolat/dist/css/chocolat.css",
         "./resources/assets/bower/Croppie/croppie.css",
         "./resources/assets/bower/ng-img-crop/compile/minifiedo/ng-img-crop.css",
-        "./resources/assets/bower/select2/dist/css/select2.min.css"
+        "./resources/assets/bower/select2/dist/css/select2.min.css",
+        "./resources/assets/bower/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [

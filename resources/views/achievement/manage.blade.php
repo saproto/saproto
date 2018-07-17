@@ -287,7 +287,7 @@
 
                         <div class="btn-group" role="group">
                             <div class="btn-group" role="group">
-                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}" - +
+                                <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}"
                                    class="btn btn-danger">
                                     Take from everyone
                                 </a>
@@ -303,5 +303,18 @@
             @endif
 
         </div>
+
+@endsection
+
+@section('javascript')
+
+    @parent
+
+    <script>
+        $('.icp-auto').iconpicker();
+        $('.icp').on('iconpickerSelected', function (e) {
+            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
+        });
+    </script>
 
 @endsection
