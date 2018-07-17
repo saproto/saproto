@@ -45,9 +45,9 @@
                 </a>
 
                 <a href="@if(Auth::check()) {{ route('user::edu::add', ['id' => $user->id]) }}?wizard=1 @else # @endif"
-                   class="list-group-item @if($user && $user->utwente_username) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
+                   class="list-group-item @if($user && $user->edu_username) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->utwente_username)<i
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->edu_username)<i
                                     class="fa fa-check" aria-hidden="true"></i>@else 2 @endif</div>
                         <div class="col-md-11 becomeamember__description">
                             <h4 class="list-group-item-heading">Add a UTwente account your Proto account</h4>
@@ -61,7 +61,7 @@
                 <a href="@if(Auth::check()) {{ route('user::memberprofile::complete') }}?wizard=1 @else # @endif"
                    class="list-group-item @if($user && $user->hasCompletedProfile()) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->utwente_username)<i
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->hasCompletedProfile())<i
                                     class="fa fa-check" aria-hidden="true"></i>@else 3 @endif</div>
                         <div class="col-md-11 becomeamember__description">
                             <h4 class="list-group-item-heading">Complete your membership profile</h4>
