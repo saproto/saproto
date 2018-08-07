@@ -10,6 +10,9 @@ use Redirect;
 
 use Proto\Models\User;
 
+use Carbon\Carbon;
+
+use DateTime;
 use Auth;
 use Session;
 use Validator;
@@ -166,7 +169,8 @@ class UserDashboardController extends Controller
     {
         $user = Auth::user();
         if ($user->hasCompletedProfile()) {
-            abort(403, "You already completed your membership profile.");
+            Session::flash("flash_message", "Your membership profile is already complete.");
+            return Redirect::route('becomeamember');
         }
 
         return view("users.dashboard.completeprofile");
@@ -176,10 +180,11 @@ class UserDashboardController extends Controller
     {
         $user = Auth::user();
         if ($user->hasCompletedProfile()) {
-            abort(403, "You already completed your membership profile.");
+            Session::flash("flash_message", "Your membership profile is already complete.");
+            return Redirect::route('becomeamember');
         }
 
-        $userdata = $request->only(['birthdate', 'gender', 'phone', 'nationality']);
+        $userdata = Session::has('flash_userdata') ? Session::get('flash_userdata') : $request->only(['birthdate', 'phone']);
 
         $validator = Validator::make($userdata, [
             'birthdate' => 'required|date',
@@ -189,11 +194,17 @@ class UserDashboardController extends Controller
             return Redirect::back()->withErrors($validator);
         }
 
-        $user->fill($userdata);
-        $user->save();
+        if (Session::has('flash_userdata') && $request->has('verified')) {
+            $user->fill($userdata);
+            $user->save();
 
-        Session::flash("flash_message", "Completed profile.");
-        return Redirect::route('becomeamember');
+            Session::flash("flash_message", "Completed profile.");
+            return Redirect::route('becomeamember');
+        } else {
+            Session::flash('flash_userdata', $userdata);
+            return view("users.dashboard.completeprofile_verify",
+                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]);
+        }
     }
 
     public function getClearProfile()

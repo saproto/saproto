@@ -19,7 +19,7 @@
         </p>
 
         <ul>
-            <li>Birthdate: <strong>{{ $user->birthdate }}</strong></li>
+            <li>Birthdate: <strong>{{ date('F j, Y', strtotime($user->birthdate)) }}</strong></li>
             <li>Phone: <strong>{{ $user->phone }}</strong></li>
         </ul>
 
