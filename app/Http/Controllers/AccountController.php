@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 
 use Proto\Models\Account;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use Proto\Models\Product;
 use Proto\Models\OrderLine;
 
+use DB;
 use Redirect;
 use Carbon\Carbon;
 
@@ -76,24 +74,8 @@ class AccountController extends Controller
     {
         $account = Account::findOrFail($account);
 
-        $orderlines = OrderLine::where('created_at', '>=', Carbon::parse($request->start)->format('Y-m-d H:i:s'))
-            ->where('created_at', '<', Carbon::parse($request->end)->format('Y-m-d H:i:s'))->get();
-
-        $products = [];
-        $totals = [];
-
-        foreach ($orderlines as $orderline) {
-            if ($orderline->product->account->account_number == $account->account_number) {
-                $p = $orderline->product;
-                if (!array_key_exists($p->id, $products)) {
-                    $products[$p->id] = $p;
-                    $totals[$p->id] = 0;
-                }
-                $totals[$p->id] += $orderline->total_price;
-            }
-        }
-
-        return view('omnomcom.accounts.aggregation', ['account' => $account, 'products' => $products, 'totals' => $totals, 'start' => $request->start, 'end' => $request->end]);
+        return view('omnomcom.accounts.aggregation', ['aggregation' => $account->generatePeriodAggregation($request->start, $request->end),
+            'start' => $request->start, 'end' => $request->end, 'account' => $account]);
     }
 
     /**
@@ -104,32 +86,11 @@ class AccountController extends Controller
      */
     public function showOmnomcomStatistics(Request $request)
     {
-        if($request->has('start') && $request->has('end')) {
-
+        if ($request->has('start') && $request->has('end')) {
             $account = Account::findOrFail(config('omnomcom.omnomcom-account'));
-
-            $orderlines = OrderLine::where('created_at', '>=', Carbon::parse($request->start)->format('Y-m-d H:i:s'))
-                ->where('created_at', '<', Carbon::parse($request->end)->format('Y-m-d H:i:s'))->get();
-
-            $products = [];
-            $totals = [];
-            $amounts = [];
-
-            foreach ($orderlines as $orderline) {
-                if ($orderline->product->account->account_number == $account->account_number) {
-                    $p = $orderline->product;
-                    if (!array_key_exists($p->id, $products)) {
-                        $products[$p->id] = $p;
-                        $totals[$p->id] = 0;
-                        $amounts[$p->id] = 0;
-                    }
-                    $totals[$p->id] += $orderline->total_price;
-                    $amounts[$p->id]++;
-                }
-            }
-
-            return view('omnomcom.statistics.show', ['products' => $products, 'amounts' => $amounts, 'totals' => $totals, 'start' => $request->start, 'end' => $request->end]);
-        }else{
+            return view('omnomcom.accounts.aggregation', ['aggregation' => $account->generatePeriodAggregation($request->start, $request->end),
+                'start' => $request->start, 'end' => $request->end, 'account' => $account]);
+        } else {
             return view('omnomcom.statistics.date-select');
         }
     }

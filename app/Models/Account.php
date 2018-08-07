@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Carbon;
+use DB;
 
 class Account extends Model
 {
@@ -54,6 +55,19 @@ class Account extends Model
 
         return $accounts;
 
+    }
+
+    public function generatePeriodAggregation($start, $end)
+    {
+        return DB::table('orderlines')
+            ->join('products', 'orderlines.product_id', '=', 'products.id')
+            ->join('accounts', 'products.account_id', '=', 'accounts.id')
+            ->select('orderlines.product_id', 'products.name', DB::raw('SUM(orderlines.units) as number_sold'),
+                DB::raw('SUM(orderlines.total_price) as total_turnover'))
+            ->groupby('orderlines.product_id')
+            ->where('accounts.id', '=', $this->id)
+            ->where('orderlines.created_at', '>=', Carbon::parse($start)->format('Y-m-d H:i:s'))
+            ->where('orderlines.created_at', '<', Carbon::parse($end)->format('Y-m-d H:i:s'))->get();
     }
 
 }

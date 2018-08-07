@@ -5,18 +5,14 @@
 @endsection
 
 @section('panel-title')
-    Account aggregation for account number {{ $account->account_number }}: {{ $account->name }}.
+    <strong>{{ $account->name }}</strong> account aggregation
 @endsection
 
 @section('panel-body')
 
     <p>
-        This table aggregates the total sale value for each product between the specified period.
-    </p>
-
-    <p>
-        Start: {{ $start }}<br>
-        End: {{ $end }}
+        This table aggregates the total sales values for each product in the <strong>{{ $account->name }}</strong>
+        account between <strong>{{ $start }} - {{ $end }}</strong>.
     </p>
 
     <hr>
@@ -27,17 +23,19 @@
         <tr>
             <th>#</th>
             <th>Product</th>
-            <th>Aggregated income</th>
+            <th>Units</th>
+            <th>Turnover</th>
         </tr>
         </thead>
 
         <tbody>
 
-        @foreach($products as $key => $product)
+        @foreach($aggregation as $key => $product)
             <tr>
-                <td>{{ $product->id }} ({{ $key }})</td>
+                <td>{{ $product->product_id }}</td>
                 <td>{{ $product->name }}</td>
-                <td>&euro;{{ number_format($totals[$key], 2) }}</td>
+                <td>{{ $product->number_sold }}</td>
+                <td>&euro; {{ number_format($product->total_turnover, 2) }}</td>
             </tr>
         @endforeach
 
