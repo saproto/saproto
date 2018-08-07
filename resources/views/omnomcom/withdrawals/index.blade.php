@@ -77,6 +77,8 @@
 
                 </table>
 
+                <div style="text-align: center;">{{ $withdrawals->links() }}</div>
+
             @else
 
                 <p style="text-align: center;">

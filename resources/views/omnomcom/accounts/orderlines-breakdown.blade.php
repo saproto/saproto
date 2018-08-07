@@ -40,6 +40,18 @@
                     @endforeach
 
                 @endforeach
+
+                @if(isset($total))
+
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th style="text-align: right;"><br>Total</th>
+                        <th><br>&euro; {{ number_format($total, 2) }}</th>
+
+                    </tr>
+
+                @endif
+
                 </tbody>
 
             </table>

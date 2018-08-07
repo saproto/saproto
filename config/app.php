@@ -278,6 +278,7 @@ return [
 
         'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
+        'MollieController' => \Proto\Http\Controllers\MollieController::class,
 
         'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 

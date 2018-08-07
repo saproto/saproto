@@ -32,7 +32,7 @@ class WithdrawalController extends Controller
      */
     public function index()
     {
-        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->get()]);
+        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(12)]);
     }
 
     /**
@@ -160,7 +160,8 @@ class WithdrawalController extends Controller
 
         return view("omnomcom.accounts.orderlines-breakdown", [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => "Accounts of withdrawal of " . date('d-m-Y', strtotime($withdrawal->date))
+            'title' => "Accounts of withdrawal of " . date('d-m-Y', strtotime($withdrawal->date)),
+            'total' => $withdrawal->total()
         ]);
     }
 
@@ -301,7 +302,7 @@ class WithdrawalController extends Controller
             'bic' => config('proto.sepa_info')->bic,
             'ci' => config('proto.sepa_info')->creditor_id,
             'ccy' => 'EUR',
-            'ultmtCdtr' => 'S.A. Proto: Activities, Food and Services',
+            'ultmtCdtr' => 'S.A. Proto',
             'reqdColltnDt' => $withdrawal->date
         ]);
 
@@ -315,7 +316,6 @@ class WithdrawalController extends Controller
                 'bic' => $user->bank->bic,
                 'dbtr' => $user->name,
                 'iban' => $user->bank->iban,
-                'ultmtDbtr' => 'Study Association Proto',  // just an information, this do not affect the payment (max 70 characters)
             ]);
             $i++;
         }

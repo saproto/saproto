@@ -26,7 +26,7 @@
                                 <th>Amount</th>
                                 <th>User</th>
                                 <th>Status</th>
-                                <th>Updated</th>
+                                <th>Date</th>
                             </tr>
                             </thead>
 
@@ -34,44 +34,40 @@
 
                             @foreach($transactions as $transaction)
 
-                                @if($transaction->status == "paid" || $transaction->status == "paidout" || $transaction->status == "open")
+                                <tr>
+                                    <td>
+                                        <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
+                                            #{{$transaction->id}}
+                                        </a>
+                                    </td>
 
-                                    <tr>
-                                        <td>
-                                            <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
-                                                #{{$transaction->id}}
-                                            </a>
-                                        </td>
+                                    <td>
+                                        <strong>&euro;</strong> {{ number_format($transaction->amount, 2, '.', '') }}
+                                    </td>
 
-                                        <td>
-                                            <strong>&euro;</strong> {{ number_format($transaction->amount, 2, '.', '') }}
-                                        </td>
+                                    <td>
+                                        <a href="{{ route('user::dashboard', ['id' => $transaction->user->id]) }}">
+                                            {{ $transaction->user->name }}
+                                        </a>
+                                    </td>
 
-                                        <td>
-                                            <a href="{{ route('user::dashboard', ['id' => $transaction->user->id]) }}">
-                                                {{ $transaction->user->name }}
-                                            </a>
-                                        </td>
+                                    <td>
+                                        @if(MollieTransaction::translateStatus($transaction->status) == 'open')
+                                            <span class="label label-default">{{ $transaction->status }}</span>
+                                        @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
+                                            <span class="label label-success">{{ $transaction->status }}</span>
+                                        @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
+                                            <span class="label label-danger">{{ $transaction->status }}</span>
+                                        @else
+                                            <span class="label label-warning">{{ $transaction->status }}</span>
+                                        @endif
+                                    </td>
 
-                                        <td>
-                                            @if(MollieTransaction::translateStatus($transaction->status) == 'open')
-                                                <span class="label label-default">{{ $transaction->status }}</span>
-                                            @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
-                                                <span class="label label-success">{{ $transaction->status }}</span>
-                                            @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
-                                                <span class="label label-danger">{{ $transaction->status }}</span>
-                                            @else
-                                                <span class="label label-warning">{{ $transaction->status }}</span>
-                                            @endif
-                                        </td>
+                                    <td>
+                                        {{ date('Y-m-d', strtotime($transaction->created_at)) }}
+                                    </td>
 
-                                        <td>
-                                            {{ date('Y-m-d', strtotime($transaction->updated_at)) }}
-                                        </td>
-
-                                    </tr>
-
-                                @endif
+                                </tr>
 
                             @endforeach
 
@@ -79,89 +75,7 @@
 
                         </table>
 
-                    @else
-
-                        <div class="list-group">
-
-                            <li class="list-group-item">
-                                There's no transactions.
-                            </li>
-
-                        </div>
-
-                    @endif
-
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-heading">
-                    Failed
-                </div>
-                <div class="panel-body">
-
-                    @if(count($transactions) > 0)
-
-                        <table class="table">
-
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Amount</th>
-                                <th>User</th>
-                                <th>Status</th>
-                                <th>Updated</th>
-                            </tr>
-                            </thead>
-
-                            <tbody>
-
-                            @foreach($transactions as $transaction)
-
-                                @if($transaction->status != "paid" && $transaction->status != "paidout" && $transaction->status != "open")
-
-                                    <tr>
-                                        <td>
-                                            <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
-                                                #{{$transaction->id}}
-                                            </a>
-                                        </td>
-
-                                        <td>
-                                            <strong>&euro;</strong> {{ number_format($transaction->amount, 2, '.', '') }}
-                                        </td>
-
-                                        <td>
-                                            <a href="{{ route('user::dashboard', ['id' => $transaction->user->id]) }}">
-                                                {{ $transaction->user->name }}
-                                            </a>
-                                        </td>
-
-                                        <td>
-                                            @if(MollieTransaction::translateStatus($transaction->status) == 'open')
-                                                <span class="label label-default">{{ $transaction->status }}</span>
-                                            @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
-                                                <span class="label label-success">{{ $transaction->status }}</span>
-                                            @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
-                                                <span class="label label-danger">{{ $transaction->status }}</span>
-                                            @else
-                                                <span class="label label-warning">{{ $transaction->status }}</span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            {{ date('Y-m-d', strtotime($transaction->updated_at)) }}
-                                        </td>
-
-                                    </tr>
-
-                                @endif
-
-                            @endforeach
-
-                            </tbody>
-
-                        </table>
+                        <div style="text-align: center;">{{ $transactions->links() }}</div>
 
                     @else
 
@@ -188,46 +102,40 @@
                 </div>
                 <div class="panel-body">
 
-                    <table class="table table-hover">
-
+                    <table class="table">
                         <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Total</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                            <tr>
+                                <th>Month</th>
+                                <th style="text-align: right;">Total</th>
+                            </tr>
                         </thead>
-
                         <tbody>
 
-                        @foreach($accounts as $key => $month)
-
-                            <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
-                                <th>{{ $month->name }}</th>
-                                <th>&euro; {{ number_format($month->total, 2) }}</th>
-                                <th>
-                                    <a href="{{ route("omnomcom::mollie::monthly",['month'=>date('Y-m', strtotime($month->name))]) }}">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        @for($m = 0; $m <= 11 ; $m++)
+                            <?
+                            $month = strtotime(sprintf('-%s months', $m));
+                            $total = MollieController::getTotalForMonth(date('Y-m', $month));
+                            ?>
+                            <tr>
+                                <td>
+                                    <a href="{{ route('omnomcom::mollie::monthly', ['month' => date('Y-m', $month)]) }}">
+                                        <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
                                     </a>
-                                </th>
+                                </td>
+                                <td style="text-align: right">
+                                    @if ($total > 0)
+                                        <span class="label label-success">
+                                             &euro; {{ number_format($total,2) }}
+                                        </span>
+                                    @else
+                                        <span class="label label-default">no transactions</span>
+                                    @endif
+                                </td>
                             </tr>
+                        @endfor
 
-                            @foreach($month->byAccounts as $account => $data)
-                                <tr class="collapse {{ $key }}">
-                                    <td>{{ $data->name }}</td>
-                                    <td>&euro; {{ number_format($data->total, 2) }}</td>
-                                </tr>
-                            @endforeach
-
-                        @endforeach
                         </tbody>
-
                     </table>
-
-                    <p>
-                        <strong>Important</strong> Remember that this overview calculates the totals based on the
-                        transaction date of the <strong>orderline</strong>, not the <strong>Mollie payment</strong>.
-                    </p>
 
                 </div>
             </div>

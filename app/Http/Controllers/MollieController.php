@@ -70,10 +70,7 @@ class MollieController extends Controller
 
     public function index()
     {
-        return view('omnomcom.mollie.list', [
-            'transactions' => MollieTransaction::orderBy('updated_at', 'desc')->get(),
-            'accounts' => MollieController::getAccounts()
-        ]);
+        return view('omnomcom.mollie.list', ['transactions' => MollieTransaction::orderBy('created_at', 'desc')->paginate(20)]);
     }
 
     public function monthly(Request $request, $month)
@@ -99,68 +96,6 @@ class MollieController extends Controller
             'title' => "Account breakdown for Mollie transactions in " . date('F Y', strtotime($month))
         ]);
 
-    }
-
-    /**
-     * Display the accounts associated with mollie payments.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public static function getAccounts()
-    {
-
-        // We do one massive query to reduce the number of queries.
-        $orderlines = DB::table('orderlines')
-            ->join('products', 'orderlines.product_id', '=', 'products.id')
-            ->join('accounts', 'products.account_id', '=', 'accounts.id')
-            ->join('mollie_transactions', 'orderlines.payed_with_mollie', '=', 'mollie_transactions.id')
-            ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
-            ->whereNotNull('orderlines.payed_with_mollie')
-            ->where(function ($query) {
-                $query->where('mollie_transactions.status', '=', 'paid')->orWhere('mollie_transactions.status', '=', 'paidout');
-            })
-            ->get();
-
-        $accounts = [];
-
-        foreach ($orderlines as $orderline) {
-            // We sort by date, where a date goes from 6am - 6am.
-            $month = Carbon::parse($orderline->created_at)->format('m-Y');
-
-            // Shorthand variable names.
-            $accnr = $orderline->account_number;
-
-            // Add account to dataset if not existing yet.
-            if (!isset($accounts[$month])) {
-                $accounts[$month] = (object)[
-                    'byAccounts' => [],
-                    'name' => Carbon::parse($orderline->created_at)->format('F Y'),
-                    'total' => 0
-                ];
-            }
-
-            // Add orderline to total account price.
-            $accounts[$month]->total += $orderline->total_price;
-
-            // Add date to account data if not existing yet.
-            if (!isset($accounts[$month]->byAccounts[$accnr])) {
-                $accounts[$month]->byAccounts[$accnr] = (object)[
-                    'name' => $orderline->account_number . " " . $orderline->name,
-                    'total' => 0
-                ];
-            }
-
-            // Add orderline to account-on-date total.
-            $accounts[$month]->byAccounts[$accnr]->total += $orderline->total_price;
-        }
-
-        ksort($accounts);
-        foreach ($accounts as $month) {
-            ksort($month->byAccounts);
-        }
-
-        return $accounts;
     }
 
     public function receive($id)
@@ -224,5 +159,12 @@ class MollieController extends Controller
 
         return $transaction;
 
+    }
+
+    public static function getTotalForMonth($month)
+    {
+        return OrderLine::whereNotNull('payed_with_mollie')
+            ->where('created_at', 'LIKE', sprintf('%s-%%', $month))
+            ->sum('total_price');
     }
 }
