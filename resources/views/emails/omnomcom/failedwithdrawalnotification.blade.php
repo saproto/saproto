@@ -15,7 +15,7 @@
     <ul>
         <li>Your account balance was insufficient.</li>
         <li>You have revoked the withdrawal authorisation you gave us.</li>
-        <li>Your bank account is no longer {{ $user->bank->iban }}).</li>
+        <li>Your bank account is no longer <strong>{{ $user->bank->iban }}</strong>.</li>
     </ul>
 
     <p>
