@@ -161,13 +161,13 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id));
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id));
         $this->info('Synced sysadmin role with permissions.');
-        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id));
+        $roles['admin']->perms()->sync(array($permissions['admin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id));
         $this->info('Synced admin role with permissions.');
         $roles['protube']->perms()->sync(array($permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['tipcie']->id, $permissions['protube']->id));
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id));
         $this->info('Synced board role with permissions.');
         $roles['finadmin']->perms()->sync(array($permissions['finadmin']->id));
         $this->info('Synced finadmin role with permissions.');
