@@ -45,7 +45,7 @@ class FeeCron extends Command
     public function handle()
     {
 
-        if (intval(date('n')) == 8 || intval(date('n')) == 8) {
+        if (intval(date('n')) == 8 || intval(date('n')) == 9) {
             $this->info('We don\'t charge membership fees in August or September.');
             return;
         }
