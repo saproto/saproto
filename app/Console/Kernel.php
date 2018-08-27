@@ -4,6 +4,7 @@ namespace Proto\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Proto\Console\Commands\MemberRenewCron;
 
 class Kernel extends ConsoleKernel
 {
@@ -34,7 +35,8 @@ class Kernel extends ConsoleKernel
         Commands\CountPrimaryMembers::class,
         Commands\VerifyPersonalDetailsEmailCron::class,
         Commands\HelperReminderCron::class,
-        Commands\PrintActiveMembers::class
+        Commands\PrintActiveMembers::class,
+        Commands\MemberRenewCron::class
     ];
 
     /**
@@ -62,5 +64,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
+        $schedule->command('proto:memberrenewcron')->cron('0 2 1 8 *');
     }
 }
