@@ -78,9 +78,21 @@
                 </span>
             </div>
             <div class="col-md-4 col-xs-6">
-
+                <a class="white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>&nbsp;&nbsp;Facebook
+                </a>
                 <br>
-
+                <a class="white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
+                    <i class="fa fa-youtube" aria-hidden="true"></i>&nbsp;&nbsp;YouTube
+                </a>
+                <br>
+                <a class="white" href="https://www.linkedin.com/company/s-a-proto/" target="_blank">
+                    <i class="fa fa-linkedin-square" aria-hidden="true"></i>&nbsp;&nbsp;LinkedIn
+                </a>
+                <br>
+                <a class="white" href="https://www.instagram.com/s.a.proto/" target="_blank">
+                    <i class="fa fa-instagram" aria-hidden="true"></i>&nbsp;&nbsp;Instagram
+                </a>
             </div>
             <div class="col-md-3 col-xs-6 footer__logo">
                 <img src="{{ asset('images/logo/inverse.png') }}" width="57%">
@@ -89,8 +101,15 @@
         <div class="row">
             <p style="text-align: center;">
                 <sub>
-                    &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">privacy policy</a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure">responsible disclosure policy</a>.
-			The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank">GitHub</a>.
+                    &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our
+                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank">
+                        privacy policy
+                    </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure">
+                        responsible disclosure policy
+                    </a>.
+                    The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank">
+                        GitHub
+                    </a>.
                     <br>
                     This website has been created with ♥ by the folks of the
                     <a href="{{ route('developers') }}">
