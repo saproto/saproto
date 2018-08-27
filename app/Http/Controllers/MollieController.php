@@ -4,8 +4,6 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\Account;
 use Proto\Models\OrderLine;
 use Proto\Models\MollieTransaction;
@@ -14,11 +12,11 @@ use Auth;
 use Mollie;
 use Proto\Models\Product;
 use Proto\Models\Event;
+use Proto\Models\User;
 use Redirect;
 use Session;
 
 use DB;
-use Carbon;
 
 class MollieController extends Controller
 {
@@ -68,9 +66,14 @@ class MollieController extends Controller
         return view('omnomcom.mollie.status', ['transaction' => $transaction, 'mollie' => Mollie::api()->payments()->get($transaction->mollie_id)]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('omnomcom.mollie.list', ['transactions' => MollieTransaction::orderBy('created_at', 'desc')->paginate(20)]);
+        if ($request->has('user_id')) {
+            $user = User::findOrFail($request->get('user_id'));
+            return view('omnomcom.mollie.list', ['user' => $user, 'transactions' => MollieTransaction::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(20)]);
+        } else {
+            return view('omnomcom.mollie.list', ['user' => null, 'transactions' => MollieTransaction::orderBy('created_at', 'desc')->paginate(20)]);
+        }
     }
 
     public function monthly(Request $request, $month)

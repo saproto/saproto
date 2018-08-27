@@ -18,6 +18,31 @@
 
                     @if(count($transactions) > 0)
 
+                        @if($user)
+                            <p>
+                                Showing transactions for <strong>{{ $user->name }}</strong>.
+                                (<a href="{{ route('omnomcom::mollie::list') }}">Show all</a>)
+                            </p>
+                        @else
+                            <p>
+                                <strong>Search for transactions for specific user:</strong>
+                            </p>
+                            <p>
+                            <form method="get">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select class="form-control user-search" name="user_id" required></select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="submit" class="btn btn-success" value="Search">
+                                    </div>
+                                </div>
+                            </form>
+                            </p>
+                        @endif
+
+                        <hr>
+
                         <table class="table">
 
                             <thead>
@@ -75,7 +100,7 @@
 
                         </table>
 
-                        <div style="text-align: center;">{{ $transactions->links() }}</div>
+                        <div style="text-align: center;">{{ $transactions->appends(Input::except('page'))->links() }}</div>
 
                     @else
 
@@ -94,53 +119,57 @@
 
         </div>
 
-        <div class="col-md-5">
+        @if(!$user)
 
-            <div class="panel">
-                <div class="panel-heading">
-                    Account overview
-                </div>
-                <div class="panel-body">
+            <div class="col-md-5">
 
-                    <table class="table">
-                        <thead>
+                <div class="panel">
+                    <div class="panel-heading">
+                        Account overview
+                    </div>
+                    <div class="panel-body">
+
+                        <table class="table">
+                            <thead>
                             <tr>
                                 <th>Month</th>
                                 <th style="text-align: right;">Total</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
 
-                        @for($m = 0; $m <= 11 ; $m++)
-                            <?php
-                            $month = strtotime(sprintf('-%s months', $m));
-                            $total = MollieController::getTotalForMonth(date('Y-m', $month));
-                            ?>
-                            <tr>
-                                <td>
-                                    <a href="{{ route('omnomcom::mollie::monthly', ['month' => date('Y-m', $month)]) }}">
-                                        <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
-                                    </a>
-                                </td>
-                                <td style="text-align: right">
-                                    @if ($total > 0)
-                                        <span class="label label-success">
+                            @for($m = 0; $m <= 11 ; $m++)
+                                <?
+                                $month = strtotime(sprintf('-%s months', $m));
+                                $total = MollieController::getTotalForMonth(date('Y-m', $month));
+                                ?>
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('omnomcom::mollie::monthly', ['month' => date('Y-m', $month)]) }}">
+                                            <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
+                                        </a>
+                                    </td>
+                                    <td style="text-align: right">
+                                        @if ($total > 0)
+                                            <span class="label label-success">
                                              &euro; {{ number_format($total,2) }}
                                         </span>
-                                    @else
-                                        <span class="label label-default">no transactions</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endfor
+                                        @else
+                                            <span class="label label-default">no transactions</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endfor
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
 
+                    </div>
                 </div>
+
             </div>
 
-        </div>
+        @endif
 
     </div>
 
