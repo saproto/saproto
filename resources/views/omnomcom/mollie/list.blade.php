@@ -139,7 +139,7 @@
                             <tbody>
 
                             @for($m = 0; $m <= 11 ; $m++)
-                                <?
+                                <?php
                                 $month = strtotime(sprintf('-%s months', $m));
                                 $total = MollieController::getTotalForMonth(date('Y-m', $month));
                                 ?>
