@@ -133,11 +133,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ldapuser->cn = $this->member->proto_username;
             $ldapuser->description = $this->id;
             $ldapuser->save();
-
-            // Enable account
-            $uac = new AccountControl($ldapuser->getUserAccountControl());
-            $uac->accountIsNormal();
-            $ldapuser->setUserAccountControl($uac);
         }
 
         $username = $this->member->proto_username;
@@ -190,11 +185,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         $ldapuser->setAttribute('sAMAccountName', $username);
         $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-        // Update account flags
-        $uac = new AccountControl($ldapuser->getUserAccountControl());
-        $uac->passwordDoesNotExpire();
-        $ldapuser->setUserAccountControl($uac);
 
         $ldapuser->save();
     }
