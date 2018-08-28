@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 
 use PragmaRX\Google2FA\Google2FA;
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 use nickurt\PwnedPasswords\PwnedPasswords;
 
 use Proto\Mail\PasswordResetEmail;
@@ -229,8 +226,6 @@ class AuthController extends Controller
         }
 
         $user->save();
-
-        AuthController::makeLdapAccount($user);
 
         Mail::to($user)->queue((new RegistrationConfirmation($user))->onQueue('high'));
 
@@ -718,26 +713,6 @@ class AuthController extends Controller
         $request->session()->reflash();
         return view('auth.2fa');
 
-    }
-
-    /**
-     * Static helper function that will prepare an LDAP account associated with a new local user.
-     *
-     * @param $user The user to make the LDAP account for.
-     */
-    public static function makeLdapAccount($user)
-    {
-        if (config('app.env') !== 'local') {
-            $ad = new Adldap();
-            $provider = new Provider(config('adldap.proto'));
-            $ad->addProvider('proto', $provider);
-            $ad->connect('proto');
-
-            $ldapuser = $provider->make()->user();
-            $ldapuser->cn = "user-" . $user->id;
-            $ldapuser->description = $user->id;
-            $ldapuser->save();
-        }
     }
 
     /**

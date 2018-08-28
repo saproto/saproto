@@ -105,13 +105,98 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
             if ($ldapuser !== null) {
                 $ldapuser->setPassword($password);
-                $ldapuser->setUserAccountControl(AccountControl::NORMAL_ACCOUNT);
                 $ldapuser->save();
             }
         }
 
         // Remove breach notification flag
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
+    }
+
+    public function updateLdapUser()
+    {
+        if (!$this->member) {
+            return null;
+        }
+
+        $ad = new Adldap();
+        $provider = new Provider(config('adldap.proto'));
+        $ad->addProvider('proto', $provider);
+        $ad->connect('proto');
+
+        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
+
+        if ($ldapuser == null) {
+            print(sprintf("%s does not exist", $this->name));
+            $ldapuser = $provider->make()->user();
+
+            $ldapuser->cn = $this->member->proto_username;
+            $ldapuser->description = $this->id;
+            $ldapuser->save();
+
+            // Enable account
+            $uac = new AccountControl($ldapuser->getUserAccountControl());
+            $uac->accountIsNormal();
+            $ldapuser->setUserAccountControl($uac);
+        }
+
+        $username = $this->member->proto_username;
+
+        // Put user in right OU
+        $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
+
+        // Update user fields
+        $ldapuser->displayName = trim($this->name);
+        $ldapuser->givenName = trim($this->calling_name);
+
+        $lastnameGuess = explode(" ", $this->name);
+        array_shift($lastnameGuess);
+        $ldapuser->sn = trim(implode(" ", $lastnameGuess));
+
+        $ldapuser->mail = $this->email;
+        $ldapuser->wWWHomePage = $this->website;
+
+        if ($this->address && $this->address_visible) {
+
+            $ldapuser->l = $this->address->city;
+            $ldapuser->postalCode = $this->address->zipcode;
+            $ldapuser->streetAddress = $this->address->street . " " . $this->address->number;
+            $ldapuser->co = $this->address->country;
+
+        } else {
+
+            $ldapuser->l = null;
+            $ldapuser->postalCode = null;
+            $ldapuser->streetAddress = null;
+            $ldapuser->co = null;
+
+        }
+
+        if ($this->phone_visible) {
+            $ldapuser->telephoneNumber = $this->phone;
+        } else {
+            $ldapuser->telephoneNumber = null;
+        }
+
+        if ($this->photo) {
+            try {
+                $ldapuser->jpegPhoto = base64_decode($this->photo->getBase64(500, 500));
+            } catch (\Intervention\Image\Exception\NotReadableException $e) {
+                $ldapuser->jpegPhoto = null;
+            }
+        } else {
+            $ldapuser->jpegPhoto = null;
+        }
+
+        $ldapuser->setAttribute('sAMAccountName', $username);
+        $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
+
+        // Update account flags
+        $uac = new AccountControl($ldapuser->getUserAccountControl());
+        $uac->passwordDoesNotExpire();
+        $ldapuser->setUserAccountControl($uac);
+
+        $ldapuser->save();
     }
 
     /**
@@ -442,11 +527,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('Proto\Models\HelperReminder');
     }
 
-    public function getIsMemberAttribute() {
+    public function getIsMemberAttribute()
+    {
         return $this->member !== null;
     }
 
-    public function getPhotoPreviewAttribute() {
+    public function getPhotoPreviewAttribute()
+    {
         return $this->generatePhotoPath();
     }
 

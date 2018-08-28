@@ -68,7 +68,7 @@ class ActiveDirectorySync extends Command
             $this->removeObsoleteUsers($provider);
 
             $this->info("Synchronizing users to LDAP.");
-            $this->syncUsers($provider, $full);
+            $this->syncUsers($full);
 
             $this->info("Synchronizing committees to LDAP.");
             $this->syncCommittees($provider);
@@ -101,7 +101,7 @@ class ActiveDirectorySync extends Command
 
     }
 
-    private function syncUsers($provider, $full = false)
+    private function syncUsers($full = false)
     {
 
         $c = 0;
@@ -112,70 +112,9 @@ class ActiveDirectorySync extends Command
 
             if (!$full && strtotime($user->updated_at) < date('U', strtotime('-15 minutes'))) continue;
 
-            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $user->id)->first();
+            $this->info(sprintf("-- %s", $user->name));
 
-            $username = $user->member->proto_username;
-
-            if ($ldapuser == null) {
-                $this->info('Creating LDAP user for ' . $user->name . '.');
-                $ldapuser = $provider->make()->user();
-                $ldapuser->cn = $username;
-                $ldapuser->description = $user->id;
-                $ldapuser->save();
-            }
-
-            $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
-
-            $ldapuser->displayName = trim($user->name);
-            $ldapuser->givenName = trim($user->calling_name);
-
-            $lastnameGuess = explode(" ", $user->name);
-            array_shift($lastnameGuess);
-            $ldapuser->sn = trim(implode(" ", $lastnameGuess));
-
-            $ldapuser->mail = $user->email;
-            $ldapuser->wWWHomePage = $user->website;
-
-            if ($user->address && $user->address_visible) {
-
-                $ldapuser->l = $user->address->city;
-                $ldapuser->postalCode = $user->address->zipcode;
-                $ldapuser->streetAddress = $user->address->street . " " . $user->address->number;
-                $ldapuser->co = $user->address->country;
-
-            } else {
-
-                $ldapuser->l = null;
-                $ldapuser->postalCode = null;
-                $ldapuser->streetAddress = null;
-                $ldapuser->co = null;
-
-            }
-
-            if ($user->phone_visible) {
-                $ldapuser->telephoneNumber = $user->phone;
-            } else {
-                $ldapuser->telephoneNumber = null;
-            }
-
-            if ($user->photo) {
-                try {
-                    $ldapuser->jpegPhoto = base64_decode($user->photo->getBase64(500, 500));
-                } catch (\Intervention\Image\Exception\NotReadableException $e) {
-                    $ldapuser->jpegPhoto = null;
-                }
-            } else {
-                $ldapuser->jpegPhoto = null;
-            }
-
-            $ldapuser->setAttribute('sAMAccountName', $username);
-            $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-            $uac = new AccountControl($ldapuser->getUserAccountControl());
-            $uac->passwordDoesNotExpire();
-            $ldapuser->setUserAccountControl($uac);
-
-            $ldapuser->save();
+            $user->updateLdapUser();
 
             $c++;
 

@@ -165,6 +165,8 @@ class UserAdminController extends Controller
 
         /** End create member alias */
 
+        $user->updateLdapUser();
+
         $member->save();
 
         Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
