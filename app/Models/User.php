@@ -127,7 +127,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
 
         if ($ldapuser == null) {
-            print(sprintf("%s does not exist", $this->name));
             $ldapuser = $provider->make()->user();
 
             $ldapuser->cn = $this->member->proto_username;
