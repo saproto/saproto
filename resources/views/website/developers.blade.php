@@ -8,15 +8,31 @@
 
     <div class="row">
 
-        <div class="col-md-7">
-
-            <div class="btn-group btn-group-justified" style="margin-bottom: 30px;">
-                <a class="btn btn-info btn-lg"
+        <div class="row" style="margin: 0; margin-bottom: 30px;">
+            <div class="col-md-4">
+                <a class="btn btn-warning btn-lg" style="width: 100%;"
+                   href="https://wiki.proto.utwente.nl/ict/services">
+                    <i class="fa fa-info-circle" aria-hidden="true" style="margin-right: 20px;"></i>
+                    Information about our IT services
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-info btn-lg" style="width: 100%;"
                    href="https://wiki.proto.utwente.nl/ict/issues">
                     <i class="fa fa-graduation-cap" aria-hidden="true" style="margin-right: 20px;"></i>
                     Learn how to report errors!
                 </a>
             </div>
+            <div class="col-md-4">
+                <a class="btn btn-success btn-lg" style="width: 100%;"
+                   href="https://wiki.proto.utwente.nl/ict/issues">
+                    <i class="fa fa-question-circle" aria-hidden="true" style="margin-right: 20px;"></i>
+                    Answers to frequent questions
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-7">
 
             <div class="panel panel-default container-panel">
 
