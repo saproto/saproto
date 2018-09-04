@@ -122,7 +122,7 @@
 
             <p>
                 <i>This will not change your University of Twente password.</i> You can change that password <a
-                        href="https://tap.utwente.nl/tap/" target="_blank">here</a>.
+                        href="https://tap.utwente.nl/chpw1.php" target="_blank">here</a>.
             </p>
 
         </div>
@@ -142,3 +142,33 @@
     </div>
 
 </form>
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <strong>Password sync</strong>
+    </div>
+
+    <div class="panel-body">
+
+        <p>
+            Synchronizing your password between all Proto systems will resolve a lot of problems you may have with
+            logging in to services like e-mail, the network drive and the wiki. If you can't login there, but can log-in
+            on the Proto site, you may want to sync your password below.
+        </p>
+
+    </div>
+
+    <div class="panel-footer">
+
+        <div class="btn-group btn-group-justified" role="group">
+            <div class="btn-group" role="group">
+                <a href="{{ route('login::password::sync') }}" class="btn btn-success">
+                    Synchronize passwords
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
