@@ -32,7 +32,7 @@
 <!-- Large modal -->
 <div id="diet-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <form method="post" action="{{ route("user::diet::edit", ["id"=>$user->id]) }}">
+        <form method="post" action="{{ route("user::diet::edit") }}">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">

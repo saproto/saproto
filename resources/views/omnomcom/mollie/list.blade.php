@@ -71,7 +71,7 @@
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('user::dashboard', ['id' => $transaction->user->id]) }}">
+                                        <a href="{{ route('user::admin::details', ['id' => $transaction->user->id]) }}">
                                             {{ $transaction->user->name }}
                                         </a>
                                     </td>

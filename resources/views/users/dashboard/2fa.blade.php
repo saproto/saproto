@@ -44,7 +44,7 @@
             <div onclick="return confirm('Do really want to unset time-based 2FA?')"
                  class="btn-group btn-group-justified" role="group">
                 <div class="btn-group" role="group">
-                    <a href="{{ route('user::2fa::deletetimebased', ['user' => $user->id]) }}"
+                    <a href="{{ route('user::2fa::deletetimebased') }}"
                        class="btn btn-danger">
                         Disable Two-Factor Authentication
                     </a>

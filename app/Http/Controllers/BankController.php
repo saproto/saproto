@@ -21,16 +21,12 @@ use Validator;
 class BankController extends Controller
 {
 
-    public function addForm($id, Request $request)
+    public function addForm(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
 
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
         if ($user->bank != null) {
-            Session::flash("flash_message", "You already have a bank authorization. Please use the update form.");
-            return Redirect::route('user::dashboard', ['id' => $id]);
+            return Redirect::route('user::bank::edit');
         }
 
         if ($request->wizard) Session::flash("wizard", true);
@@ -38,18 +34,10 @@ class BankController extends Controller
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => true]);
     }
 
-    public function add($id, Request $request)
+    public function add(Request $request)
     {
 
-        $user = User::find($id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if ($user->id != Auth::id()) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $bankdata = BankController::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
@@ -71,35 +59,28 @@ class BankController extends Controller
 
         if (Session::get('wizard')) return Redirect::route('becomeamember');
 
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
 
     }
 
-    public function editForm($id)
+    public function editForm()
     {
-        $user = User::findOrFail($id);
+        $user = Auth::user();
 
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
         if ($user->bank == null) {
-            Session::flash("flash_message", "You don't have a bank authorization to update.");
-            return Redirect::route('user::dashboard', ['id' => $id]);
+            return Redirect::route('user::bank::add');
         }
 
         return view('users.bankaccounts.addbank', ['user' => $user, 'new' => false]);
     }
 
-    public function edit($id, Request $request)
+    public function edit(Request $request)
     {
-        $user = User::findOrFail($id);
 
-        if ($user->id != Auth::id()) {
-            abort(403);
-        }
+        $user = Auth::user();
+
         if ($user->bank == null) {
-            Session::flash("flash_message", "You don't have a bank authorization to update.");
-            return Redirect::route('user::dashboard', ['id' => $id]);
+            return Redirect::route('user::bank::add');
         }
 
         $bankdata = BankController::doVerifyIban($request->input('iban'), $request->input('bic'));
@@ -120,21 +101,18 @@ class BankController extends Controller
 
         Session::flash("flash_message", "New withdrawal authorization added.");
 
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
+
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404);
-        }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+
+        $user = Auth::user();
+
         if ($user->bank == null) {
             Session::flash("flash_message", "You don't have a bank authorization to revoke.");
-            return Redirect::route('user::dashboard', ['id' => $id]);
+            return Redirect::route('user::dashboard');
         }
         if ($user->member) {
             Session::flash("flash_message", "As a member you cannot revoke your bank authorization. You can update it, though.");
@@ -147,7 +125,8 @@ class BankController extends Controller
         $user->bank->delete();
 
         Session::flash("flash_message", "Deleted bank account.");
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
+
     }
 
     public function verifyIban(Request $request)

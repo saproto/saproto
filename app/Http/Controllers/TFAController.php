@@ -16,14 +16,10 @@ use Redirect;
 class TFAController extends Controller
 {
 
-    public function timebasedPost(Request $request, $user_id, Google2FA $google2fa)
+    public function timebasedPost(Request $request, Google2FA $google2fa)
     {
 
-        $user = User::findOrFail($user_id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $code = $request->input('2facode');
         $secret = $request->input('2fakey');
@@ -34,25 +30,21 @@ class TFAController extends Controller
             $user->save();
 
             $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication enabled!');
-            return Redirect::route('user::dashboard', ['id' => $user->id]);
+            return Redirect::route('user::dashboard');
 
         } else {
 
             $request->session()->flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
-            return Redirect::route('user::dashboard', ['id' => $user->id]);
+            return Redirect::route('user::dashboard');
 
         }
 
     }
 
-    public function timebasedDelete($user_id, Request $request)
+    public function timebasedDelete(Request $request)
     {
 
-        $user = User::findOrFail($user_id);
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         if ($user->tfa_totp_key !== null) {
             $user->tfa_totp_key = null;
@@ -60,7 +52,7 @@ class TFAController extends Controller
         }
 
         $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
 
     }
 

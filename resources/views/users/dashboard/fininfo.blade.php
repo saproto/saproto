@@ -37,7 +37,7 @@
                 @if(!$user->bank)
 
                     <a type="submit" class="btn btn-success"
-                       href="{{ route("user::bank::add", ["id"=>$user->id]) }}">
+                       href="{{ route("user::bank::add") }}">
                         Authorize for automatic withdrawal
                     </a>
 
@@ -53,7 +53,7 @@
                     @else
 
                         <a type="submit" class="btn btn-success"
-                           href="{{ route("user::bank::edit", ["id"=>$user->id]) }}">
+                           href="{{ route("user::bank::edit") }}">
                             Update your bank authorization
                         </a>
 

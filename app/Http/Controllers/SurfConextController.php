@@ -21,13 +21,9 @@ class SurfConextController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id, Request $request)
+    public function create(Request $request)
     {
-        $user = User::findOrFail($id);
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         if ($request->wizard) Session::flash("wizard", true);
 
@@ -46,13 +42,9 @@ class SurfConextController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request)
     {
-        $user = User::findOrFail($id);
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $user->utwente_username = null;
         $user->edu_username = null;
@@ -60,6 +52,6 @@ class SurfConextController extends Controller
         $user->save();
 
         $request->session()->flash('flash_message', 'The link with your university account has been deleted.');
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
     }
 }

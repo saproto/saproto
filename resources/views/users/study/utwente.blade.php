@@ -51,7 +51,7 @@
 
             <div class="pull-right">
                 <input type="submit" class="btn btn-success" value="Link">
-                <a href="{{ route('user::dashboard', ['id' => $user->id]) }}" class="btn btn-default">Cancel</a>
+                <a href="{{ route('user::dashboard') }}" class="btn btn-default">Cancel</a>
             </div>
 
     </form>

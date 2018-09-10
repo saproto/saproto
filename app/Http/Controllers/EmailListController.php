@@ -95,33 +95,30 @@ class EmailListController extends Controller
      * @param $user_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function toggleSubscription(Request $request, $id, $user_id)
+    public function toggleSubscription(Request $request, $id)
     {
 
-        $user = User::findOrfail($user_id);
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
         $list = EmailList::findOrFail($id);
 
         if ($list->isSubscribed($user)) {
             if ($list->unsubscribe($user)) {
                 $request->session()->flash('flash_message', 'You have been unsubscribed to the list ' . $list->name . '.');
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
+                return Redirect::route('user::dashboard');
             }
         } else {
             if ($list->is_member_only && !$user->member) {
                 $request->session()->flash('flash_message', 'This list is only for members.');
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
+                return Redirect::route('user::dashboard');
             }
             if ($list->subscribe($user)) {
                 $request->session()->flash('flash_message', 'You have been subscribed to the list ' . $list->name . '.');
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
+                return Redirect::route('user::dashboard');
             }
         }
 
         $request->session()->flash('flash_message', 'Something went wrong toggling your subscription for ' . $list->name . '.');
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
 
     }
 

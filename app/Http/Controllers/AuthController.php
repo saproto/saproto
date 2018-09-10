@@ -244,13 +244,9 @@ class AuthController extends Controller
      * @param $id The user id.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function deleteUser(Request $request, $id)
+    public function deleteUser(Request $request)
     {
-        $user = User::findOrFail($id);
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         if ($user->member) {
             $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
@@ -526,7 +522,7 @@ class AuthController extends Controller
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
             } else {
-                return Redirect::route('user::dashboard', ['id' => $user->id]);
+                return Redirect::route('user::dashboard');
             }
         }
 

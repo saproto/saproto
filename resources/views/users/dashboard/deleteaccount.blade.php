@@ -64,7 +64,7 @@
 
             </div>
             <div class="modal-footer">
-                <form method="POST" action="{{ route('user::delete', ['id' => $user->id]) }}">
+                <form method="POST" action="{{ route('user::delete') }}">
                     {!! csrf_field() !!}
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Keep my account.

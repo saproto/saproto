@@ -69,10 +69,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
 
-        Route::post('delete/{id}', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
+        Route::post('delete', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
         Route::post('password', ['as' => 'changepassword', 'uses' => 'AuthController@updatePassword']);
 
-        Route::get('personal_key/{id}', ['as' => 'personal_key::generate', 'uses' => 'UserDashboardController@generateKey']);
+        Route::get('personal_key', ['as' => 'personal_key::generate', 'uses' => 'UserDashboardController@generateKey']);
 
         /*
          * Routes related to members.
@@ -93,8 +93,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::group(['prefix' => 'admin', 'as' => 'admin::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'UserAdminController@index']);
-            Route::get('details/{id}', ['as' => 'details', 'uses' => 'UserAdminController@details']);
-            Route::post('update/{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
+            Route::get('{id}', ['as' => 'details', 'uses' => 'UserAdminController@details']);
+            Route::post('{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
@@ -102,15 +102,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);
 
-        Route::get('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
-        Route::post('dashboard/{id?}', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
+        Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
+        Route::post('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
 
         Route::get('{id?}', ['as' => 'profile', 'middleware' => ['member'], 'uses' => 'UserProfileController@show']);
 
         /*
          * Routes related to addresses.
          */
-        Route::group(['prefix' => '{id}/address', 'as' => 'address::'], function () {
+        Route::group(['prefix' => 'address', 'as' => 'address::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
             Route::get('delete', ['as' => 'delete', 'uses' => 'AddressController@delete']);
@@ -122,14 +122,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to diet.
          */
-        Route::group(['prefix' => '{id}/diet', 'as' => 'diet::'], function () {
+        Route::group(['prefix' => 'diet', 'as' => 'diet::'], function () {
             Route::post('edit', ['as' => 'edit', 'uses' => 'UserDashboardController@editDiet']);
         });
 
         /*
          * Routes related to bank accounts
          */
-        Route::group(['prefix' => '{id}/bank', 'as' => 'bank::'], function () {
+        Route::group(['prefix' => 'bank', 'as' => 'bank::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
             Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
             Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
@@ -158,7 +158,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to UT accounts
          */
-        Route::group(['prefix' => '{id}/edu', 'as' => 'edu::'], function () {
+        Route::group(['prefix' => 'edu', 'as' => 'edu::'], function () {
             Route::get('delete', ['as' => 'delete', 'uses' => 'SurfConextController@destroy']);
             Route::get('add', ['as' => 'add', 'uses' => 'SurfConextController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'SurfConextController@store']);
@@ -167,7 +167,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         /*
          * Routes related to 2FA
          */
-        Route::group(['prefix' => '{user_id}/2fa', 'as' => '2fa::'], function () {
+        Route::group(['prefix' => '2fa', 'as' => '2fa::'], function () {
             Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
             Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
         });
@@ -438,7 +438,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to e-mail.
      */
-    Route::get('togglelist/{id}/{user_id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
+    Route::get('togglelist/{id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
 
     Route::get('unsubscribe/{hash}', ['as' => 'unsubscribefromlist', 'uses' => 'EmailController@unsubscribeLink']);
 

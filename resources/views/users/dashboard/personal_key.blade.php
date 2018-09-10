@@ -27,7 +27,7 @@
         <div class="btn-group btn-group-justified" role="group"
              onclick="return confirm('Are you sure? This will invalidate any personal links including your personalized calendar.');">
             <div class="btn-group" role="group">
-                <a href="{{ route('user::personal_key::generate', ['user' => $user->id]) }}"
+                <a href="{{ route('user::personal_key::generate') }}"
                    class="btn btn-warning">
                     Generate me a new personal key
                 </a>

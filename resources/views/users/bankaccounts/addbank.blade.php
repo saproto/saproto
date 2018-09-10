@@ -128,7 +128,7 @@
                 I have read the authorization statement and agree with it.
             </button>
 
-            <a href="{{ route('user::dashboard', ['id' => $user->id]) }}" type="button"
+            <a href="{{ route('user::dashboard') }}" type="button"
                class="btn btn-default pull-right"
                data-dismiss="modal">
                 Cancel

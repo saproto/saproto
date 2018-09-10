@@ -74,9 +74,6 @@
                         <a class="btn btn-default btn-xs" href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-default btn-xs" href="{{ route('user::dashboard', ['id'=>$user->id]) }}">
-                            <i class="fa fa-dashboard" aria-hidden="true"></i>
-                        </a>
                         <a class="btn btn-default btn-xs @if(!$user->isMember) disabled @endif" href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}">
                             <i class="fa fa-user" aria-hidden="true"></i>
                         </a>

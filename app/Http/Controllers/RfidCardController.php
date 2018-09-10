@@ -27,12 +27,12 @@ class RfidCardController extends Controller
         switch ($request->input('credentialtype')) {
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
-                if(!$qrAuthRequest) {
+                if (!$qrAuthRequest) {
                     return "<span style='color: red;'>Invalid authentication token.</span>";
                 }
 
                 $user = $qrAuthRequest->authUser();
-                if(!$user) {
+                if (!$user) {
                     return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                 }
 
@@ -92,7 +92,7 @@ class RfidCardController extends Controller
     public function update(Request $request, $id)
     {
         $rfid = RfidCard::findOrFail($id);
-        if (($rfid->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
+        if ($rfid->user->id != Auth::id()) {
             abort(403);
         }
 
@@ -100,7 +100,7 @@ class RfidCardController extends Controller
         $rfid->save();
 
         $request->session()->flash('flash_message', 'Your RFID card has been updated.');
-        return Redirect::route('user::dashboard', ['id' => $rfid->user->id]);
+        return Redirect::route('user::dashboard');
     }
 
     /**
@@ -112,9 +112,9 @@ class RfidCardController extends Controller
     public function destroy(Request $request, $id)
     {
         $rfid = RfidCard::findOrFail($id);
-        if (($rfid->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        if ($rfid->user->id != Auth::id()) {
+        abort(403);
+    }
         $rfid->delete();
 
         $request->session()->flash('flash_message', 'Your RFID card has been deleted.');

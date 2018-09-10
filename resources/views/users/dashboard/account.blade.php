@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("user::dashboard", ["id" => $user->id]) }}">
+<form class="form-horizontal" method="post" action="{{ route("user::dashboard") }}">
 
     <div class="panel panel-default">
 
@@ -110,7 +110,7 @@
 
 </form>
 
-<form class="form-horizontal" method="post" action="{{ route("user::changepassword", ["id" => $user->id]) }}">
+<form class="form-horizontal" method="post" action="{{ route("user::changepassword") }}">
 
     <div class="panel panel-default">
 

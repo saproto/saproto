@@ -28,9 +28,6 @@
 
                 <!-- Quicklinks //-->
                 <li class="list-group-item list-group-item-success">Quicklinks</li>
-                <a class="list-group-item" href="{{ route('user::dashboard', ['id' => $user->id]) }}">
-                    Dashboard
-                </a>
                 @if($user->member)
                     <a class="list-group-item" href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
                         Profile

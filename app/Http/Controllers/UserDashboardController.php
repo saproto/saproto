@@ -27,25 +27,9 @@ class UserDashboardController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id = null)
+    public function show()
     {
-        if ($id == null) {
-            $id = Auth::id();
-        } else {
-            if ($id != Auth::id() && !Auth::user()->can('board')) {
-                abort(403);
-            }
-        }
-
-        $user = User::find($id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $qrcode = null;
         $tfakey = null;
@@ -58,22 +42,9 @@ class UserDashboardController extends Controller
         return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
     }
 
-    public function update($id = null, Request $request)
+    public function update(Request $request)
     {
-        if ($id == null) {
-            $id = Auth::id();
-        }
-
-        $user = User::find($id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
-
+        $user = Auth::user();
 
         $userdata['email'] = $request->input('email');
         $userdata['website'] = $request->input('website');
@@ -86,7 +57,7 @@ class UserDashboardController extends Controller
                 'phone' => 'required|regex:(\+[0-9]{8,16})'
             ]);
             if ($validator->fails()) {
-                return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
+                return Redirect::route('user::dashboard')->withErrors($validator);
             }
         }
 
@@ -101,7 +72,7 @@ class UserDashboardController extends Controller
                 'email' => 'required|email|unique:users',
             ]);
             if ($validator->fails()) {
-                return Redirect::route('user::dashboard', ['id' => $user->id])->withErrors($validator);
+                return Redirect::route('user::dashboard')->withErrors($validator);
             }
 
             $email = [
@@ -133,24 +104,20 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash("flash_message", "Changes saved.");
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
 
     }
 
-    public function editDiet(Request $request, $id)
+    public function editDiet(Request $request)
     {
 
-        $id = ($id ? $id : Auth::id());
-        $user = User::findOrFail($id);
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $user->diet = $request->input('diet');
         $user->save();
 
         Session::flash("flash_message", "Your diet and allergy information has been updated.");
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
 
     }
 
@@ -164,7 +131,7 @@ class UserDashboardController extends Controller
         return view("users.becomeamember", ['user' => $user]);
     }
 
-    public function getCompleteProfile(Request $request)
+    public function getCompleteProfile()
     {
         $user = Auth::user();
         if ($user->hasCompletedProfile()) {
@@ -236,17 +203,14 @@ class UserDashboardController extends Controller
         return Redirect::route('user::dashboard');
     }
 
-    public function generateKey($id)
+    public function generateKey()
     {
-        $user = User::findOrFail($id);
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $user->generateNewPersonalKey();
 
         Session::flash("flash_message", "New personal key generated.");
-        return Redirect::route('user::dashboard', ['id' => $user->id]);
+        return Redirect::route('user::dashboard');
     }
 
 }

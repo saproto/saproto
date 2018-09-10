@@ -23,12 +23,12 @@
             <div class="btn-group" role="group">
                 @if ($user->edu_username)
                     <a type="button" class="btn btn-danger"
-                       href="{{ route('user::edu::delete', ['id' => $user->id]) }}">
+                       href="{{ route('user::edu::delete') }}">
                         Unlink your account
                     </a>
                 @else
                     <a type="button" class="btn btn-success"
-                       href="{{ route('user::edu::add', ['id' => $user->id]) }}">
+                       href="{{ route('user::edu::add') }}">
                         Link a university account
                     </a>
                 @endif

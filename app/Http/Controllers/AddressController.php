@@ -21,15 +21,9 @@ use Redirect;
 class AddressController extends Controller
 {
 
-    public function addForm($id, Request $request)
+    public function addForm(Request $request)
     {
-        $user = User::find($id);
-        if ($user == null) {
-            abort(404);
-        }
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         if ($user->address) {
             return Redirect::route('user::address::edit', ['id' => $user->id, 'wizard' => $request->wizard]);
@@ -40,12 +34,9 @@ class AddressController extends Controller
         return view('users.addresses.add', ['user' => $user]);
     }
 
-    public function delete($id)
+    public function delete()
     {
-        $user = User::findOrFail($id);
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
         if (!$user->address) {
             Session::flash("flash_message", "We don't have an address for you?");
             return Redirect::back();
@@ -56,21 +47,13 @@ class AddressController extends Controller
         }
         $user->address->delete();
         Session::flash("flash_message", "Your address has been deleted.");
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
     }
 
-    public function add($id, Request $request)
+    public function add(Request $request)
     {
 
-        $user = User::find($id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         // Establish new address
         $address = new Address();
@@ -78,7 +61,7 @@ class AddressController extends Controller
         $addressdata = $request->all();
         $addressdata['user_id'] = $user->id;
         if (!$address->validate($addressdata)) {
-            return Redirect::route('user::address::add', ['id' => $id])->withErrors($address->errors());
+            return Redirect::route('user::address::add')->withErrors($address->errors());
         }
         $address->fill($addressdata);
 
@@ -89,14 +72,14 @@ class AddressController extends Controller
 
         if (Session::get('wizard')) return Redirect::route('becomeamember');
 
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
 
     }
 
-    public function edit($id, Request $request)
+    public function edit(Request $request)
     {
 
-        $user = User::findOrFail($id);
+        $user = Auth::user();
         $address = $user->address;
 
         if ($address == null) {
@@ -104,15 +87,11 @@ class AddressController extends Controller
             return Redirect::back();
         }
 
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
         $addressdata = $request->all();
         $addressdata['user_id'] = $user->id;
 
         if (!$address->validate($addressdata)) {
-            return Redirect::route('user::address::edit', ['id' => $id])->withErrors($address->errors());
+            return Redirect::route('user::address::edit')->withErrors($address->errors());
         }
         $address->fill($addressdata);
         $address->save();
@@ -121,14 +100,14 @@ class AddressController extends Controller
 
         if (Session::get('wizard')) return Redirect::route('becomeamember');
 
-        return Redirect::route('user::dashboard', ['id' => $id]);
+        return Redirect::route('user::dashboard');
 
     }
 
-    public function editForm(Request $request, $id)
+    public function editForm(Request $request)
     {
 
-        $user = User::findOrFail($id);
+        $user = Auth::user();
         $address = $user->address;
 
         if ($address == null) {
@@ -136,27 +115,15 @@ class AddressController extends Controller
             return Redirect::back();
         }
 
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
-
         if ($request->wizard) Session::flash("wizard", true);
 
         return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
     }
 
-    public function toggleHidden($id, Request $request)
+    public function toggleHidden()
     {
 
-        $user = User::find($id);
-
-        if ($user == null) {
-            abort(404);
-        }
-
-        if (($user->id != Auth::id()) && (!Auth::user()->can('board'))) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $user->address_visible = !$user->address_visible;
         $user->save();

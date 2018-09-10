@@ -27,7 +27,7 @@
                     <br>
                     Click
 
-                    <a href="{{ route('user::address::togglehidden', ['id' => $user->id]) }}">
+                    <a href="{{ route('user::address::togglehidden') }}">
                         here
                     </a>
 
@@ -50,7 +50,7 @@
             <div class="btn-group btn-group-justified" role="group">
                 <div class="btn-group" role="group">
                     <a type="button" class="btn btn-success"
-                       href="{{ route('user::address::add', ['id' => $user->id]) }}">
+                       href="{{ route('user::address::add') }}">
                         Add your address
                     </a>
                 </div>
@@ -59,7 +59,7 @@
             @if($user->member)
                 <div class="btn-group btn-group-justified" role="group">
                     <a class="btn btn-success"
-                       href="{{ route('user::address::edit', ['id' => $user->id]) }}">
+                       href="{{ route('user::address::edit') }}">
                         Update your address
                     </a>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="col-md-6">
                         <div class="btn-group btn-group-justified" role="group">
                             <a class="btn btn-success"
-                               href="{{ route('user::address::edit', ['id' => $user->id]) }}">
+                               href="{{ route('user::address::edit') }}">
                                 Update
                             </a>
                         </div>
@@ -76,7 +76,7 @@
                     <div class="col-md-6">
                         <div class="btn-group btn-group-justified" role="group">
                             <a class="btn btn-danger"
-                               href="{{ route('user::address::delete', ['id' => $user->id]) }}">
+                               href="{{ route('user::address::delete') }}">
                                 Delete
                             </a>
                         </div>

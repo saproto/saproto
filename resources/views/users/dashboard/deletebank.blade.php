@@ -33,7 +33,7 @@
 
             </div>
             <div class="modal-footer">
-                <form method="POST" action="{{ route('user::bank::delete', ['id' => $user->id]) }}">
+                <form method="POST" action="{{ route('user::bank::delete') }}">
                     {!! csrf_field() !!}
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Keep my authorization active
