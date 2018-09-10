@@ -97,7 +97,6 @@ class UserDashboardController extends Controller
 
         if ($userdata['email'] !== $user->email) {
 
-
             $validator = Validator::make($userdata, [
                 'email' => 'required|email|unique:users',
             ]);

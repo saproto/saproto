@@ -151,7 +151,7 @@
 
 @endif
 
-@if (false && count($errors->all()) > 0)
+@if (count($errors->all()) > 0)
 
     <!-- Modal -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
