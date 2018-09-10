@@ -127,17 +127,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Board Room Calendar
-    |--------------------------------------------------------------------------
-    |
-    | The Google calendar ID for the imported timetable.
-    |
-    */
-
-    'boardroom-google-timetable-id' => 'student.utwente.nl_g21lqberj6o1makrue2rjjn3n8@group.calendar.google.com',
-
-    /*
-    |--------------------------------------------------------------------------
     | Protopeners Calendar
     |--------------------------------------------------------------------------
     |

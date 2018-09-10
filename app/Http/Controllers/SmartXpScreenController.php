@@ -29,13 +29,6 @@ class SmartXpScreenController extends Controller
 
     }
 
-    public function boardroomTimetable()
-    {
-
-        return CalendarController::returnGoogleCalendarEvents(config('proto.boardroom-google-timetable-id'), date('c', strtotime("today")), date('c', strtotime("+1 week")));
-
-    }
-
     public function protopenersTimetable()
     {
 

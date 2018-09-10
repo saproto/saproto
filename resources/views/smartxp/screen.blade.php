@@ -206,7 +206,7 @@
 
         <div class="col-md-4">
 
-            <div class="box-partial" style="height: 90%;">
+            <div class="box-partial" style="height: 100%;">
 
                 <div class="box" style="height: 100%;">
 
@@ -221,16 +221,6 @@
                         <div class="notice">Loading timetable...</div>
 
                     </div>
-
-                </div>
-
-            </div>
-
-            <div class="box-partial" style="height: 10%;">
-
-                <div class="box" style="height: 100%;">
-
-                    <div id="protopener" class="notice">Loading Protopener...</div>
 
                 </div>
 
@@ -271,31 +261,13 @@
 
             <div class="box-partial" style="height: 33.33%;">
 
-                <div class="box" style="height: 100%;">
+                <div id="protopeners" class="box" style="height: 100%;">
 
-                    <div class="col-md-6">
-
-                        <div class="box-header small">
-                            Hallenweg
-                        </div>
-
-                        <div id="businfo-hallen" class="businfo">
-
-                        </div>
-
+                    <div class="box-header small">
+                        Protopolis (<span id="protopolis-status">Checking</span>)
                     </div>
 
-                    <div class="col-md-6">
-
-                        <div class="box-header small">
-                            Westerbegraafplaats
-                        </div>
-
-                        <div id="businfo-wester" class="businfo">
-
-                        </div>
-
-                    </div>
+                    <div id="protopeners-timetable"></div>
 
                 </div>
 
@@ -327,13 +299,31 @@
 
             <div class="box-partial" style="height: 33.33%;">
 
-                <div id="boardroom" class="box" style="height: 100%;">
+                <div class="box" style="height: 100%;">
 
-                    <div id="boardroom-title" class="box-header small">
-                        Boardroom Timetable (<span id="boardroom-status">Checking</span>)
+                    <div class="col-md-6">
+
+                        <div class="box-header small">
+                            Hallenweg
+                        </div>
+
+                        <div id="businfo-hallen" class="businfo">
+
+                        </div>
+
                     </div>
 
-                    <div id="boardroom-timetable"></div>
+                    <div class="col-md-6">
+
+                        <div class="box-header small">
+                            Westerbegraafplaats
+                        </div>
+
+                        <div id="businfo-wester" class="businfo">
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -442,7 +432,6 @@
             success: function (data) {
                 if (data.length > 0) {
                     $(element).html('');
-                    console.log(data);
                     for (i in data) {
                         $(element).append('<div class="busentry">' + data[i].time + ' ' + data[i].mode.name + ' ' + data[i].service + ' <span style="color: #c1ff00;">' + (data[i].realtimeText !== null ? data[i].realtimeText + ' (' + data[i].realtimeState + ')' : '(' + data[i].realtimeState + ')') + '</span><br>Towards ' + data[i].destinationName + '</div>');
                     }
@@ -459,83 +448,48 @@
     updateBuses();
     setInterval(updateBuses, 60000);
 
-    function updateBoardroom() {
-        $.ajax({
-            url: '{{ route('api::timetable::boardroom') }}',
-            dataType: 'json',
-            success: function (data) {
-                if (data.length > 0) {
-                    var count = 0;
-                    $("#boardroom-timetable").html('');
-                    var occupied = false;
-                    for (i in data) {
-                        if (data[i].over) {
-                            continue;
-                        }
-
-                        count++;
-
-                        var start = moment.unix(data[i].start);
-                        var end = moment.unix(data[i].end);
-
-                        var day = start.format("dddd");
-                        var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-
-                        if (data[i].current) {
-                            occupied = true;
-                        }
-
-                        $("#boardroom-timetable").append('' +
-                            '<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' +
-                            '<div class="pull-left" style="width: 125px;"><strong>' + day + '</strong></div>' +
-                            time +
-                            '<div class="pull-right"><strong>' + data[i].title + '</strong></div>' +
-                            '</div>');
-                    }
-                    if (count == 0) {
-                        $("#timetable").html('<div class="notice">No reservations in the next 7 days!</div>');
-                    }
-                    if (occupied) {
-                        $("#boardroom-status").removeClass('green').html("Occupied");
-                    } else {
-                        $("#boardroom-status").addClass('green').html("Available");
-                    }
-                } else {
-                    $("#boardroom-timetable").html('<div class="notice">No reservations today!</div>');
-                }
-                setTimeout(updateBoardroom, 60000);
-            },
-            error: function () {
-                $("#boardroom-timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
-                setTimeout(updateBoardroom, 5000);
-            }
-        })
-    }
-
-    updateBoardroom();
-
     function updateProtopeners() {
         $.ajax({
             url: '{{ route('api::timetable::protopeners') }}',
             dataType: 'json',
             success: function (data) {
-                var protopener = null;
                 if (data.length > 0) {
+                    $("#protopeners-timetable").html('');
+                    var open = false;
+                    var count = 0;
                     for (i in data) {
-                        if (data[i].current) {
-                            protopener = data[i].title
+                        if (data[i].over) {
+                            continue;
+                        } else if (data[i].current) {
+                            open = true;
                         }
+                        count++;
+
+                        var start = moment.unix(data[i].start);
+                        var end = moment.unix(data[i].end);
+                        var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+
+                        $("#protopeners-timetable").append('' +
+                            '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
+                            '<div class="pull-left">' + time + '</div>' +
+                            '<div class="pull-right"><strong>' + data[i].title + '</strong></div>' +
+                            '</div>');
                     }
-                }
-                if (protopener !== null) {
-                    $("#protopener").html('Your current Protopener is <span class="green">' + protopener + '</span>');
+                    if (open) {
+                        $("#protopolis-status").addClass('green').html("Open");
+                    } else {
+                        $("#protopolis-status").removeClass('green').html("Closed");
+                    }
+                    if (count == 0) {
+                        $("#protopeners-timetable").html('<div class="notice">Protopolis closed for today!</div>');
+                    }
                 } else {
-                    $("#protopener").html('Nobody is Protopening right now.');
+                    $("#protopeners-timetable").html('<div class="notice">Protopolis closed today!</div>');
                 }
                 setTimeout(updateProtopeners, 60000);
             },
             error: function () {
-                $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
+                $("#protopeners-timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
                 setTimeout(updateProtopeners, 5000);
             }
         })

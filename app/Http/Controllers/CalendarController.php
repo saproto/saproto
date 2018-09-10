@@ -48,7 +48,7 @@ class CalendarController extends Controller
             }
 
             if (property_exists($entry, 'description')) {
-                preg_match(" / Type: (.*)/", $entry->description, $type);
+                preg_match(" /Type: (.*)/", $entry->description, $type);
                 preg_match('/Student set\(s\):.*(CRE MOD[0-9]{2}|IT M [0-9]{1}[a-zA-Z]{1}).*/', $entry->description, $study);
             } else {
                 $type = null;
