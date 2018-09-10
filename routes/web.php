@@ -97,6 +97,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('{id}', ['as' => 'update', 'uses' => 'UserAdminController@update']);
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
+            Route::get('studied_itech/{id}', ['as' => 'toggle_studied_itech', 'uses' => 'UserAdminController@toggleStudiedITech']);
             Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
         });
 

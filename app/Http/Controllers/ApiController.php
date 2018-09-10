@@ -102,17 +102,6 @@ class ApiController extends Controller
         }
     }
 
-    public function ldapProxy($personal_key)
-    {
-        $user = User::where('personal_key', $personal_key)->first();
-        if (!$user || !$user->member || !$user->utwente_username) {
-            abort(403, 'You do not have access to this data. You need to be a member and have a valid UT account linked.');
-        }
-        $query = (isset($_GET['filter']) ? $_GET['filter'] : '|(false)');
-        $url = config('app-proto.utwente-ldap-hook') . "?filter=" . $query;
-        return file_get_contents($url);
-    }
-
     public function fishcamStream()
     {
         header("Content-Transfer-Encoding: binary");

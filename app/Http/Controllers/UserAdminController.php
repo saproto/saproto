@@ -222,6 +222,16 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
+    public function toggleStudiedITech($id)
+    {
+        $user = User::findOrFail($id);
+        $user->did_study_itech = !$user->did_study_itech;
+        $user->save();
+
+        Session::flash("flash_message", "Toggled ITech status of " . $user->name . ".");
+        return redirect()->back();
+    }
+
     public function showForm(Request $request, $id)
     {
 

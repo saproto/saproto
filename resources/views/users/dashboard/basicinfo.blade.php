@@ -26,6 +26,16 @@
 
             @endif
 
+            @if($user->did_study_itech)
+
+                <p style="text-align: center;" title="Is this incorrect? Let the board know.">
+                    <sup>
+                        You are studying or have studied Interaction Technology.
+                    </sup>
+                </p>
+
+            @endif
+
             @if($user->hasCompletedProfile())
 
                 <hr>

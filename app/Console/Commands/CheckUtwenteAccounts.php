@@ -57,18 +57,30 @@ class CheckUtwenteAccounts extends Command
             // See if user is active
             $active = true;
             if (count($remoteusers) < 1) {
-                $unlinked[] = "Not found: $userprincipalname (" . $user->name . ")";
+                $msg = "Not found: $userprincipalname (" . $user->name . ")";
+                $this->info($msg);
+                $unlinked[] = $msg;
                 $active = false;
             } else if (!$remoteusers[0]->active) {
-                $unlinked[] = "Inactive: $userprincipalname (" . $user->name . ")";
+                $msg = "Inactive: $userprincipalname (" . $user->name . ")";
+                $this->info($msg);
+                $unlinked[] = $msg;
                 $active = false;
             }
 
-            // See if user studies CreaTe
-            if (strpos($remoteusers[0]->department, "CREA") > 0) {
-                $user->did_study_create = true;
+            if ($active && property_exists($remoteusers[0], 'department')) {
+                // See if user studies CreaTe
+                if (strpos($remoteusers[0]->department, "CREA") > 0) {
+                    $user->did_study_create = true;
+                }
+                // See if user studies ITech
+                if (strpos($remoteusers[0]->department, "ITECH") > 0) {
+                    $user->did_study_itech = true;
+                }
+                $user->utwente_department = $remoteusers[0]->department;
+            } else {
+                $user->utwente_department = null;
             }
-            $user->utwente_department = $remoteusers[0]->department;
             $user->save();
 
             // Act

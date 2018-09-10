@@ -33,11 +33,6 @@ return [
     'google-key-private' => env('GOOGLE_KEY_PRIVATE'),
 
     /*
-     * UTwente LDAP webhook
-     */
-    'utwente-ldap-hook' => env('LDAP_URL_UTWENTE', null),
-
-    /*
      * DirectAdmin config
      */
     'directadmin-hostname' => env('DA_HOSTNAME', null),

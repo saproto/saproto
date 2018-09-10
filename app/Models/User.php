@@ -196,18 +196,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasOne('Proto\Models\Member');
     }
 
-    public function getUtwenteData()
-    {
-        if ($this->utwente_username) {
-            $data = json_decode(file_get_contents(config('app-proto.utwente-ldap-hook') . "?filter=userprincipalname=" . $this->utwente_username . "*"));
-            if (count($data) > 0) {
-                return (object)$data[0];
-            } else {
-                return null;
-            }
-        }
-    }
-
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');

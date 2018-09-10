@@ -4,6 +4,8 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use Proto\Http\Controllers\LdapController;
+
 use Proto\Models\Member;
 
 class CountPrimaryMembers extends Command
@@ -40,16 +42,16 @@ class CountPrimaryMembers extends Command
     public function handle()
     {
         // Get a list of all CreaTe students.
-        $ldap_students = json_decode(file_get_contents(config('app-proto.utwente-ldap-hook') . '?filter=department=*B-CREA*'));
+        $ldap_students = LdapController::searchUtwente("|(department=*B-CREA*)(department=*M-ITECH*)");
 
         $names = [];
         $emails = [];
         $usernames = [];
 
         foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname[0] . ' ' . $student->sn[0]);
-            $emails[] = strtolower($student->mail[0]);
-            $usernames[] = $student->uid[0];
+            $names[] = strtolower($student->givenname . ' ' . $student->sn);
+            $emails[] = strtolower($student->mail);
+            $usernames[] = $student->uid;
         }
 
         $print_members = $this->option('show');
