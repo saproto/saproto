@@ -49,12 +49,15 @@
 
         <div class="form-group">
             <label for="newsletter-text">Text in newsletter</label>
-                <textarea id="newsletter-text" name="text"
-                          placeholder="Enter newsletter text here...">{{ Newsletter::getText()->value }}</textarea>
+            <textarea id="newsletter-text" name="text"
+                      placeholder="Enter newsletter text here...">{{ Newsletter::getText()->value }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Save text
-        </button>
+        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Save text</button>
+        <a class="btn btn-default pull-right" style="margin-left: 15px;" target="_blank"
+           href="{{ route("newsletter::preview") }}">
+            Preview
+        </a>
 
     </form>
 
