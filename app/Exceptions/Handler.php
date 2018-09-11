@@ -54,8 +54,6 @@ class Handler extends ExceptionHandler
 
             $sentry = app('sentry');
 
-            $context = null;
-
             if (Auth::check()) {
 
                 $user = Auth::user();
@@ -70,18 +68,7 @@ class Handler extends ExceptionHandler
                     $roles[] = $role->name;
                 }
 
-                $context = [
-                    'id' => $user->id,
-                    'is_member' => $user->member != null,
-                    'roles' => $roles,
-                    'committees' => $committees
-                ];
-
             }
-
-            $sentry->user_context([
-                'user' => $context
-            ]);
 
             $this->sentryID = $sentry->captureException($e);
 
