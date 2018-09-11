@@ -98,9 +98,9 @@ return [
     */
 
     'kickinEvent' => (object)[
-        'start' => strtotime('21 august 2017'),
-        'end' => strtotime('17 september 2017'),
-        'event' => 595
+        'start' => strtotime('21 august 2018'),
+        'end' => strtotime('21 september 2018'),
+        'event' => 913
     ],
 
     /*
@@ -145,7 +145,7 @@ return [
     |
     */
 
-    'internal' => 'Jaimy de Kok',
+    'internal' => 'Philippe Tuinman',
 
     /*
     |--------------------------------------------------------------------------
@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'treasurer' => 'Sarah Hoekstra',
+    'treasurer' => 'Maxim de Leeuw',
 
     /*
     |--------------------------------------------------------------------------
@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'secretary' => 'Quinten Tenger',
+    'secretary' => 'Emiel Steegh',
 
     /*
     |--------------------------------------------------------------------------
