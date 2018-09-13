@@ -26,7 +26,7 @@ class Flickr extends Model
         return $albums;
     }
 
-    public static function getPhotos($albumID, $include_private = false)
+    public static function getPhotos($albumID)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -178,6 +178,10 @@ class Flickr extends Model
     {
 
         $data = Flickr::getPhotosFromApiPerPage($albumId, 1);
+
+        if (!$data) {
+            return false;
+        }
 
         while ($data->page < $data->pages) {
 
