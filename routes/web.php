@@ -589,14 +589,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /**
-     * Routes related to printing.
-     */
-    Route::group(['prefix' => 'print', 'middleware' => ['member'], 'as' => 'print::'], function () {
-        Route::get('', ['as' => 'form', 'uses' => 'PrintController@form']);
-        Route::post('', ['as' => 'print', 'uses' => 'PrintController@doPrint']);
-    });
-
-    /**
      * Routes related to YouTube videos.
      */
     Route::group(['prefix' => 'video', 'as' => 'video::'], function () {
