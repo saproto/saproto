@@ -275,6 +275,7 @@ return [
         'FlickrAlbum' => \Proto\Models\FlickrAlbum::class,
         'Newsletter' => \Proto\Models\Newsletter::class,
         'PlayedVideo' => \Proto\Models\PlayedVideo::class,
+        'Announcement' => \Proto\Models\Announcement::class,
 
         'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,

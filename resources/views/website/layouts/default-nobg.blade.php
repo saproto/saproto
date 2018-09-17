@@ -4,6 +4,8 @@
 
     <div id="container" class="container container-nobg">
 
+        @include('website.announcements')
+
         @yield('content')
 
     </div>

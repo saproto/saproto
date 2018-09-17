@@ -155,10 +155,12 @@
                             <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
 
                             @if(Auth::user()->can('sysadmin'))
+                                <li role="separator" class="divider"></li>
                                 <li><a href="{{ route("protube::radio::index") }}">ProTube Radio Stations</a></li>
                                 <li><a href="{{ route("protube::display::index") }}">ProTube Displays</a></li>
                                 <li><a href="{{ route("protube::soundboard::index") }}">Soundboard Sounds</a></li>
                                 <li><a href="{{ route("alias::index") }}">Aliases</a></li>
+                                <li><a href="{{ route("announcement::index") }}">Announcements</a></li>
                                 <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
                             @endif
 

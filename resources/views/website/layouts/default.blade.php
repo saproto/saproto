@@ -4,6 +4,8 @@
 
     <div id="container" class="container">
 
+        @include('website.announcements')
+
         @yield('content')
 
     </div>

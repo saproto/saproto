@@ -421,10 +421,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return ($this->member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
     }
 
-    public function isElegibleForKickInCamp()
+    /**
+     * This function returns a guess of the system for whether or not they are a first year student.
+     * Note that this is a GUESS. There is no way for us to know sure without manually setting a flag on each user.
+     * @return bool Whether or not the system thinks this is a first year.
+     */
+    public function isFirstYear()
     {
-        return $this->member && date('U') > config('proto.kickinEvent')->start && date('U') < config('proto.kickinEvent')->end
-            && $this->member->created_at->format('U') > config('proto.kickinEvent')->start;
+        return $this->member
+            && Carbon::instance(new DateTime($this->member->created_at))->age < 1
+            && $this->did_study_create;
     }
 
     public function hasTFAEnabled()

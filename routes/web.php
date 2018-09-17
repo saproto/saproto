@@ -603,6 +603,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'VideoController@publicIndex']);
     });
 
+    /**
+     * Routes related to announcements.
+     */
+    Route::group(['prefix' => 'announcement', 'as' => 'announcement::'], function () {
+        Route::group(['prefix' => 'admin', 'middleware' => ['permission:admin'], 'as' => ''], function () {
+            Route::get('', ['as' => 'index', 'uses' => 'AnnouncementController@index']);
+            Route::get('add', ['as' => 'add', 'uses' => 'AnnouncementController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'AnnouncementController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'AnnouncementController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'AnnouncementController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AnnouncementController@destroy']);
+            Route::get('clear', ['as' => 'clear', 'uses' => 'AnnouncementController@clear']);
+        });
+        Route::get('dismiss/{id}', ['as' => 'dismiss', 'uses' => 'AnnouncementController@dismiss']);
+    });
+
     /*
      * Routes related to Flickr photos.
      */

@@ -195,9 +195,6 @@ class Activity extends Validatable
      */
     public function canSubscribe()
     {
-        if (Auth::check() && Auth::user()->isElegibleForKickInCamp() && $this->event->id == config('proto.kickinEvent')->event) {
-            return true;
-        }
         if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }

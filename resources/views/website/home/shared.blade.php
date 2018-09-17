@@ -43,7 +43,7 @@
 
     <div class="container" style="margin-top: 30px;">
 
-        @include('kickin.notice')
+        @include('website.announcements')
 
         @section('visitor-specific')
         @show

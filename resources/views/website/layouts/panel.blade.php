@@ -6,6 +6,8 @@
 
         <div class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
 
+            @include('website.announcements')
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     @section('panel-title')
