@@ -431,7 +431,7 @@
 
                     <div class="panel-body" style="text-align: center;">
                         <p>This activity requires you to sign-up. You can only sign-up when you are a member.</p>
-                        @if(!Auth::check()) <p>Please <a href="{{ route('login::show') }}">log-in</a> if you are already
+                        @if(!Auth::check()) <p>Please <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a> if you are already
                             a member.</p> @endif
                         @if(Auth::check() && !Auth::user()->member) <p>Please <a href="{{ route('becomeamember') }}">become
                                 a member</a> to sign-up for this activity.</p> @endif

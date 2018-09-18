@@ -343,6 +343,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
+        // Force login for event
+        Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
+
     });
 
     Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {

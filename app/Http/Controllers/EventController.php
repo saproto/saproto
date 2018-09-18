@@ -167,6 +167,11 @@ class EventController extends Controller
         return view('event.display', ['event' => $event]);
     }
 
+    public function forceLogin($id)
+    {
+        return Redirect::route("event::show", ['id' => $id]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

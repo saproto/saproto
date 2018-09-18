@@ -89,7 +89,7 @@
 
                 @if(!Auth::check())
                     <p>
-                        Please <a href="{{ route('login::show') }}">log-in</a> to buy tickets.
+                        Please <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a> to buy tickets.
                     </p>
                 @else
                     <div class="form-horizontal">
