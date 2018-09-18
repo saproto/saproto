@@ -15,8 +15,8 @@
             <tr>
 
                 <th>Title</th>
-                <th width="100px">Published</th>
-                <th width="25px">Controls</th>
+                <th>Published</th>
+                <th>Controls</th>
 
             </tr>
 
@@ -29,6 +29,11 @@
                     <td>{{ $newsitem->title }}</td>
                     <td>@if($newsitem->isPublished()) <span style="color: green">{{ $newsitem->published_at }}</span> @else <span style="color: dimgrey">{{ $newsitem->published_at }}</span> @endif</td>
                     <td>
+                        <a class="btn btn-xs btn-default"
+                           href="{{ route('news::show', ['id' => $newsitem->id]) }}" role="button">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+
                         <a class="btn btn-xs btn-default"
                            href="{{ route('news::edit', ['id' => $newsitem->id]) }}" role="button">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
