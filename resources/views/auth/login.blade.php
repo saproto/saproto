@@ -35,6 +35,12 @@
         </p>
 
         <p>
+            <a class="btn btn-default" href="{{ route('login::register') }}" style="width: 100%;">
+                Create Proto account
+            </a>
+        </p>
+
+        <p>
             <a class="btn btn-default" href="{{ route('login::requestusername') }}" style="width: 100%;">
                 Forgot your username?
             </a>
