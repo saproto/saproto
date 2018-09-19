@@ -48,6 +48,10 @@
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
             @elseif(date('U') > strtotime('May 4') && date('U') < strtotime('May 5'))
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
+            @elseif(date('U') > strtotime('September 19') && date('U') < strtotime('September 20'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/talklikeapirate.png') }}');
+            @elseif(date('U') > strtotime('September 23') && date('U') < strtotime('December 22'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/autumn.png') }}');
             @else
                          background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
