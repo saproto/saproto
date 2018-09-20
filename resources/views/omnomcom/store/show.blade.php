@@ -36,26 +36,44 @@
         }
 
         body {
-            @if(date('U') > strtotime('December 6') && date('U') < strtotime('December 31'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
-            @elseif(date('U') > strtotime('November 25') && date('U') < strtotime('December 6'))
+            /**
+                Special OmNomCom monsters for special occasions. Priority is from top to bottom.
+                The first date is inclusive and should be the day when the monster should be appearing.
+                The second date is exclusive and should thus be the first day the monster should no longer be there.
+
+                Single days.
+             */
+            @if(date('U') > strtotime('November 25') && date('U') < strtotime('December 6'))
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
-            @elseif(date('U') > (easter_date() - 3600*24*7) && date('U') < (easter_date() + 3600*24))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
-            @elseif(date('U') > strtotime('March 10') && date('U') < strtotime('March 18'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
-            @elseif(date('U') > strtotime('April 1') && date('U') < strtotime('April 21'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
             @elseif(date('U') > strtotime('May 4') && date('U') < strtotime('May 5'))
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
             @elseif(date('U') > strtotime('September 19') && date('U') < strtotime('September 20'))
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/talklikeapirate.png') }}');
+            /**
+                Periods
+             */
+            @elseif(date('U') > strtotime('April 1') && date('U') < strtotime('April 21'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
+            @elseif(date('U') > strtotime('March 10') && date('U') < strtotime('March 18'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
+            @elseif(date('U') > (easter_date() - 3600*24*7) && date('U') < (easter_date() + 3600*24))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
+            @elseif(date('U') > strtotime('September 22') && date('U') < strtotime('October 3'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/oktoberfest.png') }}');
+            @elseif(date('U') > strtotime('December 6') && date('U') < strtotime('December 31'))
+                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+            /**
+                Seasons
+             */
             @elseif(date('U') > strtotime('September 23') && date('U') < strtotime('December 22'))
                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/autumn.png') }}');
+            /**
+                Default
+             */
             @else
                          background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
-                    background-position: center 220%;
+            background-position: center 220%;
             background-repeat: no-repeat;
         }
 
