@@ -6,12 +6,6 @@
         Hey {{ $user->calling_name }},
     </p>
 
-    <p>
-        Via this e-mail I would like to inform you about the upcoming activities of S.A. Proto. In this e-mail you will
-        find a summary of the activities along with the most important info. If you want to know more, be sure to click
-        through to our website!
-    </p>
-
     @if($text != '')
         <p>
 
