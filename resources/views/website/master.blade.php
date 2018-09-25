@@ -93,6 +93,10 @@
                 <a class="white" href="https://www.instagram.com/s.a.proto/" target="_blank">
                     <i class="fa fa-instagram" aria-hidden="true"></i>&nbsp;&nbsp;Instagram
                 </a>
+                <br>
+                <a class="white" href="https://www.snapchat.com/add/sa_proto" target="_blank">
+                    <i class="fa fa-snapchat-ghost" aria-hidden="true"></i>&nbsp;&nbsp;Snapchat
+                </a>
             </div>
             <div class="col-md-3 col-xs-6 footer__logo">
                 <img src="{{ asset('images/logo/inverse.png') }}" width="57%">
