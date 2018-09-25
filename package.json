@@ -3,9 +3,6 @@
   "version": "0.0.2",
   "description": "S.A. Proto Main Website",
   "main": "./public/index.php",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/saproto/saproto.git"
@@ -15,24 +12,29 @@
     "Utwente",
     "University of Twente",
     "Laravel",
-    "AngularJS",
     "JS",
     "SASS",
     "CSS",
-    "Bower",
     "Grunt"
   ],
   "author": "",
-  "license": "GNU General Public License (http://www.gnu.org/licenses)",
+  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/saproto/saproto/issues"
   },
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "private": false,
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47",
+    "js-cookie": "^2.2.0",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.21",
+    "simplemde": "^1.11.2"
+  },
   "devDependencies": {
     "bootstrap-sass": "^3.0.0",
     "babel-eslint": "^4.1.4",
-    "bower": "^1.3.12",
     "eslint": "^1.9.0",
     "eslint-config-eslint": "^1.0.1",
     "grunt": "^0.4.5",
@@ -53,20 +55,20 @@
     "tmp": "./tmp",
     "javascripts": {
       "src": [
-        "./resources/assets/bower/jquery/dist/jquery.min.js",
-        "./resources/assets/bower/moment/min/moment.min.js",
-        "./resources/assets/bower/bootstrap/dist/js/bootstrap.min.js",
-        "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
-        "./resources/assets/bower/js-cookie/src/js.cookie.js",
-        "./resources/assets/bower/simplemde/dist/simplemde.min.js",
-        "./resources/assets/bower/angular/angular.js",
-        "./resources/assets/bower/socket.io-client/dist/socket.io.js",
-        "./resources/assets/bower/chocolat/dist/js/jquery.chocolat.min.js",
-        "./resources/assets/bower/Croppie/croppie.min.js",
-        "./resources/assets/bower/ng-img-crop/compile/minified/ng-img-crop.js",
-        "./resources/assets/bower/jquery-dateFormat/dist/jquery-dateFormat.min.js",
-        "./resources/assets/bower/select2/dist/js/select2.full.min.js",
-        "./resources/assets/bower/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js"
+        "./node_modules/jquery/dist/jquery.min.js",
+        "./node_modules/moment/min/moment.min.js",
+        "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "./node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js",
+        "./node_modules/js-cookie/src/js.cookie.js",
+        "./node_modules/simplemde/dist/simplemde.min.js",
+        "./node_modules/angular/angular.js",
+        "./node_modules/socket.io-client/dist/socket.io.js",
+        "./node_modules/chocolat/dist/js/jquery.chocolat.min.js",
+        "./node_modules/Croppie/croppie.min.js",
+        "./node_modules/ng-img-crop/compile/minified/ng-img-crop.js",
+        "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js",
+        "./node_modules/select2/dist/js/select2.full.min.js",
+        "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -88,19 +90,16 @@
       "src": [
         "./resources/assets/sass/framework/**/*.scss",
         "./resources/views/**/*.scss",
-        "./resources/assets/bower/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
-        "./resources/assets/bower/simplemde/dist/simplemde.min.css",
-        "./resources/assets/bower/font-awesome/css/font-awesome.css",
-        "./resources/assets/bower/on-screen-keyboard/onScreenKeyboard.css",
-        "./resources/assets/bower/chocolat/dist/css/chocolat.css",
-        "./resources/assets/bower/Croppie/croppie.css",
-        "./resources/assets/bower/ng-img-crop/compile/minifiedo/ng-img-crop.css",
-        "./resources/assets/bower/select2/dist/css/select2.min.css",
-        "./resources/assets/bower/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
+        "./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css",
+        "./node_modules/simplemde/dist/simplemde.min.css",
+        "./node_modules/font-awesome/css/font-awesome.css",
+        "./node_modules/chocolat/dist/css/chocolat.css",
+        "./node_modules/select2/dist/css/select2.min.css",
+        "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [
-         "./resources/views/**/*.scss",
+        "./resources/views/**/*.scss",
         "./resources/assets/**/*.scss"
       ]
     }

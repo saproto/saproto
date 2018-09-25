@@ -51,11 +51,11 @@ module.exports = function (grunt) {
 
 		bump: {
 			options: {
-				files: ['package.json', 'bower.json'],
+				files: ['package.json'],
 				updateConfigs: [],
 				commit: true,
 				commitMessage: 'Release %VERSION%',
-				commitFiles: ['package.json', 'bower.json'],
+				commitFiles: ['package.json'],
 				createTag: true,
 				tagName: '%VERSION%',
 				tagMessage: 'Version %VERSION%',
@@ -75,13 +75,12 @@ module.exports = function (grunt) {
 			importer: importOnce,
 			importOnce: {
 				index: false,
-				css: true,
-				bower: false
+				css: true
 			},
 			options: {
 				outputStyle: 'expanded',
 				sourceComments: true,
-				includePaths: ['./resources/assets/bower/'],
+				includePaths: [],
 			},
 			dist: {
 				files: {

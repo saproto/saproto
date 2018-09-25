@@ -20,13 +20,6 @@ php artisan migrate
 # Add necessary roles.
 php artisan proto:generateroles
 
-# Update bower dependencies.
-if [ "$1" == --no-deps ]; then
-  echo "Not updating bower dependencies.";
-else
-  bower install
-fi
-
 # Fancy artisan stuff for the IDE.
 php artisan clear-compiled
 php artisan ide-helper:generate
