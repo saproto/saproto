@@ -26,7 +26,7 @@
             <p>
                 You have been charged the regular membership fee of &euro;{{ number_format($fee_amount, 2) }} because we
                 have determined, using information provided to us by the University of Twente, you are currently
-                studying Creative Technology at the Universtiy of Twente.
+                studying Creative Technology or Interaction Technology at the Universtiy of Twente.
             </p>
 
         @else
@@ -34,7 +34,7 @@
             <p>
                 You have been charged the reduced membership fee of &euro;{{ number_format($fee_amount, 2) }} because we
                 have determined, using information provided to us by the University of Twente, you are not a student of
-                the Creative Technology programme at the Universtiy of Twente.
+                the Creative Technology or Interaction Technology programmes at the Universtiy of Twente.
             </p>
 
         @endif
