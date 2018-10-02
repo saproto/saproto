@@ -221,8 +221,10 @@ class EventController extends Controller
             $event->image()->associate($file);
         }
 
-        $committee = Committee::find($request->input('committee'));
-        $event->committee()->associate($committee);
+        if ($request->has('committee')) {
+            $committee = Committee::find($request->input('committee'));
+            $event->committee()->associate($committee);
+        }
 
         $event->save();
 
