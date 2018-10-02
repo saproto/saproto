@@ -4,7 +4,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     Route::group(['middleware' => ['web']], function () {
 
-        Route::get('gdpr_export', ['as' => 'gdpr_export', 'uses' => 'ApiController@gdprExport']);
+        Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
 
         Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
         Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
