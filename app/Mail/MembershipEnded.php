@@ -7,12 +7,14 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\User;
+use Proto\Models\EmailList;
 
 class MembershipEnded extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $user;
+    public $lists;
 
     /**
      * Create a new message instance.
@@ -22,6 +24,7 @@ class MembershipEnded extends Mailable
     public function __construct(User $user)
     {
         $this->user = $user;
+        $this->lists = $this->getSubscriptionList();
     }
 
     /**
@@ -35,5 +38,15 @@ class MembershipEnded extends Mailable
             ->from('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)')
             ->subject('Termination of your membership of Study Association Proto')
             ->view('emails.membershipend');
+    }
+
+    public function getSubscriptionList()
+    {
+        $footer = [];
+        $lists = $this->user->lists;
+        foreach ($lists as $list) {
+            $footer[] = sprintf('<li>%s (<a href="%s">Unsubscribe</a>)</li>', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($this->user->id, $list->id)]));
+        }
+        return implode('', $footer);
     }
 }
