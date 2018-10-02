@@ -51,15 +51,9 @@ class GenerateRoles extends Command
 
         $permissions['sysadmin'] = Permission::where('name', '=', 'sysadmin')->first();
         if ($permissions['sysadmin'] == null) {
-            $permissions['sysadmin'] = new Permission(array('name' => 'sysadmin', 'display_name' => 'System Admin', 'description' => 'Gives root access to the application.'));
+            $permissions['sysadmin'] = new Permission(array('name' => 'sysadmin', 'display_name' => 'System Admin', 'description' => 'Gives admin access to the application.'));
             $permissions['sysadmin']->save();
             $this->info('Added sysadmin permission.');
-        }
-        $permissions['admin'] = Permission::where('name', '=', 'admin')->first();
-        if ($permissions['admin'] == null) {
-            $permissions['admin'] = new Permission(array('name' => 'admin', 'display_name' => 'Admin', 'description' => 'Gives admin access to the application.'));
-            $permissions['admin']->save();
-            $this->info('Added admin permission.');
         }
         $permissions['board'] = Permission::where('name', '=', 'board')->first();
         if ($permissions['board'] == null) {
