@@ -19,7 +19,7 @@
                 <form method="post"
                       action="{{ ($event == null ? route("event::add") : route("event::edit", ['id' => $event->id])) }}"
                       enctype="multipart/form-data">
-                    
+
                     @include('event.edit_includes.buttonbar')
 
                     <div class="panel-body">
