@@ -25,7 +25,7 @@
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "private": false,
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.0",
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.2",
@@ -33,7 +33,6 @@
     "simplemde": "^1.11.2"
   },
   "devDependencies": {
-    "bootstrap-sass": "^3.0.0",
     "babel-eslint": "^4.1.4",
     "eslint": "^1.9.0",
     "eslint-config-eslint": "^1.0.1",
