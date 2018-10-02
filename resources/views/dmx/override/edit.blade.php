@@ -18,7 +18,7 @@
 
         <div class="form-group">
             <label for="name">Fixtures to override:</label>
-            <select class="form-control" name="fixtures[]" multiple>
+            <select class="form-control" name="fixtures[]" multiple required>
                 @foreach($fixtures as $fixture)
                     <option value="{{ $fixture->id }}" {{ ($override && in_array($fixture->id, $override->getFixtureIds()) ? 'selected' : '') }}>
                         {{ $fixture->name }}
