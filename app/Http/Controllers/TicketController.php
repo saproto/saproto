@@ -250,7 +250,7 @@ class TicketController extends Controller
             Session::flash("flash_message", "You need to pay for this ticket before you can download it.");
             return Redirect::back();
         }
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream();
+        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream(sprintf('saproto-ticket-%s.pdf', $ticket->id));
     }
 
     /**
