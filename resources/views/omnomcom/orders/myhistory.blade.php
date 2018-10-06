@@ -63,7 +63,7 @@
                             <p>
                                 Using this service you can pay your outstanding balance using our external payment
                                 provider Mollie. Using Mollie you can pay your outstanding balance using iDeal,
-                                CreditCard, Bitcoin and various German and Belgien payment providers.
+                                CreditCard, Bitcoin and various German and Belgian payment providers.
                             </p>
                             <p>
                                 <strong>Important!</strong> Using this service you will incur a transaction fee on top
