@@ -25,6 +25,7 @@ composer.phar
 # Generated files
 /public/assets/saproto-sp-test.xml
 /resources/assets/sass/components.scss
+/public/assets/application.*
 
 # Dammit, Mac users
 .DS_Store
