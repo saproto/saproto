@@ -37,19 +37,19 @@
                 <div class="panel-heading">ProTube control</div>
                 <div class="panel-body">
                     <table class="table">
-                        <tr>
-                            <td>YouTube</td>
-                            <td><input class="slider" id="youtubeV" data-slider-id="youtubeVSlider" type="text"
+                        <tr style="height:60px;">
+                            <td style="vertical-align:middle;">YouTube</td>
+                            <td style="vertical-align:middle;"><input class="slider" id="youtubeV" data-slider-id="youtubeVSlider" type="text"
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
-                        <tr>
-                            <td>Radio</td>
-                            <td><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text"
+                        <tr style="height:60px;">
+                            <td style="vertical-align:middle;">Radio</td>
+                            <td style="vertical-align:middle;"><input class="slider" id="radioV" data-slider-id="radioVSlider" type="text"
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
-                        <tr>
-                            <td>Sounds</td>
-                            <td><input class="slider" id="soundboardV" data-slider-id="soundboardVSlider" type="text"
+                        <tr style="height:60px;">
+                            <td style="vertical-align:middle;">Sounds</td>
+                            <td style="vertical-align:middle;"><input class="slider" id="soundboardV" data-slider-id="soundboardVSlider" type="text"
                                        data-slider-min="0" data-slider-max="100" data-slider-step="1"/></td>
                         </tr>
                     </table>
