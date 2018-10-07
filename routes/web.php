@@ -687,7 +687,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
-    Route::get('boardroom', ['uses' => 'SmartXpScreenController@boardroomStatus']);
 
     /*
      * The routes for Protube.
