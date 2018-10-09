@@ -24,7 +24,7 @@
                         <em class="small-text">
                             Published {{ Carbon::parse($newsitem->published_at)->diffForHumans() }}
                         </em>
-                        <p class="medium-text">{!!  Markdown::convertToHtml(\Illuminate\Support\Str::words($newsitem->content, 50)) !!} </p>
+                        <p class="medium-text">{!! str_limit(strip_tags(Markdown::convertToHtml($newsitem->content)), 500) !!} </p>
                     </div>
                 </div>
             @endforeach

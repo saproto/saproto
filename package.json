@@ -100,7 +100,7 @@
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [
-         "./resources/views/**/*.scss",
+        "./resources/views/**/*.scss",
         "./resources/assets/**/*.scss"
       ]
     }
