@@ -37,17 +37,13 @@
 
 </head>
 
-<body ng-controller="AppController as app" style="display: block;" class="template-{{ $viewName }}">
+<body class="template-{{ $viewName }}" style="background-color: #e0e0e0;">
 
-<div id="wrap">
+<main role="main" class="container-fluid">
 
-    <div id="main">
+    @yield('body')
 
-        @yield('body')
-
-    </div>
-
-</div>
+</main>
 
 <footer class="main-footer" id="footer">
     <div class="container">
@@ -133,7 +129,6 @@
 
 @if (Session::has('flash_message'))
 
-    <!-- Modal -->
     <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

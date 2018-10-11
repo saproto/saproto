@@ -2,12 +2,8 @@
 
 @section('greeting')
 
-    <h1>
-        <strong>Welcome to Study Association Proto</strong>
-    </h1>
-    <h3>
-        S.A. Proto is the study association for Creative Technology at the University of Twente.
-    </h3>
+    <strong>Welcome to Study Association Proto</strong><br>
+    S.A. Proto is the study association for Creative Technology at the University of Twente.
 
 @endsection
 
@@ -86,7 +82,5 @@
     </div>
 
     <hr>
-
-    @include('website.home.recentphotos')
 
 @endsection

@@ -8,6 +8,7 @@ return [
 
     'primary-domain' => env('PRIMARY_DOMAIN'),
     'app-url' => config('app.url'),
+    'assets-domain' => env('REDIRECT_ASSETS_DOMAIN', null),
 
     /*
      * Whitelist for debug environment

@@ -2,12 +2,8 @@
 
 @section('greeting')
 
-    <h1>
-        <strong>Hi, {{ Auth::user()->calling_name }}</strong>
-    </h1>
-    <h3>
-        @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
-    </h3>
+    <strong>Hi, {{ Auth::user()->calling_name }}</strong><br>
+    @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
 
 @endsection
 
@@ -18,10 +14,6 @@
         <div class="col-md-8">
 
             @include('website.home.news')
-
-            @if(count($newsitems) <= 2)
-                @include('website.home.recentphotos')
-            @endif
 
         </div>
 
@@ -92,10 +84,6 @@
             </div>
 
         </div>
-
-        @if(count($newsitems) > 2)
-            @include('website.home.recentphotos')
-        @endif
 
     </div>
 

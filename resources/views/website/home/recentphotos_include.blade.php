@@ -1,6 +1,6 @@
 <div class="col-md-{{ $colsize }} col-xs-6">
 
-    <a href="{{ $link_to_photos ? route('photo::albums') : route('photo::album::list', ['id' => $album->id]) }}"
+    <a href="{{ $link_to_photos ?  :  }}"
        class="album-link">
         <div class="album"
              style="background-image: url('{!! $link_to_photos ? '': $album->thumb !!}'); background-color: #555;">

@@ -2,26 +2,30 @@
 
 @section('body')
 
-    <div id="auth__header">
+    <div class="container">
 
-        <h2>@yield('page-title')</h2>
+        <div id="auth__container" class="row justify-content-center align-self-center">
 
-    </div>
+            <div class="col col-sm-12 col-lg-4">
 
-    <div id="auth__container" class="col-lg-2 col-lg-offset-5 col-sm-4 col-sm-offset-4 col-xs-10 col-xs-offset-1">
+                <h2>@yield('page-title')</h2>
 
-        <p style="text-align: center">
-            <img id="auth__logo" src="{{ asset('images/logo/inverse.png') }}" width="150px">
-        </p>
+                <p style="text-align: center">
+                    <img id="auth__logo" src="{{ asset('images/logo/inverse.png') }}" width="150px">
+                </p>
 
-        @yield('login-body')
+                @yield('login-body')
 
-        <p style="text-align: center;">
-            <br>
-            <a href="/" style="color: #fff;">
-                <sub>Go back to homepage.</sub>
-            </a>
-        </p>
+                <p style="text-align: center;">
+                    <br>
+                    <a href="/" style="color: #fff;">
+                        <sub>Go back to homepage.</sub>
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 

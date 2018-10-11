@@ -1,34 +1,16 @@
 // Colors from http://paletton.com/#uid=72m0u0kvJuNjIBVp1wQxUoaDBiX
-$brand-primary: #C1FF00;
-$brand-success: #7FBA00;
-$brand-info: #7F38A9;
-$brand-warning: #C75600;
+$primary: #66b96a;
+
+$brand-primary: $primary;
+$brand-success: $primary;
+$brand-info: #00bbd3;
+$brand-warning: #f37e16;
 $brand-danger: #C50005;
 
-$link-color: $brand-success;
+$primary-color: #66b96a;
+$proto-darker: $primary-color;
 
-// Navbar
-$navbar-default-bg: transparent;
-
-$navbar-default-color: #fff;
-
-$navbar-default-brand-color: $navbar-default-color;
-$navbar-default-brand-hover-color: $navbar-default-color;
-
-$navbar-default-link-color: $navbar-default-color;
-$navbar-default-link-hover-color: $navbar-default-color;
-
-$navbar-default-link-active-bg: transparent;
-$navbar-default-link-active-color: $navbar-default-color;
-
-// Border radius
-$border-radius-small: 0px;
-$border-radius-base: 0px;
-$border-radius-large: 0px;
-
-// Panels
-$panel-default-heading-bg: #222;
-$panel-default-text: #fff;
+$link-color: #333;
 
 @import url(https://fonts.googleapis.com/css?family=Lato);
 
