@@ -6,16 +6,18 @@
 
 @section('container')
 
+    @include('website.announcements')
+
     <div class="row">
 
-        <div class="col-9">
+        <div class="col-xl-9 col-md-12">
 
             <div class="card text-white mb-3" style="height: 250px;">
                 <div class="card-body" style="background-image: url({{ asset('images/application/headerbg.jpg') }});
                         background-size: cover; background-position: center center; text-align: left;
-                        border: 10px solid #fff; vertical-align: bottom; font-size: 25px; display: flex;
+                        border: 5px solid #fff; vertical-align: bottom; font-size: 30px; display: flex;
                         text-shadow: 0 0 20px #000;">
-                    <p class="card-text" style="align-self: flex-end;">
+                    <p class="card-text ellipsis" style="align-self: flex-end;">
                         @section('greeting')
                         @show
                     </p>
@@ -24,7 +26,7 @@
 
             @if(count($companies) > 0)
 
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <p class="card-text" style="text-align: center;">
 
@@ -48,7 +50,7 @@
 
         </div>
 
-        <div class="col-3">
+        <div class="col-xl-3 col-md-12">
 
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">Recent photo albums</div>
@@ -56,17 +58,11 @@
 
                     @foreach(Flickr::getAlbums(4) as $key => $album)
 
-                        <a href="{{ route('photo::album::list', ['id' => $album->id]) }}" class="card text-white mb-3"
-                           style="text-decoration: none !important;">
-                            <div class="card-body" style="display: flex; background-image: url({{ $album->thumb }});
-                                    background-size: cover; background-position: center center; height: 100px;
-                                    text-shadow: 0 0 20px #000;">
-                                <p class="card-text" style="align-self: flex-end;">
-                                    {{ date('M j, Y', $album->date_taken) }}<br>
-                                    <strong>{{ $album->name }}</strong><br>
-                                </p>
-                            </div>
-                        </a>
+                        @include('website.layouts.redesign.card-bg-image', [
+                        'url' => route('photo::album::list', ['id' => $album->id]) ,
+                        'img' => $album->thumb,
+                        'html' => sprintf('%s<br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name)
+                        ])
 
                     @endforeach
 
@@ -88,15 +84,6 @@
         </div>
 
     </div>
-
-    </div>
-
-    <div class="container" style="margin-top: 30px;">
-
-        @include('website.announcements')
-
-        @section('visitor-specific')
-        @show
 
     </div>
 

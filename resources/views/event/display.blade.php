@@ -101,7 +101,11 @@
 
                         @foreach($event->albums as $album)
 
-                            @include('website.home.recentphotos_include', ['colsize'=> 6, 'album'=> $album, 'link_to_photos' => false])
+                            @include('website.layouts.redesign.card-bg-image', [
+                                'url' => route('photo::album::list', ['id' => $album->id]) ,
+                                'img' => $album->thumb,
+                                'html' => sprintf('%s<br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name)
+                            ])
 
                         @endforeach
 
@@ -431,7 +435,9 @@
 
                     <div class="panel-body" style="text-align: center;">
                         <p>This activity requires you to sign-up. You can only sign-up when you are a member.</p>
-                        @if(!Auth::check()) <p>Please <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a> if you are already
+                        @if(!Auth::check()) <p>Please <a
+                                    href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a> if
+                            you are already
                             a member.</p> @endif
                         @if(Auth::check() && !Auth::user()->member) <p>Please <a href="{{ route('becomeamember') }}">become
                                 a member</a> to sign-up for this activity.</p> @endif
