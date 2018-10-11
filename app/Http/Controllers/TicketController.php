@@ -56,6 +56,11 @@ class TicketController extends Controller
     public function store(Request $request)
     {
 
+        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::can('sysadmin')) {
+            Session::flash('flash_message', "Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.");
+            return Redirect::back();
+        }
+
         $ticket = new Ticket();
         $ticket->event_id = Event::findOrFail($request->input('event'))->id;
         $ticket->product_id = Product::findOrFail($request->input('product'))->id;
@@ -91,10 +96,20 @@ class TicketController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::user()->can('sysadmin')) {
+            Session::flash('flash_message', "Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.");
+            return Redirect::back();
+        }
+
         $ticket = Ticket::findOrFail($id);
 
-        $ticket->event_id = Event::findOrFail($request->input('event'))->id;
-        $ticket->product_id = Product::findOrFail($request->input('product'))->id;
+        if ($request->has('event')) {
+            $ticket->event_id = Event::findOrFail($request->input('event'))->id;
+        }
+        if ($request->has('product')) {
+            $ticket->product_id = Product::findOrFail($request->input('product'))->id;
+        }
+
         $ticket->members_only = $request->has('is_members_only');
         $ticket->is_prepaid = $request->has('is_prepaid');
         $ticket->available_from = strtotime($request->input('available_from'));
@@ -235,7 +250,7 @@ class TicketController extends Controller
             Session::flash("flash_message", "You need to pay for this ticket before you can download it.");
             return Redirect::back();
         }
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream();
+        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream(sprintf('saproto-ticket-%s.pdf', $ticket->id));
     }
 
     /**

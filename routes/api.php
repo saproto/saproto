@@ -4,7 +4,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     Route::group(['middleware' => ['web']], function () {
 
-        Route::get('gdpr_export', ['as' => 'gdpr_export', 'uses' => 'ApiController@gdprExport']);
+        Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
 
         Route::get('photos', ['as' => 'photos::albums', 'uses' => 'PhotoController@apiIndex']);
         Route::get('photos/{id}', ['as' => 'photos::albumList', 'uses' => 'PhotoController@apiShow']);
@@ -23,7 +23,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
         Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
-        Route::get('timetable/boardroom', ['as' => 'timetable::boardroom', 'uses' => 'SmartXpScreenController@boardroomTimetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('timetable/smartxp', ['as' => 'timetable::smartxp', 'uses' => 'SmartXpScreenController@smartxpTimetable']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);

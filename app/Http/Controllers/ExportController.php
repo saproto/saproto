@@ -42,7 +42,7 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                if ($user->can('admin')) {
+                if ($user->can('board')) {
                     $data = Activity::all();
                 } else {
                     $data = Activity::with('event')->get()->filter(function ($val) {
@@ -54,7 +54,7 @@ class ExportController extends Controller
                 }
                 break;
             case 'committees':
-                if ($user->can('admin')) {
+                if ($user->can('board')) {
                     $data = Committee::all();
                 } else {
                     $data = Committee::where('public', 1)->orWhereIn('id', array_values(config('proto.committee')))->get();
@@ -64,7 +64,7 @@ class ExportController extends Controller
                 $data = HelpingCommittee::all();
                 break;
             case 'events':
-                if ($user->can('admin')) {
+                if ($user->can('board')) {
                     $data = Event::all();
                 } else {
                     $data = Event::where('secret', 0)->get();

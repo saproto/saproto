@@ -20,6 +20,8 @@
                       action="{{ ($event == null ? route("event::add") : route("event::edit", ['id' => $event->id])) }}"
                       enctype="multipart/form-data">
 
+                    @include('event.edit_includes.buttonbar')
+
                     <div class="panel-body">
 
                         {!! csrf_field() !!}
@@ -192,20 +194,7 @@
 
                     </div>
 
-                    <div class="panel-footer clearfix">
-
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
-                        </button>
-
-                        @if($event)
-                            <a href="{{ route("event::delete", ['id' => $event->id]) }}"
-                               class="btn btn-danger pull-left">Delete</a>
-                        @endif
-
-                        <a href="{{ $event ? route('event::show', ['id' => $event->getPublicId()]) : URL::previous() }}"
-                           class="btn btn-default pull-right">Cancel</a>
-
-                    </div>
+                    @include('event.edit_includes.buttonbar')
 
                 </form>
 

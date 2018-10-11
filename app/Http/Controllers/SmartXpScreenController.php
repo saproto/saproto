@@ -116,8 +116,4 @@ class SmartXpScreenController extends Controller
             'answer' => $this->smartxpTimetable()->answer]);
     }
 
-    public function boardroomStatus()
-    {
-        return view('smartxp.boardroom');
-    }
 }

@@ -18,12 +18,18 @@
 
         <div class="form-group">
             <label for="product">Product:</label>
-            <select class="form-control product-search" id="product" name="product" required></select>
+            @if($ticket)
+            &nbsp; <i>{{ $ticket->product->name }}</i>
+            @endif
+            <select class="form-control product-search" id="product" name="product" {{ $ticket ? '' : 'required' }}></select>
         </div>
 
         <div class="form-group">
             <label for="event">Event:</label>
-            <select class="form-control event-search" id="event" name="event" required></select>
+            @if($ticket)
+                &nbsp; <i>{{ $ticket->event->title }} ({{ $ticket->event->getFormattedDateAttribute()->simple }})</i>
+            @endif
+            <select class="form-control event-search" id="event" name="event" {{ $ticket ? '' : 'required' }}></select>
         </div>
 
         <div class="form-group">
