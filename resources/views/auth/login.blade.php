@@ -35,19 +35,19 @@
         </p>
 
         <p>
-            <a class="btn btn-default" href="{{ route('login::register') }}" style="width: 100%;">
+            <a class="btn btn-outline-secondary" href="{{ route('login::register') }}" style="width: 100%;">
                 Create Proto account
             </a>
         </p>
 
         <p>
-            <a class="btn btn-default" href="{{ route('login::requestusername') }}" style="width: 100%;">
+            <a class="btn btn-outline-secondary" href="{{ route('login::requestusername') }}" style="width: 100%;">
                 Forgot your username?
             </a>
         </p>
 
         <p>
-            <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
+            <a class="btn btn-outline-secondary" href="{{ route('login::resetpass') }}" style="width: 100%;">
                 Forgot your password?
             </a>
         </p>

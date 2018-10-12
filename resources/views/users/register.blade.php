@@ -1,16 +1,12 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
-    New Account Registration
+    Register account
 @endsection
 
-@section('panel-title')
-    Registering a new account
-@endsection
+@section('login-body')
 
-@section('panel-body')
-
-    <form method="POST" action="{{ route('login::register') }}">
+    <form method="POST" action="{{ route('login::register') }}" class="text-left">
 
         @if(Session::get('wizard'))
             @include('users.registerwizard_macro')
@@ -39,43 +35,42 @@
 
         {!! csrf_field() !!}
 
-        <div class="form-group">
-            <label for="email" class="control-label">Your e-mail address:</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="j.doe@student.utwente.nl"
-                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['email'] : '') }}"
-                   required>
-            <p class="help-block">
-                Your e-mail address will also be your username. Please enter a valid e-mail address as your password
-                will be sent to this e-mail address.
-            </p>
-        </div>
+        <p>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Your e-mail address" required
+                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['email'] : '') }}">
+        </p>
+
+        <p>
+            Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
+            sent to this e-mail address.
+        </p>
 
         <hr>
 
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-5">
-                    <label for="name" class="control-label">Your first and last name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}"
-                           required>
-                </div>
-                <div class="col-md-5">
-                    <label for="calling_name" class="control-label">Calling name</label>
-                    <input type="text" class="form-control" id="calling_name" name="calling_name" placeholder="Johnny"
-                           value="{{ (Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '') }}"
-                           required>
-                </div>
-            </div>
-        </div>
+        <p>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Full name" required
+                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}">
+        </p>
+
+        <p>
+            <input type="text" class="form-control" id="calling_name" name="calling_name" placeholder="Calling name"
+                   required
+                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '') }}">
+        </p>
 
         <hr>
+
+        <p>
+            <a a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+               target="_blank" class="btn btn-outline-secondary btn-block">
+                Privacy policy
+            </a>
+        </p>
 
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="privacy_policy_acceptance" required>
-                I have read and agree with the <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
-                                                  target="_blank">privacy policy</a> of S.A. Proto.
+                I have read and acknowledge the privacy policy.
             </label>
         </div>
 
@@ -83,10 +78,10 @@
 
         {!! Recaptcha::render() !!}
 
-        @endsection
+        <hr>
 
-        @section('panel-footer')
-            <button type="submit" class="btn btn-success pull-right">Create my account</button>
+        <button type="submit" class="btn btn-success btn-block">Create my account</button>
 
     </form>
+
 @endsection

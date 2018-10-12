@@ -2,30 +2,48 @@
 
 @section('body')
 
-    <div class="container">
+    <div class="row justify-content-center">
 
-        <div id="auth__container" class="row justify-content-center align-self-center">
+        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12">
 
-            <div class="col col-sm-12 col-lg-4">
+            <div class="card mb-3" style="margin-top: 50px;">
 
-                <h2>@yield('page-title')</h2>
+                <div class="card-header text-center bg-dark text-white">
+                    @yield('page-title')
+                </div>
 
-                <p style="text-align: center">
-                    <img id="auth__logo" src="{{ asset('images/logo/inverse.png') }}" width="150px">
-                </p>
+                <div class="card-body text-center">
 
-                @yield('login-body')
+                    <img src="{{ asset('images/logo/regular.png') }}" width="50%">
 
-                <p style="text-align: center;">
-                    <br>
-                    <a href="/" style="color: #fff;">
-                        <sub>Go back to homepage.</sub>
-                    </a>
-                </p>
+                    <hr>
+
+                    @yield('login-body')
+
+                </div>
+
+                <a href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
+                    Go back to homepage.
+                </a>
 
             </div>
 
         </div>
+
+    </div>
+
+    <div id="auth__header">
+
+        <h2></h2>
+
+    </div>
+
+    <div id="auth__container" class="">
+
+        <p style="text-align: center;">
+            <br>
+
+        </p>
 
     </div>
 
@@ -37,7 +55,7 @@
 
     <style>
 
-        #footer {
+        footer {
             display: none;
         }
 
