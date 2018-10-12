@@ -1,61 +1,44 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     {{ $page->title }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="card">
 
-        <div class="@if($page->featuredImage || ($page->files->count() > 0 && $page->show_attachments)) col-md-8 @else col-md-12 @endif">
-
-            <div class="page-show__content">
-                {!! $parsedContent !!}
-            </div>
-
-        </div>
-
-        @if($page->featuredImage || ($page->files->count() > 0 && $page->show_attachments))
-
-            <div class="col-md-4">
-
-                @if($page->featuredImage)
-                    <div class="panel panel-default">
-                        <img src="{{ $page->featuredImage->generateImagePath('600', null) }}" class="img-responsive"/>
-                    </div>
-                @endif
-
-                @if($page->files->count() > 0 && $page->show_attachments)
-
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading">
-
-                            Attachments
-
-                        </div>
-
-                        <div class="panel-body">
-
-                            @foreach($page->files as $file)
-
-                                <p><i class="fa fa-paperclip" aria-hidden="true"></i> <a
-                                            href="{{ $file->generatePath() }}"
-                                            target="_blank">{{ $file->original_filename }}</a></p>
-
-                            @endforeach
-
-                        </div>
-
-                    </div>
-
-                @endif
-
-            </div>
-
+        @if($page->featuredImage)
+            <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}"
+                 style="width: 100%;">
         @endif
 
+        <div class="card-body">
+            <h5 class="card-title">@yield('page-title')</h5>
+            <p class="card-text">
+
+            {!! $parsedContent !!}
+
+            @if($page->files->count() > 0 && $page->show_attachments)
+
+                <hr>
+
+                <p>
+                    <strong>Attachments</strong>
+                </p>
+
+                @foreach($page->files as $file)
+
+                    <a href="{{ $file->generatePath() }}"                       target="_blank" class="card-link">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i> {{ $file->original_filename }}
+                    </a>
+
+                @endforeach
+
+            @endif
+
+            </p>
+        </div>
     </div>
 
 @endsection

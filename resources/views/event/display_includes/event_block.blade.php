@@ -6,12 +6,12 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body" style="text-align: left;
-                background: linear-gradient(rgba(255, 255, 255, 0.75),rgba(255, 255, 255, 0.75)), {{ $event->image ? sprintf('url(%s);', $event->image->generateImagePath(800,300)) : '#eee;' }};
+                background: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9)), {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('url(%s);', $event->image->generateImagePath(800,300)) : '#eee;' }};
                 background-size: cover; background-position: center center;">
 
             @if($event->activity && Auth::check())
                 @if($event->activity->isParticipating(Auth::user()))
-                    <i class="fa fa-check green" aria-hidden="true" title="You participate in this activity."></i>
+                    <i class="fa fa-check text-primary" aria-hidden="true" title="You participate in this activity."></i>
                 @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fa fa-life-ring" style="color: red;" aria-hidden="true"

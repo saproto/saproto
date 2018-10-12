@@ -22,7 +22,7 @@
 
                         @foreach($newsitems as $index => $newsitem)
 
-                            @include('website.layouts.redesign.card-bg-image', [
+                            @include('website.layouts.macros.card-bg-image', [
                             'url' => $newsitem->url(),
                             'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
                             'html' => sprintf('<strong>%s</strong><br>Published %s', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans())
@@ -44,21 +44,7 @@
 
         <div class="col-xl-4 col-md-12">
 
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">Upcoming events</div>
-                <div class="card-body">
-
-                    @foreach($events as $key => $event)
-
-                        @include('event.display_includes.event_block', ['event'=> $event])
-
-                        <?php $week = date('W', $event->start); ?>
-
-                    @endforeach
-
-                    <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
-                </div>
-            </div>
+            @include('website.layouts.macros.upcomingevents', ['n' => 5])
 
         </div>
 

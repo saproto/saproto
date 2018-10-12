@@ -6,7 +6,7 @@
 
         <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12">
 
-            <div class="card mb-3" style="margin-top: 50px;">
+            <div class="card mb-3 mt-5">
 
                 <div class="card-header text-center bg-dark text-white">
                     @yield('page-title')

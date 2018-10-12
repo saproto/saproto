@@ -520,4 +520,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->generatePhotoPath();
     }
 
+    public function getIcalUrl() {
+        return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
+    }
+
 }

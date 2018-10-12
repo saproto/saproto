@@ -6,6 +6,12 @@
 
     <div style="width: 100%; height: 71px;">&nbsp;</div>
 
-    @yield('container')
+    <main role="main" class="container-fluid">
+
+        @yield('container')
+
+    </main>
+
+    @include('website.footer')
 
 @endsection

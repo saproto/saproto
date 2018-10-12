@@ -41,8 +41,8 @@
     }
 
     .member-picture {
-        width: 30px;
-        height: 30px;
+        width: 19px;
+        height: 19px;
         background-size: cover;
         background-position: center center;
         float: left;

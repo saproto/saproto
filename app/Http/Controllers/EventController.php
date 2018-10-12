@@ -55,11 +55,9 @@ class EventController extends Controller
             $reminder = null;
         }
 
-        $relevant_only = Auth::check() && Auth::user()->getCalendarRelevantSetting() ? true : false;
-
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'relevant_only' => $relevant_only]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
     }
 
     /**
