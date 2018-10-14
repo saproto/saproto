@@ -6,8 +6,6 @@
 
 @section('container')
 
-    @include('website.announcements')
-
     <div class="row">
 
         <div class="col-xl-9 col-md-12">

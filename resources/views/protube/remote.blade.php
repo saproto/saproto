@@ -924,7 +924,7 @@
             '                    </div>\n' +
             '                    <div class="result_details">\n' +
             '                        <p><i class="fas fa-user" aria-hidden="true"></i> ' + item.channelTitle + '</p>\n' +
-            '                        <p><i class="fas fa-clock-o" aria-hidden="true"></i> ' + item.duration + '</p>\n' +
+            '                        <p><i class="far fa-clock" aria-hidden="true"></i> ' + item.duration + '</p>\n' +
             '                    </div>\n' +
             '                    <div class="addButton">\n' +
             '                        <i class="fas fa-plus" aria-hidden="true"></i>\n' +

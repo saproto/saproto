@@ -9,6 +9,8 @@
 
     <main role="main" class="container-fluid">
 
+        @include('website.announcements')
+
         <div class="row">
 
             <div class="col-lg-9">

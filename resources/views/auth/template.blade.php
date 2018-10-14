@@ -4,19 +4,15 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12">
+        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12 text-center">
 
             <div class="card mb-3 mt-5">
 
                 <div class="card-header text-center bg-dark text-white">
-                    @yield('page-title')
+                    S.A. Proto | @yield('page-title')
                 </div>
 
                 <div class="card-body text-center">
-
-                    <img src="{{ asset('images/logo/regular.png') }}" width="50%">
-
-                    <hr>
 
                     @yield('login-body')
 
@@ -28,22 +24,9 @@
 
             </div>
 
+            <img src="{{ asset('images/logo/regular.png') }}" width="60%" class="mb-3 mt-5">
+
         </div>
-
-    </div>
-
-    <div id="auth__header">
-
-        <h2></h2>
-
-    </div>
-
-    <div id="auth__container" class="">
-
-        <p style="text-align: center;">
-            <br>
-
-        </p>
 
     </div>
 

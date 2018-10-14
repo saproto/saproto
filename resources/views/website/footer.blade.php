@@ -22,10 +22,10 @@
             <div class="col-3">
                 <span class=" medium-text">
                     <br>
-                    <span class="fas fa-clock-o"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
-                    <span class="fas fa-phone"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
+                    <span class="far fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
+                    <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
                         4423</a><br>
-                    <span class="fas fa-paperclip"></span>&nbsp;&nbsp;
+                    <span class="far fa-envelope fa-fw"></span>&nbsp;&nbsp;
                     <a class="email white"
                        href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
                 </span>

@@ -25,7 +25,7 @@
         @endif
 
         @if ($event->activity->no_show_fee > 0)
-            <a href="#" class="list-group-item bg-warning text-white" data-toggle="modal" data-target="#noshow-modal">
+            <a href="#" class="list-group-item bg-info text-white" data-toggle="modal" data-target="#noshow-modal">
                 <i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Not showing up can cost you
                 &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
             </a>
@@ -33,7 +33,7 @@
 
         @if($event->activity->getParticipation(Auth::user()) !== null)
             @if($event->activity->canUnsubscribe() || $event->activity->getParticipation(Auth::user())->backup)
-                <a class="list-group-item bg-warning text-white"
+                <a class="list-group-item bg-danger text-white"
                    href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getParticipation(Auth::user())->id]) }}">
                     @if ($event->activity->getParticipation(Auth::user())->backup)
                         Sign me out of the back-up list.

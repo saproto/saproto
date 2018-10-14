@@ -199,7 +199,7 @@
                 {{ csrf_field() }}
                 <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search">
                 <button type="submit" class="btn btn-outline-light my-2 my-sm-0" style="">
-                    Search
+                    <i class="fas fa-search"></i>
                 </button>
             </form>
 
@@ -257,9 +257,9 @@
                 <form class="form-inline mt-2 mt-md-0">
                     <a class="btn btn-outline-light" href="{{ route('login::register') }}"
                        style="margin-right: 10px;">
-                        Register
+                        <i class="fas fa-user-plus mr-2"></i> Register
                     </a>
-                    <a class="btn btn-light" href="{{ route('login::show') }}"> Log-in </a>
+                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-unlock mr-2"></i> Log-in</a>
                 </form>
 
                 </form>

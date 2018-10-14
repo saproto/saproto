@@ -77,7 +77,7 @@
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({
             icons: {
-                time: "fas fa-clock-o",
+                time: "far fa-clock",
                 date: "fas fa-calendar",
                 up: "fas fa-arrow-up",
                 down: "fas fa-arrow-down",

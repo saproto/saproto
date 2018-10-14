@@ -11,30 +11,30 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
 
             @if($event->activity && Auth::check())
                 @if($event->activity->isParticipating(Auth::user()))
-                    <i class="fas fa-check text-primary" aria-hidden="true" title="You participate in this activity."></i>
+                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true" title="You participate in this activity."></i>
                 @endif
                 @if($event->activity->isHelping(Auth::user()))
-                    <i class="fas fa-life-ring" style="color: red;" aria-hidden="true"
+                    <i class="fas fa-life-ring fa-fw" style="color: red;" aria-hidden="true"
                        title="You are helping with this activity."></i>
                 @endif
             @endif
             @if (Auth::user() && $event->hasBoughtTickets(Auth::user()))
-                <i class="fas fa-ticket" style="color: dodgerblue;" aria-hidden="true"
+                <i class="fas fa-ticket fa-fw" style="color: dodgerblue;" aria-hidden="true"
                    title="You bought a ticket for this event."></i>
             @endif
             @if (Auth::check() && Auth::user()->member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
-                <i class="fas fa-exclamation-triangle" style="color: red;" aria-hidden="true"
+                <i class="fas fa-exclamation-triangle fa-fw" style="color: red;" aria-hidden="true"
                    title="This activity needs help, and you can provide that!"></i>
             @endif
             <strong>{{ $event->title }}</strong>
 
             <br>
 
-            <i class="fas fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
+            <i class="fas fa-map-marker-alt fa-fw" aria-hidden="true"></i> {{ $event->location }}
 
             <br>
 
-            <i class="fas fa-clock-o" aria-hidden="true"></i>
+            <i class="far fa-clock fa-fw" aria-hidden="true"></i>
             {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
 
             @if($event->is_external)

@@ -8,6 +8,8 @@
 
     <main role="main" class="container-fluid">
 
+        @include('website.announcements')
+
         @yield('container')
 
     </main>

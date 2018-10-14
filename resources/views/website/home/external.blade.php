@@ -103,7 +103,7 @@
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route("event::list") }}" class="btn btn-info btn-block">
-                <i class="fas fa-calendar mr-2" aria-hidden="true"></i> Upcoming events
+                <i class="far fa-calendar-alt mr-2" aria-hidden="true"></i> Upcoming events
             </a>
         </div>
 

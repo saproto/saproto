@@ -46,12 +46,12 @@
     <ul class="list-group list-group-flush">
 
         <li class="list-group-item">
-            <i class="fas fa-fw fa-clock-o" aria-hidden="true"></i>
+            <i class="far fa-fw fa-clock" aria-hidden="true"></i>
             {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
         </li>
 
         <li class="list-group-item">
-            <i class="fas fa-fw fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
+            <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> {{ $event->location }}
         </li>
 
         @if ($event->involves_food == true)
