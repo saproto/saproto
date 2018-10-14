@@ -396,7 +396,7 @@
             screen.on("queue", function (data) {
                 $("#queue ul").html("");
                 for (var i in data) {
-                    var invisible = (data[i].showVideo ? '' : '<i class="fa fa-eye-slash" aria-hidden="true"></i>');
+                    var invisible = (data[i].showVideo ? '' : '<i class="fas fa-eye-slash" aria-hidden="true"></i>');
                     $("#queue ul").append(`<li><img src="https://img.youtube.com/vi/${data[i].id}/0.jpg" /><h1>${data[i].title}${invisible}</h1></li>`);
                 }
             });

@@ -35,25 +35,25 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('menu::edit', ['id' => $menuItem->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
 
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
 
                         @if(!$menuItem->isFirst())
                             <a class="btn btn-xs btn-default"
                                href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}" role="button">
-                                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                <i class="fas fa-arrow-up" aria-hidden="true"></i>
                             </a>
                         @endif
 
                         @if(!$menuItem->isLast())
                             <a class="btn btn-xs btn-default"
                                href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}" role="button">
-                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                <i class="fas fa-arrow-down" aria-hidden="true"></i>
                             </a>
                         @endif
                     </td>
@@ -68,25 +68,25 @@
                             <td>
                                 <a class="btn btn-xs btn-default"
                                    href="{{ route('menu::edit', ['id' => $childItem->id]) }}" role="button">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <i class="fas fa-pencil" aria-hidden="true"></i>
                                 </a>
 
                                 <a class="btn btn-xs btn-danger"
                                    href="{{ route('menu::delete', ['id' => $childItem->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
                                 </a>
 
                                 @if(!$childItem->isFirst())
                                     <a class="btn btn-xs btn-default"
                                        href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}" role="button">
-                                        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                                        <i class="fas fa-arrow-up" aria-hidden="true"></i>
                                     </a>
                                 @endif
 
                                 @if(!$childItem->isLast())
                                     <a class="btn btn-xs btn-default"
                                        href="{{ route('menu::orderDown', ['id' => $childItem->id]) }}" role="button">
-                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                        <i class="fas fa-arrow-down" aria-hidden="true"></i>
                                     </a>
                                 @endif
                             </td>

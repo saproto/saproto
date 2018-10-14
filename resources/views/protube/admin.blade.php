@@ -59,7 +59,7 @@
                             </button>
                         </div>
                         <div class="btn-group" role="group" style="width: 50%;">
-                            <button type="button" class="btn btn-default" id="shuffleRadio" style="width: 80%;"><i class="fa fa-random"
+                            <button type="button" class="btn btn-default" id="shuffleRadio" style="width: 80%;"><i class="fas fa-random"
                                                                                                aria-hidden="true"></i>
                                 Radio
                             </button>
@@ -81,7 +81,7 @@
                     <div class="btn-group btn-group-justified" role="group" aria-label="ProTube controls">
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" id="skip">
-                                <i class="fa fa-fast-forward" aria-hidden="true"></i>
+                                <i class="fas fa-fast-forward" aria-hidden="true"></i>
                             </button>
                         </div>
                         <div class="btn-group" role="group">
@@ -91,12 +91,12 @@
                         </div>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" id="reload">
-                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                                <i class="fas fa-refresh" aria-hidden="true"></i>
                             </button>
                         </div>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-default" id="togglephotos">
-                                <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                                <i class="fab fa-youtube" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
                     <form id="searchForm">
                         <div class="form-group" width="100%">
                             <div class="input-group">
-                                <div class="input-group-addon"><label for="showVideo"><i class="fa fa-eye"
+                                <div class="input-group-addon"><label for="showVideo"><i class="fas fa-eye"
                                                                                          aria-hidden="true"></i></label>
                                     <input type="checkbox" id="showVideo" checked="checked"></div>
                                 <input type="text" class="form-control" id="searchBox" placeholder="Search YouTube...">
@@ -275,9 +275,9 @@
 
                 for (var i in data) {
                     var controls = "";
-                    if (i > 0) controls += '<span class="up" data-index="' + i + '"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i></span>';
-                    if (i < data.length - 1) controls += '<span class="down" data-index="' + i + '"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>';
-                    controls += '<span class="veto" data-index="' + i + '"><i class="fa fa-minus-circle" aria-hidden="true"></i></span>';
+                    if (i > 0) controls += '<span class="up" data-index="' + i + '"><i class="fas fa-arrow-circle-up" aria-hidden="true"></i></span>';
+                    if (i < data.length - 1) controls += '<span class="down" data-index="' + i + '"><i class="fas fa-arrow-circle-down" aria-hidden="true"></i></span>';
+                    controls += '<span class="veto" data-index="' + i + '"><i class="fas fa-minus-circle" aria-hidden="true"></i></span>';
 
                     queue.append('<div class="item" data-ytId="' + data[i].id + '">' +
                         '<img src="//img.youtube.com/vi/' + data[i].id + '/0.jpg" />' +
@@ -347,26 +347,26 @@
 
             admin.on("playerState", function (data) {
                 if (data.slideshow) {
-                    $("#togglephotos").html('<i class="fa fa-youtube-play" aria-hidden="true"></i>');
+                    $("#togglephotos").html('<i class="fab fa-youtube" aria-hidden="true"></i>');
                 } else {
-                    $("#togglephotos").html('<i class="fa fa-picture-o" aria-hidden="true"></i>');
+                    $("#togglephotos").html('<i class="fas fa-picture-o" aria-hidden="true"></i>');
                 }
                 if (data.playing) {
                     if (data.paused) {
-                        $("#playpause").html('<i class="fa fa-play" aria-hidden="true"></i>');
+                        $("#playpause").html('<i class="fas fa-play" aria-hidden="true"></i>');
                     } else {
-                        $("#playpause").html('<i class="fa fa-pause" aria-hidden="true"></i>');
+                        $("#playpause").html('<i class="fas fa-pause" aria-hidden="true"></i>');
                     }
-                    $("#skip").html('<i class="fa fa-fast-forward" aria-hidden="true"></i>');
+                    $("#skip").html('<i class="fas fa-fast-forward" aria-hidden="true"></i>');
                 } else {
-                    $("#playpause").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
-                    $("#togglephotos").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
-                    $("#skip").html('<i class="fa fa-ellipsis-h" aria-hidden="true"></i>');
+                    $("#playpause").html('<i class="fas fa-ellipsis-h" aria-hidden="true"></i>');
+                    $("#togglephotos").html('<i class="fas fa-ellipsis-h" aria-hidden="true"></i>');
+                    $("#skip").html('<i class="fas fa-ellipsis-h" aria-hidden="true"></i>');
                 }
                 if (data.protubeOn) {
-                    $("#protubeToggle").html('<i class="fa fa-toggle-on" aria-hidden="true"></i> ProTube');
+                    $("#protubeToggle").html('<i class="fas fa-toggle-on" aria-hidden="true"></i> ProTube');
                 } else {
-                    $("#protubeToggle").html('<i class="fa fa-toggle-off" aria-hidden="true"></i> ProTube');
+                    $("#protubeToggle").html('<i class="fas fa-toggle-off" aria-hidden="true"></i> ProTube');
                 }
             });
 

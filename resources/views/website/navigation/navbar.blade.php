@@ -233,7 +233,7 @@
                                     <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
                                         Slack
                                         <span class="badge badge-secondary">
-                                            <i class="fa fa-circle green"></i> <span id="slack__online">...</span>
+                                            <i class="fas fa-circle green"></i> <span id="slack__online">...</span>
                                         </span>
                                     </a>
                                 @endif

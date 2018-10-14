@@ -117,11 +117,11 @@
                                         {{ $purchase->user->name }}
                                         @if($purchase->user->age() >= 18)
                                             <span class="label label-success">
-                                                <i class="fa fa-check" aria-hidden="true"></i> 18+
+                                                <i class="fas fa-check" aria-hidden="true"></i> 18+
                                             </span>
                                         @else
                                             <span class="label label-danger">
-                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 18-
+                                                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> 18-
                                             </span>
                                         @endif
                                     </td>
@@ -129,11 +129,11 @@
                                         <td>
                                             @if ($purchase->user->hasDiet())
                                                 <span class="label label-danger">
-                                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> yes
+                                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> yes
                                                 </span>
                                             @else
                                                 <span class="label label-success">
-                                                    <i class="fa fa-check" aria-hidden="true"></i> no
+                                                    <i class="fas fa-check" aria-hidden="true"></i> no
                                                 </span>
                                             @endif
                                         </td>

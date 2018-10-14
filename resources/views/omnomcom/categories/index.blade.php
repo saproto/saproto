@@ -48,13 +48,13 @@
                             <td>
                                 <a class="btn btn-xs btn-default"
                                    href="{{ route('omnomcom::categories::edit', ['id' => $category->id]) }}" role="button">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <i class="fas fa-pencil" aria-hidden="true"></i>
                                 </a>
                                 <a class="btn btn-xs btn-danger"
                                    onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
                                    href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}"
                                    role="button">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </td>
 

@@ -36,18 +36,18 @@
                     </td>
                     <td>
                         <span style="color: red;">
-                            <i class="fa fa-tint" aria-hidden="true"></i>
+                            <i class="fas fa-tint" aria-hidden="true"></i>
                             {{ $override->red() }}
                         </span>&nbsp;&nbsp;
                         <span style="color: green;">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
+                                <i class="fas fa-tint" aria-hidden="true"></i>
                             {{ $override->green() }}
                             </span>&nbsp;&nbsp;
                         <span style="color: blue;">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
+                                <i class="fas fa-tint" aria-hidden="true"></i>
                             {{ $override->blue() }}
                             </span>&nbsp;&nbsp;
-                        <i class="fa fa-sun-o" aria-hidden="true"></i>
+                        <i class="fas fa-sun-o" aria-hidden="true"></i>
                         {{ $override->brightness() }}
                     </td>
                     <td>
@@ -57,11 +57,11 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('dmx::override::edit', ['id' => $override->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('dmx::override::delete', ['id' => $override->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

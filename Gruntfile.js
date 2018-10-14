@@ -5,8 +5,11 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 
 		copy: {
-			options: {
-				noProcess: ['**/*.{eot,woff2,woff,ttf,svg,dae,tga}']
+			fontawesome: {
+				expand: true,
+				cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
+				src: '**',
+				dest: '<%= pkg.paths.assets %>/fonts/'
 			}
 		},
 
@@ -157,6 +160,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
 	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'cssmin', 'autoprefixer']);
 
-	grunt.registerTask('default', ['build:js', 'build:sass']);
+	grunt.registerTask('default', ['build:js', 'build:sass', 'copy:fontawesome']);
 
 };

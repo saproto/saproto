@@ -26,7 +26,7 @@
 
         @if ($event->activity->no_show_fee > 0)
             <a href="#" class="list-group-item bg-warning text-white" data-toggle="modal" data-target="#noshow-modal">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Not showing up can cost you
+                <i class="fas fa-info-circle" aria-hidden="true"></i>&nbsp;&nbsp;Not showing up can cost you
                 &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
             </a>
         @endif
@@ -38,7 +38,7 @@
                     @if ($event->activity->getParticipation(Auth::user())->backup)
                         Sign me out of the back-up list.
                     @else
-                        Sign me out. <i class="fa fa-frown-o" aria-hidden="true"></i>
+                        Sign me out. <i class="fas fa-frown-o" aria-hidden="true"></i>
                     @endif
                 </a>
             @endif
@@ -131,7 +131,7 @@
                                     <select class="form-control user-search" name="user_id" required></select>
                                     <span class="input-group-btn">
                                                 <button type="submit" class="btn btn-sm btn-success">
-                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    <i class="fas fa-plus-circle" aria-hidden="true"></i>
                                                 </button>
                                             </span>
                                 </div>

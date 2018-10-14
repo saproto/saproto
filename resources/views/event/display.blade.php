@@ -115,7 +115,7 @@
                                                 <p class="pull-right activity__admin-controls">
                                                     <a class="activity__admin-controls__button--delete"
                                                        href="{{ route('event::deleteparticipation', ['participation_id' => $participation->id]) }}">
-                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                        <i class="fas fa-times" aria-hidden="true"></i>
                                                     </a>
                                                 </p>
                                             @endif
@@ -157,7 +157,7 @@
                                                             required></select>
                                                     <span class="input-group-btn">
                                                             <button type="submit" class="btn btn-success">
-                                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                                <i class="fas fa-plus-circle" aria-hidden="true"></i>
                                                             </button>
                                                         </span>
                                                 </div>

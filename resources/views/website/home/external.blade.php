@@ -9,11 +9,11 @@
 
 @section('left-column')
 
-    <div class="row row-eq-height">
+    <div class="row row-eq-height mb-3">
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card mb-3">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Prototyping</h5>
                     <p class="card-text">
@@ -34,7 +34,7 @@
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card mb-3">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Community</h5>
                     <p class="card-text">
@@ -57,11 +57,11 @@
 
     </div>
 
-    <div class="row row-eq-height">
+    <div class="row row-eq-height mb-3">
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card mb-3">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Creative</h5>
                     <p class="card-text">
@@ -78,7 +78,7 @@
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card mb-3">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Innovation</h5>
                     <p class="card-text">
@@ -97,13 +97,13 @@
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route('page::show', ['slug' => 'board']) }}" class="btn btn-info btn-block">
-                <i class="fa fa-user" aria-hidden="true"></i> Contact
+                <i class="fas fa-user mr-2" aria-hidden="true"></i> Contact
             </a>
         </div>
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route("event::list") }}" class="btn btn-info btn-block">
-                <i class="fa fa-calendar" aria-hidden="true"></i> Upcoming events
+                <i class="fas fa-calendar mr-2" aria-hidden="true"></i> Upcoming events
             </a>
         </div>
 

@@ -21,7 +21,7 @@
             @endforeach
 
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>&nbsp;&nbsp;Import calendar
+                <i class="fas fa-calendar-plus-o" aria-hidden="true"></i>&nbsp;&nbsp;Import calendar
             </button>
 
         </div>
@@ -53,7 +53,7 @@
 
                 <a class="btn btn-info" type="button" style="width: 100%;" target="_blank"
                    href="https://calendar.google.com/calendar/r?cid={{ urlencode(str_replace("https://", "http://", Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar"))) }}">
-                    <i class="fa fa-google" aria-hidden="true"></i>
+                    <i class="fas fa-google" aria-hidden="true"></i>
                     &nbsp;&nbsp;&nbsp;Add to Google Calendar
                 </a>
 

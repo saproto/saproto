@@ -266,7 +266,7 @@
                                 <p class="pull-right activity__admin-controls">
                                     <a class="activity__admin-controls__button--delete"
                                        href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                        <i class="fas fa-times" aria-hidden="true"></i>
                                     </a>
                                 </p>
                             </div>

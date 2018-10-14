@@ -33,9 +33,9 @@
                     <td>{{ $message->id }}</td>
                     <td>
                         @if($message->video())
-                            <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                            <i class="fab fa-youtube" aria-hidden="true"></i>
                         @elseif($message->image)
-                            <i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <i class="fas fa-picture-o" aria-hidden="true"></i>
                         @endif
                     </td>
                     <td>{{ $message->name }}</td>
@@ -53,11 +53,11 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

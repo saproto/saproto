@@ -23,7 +23,7 @@
                     </p>
                     <h4>{!! $entry["quote"] !!}</h4>
                     <div class="qq_like" data-id="{{ $entry->id }}">
-                        <i class="fa fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
+                        <i class="fas fa-thumbs-up {{ $entry->liked(Auth::user()->id) ? "qq_liked" : "" }}"></i>
                         <span>{{ count($entry->likes()) }}</span>
                     </div>
                     @if (Auth::check() && Auth::user()->can("board"))

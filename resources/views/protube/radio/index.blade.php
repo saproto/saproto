@@ -36,10 +36,10 @@
                         <a class="btn btn-danger"
                            onclick="return confirm('Are you sure you want to delete {{ $station->name }}?');"
                            href="{{ route('protube::radio::delete', ['id' => $station->id]) }}" role="button">
-                            <i class="fa fa-trash-o"></i> Delete
+                            <i class="fas fa-trash-o"></i> Delete
                         </a>
                         <a class="btn btn-success radio__test" data-url="{{ $station->url }}">
-                            <i class="fa fa-volume-up"></i> Test
+                            <i class="fas fa-volume-up"></i> Test
                         </a>
                     </td>
 
@@ -64,7 +64,7 @@
                 </td>
                 <td>
                     <button type="submit" class="btn btn-success" role="button">
-                        <i class="fa fa-save" aria-hidden="true"></i> Save
+                        <i class="fas fa-save" aria-hidden="true"></i> Save
                     </button>
                 </td>
 
@@ -90,7 +90,7 @@
             stopPlaying();
             radio.src = $(this).attr('data-url');
             radio.play();
-            $(this).removeClass('btn-success radio__test').addClass('btn-info radio__stop').html('<i class="fa fa-volume-off"></i> Stop')
+            $(this).removeClass('btn-success radio__test').addClass('btn-info radio__stop').html('<i class="fas fa-volume-off"></i> Stop')
         });
 
         $("body").delegate('.radio__stop', 'click', function () {
@@ -98,7 +98,7 @@
         });
 
         function stopPlaying() {
-            $('.radio__stop').removeClass('btn-info radio__stop').addClass('btn-success radio__test').html('<i class="fa fa-volume-up"></i> Test')
+            $('.radio__stop').removeClass('btn-info radio__stop').addClass('btn-success radio__test').html('<i class="fas fa-volume-up"></i> Test')
             radio.src = "";
         }
 

@@ -35,13 +35,13 @@
                                 <div class="album-name">
 
 
-                                    <i class="fa fa-heart"></i> {{$photo->getLikes()}}
+                                    <i class="fas fa-heart"></i> {{$photo->getLikes()}}
 
 
                                 </div>
                                 @if ($photo->private)
                                     <div class="photo__hidden">
-                                        <i class="fa fa-low-vision" aria-hidden="true"></i>
+                                        <i class="fas fa-low-vision" aria-hidden="true"></i>
                                     </div>
                                 @endif
                             </div>

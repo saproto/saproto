@@ -575,14 +575,14 @@
         <div class="container">
             <div class="row vertical-align">
                 <div class="col-md-2 col-xs-9 col-md-push-9" id="protube__remote__showToggle">
-                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <i class="fas fa-picture-o" aria-hidden="true"></i>
 
                     <label class="switch">
                         <input type="checkbox" id="protube__remote__videoToggle" checked>
                         <span class="slider round"></span>
                     </label>
 
-                    <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                    <i class="fab fa-youtube" aria-hidden="true"></i>
                 </div>
 
                 <div class="col-md-1 col-xs-3 col-md-push-9" id="protube__remote__profilePic">
@@ -614,7 +614,7 @@
             <div id="protube__remote__queue_nowPlaying_container">
 
             </div>
-            <div class="protube__remote__queue_nowPlaying_button"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+            <div class="protube__remote__queue_nowPlaying_button"><i class="fas fa-ellipsis-h" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -642,7 +642,7 @@
 
                 <div class="list-group" id="protube__remote__userModal__infoList">
                     <a href="{{ route("login::show") }}" class="list-group-item">
-                        <i class="fa fa-sign-in" aria-hidden="true"></i>
+                        <i class="fas fa-sign-in" aria-hidden="true"></i>
                         Login
                     </a>
                 </div>
@@ -743,10 +743,10 @@
                         $("#protube__remote__login__photo").attr("src", userInfo.photo);
                         $("#protube__remote__profilePic").find("img").attr("src", userInfo.photo);
                         $("#protube__remote__userModal__infoList").html("<a href=\"{{ route("protube::dashboard") }}\" target=\"_blank\" class=\"list-group-item\">\n" +
-                            "                        <i class=\"fa fa-user-secret\" aria-hidden=\"true\"></i>\n\n\n" +
+                            "                        <i class=\"fas fa-user-secret\" aria-hidden=\"true\"></i>\n\n\n" +
                             "                        Privacy settings</a>\n" +
                             "                    <a href=\"{{ route("login::logout") }}\" class=\"list-group-item\">\n" +
-                            "                        <i class=\"fa fa-sign-out\" aria-hidden=\"true\"></i>\n" +
+                            "                        <i class=\"fas fa-sign-out\" aria-hidden=\"true\"></i>\n" +
                             "                        Logout\n" +
                             "                    </a>")
                     }
@@ -814,16 +814,16 @@
 
                     if (!$.isEmptyObject(data)) {
                         if (data.showVideo) {
-                            var nowplaying_icon = "<i class=\"fa fa-youtube-play\" aria-hidden=\"true\"></i>";
+                            var nowplaying_icon = "<i class=\"fab fa-youtube\" aria-hidden=\"true\"></i>";
                         } else {
-                            var nowplaying_icon = "<i class=\"fa fa-picture-o\" aria-hidden=\"true\"></i>";
+                            var nowplaying_icon = "<i class=\"fas fa-picture-o\" aria-hidden=\"true\"></i>";
                         }
 
                         nowplaying.html(nowplaying_icon + " " + data.title);
 
                         setProgressBar(data.duration, data.progress);
                     } else {
-                        nowplaying.html("<i class=\"fa fa-music\" aria-hidden=\"true\"></i> Now playing radio");
+                        nowplaying.html("<i class=\"fas fa-music\" aria-hidden=\"true\"></i> Now playing radio");
                         stopProgressBar(true);
                     }
                 });
@@ -836,7 +836,7 @@
                 $('#protube__remote__ytSearch_form').bind('submit', function (e) {
                     e.preventDefault();
                     remote.emit("search", encodeURIComponent($("#protube__remote__ytSearch").val()));
-                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px;\"><i class=\"fa fa-spinner fa-pulse fa-fw\"></i><br />\n" +
+                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px;\"><i class=\"fas fa-spinner fa-pulse fa-fw\"></i><br />\n" +
                         "Loading...</div>");
                     window.scrollTo(0, 0);
                 });
@@ -906,7 +906,7 @@
                                 id: current.attr("data-ytId"),
                                 showVideo: ($("#protube__remote__videoToggle").prop("checked") ? true : false)
                             });
-                            current.find(".addButton").addClass("added").html("<i class=\"fa fa-check\" aria-hidden=\"true\"></i>");
+                            current.find(".addButton").addClass("added").html("<i class=\"fas fa-check\" aria-hidden=\"true\"></i>");
 
                         })
                     });
@@ -923,11 +923,11 @@
             '                        <h1>' + item.title + '</h1>\n' +
             '                    </div>\n' +
             '                    <div class="result_details">\n' +
-            '                        <p><i class="fa fa-user" aria-hidden="true"></i> ' + item.channelTitle + '</p>\n' +
-            '                        <p><i class="fa fa-clock-o" aria-hidden="true"></i> ' + item.duration + '</p>\n' +
+            '                        <p><i class="fas fa-user" aria-hidden="true"></i> ' + item.channelTitle + '</p>\n' +
+            '                        <p><i class="fas fa-clock-o" aria-hidden="true"></i> ' + item.duration + '</p>\n' +
             '                    </div>\n' +
             '                    <div class="addButton">\n' +
-            '                        <i class="fa fa-plus" aria-hidden="true"></i>\n' +
+            '                        <i class="fas fa-plus" aria-hidden="true"></i>\n' +
             '                    </div>\n' +
             '                </div>' +
             '           </div>';

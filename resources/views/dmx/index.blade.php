@@ -33,7 +33,7 @@
                     <td>{{ $fixture->id }}</td>
                     <td>
                         @if($fixture->follow_timetable)
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <i class="fas fa-calendar" aria-hidden="true"></i>
                         @endif
                     </td>
                     <td>{{ $fixture->name }}</td>
@@ -42,35 +42,35 @@
                     <td>
                         @if(count($fixture->getChannels('red')) > 0)
                             <span style="color: red;">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
+                                <i class="fas fa-tint" aria-hidden="true"></i>
                                 {{ implode(", ", $fixture->getChannels('red')->pluck('id')->toArray()) }}
                             </span>&nbsp;&nbsp;
                         @endif
                         @if(count($fixture->getChannels('green')) > 0)
                             <span style="color: green;">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
+                                <i class="fas fa-tint" aria-hidden="true"></i>
                                 {{ implode(", ", $fixture->getChannels('green')->pluck('id')->toArray()) }}
                             </span>&nbsp;&nbsp;
                         @endif
                         @if(count($fixture->getChannels('blue')) > 0)
                             <span style="color: blue;">
-                                <i class="fa fa-tint" aria-hidden="true"></i>
+                                <i class="fas fa-tint" aria-hidden="true"></i>
                                 {{ implode(", ", $fixture->getChannels('blue')->pluck('id')->toArray()) }}
                             </span>&nbsp;&nbsp;
                         @endif
                         @if(count($fixture->getChannels('brightness')) > 0)
-                            <i class="fa fa-sun-o" aria-hidden="true"></i>
+                            <i class="fas fa-sun-o" aria-hidden="true"></i>
                             {{ implode(", ", $fixture->getChannels('brightness')->pluck('id')->toArray()) }}
                         @endif
                     </td>
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('dmx::edit', ['id' => $fixture->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('dmx::delete', ['id' => $fixture->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

@@ -7,7 +7,7 @@
         @if(Auth::user()->can('board') && !$event->activity->closed)
             &nbsp;&nbsp;
             <a class="float-right text-white" href="{{ route('event::deleteparticipation', ['participation_id' => $user->pivot->id]) }}">
-                <i class="fa fa-times" aria-hidden="true"></i>
+                <i class="fas fa-times" aria-hidden="true"></i>
             </a>
         @endif
 

@@ -49,11 +49,11 @@
                     @if($user->age() >= 18)
 
                         <span class="label label-success">
-                            <i class="fa fa-check" aria-hidden="true"></i> 18+
+                            <i class="fas fa-check" aria-hidden="true"></i> 18+
                         </span>
                     @else
                         <span class="label label-danger">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 18-
+                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> 18-
                         </span>
                     @endif
                 </td>

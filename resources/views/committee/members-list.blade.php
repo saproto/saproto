@@ -15,7 +15,7 @@
 
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
-                        <span class="label label-success"><i class="fa fa-pencil"></i></span>
+                        <span class="label label-success"><i class="fas fa-pencil"></i></span>
                     </a>
                 @endif
                 <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
@@ -57,7 +57,7 @@
 
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
-                        <span class="label label-success"><i class="fa fa-pencil"></i></span>
+                        <span class="label label-success"><i class="fas fa-pencil"></i></span>
                     </a>
                 @endif
                 <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
@@ -100,7 +100,7 @@
 
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
-                        <span class="label label-success"><i class="fa fa-pencil"></i></span>
+                        <span class="label label-success"><i class="fas fa-pencil"></i></span>
                     </a>
                 @endif
                 <a href="{{ route('user::profile', ['id' => $membership->user->getPublicId()]) }}">{{ $membership->user->name }}</a>
@@ -143,7 +143,7 @@
 
                 @if(Route::current()->getName() == "committee::edit")
                     <a href="{{ route("committee::membership::edit", ['id' => $membership->id]) }}">
-                        <span class="label label-success"><i class="fa fa-pencil"></i></span>
+                        <span class="label label-success"><i class="fas fa-pencil"></i></span>
                     </a>
                 @endif
 

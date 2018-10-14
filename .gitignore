@@ -26,6 +26,7 @@ composer.phar
 /public/assets/saproto-sp-test.xml
 /resources/assets/sass/components.scss
 /public/assets/application.*
+/public/assets/fonts
 
 # Dammit, Mac users
 .DS_Store

@@ -59,11 +59,11 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('tickets::edit', ['id' => $ticket->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('tickets::delete', ['id' => $ticket->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

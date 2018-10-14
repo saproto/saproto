@@ -118,7 +118,7 @@
                                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                                     </a>
                                     @if($withdrawal->getFailedWithdrawal($user))
-                                        <i class="fa fa-times" aria-hidden="true" style="color: red;"></i>
+                                        <i class="fas fa-times" aria-hidden="true" style="color: red;"></i>
                                     @endif
                                 </td>
                                 <td style="text-align: right;">

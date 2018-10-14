@@ -96,11 +96,11 @@
                                            href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
                                             <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event->title }}</strong></p>
-                                                <p><i class="fa fa-map-marker"
+                                                <p><i class="fas fa-map-marker"
                                                       aria-hidden="true"></i> {{ $event->location }}
                                                 </p>
                                                 <p>
-                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <i class="fas fa-clock-o" aria-hidden="true"></i>
                                                     {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }}
                                                     -
                                                     @if (($event->end - $event->start) < 3600 * 24)
@@ -176,12 +176,12 @@
                                         <div class="activity" {!! ($event->secret ? 'style="opacity: 0.3;"' : '') !!}>
                                             <p><strong>{{ $event->title }}</strong></p>
                                             <p>
-                                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                                <i class="fas fa-map-marker" aria-hidden="true"></i>
                                                 {{ $event->location }}
                                             </p>
                                             <p>
                                                 <sup>
-                                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    <i class="fas fa-clock-o" aria-hidden="true"></i>
                                                     {{ date('l j F', $event->start) }}, {{ date('H:i', $event->start) }}
                                                     -
                                                     @if (($event->end - $event->start) < 3600 * 24)
@@ -230,12 +230,12 @@
                                            href="{{ route('event::show', ['id' => Event::find($event['id'])->getPublicId()]) }}">
                                             <div class="activity" {!! ($event['secret'] ? 'style="opacity: 0.3;"' : '') !!}>
                                                 <p><strong>{{ $event['title'] }}</strong></p>
-                                                <p><i class="fa fa-map-marker"
+                                                <p><i class="fas fa-map-marker"
                                                       aria-hidden="true"></i> {{ $event['location'] }}
                                                 </p>
                                                 <p>
                                                     <sup>
-                                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                        <i class="fas fa-clock-o" aria-hidden="true"></i>
                                                         {{ date('l j F Y', $event['start']) }}
                                                         , {{ date('H:i', $event['start']) }}
                                                         -

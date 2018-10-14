@@ -10,7 +10,7 @@
         <div class="col-md-5 col-xs-12">
             <form method="get" action="{{ route('user::admin::list') }}">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-search"></i></span>
                     <input type="text" name="query" class="form-control" id="search" placeholder="Search..."
                            value="{{ $query }}">
                     <span class="input-group-btn"><button class=" btn btn-default" id="goSearch">Go!</button></span>
@@ -72,24 +72,24 @@
                 <td>
                     @if(!$user->deleted_at)
                         <a class="btn btn-default btn-xs" href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <i class="fas fa-eye" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-xs @if(!$user->isMember) disabled @endif" href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}">
-                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <i class="fas fa-user" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-xs"
                            href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}">
-                            <i class="fa fa-user-secret" aria-hidden="true"></i>
+                            <i class="fas fa-user-secret" aria-hidden="true"></i>
                         </a>
                         @if ($user->isTempadmin())
                             <a class="btn btn-default btn-xs"
                                href="{{ route('tempadmin::end', ['id'=>$user->id]) }}">
-                                <i class="fa fa-user-times" aria-hidden="true"></i>
+                                <i class="fas fa-user-times" aria-hidden="true"></i>
                             </a>
                         @else
                             <a class="btn btn-default btn-xs"
                                href="{{ route('tempadmin::make', ['id'=>$user->id]) }}">
-                                <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                <i class="fas fa-user-plus" aria-hidden="true"></i>
                             </a>
                         @endif
                     @endif

@@ -25,13 +25,14 @@
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "private": false,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.4.1",
     "bootstrap": "^4.1.0",
-    "tempusdominus-bootstrap-4": "^5.1.2",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "popper.js": "^1.14.4",
-    "simplemde": "^1.11.2"
+    "simplemde": "^1.11.2",
+    "tempusdominus-bootstrap-4": "^5.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",

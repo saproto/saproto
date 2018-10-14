@@ -59,16 +59,16 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('video::view', ['id' => $video->id]) }}" role="button">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <i class="fas fa-eye" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('video::admin::edit', ['id' => $video->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            onclick="return confirm('Delete this video: {{ $video->title }}?')"
                            href="{{ route('video::admin::delete', ['id' => $video->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
                 </tr>

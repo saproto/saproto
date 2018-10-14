@@ -46,7 +46,7 @@
                             <label>
                                 <input type="checkbox" name="is_member_only"
                                        @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
-                                <i class="fa fa-lock" aria-hidden="true"></i> Members only
+                                <i class="fas fa-lock" aria-hidden="true"></i> Members only
                             </label>
                         </div>
 
@@ -176,18 +176,18 @@
                                                 <a class="btn btn-xs btn-default pageEdit_insertImage"
                                                    href="#" role="button"
                                                    rel="{{ $file->generateImagePath(1000, null) }}">
-                                                    <i class="fa fa-image" aria-hidden="true"></i>
+                                                    <i class="fas fa-image" aria-hidden="true"></i>
                                                 </a>
                                             @else
                                                 <a class="btn btn-xs btn-default pageEdit_insertLink"
                                                    href="#" role="button" rel="{{ $file->generatePath() }}">
-                                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                                    <i class="fas fa-link" aria-hidden="true"></i>
                                                 </a>
                                             @endif
                                             <a class="btn btn-xs btn-danger"
                                                href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
                                                role="button">
-                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                <i class="fas fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
 

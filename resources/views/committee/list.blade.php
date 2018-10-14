@@ -23,7 +23,7 @@
                         @include('website.layouts.macros.card-bg-image', [
                                     'url' => route('committee::show', ['id' => $committee->getPublicId()]),
                                     'img' => $committee->image->generateImagePath(450, 300),
-                                    'html' => !$committee->public ? sprintf('<i class="fa fa-lock"></i>&nbsp;&nbsp;%s', $committee->name) : sprintf('<strong>%s</strong>', $committee->name),
+                                    'html' => !$committee->public ? sprintf('<i class="fas fa-lock"></i>&nbsp;&nbsp;%s', $committee->name) : sprintf('<strong>%s</strong>', $committee->name),
                                     'height' => '120',
                                     'classes' => !$committee->public ? ['committee__hidden'] : null,
                                     'photo_pop' => true

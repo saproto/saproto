@@ -59,9 +59,9 @@
 
                         <td>
                             @if($password->isNote())
-                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
+                                <i class="fas fa-sticky-note-o" aria-hidden="true"></i>
                             @else
-                                <i class="fa fa-key" aria-hidden="true"></i>
+                                <i class="fas fa-key" aria-hidden="true"></i>
                             @endif
                         </td>
 
@@ -83,12 +83,12 @@
 
                             <td>
                                 @if($password->url)
-                                    <a href="{{ $password->url }}" class="btn btn-default"><i class="fa fa-external-link" aria-hidden="true"></i>
+                                    <a href="{{ $password->url }}" class="btn btn-default"><i class="fas fa-external-link" aria-hidden="true"></i>
                                     </a>
                                 @endif
                             </td>
-                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="user_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="user_{{ $i }}" value="{{ Crypt::decrypt($password->username) }}"></td>
-                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="pass_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}" value="{{ Crypt::decrypt($password->password) }}"></td>
+                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="user_{{ $i }}"><i class="fas fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="user_{{ $i }}" value="{{ Crypt::decrypt($password->username) }}"></td>
+                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="pass_{{ $i }}"><i class="fas fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}" value="{{ Crypt::decrypt($password->password) }}"></td>
 
                         @endif
 
@@ -97,8 +97,8 @@
                         </td>
 
                         <td>
-                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}" class="btn btn-default"><i class="fas fa-pencil-square-o" aria-hidden="true"></i></a>
+                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i></a>
                         </td>
 
                     </tr>

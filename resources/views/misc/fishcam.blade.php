@@ -9,7 +9,7 @@
     <div id="fishcam">
 
         <p style="font-size: 90px; text-align: center;">
-            <i id="fishcam__activate" class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <i id="fishcam__activate" class="fas fa-exclamation-triangle" aria-hidden="true"></i>
         </p>
 
         <p>

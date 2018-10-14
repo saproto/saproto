@@ -79,12 +79,12 @@
                             <br>
                             <a href="{{ PlayedVideo::generateYoutubeUrl($video->video_id) }}"
                                target="_blank" class="btn btn-xs btn-danger">
-                                <i class="fa fa-youtube-play" aria-hidden="true"></i> Watch on YouTube
+                                <i class="fab fa-youtube" aria-hidden="true"></i> Watch on YouTube
                             </a>
                             @if(!empty($video->spotify_id))
                                 <a href="{{ PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
                                    target="_blank" class="btn btn-xs btn-success">
-                                    <i class="fa fa-spotify" aria-hidden="true"></i> Listen on Spotify
+                                    <i class="fab fa-spotify" aria-hidden="true"></i> Listen on Spotify
                                 </a>
                             @endif
                         </li>

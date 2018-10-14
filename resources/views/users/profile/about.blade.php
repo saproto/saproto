@@ -10,31 +10,31 @@
         <hr class="rule">
 
         <p class="ellipsis">
-            <i class="fa fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;
+            <i class="fas fa-envelope-o" aria-hidden="true"></i>&nbsp;&nbsp;
             <a href="mailto:{{ $user->getDisplayEmail() }}">{{ $user->getDisplayEmail() }}</a>
         </p>
 
         @if($user->website)
             <p class="ellipsis">
-                <i class="fa fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
+                <i class="fas fa-globe" aria-hidden="true"></i>&nbsp;&nbsp;
                 <a href="{{ $user->websiteUrl() }}">{{ $user->websiteDisplay() }}</a>
             </p>
         @endif
         @if($user->phone_visible)
             <p class="ellipsis">
-                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;
+                <i class="fas fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;
                 <a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>
             </p>
         @endif
         @if($user->address_visible && $user->address != null)
             <p class="ellipsis">
-                <i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;
+                <i class="fas fa-home" aria-hidden="true"></i>&nbsp;&nbsp;
                 {{ $user->address->street }} {{ $user->address->number }}, {{ $user->address->city }}
             </p>
         @endif
 
         <p class="ellipsis">
-            <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
+            <i class="fas fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
             @if($user->member == null)
                 Not a member
             @else

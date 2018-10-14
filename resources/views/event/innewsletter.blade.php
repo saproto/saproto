@@ -91,7 +91,7 @@
                     <td>{{ $event->title }}</td>
                     <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>
                     <td>
-                        <i class="fa fa-{{ ($event->include_in_newsletter ? 'check' : 'times') }}"
+                        <i class="fas fa-{{ ($event->include_in_newsletter ? 'check' : 'times') }}"
                            aria-hidden="true"></i>
                     </td>
                     <td>

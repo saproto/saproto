@@ -17,7 +17,7 @@
                     </div>
                     @if ($album->private)
                         <div class="photo__hidden">
-                            <i class="fa fa-low-vision" aria-hidden="true"></i>
+                            <i class="fas fa-low-vision" aria-hidden="true"></i>
                         </div>
                     @endif
                 </div>

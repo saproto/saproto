@@ -45,11 +45,11 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('achievement::manage', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-bars" aria-hidden="true"></i>
+                            <i class="fas fa-bars" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('achievement::delete', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

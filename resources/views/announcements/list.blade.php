@@ -37,11 +37,11 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route('announcement::edit', ['id' => $announcement->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('announcement::delete', ['id' => $announcement->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            <i class="fas fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </td>
 

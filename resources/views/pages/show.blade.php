@@ -30,7 +30,7 @@
                 @foreach($page->files as $file)
 
                     <a href="{{ $file->generatePath() }}"                       target="_blank" class="card-link">
-                        <i class="fa fa-paperclip" aria-hidden="true"></i> {{ $file->original_filename }}
+                        <i class="fas fa-paperclip" aria-hidden="true"></i> {{ $file->original_filename }}
                     </a>
 
                 @endforeach

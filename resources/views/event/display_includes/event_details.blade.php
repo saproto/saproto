@@ -46,24 +46,24 @@
     <ul class="list-group list-group-flush">
 
         <li class="list-group-item">
-            <i class="fa fa-fw fa-clock-o" aria-hidden="true"></i>
+            <i class="fas fa-fw fa-clock-o" aria-hidden="true"></i>
             {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
         </li>
 
         <li class="list-group-item">
-            <i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
+            <i class="fas fa-fw fa-map-marker" aria-hidden="true"></i> {{ $event->location }}
         </li>
 
         @if ($event->involves_food == true)
             <a class="list-group-item bg-info text-white" href="{{ route("user::dashboard") }}#alergies">
-                <i class="fa fa-fw fa-cutlery" aria-hidden="true"></i> There will be food, please indicate
+                <i class="fas fa-fw fa-cutlery" aria-hidden="true"></i> There will be food, please indicate
                 any allergies or diets on your dashboard.
             </a>
         @endif
 
         @if ($event->is_external == true)
             <li class="list-group-item">
-                <i class="fa fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto.
+                <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto.
             </li>
         @endif
 
@@ -94,7 +94,7 @@
                     @include('website.layouts.macros.card-bg-image', [
                         'url' => route('video::view', ['id'=> $video->id]),
                         'img' => $video->youtube_thumb_url,
-                        'html' => sprintf('<em>%s</em><br><strong><i class="fa fa-fw fa-play" aria-hidden="true"></i> %s</strong>', date("M j, Y", strtotime($video->video_date)), $video->title)
+                        'html' => sprintf('<em>%s</em><br><strong><i class="fas fa-fw fa-play" aria-hidden="true"></i> %s</strong>', date("M j, Y", strtotime($video->video_date)), $video->title)
                     ])
 
                 @endforeach
@@ -108,7 +108,7 @@
                     @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]),
                         'img' => $album->thumb,
-                        'html' => sprintf('<em>%s</em><br><strong><i class="fa fa-fw fa-picture-o" aria-hidden="true"></i> %s</strong>', date("M j, Y", $album->date_taken), $album->name)
+                        'html' => sprintf('<em>%s</em><br><strong><i class="fas fa-fw fa-picture-o" aria-hidden="true"></i> %s</strong>', date("M j, Y", $album->date_taken), $album->name)
                     ])
 
                 @endforeach

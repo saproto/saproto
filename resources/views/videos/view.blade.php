@@ -7,7 +7,7 @@
 @section('content')
 
     <p style="text-align: left; float: left; color: #fff;">
-        From <span style="color: red;"><i class="fa fa-youtube-play" aria-hidden="true"></i> YouTube</span> &mdash;
+        From <span style="color: red;"><i class="fab fa-youtube" aria-hidden="true"></i> YouTube</span> &mdash;
         <a href="{{ $video->getYouTubeUrl() }}" class="underline-on-hover" target="_blank" style="color: #fff;">
             {{ $video->youtube_title }}
         </a>
@@ -19,7 +19,7 @@
 
     @if($video->event)
         <p style="text-align: right; float: right; color: #fff;">
-            <i class="fa fa-calendar" aria-hidden="true"></i>
+            <i class="fas fa-calendar" aria-hidden="true"></i>
             <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}"
                style="color: #fff;" class="underline-on-hover">
                 {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}

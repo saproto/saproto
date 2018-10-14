@@ -44,7 +44,7 @@
             <label>
                 <input type="checkbox" name="is_member_only"
                        @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
-                <i class="fa fa-lock" aria-hidden="true"></i> Members only
+                <i class="fas fa-lock" aria-hidden="true"></i> Members only
             </label>
         </div>
 

@@ -55,12 +55,12 @@
                         <td>
                             <a class="btn btn-xs btn-default"
                                href="{{ route('email::list::edit', ['id' => $list->id]) }}" role="button">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <i class="fas fa-pencil" aria-hidden="true"></i>
                             </a>
                             <a class="btn btn-xs btn-danger"
                                onclick="return confirm('Delete e-mail list {{ $list->name }}?');"
                                href="{{ route('email::list::delete', ['id' => $list->id]) }}" role="button">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <i class="fas fa-trash-o" aria-hidden="true"></i>
                             </a>
                         </td>
 
@@ -137,27 +137,27 @@
                         <td>
                             <a class="btn btn-xs btn-info" target="_blank"
                                href="{{ route('email::show', ['id' => $email->id]) }}" role="button">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fas fa-eye" aria-hidden="true"></i>
                             </a>
                             @if (!$email->sent)
                                 <a class="btn btn-xs btn-danger"
                                    onclick="return confirm('You sure you want to delete this e-mail?')"
                                    href="{{ route('email::delete', ['id' => $email->id]) }}" role="button">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
                                 </a>
                                 @if (!$email->ready)
                                     <a class="btn btn-xs btn-success"
                                        href="{{ route('email::toggleready', ['id' => $email->id]) }}" role="button">
-                                        <i class="fa fa-send-o" aria-hidden="true"></i>
+                                        <i class="fas fa-send-o" aria-hidden="true"></i>
                                     </a>
                                     <a class="btn btn-xs btn-default"
                                        href="{{ route('email::edit', ['id' => $email->id]) }}" role="button">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        <i class="fas fa-pencil" aria-hidden="true"></i>
                                     </a>
                                 @else
                                     <a class="btn btn-xs btn-warning"
                                        href="{{ route('email::toggleready', ['id' => $email->id]) }}" role="button">
-                                        <i class="fa fa-undo" aria-hidden="true"></i>
+                                        <i class="fas fa-undo" aria-hidden="true"></i>
                                     </a>
                                 @endif
                             @endif

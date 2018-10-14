@@ -259,7 +259,7 @@
                                                onclick="return confirm('You sure you want to delete this attachment?')"
                                                href="{{ route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]) }}"
                                                role="button">
-                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                <i class="fas fa-trash-o" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -359,12 +359,12 @@
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({
             icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
+                time: "fas fa-clock-o",
+                date: "fas fa-calendar",
+                up: "fas fa-arrow-up",
+                down: "fas fa-arrow-down",
+                next: "fas fa-chevron-right",
+                previous: "fas fa-chevron-left"
             },
             format: 'DD-MM-YYYY HH:mm'
         });

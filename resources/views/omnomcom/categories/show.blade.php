@@ -52,7 +52,7 @@
                                     <i class="fa arrow fa-arrow-left" aria-hidden="true"></i>
                                 </a>
                                 <a href="{{ route("omnomcom::products::edit",['id' => $product->id]) }}">
-                                    <i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                    <i class="fas fa-pencil-square" aria-hidden="true"></i>
                                 </a>
                                 <a href="{{ route("omnomcom::products::rank",['category' => $category->id, 'id' => $product->id, 'direction' => 'down']) }}">
                                     <i class="fa arrow fa-arrow-right" aria-hidden="true"></i>

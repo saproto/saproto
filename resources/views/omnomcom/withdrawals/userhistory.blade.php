@@ -13,7 +13,7 @@
             @if($withdrawal->getFailedWithdrawal(Auth::user()))
 
                 <p style="text-align: center; margin-bottom: 20px; padding: 10px 0; color: #fff; background-color: red;">
-                    <i class="fa fa-times" aria-hidden="true"></i> This withdrawal has failed.
+                    <i class="fas fa-times" aria-hidden="true"></i> This withdrawal has failed.
                 </p>
 
             @endif

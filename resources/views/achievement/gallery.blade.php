@@ -80,7 +80,7 @@
                                     <div class="achievement-title">
                                         <strong>{{ $achievement->name }}</strong>
                                         @if(in_array($achievement->id, $obtained))
-                                            <i class="fa fa-check" aria-hidden="true" title="obtained!"></i>
+                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
                                         @endif
                                     </div>
 
@@ -149,7 +149,7 @@
                                     <div class="achievement-title">
                                         <strong>{{ $achievement->name }}</strong>
                                         @if(in_array($achievement->id, $obtained))
-                                            <i class="fa fa-check" aria-hidden="true" title="obtained!"></i>
+                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
                                         @endif
                                     </div>
 
@@ -218,7 +218,7 @@
                                     <div class="achievement-title">
                                         <strong>{{ $achievement->name }}</strong>
                                         @if(in_array($achievement->id, $obtained))
-                                            <i class="fa fa-check" aria-hidden="true" title="obtained!"></i>
+                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
                                         @endif
                                     </div>
 
@@ -287,7 +287,7 @@
                                     <div class="achievement-title">
                                         <strong>{{ $achievement->name }}</strong>
                                         @if(in_array($achievement->id, $obtained))
-                                            <i class="fa fa-check" aria-hidden="true" title="obtained!"></i>
+                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
                                         @endif
                                     </div>
 
@@ -356,7 +356,7 @@
                                     <div class="achievement-title">
                                         <strong>{{ $achievement->name }}</strong>
                                         @if(in_array($achievement->id, $obtained))
-                                            <i class="fa fa-check" aria-hidden="true" title="obtained!"></i>
+                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
                                         @endif
                                     </div>
 

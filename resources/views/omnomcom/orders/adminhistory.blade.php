@@ -161,7 +161,7 @@
                                    @else
                                    onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');"
                                         @endif>
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
                                 </a>
                             </div>
 
@@ -315,12 +315,12 @@
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({
             icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
+                time: "fas fa-clock-o",
+                date: "fas fa-calendar",
+                up: "fas fa-arrow-up",
+                down: "fas fa-arrow-down",
+                next: "fas fa-chevron-right",
+                previous: "fas fa-chevron-left"
             },
             format: 'YYYY-MM-DD'
         });

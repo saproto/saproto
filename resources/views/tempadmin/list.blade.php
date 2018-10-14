@@ -36,13 +36,13 @@
                     <td>
                         <a class="btn btn-xs btn-default"
                            href="{{ route("tempadmin::edit", ['id' => $tempadmin->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
 
                         <a class="btn btn-xs btn-danger"
                            href="{{ route('tempadmin::endId', ['id' => $tempadmin->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                            @if(Carbon::parse($tempadmin->start_at)->isFuture()) <i class="fa fa-trash-o" aria-hidden="true"></i>
-                            @else <i class="fa fa-hourglass-end" aria-hidden="true"></i> @endif
+                            @if(Carbon::parse($tempadmin->start_at)->isFuture()) <i class="fas fa-trash-o" aria-hidden="true"></i>
+                            @else <i class="fas fa-hourglass-end" aria-hidden="true"></i> @endif
                         </a>
                     </td>
                 </tr>
@@ -59,12 +59,12 @@
                     <td>
                         <a class="btn btn-xs btn-default disabled"
                            href="#" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fas fa-pencil" aria-hidden="true"></i>
                         </a>
 
                         <a class="btn btn-xs btn-danger disabled"
                            href="#" role="button">
-                            <i class="fa fa-hourglass-end" aria-hidden="true"></i>
+                            <i class="fas fa-hourglass-end" aria-hidden="true"></i>
                         </a>
                     </td>
                 </tr>

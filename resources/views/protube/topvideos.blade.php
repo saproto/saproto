@@ -11,7 +11,7 @@
                 <ul class="list-group">
                     <a href="https://open.spotify.com/user/studyassociationproto/playlist/213N4HAIKNZe7H0X3R79I2"
                        target="_blank" class="list-group-item list-group-item-success">
-                        <i class="fa fa-spotify" aria-hidden="true"></i> Get the ProTube Hits Spotify playlist!
+                        <i class="fab fa-spotify" aria-hidden="true"></i> Get the ProTube Hits Spotify playlist!
                     </a>
                     <li class="list-group-item">
                         <strong>
@@ -42,12 +42,12 @@
                                 <br>
                                 <a href="{{ PlayedVideo::generateYoutubeUrl($video->video_id) }}"
                                    target="_blank" class="btn btn-xs btn-danger">
-                                    <i class="fa fa-youtube-play" aria-hidden="true"></i> Watch on YouTube
+                                    <i class="fab fa-youtube" aria-hidden="true"></i> Watch on YouTube
                                 </a>
                                 @if(!empty($video->spotify_id))
                                     <a href="{{ PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
                                        target="_blank" class="btn btn-xs btn-success">
-                                        <i class="fa fa-spotify" aria-hidden="true"></i> Listen on Spotify
+                                        <i class="fab fa-spotify" aria-hidden="true"></i> Listen on Spotify
                                     </a>
                                 @endif
                             </li>

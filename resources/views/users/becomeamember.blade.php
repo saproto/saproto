@@ -27,7 +27,7 @@
                 <a href="{{ route("login::register") }}?wizard=1"
                    class="list-group-item @if(Auth::check()) list-group-item-success becomeamember__done @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if(Auth::check())<i class="fa fa-check"
+                        <div class="col-md-1 becomeamember__number">@if(Auth::check())<i class="fas fa-check"
                                                                                          aria-hidden="true"></i>@else
                                 1 @endif
                         </div>
@@ -48,7 +48,7 @@
                    class="list-group-item @if($user && $user->edu_username) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
                         <div class="col-md-1 becomeamember__number">@if($user && $user->edu_username)<i
-                                    class="fa fa-check" aria-hidden="true"></i>@else 2 @endif</div>
+                                    class="fas fa-check" aria-hidden="true"></i>@else 2 @endif</div>
                         <div class="col-md-11 becomeamember__description">
                             <h4 class="list-group-item-heading">Add a UTwente account your Proto account</h4>
                             <p class="list-group-item-text">If you are a student at the University of Twente, we would
@@ -62,7 +62,7 @@
                    class="list-group-item @if($user && $user->hasCompletedProfile()) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
                         <div class="col-md-1 becomeamember__number">@if($user && $user->hasCompletedProfile())<i
-                                    class="fa fa-check" aria-hidden="true"></i>@else 3 @endif</div>
+                                    class="fas fa-check" aria-hidden="true"></i>@else 3 @endif</div>
                         <div class="col-md-11 becomeamember__description">
                             <h4 class="list-group-item-heading">Complete your membership profile</h4>
                             <p class="list-group-item-text">To enter your in our member administration, you need to
@@ -74,7 +74,7 @@
                 <a href="@if(Auth::check()) {{ route("user::bank::add", ["id"=>$user->id]) }}?wizard=1 @else # @endif"
                    class="list-group-item @if($user && $user->bank) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->bank)<i class="fa fa-check"
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->bank)<i class="fas fa-check"
                                                                                                 aria-hidden="true"></i>@else
                                 4 @endif</div>
                         <div class="col-md-11 becomeamember__description">
@@ -88,7 +88,7 @@
                 <a href="@if(Auth::check()) {{ route('user::address::add', ['id' => $user->id]) }}?wizard=1 @else # @endif"
                    class="list-group-item @if($user && $user->address) list-group-item-success becomeamember__done @endif @if(!Auth::check()) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->address)<i class="fa fa-check"
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->address)<i class="fas fa-check"
                                                                                                    aria-hidden="true"></i>@else
                                 5 @endif</div>
                         <div class="col-md-11 becomeamember__description">
@@ -106,7 +106,7 @@
                 <a href="{{ route('page::show', ['slug' => 'board']) }}"
                    class="list-group-item @if($user && $user->member) list-group-item-success becomeamember__done @endif @if(!Auth::check() || !($user->address && $user->bank)) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->member)<i class="fa fa-check"
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->member)<i class="fas fa-check"
                                                                                                   aria-hidden="true"></i>@else
                                 6 @endif</div>
                         <div class="col-md-11 becomeamember__description">
@@ -122,7 +122,7 @@
                 <a href="#"
                    class="list-group-item @if($user && $user->member) list-group-item-success @endif @if(!Auth::check() || !$user->member) becomeamember__future @endif">
                     <div class="row">
-                        <div class="col-md-1 becomeamember__number">@if($user && $user->member)<i class="fa fa-trophy"
+                        <div class="col-md-1 becomeamember__number">@if($user && $user->member)<i class="fas fa-trophy"
                                                                                                   aria-hidden="true"></i>@else
                                 7 @endif</div>
                         <div class="col-md-11 becomeamember__description">

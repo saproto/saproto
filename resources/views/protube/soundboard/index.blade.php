@@ -35,15 +35,15 @@
                         <td>
                             <a class="btn btn-success"
                                href="{{ route('protube::soundboard::togglehidden', ['id' => $sound->id]) }}" role="button">
-                                @if($sound->hidden) <i class="fa fa-eye"></i> Unhide @else <i class="fa fa-eye-slash"></i> Hide @endif
+                                @if($sound->hidden) <i class="fas fa-eye"></i> Unhide @else <i class="fas fa-eye-slash"></i> Hide @endif
                             </a>
                             <a class="btn btn-danger"
                                onclick="return confirm('Are you sure you want to delete {{ $sound->name }}?');"
                                href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}" role="button">
-                                <i class="fa fa-trash-o"></i> Delete
+                                <i class="fas fa-trash-o"></i> Delete
                             </a>
                             <a class="btn btn-success sound__test" data-url="{{ $sound->file->generatePath() }}">
-                                <i class="fa fa-volume-up"></i> Test
+                                <i class="fas fa-volume-up"></i> Test
                             </a>
                         </td>
 
@@ -72,7 +72,7 @@
                 </td>
                 <td>
                     <button type="submit" class="btn btn-success" role="button">
-                        <i class="fa fa-save" aria-hidden="true"></i> Save
+                        <i class="fas fa-save" aria-hidden="true"></i> Save
                     </button>
                 </td>
 

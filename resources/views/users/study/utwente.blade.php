@@ -66,12 +66,12 @@
         // Initializes datetimepickers for consistent options
         $('.datetime-picker').datetimepicker({
             icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
+                time: "fas fa-clock-o",
+                date: "fas fa-calendar",
+                up: "fas fa-arrow-up",
+                down: "fas fa-arrow-down",
+                next: "fas fa-chevron-right",
+                previous: "fas fa-chevron-left"
             },
             format: 'DD-MM-YYYY'
         });

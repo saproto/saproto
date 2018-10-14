@@ -10,33 +10,33 @@
 
         @if ($photo->previous != null)
             <a href="{{route("photo::view", ["id"=> $photo->previous])}}">
-                <i class="fa fa-arrow-left"></i>
+                <i class="fas fa-arrow-left"></i>
             </a>
             &nbsp;&nbsp;&nbsp;
         @endif
 
         @if ($photo->liked == null)
             <a href="{{route("photo::likes", ["id"=> $photo->id])}}">
-                <i class="fa fa-heart-o"></i> {{ $photo->likes }}
+                <i class="fas fa-heart-o"></i> {{ $photo->likes }}
             </a>
         @endif
 
         @if($photo-> liked != null)
             <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}">
-                <i class="fa fa-heart"></i> {{ $photo->likes }}
+                <i class="fas fa-heart"></i> {{ $photo->likes }}
             </a>
         @endif
 
         &nbsp;&nbsp;&nbsp;
 
         <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}">
-            <i class="fa fa-arrow-up" aria-hidden="true"></i> Album
+            <i class="fas fa-arrow-up" aria-hidden="true"></i> Album
         </a>
 
         @if($photo->next != null)
             &nbsp;&nbsp;&nbsp;
             <a href="{{route("photo::view", ["id"=> $photo->next])}}">
-                <i class="fa fa-arrow-right"></i>
+                <i class="fas fa-arrow-right"></i>
             </a>
         @endif
 
