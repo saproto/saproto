@@ -24,7 +24,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                 @endif
             @endif
             @if (Auth::user() && $event->hasBoughtTickets(Auth::user()))
-                <i class="fas fa-ticket fa-fw" style="color: dodgerblue;" aria-hidden="true"
+                <i class="fas fa-ticket-alt fa-fw" style="color: dodgerblue;" aria-hidden="true"
                    title="You bought a ticket for this event."></i>
             @endif
             @if (Auth::check() && Auth::user()->member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))

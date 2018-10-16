@@ -1,125 +1,138 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     ProTube Dashboard
 @endsection
 
-@section('content')
+@section('container')
+
     <div class="row">
 
         <div class="col-md-4">
-            <p>
-                <a href="{{ route('protube::top') }}" class="btn btn-success" style="width: 100%">
-                    View the ProTube top hits!
-                </a>
-            </p>
 
-            <hr>
+            <div class="card mb-3">
 
-            <h4>ProTube Settings</h4>
+                <div class="card-header">
+                    ProTube settings
+                </div>
 
-            <p>
-                ProTube can keep your history. This means that if you play a song using ProTube, and if you are logged
-                in to the website in that browser, it will remember you put that song in the queue. This enables us to
-                generate a top hits list for you personally, and we have plans to also allow you to sync your own
-                personalized Spotify playlist. None of this information is shared with other people.
-            </p>
+                <div class="card-body">
 
-            <hr>
+                    <p class="card-text">
 
-            <p>
-                ProTube is currently <strong>{{$user->keep_protube_history ? '' : 'not' }}</strong> keeping your
-                history.
-            </p>
-            @if($user->keep_protube_history)
-                <a href="{{ route('protube::togglehistory') }}" class="btn btn-danger" style="width: 100%;">
-                    Stop keeping my ProTube history.
-                </a>
-            @else
-                <a href="{{ route('protube::togglehistory') }}" class="btn btn-success" style="width: 100%;">
-                    Start keeping my ProTube history.
-                </a>
-            @endif
+                        ProTube can keep your history. This means that if you play a song using ProTube, and if you are
+                        logged in to the website in that browser, it will remember you put that song in the queue. This
+                        enables us to generate a top hits list for you personally, and we have plans to also allow you
+                        to sync your own personalized Spotify playlist. None of this information is shared with other
+                        people.
 
-            <hr>
+                    </p>
 
-            <p>
-                You have put <strong>{{ $usercount }}</strong> songs in ProTube. You can anonimyze your history. We will
-                keep the songs for historic purposes, but we will remove your name from them. This action is
-                irreversible.
-            </p>
+                    <hr>
 
-            <a href="{{ route('protube::clearhistory') }}" class="btn btn-danger"
-               onclick="return confirm('Are you sure?');" style="width: 100%;">
-                Clear my ProTube history.
+                    <p class="card-text">
+                        ProTube is currently <strong>{{$user->keep_protube_history ? '' : 'not' }}</strong> keeping your
+                        history.
+                    </p>
+                    @if($user->keep_protube_history)
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-danger"
+                           style="width: 100%;">
+                            Stop keeping my ProTube history.
+                        </a>
+                    @else
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-primary"
+                           style="width: 100%;">
+                            Start keeping my ProTube history.
+                        </a>
+                    @endif
+
+                    @if($usercount > 0)
+
+                        <hr>
+
+                        <p class="card-text">
+                            You have put <strong>{{ $usercount }}</strong> songs in ProTube. You can anonimyze your
+                            history. We will keep the songs for historic purposes, but we will remove your name from
+                            them. This action is irreversible.
+                        </p>
+
+                        <a href="{{ route('protube::clearhistory') }}" class="btn btn-outline-danger"
+                           onclick="return confirm('Are you sure?');" style="width: 100%;">
+                            Clear my ProTube history.
+                        </a>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+            <a href="{{ route('protube::top') }}" class="btn btn-primary btn-block">
+                View the public ProTube top hits!
             </a>
-
-            <hr>
-
-            <ul class="list-group">
-                <li class="list-group-item list-group-item-success">
-                    <strong>
-                        Your personal top list!
-                    </strong>
-                </li>
-                @if(count($usertop) == 0)
-                    <li class="list-group-item">
-                        You have played videos.
-                    </li>
-                @else
-                    @foreach($usertop as $video)
-                        <li class="list-group-item protube__dashboard__video">
-                            @if(!empty($video->spotify_id ))
-                                {{ $video->spotify_name }}
-                            @else
-                                {{ $video->video_title }}
-                            @endif
-                            <br>
-                            <sup>Played {{ $video->played_count }} times.</sup>
-                            <br>
-                            <a href="{{ PlayedVideo::generateYoutubeUrl($video->video_id) }}"
-                               target="_blank" class="btn btn-xs btn-danger">
-                                <i class="fab fa-youtube" aria-hidden="true"></i> Watch on YouTube
-                            </a>
-                            @if(!empty($video->spotify_id))
-                                <a href="{{ PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
-                                   target="_blank" class="btn btn-xs btn-success">
-                                    <i class="fab fa-spotify" aria-hidden="true"></i> Listen on Spotify
-                                </a>
-                            @endif
-                        </li>
-                    @endforeach
-                @endif
-            </ul>
-
 
         </div>
 
-        <div class="col-md-8">
-            <h4>ProTube History</h4>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th width="140px">Time</th>
-                    <th>Video</th>
-                    <th>&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($history as $video)
-                    <tr>
-                        <td>{{ date('d M H:i:s', strtotime($video->played_at)) }}</td>
-                        <td>
-                            <a href="{{ PlayedVideo::generateYoutubeUrl($video->video_id) }}" target="_blank">
-                                {{ $video->video_title }}
-                            </a>
-                        </td>
-                        <td></td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <div class="card-header">
+                    Your personal top hits
+                </div>
+
+                <div class="card-body" style="max-height: 850px; overflow-y: auto;">
+
+                    @if(count($usertop) == 0)
+
+                        <p class="card-text">
+                            There are no videos linked to your account.
+                        </p>
+
+                    @else
+
+                        @foreach($usertop as $video)
+
+                            @include('protube.includes.song_block', [
+                                'video' => $video
+                            ])
+
+                        @endforeach
+
+                    @endif
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card">
+
+                <div class="card-header">
+                    Recently played
+                </div>
+
+                <div class="card-body" style="max-height: 850px; overflow-y: auto;">
+
+                    @foreach($history as $video)
+
+                        @include('protube.includes.song_block', [
+                            'video' => $video,
+                            'hide_played' => true,
+                            'show_text' => sprintf('Played on %s', date('H:i:s', strtotime($video->played_at)))
+                        ])
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
+
 @endsection

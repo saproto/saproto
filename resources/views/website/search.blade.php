@@ -1,4 +1,4 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Search
@@ -7,101 +7,136 @@
     @endif
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <div class="panel panel-default">
-                <div class="panel-body ">
-                    <form method="post" action="{{ route('search') }}">
-                        {!! csrf_field() !!}
-                        <input type="text" name="query" class="form-control"
-                               placeholder="Enter your search term here and hit enter...">
-                    </form>
+    <div class="row justify-content-center">
+
+        @if (count($users) + count($committees) + count($pages) + count($events) == 0)
+
+            <div class="col-md-4 col-sm-6 col-xs-10">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text text-center">
+                            Your search has returned no results.
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        @endif
+
+        @if (count($users) > 0)
+
+            <div class="col-md-3">
+
+                <div class="card">
+                    <div class="card-header">
+                        Proto members
+                    </div>
+                    <div class="card-body">
+
+                        @foreach($users as $user)
+
+                            @include('users.includes.usercard', [
+                                'user' => $user['object'],
+                                'subtitle' => sprintf('<em>Member since %s</em>',
+                                 date('U', strtotime($user['object']->member->created_at)) > 0 ? date('F Y', strtotime($user['object']->member->created_at)) : 'forever!')
+                                ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+
+        @endif
+
+            @if (count($committees) > 0)
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            Committees
+                        </div>
+                        <div class="card-body">
+
+                            @foreach($committees as $committee)
+
+                                @include('website.layouts.macros.card-bg-image', [
+                                            'url' => route('committee::show', ['id' => $committee['object']->getPublicId()]),
+                                            'img' => $committee['object']->image->generateImagePath(450, 300),
+                                            'html' => !$committee['object']->public ? sprintf('<i class="fas fa-lock"></i>&nbsp;&nbsp;%s', $committee['object']->name) : sprintf('<strong>%s</strong>', $committee['object']->name),
+                                            'height' => '120',
+                                            'classes' => !$committee['object']->public ? ['committee__hidden'] : null,
+                                            'photo_pop' => true
+                                ])
+
+                            @endforeach
+
+                        </div>
+                    </div>
+
+                </div>
+
+            @endif
+
+            @if (count($events) > 0)
+
+                <div class="col-md-3">
+
+                    <div class="card">
+                        <div class="card-header">
+                            Proto members
+                        </div>
+                        <div class="card-body">
+
+                            @foreach($events as $event)
+
+                                @include('event.display_includes.event_block', [
+                                    'event'=> $event['object']
+                                ])
+
+                            @endforeach
+
+                        </div>
+                    </div>
+
+                </div>
+
+            @endif
+
+        @if (count($pages) > 0)
+
+            <div class="col-md-3">
+
+                <div class="card">
+                    <div class="card-header">
+                        Pages
+                    </div>
+                    <div class="card-body">
+
+                        @foreach($pages as $page)
+
+                            @include('website.layouts.macros.card-bg-image', [
+                                'url' => route("page::show", ["slug" => $page['object']->slug]),
+                                'img' => $page['object']->featuredImage ? $page['object']->featuredImage->generateImagePath(300, 200) : null,
+                                'photo_pop' => true,
+                                'html' => $page['object']->title,
+                                'height' => 100,
+                                'leftborder' => 'info'
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+
+        @endif
+
     </div>
-
-    @if (count($users) + count($committees) + count($pages) + count($events) == 0 && $term != null)
-
-        <div class="row">
-
-            <div class="col-md-4 col-md-offset-4">
-                <div class="panel panel-default search__card">
-                    <div class="panel-body ">
-                        <p>
-                            &nbsp;
-                        </p>
-                        <p style="text-align: center">
-                            <strong>
-                                Your search returned no results.
-                            </strong>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    @endif
-
-    <?php $data = array_merge($users, $committees, $pages, $events); ?>
-
-    @foreach($data as $index => $result)
-
-        <?php $object = $result['object']; ?>
-
-        @if ($index % 3 == 0)
-
-            <div class="row">
-
-        @endif
-
-        <div class="col-md-4">
-
-            <a class="search__href" href="{{ $result['href'] }}">
-
-                <div class="panel panel-default search__card">
-
-                    <div class="panel-body ">
-
-                        @if($object instanceof Proto\Models\User)
-
-                            @include('website.search.user')
-
-                        @elseif($object instanceof Proto\Models\Page)
-
-                            @include('website.search.page')
-
-                        @elseif($object instanceof Proto\Models\Committee)
-
-                            @include('website.search.committee')
-
-                        @elseif($object instanceof Proto\Models\Event)
-
-                            @include('website.search.event')
-
-                        @else
-
-                            Unknown object type
-
-                        @endif
-
-                    </div>
-
-                </div>
-
-            </a>
-
-        </div>
-
-        @if ($index %3 == 2 || $index + 1 == count($data))
-
-            </div>
-
-        @endif
-
-    @endforeach
 
 @endsection

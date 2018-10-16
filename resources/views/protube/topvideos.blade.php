@@ -44,54 +44,9 @@
 
                             @foreach($content as $video)
 
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <p class="card-text ellipsis">
-
-                                            <strong>
-                                                <i class="fas fa-music fa-fw mr-2"></i>
-                                                @if(!empty($video->spotify_id ))
-                                                    {{ $video->spotify_name }}
-                                                @else
-                                                    {{ $video->video_title }}
-                                                @endif
-                                            </strong>
-
-                                            <br>
-
-                                            <span class="text-muted">
-                                                <em>Played {{ $video->played_count }} times.</em>
-                                            </span>
-
-                                        </p>
-
-                                        <div class="row">
-
-                                            <div class="col-6">
-
-                                                <a href="{{ PlayedVideo::generateYoutubeUrl($video->video_id) }}"
-                                                   target="_blank" class="btn btn-xs btn-danger btn-block btn-sm">
-                                                    <i class="fab fa-youtube" aria-hidden="true"></i> Watch on YouTube
-                                                </a>
-
-                                            </div>
-
-                                            <div class="col-6">
-
-                                                @if(!empty($video->spotify_id))
-                                                    <a href="{{ PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
-                                                       target="_blank" class="btn btn-xs btn-success btn-block btn-sm">
-                                                        <i class="fab fa-spotify" aria-hidden="true"></i> Listen on
-                                                        Spotify
-                                                    </a>
-                                                @endif
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
+                                @include('protube.includes.song_block', [
+                                    'video' => $video
+                                ])
 
                             @endforeach
 

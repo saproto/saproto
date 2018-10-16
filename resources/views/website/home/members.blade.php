@@ -58,17 +58,10 @@
 
                         @foreach($birthdays as $key => $user)
 
-
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <img width="50px" height="50px" class="rounded-circle float-right"
-                                         src="{!! $user->generatePhotoPath(50, 50) !!}">
-                                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">
-                                        <strong>{{ $user->name }}</strong><br>
-                                    </a>
-                                    <em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>
-                                </div>
-                            </div>
+                            @include('users.includes.usercard', [
+                                'user' => $user,
+                                'subtitle' => '<em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>'
+                            ])
 
                         @endforeach
 

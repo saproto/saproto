@@ -194,10 +194,9 @@
 
             </ul>
 
-            <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 float-right"
-                  style="margin-right: 10px;">
+            <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
                 {{ csrf_field() }}
-                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search" value="{{ isset($term) ? $term : null }}">
                 <button type="submit" class="btn btn-outline-light my-2 my-sm-0" style="">
                     <i class="fas fa-search"></i>
                 </button>

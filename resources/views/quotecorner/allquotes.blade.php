@@ -20,7 +20,7 @@
 
             </div>
 
-            {{ $data->links() }}
+                {{ $data->links() }}
 
         @endif
 

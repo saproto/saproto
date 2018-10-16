@@ -15,7 +15,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-success btn-block">
+            <button type="submit" class="btn btn-primary btn-block">
                 Submit
             </button>
 

@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 

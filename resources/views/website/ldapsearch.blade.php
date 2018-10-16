@@ -22,11 +22,11 @@
 
                     <div class="card-body">
                         <input type="text" name="query" class="form-control"
-                               placeholder="Enter your search term here and hit enter..." value="{{ $term }}">
+                               placeholder="Search for something!" value="{{ $term }}">
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success btn-block">Search</button>
+                        <button type="submit" class="btn btn-primary btn-block">Search</button>
                     </div>
 
                 </div>
@@ -60,7 +60,7 @@
 
                                     <div class="col-md-4 col-sm-12 mb-3">
 
-                                        <div class="card mb-3 h-100" style="border-left: 5px solid green;">
+                                        <div class="card h-100 leftborder leftborder-primary">
 
                                             <div class="card-body">
 

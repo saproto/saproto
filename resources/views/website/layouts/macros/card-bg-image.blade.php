@@ -1,4 +1,5 @@
-<a href="{{ $url or '#' }}" class="card mb-3 {{ isset($classes) ? implode(' ', $classes) : null }}"
+<a href="{{ $url or '#' }}" class="card mb-3 {{ isset($classes) ? implode(' ', $classes) : null }}
+        {{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}"
    style="text-decoration: none !important;
    {{ isset($height) ? sprintf('height: %spx;', $height) : null }}
            ">

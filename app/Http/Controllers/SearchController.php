@@ -257,19 +257,19 @@ class SearchController extends Controller
 
     public function getUserSearch(Request $request)
     {
-        $search_attributes = ['id', 'name', 'calling_name', 'email', 'phone', 'edu_username'];
+        $search_attributes = ['id', 'name', 'calling_name'];
         return $this->getGenericSearch(User::class, $request->get('q'), $search_attributes);
     }
 
     public function getEventSearch(Request $request)
     {
-        $search_attributes = ['id', 'title', 'description'];
+        $search_attributes = ['id', 'title'];
         return $this->getGenericSearch(Event::class, $request->get('q'), $search_attributes);
     }
 
     public function getCommitteeSearch(Request $request)
     {
-        $search_attributes = ['id', 'name', 'slug', 'description'];
+        $search_attributes = ['id', 'name', 'slug'];
         return $this->getGenericSearch(Committee::class, $request->get('q'), $search_attributes);
     }
 
