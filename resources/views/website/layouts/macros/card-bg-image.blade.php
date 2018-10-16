@@ -11,7 +11,7 @@
     @endif
     @if(isset($img))
     @if(isset($photo_pop))
-            background: linear-gradient(rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)), {{ sprintf('url(%s);', $img) }};
+            background: {{ sprintf('url(%s);', $img) }};
             background-size: cover; background-position: center center; height: 100px;
     @else
             background: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9)), {{ sprintf('url(%s);', $img) }};

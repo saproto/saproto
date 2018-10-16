@@ -1,69 +1,57 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
-
+    Photo
 @endsection
 
-@section('content')
+@section('container')
 
-    <div id="photo_buttons">
+    <div class="row justify-content-center">
 
-        @if ($photo->previous != null)
-            <a href="{{route("photo::view", ["id"=> $photo->previous])}}">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-            &nbsp;&nbsp;&nbsp;
-        @endif
+        <div class="col-md-12 col-lg-10 col-xl-8">
 
-        @if ($photo->liked == null)
-            <a href="{{route("photo::likes", ["id"=> $photo->id])}}">
-                <i class="fas fa-heart-o"></i> {{ $photo->likes }}
-            </a>
-        @endif
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-center">
 
-        @if($photo-> liked != null)
-            <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}">
-                <i class="fas fa-heart"></i> {{ $photo->likes }}
-            </a>
-        @endif
+                    @if ($photo->previous != null)
+                        <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark mr-3">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                    @endif
 
-        &nbsp;&nbsp;&nbsp;
+                    @if ($photo->liked == null)
+                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info mr-3">
+                            <i class="far fa-heart"></i> {{ $photo->likes }}
+                        </a>
+                    @endif
 
-        <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}">
-            <i class="fas fa-arrow-up" aria-hidden="true"></i> Album
-        </a>
+                    @if($photo-> liked != null)
+                        <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info mr-3">
+                            <i class="fas fa-heart"></i> {{ $photo->likes }}
+                        </a>
+                    @endif
 
-        @if($photo->next != null)
-            &nbsp;&nbsp;&nbsp;
-            <a href="{{route("photo::view", ["id"=> $photo->next])}}">
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        @endif
+                    <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
+                       class="btn btn-success mr-3">
+                        <i class="fas fa-arrow-up mr-2" aria-hidden="true"></i> <i class="fas fa-images"></i>
+                    </a>
+
+                    @if($photo->next != null)
+                        <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    @endif
+
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <img class="card-img-bottom card-img-top" src="{!! $photo->photo_url !!}">
+            </div>
+
+        </div>
 
     </div>
-
-    <div>
-        <img id="photo_size" src="{!! $photo->photo_url !!}">
-    </div>
-
-    <style type="text/css">
-        #photo_buttons {
-            width: 100%;
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        #photo_size {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            max-height: 80vh;
-            max-width: 99%;
-
-        }
-
-    </style>
 
 @endsection
 

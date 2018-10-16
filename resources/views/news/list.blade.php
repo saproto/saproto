@@ -8,10 +8,6 @@
 
     <div class="card mb-3">
 
-        <div class="card-header bg-dark text-white text-center">
-            All news
-        </div>
-
         <div class="card-body">
 
             <div class="row">
@@ -45,7 +41,7 @@
 
                             @include('website.layouts.macros.card-bg-image', [
                                         'url' => $newsitem->url(),
-                                        'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
+                                        'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(500,300) : null,
                                         'html' => sprintf('<strong>%s</strong><br>Published %s', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                                         'height' => '180',
                                         'photo_pop' => true

@@ -20,6 +20,17 @@ class Achievement extends Model
         return $this->hasMany('Proto\Models\AchievementOwnership');
     }
 
+    public function numberOfStars() {
+        $map = [
+            'COMMON' => 1,
+            'UNCOMMON' => 2,
+            'RARE' => 3,
+            'EPIC' => 4,
+            'LEGENDARY' => 5
+        ];
+        return $map[$this->tier];
+    }
+
     public function currentOwners($ismember = true)
     {
         $users = array();

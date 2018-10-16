@@ -1,390 +1,66 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     Achievement Overview
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="col-md-3">
+    <div id="achievement-accordion">
 
-        <div class="panel panel-default container-panel fixNav">
+    <?php $stars = 1; ?>
 
-            <div class="panel-body">
+    @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
-                <h4>Select tier:</h4>
-                <button class="btn COMMON" style="width:100px;"
-                        onclick="document.getElementById('divCommon').scrollIntoView();">Common
-                </button>
-                <br>
-                <button class="btn UNCOMMON" style="width:100px;"
-                        onclick="document.getElementById('divUncommon').scrollIntoView();">Uncommon
-                </button>
-                <br>
-                <button class="btn RARE" style="width:100px;"
-                        onclick="document.getElementById('divRare').scrollIntoView();">Rare
-                </button>
-                <br>
-                <button class="btn EPIC" style="width:100px;"
-                        onclick="document.getElementById('divEpic').scrollIntoView();">Epic
-                </button>
-                <br>
-                <button class="btn LEGENDARY" style="width:100px;"
-                        onclick="document.getElementById('divLegendary').scrollIntoView();">Legendary
-                </button>
+        <div class="card mb-3 achievement-{{ $tier }}">
+
+            <div class="card-header text-white" data-toggle="collapse" data-target="#collapse-achievement-{{ $tier }}"
+            style="cursor: pointer;">
+
+                @for($i = 0; $i < 5; $i++)
+                    @if ($i >= $achievements[0]->numberOfStars())
+                        <i class="far fa-star"></i>
+                    @else
+                        <i class="fas fa-star"></i>
+                    @endif
+                @endfor
+
+                <span class="text-capitalize ml-3">
+                    <strong>{{ $tier }}</strong>
+                </span>
 
             </div>
 
-        </div>
+            <div class="card-body bg-white collapse {{ ($tier == 'common' ? 'show' : '') }}"
+                 id="collapse-achievement-{{ $tier }}" data-parent="#achievement-accordion">
 
-    </div>
+                <div class="row">
 
-    <div class="col-md-8">
+                    @if(count($achievements) > 0)
 
-        <div class="panel panel-default container-panel" id="divCommon">
+                        @foreach($achievements as $achievement)
 
-            <div class="panel-body">
+                            <div class="col-xl-4 col-md-6 col-sm-12">
 
-                <ul class="achievement-list achievement-gallery">
-
-                    <li class="achievement achievement-rank COMMON">
-                        <div class="achievement-label">
-                            <img src="{{ asset('images/achievements/common.svg') }}" alt="">
-                        </div>
-                        <div class="achievement-icon">
-                            COMMON
-                        </div>
-                    </li>
-                    <br><br>
-
-                    @foreach($common as $achievement)
-
-                        <li class="achievement {{ $achievement->tier }}">
-
-                            <div class="achievement-tooltip">
-
-                                <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
-                                         alt="">
-                                    <div class="achievement-button-icon">
-                                        @if($achievement->fa_icon)
-                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
-                                        @else
-                                            No icon available
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="achievement-text">
-
-                                    <div class="achievement-title">
-                                        <strong>{{ $achievement->name }}</strong>
-                                        @if(in_array($achievement->id, $obtained))
-                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
-                                        @endif
-                                    </div>
-
-                                    <div class="achievement-desc">
-                                        <p>{{ $achievement->desc }}</p>
-                                    </div>
-
-                                    <div class="achievement-data">
-                                        <sub>Available since: {{ $achievement->created_at->format('d/m/Y') }}.</sub>
-                                        @if(Auth::check() && Auth::user()->can("board"))
-                                            <a class="del"
-                                               href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">Edit</a>
-                                        @endif
-                                    </div>
-
-                                </div>
+                                @include('achievement.includes.achievement_include', [
+                                'achievement' => $achievement
+                                ])
 
                             </div>
 
-                        </li>
+                        @endforeach
 
-                    @endforeach
+                    @endif
 
-                </ul>
+                    <?php $stars++; ?>
 
-            </div>
-
-        </div>
-
-        <div class="panel panel-default container-panel" id="divUncommon">
-
-            <div class="panel-body">
-
-                <ul class="achievement-list achievement-gallery">
-
-                    <li class="achievement achievement-rank UNCOMMON">
-                        <div class="achievement-label">
-                            <img src="{{ asset('images/achievements/uncommon.svg') }}" alt="">
-                        </div>
-                        <div class="achievement-icon">
-                            UNCOMMON
-                        </div>
-                    </li>
-                    <br><br>
-
-                    @foreach($uncommon as $achievement)
-
-                        <li class="achievement {{ $achievement->tier }}">
-
-                            <div class="achievement-tooltip">
-
-                                <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
-                                         alt="">
-                                    <div class="achievement-button-icon">
-                                        @if($achievement->fa_icon)
-                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
-                                        @else
-                                            No icon available
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="achievement-text">
-
-                                    <div class="achievement-title">
-                                        <strong>{{ $achievement->name }}</strong>
-                                        @if(in_array($achievement->id, $obtained))
-                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
-                                        @endif
-                                    </div>
-
-                                    <div class="achievement-desc">
-                                        <p>{{ $achievement->desc }}</p>
-                                    </div>
-
-                                    <div class="achievement-data">
-                                        <sub>Available since: {{ $achievement->created_at->format('d/m/Y') }}.</sub>
-                                        @if(Auth::check() && Auth::user()->can("board"))
-                                            <a class="del"
-                                               href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">Edit</a>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                    @endforeach
-
-                </ul>
+                </div>
 
             </div>
 
         </div>
 
-        <div class="panel panel-default container-panel" id="divRare">
-
-            <div class="panel-body">
-
-                <ul class="achievement-list achievement-gallery">
-
-                    <li class="achievement achievement-rank RARE">
-                        <div class="achievement-label">
-                            <img src="{{ asset('images/achievements/rare.svg') }}" alt="">
-                        </div>
-                        <div class="achievement-icon">
-                            RARE
-                        </div>
-                    </li>
-                    <br><br>
-
-                    @foreach($rare as $achievement)
-
-                        <li class="achievement {{ $achievement->tier }}">
-
-                            <div class="achievement-tooltip">
-
-                                <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
-                                         alt="">
-                                    <div class="achievement-button-icon">
-                                        @if($achievement->fa_icon)
-                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
-                                        @else
-                                            No icon available
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="achievement-text">
-
-                                    <div class="achievement-title">
-                                        <strong>{{ $achievement->name }}</strong>
-                                        @if(in_array($achievement->id, $obtained))
-                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
-                                        @endif
-                                    </div>
-
-                                    <div class="achievement-desc">
-                                        <p>{{ $achievement->desc }}</p>
-                                    </div>
-
-                                    <div class="achievement-data">
-                                        <sub>Available since: {{ $achievement->created_at->format('d/m/Y') }}.</sub>
-                                        @if(Auth::check() && Auth::user()->can("board"))
-                                            <a class="del"
-                                               href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">Edit</a>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                    @endforeach
-
-                </ul>
-
-            </div>
-
-        </div>
-
-        <div class="panel panel-default container-panel" id="divEpic">
-
-            <div class="panel-body">
-
-                <ul class="achievement-list achievement-gallery">
-
-                    <li class="achievement achievement-rank EPIC">
-                        <div class="achievement-label">
-                            <img src="{{ asset('images/achievements/epic.svg') }}" alt="">
-                        </div>
-                        <div class="achievement-icon">
-                            EPIC
-                        </div>
-                    </li>
-                    <br><br>
-
-                    @foreach($epic as $achievement)
-
-                        <li class="achievement {{ $achievement->tier }}">
-
-                            <div class="achievement-tooltip">
-
-                                <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
-                                         alt="">
-                                    <div class="achievement-button-icon">
-                                        @if($achievement->fa_icon)
-                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
-                                        @else
-                                            No icon available
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="achievement-text">
-
-                                    <div class="achievement-title">
-                                        <strong>{{ $achievement->name }}</strong>
-                                        @if(in_array($achievement->id, $obtained))
-                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
-                                        @endif
-                                    </div>
-
-                                    <div class="achievement-desc">
-                                        <p>{{ $achievement->desc }}</p>
-                                    </div>
-
-                                    <div class="achievement-data">
-                                        <sub>Available since: {{ $achievement->created_at->format('d/m/Y') }}.</sub>
-                                        @if(Auth::check() && Auth::user()->can("board"))
-                                            <a class="del"
-                                               href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">Edit</a>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                    @endforeach
-
-                </ul>
-
-            </div>
-
-        </div>
-
-        <div class="panel panel-default container-panel" id="divLegendary">
-
-            <div class="panel-body">
-
-                <ul class="achievement-list achievement-gallery">
-
-                    <li class="achievement achievement-rank LEGENDARY">
-                        <div class="achievement-label">
-                            <img src="{{ asset('images/achievements/legendary.svg') }}" alt="">
-                        </div>
-                        <div class="achievement-icon">
-                            LEGENDARY
-                        </div>
-                    </li>
-                    <br><br>
-
-                    @foreach($legendary as $achievement)
-
-                        <li class="achievement {{ $achievement->tier }}">
-
-                            <div class="achievement-tooltip">
-
-                                <div class="achievement-button">
-                                    <img src="{{ asset('images/achievements/' . strtolower($achievement->tier) . '_tooltip.svg') }}"
-                                         alt="">
-                                    <div class="achievement-button-icon">
-                                        @if($achievement->fa_icon)
-                                            <i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i>
-                                        @else
-                                            No icon available
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="achievement-text">
-
-                                    <div class="achievement-title">
-                                        <strong>{{ $achievement->name }}</strong>
-                                        @if(in_array($achievement->id, $obtained))
-                                            <i class="fas fa-check" aria-hidden="true" title="obtained!"></i>
-                                        @endif
-                                    </div>
-
-                                    <div class="achievement-desc">
-                                        <p>{{ $achievement->desc }}</p>
-                                    </div>
-
-                                    <div class="achievement-data">
-                                        <sub>Available since: {{ $achievement->created_at->format('d/m/Y') }}.</sub>
-                                        @if(Auth::check() && Auth::user()->can("board"))
-                                            <a class="del"
-                                               href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">Edit</a>
-                                        @endif
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </li>
-
-                    @endforeach
-
-                </ul>
-
-            </div>
-
-        </div>
+    @endforeach
 
     </div>
 

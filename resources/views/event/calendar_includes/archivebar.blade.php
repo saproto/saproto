@@ -21,7 +21,7 @@
             @endforeach
 
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fas fa-calendar-plus-o" aria-hidden="true"></i>&nbsp;&nbsp;Import calendar
+                <i class="fas fa-calendar-plus mr-2"></i> Import calendar
             </button>
 
         </div>

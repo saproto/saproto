@@ -4,27 +4,31 @@
     </div>
 @endif
 
-<div class="card mb-3">
+@if(Auth::check() && ($event->isEventAdmin(Auth::user()) || Auth::user()->can('board')))
 
-    @if(Auth::check() && ($event->isEventAdmin(Auth::user()) || Auth::user()->can('board')))
+    <div class="row align-content-center mb-3" role="group">
 
-        <div class="card-header text-center bg-dark">
-
-            @if($event->isEventAdmin(Auth::user()))
-                <a href="{{ route("event::admin", ['id'=>$event->id]) }}" class="btn btn-sm btn-primary w-25">
+        @if($event->isEventAdmin(Auth::user()))
+            <div class="col-6">
+                <a href="{{ route("event::admin", ['id'=>$event->id]) }}" class="btn btn-primary btn-block">
                     Admin
                 </a>
-            @endif
+            </div>
+        @endif
 
-            @if(Auth::user()->can('board'))
-                <a href="{{ route("event::edit", ['id'=>$event->id]) }}" class="btn btn-sm btn-info w-25">
+        @if(Auth::user()->can('board'))
+            <div class="col-6">
+                <a href="{{ route("event::edit", ['id'=>$event->id]) }}" class="btn btn-info btn-block">
                     Edit
                 </a>
-            @endif
+            </div>
+        @endif
 
-        </div>
+    </div>
 
-    @endif
+@endif
+
+<div class="card mb-3">
 
     @if($event->image)
         <img class="card-img-top" src="{{ $event->image->generateImagePath(null, null) }}" width="100%">
@@ -46,7 +50,7 @@
     <ul class="list-group list-group-flush">
 
         <li class="list-group-item">
-            <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+            <i class="fas fa-fw fa-clock" aria-hidden="true"></i>
             {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
         </li>
 
@@ -56,7 +60,7 @@
 
         @if ($event->involves_food == true)
             <a class="list-group-item bg-info text-white" href="{{ route("user::dashboard") }}#alergies">
-                <i class="fas fa-fw fa-cutlery" aria-hidden="true"></i> There will be food, please indicate
+                <i class="fas fa-fw fa-utensils" aria-hidden="true"></i> There will be food, please indicate
                 any allergies or diets on your dashboard.
             </a>
         @endif
@@ -108,7 +112,7 @@
                     @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]),
                         'img' => $album->thumb,
-                        'html' => sprintf('<em>%s</em><br><strong><i class="fas fa-fw fa-picture-o" aria-hidden="true"></i> %s</strong>', date("M j, Y", $album->date_taken), $album->name)
+                        'html' => sprintf('<em>%s</em><br><strong><i class="fas fa-fw fa-images" aria-hidden="true"></i> %s</strong>', date("M j, Y", $album->date_taken), $album->name)
                     ])
 
                 @endforeach

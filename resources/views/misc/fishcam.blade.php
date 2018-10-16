@@ -1,25 +1,38 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     The FishCam&trade;
 @endsection
 
-@section('content')
+@section('container')
 
-    <div id="fishcam">
+    <div class="row justify-content-center">
 
-        <p style="font-size: 90px; text-align: center;">
-            <i id="fishcam__activate" class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-        </p>
+    <div class="card" id="fishcam" style="width: 640px; height: 480px;">
 
-        <p>
-            <strong>Warning</strong>
-            The fishcam stream is of very high quality, and streams with roughly 0.5 MB/s.
-            <strong>Please don't load this page over a mobile connection.</strong>
-            Seriously.
-            If you have a 1 gigabyte data plan, you will use it up completely over the course of half an hour.
-            Please click the exclamation mark to start the stream.
-        </p>
+        <div class="card-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i> Warning | Please don't
+            load this page over a mobile connection.
+        </div>
+
+        <div class="card-body">
+
+            <div class="card-text">
+                The fishcam stream is of very high quality, and streams with roughly 0.5 MB/s. If you have a 1 gigabyte
+                data plan, you will use it up completely over the course of half an hour.
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+
+            <button href="#" id="fishcam__activate" class="btn btn-danger btn-block">
+                <i class="fas fa-fish mr-2"></i> I understand, start the fishcam anyway!
+            </button>
+
+        </div>
+
+    </div>
 
     </div>
 

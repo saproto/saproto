@@ -259,7 +259,7 @@
                        style="margin-right: 10px;">
                         <i class="fas fa-user-plus mr-2"></i> Register
                     </a>
-                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-unlock mr-2"></i> Log-in</a>
+                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i> Log-in</a>
                 </form>
 
                 </form>

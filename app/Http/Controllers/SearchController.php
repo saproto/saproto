@@ -100,7 +100,7 @@ class SearchController extends Controller
                 $search = "&";
                 $data = [];
                 foreach ($terms as $term) {
-                    $search .= "(|(sn=$term)(middlename=$term)(givenName=$term)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                    $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
                 }
                 $data = LdapController::searchUtwente($search, true);
             } else {

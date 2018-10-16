@@ -9,7 +9,7 @@
 
 @section('left-column')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
         <div class="col-xl-4 col-md-12">
 
@@ -48,31 +48,36 @@
 
         </div>
 
-        <div class="col-xl-4 col-md-12">
+        @if (count($birthdays) > 0)
 
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">Birthdays</div>
-                <div class="card-body">
+            <div class="col-xl-4 col-md-12">
 
-                    @if (count($birthdays) > 0)
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">Birthdays</div>
+                    <div class="card-body">
 
                         @foreach($birthdays as $key => $user)
 
-                            <div class="member ellipsis">
-                                <div class="member-picture"
-                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');">
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <img width="50px" height="50px" class="rounded-circle float-right"
+                                         src="{!! $user->generatePhotoPath(50, 50) !!}">
+                                    <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">
+                                        <strong>{{ $user->name }}</strong><br>
+                                    </a>
+                                    <em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>
                                 </div>
-                                <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
                             </div>
 
                         @endforeach
 
-                    @endif
-
+                    </div>
                 </div>
+
             </div>
 
-        </div>
+        @endif
 
     </div>
 

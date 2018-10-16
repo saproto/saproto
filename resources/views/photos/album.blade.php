@@ -1,59 +1,49 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
 @endsection
 
-@section('content')
+@section('container')
 
     @if($photos->event !== null)
 
-        <p style="text-align: center;">
-
-            <a class="btn btn-info" href="{{ route('event::show', ['event_id'=>$photos->event->getPublicId()]) }}">
-                Visit event information of {{ $photos->event->title }}
-            </a>
-
-        </p>
-
-        <hr>
+        <a class="btn btn-info btn-block mb-3" href="{{ route('event::show', ['event_id'=>$photos->event->getPublicId()]) }}">
+            These photos were taken at the event {{ $photos->event->title }}, click here for more info.
+        </a>
 
     @endif
 
-    <div id="album">
+    <div class="card mb-3">
 
-        @foreach($photos->photos as $key => $photo)
+        <div class="card-header bg-dark text-white text-center">
+            {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
+        </div>
 
-            @if($key % 4 == 0)
-                <div class="row">
-                    @endif
+        <div class="card-body">
 
-                    <div class="col-md-3 col-xs-6">
+            <div class="row">
 
-                        <a href="{{route("photo::view", ["id"=> $photo->id])}}" class="photo-link">
-                            <div class="photo" style="background-image: url('{!! $photo->thumb !!}')">
-                                <div class="album-name">
+                @foreach($photos->photos as $key => $photo)
 
+                    <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                    <i class="fas fa-heart"></i> {{$photo->getLikes()}}
-
-
-                                </div>
-                                @if ($photo->private)
-                                    <div class="photo__hidden">
-                                        <i class="fas fa-low-vision" aria-hidden="true"></i>
-                                    </div>
-                                @endif
-                            </div>
-                        </a>
+                        @include('website.layouts.macros.card-bg-image', [
+                        'url' => route("photo::view", ["id"=> $photo->id]),
+                        'img' => $photo->thumb,
+                        'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
+                            $photo->getLikes(), $photo->private ? '<i class="fas fa-eye-slash ml-4 mr-2"></i> Members only' : null),
+                        'photo_pop' => true,
+                        'height' => 200
+                        ])
 
                     </div>
 
-                    @if($key % 4 == 3)
-                </div>
-            @endif
+                @endforeach
 
-        @endforeach
+            </div>
+
+        </div>
 
     </div>
 
@@ -64,16 +54,16 @@
     @parent
 
     <script>
-        (function(window, location) {
-            history.replaceState(null, document.title, location.pathname+"#!/stealingyourhistory");
+        (function (window, location) {
+            history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
             history.pushState(null, document.title, location.pathname);
 
-            window.addEventListener("popstate", function() {
-                if(location.hash === "#!/stealingyourhistory") {
+            window.addEventListener("popstate", function () {
+                if (location.hash === "#!/stealingyourhistory") {
                     history.replaceState(null, document.title, location.pathname);
-                    setTimeout(function(){
+                    setTimeout(function () {
                         location.replace("{{ route('photo::albums')}}");
-                    },0);
+                    }, 0);
                 }
             }, false);
         }(window, location));

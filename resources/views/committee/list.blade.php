@@ -8,10 +8,6 @@
 
     <div class="card mb-3">
 
-        <div class="card-header bg-dark text-white text-center">
-            Committees of S.A. Proto
-        </div>
-
         <div class="card-body">
 
             <div class="row" id="committee__list">

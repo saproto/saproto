@@ -31,6 +31,7 @@
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "popper.js": "^1.14.4",
+    "select2": "^4.0.5",
     "simplemde": "^1.11.2",
     "tempusdominus-bootstrap-4": "^5.1.2"
   },
@@ -96,6 +97,7 @@
         "./node_modules/font-awesome/css/font-awesome.css",
         "./node_modules/chocolat/dist/css/chocolat.css",
         "./node_modules/select2/dist/css/select2.min.css",
+        "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css",
         "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
