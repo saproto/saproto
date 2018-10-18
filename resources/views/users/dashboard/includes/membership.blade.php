@@ -40,19 +40,19 @@
                         <th>Special status</th>
                         <td>
                             @if($user->member->is_honorary)
-                                <span class="badge badge-pill badge-success">
+                                <span class="badge badge-pill badge-primary">
                                     Honorary member! <i class="fas fa-trophy"></i>
                                 </span>
                             @endif
 
                             @if($user->member->is_donator)
-                                <span class="badge badge-pill badge-success">
+                                <span class="badge badge-pill badge-primary">
                                     Donator <i class="far fa-handshake"></i>
                                 </span>
                             @endif
 
                             @if($user->member->is_lifelong)
-                                <span class="badge badge-pill badge-success">
+                                <span class="badge badge-pill badge-primary">
                                     Lifelong member
                                 </span>
                             @endif

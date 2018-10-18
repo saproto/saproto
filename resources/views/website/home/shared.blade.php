@@ -52,7 +52,7 @@
 
             @include('website.layouts.macros.recentalbums', ['n' => 4])
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header bg-dark text-white">Proto.ink articles</div>
                 <ul id="protoink" class="list-group list-group-flush">
                     <li class="list-group-item">Loading articles...</li>

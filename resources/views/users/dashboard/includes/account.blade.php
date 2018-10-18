@@ -31,13 +31,13 @@
                     <tr>
                         <th>Studies attended</th>
                         <td>
-                        <span class="badge badge-pill badge-{{ $user->did_study_create ? 'success' : 'dark' }} text-white"
+                        <span class="badge badge-pill badge-{{ $user->did_study_create ? 'primary' : 'dark' }} text-white"
                               data-toggle="tooltip" data-placement="bottom"
                               title="Is this incorrect? Let the board know.">
                             <i class="fas fa-{{ $user->did_study_create ? 'check-' : null }}square fa-fw"></i>
                             Creative Technology
                         </span>
-                            <span class="badge badge-pill badge-{{ $user->did_study_itech ? 'success' : 'dark' }} text-white"
+                            <span class="badge badge-pill badge-{{ $user->did_study_itech ? 'primary' : 'dark' }} text-white"
                                   data-toggle="tooltip" data-placement="bottom"
                                   title="Is this incorrect? Let the board know.">
                             <i class="fas fa-{{ $user->did_study_itech ? 'check-' : null }}square fa-fw"></i>
@@ -75,7 +75,7 @@
                             </a>
                         @else
                             Not linked
-                            <a class="badge badge-pill badge-success float-right" href="{{ route('user::edu::add') }}">
+                            <a class="badge badge-pill badge-primary float-right" href="{{ route('user::edu::add') }}">
                                 <i class="fas fa-user-plus fa-fw"></i>
                             </a>
                         @endif
@@ -91,12 +91,12 @@
                         @if($user->address)
                             {{ $user->address->street }} {{ $user->address->number }}
                             @if($user->member)
-                                <a class="badge badge-pill badge-success float-right"
+                                <a class="badge badge-pill badge-primary float-right"
                                    href="{{ route('user::address::edit') }}">
                                     <i class="far fa-edit fa-fw"></i>
                                 </a>
                             @else
-                                <a class="badge badge-pill badge-success float-right"
+                                <a class="badge badge-pill badge-primary float-right"
                                    href="{{ route('user::address::edit') }}">
                                     <i class="far fa-edit fa-fw"></i>
                                 </a>
@@ -114,7 +114,7 @@
                                 @else
                                     <i class="fas fa-user-lock fa-fw mr-2"></i> Visible to the board
                                 @endif
-                                <a class="badge badge-pill badge-success float-right"
+                                <a class="badge badge-pill badge-primary float-right"
                                    href="{{ route('user::address::togglehidden') }}">
                                     @if($user->address_visible)
                                         <i class="fas fa-toggle-on fa-fw"></i>
@@ -192,7 +192,7 @@
             @endif
 
             @if(!$user->hasCompletedProfile())
-                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-success btn-block">
+                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-primary btn-block">
                     Complete profile for membership
                 </a>
             @endif
@@ -201,7 +201,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-outline-success btn-block">
+            <button type="submit" class="btn btn-outline-primary btn-block">
                 Update account
             </button>
 

@@ -24,18 +24,10 @@ class OrderLineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $user_id = null, $date = null)
+    public function index($date = null)
     {
 
-        if ($user_id == null) {
-            $user = Auth::user();
-        } else {
-            $user = User::findOrFail($user_id);
-        }
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 

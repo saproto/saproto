@@ -27,7 +27,7 @@
                                    class="badge badge-danger float-right">Unsubscribe</a>
                             @elseif(!$list->is_member_only || $user->member)
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"
-                                   class="badge badge-success float-right">Subscribe</a>
+                                   class="badge badge-primary float-right">Subscribe</a>
                             @else
                                 <span class="badge badge-info float-right">Members only</span>
                             @endif

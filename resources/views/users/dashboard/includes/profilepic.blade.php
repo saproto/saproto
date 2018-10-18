@@ -33,7 +33,7 @@
                         <label class="custom-file-label">Choose file</label>
                     </div>
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-success" type="button">
+                        <button type="submit" class="btn btn-outline-primary" type="button">
                             <i class="fas fa-file-upload"></i>
                         </button>
                     </div>

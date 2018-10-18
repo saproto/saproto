@@ -23,7 +23,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                        title="You are helping with this activity."></i>
                 @endif
             @endif
-            @if (Auth::user() && $event->hasBoughtTickets(Auth::user()))
+            @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
                 <i class="fas fa-ticket-alt fa-fw" style="color: dodgerblue;" aria-hidden="true"
                    title="You bought a ticket for this event."></i>
             @endif
@@ -36,7 +36,11 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             <br>
 
             <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-            {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
+            @if (isset($include_year))
+                {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
+            @else
+                {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
+            @endif
 
             <br>
 

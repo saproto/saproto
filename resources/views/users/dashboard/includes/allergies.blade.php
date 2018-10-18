@@ -19,7 +19,7 @@
 
     <div class="card-footer">
 
-        <div class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#diet-modal">
+        <div class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#diet-modal">
             Update
         </div>
 
@@ -68,7 +68,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Save changes</button>
+                    <button type="submit" class="btn btn-outline-primary">Save changes</button>
                 </div>
 
             </div>

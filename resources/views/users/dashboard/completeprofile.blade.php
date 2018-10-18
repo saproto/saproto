@@ -36,7 +36,7 @@
 
         @section('panel-footer')
 
-            <button type="submit" class="btn btn-success pull-right">Complete profile</button>
+            <button type="submit" class="btn btn-outline-primary pull-right">Complete profile</button>
 
     </form>
 

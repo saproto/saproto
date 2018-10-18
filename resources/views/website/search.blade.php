@@ -38,10 +38,10 @@
                         @foreach($users as $user)
 
                             @include('users.includes.usercard', [
-                                'user' => $user['object'],
+                                'user' => $user,
                                 'subtitle' => sprintf('<em>Member since %s</em>',
-                                 date('U', strtotime($user['object']->member->created_at)) > 0 ? date('F Y', strtotime($user['object']->member->created_at)) : 'forever!')
-                                ])
+                                 date('U', strtotime($user->member->created_at)) > 0 ? date('F Y', strtotime($user->member->created_at)) : 'forever!')
+                            ])
 
                         @endforeach
 
@@ -52,60 +52,54 @@
 
         @endif
 
-            @if (count($committees) > 0)
+        @if (count($committees) > 0)
 
-                <div class="col-md-3">
+            <div class="col-md-3">
 
-                    <div class="card">
-                        <div class="card-header">
-                            Committees
-                        </div>
-                        <div class="card-body">
-
-                            @foreach($committees as $committee)
-
-                                @include('website.layouts.macros.card-bg-image', [
-                                            'url' => route('committee::show', ['id' => $committee['object']->getPublicId()]),
-                                            'img' => $committee['object']->image->generateImagePath(450, 300),
-                                            'html' => !$committee['object']->public ? sprintf('<i class="fas fa-lock"></i>&nbsp;&nbsp;%s', $committee['object']->name) : sprintf('<strong>%s</strong>', $committee['object']->name),
-                                            'height' => '120',
-                                            'classes' => !$committee['object']->public ? ['committee__hidden'] : null,
-                                            'photo_pop' => true
-                                ])
-
-                            @endforeach
-
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        Committees
                     </div>
+                    <div class="card-body">
 
+                        @foreach($committees as $committee)
+
+                            @include('committee.include.committee_block', ['committee' => $committee])
+
+                        @endforeach
+
+                    </div>
                 </div>
 
-            @endif
+            </div>
 
-            @if (count($events) > 0)
+        @endif
 
-                <div class="col-md-3">
+        @if (count($events) > 0)
 
-                    <div class="card">
-                        <div class="card-header">
-                            Proto members
-                        </div>
-                        <div class="card-body">
+            <div class="col-md-3">
 
-                            @foreach($events as $event)
-
-                                @include('event.display_includes.event_block', [
-                                    'event'=> $event['object']
-                                ])
-
-                            @endforeach
-
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        Upcoming events
                     </div>
+                    <div class="card-body">
 
+                        @foreach($events as $event)
+
+                            @include('event.display_includes.event_block', [
+                                'event'=> $event,
+                                'include_year' => true
+                            ])
+
+                        @endforeach
+
+                    </div>
                 </div>
 
-            @endif
+            </div>
+
+        @endif
 
         @if (count($pages) > 0)
 
@@ -120,10 +114,10 @@
                         @foreach($pages as $page)
 
                             @include('website.layouts.macros.card-bg-image', [
-                                'url' => route("page::show", ["slug" => $page['object']->slug]),
-                                'img' => $page['object']->featuredImage ? $page['object']->featuredImage->generateImagePath(300, 200) : null,
+                                'url' => route("page::show", ["slug" => $page->slug]),
+                                'img' => $page->featuredImage ? $page->featuredImage->generateImagePath(300, 200) : null,
                                 'photo_pop' => true,
-                                'html' => $page['object']->title,
+                                'html' => $page->title,
                                 'height' => 100,
                                 'leftborder' => 'info'
                             ])

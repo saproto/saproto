@@ -33,7 +33,7 @@
 
         @section('panel-footer')
 
-            <button type="submit" class="btn btn-success pull-right">The information above is correct.</button>
+            <button type="submit" class="btn btn-outline-primary pull-right">The information above is correct.</button>
 
     </form>
 

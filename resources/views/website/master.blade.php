@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="position: relative; min-height: 100%;">
 
 <head>
 
@@ -37,7 +37,7 @@
 
 </head>
 
-<body class="template-{{ $viewName }}" style="background-color: #e0e0e0;">
+<body class="template-{{ $viewName }}" style="background-color: #e0e0e0; margin-bottom: 216px;">
 
 @yield('body')
 

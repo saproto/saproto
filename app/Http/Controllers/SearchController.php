@@ -26,64 +26,51 @@ class SearchController extends Controller
 
         $term = $request->input('query');
 
-        $data = SearchController::doSearch($term);
-
         $users = [];
-        foreach ($data['users'] as $id => $count) {
-            $user = User::findOrFail($id);
-            $users[] = [
-                'score' => $count,
-                'object' => $user,
-                'href' => route('user::profile', ['id' => $user->getPublicId()])
-            ];
-        }
-        $pages = [];
-        foreach ($data['pages'] as $id => $count) {
-            $page = Page::findOrFail($id);
-            $pages[] = [
-                'score' => $count,
-                'object' => $page,
-                'href' => route('page::show', ['slug' => $page->slug])
-            ];
-        }
-        $committees = [];
-        foreach ($data['committees'] as $id => $count) {
-            $committee = Committee::findOrFail($id);
-            $committees[] = [
-                'score' => $count,
-                'object' => $committee,
-                'href' => route('committee::show', ['id' => $committee->getPublicId()])
-            ];
-        }
-        $events = [];
-        foreach ($data['events'] as $id => $count) {
-            $event = Event::findOrFail($id);
-            $events[] = [
-                'score' => $count,
-                'object' => $event,
-                'href' => route('event::show', ['id' => $event->getPublicId()])
-            ];
+        if (Auth::check() && Auth::user()->member) {
+            $presearch_users = $this->getGenericSearch(User::class, $term,
+                ['id', 'name', 'calling_name', 'utwente_username', 'email']);
+            foreach ($presearch_users as $user) {
+                if ($user->member) {
+                    $users[] = $user;
+                }
+
+            }
         }
 
-        usort($users, function ($a, $b) {
-            return $b['score'] - $a['score'];
-        });
-        usort($pages, function ($a, $b) {
-            return $b['score'] - $a['score'];
-        });
-        usort($committees, function ($a, $b) {
-            return $b['score'] - $a['score'];
-        });
-        usort($events, function ($a, $b) {
-            return $b['score'] - $a['score'];
-        });
+        $pages = [];
+        $presearch_pages = $this->getGenericSearch(Page::class, $term,
+            ['slug', 'title', 'content']);
+        foreach ($presearch_pages as $page) {
+            if (!$page->is_member_only || (Auth::check() && Auth::user()->member)) {
+                $pages[] = $page;
+            }
+        }
+
+        $committees = [];
+        $presearch_committees = $this->getGenericSearch(Committee::class, $term,
+            ['id', 'name', 'slug']);
+        foreach ($presearch_committees as $committee) {
+            if ($committee->public || (Auth::check() && Auth::user()->can('board'))) {
+                $committees[] = $committee;
+            }
+        }
+
+        $events = [];
+        $presearch_events = $this->getGenericSearch(Event::class, $term,
+            ['id', 'title']);
+        foreach ($presearch_events as $event) {
+            if (!$event->secret || (Auth::check() && Auth::user()->can('board'))) {
+                $events[] = $event;
+            }
+        }
 
         return view('website.search', [
             'term' => $term,
             'users' => $users,
             'pages' => $pages,
             'committees' => $committees,
-            'events' => $events
+            'events' => array_reverse($events)
         ]);
 
     }
@@ -114,142 +101,6 @@ class SearchController extends Controller
 
     }
 
-    public static function doSearch($term)
-    {
-
-        $data = [
-            'users' => [],
-            'pages' => [],
-            'events' => [],
-            'committees' => []
-        ];
-
-        $term = str_replace('%', '', $term);
-
-        if (strlen($term) == 0) {
-            return $data;
-        }
-
-        $term = explode(' ', $term);
-
-        if (count($term) == 0) {
-            return $data;
-        }
-
-        foreach ($term as $string) {
-
-            $string = strtolower($string);
-
-            if ($string == 'proto') continue;
-
-            foreach (User::all() as $user) {
-
-                if (
-                    (
-                        (strlen($string) >= 3 && strpos(strtolower($user->name), $string) > -1)
-                        || strtolower($user->calling_name) == $string
-                        || ($user->utwente_username && strlen($string) >= 5 && strpos(strtolower($user->utwente_username), $string) > -1) && Auth::check() && Auth::user()->can('board')
-                        || (intval($string) > 0 && $user->id == $string)
-                    ) && $user->member && Auth::check() && Auth::user()->member
-                ) {
-
-                    if (array_key_exists($user->id, $data['users'])) {
-                        $data['users'][$user->id]++;
-                    } else {
-                        $data['users'][$user->id] = 1;
-                    }
-
-                }
-
-            }
-
-            foreach (Page::all() as $page) {
-
-                if (
-                    (
-                        (strlen($string) >= 3 && strpos(strtolower($page->title), $string) > -1)
-                        || (strlen($string) >= 3 && strpos(strtolower($page->content), $string) > -1)
-                    ) && (!$page->is_member_only || Auth::check() && Auth::user()->member)
-                ) {
-
-                    if (array_key_exists($page->id, $data['pages'])) {
-                        $data['pages'][$page->id] +=
-                            substr_count(strtolower($page->title), $string)
-                            + substr_count(strtolower($page->content), $string);
-                    } else {
-                        $data['pages'][$page->id] = substr_count(strtolower($page->title), $string)
-                            + substr_count(strtolower($page->content), $string);
-                    }
-
-                }
-
-            }
-
-            foreach (Event::all() as $event) {
-
-                if (
-                    (
-                        (strlen($string) >= 3 && strpos(strtolower($event->title), $string) > -1)
-                        || (strlen($string) >= 3 && strpos(strtolower($event->description), $string) > -1)
-                    ) && (!$event->secret || Auth::check() && Auth::user()->can('board'))
-                ) {
-
-                    if (array_key_exists($event->id, $data['events'])) {
-                        $data['events'][$event->id] +=
-                            substr_count(strtolower($event->title), $string)
-                            + substr_count(strtolower($event->content), $string);
-                    } else {
-                        $data['events'][$event->id] = substr_count(strtolower($event->title), $string)
-                            + substr_count(strtolower($event->description), $string);
-                        $data['events'][$event->id] -= SearchController::searchTimePenalty($event);
-                    }
-
-                }
-
-            }
-
-            foreach (Committee::all() as $committee) {
-
-                if (
-                    (
-                        (strlen($string) >= 3 && strpos(strtolower($committee->name), $string) > -1)
-                        || (strlen($string) >= 3 && strpos(strtolower($committee->description), $string) > -1)
-                    ) && ($committee->public || Auth::check() && Auth::user()->can('board'))
-                ) {
-
-                    if (array_key_exists($committee->id, $data['committees'])) {
-                        $data['committees'][$committee->id] +=
-                            substr_count(strtolower($committee->name), $string)
-                            + substr_count(strtolower($committee->description), $string);
-                    } else {
-                        $data['committees'][$committee->id] = substr_count(strtolower($committee->name), $string)
-                            + substr_count(strtolower($committee->description), $string);
-                    }
-
-                }
-
-            }
-
-        }
-
-        arsort($data['users']);
-        arsort($data['pages']);
-        arsort($data['events']);
-        arsort($data['committees']);
-
-        return $data;
-    }
-
-    public static function searchTimePenalty(Event $event)
-    {
-        $penalty = 0;
-
-        $delta = date('U') - date('U', $event->start);
-        $penalty = 0.2 * ($delta / 3600 / 24);
-
-        return $penalty;
-    }
-
     public function openSearch()
     {
         return Response::make(View::make('website.opensearch'))->header('Content-Type', 'text/xml');
@@ -257,7 +108,7 @@ class SearchController extends Controller
 
     public function getUserSearch(Request $request)
     {
-        $search_attributes = ['id', 'name', 'calling_name'];
+        $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         return $this->getGenericSearch(User::class, $request->get('q'), $search_attributes);
     }
 

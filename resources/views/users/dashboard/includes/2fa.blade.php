@@ -44,7 +44,7 @@
         @else
 
 
-            <a data-toggle="modal" data-target="#totp-modal" class="btn btn-outline-success btn-block">
+            <a data-toggle="modal" data-target="#totp-modal" class="btn btn-outline-primary btn-block">
                 Configure Two-Factor Authentication
             </a>
 

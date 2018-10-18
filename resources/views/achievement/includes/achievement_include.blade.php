@@ -6,6 +6,13 @@
 
         <strong class="text-white">{{ $achievement->name }}</strong>
 
+        @if(isset($include_delete_for) && $include_delete_for)
+            <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
+               class="float-right text-white">
+                <i class="fas fa-trash fa-fw ml-3"></i>
+            </a>
+        @endif
+
         <span class="float-right">
                 @for($i = 0; $i < 5; $i++)
                 @if ($i >= $achievement->numberOfStars())
@@ -20,8 +27,16 @@
 
     <div class="card-body bg-white text-dark">
 
-            {{ $achievement->desc }}
+        {{ $achievement->desc }}
 
     </div>
+
+    @if(isset($footer) && $footer)
+
+        <div class="card-footer">
+            {!! $footer !!}
+        </div>
+
+    @endif
 
 </div>

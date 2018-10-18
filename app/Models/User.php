@@ -367,12 +367,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $r;
     }
 
-    public function withdrawals()
+    public function withdrawals($limit = 0)
     {
         $withdrawals = [];
         foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
             if ($withdrawal->orderlinesForUser($this)->count() > 0) {
                 $withdrawals[] = $withdrawal;
+                if ($limit > 0 && count($withdrawals) > $limit) {
+                    break;
+                }
             }
         }
         return $withdrawals;
@@ -520,7 +523,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->generatePhotoPath();
     }
 
-    public function getIcalUrl() {
+    public function getIcalUrl()
+    {
         return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
     }
 

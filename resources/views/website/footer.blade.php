@@ -1,4 +1,4 @@
-<footer class="main-footer bg-dark text-white" style="margin: 16px 0 0 0; padding: 16px 0;">
+<footer class="main-footer bg-dark text-white pt-3" style="position: absolute; bottom: 0; width: 100%;">
 
     <div class="container">
 

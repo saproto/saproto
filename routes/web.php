@@ -500,7 +500,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
             Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
-            Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
+            Route::get('history/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
 
             Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
             Route::post('add/single', ['as' => 'add', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@store']);

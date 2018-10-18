@@ -49,7 +49,7 @@
 
                 @endif
 
-                <a class="btn btn-outline-success btn-block" href="{{ route("user::bank::edit") }}">
+                <a class="btn btn-outline-primary btn-block" href="{{ route("user::bank::edit") }}">
                     Update authorization
                 </a>
 
@@ -61,7 +61,7 @@
 
 @else
 
-    <a type="submit" class="btn btn-success btn-block" href="{{ route("user::bank::add") }}">
+    <a type="submit" class="btn btn-outline-primary btn-block" href="{{ route("user::bank::add") }}">
         Issue SEPA direct withdrawal authorisation
     </a>
 
