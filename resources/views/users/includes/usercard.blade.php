@@ -7,4 +7,9 @@
         </a>
         {!! $subtitle !!}
     </div>
+    @if(isset($footer) && $footer)
+        <div class="card-footer">
+            {!! $footer !!}
+        </div>
+    @endif
 </div>

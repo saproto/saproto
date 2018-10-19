@@ -24,7 +24,7 @@
 
             <div class="col-md-5">
 
-                @include('committee.members-list')
+                @include('committee.include.members-list')
 
             </div>
 

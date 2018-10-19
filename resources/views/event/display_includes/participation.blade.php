@@ -4,9 +4,14 @@
 
         <ul class="list-group list-group-flush text-center">
 
-            @if (($event->isEventAdmin(Auth::user()) || Auth::user()->can('board')) && $event->activity->closed)
+            @if (($event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can("finadmin")) && $event->activity->closed)
                 <li class="list-group-item bg-danger text-white">
-                    This activity is closed and cannot be changed anymore.
+                    This activity is closed and cannot be changed anymore.<br>
+                    @if ($event->activity->closedAccount)
+                        (Account {{ $event->activity->closedAccount->account_number }}, {{ $event->activity->closedAccount->name }})
+                    @else()
+                        (Unknown account.)
+                    @endif
                 </li>
             @endif
 

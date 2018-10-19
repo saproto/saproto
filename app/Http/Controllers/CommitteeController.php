@@ -45,8 +45,7 @@ class CommitteeController extends Controller
         }
 
         return view('committee.show', ['committee' => $committee, 'members' => $committee->allmembers(),
-            'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user()),
-            'is_committee_member' => Auth::check() && $committee->isMember(Auth::user())
+            'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user())
         ]);
     }
 

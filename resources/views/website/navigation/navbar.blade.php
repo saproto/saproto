@@ -1,6 +1,6 @@
 <header>
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary text-white" style="height: 57px !important;">
 
         <a class="navbar-brand" href="{{ route('homepage') }}">Study Association Proto</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
@@ -212,8 +212,8 @@
                             <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
-                                <img class="profile__photo profile__photo--small"
-                                     src="{{ Auth::user()->generatePhotoPath(100, 100) }}">
+                                <img class="rounded-circle" src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
+                                style="width: 45px; height: 45px;">
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu">

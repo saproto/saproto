@@ -22,6 +22,7 @@ use DB;
 
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\SepaUtilities\SepaUtilities;
+use AbcAeffchen\Sephpa\SephpaInputException;
 
 class WithdrawalController extends Controller
 {
@@ -308,16 +309,20 @@ class WithdrawalController extends Controller
 
         $i = 1;
         foreach ($withdrawal->users() as $user) {
-            $direct_debit->addPayment([
-                'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
-                'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                'mndtId' => $user->bank->machtigingid,
-                'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
-                'bic' => $user->bank->bic,
-                'dbtr' => $user->name,
-                'iban' => $user->bank->iban,
-            ]);
-            $i++;
+            try {
+                $direct_debit->addPayment([
+                    'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
+                    'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
+                    'mndtId' => $user->bank->machtigingid,
+                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'bic' => $user->bank->bic,
+                    'dbtr' => $user->name,
+                    'iban' => $user->bank->iban,
+                ]);
+                $i++;
+            } catch (SephpaInputException $e) {
+                abort(400, sprintf("Error for user #%s: %s", $user->id, $e->getMessage()));
+            }
         }
 
         $response = $direct_debit->generateOutput([], false)[0];
