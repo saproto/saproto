@@ -1,6 +1,6 @@
 <div class="card h-100">
 
-    <div class="card-header">
+    <div class="card-header bg-dark text-white">
 
         <span class="qq_like mr-3" data-id="{{ $quote->id }}" style="cursor: pointer;">
             <i class="fa-thumbs-up {{ $quote->liked(Auth::user()->id) ? "fas" : "far" }}"></i>

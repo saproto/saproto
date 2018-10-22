@@ -12,7 +12,7 @@
 
             <div class="card">
 
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
 
                     <a href="{{ route('video::index') }}" class="btn btn-info mr-2">
                         <i class="fas fa-arrow-left"></i>

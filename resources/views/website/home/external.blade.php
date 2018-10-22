@@ -13,7 +13,7 @@
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card h-100">
+            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Prototyping</h5>
                     <p class="card-text">
@@ -34,7 +34,7 @@
 
         <div class="col-md-12 col-xl-6">
 
-            <div class="card h-100">
+            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Community</h5>
                     <p class="card-text">

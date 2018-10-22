@@ -37,7 +37,11 @@
 
 </head>
 
-<body class="template-{{ $viewName }}" style="background-color: #e0e0e0; margin-bottom: 216px;">
+<body class="template-{{ $viewName }}"
+    @section('body-style')
+        style="background-color: #e0e0e0; margin-bottom: 216px;"
+    @show
+>
 
 @yield('body')
 
@@ -47,56 +51,9 @@
     @include('website.layouts.assets.javascripts')
 @show
 
-@if (Session::has('flash_message'))
+@include('website.layouts.macros.flashmessages')
 
-    <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="flashModalLabel">Attention</h4>
-                </div>
-                <div class="modal-body">
-                    {!! Session::get('flash_message') !!}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-        $('#flashModal').modal('show');
-    </script>
-
-@endif
-
-@if (isset($errors) && count($errors->all()) > 0)
-
-    <!-- Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="errorModalLabel">Error</h4>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                        @foreach($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-        $('#errorModal').modal('show');
-    </script>
-
-@endif
+@include('website.layouts.macros.errormessages')
 
 @endif
 

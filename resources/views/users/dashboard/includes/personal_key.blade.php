@@ -1,6 +1,6 @@
 <div class="card mb-3">
 
-    <div class="card-header">
+    <div class="card-header bg-dark text-white">
         Personal key
     </div>
 

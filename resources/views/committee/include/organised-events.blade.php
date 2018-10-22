@@ -2,7 +2,7 @@
 
     <div class="card mb-3">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Upcoming events
         </div>
 
@@ -30,7 +30,7 @@
 
     <div class="card mb-3">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Recently organised
         </div>
 
@@ -61,7 +61,7 @@
 
     <div class="card mb-3">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Events recently helped at
         </div>
 

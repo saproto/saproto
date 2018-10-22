@@ -1,6 +1,6 @@
 <div class="card mb-3">
 
-    <div class="card-header">
+    <div class="card-header bg-dark text-white">
         Recent withdrawals
     </div>
 
@@ -44,7 +44,7 @@
 
     <div class="card mb-3">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Recent payments
         </div>
 

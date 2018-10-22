@@ -2,7 +2,7 @@
 
     <div class="card">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Most popular recent quote
         </div>
 

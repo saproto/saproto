@@ -1,6 +1,6 @@
 <div class="card">
 
-    <div class="card-header">
+    <div class="card-header bg-dark text-white">
         Committee memberships
     </div>
 
@@ -44,7 +44,7 @@
 
     <div class="card mt-3 mb-3">
 
-        <div class="card-header">
+        <div class="card-header bg-dark text-white">
             Past committee memberships
         </div>
 

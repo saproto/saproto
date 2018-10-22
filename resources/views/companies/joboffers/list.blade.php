@@ -1,75 +1,70 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
-    Creative Technology Job offers
+    Interesting job offers
 @endsection
 
-@section('content')
+@section('container')
 
-    @if(count($companies) > 0)
+    <div class="row row-eq-height">
 
-    @foreach($companies as $key => $company)
+        @if(count($companies) > 0)
 
-        <div class="company__row">
+            @foreach($companies as $key => $company)
+
+                <div class="col-md-4 mb-4">
+
+                    <div class="card h-100">
+                        <div class="card-header text-center">
+                            <div class="align-items-center row " style="height: 120px;">
+                                <div class="col" style="display: block;">
+                                    @if($company->image)
+                                        <img src="{{ $company->image->generateImagePath(null, null) }}"
+                                             style="max-width: 70%; max-height: 100px;">
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $company->name }}</h5>
+
+                            <a href="{{ route('companies::show', ['id' => $company->id]) }}"
+                               class="card-link text-info">
+                                Learn more
+                            </a>
+                            <a href="{{ $company->url }}" class="card-link text-info">
+                                Visit website
+                            </a>
+
+                            <p class="card-text mt-3">This company is currently looking to fill these positions:</p>
+                            <ul class="list-group">
+                                @foreach($company->joboffers as $joboffer)
+                                    <a href="{{ route("joboffers::show", ['id' => $joboffer->id]) }}" class="list-group-item">
+                                        {{ $joboffer->title }}
+                                    </a>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            @endforeach
+
+        @else
 
             <div class="row">
-
-                <div class="col-md-5 col-xs-6">
-
-                    <div class="company__row__image">
-
-                        <div style="{{ ($company->image ? "background-image: url(".$company->image->generateImagePath(600, null).");" : '') }}">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-7 col-xs-6 company__row__excerpt">
-
+                <div class="col-md-8 col-md-offset-2 col-xs-12">
                     <div class="panel panel-default">
-
                         <div class="panel-body">
-
-                            <h3>{{ $company->name }}</h3>
-
-                            <a href="{{ route('companies::show', ['id' => $company->id]) }}">Learn more about this
-                                company</a> or <a href="{{$company->url}}" target="_blank">visit their website!</a>
-
-                            <hr>
-
-                            <p>This company is currently looking to fill these positions:</p>
-                            <ul>
-                            @foreach($company->joboffers as $joboffer)
-                                <li><a href="{{ route("joboffers::show", ['id' => $joboffer->id]) }}">{{ $joboffer->title }}</a></li>
-                            @endforeach
-                            </ul>
-
+                            There are currently no job offers. Please check back soon! :)
                         </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    @endforeach
-
-    @else
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 col-xs-12">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        There are currently no job offers. Please check back soon! :)
                     </div>
                 </div>
             </div>
-        </div>
 
-    @endif
+        @endif
+
+    </div>
 
 @endsection

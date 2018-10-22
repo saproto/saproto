@@ -12,7 +12,7 @@
 
             <div class="card mb-3">
 
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
                     ProTube settings
                 </div>
 
@@ -77,7 +77,7 @@
 
             <div class="card">
 
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
                     Your personal top hits
                 </div>
 
@@ -111,7 +111,7 @@
 
             <div class="card">
 
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
                     Recently played
                 </div>
 

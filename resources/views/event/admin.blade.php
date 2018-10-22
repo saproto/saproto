@@ -18,7 +18,7 @@
 
                 <div class="card">
 
-                    <div class="card-header">
+                    <div class="card-header bg-dark text-white">
                         Diet and allergy information.
                     </div>
 
@@ -57,7 +57,7 @@
 
                 <div class="card">
 
-                    <div class="card-header">
+                    <div class="card-header bg-dark text-white">
                         Event tickets
                     </div>
 
@@ -73,7 +73,7 @@
 
                             <div class="card mb-3">
 
-                                <div class="card-header" style="cursor: pointer;"
+                                <div class="card-header bg-dark text-white" style="cursor: pointer;"
                                      data-toggle="collapse" data-target="#ticket__collapse__{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
                                     <span class="badge badge-primary float-right">

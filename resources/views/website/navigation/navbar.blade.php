@@ -2,7 +2,11 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary text-white" style="height: 57px !important;">
 
-        <a class="navbar-brand" href="{{ route('homepage') }}">Study Association Proto</a>
+        <a class="navbar-brand" href="{{ route('homepage') }}">
+            @if(config('app.env') != 'production') <i class="fas fa-hammer mr-2"></i> @endif
+            S.A. Proto
+            @if(config('app.env') != 'production') | Dev @endif
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -55,7 +59,15 @@
                            aria-haspopup="true"
                            aria-expanded="false">OmNomCom</a>
                         <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ route("omnomcom::store::show") }}">Application</a>
+
+                            @foreach(config('omnomcom.stores') as $name => $store)
+                                @if(in_array(Request::ip(), $store->addresses) || Auth::user()->can($store->roles))
+                                    <a class="dropdown-item"
+                                       href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
+                                        Open store: {{ $store->name }}
+                                    </a>
+                                @endif
+                            @endforeach
 
                             @if (Auth::check() && Auth::user()->can("omnomcom"))
                                 <li role="separator" class="dropdown-divider"></li>
@@ -196,7 +208,8 @@
 
             <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
                 {{ csrf_field() }}
-                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search" value="{{ isset($term) ? $term : null }}">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search"
+                       value="{{ isset($term) ? $term : null }}">
                 <button type="submit" class="btn btn-outline-light my-2 my-sm-0" style="">
                     <i class="fas fa-search"></i>
                 </button>
@@ -213,7 +226,7 @@
                                aria-haspopup="true"
                                aria-expanded="false">
                                 <img class="rounded-circle" src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
-                                style="width: 45px; height: 45px;">
+                                     style="width: 45px; height: 45px;">
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu">
@@ -258,7 +271,8 @@
                        style="margin-right: 10px;">
                         <i class="fas fa-user-plus mr-2"></i> Register
                     </a>
-                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i> Log-in</a>
+                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i>
+                        Log-in</a>
                 </form>
 
                 </form>

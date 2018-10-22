@@ -1,18 +1,21 @@
 <div class="card mb-3">
 
-    <div class="card-body">
+    <div class="card-header  bg-dark text-white">
 
-        <h3 class="text-center ellipsis">
+        <h3 class="text-center ellipsis mb-3 mt-3">
             {{ $user->name }}
         </h3>
 
         <div class="text-center">
 
-            <img src="{{ $user->generatePhotoPath(170, 170) }}" class="rounded-circle" width="170px" height="170px">
+            <img src="{{ $user->generatePhotoPath(170, 170) }}" class="rounded-circle mb-3 mt-3 border-white"
+                 width="170px" height="170px" style="border-style: solid; border-width: 2px;">
 
         </div>
 
-        <hr>
+    </div>
+
+    <div class="card-body">
 
         @if($user->member && $user->member->is_honorary)
             <p class="card-text ellipsis">

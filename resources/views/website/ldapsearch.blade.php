@@ -16,7 +16,7 @@
 
                 <div class="card mb-3">
 
-                    <div class="card-header">
+                    <div class="card-header bg-dark text-white">
                         Search for University of Twente people
                     </div>
 
@@ -40,7 +40,7 @@
 
                 <div class="card">
 
-                    <div class="card-header">
+                    <div class="card-header bg-dark text-white">
                         Search results
                     </div>
 
