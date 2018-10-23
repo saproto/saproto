@@ -1,46 +1,56 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Account Aggregation
-@endsection
-
-@section('panel-title')
     <strong>{{ $account->name }}</strong> account aggregation
 @endsection
 
-@section('panel-body')
+@section('container')
 
-    <p>
-        This table aggregates the total sales values for each product in the <strong>{{ $account->name }}</strong>
-        account between <strong>{{ $start }} - {{ $end }}</strong>.
-    </p>
+    <div class="row justify-content-center mb-5">
 
-    <hr>
+        <div class="col-md-4">
 
-    <table class="table">
+            <div class="card">
 
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Product</th>
-            <th>Units</th>
-            <th>Turnover</th>
-        </tr>
-        </thead>
+                <div class="card-header">
+                    @yield('page-title')
+                </div>
 
-        <tbody>
+                <div class="card-body">
+                    <p class="card-textØ">
+                        This table aggregates the total sales values for each product in the
+                        <strong>{{ $account->name }}</strong> account between <strong>{{ $start }} - {{ $end }}</strong>.
+                    </p>
+                </div>
 
-        @foreach($aggregation as $key => $product)
-            <tr>
-                <td>{{ $product->product_id }}</td>
-                <td>{{ $product->name }}</td>
-                <td>{{ $product->number_sold }}</td>
-                <td>&euro; {{ number_format($product->total_turnover, 2) }}</td>
-            </tr>
-        @endforeach
+                <table class="table table-hover table-sm">
 
-        </tbody>
+                    <thead>
+                    <tr>
+                        <th class="pl-4">Product</th>
+                        <th>Units</th>
+                        <th>Turnover</th>
+                    </tr>
+                    </thead>
 
-    </table>
+                    <tbody>
+
+                    @foreach($aggregation as $key => $product)
+                        <tr>
+                            <td class="pl-4">{{ $product->name }}</td>
+                            <td>{{ $product->number_sold }}</td>
+                            <td>&euro; {{ number_format($product->total_turnover, 2) }}</td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

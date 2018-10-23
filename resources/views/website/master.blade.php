@@ -38,10 +38,7 @@
 </head>
 
 <body class="template-{{ $viewName }}"
-    @section('body-style')
-        style="background-color: #e0e0e0; margin-bottom: 216px;"
-    @show
->
+      style="background-color: #f3f3f3; margin-bottom: 216px; @section('body-style')@show">
 
 @yield('body')
 

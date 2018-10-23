@@ -1,64 +1,57 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     OmNomCom statistics
 @endsection
 
-@section('panel-title')
-    Show OmNomCom statistics
-@endsection
+@section('container')
 
-@section('panel-body')
+    <div class="row justify-content-center mb-3">
 
-    <form method="post" action="{{ route("omnomcom::products::statistics") }}">
+        <div class="col-md-3">
 
-        {!! csrf_field() !!}
+            <form method="post" action="{{ route("omnomcom::products::statistics") }}">
 
-        <p style="text-align: center;">
-            Select the dates for which you want to generate OmNomCom statistics:
-        </p>
+                {!! csrf_field() !!}
 
-        <hr>
+                <div class="card">
 
-                <div class="form-group">
-                    <label for="date">Start date:</label>
-                    <input type="text" class="form-control datetime-picker" id="date" name="start" required>
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
+                    </div>
+
+                    <div class="card-body">
+
+                        <p class="card-text">
+                            Select the dates for which you want to generate OmNomCom statistics:
+                        </p>
+
+                        <hr>
+
+                        <label for="date">Start date:</label>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'start',
+                            'format' => 'datetime'
+                        ])
+
+                        <label for="name">End date:</label>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'end',
+                            'format' => 'datetime'
+                        ])
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success btn-block">Submit</button>
+                    </div>
+
                 </div>
 
+            </form>
 
-                <div class="form-group">
-                    <label for="name">End date:</label>
-                    <input type="text" class="form-control datetime-picker" id="date" name="end" required>
-                </div>
+        </div>
 
-
-        @endsection
-
-        @section('panel-footer')
-
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
-
-    </form>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "far fa-clock",
-                date: "fas fa-calendar",
-                up: "fas fa-arrow-up",
-                down: "fas fa-arrow-down",
-                next: "fas fa-chevron-right",
-                previous: "fas fa-chevron-left"
-            },
-            format: 'DD-MM-YYYY HH:mm'
-        });
-    </script>
+    </div>
 
 @endsection

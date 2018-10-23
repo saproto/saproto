@@ -1,57 +1,58 @@
-<div class="card">
+<div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
         @yield('page-title')
     </div>
 
-    <div class="card-body">
+    @if(count($orderlines) > 0)
 
-        @if(count($orderlines) > 0)
+        <table class="table table-borderless table-hover table-sm mt-1">
 
-            <table class="table table-borderless table-hover table-sm">
+            <?php $current_date = null; ?>
 
-                <?php $current_date = null; ?>
+            @foreach($orderlines as $orderline)
 
-                @foreach($orderlines as $orderline)
-
-                    @if(date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
-                        <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
-                        <tr class="bg-dark text-white">
-                            <td colspan="4">
-                                <span class="ml-3">
-                                    <i class="fas fa-calendar-alt fa-fw mr-3"></i>
-                                    {{ date('l F jS', strtotime($current_date)) }}
-                                </span>
-                            </td>
-                        </tr>
-                    @endif
-
-                    <tr>
-                        <td>
-                            <strong>&euro;</strong> {{ number_format($orderline->total_price, 2, '.', '') }}
+                @if(date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
+                    <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
+                    <tr class="bg-dark text-white mt-3">
+                        <td class="text-right">
+                            <i class="fas fa-calendar-alt"></i>
                         </td>
-                        <td>
-                            {{ $orderline->units }}x <strong>{{ $orderline->product->name }}</strong>
-                            @if ($orderline->description)
-                                <br><span class="text-muted"><em>{{ $orderline->description }}</em></span>
-                            @endif
+                        <td colspan="3">
+                            {{ date('l, F jS', strtotime($current_date)) }}
                         </td>
-                        <td>{!! $orderline->generateHistoryStatus() !!}</td>
-                        <td>{{ date('H:i:s', strtotime($orderline->created_at)) }}</td>
                     </tr>
+                @endif
 
-                @endforeach
+                <tr>
+                    <td class="text-right">
+                        &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
+                    </td>
+                    <td>
+                        <span class="text-muted mr-2">{{ $orderline->units }}x</span>
+                        {{ $orderline->product->name }}
+                        @if ($orderline->description)
+                            <br><span class="text-muted"><em>{{ $orderline->description }}</em></span>
+                        @endif
+                    </td>
+                    <td>{!! $orderline->generateHistoryStatus() !!}</td>
+                    <td>{{ date('H:i:s', strtotime($orderline->created_at)) }}</td>
+                </tr>
 
-            </table>
+            @endforeach
 
-        @else
+        </table>
+
+    @else
+
+        <div class="card-body">
 
             <p class="card-text text-center">
                 You didn't buy anything in this month.
             </p>
 
-        @endif
+        </div>
 
-    </div>
+    @endif
 
 </div>

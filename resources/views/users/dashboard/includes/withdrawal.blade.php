@@ -38,18 +38,18 @@
 
         <div class="card-footer">
 
-            <div class="btn-group btn-block" role="group" >
+            <div class="btn-group btn-block">
 
                 @if(!$user->member)
 
-                    <a class="btn btn-outline-danger btn-block" data-toggle="modal"
+                    <a class="btn btn-outline-danger w-50" data-toggle="modal"
                             data-target="#bank-modal-cancel">
                         Cancel authorization
                     </a>
 
                 @endif
 
-                <a class="btn btn-outline-primary btn-block" href="{{ route("user::bank::edit") }}">
+                <a class="btn btn-outline-info w-50" href="{{ route("user::bank::edit") }}">
                     Update authorization
                 </a>
 
@@ -61,7 +61,7 @@
 
 @else
 
-    <a type="submit" class="btn btn-outline-primary btn-block" href="{{ route("user::bank::add") }}">
+    <a type="submit" class="btn btn-outline-info btn-block" href="{{ route("user::bank::add") }}">
         Issue SEPA direct withdrawal authorisation
     </a>
 
@@ -72,9 +72,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Cancel withdrawal authorization</h4>
+                    <h5 class="modal-title">Cancel withdrawal authorisation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
 
@@ -102,18 +103,21 @@
                     </p>
 
                 </div>
+                <form method="POST" action="{{ route('user::bank::delete') }}">
+                    {!! csrf_field() !!}
                 <div class="modal-footer">
-                    <form method="POST" action="{{ route('user::bank::delete') }}">
-                        {!! csrf_field() !!}
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
+
+                    <div class="btn-group btn-block">
+                    <button type="submit" class="btn btn-danger w-50" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
+                        Cancel my authorization
+                    </button>
+                        <button type="button" class="btn btn-default w-50" data-dismiss="modal">
                             Keep my authorization active
                         </button>
-                        <button type="submit"
-                                class="btn btn-danger" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
-                            Cancel my authorization
-                        </button>
-                    </form>
+                    </div>
+
                 </div>
+                </form>
             </div>
         </div>
     </div>

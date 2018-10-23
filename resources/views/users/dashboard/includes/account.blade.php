@@ -96,7 +96,7 @@
                                     <i class="far fa-edit fa-fw"></i>
                                 </a>
                             @else
-                                <a class="badge badge-pill badge-primary float-right"
+                                <a class="badge badge-pill badge-primary float-right ml-2"
                                    href="{{ route('user::address::edit') }}">
                                     <i class="far fa-edit fa-fw"></i>
                                 </a>
@@ -192,7 +192,7 @@
             @endif
 
             @if(!$user->hasCompletedProfile())
-                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-primary btn-block">
+                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-info btn-block">
                     Complete profile for membership
                 </a>
             @endif
@@ -201,7 +201,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-outline-primary btn-block">
+            <button type="submit" class="btn btn-outline-info btn-block">
                 Update account
             </button>
 

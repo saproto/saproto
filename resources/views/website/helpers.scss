@@ -10,19 +10,19 @@
   border-left-style: solid !important;
   
   &-primary {
-    border-left-color: $brand-primary;
+    border-left-color: $primary;
   }
   &-success {
-    border-left-color: $brand-success;
+    border-left-color: $success;
   }
   &-info {
-    border-left-color: $brand-info;
+    border-left-color: $info;
   }
   &-warning {
-    border-left-color: $brand-warning;
+    border-left-color: $warning;
   }
   &-danger {
-    border-left-color: $brand-danger;
+    border-left-color: $danger;
   }
 
 }

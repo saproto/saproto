@@ -26,7 +26,7 @@
 
         <div class="card-footer">
 
-            <button href="#" id="fishcam__activate" class="btn btn-danger btn-block">
+            <button href="#" id="fishcam__activate" class="btn btn-warning btn-block">
                 <i class="fas fa-fish mr-2"></i> I understand, start the fishcam anyway!
             </button>
 

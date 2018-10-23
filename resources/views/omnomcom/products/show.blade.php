@@ -16,41 +16,11 @@
 
             </h3>
 
-            <p style="text-align: center;">Currently in stock: <strong>{{ $product->stock }}</strong></p>
-
-            @if($product->image != null)
-
-                <div class="product__edit__image">
-                    <div class="product__edit__image__inner"
-                         style="background-image: url('{!! $product->image->generateImagePath(500, null) !!}');"></div>
-                </div>
-
-            @endif
-
-            <hr>
-
-            <div class="btn-group-justified">
-                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}" class="btn btn-success">
-                    Edit OmNomCom Product
-                </a>
-            </div>
-
-            @if ($product->ticket)
-
-                <hr>
-
-                <div class="btn-group-justified">
-                    <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-success">
-                        Edit Associated Event Ticket
-                    </a>
-                </div>
-
-            @endif
 
 
         </div>
 
-        <div class="col-md-9">
+        <div >
 
             <h3>Most recent orders for this product</h3>
 

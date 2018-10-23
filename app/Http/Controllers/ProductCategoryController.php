@@ -58,20 +58,7 @@ class ProductCategoryController extends Controller
     public function show($id)
     {
         $category = ProductCategory::findOrFail($id);
-        return view('omnomcom.categories.show', ['category' => $category]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category = ProductCategory::findOrFail($id);
-
-        return view("omnomcom.categories.edit", ['category' => $category]);
+        return view('omnomcom.categories.edit', ['category' => $category]);
     }
 
     /**

@@ -1,76 +1,57 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     OmNomCom Product Category Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-4">
 
-            <p style="text-align: center;">
-                <a href="{{ route('omnomcom::categories::add') }}">Create a new category.</a>
-            </p>
+            <div class="card mb-3">
 
-            <hr>
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                    <a href="{{ route('omnomcom::categories::add') }}" class="float-right badge badge-success">
+                        Add new category
+                    </a>
+                </div>
 
-            @if (count($categories) > 0)
+                @if (count($categories) > 0)
 
-                <table class="table">
+                    <table class="table table-borderless table-hover">
 
-                    <thead>
+                        @foreach($categories as $category)
 
-                    <tr>
+                            <tr>
 
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Associated Prod.</th>
+                                <td class="text-right">{{ $category->id }}</td>
+                                <td>
+                                    <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
+                                        {{ $category->name }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{ count($category->products()) }} products
+                                </td>
+                                <td>
+                                    <a onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
+                                       href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
+                                        <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                    </a>
+                                </td>
 
-                    </tr>
+                            </tr>
 
-                    </thead>
+                        @endforeach
 
-                    @foreach($categories as $category)
+                    </table>
 
-                        <tr>
+                @endif
 
-                            <td>{{ $category->id }}</td>
-                            <td>
-                                <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
-                                    {{ $category->name }}
-                                </a>
-                            </td>
-                            <td>
-                                {{ count($category->products()) }}
-                            </td>
-                            <td>
-                                <a class="btn btn-xs btn-default"
-                                   href="{{ route('omnomcom::categories::edit', ['id' => $category->id]) }}" role="button">
-                                    <i class="fas fa-pencil" aria-hidden="true"></i>
-                                </a>
-                                <a class="btn btn-xs btn-danger"
-                                   onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
-                                   href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}"
-                                   role="button">
-                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
-                                </a>
-                            </td>
-
-                        </tr>
-
-                    @endforeach
-
-                </table>
-
-            @else
-
-                <p style="text-align: center;">
-                    There are no categories matching your query.
-                </p>
-
-            @endif
+            </div>
 
         </div>
 

@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary btn-block">Search</button>
+                        <button type="submit" class="btn btn-info btn-block">Search</button>
                     </div>
 
                 </div>
@@ -60,7 +60,7 @@
 
                                     <div class="col-md-4 col-sm-12 mb-3">
 
-                                        <div class="card h-100 leftborder leftborder-primary">
+                                        <div class="card h-100 leftborder leftborder-info">
 
                                             <div class="card-body">
 
@@ -87,8 +87,7 @@
                                                         @endif
                                                     </em>
 
-
-                                                    @if(property_exists($result, 'userprincipalname'))
+                                                    @if(Auth::user()->can('board') && property_exists($result, 'userprincipalname'))
                                                         <br>
                                                         <i class="fas fa-users-cog fa-fw"></i>
                                                         {{ substr($result->userprincipalname,0,8) }}
@@ -104,9 +103,9 @@
                                                         <a href="tel:{{ $result->telephonenumber }}">{{ $result->telephonenumber }}</a>
                                                     @endif
                                                     @if(property_exists($result, 'physicaldeliveryofficename'))
-                                                    <br>
-                                                    <i class="fas fa-map-marker-alt fa-fw"></i>
-                                                    Room {{ $result->physicaldeliveryofficename }}
+                                                        <br>
+                                                        <i class="fas fa-map-marker-alt fa-fw"></i>
+                                                        Room {{ $result->physicaldeliveryofficename }}
                                                     @endif
 
                                                 </p>

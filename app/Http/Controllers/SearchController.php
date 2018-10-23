@@ -29,7 +29,7 @@ class SearchController extends Controller
         $users = [];
         if (Auth::check() && Auth::user()->member) {
             $presearch_users = $this->getGenericSearch(User::class, $term,
-                ['id', 'name', 'calling_name', 'utwente_username', 'email']);
+                Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']);
             foreach ($presearch_users as $user) {
                 if ($user->member) {
                     $users[] = $user;
@@ -87,7 +87,11 @@ class SearchController extends Controller
                 $search = "&";
                 $data = [];
                 foreach ($terms as $term) {
-                    $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                    if (Auth::user()->can('board')) {
+                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                    } else {
+                        $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
+                    }
                 }
                 $data = LdapController::searchUtwente($search, true);
             } else {

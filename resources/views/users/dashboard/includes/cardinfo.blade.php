@@ -28,7 +28,7 @@
                                         Delete
                                     </a>
 
-                                    <a class="btn btn-sm btn-outline-primary"
+                                    <a class="btn btn-sm btn-outline-info"
                                        href="{{ route('user::rfid::edit', ['id' => $rfid->id]) }}">
                                         Rename
                                     </a>

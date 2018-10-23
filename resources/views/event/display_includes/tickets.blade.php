@@ -26,7 +26,7 @@
 
                             @if($purchase->canBeDownloaded())
                                 <a href="{{ route("tickets::download", ['id'=>$purchase->id]) }}"
-                                   class="card-link text-primary">
+                                   class="card-link text-info">
                                     Download PDF
                                 </a>
                             @else
@@ -93,7 +93,7 @@
                                         <?php $has_prepay_tickets = true; ?>
                                         <span class="badge badge-danger float-right">Pre-Paid</span>
                                     @else
-                                        <span class="badge badge-primary float-right">Withdrawal</span>
+                                        <span class="badge badge-info float-right">Withdrawal</span>
                                     @endif
 
                                     <strong>{{ $ticket->product->name }}</strong>

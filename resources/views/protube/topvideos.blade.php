@@ -7,11 +7,11 @@
 @section('container')
 
     <a href="https://open.spotify.com/user/studyassociationproto/playlist/213N4HAIKNZe7H0X3R79I2"
-       target="_blank" class="btn btn-primary btn-block btn-lg mb-3">
+       target="_blank" class="btn btn-info btn-block btn-lg mb-3">
         <i class="fab fa-spotify fa-fw mr-3" aria-hidden="true"></i> Get the ProTube Hits Spotify playlist!
     </a>
 
-    <div class="row">
+    <div class="row mb-3">
 
         @foreach($data as $period => $content)
 

@@ -19,7 +19,7 @@
                         @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]) ,
                         'img' => $album->thumb,
-                        'html' => sprintf('%s<br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name),
+                        'html' => sprintf('<sub>%s</sub><br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name),
                         'photo_pop' => true,
                         'height' => 150
                         ])

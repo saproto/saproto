@@ -65,14 +65,18 @@ class OrderLineController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param null $date
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function adminindex(Request $request)
+    public function adminindex(Request $request, $date = null)
     {
 
-        $date = ($request->has('date') ? $request->input('date') : null);
+        if ($request->has('date')) {
+            return Redirect::route('omnomcom::orders::adminlist', ['date' => $request->get('date')]);
+        }
+
+        $date = ($date ? $date : date('Y-m-d'));
 
         $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
 
@@ -80,7 +84,7 @@ class OrderLineController extends Controller
             $orderlines = $orderlines->where('created_at', '<=', Carbon::parse($date . ' 23:59:59')->format('Y-m-d H:i:s'));
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->get();
+        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
 
         if (Auth::user()->can('alfred')) {
             $neworderlines = [];

@@ -20,5 +20,5 @@
 @endsection
 
 @section('body-style')
-    style="margin-bottom: 20px !important;" class='bg-white'
+    margin-bottom: 20px !important;
 @endsection

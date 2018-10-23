@@ -29,9 +29,9 @@ class ProductController extends Controller
     {
 
         $paginate = false;
-        if ($request->has('search')) {
+        if ($request->has('search') && strlen($request->get('search')) > 3) {
             $search = $request->get('search');
-            $products = Product::where('name', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->get();
+            $products = Product::where('name', 'like', "%$search%")->orderBy('is_visible', 'desc')->orderBy('name', 'asc')->limit(100)->get();
         } elseif ($request->has('filter')) {
             switch ($request->get('filter')) {
 
@@ -41,16 +41,16 @@ class ProductController extends Controller
 
                 default:
                     $paginate = true;
-                    $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(15);
+                    $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
                     break;
 
             }
         } else {
             $paginate = true;
-            $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(15);
+            $products = Product::orderBy('is_visible', 'desc')->orderBy('name', 'asc')->paginate(20);
         }
 
-        return view('omnomcom.products.index', ['products' => $products, 'paginate' => $paginate]);
+        return view('omnomcom.products.index', ['products' => $products]);
 
     }
 
@@ -115,20 +115,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        $orderlines = $product->orderlines()->orderBy('created_at', "DESC")->paginate(15);
-        return view('omnomcom.products.show', ['product' => $product, 'orderlines' => $orderlines]);
-
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int $id
@@ -137,10 +123,13 @@ class ProductController extends Controller
     public function edit($id)
     {
 
+        $product = Product::findOrFail($id);
+
         return view('omnomcom.products.edit', [
-            'product' => Product::findOrFail($id),
+            'product' => $product,
             'accounts' => Account::orderBy('account_number', 'asc')->get(),
-            'categories' => ProductCategory::all()
+            'categories' => ProductCategory::all(),
+            'orderlines' => $product->orderlines()->orderBy('created_at', "DESC")->paginate(20)
         ]);
 
     }

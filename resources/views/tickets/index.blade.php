@@ -43,7 +43,7 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{{ route('omnomcom::products::show', ['id'=>$ticket->product->id]) }}">
+                        <a href="{{ route('omnomcom::products::edit', ['id'=>$ticket->product->id]) }}">
                             {{ $ticket->product->name }}
                         </a>
                     </td>

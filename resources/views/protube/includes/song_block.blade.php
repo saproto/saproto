@@ -1,4 +1,4 @@
-<div class="card mb-3 leftborder leftborder-primary">
+<div class="card mb-3 leftborder leftborder-info">
     <div class="card-body">
         <p class="card-text ellipsis">
 

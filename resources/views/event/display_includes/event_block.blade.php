@@ -2,7 +2,7 @@
 Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::user())) || Auth::user()->can('board'))
 ))
 
-    <a class="card mb-3" style="text-decoration: none !important;"
+    <a class="card mb-3 leftborder leftborder-info" style="text-decoration: none !important;"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body" style="text-align: left;

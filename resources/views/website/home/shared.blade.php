@@ -10,11 +10,10 @@
 
         <div class="col-xl-9 col-md-12">
 
-            <div class="card text-white mb-3" style="height: 250px;">
-                <div class="card-body"
-                     style="background-image: url({{ asset(sprintf('images/header/header%s.jpg', mt_rand(1,3))) }});
-                             background-size: cover; background-position: center center; text-align: left;
-                             border: 5px solid #fff; vertical-align: bottom; font-size: 30px; display: flex;
+            <div class="card text-white mb-3 border-0" style="height: 250px;
+                    background-image: url({{ asset(sprintf('images/header/header%s.jpg', mt_rand(1,3))) }});
+                    background-size: cover; background-position: center center;">
+                <div class="card-body" style="text-align: left; vertical-align: bottom; font-size: 30px; display: flex;
                              text-shadow: 0 0 20px #000;">
                     <p class="card-text ellipsis" style="align-self: flex-end;">
                         @section('greeting')
