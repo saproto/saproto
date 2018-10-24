@@ -23,24 +23,24 @@
                 <span class=" medium-text">
                     <br>
                     <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
-                    <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel white" href="tel:+31534894423">+31 (0)53 489
+                    <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">+31 (0)53 489
                         4423</a><br>
                     <span class="fas fa-envelope fa-fw"></span>&nbsp;&nbsp;
-                    <a class="email white"
+                    <a class="email text-white"
                        href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
                 </span>
             </div>
 
             <div class="col-3" style="text-align: right;">
-                <a class="white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
+                <a class="text-white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
                     Facebook&nbsp;&nbsp;<i class="fab fa-fw fa-facebook" aria-hidden="true"></i></a><br>
-                <a class="white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
+                <a class="text-white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
                     YouTube&nbsp;&nbsp;<i class="fab fa-fw fa-youtube" aria-hidden="true"></i></a><br>
-                <a class="white" href="https://www.linkedin.com/company/s-a-proto/" target="_blank">
+                <a class="text-white" href="https://www.linkedin.com/company/s-a-proto/" target="_blank">
                     LinkedIn&nbsp;&nbsp;<i class="fab fa-fw fa-linkedin" aria-hidden="true"></i></a><br>
-                <a class="white" href="https://www.instagram.com/s.a.proto/" target="_blank">
+                <a class="text-white" href="https://www.instagram.com/s.a.proto/" target="_blank">
                     Instagram&nbsp;&nbsp;<i class="fab fa-fw fa-instagram" aria-hidden="true"></i></a><br>
-                <a class="white" href="https://www.snapchat.com/add/sa_proto" target="_blank">
+                <a class="text-white" href="https://www.snapchat.com/add/sa_proto" target="_blank">
                     Snapchat&nbsp;&nbsp;<i class="fab fa-fw fa-snapchat" aria-hidden="true"></i>
                 </a>
             </div>
@@ -54,18 +54,18 @@
         <p class="text-center mt-3">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our
-                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="white">
+                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
                     privacy policy
-                </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="white">
+                </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
                     responsible disclosure policy
                 </a>.
                 The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank"
-                                                      class="white">
+                                                      class="text-white">
                     GitHub
                 </a>.
                 <br>
                 This website has been created with ♥ by the folks of the
-                <a href="{{ route('developers') }}" class="white">
+                <a href="{{ route('developers') }}" class="text-white">
                     {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                 </a>.
             </sub>

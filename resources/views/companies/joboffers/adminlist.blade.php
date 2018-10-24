@@ -19,15 +19,15 @@
                     </a>
                 </div>
 
-                <table class="table table-sm table-hover table-borderless">
+                <table class="table table-sm table-hover">
 
                     <thead>
 
-                    <tr>
+                    <tr class="bg-dark text-white">
 
-                        <th class="pl-3">Company</th>
-                        <th>Title</th>
-                        <th></th>
+                        <td class="pl-3">Company</td>
+                        <td>Title</td>
+                        <td></td>
 
                     </tr>
 

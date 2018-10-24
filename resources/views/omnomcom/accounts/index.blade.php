@@ -1,33 +1,34 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    OmNomCom Product Administration
+    OmNomCom Product Accounts
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6">
 
-            <p style="text-align: center;">
-                <a href="{{ route('omnomcom::accounts::add') }}">Create a new account.</a>
-            </p>
+            <div class="card mb-3">
 
-            <hr>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('omnomcom::accounts::add') }}" class="badge badge-info float-right">
+                        Create a new account.
+                    </a>
+                </div>
 
-            @if (count($accounts) > 0)
-
-                <table class="table">
+                <table class="table table-hover table-sm">
 
                     <thead>
 
-                    <tr>
+                    <tr class="bg-dark text-white">
 
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Acc. Number</th>
-                        <th>Associated Prod.</th>
+                        <td class="pl-3">Name</td>
+                        <td>Acc. Number</td>
+                        <td>Associated Prod.</td>
+                        <td></td>
 
                     </tr>
 
@@ -37,8 +38,7 @@
 
                         <tr>
 
-                            <td>{{ $account->id }}</td>
-                            <td>
+                            <td class="pl-3">
                                 <a href="{{ route('omnomcom::accounts::show', ['id' => $account->id]) }}">
                                     {{ $account->name }}
                                 </a>
@@ -50,14 +50,11 @@
                                 {{ $account->products->count() }}
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-default"
-                                   href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}" role="button">
-                                    <i class="fas fa-pencil" aria-hidden="true"></i>
+                                <a href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}">
+                                    <i class="fas fa-edit mr-2"></i>
                                 </a>
-                                <a class="btn btn-xs btn-danger"
-                                   href="{{ route('omnomcom::accounts::delete', ['id' => $account->id]) }}"
-                                   role="button">
-                                    <i class="fas fa-trash-o" aria-hidden="true"></i>
+                                <a href="{{ route('omnomcom::accounts::delete', ['id' => $account->id]) }}">
+                                    <i class="fas fa-trash text-danger"></i>
                                 </a>
                             </td>
 
@@ -67,13 +64,7 @@
 
                 </table>
 
-            @else
-
-                <p style="text-align: center;">
-                    There are no accounts matching your query.
-                </p>
-
-            @endif
+            </div>
 
         </div>
 

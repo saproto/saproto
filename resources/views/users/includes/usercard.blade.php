@@ -9,7 +9,9 @@
         @else
             <span class="text-muted">{{ $user->name }}</span><br>
         @endif
-        {!! $subtitle !!}
+        <div class="ellipsis">
+            {!! $subtitle !!}
+        </div>
     </div>
     @if(isset($footer) && $footer)
         <div class="card-footer">

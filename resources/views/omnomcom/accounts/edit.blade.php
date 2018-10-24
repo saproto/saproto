@@ -1,14 +1,10 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Account Administration
-@endsection
-
-@section('panel-title')
     {{ ($account == null ? "Create new account." : "Edit account " . $account->account_number .".") }}
 @endsection
 
-@section('panel-body')
+@section('container')
 
     <form method="post"
           action="{{ ($account == null ? route("omnomcom::accounts::add") : route("omnomcom::accounts::edit", ['id' => $account->id])) }}"
@@ -16,37 +12,42 @@
 
         {!! csrf_field() !!}
 
-        <div class="row">
+        <div class="row justify-content-center">
 
-            <div class="col-md-6">
+            <div class="col-md-3">
 
-                <div class="form-group">
-                    <label for="name">Account name:</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                           placeholder="Magical Accessories" value="{{ $account->name or '' }}" required>
-                </div>
+                <div class="card mb-3">
 
-            </div>
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
+                    </div>
 
-            <div class="col-md-6">
+                    <div class="card-body">
 
-                <div class="form-group">
-                    <label for="account_number">Account number:</label>
-                    <input type="number" class="form-control" id="account_number" name="account_number"
-                           placeholder="1234" value="{{ $account->account_number or '' }}" required>
+                        <div class="form-group">
+                            <label for="name">Account name:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Magical Accessories" value="{{ $account->name or '' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="account_number">Account number:</label>
+                            <input type="number" class="form-control" id="account_number" name="account_number"
+                                   placeholder="1234" value="{{ $account->account_number or '' }}" required>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success float-right">Submit</button>
+                        <a href="{{ route("omnomcom::accounts::list") }}" class="btn btn-default">Cancel</a>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
-
-        @endsection
-
-        @section('panel-footer')
-
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
-
-            <a href="{{ route("omnomcom::accounts::list") }}" class="btn btn-default pull-right">Cancel</a>
 
     </form>
 

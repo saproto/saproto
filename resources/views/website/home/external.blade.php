@@ -93,7 +93,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route('page::show', ['slug' => 'board']) }}" class="btn btn-info btn-block">

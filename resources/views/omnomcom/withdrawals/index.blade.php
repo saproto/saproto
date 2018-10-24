@@ -11,13 +11,6 @@
         <div class="col-md-10 col-md-offset-1">
 
             <p style="text-align: center;">
-                There are currently <strong>{{ WithdrawalController::openOrderlinesTotal() }}</strong> unpaid orderlines
-                for
-                a grand total of
-                <strong>&euro;{{ number_format(WithdrawalController::openOrderlinesSum(), 2, ',', '.') }}</strong>.
-            </p>
-
-            <p style="text-align: center;">
                 <a href="{{ route('omnomcom::withdrawal::add') }}">Create a new withdrawal.</a>
             </p>
 

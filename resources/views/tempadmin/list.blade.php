@@ -19,17 +19,17 @@
                     </a>
                 </div>
 
-                <table class="table table-borderless table-hover table-sm">
+                <table class="table table-hover table-sm">
 
                     <thead>
 
                     <tr class="bg-dark text-white">
 
-                        <th class="pl-3">User</th>
-                        <th>Given by</th>
-                        <th>From</th>
-                        <th>Until</th>
-                        <th></th>
+                        <td class="pl-3">User</td>
+                        <td>Given by</td>
+                        <td>From</td>
+                        <td>Until</td>
+                        <td></td>
 
                     </tr>
 

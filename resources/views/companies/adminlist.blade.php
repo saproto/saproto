@@ -12,24 +12,24 @@
 
             <div class="card mb-3">
 
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
                     <a href="{{ route('companies::add') }}" class="badge badge-info float-right">
                         Create a new company.
                     </a>
                 </div>
 
-                <table class="table table-sm table-borderless table-hover">
+                <table class="table table-sm table-hover">
 
                     <thead>
 
-                    <tr>
+                    <tr class="bg-dark text-white">
 
-                        <th class="pl-3">Name</th>
-                        <th>URL</th>
-                        <th>Visible</th>
-                        <th>Logo Bar</th>
-                        <th></th>
+                        <td class="pl-3">Name</td>
+                        <td>URL</td>
+                        <td>Visible</td>
+                        <td>Logo Bar</td>
+                        <td></td>
 
                     </tr>
 

@@ -33,7 +33,7 @@ class WithdrawalController extends Controller
      */
     public function index()
     {
-        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(12)]);
+        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(6)]);
     }
 
     /**

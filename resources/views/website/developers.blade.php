@@ -1,79 +1,82 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     About the website of S.A. Proto
 @endsection
 
-@section('content')
+@section('container')
 
     <div class="row">
 
-        <div class="row" style="margin: 0; margin-bottom: 30px;">
-            <div class="col-md-4">
-                <a class="btn btn-warning btn-lg" style="width: 100%;"
-                   href="https://wiki.proto.utwente.nl/ict/services">
-                    <i class="fas fa-info-circle" aria-hidden="true" style="margin-right: 20px;"></i>
-                    Information about our IT services
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="btn btn-info btn-lg" style="width: 100%;"
-                   href="https://wiki.proto.utwente.nl/ict/issues">
-                    <i class="fas fa-graduation-cap" aria-hidden="true" style="margin-right: 20px;"></i>
-                    Learn how to report errors!
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="btn btn-success btn-lg" style="width: 100%;"
-                   href="https://wiki.proto.utwente.nl/ict/issues">
-                    <i class="fas fa-question-circle" aria-hidden="true" style="margin-right: 20px;"></i>
-                    Answers to frequent questions
-                </a>
-            </div>
-        </div>
-
         <div class="col-md-7">
 
-            <div class="panel panel-default container-panel">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <a class="btn btn-warning btn-block"
+                       href="https://wiki.proto.utwente.nl/ict/services">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Manuals
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-info btn-block"
+                       href="https://wiki.proto.utwente.nl/ict/issues">
+                        <i class="fas fa-graduation-cap mr-2"></i>
+                        Learn how to report errors!
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-success btn-block"
+                       href="https://wiki.proto.utwente.nl/ict/issues">
+                        <i class="fas fa-question-circle mr-2"></i>
+                        Answers to frequent questions
+                    </a>
+                </div>
+            </div>
 
-                <div class="panel-body">
+            <div class="card mb-3">
 
-                    <h3>About this website</h3>
+                <div class="card-header bg-dark text-white">
+                    About this website
+                </div>
 
-                    <p>
+                <div class="card-body">
+
+                    <p class="card-text">
                         The <a href="{{ route("homepage") }}">website of Study Association Proto</a> was released in the
                         summer of 2016. For as far as you're interested, it is mostly custom-built on the Laravel
                         framework. It is the successor of the WordPress website we've been rocking since the association
                         was founded in 2011.
                     </p>
 
-                    <p>
+                    <p class="card-text">
                         The website is open source and actively maintained by a dedicated committee of the association:
-                        the <a href="{{ route('committee::show', ['id'=>$committee->getPublicId()]) }}">{{ $committee->name }}</a>.
+                        the
+                        <a href="{{ route('committee::show', ['id'=>$committee->getPublicId()]) }}">{{ $committee->name }}</a>.
                         You will find the current members of this committee on your right. Below this piece of prose you
                         will also find a list of the developers who have been contributing to the association's ICT in
                         the past.
                     </p>
 
-                    <h3>Responsible disclosure</h3>
+                    <h5 class="card-title">Responsible disclosure</h5>
 
-                    <p>
+                    <p class="card-text">
                         If you find any security flaw on our website, please <a
                                 href="mailto:{{ $committee->slug . "@" . config('proto.emaildomain') }}">e-mail the
                             developers</a> immediately. We will make sure the security hole gets fixed as soon as
                         possible.
                     </p>
 
-                    <h3>Reporting issues and giving feedback</h3>
+                    <h5 class="card-title">Reporting issues and giving feedback</h5>
 
-                    <p>
+                    <p class="card-text">
                         If you have a problem with the content of the website, please contact <a
                                 href="mailto:board@proto.utwente.nl">the board of the association</a>. They generally
                         decide what gets published and are able to make general changes to user accounts, committees,
                         activities and other association-related content.
                     </p>
 
-                    <p>
+                    <p class="card-text">
                         For issues related to the website itself, you can get into contact with the developers. We are
                         active on <a href="https://github.com/saproto/saproto" target="_blank">GitHub</a> where we
                         contribute code to the website and resolve issues. If you have any technical issue, bug report
@@ -81,12 +84,12 @@
                         loop on your particular thing.
                     </p>
 
-                    <p>
+                    <p class="card-text">
                         If you have questions and/or feedback regarding this website, you are very most welcome to
                         submit them.
                     </p>
 
-                    <p>
+                    <p class="card-text">
                         If you feel the desire to contribute to the website directly, do not hestitate to fork our
                         repository and make a pull request with your changes. We welcome all input and be happy to help
                         you get your idea integrated in the website! Just want to ask something? <a
@@ -96,25 +99,52 @@
 
                 </div>
 
-            </div>
-
-            <div class="panel panel-default container-panel">
-
-                <div class="panel-body">
-
-                    <h3>Developers from days past</h3>
-
+                <div class="card-footer text-center">
+                    <strong>Previous contributors</strong> -
                     @foreach($developers['old'] as $i => $dev)
-                        @if($dev->user->isMember) <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
+                        @if($dev->user->isMember) <a
+                                href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
                             {{ $dev->user->name }}
                         </a>
                         @else
                             {{ $dev->user->name }}
                         @endif
                         @if ($i + 1 < count($developers['old']))
-                            ,
+                            -
                         @endif
                     @endforeach
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-5">
+
+            <div class="card mb-3">
+
+                @if($committee->image)
+                    <img class="card-img-top w-100" src="{{ $committee->image->generateImagePath(800,300) }}">
+                @endif
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        @foreach($developers['current'] as $i => $dev)
+
+                            <div class="col-6">
+
+                                @include('users.includes.usercard', [
+                                    'user' => $dev->user,
+                                    'subtitle' => sprintf('<em>%s</em>', $dev->role)
+                                ])
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
 
                 </div>
 
@@ -122,60 +152,6 @@
 
         </div>
 
-        <div id="developer__list" class="col-md-5">
-
-            @if($committee->image)
-                <img src="{{ $committee->image->generateImagePath(800,300) }}"
-                     style="width: 100%; margin-bottom: 30px; box-shadow: 0 0 20px -7px #000;">
-            @endif
-
-            @foreach($developers['current'] as $i => $dev)
-
-                @if($i % 2 == 0)
-
-                    <div class="col">
-
-                        @endif
-
-                        <div class="col-md-6">
-
-                            <div class="developer__list__entry"
-                                 style="background-image: url('{!! $dev->user->generatePhotoPath(250, 250) !!}');">
-
-                                <span>
-                                    <a href="{{ route('user::profile', ['id' => $dev->user->getPublicId()]) }}">
-                                        {{ $dev->user->name }}
-                                    </a>
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        @if($i % 2 == 1 || $i == count($developers['current']) - 1)
-
-                    </div>
-
-                @endif
-
-            @endforeach
-
-        </div>
-
     </div>
-
-@endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        #nav {
-            display: none;
-        }
-
-    </style>
 
 @endsection

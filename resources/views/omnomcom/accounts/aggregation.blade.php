@@ -12,12 +12,12 @@
 
             <div class="card">
 
-                <div class="card-header">
+                <div class="card-header bg-dark text-white">
                     @yield('page-title')
                 </div>
 
                 <div class="card-body">
-                    <p class="card-textØ">
+                    <p class="card-text">
                         This table aggregates the total sales values for each product in the
                         <strong>{{ $account->name }}</strong> account between <strong>{{ $start }} - {{ $end }}</strong>.
                     </p>
@@ -26,10 +26,10 @@
                 <table class="table table-hover table-sm">
 
                     <thead>
-                    <tr>
-                        <th class="pl-4">Product</th>
-                        <th>Units</th>
-                        <th>Turnover</th>
+                    <tr class="bg-dark text-white">
+                        <td class="pl-3">Product</td>
+                        <td>Units</td>
+                        <td>Turnover</td>
                     </tr>
                     </thead>
 
@@ -37,7 +37,7 @@
 
                     @foreach($aggregation as $key => $product)
                         <tr>
-                            <td class="pl-4">{{ $product->name }}</td>
+                            <td class="pl-3">{{ $product->name }}</td>
                             <td>{{ $product->number_sold }}</td>
                             <td>&euro; {{ number_format($product->total_turnover, 2) }}</td>
                         </tr>
