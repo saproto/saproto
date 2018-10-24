@@ -23,7 +23,12 @@
 
     <div class="card-body">
 
+        <i class="text-muted fas fa-quote-left fa-pull-left"></i>
+
         {!! $quote["quote"] !!}
+
+
+        <i class="text-muted fas fa-quote-right fa-pull-right"></i>
 
         <div class="text-muted text-right mt-2">
             <em><sub>-- {{ $quote->created_at->format("j M Y, H:i") }}</sub></em>

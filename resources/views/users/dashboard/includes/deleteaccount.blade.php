@@ -1,6 +1,6 @@
 @if (!$user->member)
 
-    <button type="submit" class="btn btn-danger btn-block mb-3" data-toggle="modal" data-target="#modal-user-delete">
+    <button type="submit" class="btn btn-outline-danger btn-block mb-3" data-toggle="modal" data-target="#modal-user-delete">
         Close your Proto account
     </button>
 

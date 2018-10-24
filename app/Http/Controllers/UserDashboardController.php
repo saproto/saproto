@@ -161,6 +161,7 @@ class UserDashboardController extends Controller
         }
 
         if (Session::has('flash_userdata') && $request->has('verified')) {
+            $userdata['birthdate'] = date('Y-m-d', strtotime($userdata['birthdate']));
             $user->fill($userdata);
             $user->save();
 

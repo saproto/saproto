@@ -1,36 +1,50 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Clear membership profile
 @endsection
 
-@section('panel-title')
-    Clear membership profile
-@endsection
+@section('container')
 
-@section('panel-body')
+    <div class="row justify-content-center">
 
-    <form method="POST" action="{{ route('user::memberprofile::clear') }}">
+        <div class="col-md-4">
 
-        {!! csrf_field() !!}
+            <form method="POST" action="{{ route('user::memberprofile::clear') }}">
 
-        <p>
-            If you confirm below, the following information will be deleted:
-        </p>
+                <div class="card mb-3">
 
-        <ul>
-            <li>Birthdate: <strong>{{ date('F j, Y', strtotime($user->birthdate)) }}</strong></li>
-            <li>Phone: <strong>{{ $user->phone }}</strong></li>
-        </ul>
+                    <div class="card-header bg-dark text-white">@yield('page-title')</div>
 
-        <p>
-            Are you sure?
-        </p>
+                    <div class="card-body">
 
-        @endsection
+                        {!! csrf_field() !!}
 
-        @section('panel-footer')
-            <button type="submit" class="btn btn-outline-primary pull-right">Yes, clear my profile</button>
+                        <p>
+                            If you confirm below, the following information will be deleted:
+                        </p>
 
-    </form>
+                        <ul>
+                            <li>Birthdate: <strong>{{ date('F j, Y', strtotime($user->birthdate)) }}</strong></li>
+                            <li>Phone: <strong>{{ $user->phone }}</strong></li>
+                        </ul>
+
+                        <p>
+                            Are you sure?
+                        </p>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-primary pull-right">Yes, clear my profile</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 @endsection

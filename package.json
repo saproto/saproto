@@ -27,6 +27,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.4.1",
     "bootstrap": "^4.1.0",
+    "bootstrap-slider": "^10.2.1",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
@@ -62,6 +63,7 @@
         "./node_modules/popper.js/dist/umd/popper.min.js",
         "./node_modules/bootstrap/dist/js/bootstrap.min.js",
         "./node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js",
+        "./node_modules/bootstrap-slider/dist/bootstrap-slider.min.js",
         "./node_modules/js-cookie/src/js.cookie.js",
         "./node_modules/simplemde/dist/simplemde.min.js",
         "./node_modules/angular/angular.js",
@@ -94,6 +96,7 @@
         "./resources/assets/sass/framework/**/*.scss",
         "./resources/views/**/*.scss",
         "./node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css",
+        "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css",
         "./node_modules/simplemde/dist/simplemde.min.css",
         "./node_modules/font-awesome/css/font-awesome.css",
         "./node_modules/chocolat/dist/css/chocolat.css",

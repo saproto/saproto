@@ -185,18 +185,6 @@
                 </tbody>
             </table>
 
-            @if($user->hasCompletedProfile() && !$user->member)
-                <a href="{{ route('user::memberprofile::clear') }}" class="btn btn-danger btn-block">
-                    Clear information required only for members
-                </a>
-            @endif
-
-            @if(!$user->hasCompletedProfile())
-                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-info btn-block">
-                    Complete profile for membership
-                </a>
-            @endif
-
         </div>
 
         <div class="card-footer">
@@ -204,6 +192,18 @@
             <button type="submit" class="btn btn-outline-info btn-block">
                 Update account
             </button>
+
+            @if($user->hasCompletedProfile() && !$user->member)
+                <a href="{{ route('user::memberprofile::clear') }}" class="btn btn-outline-danger btn-block mt-3">
+                    Clear information required only for members
+                </a>
+            @endif
+
+            @if(!$user->hasCompletedProfile())
+                <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-info btn-block mt-3">
+                    Complete profile for membership
+                </a>
+            @endif
 
         </div>
 

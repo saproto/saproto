@@ -1,29 +1,19 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
-    Authentication
+    Password Store
 @endsection
 
-@section('panel-title')
-    Authentication
-@endsection
-
-@section('panel-body')
+@section('login-body')
 
     <form method="POST" action="{{ route('passwordstore::auth') }}">
 
         {!! csrf_field() !!}
 
-        <div class="form-group">
-            <label for="message-text" class="control-label">Password:</label>
-            <input type="password" class="form-control" id="password" name="password"
-                   placeholder="Proto password or UTwente password">
-        </div>
+        <input type="password" class="form-control mb-3" id="password" name="password"
+               placeholder="Password">
 
-        @endsection
-
-        @section('panel-footer')
-            <button type="submit" class="btn btn-success">Confirm</button>
+        <button type="submit" class="btn btn-success btn-block">Confirm</button>
 
     </form>
 @endsection
