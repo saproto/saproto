@@ -1,122 +1,130 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Narrowcasting Admin
-@endsection
-
-@section('panel-title')
     {{ ($item == null ? "Create new campaign." : "Edit campaign " . $item->name .".") }}
 @endsection
 
-@section('panel-body')
+@section('container')
 
-    <form method="post"
-          action="{{ ($item == null ? route("narrowcasting::add") : route("narrowcasting::edit", ['id' => $item->id])) }}"
-          enctype="multipart/form-data">
+    <div class="row justify-content-center">
 
-        {!! csrf_field() !!}
+        <div class="col-md-4">
 
-        <div class="form-group">
-            <label for="name">Campaign name:</label>
-            <input type="text" class="form-control" id="name" name="name"
-                   placeholder="Lightsaber Building in the SmartXp" value="{{ $item->name or '' }}" required>
-        </div>
+            <div class="card mb-3">
 
-        <div class="form-group">
-            <label for="campaign_start">Campaign start:</label>
-            <input type="text" class="form-control datetime-picker" id="campaign_start" name="campaign_start"
-                   value="{{ ($item ? date('d-m-Y H:i', $item->campaign_start) : '') }}" required>
-        </div>
+                <form method="post"
+                      action="{{ ($item == null ? route("narrowcasting::add") : route("narrowcasting::edit", ['id' => $item->id])) }}"
+                      enctype="multipart/form-data">
 
-        <div class="form-group">
-            <label for="campaign_end">Campaign end:</label>
-            <input type="text" class="form-control datetime-picker" id="campaign_end" name="campaign_end"
-                   value="{{ ($item ? date('d-m-Y H:i', $item->campaign_end) : '') }}" required>
-        </div>
+                    {!! csrf_field() !!}
 
-        <div class="form-group">
-            <label for="slide_duration">Slide duration in seconds:</label>
-            <input type="text" class="form-control" id="slide_duration" name="slide_duration"
-                   value="{{ $item->slide_duration or '30' }}" required>
-        </div>
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
+                    </div>
 
-        <div class="form-group">
-            <label for="youtube_id">YouTube ID:</label>
-            <input type="text" class="form-control" id="youtube_id" name="youtube_id"
-                   placeholder="Only the ID!" value="{{ $item->youtube_id or '' }}">
-        </div>
+                    <div class="card-body">
 
-        <p>
-            <sup><strong>Note:</strong> if a YouTube ID is present, the image file and slide duration field is ignored and hidden.</sup>
-        </p>
+                        <div class="form-group">
+                            <label for="name">Campaign name:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Lightsaber Building in the SmartXp" value="{{ $item->name or '' }}"
+                                   required>
+                        </div>
 
-        @if($item && $item->video())
+                        <div class="form-group">
+                            <label for="campaign_start">Campaign start:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'campaign_start',
+                                'format' => 'datetime',
+                                'placeholder' => $item ? $item->campaign_start : date('U')
+                            ])
+                        </div>
 
-            <label>Current video:</label>
+                        <div class="form-group">
+                            <label for="campaign_end">Campaign end:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'campaign_end',
+                                'format' => 'datetime',
+                                'placeholder' => $item ? $item->campaign_end : null
+                            ])
+                        </div>
 
-            <div class="row">
+                        <div class="form-group">
+                            <label for="slide_duration">Slide duration in seconds:</label>
+                            <input type="text" class="form-control" id="slide_duration" name="slide_duration"
+                                   value="{{ $item->slide_duration or '30' }}" required>
+                        </div>
 
-                <div class="col-md-6">
-                    <img src="{!! $item->video()->snippet->thumbnails->high->url !!}" style="width: 100%">
-                </div>
-                <div class="col-md-6">
-                    <strong><a href="https://youtu.be/{{ $item->video()->id }}"
-                               target="_blank">{{ $item->video()->snippet->title }}</a></strong>
-                    <br>
-                    <strong>{{ $item->video()->snippet->channelTitle }}</strong>
-                </div>
+                        <div class="form-group">
+                            <label for="youtube_id">YouTube ID:</label>
+                            <input type="text" class="form-control" id="youtube_id" name="youtube_id"
+                                   placeholder="Only the ID!" value="{{ $item->youtube_id or '' }}">
+                        </div>
+
+                        <p>
+                            <sup><strong>Note:</strong> if a YouTube ID is present, the image file and slide duration
+                                field is ignored and hidden.</sup>
+                        </p>
+
+                        @if($item && $item->video())
+
+                            <label>Current video:</label>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <img src="{!! $item->video()->snippet->thumbnails->high->url !!}"
+                                         style="width: 100%">
+                                </div>
+                                <div class="col-md-6">
+                                    <strong><a href="https://youtu.be/{{ $item->video()->id }}"
+                                               target="_blank">{{ $item->video()->snippet->title }}</a></strong>
+                                    <br>
+                                    <strong>{{ $item->video()->snippet->channelTitle }}</strong>
+                                </div>
+
+                            </div>
+
+                        @else
+
+                            <div class="custom-file mb-3">
+                                <input type="file" class="custom-file-input" name="image">
+                                <label class="custom-file-label">Upload an image</label>
+                            </div>
+
+                            <p>
+                                <sup><strong>Screen resolution</strong> is 1680 x 1050 pixels.</sup>
+                            </p>
+
+                            @if($item && $item->image)
+
+                                <label>Current image:</label>
+                                <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
+
+                            @endif
+
+                        @endif
+
+                    </div>
+
+                    <div class="card-footer">
+
+                        <button type="submit" class="btn btn-success float-right">
+                            Submit
+                        </button>
+
+                        <a href="{{ route("narrowcasting::list") }}" class="btn btn-default">Cancel</a>
+
+                    </div>
+
+                </form>
 
             </div>
 
-        @else
+        </div>
 
-            <div class="form-group">
-                <label for="image">Image file:</label>
-                <input type="file" class="form-control" id="image" name="image">
-            </div>
-
-            <p>
-                <sup><strong>Screen resolution</strong> is 1680 x 1050 pixels.</sup>
-            </p>
-
-            @if($item && $item->image)
-
-                <label>Current image:</label>
-                <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
-
-            @endif
-
-        @endif
-
-        @endsection
-
-        @section('panel-footer')
-
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
-
-            <a href="{{ route("narrowcasting::list") }}" class="btn btn-default pull-right">Cancel</a>
+    </div>
 
     </form>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "far fa-clock",
-                date: "fas fa-calendar",
-                up: "fas fa-arrow-up",
-                down: "fas fa-arrow-down",
-                next: "fas fa-chevron-right",
-                previous: "fas fa-chevron-left"
-            },
-            format: 'DD-MM-YYYY HH:mm'
-        });
-    </script>
 
 @endsection

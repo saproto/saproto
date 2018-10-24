@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div class="row row-eq-height">
+    <div class="row row-eq-height justify-content-center">
 
         @foreach($companies as $key => $company)
 

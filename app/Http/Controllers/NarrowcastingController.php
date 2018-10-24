@@ -31,7 +31,7 @@ class NarrowcastingController extends Controller
      */
     public function index()
     {
-        return view('narrowcasting.list', ['messages' => NarrowcastingItem::get()]);
+        return view('narrowcasting.list', ['messages' => NarrowcastingItem::orderBy('campaign_start', 'desc')->paginate(10)]);
     }
 
     /**

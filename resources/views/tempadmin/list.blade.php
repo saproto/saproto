@@ -1,93 +1,92 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Temporary Admin Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    <p style="text-align: center;"><a href="{{ route('tempadmin::add') }}">Grant temporary admin access.</a></p>
+    <div class="row justify-content-center">
 
-    @if (count($tempadmins) > 0 || count($pastTempadmins) > 0)
+        <div class="col-md-6">
 
-        <table class="table">
+            <div class="card mb-3">
 
-            <thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('tempadmin::add') }}" class="float-right badge-info badge">
+                        Add new temporary admin.
+                    </a>
+                </div>
 
-            <tr>
+                <table class="table table-borderless table-hover table-sm">
 
-                <th>User</th>
-                <th>Given by</th>
-                <th>From</th>
-                <th>Until</th>
-                <th>Controls</th>
+                    <thead>
 
-            </tr>
+                    <tr class="bg-dark text-white">
 
-            </thead>
+                        <th class="pl-3">User</th>
+                        <th>Given by</th>
+                        <th>From</th>
+                        <th>Until</th>
+                        <th></th>
 
-            @foreach($tempadmins as $tempadmin)
+                    </tr>
 
-                <tr>
-                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->user->getPublicId()]) }}">{{ $tempadmin->user->name }}</a></td>
-                    <td><a href="{{ route("user::profile", ['id' => $tempadmin->creator->getPublicId()]) }}">{{ $tempadmin->creator->name }}</a></td>
-                    <td @if(Carbon::parse($tempadmin->start_at)->isPast()) style="color: lightgray" @endif>{{ $tempadmin->start_at }}</td>
-                    <td>{{ $tempadmin->end_at }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route("tempadmin::edit", ['id' => $tempadmin->id]) }}" role="button">
-                            <i class="fas fa-pencil" aria-hidden="true"></i>
-                        </a>
+                    </thead>
 
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('tempadmin::endId', ['id' => $tempadmin->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                            @if(Carbon::parse($tempadmin->start_at)->isFuture()) <i class="fas fa-trash-o" aria-hidden="true"></i>
-                            @else <i class="fas fa-hourglass-end" aria-hidden="true"></i> @endif
-                        </a>
-                    </td>
-                </tr>
+                    @foreach($tempadmins as $tempadmin)
 
-            @endforeach
+                        <tr>
+                            <td class="pl-3">
+                                <a href="{{ route("user::profile", ['id' => $tempadmin->user->getPublicId()]) }}">{{ $tempadmin->user->name }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ route("user::profile", ['id' => $tempadmin->creator->getPublicId()]) }}">{{ $tempadmin->creator->name }}</a>
+                            </td>
+                            <td @if(Carbon::parse($tempadmin->start_at)->isPast()) class="text-muted" @endif>{{ $tempadmin->start_at }}</td>
+                            <td>{{ $tempadmin->end_at }}</td>
+                            <td>
+                                <a href="{{ route("tempadmin::edit", ['id' => $tempadmin->id]) }}">
+                                    <i class="fas fa-edit fa-fw mr-2"></i>
+                                </a>
 
-            @foreach($pastTempadmins as $pastTempadmin)
+                                <a href="{{ route('tempadmin::endId', ['id' => $tempadmin->id]) }}"
+                                   onclick="return confirm('Are you sure?')" role="button">
+                                    @if(Carbon::parse($tempadmin->start_at)->isFuture())
+                                        <i class="fas fa-trash fa-fw text-danger"></i>
+                                    @else
+                                        <i class="fas fa-hourglass-end text-danger fa-fw"></i>
+                                    @endif
+                                </a>
+                            </td>
+                        </tr>
 
-                <tr class="tempadmin__past">
-                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->user->getPublicId()]) }}">{{ $pastTempadmin->user->name }}</a></td>
-                    <td><a href="{{ route("user::profile", ['id' => $pastTempadmin->creator->getPublicId()]) }}">{{ $pastTempadmin->creator->name }}</a></td>
-                    <td>{{ $pastTempadmin->start_at }}</td>
-                    <td>{{ $pastTempadmin->end_at }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-default disabled"
-                           href="#" role="button">
-                            <i class="fas fa-pencil" aria-hidden="true"></i>
-                        </a>
+                    @endforeach
 
-                        <a class="btn btn-xs btn-danger disabled"
-                           href="#" role="button">
-                            <i class="fas fa-hourglass-end" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr>
+                    @foreach($pastTempadmins as $pastTempadmin)
 
-            @endforeach
+                        <tr class="text-muted">
+                            <td class="pl-3">
+                                <a href="{{ route("user::profile", ['id' => $pastTempadmin->user->getPublicId()]) }}">{{ $pastTempadmin->user->name }}</a>
+                            </td>
+                            <td>
+                                <a href="{{ route("user::profile", ['id' => $pastTempadmin->creator->getPublicId()]) }}">{{ $pastTempadmin->creator->name }}</a>
+                            </td>
+                            <td>{{ $pastTempadmin->start_at }}</td>
+                            <td>{{ $pastTempadmin->end_at }}</td>
+                            <td></td>
+                        </tr>
 
-        </table>
+                    @endforeach
 
-    @else
-
-        <p style="text-align: center;">There are no temporary admins. <a href="{{ route('tempadmin::add') }}">Grant temporary admin access.</a></p>
-
-    @endif
+                </table>
 
 
-    <style type="text/css">
-        .tempadmin__past {
-            color: lightgray;
-        }
+            </div>
 
-        .tempadmin__past a {
-            color: lightgray;
-        }
-    </style>
+        </div>
+
+    </div>
 
 @endsection

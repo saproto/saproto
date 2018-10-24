@@ -42,7 +42,7 @@ class CompanyController extends Controller
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
-            Session::flash("flash_message", "There are currently no companies on our membercard, but please check back real soon!");
+            Session::flash("flash_message", "There are currently no promotions for Proto members, please check back real soon!");
             return Redirect::back();
         }
     }
@@ -54,7 +54,7 @@ class CompanyController extends Controller
      */
     public function adminIndex()
     {
-        return view('companies.adminlist', ['companies' => Company::orderBy('sort')->get()]);
+        return view('companies.adminlist', ['companies' => Company::orderBy('sort')->paginate(20)]);
     }
 
     /**
@@ -85,7 +85,7 @@ class CompanyController extends Controller
         $company->in_logo_bar = $request->has('in_logo_bar');
         $company->membercard_excerpt = $request->membercard_excerpt;
         $company->membercard_long = $request->membercard_long;
-        $company->on_membercard = $request->has('membercard_excerpt');
+        $company->on_membercard = $request->has('on_membercard');
         $company->sort = Company::with('sort')->max('sort') + 1;
 
 
@@ -155,7 +155,7 @@ class CompanyController extends Controller
         $company->in_logo_bar = $request->has('in_logo_bar');
         $company->membercard_excerpt = $request->membercard_excerpt;
         $company->membercard_long = $request->membercard_long;
-        $company->on_membercard = $request->has('membercard_excerpt');
+        $company->on_membercard = $request->has('on_membercard');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
