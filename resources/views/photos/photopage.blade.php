@@ -49,6 +49,15 @@
                 <img class="card-img-bottom card-img-top" src="{!! $photo->photo_url !!}">
             </div>
 
+            <div class="card mb-3">
+                <div class="card-body bg-light">
+                    <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}" class="btn btn-default btn-block">
+                        <i class="fas fa-shield-alt fa-fw mr-3"></i>
+                        If you would like this photo removed, please contact photos&#64;{{ config('proto.emaildomain') }}.
+                    </a>
+                </div>
+            </div>
+
         </div>
 
     </div>
