@@ -25,7 +25,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="pl-3">User</td>
+                        <td>User</td>
                         <td>Given by</td>
                         <td>From</td>
                         <td>Until</td>
@@ -38,7 +38,7 @@
                     @foreach($tempadmins as $tempadmin)
 
                         <tr>
-                            <td class="pl-3">
+                            <td>
                                 <a href="{{ route("user::profile", ['id' => $tempadmin->user->getPublicId()]) }}">{{ $tempadmin->user->name }}</a>
                             </td>
                             <td>
@@ -67,7 +67,7 @@
                     @foreach($pastTempadmins as $pastTempadmin)
 
                         <tr class="text-muted">
-                            <td class="pl-3">
+                            <td>
                                 <a href="{{ route("user::profile", ['id' => $pastTempadmin->user->getPublicId()]) }}">{{ $pastTempadmin->user->name }}</a>
                             </td>
                             <td>

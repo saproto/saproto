@@ -1,5 +1,4 @@
 <form class="form-horizontal" method="post" action="{{ route("welcomeMessages::add") }}" id="addmessage">
-    <h3 style="text-align:center; margin-bottom:20px;">Set a new welcome message</h3>
     {{ csrf_field() }}
     <div class="row">
         <div class="col-md-4">
@@ -12,13 +11,9 @@
                    required>
         </div>
         <div class="col-md-2">
-            <div class="btn-group btn-group-justified" role="group">
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-success">
-                        Post
-                    </button>
-                </div>
-            </div>
+            <button type="submit" class="btn btn-success btn-block">
+                Post
+            </button>
         </div>
     </div>
 </form>

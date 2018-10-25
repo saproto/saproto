@@ -41,7 +41,7 @@
 
                         <tr {!! ($message->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
 
-                            <td class="pl-3">
+                            <td>
                                 @if($message->video())
                                     <i class="fab fa-youtube" aria-hidden="true"></i>
                                 @elseif($message->image)

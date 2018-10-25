@@ -23,7 +23,7 @@ class NewsController extends Controller
      */
     public function admin()
     {
-        $newsitems = Newsitem::all();
+        $newsitems = Newsitem::orderBy('published_at', 'desc')->paginate(20);
 
         return view('news.admin', ['newsitems' => $newsitems]);
     }

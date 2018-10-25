@@ -23,7 +23,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="pl-3">Event</td>
+                        <td>Event</td>
                         <td>Ticket Name</td>
                         <td>Availability</td>
                         <td>Who</td>
@@ -38,7 +38,7 @@
 
                         <tr>
 
-                            <td class="pl-3">
+                            <td>
                                 <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
                                     {{ $ticket->event->title }}
                                 </a>

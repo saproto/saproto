@@ -94,7 +94,7 @@
 
                         <tr>
 
-                            <th class="pl-3">Name</th>
+                            <th>Name</th>
                             <th>Price</th>
                             <th>Stock</th>
                             <th>Visible</th>
@@ -111,7 +111,7 @@
 
                             <tr>
 
-                                <td class="pl-3">
+                                <td>
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
                                         {{ $product->name }}
                                     </a>
@@ -120,7 +120,7 @@
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
-                                <td class="text-right pr-3">
+                                <td class="text-right">
                                     <a onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
                                        href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">
                                         <i class="fas fa-trash text-danger" aria-hidden="true"></i>

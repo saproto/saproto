@@ -1,22 +1,24 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Overview of Mollie Transactions
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
         <div class="col-md-7">
 
-            <div class="panel">
-                <div class="panel-heading">
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white">
                     Transactions
                 </div>
-                <div class="panel-body">
 
-                    @if(count($transactions) > 0)
+                @if(count($transactions) > 0)
+
+                    <div class="card-body">
 
                         @if($user)
                             <p>
@@ -41,130 +43,125 @@
                             </p>
                         @endif
 
-                        <hr>
+                    </div>
 
-                        <table class="table">
+                    <table class="table table-hover table-sm">
 
-                            <thead>
+                        <thead>
+                        <tr class="bg-dark text-white">
+                            <td></td>
+                            <td>Amount</td>
+                            <td>User</td>
+                            <td>Status</td>
+                            <td>Date</td>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        @foreach($transactions as $transaction)
+
                             <tr>
-                                <th>#</th>
-                                <th>Amount</th>
-                                <th>User</th>
-                                <th>Status</th>
-                                <th>Date</th>
+                                <td class="text-right">
+                                    <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
+                                        #{{$transaction->id}}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <strong>&euro;</strong> {{ number_format($transaction->amount, 2, '.', '') }}
+                                </td>
+
+                                <td>
+                                    <a href="{{ route('user::admin::details', ['id' => $transaction->user->id]) }}">
+                                        {{ $transaction->user->name }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    @if(MollieTransaction::translateStatus($transaction->status) == 'open')
+                                        <span class="label label-default">{{ $transaction->status }}</span>
+                                    @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
+                                        <span class="label label-success">{{ $transaction->status }}</span>
+                                    @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
+                                        <span class="label label-danger">{{ $transaction->status }}</span>
+                                    @else
+                                        <span class="label label-warning">{{ $transaction->status }}</span>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    {{ date('Y-m-d', strtotime($transaction->created_at)) }}
+                                </td>
+
                             </tr>
-                            </thead>
 
-                            <tbody>
+                        @endforeach
 
-                            @foreach($transactions as $transaction)
+                        </tbody>
 
-                                <tr>
-                                    <td>
-                                        <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
-                                            #{{$transaction->id}}
-                                        </a>
-                                    </td>
+                    </table>
 
-                                    <td>
-                                        <strong>&euro;</strong> {{ number_format($transaction->amount, 2, '.', '') }}
-                                    </td>
+                    <div class="card-footer pb-0">{{ $transactions->appends(Input::except('page'))->links() }}</div>
 
-                                    <td>
-                                        <a href="{{ route('user::admin::details', ['id' => $transaction->user->id]) }}">
-                                            {{ $transaction->user->name }}
-                                        </a>
-                                    </td>
+                @else
+                    <div class="card-body">
+                        <p class="card-text text-center">
+                            There's no transactions.
+                        </p>
+                    </div>
+                @endif
 
-                                    <td>
-                                        @if(MollieTransaction::translateStatus($transaction->status) == 'open')
-                                            <span class="label label-default">{{ $transaction->status }}</span>
-                                        @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
-                                            <span class="label label-success">{{ $transaction->status }}</span>
-                                        @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
-                                            <span class="label label-danger">{{ $transaction->status }}</span>
-                                        @else
-                                            <span class="label label-warning">{{ $transaction->status }}</span>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        {{ date('Y-m-d', strtotime($transaction->created_at)) }}
-                                    </td>
-
-                                </tr>
-
-                            @endforeach
-
-                            </tbody>
-
-                        </table>
-
-                        <div style="text-align: center;">{{ $transactions->appends(Input::except('page'))->links() }}</div>
-
-                    @else
-
-                        <div class="list-group">
-
-                            <li class="list-group-item">
-                                There's no transactions.
-                            </li>
-
-                        </div>
-
-                    @endif
-
-                </div>
             </div>
 
         </div>
 
         @if(!$user)
 
-            <div class="col-md-5">
+            <div class="col-md-3">
 
-                <div class="panel">
-                    <div class="panel-heading">
+                <div class="card mb-3">
+
+                    <div class="card-header bg-dark text-white mb-1">
                         Account overview
                     </div>
-                    <div class="panel-body">
 
-                        <table class="table">
-                            <thead>
+                    <table class="table table-hover table-sm">
+                        <thead>
+                        <tr class="bg-dark text-white">
+                            <td>Month</td>
+                            <td class="text-right">Total</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @for($m = 0; $m <= 11 ; $m++)
+                            <?php
+                            $month = strtotime(sprintf('-%s months', $m));
+                            $total = MollieController::getTotalForMonth(date('Y-m', $month));
+                            ?>
                             <tr>
-                                <th>Month</th>
-                                <th style="text-align: right;">Total</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            @for($m = 0; $m <= 11 ; $m++)
-                                <?php
-                                $month = strtotime(sprintf('-%s months', $m));
-                                $total = MollieController::getTotalForMonth(date('Y-m', $month));
-                                ?>
-                                <tr>
-                                    <td>
-                                        <a href="{{ route('omnomcom::mollie::monthly', ['month' => date('Y-m', $month)]) }}">
-                                            <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
-                                        </a>
-                                    </td>
-                                    <td style="text-align: right">
-                                        @if ($total > 0)
-                                            <span class="label label-success">
+                                <td>
+                                    <a href="{{ route('omnomcom::mollie::monthly', ['month' => date('Y-m', $month)]) }}">
+                                        <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
+                                    </a>
+                                </td>
+                                <td class="text-right">
+                                    @if ($total > 0)
+                                        <span class="label label-success">
                                              &euro; {{ number_format($total,2) }}
                                         </span>
-                                        @else
-                                            <span class="label label-default">no transactions</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endfor
+                                    @else
+                                        <span class="label label-default">no transactions</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endfor
 
-                            </tbody>
-                        </table>
+                        </tbody>
 
-                    </div>
+                    </table>
+
                 </div>
 
             </div>

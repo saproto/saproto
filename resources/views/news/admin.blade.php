@@ -1,67 +1,72 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     News Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($newsitems) > 0)
+    <div class="row justify-content-center">
 
-        <table class="table">
+        <div class="col-md-6">
 
-            <thead>
+            <div class="card mb-3">
 
-            <tr>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('news::add') }}" class="badge badge-info float-right">
+                        Create a new news item.
+                    </a>
+                </div>
 
-                <th>Title</th>
-                <th>Published</th>
-                <th>Controls</th>
+                <table class="table table-sm table-hover">
 
-            </tr>
+                    <thead>
 
-            </thead>
+                    <tr class="bg-dark text-white">
 
-            @foreach($newsitems as $newsitem)
+                        <td>Title</td>
+                        <td>Published</td>
+                        <td>Controls</td>
 
-                <tr>
+                    </tr>
 
-                    <td>{{ $newsitem->title }}</td>
-                    <td>@if($newsitem->isPublished()) <span style="color: green">{{ $newsitem->published_at }}</span> @else <span style="color: dimgrey">{{ $newsitem->published_at }}</span> @endif</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('news::show', ['id' => $newsitem->id]) }}" role="button">
-                            <i class="fas fa-eye" aria-hidden="true"></i>
-                        </a>
+                    </thead>
 
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('news::edit', ['id' => $newsitem->id]) }}" role="button">
-                            <i class="fas fa-pencil" aria-hidden="true"></i>
-                        </a>
+                    @foreach($newsitems as $newsitem)
 
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('news::delete', ['id' => $newsitem->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                            <i class="fas fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                        <tr>
 
-                </tr>
+                            <td>{{ $newsitem->title }}</td>
+                            <td>@if($newsitem->isPublished()) <span class="text-primary">{{ $newsitem->published_at }}</span> @else <span class="text-muted">{{ $newsitem->published_at }}</span> @endif</td>
+                            <td>
+                                <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
+                                    <i class="fas fa-link mr-2"></i>
+                                </a>
 
-            @endforeach
+                                <a href="{{ route('news::edit', ['id' => $newsitem->id]) }}">
+                                    <i class="fas fa-edit mr-2"></i>
+                                </a>
 
-        </table>
+                                <a href="{{ route('news::delete', ['id' => $newsitem->id]) }}" onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+                            </td>
 
-        <p style="text-align: center;">
-            <a href="{{ route('news::add') }}">Create a new news item.</a>
-        </p>
+                        </tr>
 
-    @else
+                    @endforeach
 
-        <p style="text-align: center;">
-            There are currently no news items.
-            <a href="{{ route('news::add') }}">Create a new news item.</a>
-        </p>
+                </table>
 
-    @endif
+                <div class="card-footer pb-0">
+                    {!! $newsitems->links() !!}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

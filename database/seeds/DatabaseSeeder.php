@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (config('app.env') !== 'local') {
+        if (config('app.env') == 'production') {
             echo "You cannot seed your database outside the development environment.";
             return;
         }

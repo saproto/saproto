@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div class="card">
+    <div class="card mb-3">
 
         @if($page->featuredImage)
             <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}"

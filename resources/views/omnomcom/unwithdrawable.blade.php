@@ -1,56 +1,66 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Unwithdrawable orderlines
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <p style="text-align: center;">
-            These orderlines cannot be withdrawn because they are associated with a user that doesn't have an active
-            withdrawal authorization anymore.
-        </p>
+        <div class="col-md-6">
 
-        <div class="col-md-8 col-md-offset-2">
+            <div class="card mb-3">
 
-            <table class="table table-hover">
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                </div>
 
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Total</th>
-                    <th>Transaction Date</th>
-                </tr>
-                </thead>
+                <div class="card-body">
+                    <p class="card-text">
+                        These orderlines cannot be withdrawn because they are associated with a user that doesn't have
+                        an active withdrawal authorization.
+                    </p>
+                </div>
 
-                <tbody>
+                <table class="table table-hover table-sm">
 
-                @foreach($users as $key => $user)
-
-                    <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
-                        <th>{{ $key }}</th>
-                        <th>{{ $user->user->name }}</th>
-                        <th>&euro; {{ number_format($user->total, 2) }}</th>
-                        <th></th>
-
+                    <thead>
+                    <tr class="bg-dark text-white">
+                        <td></td>
+                        <td>Name</td>
+                        <td>Total</td>
+                        <td>Transaction Date</td>
                     </tr>
+                    </thead>
 
-                    @foreach($user->orderlines as $orderline)
-                        <tr class="collapse {{ $key }}">
-                            <td>{{ $orderline->id }}</td>
-                            <td>{{ $orderline->units }}x {{ $orderline->product->name }}</td>
-                            <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>
-                            <td>{{ $orderline->created_at }}</td>
+                    <tbody>
+
+                    @foreach($users as $key => $user)
+
+                        <tr data-toggle="collapse" data-target=".collapse-{{ $key }}" style="cursor: pointer;">
+                            <th>{{ $key }}</th>
+                            <td>{{ $user->user->name }}</td>
+                            <th>&euro; {{ number_format($user->total, 2) }}</th>
+                            <td></td>
+
                         </tr>
+
+                        @foreach($user->orderlines as $orderline)
+                            <tr class="collapse collapse-{{ $key }}">
+                                <td>{{ $orderline->id }}</td>
+                                <td>{{ $orderline->units }}x {{ $orderline->product->name }}</td>
+                                <td>&euro; {{ number_format($orderline->total_price, 2) }}</td>
+                                <td>{{ $orderline->created_at }}</td>
+                            </tr>
+                        @endforeach
+
                     @endforeach
+                    </tbody>
 
-                @endforeach
-                </tbody>
+                </table>
 
-            </table>
+            </div>
 
         </div>
 

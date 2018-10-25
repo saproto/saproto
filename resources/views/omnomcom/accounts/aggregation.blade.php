@@ -27,7 +27,7 @@
 
                     <thead>
                     <tr class="bg-dark text-white">
-                        <td class="pl-3">Product</td>
+                        <td>Product</td>
                         <td>Units</td>
                         <td>Turnover</td>
                     </tr>
@@ -37,7 +37,7 @@
 
                     @foreach($aggregation as $key => $product)
                         <tr>
-                            <td class="pl-3">{{ $product->name }}</td>
+                            <td>{{ $product->name }}</td>
                             <td>{{ $product->number_sold }}</td>
                             <td>&euro; {{ number_format($product->total_turnover, 2) }}</td>
                         </tr>

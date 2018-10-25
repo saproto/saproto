@@ -76,7 +76,7 @@
 
                         <tr class="bg-dark text-white">
 
-                            <td class="pl-3">Event</td>
+                            <td>Event</td>
                             <td>When</td>
                             <td></td>
                             <td></td>
@@ -89,13 +89,13 @@
 
                             <tr style="opacity: {{ ($event->include_in_newsletter ? '1' : '0.4') }};">
 
-                                <td class="pl-3">{{ $event->title }}</td>
+                                <td>{{ $event->title }}</td>
                                 <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>
                                 <td>
                                     <i class="fas fa-{{ ($event->include_in_newsletter ? 'check' : 'times') }}"
                                        aria-hidden="true"></i>
                                 </td>
-                                <td class="pr-3">
+                                <td>
                                     <a href="{{ route('newsletter::toggle', ['id' => $event->id]) }}">
                                         Toggle
                                     </a>

@@ -14,7 +14,7 @@
                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                     </a>
                     @if($withdrawal->getFailedWithdrawal($user))
-                        <i class="fas fa-times text-danger"></i>
+                        <i class="fas fa-times text-danger ml-2"></i>
                     @endif
                     <span class="float-right">
                                 &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}
@@ -54,7 +54,7 @@
                 <li class="list-group-item">
                     <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
                         {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
-                        {!! MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-1 text-danger"></i>' : "" !!}
+                        {!! MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
                     </a>
                     <span class="float-right">&euro;{{ number_format($transaction->amount, 2, '.', ',') }}</span>
                 </li>

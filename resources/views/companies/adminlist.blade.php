@@ -25,7 +25,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="pl-3">Name</td>
+                        <td>Name</td>
                         <td>URL</td>
                         <td>Visible</td>
                         <td>Logo Bar</td>
@@ -39,7 +39,7 @@
 
                         <tr>
 
-                            <td class="pl-3">{{ $company->name }}</td>
+                            <td>{{ $company->name }}</td>
                             <td><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
                             <td>{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
                             <td>{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>

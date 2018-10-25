@@ -24,7 +24,7 @@
 
                         <tr class="bg-dark text-white">
 
-                            <td class="pl-3">Event</td>
+                            <td>Event</td>
                             <td>Fee</td>
                             <td>Participants</td>
                             <td>Account</td>
@@ -42,7 +42,7 @@
 
                                     {{ csrf_field() }}
 
-                                    <td class="pl-3">
+                                    <td>
                                     @if ($activity->event)
                                             <a href="{{ route("event::show", ['id' => $activity->event->getPublicId()]) }}">{{ $activity->event->title }}</a><br>
                                             {{ date('D j F Y', $activity->event->start) }}

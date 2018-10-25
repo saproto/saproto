@@ -25,7 +25,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="pl-3">Name</td>
+                        <td>Name</td>
                         <td>Acc. Number</td>
                         <td>Associated Prod.</td>
                         <td></td>
@@ -38,7 +38,7 @@
 
                         <tr>
 
-                            <td class="pl-3">
+                            <td>
                                 <a href="{{ route('omnomcom::accounts::show', ['id' => $account->id]) }}">
                                     {{ $account->name }}
                                 </a>

@@ -25,7 +25,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="pl-3">Company</td>
+                        <td>Company</td>
                         <td>Title</td>
                         <td></td>
 
@@ -37,7 +37,7 @@
 
                         <tr>
 
-                            <td class="pl-3">{{ $joboffer->company->name }}</td>
+                            <td>{{ $joboffer->company->name }}</td>
                             <td>{{ $joboffer->title}}</td>
 
                             <td>

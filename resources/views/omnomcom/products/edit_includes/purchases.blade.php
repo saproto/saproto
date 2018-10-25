@@ -14,7 +14,7 @@
 
                 <tr>
 
-                    <td class="pl-3">{{ $orderline->created_at }}</td>
+                    <td>{{ $orderline->created_at }}</td>
                     <td>
                         @if($orderline->user)
 

@@ -1,28 +1,26 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     @if($new) Create new page @else Edit page {{ $item->title }} @endif
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="{{ ($new ? 'col-md-6 col-md-offset-3' : 'col-md-7') }}">
+        <div class="col-md-6">
 
-            <div class="panel panel-default">
+            <form method="post"
+                  action="@if($new) {{ route("page::add") }} @else {{ route("page::edit", ['id' => $item->id]) }} @endif"
+                  enctype="multipart/form-data">
 
-                <div class="panel-heading">
+                <div class="card mb-3">
 
-                    Page content
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
+                    </div>
 
-                </div>
-
-                <div class="panel-body">
-
-                    <form method="post"
-                          action="@if($new) {{ route("page::add") }} @else {{ route("page::edit", ['id' => $item->id]) }} @endif"
-                          enctype="multipart/form-data">
+                    <div class="card-body">
 
                         {!! csrf_field() !!}
 
@@ -34,11 +32,11 @@
 
                         <div class="form-group">
                             <label for="slug">URL:</label>
-                            <div class="input-group">
-                                <div class="input-group-addon">{{ route('page::show', '') }}/</div>
-                                <input type="text" class="form-control datetime-picker" id="slug" name="slug"
-                                       placeholder="about-proto"
-                                       value="{{ $item->slug or '' }}" required>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ route('page::show', '') }}/</span>
+                                </div>
+                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug or '' }}" required>
                             </div>
                         </div>
 
@@ -46,7 +44,7 @@
                             <label>
                                 <input type="checkbox" name="is_member_only"
                                        @if(isset($item->is_member_only) && $item->is_member_only) checked @endif>
-                                <i class="fas fa-lock" aria-hidden="true"></i> Members only
+                                <i class="fas fa-lock"></i> Members only
                             </label>
                         </div>
 
@@ -60,106 +58,95 @@
 
                         <div class="form-group">
                             <label for="editor">Content</label>
-                            @if ($item == null)
-                                <textarea id="editor" name="content"
-                                          placeholder="Enter page content here..."></textarea>
-                            @else
-                                <textarea id="editor" name="content">{{ $item->content }}</textarea>
-                            @endif
-                        </div>
-
-
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
-                        </button>
-
-                        <a href="{{ route("page::list") }}" class="btn btn-default pull-right">Cancel</a>
-
-                    </form>
-                </div>
-            </div>
-
-
-            @if(!$new)
-
-                <form method="post" action="{{ route("page::image", ["id" => $item->id]) }}"
-                      enctype="multipart/form-data">
-
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading">
-                            Update featured image
-                        </div>
-
-                        <div class="panel-body">
-
-                            {!! csrf_field() !!}
-
-                            @if($item->featuredImage)
-
-                                <img src="{!! $item->featuredImage->generateImagePath(700,null) !!}" width="100%;">
-
-                            @else
-                                <p>
-                                    &nbsp;
-                                </p>
-                                <p style="text-align: center;">
-                                    This page has no featured image yet. Upload one now!
-                                </p>
-                            @endif
-
-                            <hr>
-
-                            <div class="form-horizontal">
-
-                                <div class="form-group">
-                                    <label for="image" class="col-sm-4 control-label">New featured image</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="image" type="file" name="image"
-                                               accept="image/*">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="panel-footer clearfix">
-                            <button type="submit" class="btn btn-success pull-right">
-                                Replace featured image
-                            </button>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'editor',
+                                'placeholder' => 'Text goes here.',
+                                'value' => $item ? $item->content : null
+                            ])
                         </div>
 
                     </div>
-                </form>
 
-            @endif
+                    <div class="card-footer">
+
+                        <button type="submit" class="btn btn-success float-right">
+                            Submit
+                        </button>
+
+                        <a href="{{ route("page::list") }}" class="btn btn-default">Cancel</a>
+
+                    </div>
+
+                </div>
+
+            </form>
 
         </div>
 
         @if(!$new)
 
-            <div class="col-md-5">
+            <div class="col-md-3">
 
-                <div class="panel panel-default">
+                <form method="post" action="{{ route("page::image", ["id" => $item->id]) }}"
+                      enctype="multipart/form-data">
 
-                    <div class="panel-heading">
+                    {!! csrf_field() !!}
 
-                        Attached files
+                    <div class="card mb-3">
+
+                        @if($item->featuredImage)
+
+                            <img src="{!! $item->featuredImage->generateImagePath(700,null) !!}" width="100%;"
+                                 class="card-img-top">
+
+                        @endif
+
+                        <div class="card-header bg-dark text-white">
+                            Featured image
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="image">
+                                <label class="custom-file-label" for="customFile">Upload featured image</label>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer">
+
+                            <button type="submit" class="btn btn-success pull-right btn-block">
+                                Replace featured image
+                            </button>
+
+                        </div>
 
                     </div>
 
-                    <div class="panel-body">
+                </form>
+
+                <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}"
+                      enctype="multipart/form-data">
+
+                    {!! csrf_field() !!}
+
+                    <div class="card mb-3">
+
+                        <div class="card-header bg-dark text-white mb-1">
+                            Attachments
+                        </div>
 
                         @if ($item->files->count() > 0)
 
-                            <table class="table">
+                            <table class="table table-hover table-sm">
 
                                 <thead>
 
-                                <tr>
+                                <tr class="bg-dark text-white">
 
-                                    <th>Filename</th>
-                                    <th>Controls</th>
+                                    <td>Filename</td>
+                                    <td>Controls</td>
 
                                 </tr>
 
@@ -169,25 +156,25 @@
 
                                     <tr>
 
-                                        <td><a href="{{ $file->generatePath() }}"
-                                               target="_blank">{{ $file->original_filename }}</a></td>
+                                        <td class="pl-3 ellipsis">
+                                            <a href="{{ $file->generatePath() }}" target="_blank">
+                                                {{ $file->original_filename }}
+                                            </a>
+                                        </td>
                                         <td>
                                             @if(substr($file->mime, 0, 5) == 'image')
-                                                <a class="btn btn-xs btn-default pageEdit_insertImage"
-                                                   href="#" role="button"
+                                                <a class="pageEdit_insertImage" href="#"
                                                    rel="{{ $file->generateImagePath(1000, null) }}">
-                                                    <i class="fas fa-image" aria-hidden="true"></i>
+                                                    <i class="fas fa-image mr-2 fa-fw"></i>
                                                 </a>
                                             @else
-                                                <a class="btn btn-xs btn-default pageEdit_insertLink"
-                                                   href="#" role="button" rel="{{ $file->generatePath() }}">
-                                                    <i class="fas fa-link" aria-hidden="true"></i>
+                                                <a class="pageEdit_insertLink" href="#" role="button"
+                                                   rel="{{ $file->generatePath() }}">
+                                                    <i class="fas fa-link mr-2 fa-fw"></i>
                                                 </a>
                                             @endif
-                                            <a class="btn btn-xs btn-danger"
-                                               href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}"
-                                               role="button">
-                                                <i class="fas fa-trash-o" aria-hidden="true"></i>
+                                            <a href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}">
+                                                <i class="fas fa-trash text-danger"></i>
                                             </a>
                                         </td>
 
@@ -197,54 +184,34 @@
 
                             </table>
 
-                        @else
-
-                            <p style="text-align: center;">
-                                There are currently no files attached to this page.
-                            </p>
-
                         @endif
 
-                        <hr>
+                        <div class="card-body">
 
-                        <form method="post" action="{{ route("page::file::add", ["id" => $item->id]) }}"
-                              enctype="multipart/form-data">
-
-                            {!! csrf_field() !!}
-
-                            <div class="form-horizontal">
-
-                                <div class="form-group">
-                                    <label for="image" class="col-sm-4 control-label">New file</label>
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="file" type="file" name="file" required>
-                                    </div>
-                                </div>
-
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="file">
+                                <label class="custom-file-label" for="customFile">Upload a file</label>
                             </div>
 
-                            <button type="submit" class="btn btn-success pull-right">
+                        </div>
+
+                        <div class="card-footer">
+
+                            <button type="submit" class="btn btn-success btn-block">
                                 Upload file
                             </button>
 
-                        </form>
+                        </div>
 
                     </div>
 
-
-                </div>
-
-                @endif
+                </form>
 
             </div>
 
-    </div>
+        @endif
 
-    <style type="text/css">
-        .CodeMirror img {
-            width: 100%;
-        }
-    </style>
+    </div>
 
 
 
@@ -255,13 +222,6 @@
     @parent
 
     <script>
-        var simplemde = new SimpleMDE({
-            element: $("#editor")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview", "guide"],
-            spellChecker: false
-        });
-
-
         // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
             var cm = $('.CodeMirror')[0].CodeMirror;

@@ -95,7 +95,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->password = Hash::make($password);
         $this->save();
 
-        if (config('app.env') !== 'local') {
+        if (config('app.env') == 'production') {
             // Update Active Directory Password
             $ad = new Adldap();
             $provider = new Provider(config('adldap.proto'));

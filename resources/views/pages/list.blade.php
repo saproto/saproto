@@ -1,64 +1,70 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Page Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($pages) > 0)
+    <div class="row justify-content-center">
 
-        <table class="table">
+        <div class="col-md-8">
 
-            <thead>
+            <div class="card mb-3">
 
-            <tr>
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                    <a href="{{ route('page::add') }}" class="badge badge-info float-right">
+                        Create a new page.
+                    </a>
+                </div>
 
-                <th>Title</th>
-                <th>URL</th>
-                <th>Visibility</th>
-                <th>Controls</th>
+                <table class="table table-sm table-hover">
 
-            </tr>
+                    <thead>
 
-            </thead>
+                    <tr class="bg-dark text-white">
 
-            @foreach($pages as $page)
+                        <td>Title</td>
+                        <td>URL</td>
+                        <td>Visibility</td>
+                        <td>Controls</td>
 
-                <tr>
+                    </tr>
 
-                    <td>{{ $page->title }}</td>
-                    <td><a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a></td>
-                    <td>@if($page->is_member_only) Member only @else Public @endif</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('page::edit', ['id' => $page->id]) }}" role="button">
-                            <i class="fas fa-pencil" aria-hidden="true"></i>
-                        </a>
+                    </thead>
 
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('page::delete', ['id' => $page->id]) }}" onclick="return confirm('Are you sure?')" role="button">
-                            <i class="fas fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                    @foreach($pages as $page)
 
-                </tr>
+                        <tr>
 
-            @endforeach
+                            <td>{{ $page->title }}</td>
+                            <td><a href="{{ route('page::show', $page->slug) }}">{{ route('page::show', $page->slug) }}</a></td>
+                            <td>@if($page->is_member_only) <i class="fas fa-lock"></i> @endif</td>
+                            <td>
+                                <a href="{{ route('page::edit', ['id' => $page->id]) }}">
+                                    <i class="fas fa-edit mr-2"></i>
+                                </a>
 
-        </table>
+                                <a href="{{ route('page::delete', ['id' => $page->id]) }}" onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+                            </td>
 
-        <p style="text-align: center;">
-            <a href="{{ route('page::add') }}">Create a new page.</a>
-        </p>
+                        </tr>
 
-    @else
+                    @endforeach
 
-        <p style="text-align: center;">
-            There are currently no pages.
-            <a href="{{ route('page::add') }}">Create a new page.</a>
-        </p>
+                </table>
 
-    @endif
+                <div class="card-footer pb-0">
+                    {!! $pages->links() !!}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

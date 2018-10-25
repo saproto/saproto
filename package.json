@@ -28,6 +28,7 @@
     "@fortawesome/fontawesome-free": "^5.4.1",
     "bootstrap": "^4.1.0",
     "bootstrap-slider": "^10.2.1",
+    "fontawesome-iconpicker": "^3.1.0",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
