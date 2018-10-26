@@ -1,102 +1,119 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Authorization Matrix
 @endsection
 
-@section('content')
+@section('container')
 
-    <table class="table">
+    <div class="row justify-content-center">
 
-        <?php $width = 100 / (count($permissions) + 1) ?>
+        <div class="col-md-6">
 
-        <thead>
-        <tr>
-            <th>Role</th>
-            <th colspan="{{ count($permissions) }}">Permissions</th>
-        </tr>
-        </thead>
+            <div class="card mb-3">
 
-        <tbody>
-        @foreach($roles as $role)
-            <tr>
-                <th width="{{ $width }}%">
-                    {{ $role->name }}
-                </th>
-                @foreach($permissions as $permission)
-                    <td width="{{ $width }}%">
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                </div>
+
+                <table class="table table-hover table-sm">
+
+                    <?php $width = 100 / (count($permissions) + 1) ?>
+
+                    <thead>
+                    <tr class="bg-dark text-white">
+                        <td>Role</td>
+                        <td colspan="{{ count($permissions) }}">Permissions</td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach($roles as $role)
+                        <tr>
+                            <th width="{{ $width }}%">
+                                {{ $role->name }}
+                            </th>
+                            @foreach($permissions as $permission)
+                                <td width="{{ $width }}%">
                         <span style="opacity: {{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '1' : '0.2' }};">
                             {{ $permission->name }}
                         </span>
-                    </td>
-                @endforeach
-            </tr>
-        @endforeach
-        </tbody>
-
-    </table>
-
-    <hr>
-
-    <p>
-        Below it is possible to assign and unassign people to and from the various roles. Please keep in mind that most
-        roles are automatically (un)assigned when a user authenticates and changes may thus be discarded the next time a
-        user logs in. For those roles adding or removing the member from the roles associated committee probably is what
-        you're looking for. Adding and removing roles and permissions, as well as changing their association, can only
-        be done in the application code.
-    </p>
-
-    <hr>
-
-    @foreach($roles as $i => $role)
-
-        @if ($i % 4 == 0)
-
-            <div class="row">
-
-                @endif
-
-                <div class="col-md-3">
-
-                    <form method="post" action="{{ route('authorization::grant', ['id' => $role->id]) }}">
-
-                        <div class="list-group">
-                            <a class="list-group-item list-group-item-success">
-                                <strong>{{ $role->name }}</strong>
-                            </a>
-
-                            @foreach($role->users as $user)
-                                <span class="list-group-item">
-                                    {{ $user->name }} {!! $user->signed_nda ? '<span class="label label-success">NDA</span>' : '' !!}
-                                    <span class="pull-right">
-                                        <a href="{{ route("authorization::revoke", ['id' => $role->id, 'user' => $user->id]) }}">
-                                           X
-                                       </a>
-                                    </span>
-                                </span>
+                                </td>
                             @endforeach
-                        </div>
+                        </tr>
+                    @endforeach
+                    </tbody>
 
-                        <select class="form-control user-search" name="user"></select>
-
-                        <br>
-
-                        <input type="submit" class="btn btn-success" value="Grant">
-
-                        {!! csrf_field() !!}
-
-                    </form>
-
-                </div>
-
-                @if ($i % 4 == 3 || $i == count($roles) - 1)
+                </table>
 
             </div>
 
-            <hr>
+        </div>
 
-        @endif
+        <div class="col-md-3">
 
-    @endforeach
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white mb-1">
+                    Manage role membership
+                </div>
+
+                <div class="card-body accordion" id="role-accordion">
+
+                    @foreach($roles as $i => $role)
+
+                        <form method="post" action="{{ route('authorization::grant', ['id' => $role->id]) }}">
+
+                            <div class="card mb-2">
+
+                                <div class="card-header bg-info text-white" style="cursor: pointer;"
+                                     data-toggle="collapse" data-target="#role-accordion-{{ $role->id }}">
+                                    {{ $role->name }}
+                                </div>
+
+                                <div class="collapse" data-parent="#role-accordion" id="role-accordion-{{ $role->id }}">
+
+                                    <div class="card-body">
+
+                                        @foreach($role->users as $user)
+
+                                            @include('users.includes.usercard', [
+                                                'user' => $user,
+                                                'subtitle' => sprintf('<div class="badge badge-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
+                                                    <a href="%s"><div class="badge badge-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
+                                                    $user->signed_nda ? 'primary' : 'danger',
+                                                    $user->signed_nda ? 'fa-user-shield' : 'fa-user-times',
+                                                    route("authorization::revoke", ['id' => $role->id, 'user' => $user->id]))
+                                            ])
+
+                                        @endforeach
+
+                                    </div>
+
+                                    <div class="card-footer">
+
+                                        <select class="form-control user-search" name="user"></select>
+
+                                        <input type="submit" class="btn btn-success btn-block mt-3" value="Grant">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            {!! csrf_field() !!}
+
+                        </form>
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

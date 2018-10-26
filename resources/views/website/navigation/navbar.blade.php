@@ -225,9 +225,10 @@
                             <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
-                                <img class="rounded-circle" src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
-                                     style="width: 45px; height: 45px;">
                                 {{ Auth::user()->name }}
+                                <img class="rounded-circle ml-2"
+                                     src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
+                                     style="width: 45px; height: 45px; border: 2px solid white;">
                             </a>
                             <ul class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>

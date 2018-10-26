@@ -1,88 +1,111 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     ProTube Soundboard Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    <table class="table">
+    <div class="row justify-content-center">
 
-        <thead>
+        <div class="col-md-6">
 
-        <tr>
+            <div class="card mb-3">
 
-            <th>#</th>
-            <th>Name</th>
-            <th>Controls</th>
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                </div>
 
-        </tr>
+                <table class="table table-hover">
 
-        </thead>
-
-        <tbody>
-
-        @if (count($sounds) > 0)
-
-            @foreach($sounds as $sound)
+                    <thead>
 
                     <tr>
 
-                        <td>{{ $sound->id }}</td>
-                        <td>
-                            {{ $sound->name }}
-                        </td>
-                        <td>
-                            <a class="btn btn-success"
-                               href="{{ route('protube::soundboard::togglehidden', ['id' => $sound->id]) }}" role="button">
-                                @if($sound->hidden) <i class="fas fa-eye"></i> Unhide @else <i class="fas fa-eye-slash"></i> Hide @endif
-                            </a>
-                            <a class="btn btn-danger"
-                               onclick="return confirm('Are you sure you want to delete {{ $sound->name }}?');"
-                               href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}" role="button">
-                                <i class="fas fa-trash-o"></i> Delete
-                            </a>
-                            <a class="btn btn-success sound__test" data-url="{{ $sound->file->generatePath() }}">
-                                <i class="fas fa-volume-up"></i> Test
-                            </a>
-                        </td>
+                        <th>Name</th>
+                        <th>Controls</th>
 
                     </tr>
 
-            @endforeach
+                    </thead>
 
-        @endif
+                    <tbody>
 
-        <form method="post" action="{{ route('protube::soundboard::store') }}" enctype="multipart/form-data">
+                    @if (count($sounds) > 0)
 
-            {!! csrf_field() !!}
+                        @foreach($sounds as $sound)
 
-            <tr>
+                            <tr>
 
-                <td></td>
-                <td>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <input class="form-control" type="text" name="name" placeholder="Sound name">
-                        </div>
-                        <div class="col-md-4">
-                            <input class="form-control" type="file" name="sound" id="sound">
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success" role="button">
-                        <i class="fas fa-save" aria-hidden="true"></i> Save
-                    </button>
-                </td>
+                                <td>
+                                    <a href="{{ $sound->file->generatePath() }}">
+                                        <i class="fas fa-cloud-download-alt fa-fw mr-2"></i>
+                                    </a>
+                                    {{ $sound->name }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger"
+                                       onclick="return confirm('Are you sure you want to delete {{ $sound->name }}?');"
+                                       href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}">
+                                        <i class="fas fa-trash mr-2"></i> Delete
+                                    </a>
+                                    <div class="btn btn-success sound__test" data-url="{{ $sound->file->generatePath() }}">
+                                        <i class="fas fa-volume-up"></i> Test
+                                    </div>
+                                    <a class="btn btn-success"
+                                       href="{{ route('protube::soundboard::togglehidden', ['id' => $sound->id]) }}">
+                                        @if($sound->hidden) <i class="fas fa-eye"></i> Unhide @else <i class="fas fa-eye-slash"></i> Hide @endif
+                                    </a>
+                                </td>
 
-            </tr>
+                            </tr>
 
-        </form>
+                        @endforeach
 
-        </tbody>
+                    @endif
 
-    </table>
+                    <form method="post" action="{{ route('protube::soundboard::store') }}" enctype="multipart/form-data">
+
+                        {!! csrf_field() !!}
+
+                        <tr>
+
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" name="name" placeholder="Sound name">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="sound">
+                                            <label class="custom-file-label">MP3</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save mr-2" aria-hidden="true"></i> Save
+                                </button>
+                            </td>
+
+                        </tr>
+
+                    </form>
+
+                    </tbody>
+
+                </table>
+
+                <div class="card-footer pb-0">
+                    {!! $sounds->links() !!}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection
 

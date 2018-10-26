@@ -1,80 +1,105 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     ProTube Radio Station Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    <table class="table">
+    <div class="row justify-content-center">
 
-        <thead>
+        <div class="col-md-6">
 
-        <tr>
+            <div class="card mb-3">
 
-            <th>#</th>
-            <th>Name</th>
-            <th>Stream URL</th>
-            <th>Controls</th>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                </div>
 
-        </tr>
+                <div class="card-body">
 
-        </thead>
+                    <form method="post" action="{{ route('protube::radio::store') }}">
 
-        <tbody>
+                        {!! csrf_field() !!}
 
-        @if (count($stations) > 0)
+                        <div class="row">
 
-            @foreach($stations as $station)
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>Stream name</label>
+                                    <input class="form-control" type="text" name="name" placeholder="Proto Radio FM">
+                                </div>
+                            </div>
 
-                <tr>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label>Stream URL</label>
+                                    <input class="form-control" type="text" name="url" placeholder="Stream URL">
+                                </div>
+                            </div>
 
-                    <td>{{ $station->id }}</td>
-                    <td>{{ $station->name }}</td>
-                    <td>{{ $station->url }}</td>
-                    <td>
-                        <a class="btn btn-danger"
-                           onclick="return confirm('Are you sure you want to delete {{ $station->name }}?');"
-                           href="{{ route('protube::radio::delete', ['id' => $station->id]) }}" role="button">
-                            <i class="fas fa-trash-o"></i> Delete
-                        </a>
-                        <a class="btn btn-success radio__test" data-url="{{ $station->url }}">
-                            <i class="fas fa-volume-up"></i> Test
-                        </a>
-                    </td>
+                            <div class="col-4">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-success btn-block">
+                                    <i class="fas fa-save mr-2" aria-hidden="true"></i> Save
+                                </button>
+                            </div>
 
-                </tr>
+                        </div>
 
-            @endforeach
+                    </form>
 
-        @endif
+                </div>
 
-        <form method="post" action="{{ route('protube::radio::store') }}">
+                <table class="table table-hover">
 
-            {!! csrf_field() !!}
+                    <thead>
 
-            <tr>
+                    <tr class="bg-dark text-white">
 
-                <td></td>
-                <td>
-                    <input class="form-control" type="text" name="name" placeholder="Stream name">
-                </td>
-                <td>
-                    <input class="form-control" type="text" name="url" placeholder="Stream URL">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success" role="button">
-                        <i class="fas fa-save" aria-hidden="true"></i> Save
-                    </button>
-                </td>
+                        <td>Name</td>
+                        <td>Stream URL</td>
+                        <td>Controls</td>
 
-            </tr>
+                    </tr>
 
-        </form>
+                    </thead>
 
-        </tbody>
+                    <tbody>
 
-    </table>
+                    @if (count($stations) > 0)
+
+                        @foreach($stations as $station)
+
+                            <tr>
+
+                                <td>{{ $station->name }}</td>
+                                <td>{{ $station->url }}</td>
+                                <td>
+                                    <a onclick="return confirm('Are you sure you want to delete {{ $station->name }}?');"
+                                       href="{{ route('protube::radio::delete', ['id' => $station->id]) }}">
+                                        <i class="fas fa-trash text-danger fa-fw"></i>
+                                    </a>
+                                    <a class="radio__test" data-url="{{ $station->url }}">
+                                        <i class="fas fa-volume-up fa-fw"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    @endif
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection
 
@@ -90,7 +115,7 @@
             stopPlaying();
             radio.src = $(this).attr('data-url');
             radio.play();
-            $(this).removeClass('btn-success radio__test').addClass('btn-info radio__stop').html('<i class="fas fa-volume-off"></i> Stop')
+            $(this).removeClass('radio__test').addClass('radio__stop').html('<i class="fas fa-volume-mute fa-fw"></i>')
         });
 
         $("body").delegate('.radio__stop', 'click', function () {
@@ -98,7 +123,7 @@
         });
 
         function stopPlaying() {
-            $('.radio__stop').removeClass('btn-info radio__stop').addClass('btn-success radio__test').html('<i class="fas fa-volume-up"></i> Test')
+            $('.radio__stop').removeClass('radio__stop').addClass('radio__test').html('<i class="fas fa-volume-up fa-fw"></i>')
             radio.src = "";
         }
 
