@@ -32,12 +32,17 @@ class DevelopmentAccess
      */
     public function handle($request, Closure $next)
     {
+        if (config('app-proto.debug-whitelist') == null) {
+            return $next($request);
+        }
+
         $this->ipWhitelist = explode(',', config('app-proto.debug-whitelist'));
 
-        if (app()->environment() != 'production' && $this->clientNotAllowed()) {
+        if ($this->clientNotAllowed()) {
             config(['app.debug' => false]);
             return abort(403);
         }
+
         return $next($request);
     }
 
