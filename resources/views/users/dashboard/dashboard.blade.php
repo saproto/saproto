@@ -8,7 +8,7 @@
 
     <div class="row">
 
-        <div class="col-md-5 col-sm-12">
+        <div class="col-xl-5 col-md-12">
 
             @include('users.dashboard.includes.membership')
 
@@ -20,7 +20,7 @@
 
         </div>
 
-        <div class="col-md-3 col-sm-12">
+        <div class="col-xl-3 col-md-12">
 
             <a href="{{ route('api::gdpr_export') }}" target="_blank" class="btn btn-outline-info btn-block mb-3"
                onclick="return confirm('You are about to download all your personal data as a JSON file. This can take a few seconds. Continue?');">
@@ -39,7 +39,7 @@
 
         </div>
 
-        <div class="col-md-4 col-sm-12">
+        <div class="col-xl-4 col-md-12">
 
             @include('users.dashboard.includes.withdrawal')
 

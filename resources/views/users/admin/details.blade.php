@@ -94,28 +94,6 @@
 
         });
 
-        $('body').delegate('#print-form', 'click', function () {
-
-            if (confirm("Please confirm you want to print a membership document.")) {
-                $.ajax({
-                    url: '{{ route('memberform::print') }}',
-                    data: {
-                        '_token': '{!! csrf_token() !!}',
-                        'id': $(this).attr('data-id')
-                    },
-                    method: 'post',
-                    dataType: 'html',
-                    success: function (data) {
-                        alert(data);
-                    },
-                    error: function (data) {
-                        alert("Something went wrong while requesting the print.");
-                    }
-                });
-            }
-
-        });
-
     </script>
 
 @endsection

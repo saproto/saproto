@@ -71,7 +71,7 @@
                             {{ $user->utwente_username ? $user->utwente_username : $user->edu_username }}
                             <a class="badge badge-pill badge-danger float-right"
                                href="{{ route('user::edu::delete') }}">
-                                <i class="fas fa-eraser fa-fw"></i>
+                                <i class="fas fa-unlink fa-fw"></i>
                             </a>
                         @else
                             Not linked
@@ -117,9 +117,9 @@
                                 <a class="badge badge-pill badge-primary float-right"
                                    href="{{ route('user::address::togglehidden') }}">
                                     @if($user->address_visible)
-                                        <i class="fas fa-toggle-on fa-fw"></i>
+                                        Hide from members.
                                     @else
-                                        <i class="fas fa-toggle-off fa-fw"></i>
+                                        Make visible to members.
                                     @endif
                                 </a>
                             </p>

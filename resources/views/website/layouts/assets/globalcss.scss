@@ -2,7 +2,7 @@
   text-decoration: underline !important;
 }
 
-.card > .table tr > td{
+.card > .table tr > td {
   &:first-child {
     padding-left: 20px !important;
   }
@@ -11,7 +11,7 @@
   }
 }
 
-.card > .table tr > th{
+.card > .table tr > th {
   &:first-child {
     padding-left: 20px !important;
   }
@@ -22,4 +22,8 @@
 
 .alert > p {
   margin: 0 !important;
+}
+
+img {
+  max-width: 100%;
 }

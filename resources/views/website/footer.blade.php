@@ -2,16 +2,16 @@
 
     <div class="container">
 
-        <div class="row vcard">
+        <div class="row vcard ellipsis">
 
-            <div class="col-3">
+            <div class="col-md-3 col-sm-6 col-6">
                 <strong>
                     <span class="fas fa-home"></span>&nbsp;&nbsp;
                     <span class="org url" href="https://www.saproto.nl/"><span
                                 class="green">S.A. Proto</span></span>
                 </strong>
                 <br>
-                <span class="adr medium-text">
+                <span class="adr">
                     <span class="extended-address">Zilverling A230</span><br>
                     <span class="street-address">Drienerlolaan 5</span><br>
                     <span class="postal-code">7522NB</span>
@@ -19,19 +19,18 @@
                 </span>
             </div>
 
-            <div class="col-3">
-                <span class=" medium-text">
-                    <br>
-                    <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
-                    <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">+31 (0)53 489
-                        4423</a><br>
-                    <span class="fas fa-envelope fa-fw"></span>&nbsp;&nbsp;
-                    <a class="email text-white"
-                       href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
-                </span>
+            <div class="col-md-3 col-sm-6 col-6">
+                <br>
+                <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
+                <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">
+                    +31 (0)53 489 4423
+                </a><br>
+                <span class="fas fa-envelope fa-fw"></span>&nbsp;&nbsp;
+                <a class="email text-white"
+                   href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
             </div>
 
-            <div class="col-3" style="text-align: right;">
+            <div class="col-3 d-none d-lg-block" style="text-align: right;">
                 <a class="text-white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
                     Facebook&nbsp;&nbsp;<i class="fab fa-fw fa-facebook" aria-hidden="true"></i></a><br>
                 <a class="text-white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
@@ -45,16 +44,17 @@
                 </a>
             </div>
 
-            <div class="col-3" style="text-align: right;">
+            <div class="col-lg-3 col-md-6 d-none d-md-block" style="text-align: right;">
                 <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
             </div>
 
         </div>
 
-        <p class="text-center mt-3">
+        <p class="text-center mt-3 ellipsis">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our
-                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
+                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank"
+                   class="text-white">
                     privacy policy
                 </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
                     responsible disclosure policy

@@ -1,6 +1,6 @@
 <header>
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary text-white" style="height: 57px !important;">
+    <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
 
         <a class="navbar-brand" href="{{ route('homepage') }}">
             @if(config('app.env') != 'production') <i class="fas fa-hammer mr-2"></i> @endif
@@ -96,7 +96,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
-                           aria-expanded="false">Admin Tools <span class="caret"></span></a>
+                           aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             @if (Auth::user()->can("board"))
@@ -162,7 +162,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
-                           aria-expanded="false">Web Admin <span class="caret"></span></a>
+                           aria-expanded="false">Site <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
@@ -228,7 +228,7 @@
                                 {{ Auth::user()->name }}
                                 <img class="rounded-circle ml-2"
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
-                                     style="width: 45px; height: 45px; border: 2px solid white;">
+                                     style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
                             </a>
                             <ul class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
