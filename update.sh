@@ -29,6 +29,9 @@ php artisan ide-helper:meta
 # Reload worker queues.
 php artisan queue:restart
 
+# Update packages.
+npm install
+
 # Generate assets
 grunt
 

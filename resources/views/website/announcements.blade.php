@@ -18,7 +18,8 @@
                             {!! Markdown::convertToHtml($announcement->content) !!}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-{{ $announcement->bootstrap_style() }}" data-dismiss="modal">
+                            <button type="button" class="btn btn-{{ $announcement->bootstrap_style() }}"
+                                    data-dismiss="modal">
                                 Close modal
                             </button>
                         </div>
@@ -44,7 +45,7 @@
                  class="alert alert-{{ $announcement->bootstrap_style() }}">
 
                 @if ($announcement->is_dismissable)
-                    <span class="pull-right">
+                    <span class="float-right">
                        <a href="{{ route('announcement::dismiss', ['id' => $announcement->id]) }}">
                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                        </a>
