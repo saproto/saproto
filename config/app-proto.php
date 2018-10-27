@@ -34,15 +34,6 @@ return [
     'google-key-private' => env('GOOGLE_KEY_PRIVATE'),
 
     /*
-     * DirectAdmin config
-     */
-    'directadmin-hostname' => env('DA_HOSTNAME', null),
-    'directadmin-port' => env('DA_PORT', null),
-    'directadmin-username' => env('DA_USERNAME', null),
-    'directadmin-password' => env('DA_PASSWORD', null),
-    'directadmin-domain' => env('DA_DOMAIN', null),
-
-    /*
      * Spotify config
      */
     'spotify-clientkey' => env('SPOTIFY_CLIENT', null),
