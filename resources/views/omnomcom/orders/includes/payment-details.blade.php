@@ -1,7 +1,7 @@
-<div class="card">
+<div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        Payment details
+        Financial details
     </div>
 
     <div class="card-body">
@@ -32,10 +32,10 @@
 
         <div class="card-footer">
 
-            <button class="btn btn-primary btn-block" type="button" data-toggle="modal"
+            <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal"
                     data-target="#mollie-modal">
-                Pay next withdrawal now
-            </button>
+                Pay now
+            </a>
 
         </div>
 

@@ -8,25 +8,25 @@
 
     <div class="row">
 
-        <div class="col-lg-2 col-md-2 col-sm-12">
+        <div class="col-xl-2 col-lg-4 col-md-12">
 
             @include('omnomcom.orders.includes.payment-details')
 
         </div>
 
-        <div class="col-lg-6 col-md-8 col-sm-12">
+        <div class="col-xl-6 col-lg-8 col-md-12">
 
             @include('omnomcom.orders.includes.history')
 
         </div>
 
-        <div class="col-lg-2 col-md-2 col-sm-12">
+        <div class="col-xl-2 col-lg-6 col-md-12">
 
             @include('omnomcom.orders.includes.recent-payments')
 
         </div>
 
-        <div class="col-lg-2 col-md-2 col-sm-12">
+        <div class="col-xl-2 col-lg-6 col-md-12">
 
             @include('omnomcom.orders.includes.month-overview')
 

@@ -4,7 +4,7 @@
         {{ $user->calling_name }}'s hoofd
     </div>
 
-    <div class="card-body p-5">
+    <div class="card-body p-5 text-center">
 
         <img src="{{ $user->generatePhotoPath(800, 800) }}" class="rounded-circle" style="max-width: 100%;">
 

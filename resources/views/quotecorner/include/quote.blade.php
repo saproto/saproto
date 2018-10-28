@@ -9,14 +9,16 @@
 
         Posted by
         @if($quote->user->isMember)
-            <a href="{{ route('user::profile', ['id' => $quote->user->getPublicId()]) }}">{{ $quote->user->name }}</a>
+            <a href="{{ route('user::profile', ['id' => $quote->user->getPublicId()]) }}" class="text-white">
+                {{ $quote->user->name }}
+            </a>
         @else
             {{ $quote->user->name }}
         @endif
 
         @if (Auth::check() && Auth::user()->can("board"))
             <a href="{{ route('quotes::delete', ['id' => $quote->id]) }}" class="float-right ml-3"><i
-                        class="fas fa-trash-alt"></i></a>
+                        class="fas fa-trash-alt text-white"></i></a>
         @endif
 
     </div>

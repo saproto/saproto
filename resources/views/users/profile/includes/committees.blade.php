@@ -14,9 +14,9 @@
                     <div class="col-md-6 col-xs-12">
                         @include('committee.include.committee_block', [
                          'committee' => $committee,
-                         'footer' => sprintf('<strong>%s</strong> %s<br><sup>Since %s</sup>',
+                         'override_committee_name' => sprintf('<strong>%s</strong> %s', $committee->name, $committee->pivot->edition),
+                         'footer' => sprintf('<strong>%s</strong><br><sup>Since %s</sup>',
                              ($committee->pivot->role ? $committee->pivot->role : 'General Member'),
-                             ($committee->pivot->edition ? $committee->pivot->edition : ''),
                              date('j F Y', strtotime($committee->pivot->created_at)))
                         ])
                     </div>
@@ -56,9 +56,9 @@
                     <div class="col-md-6 col-xs-12">
                         @include('committee.include.committee_block', [
                          'committee' => $committeeparticipation->committee,
-                         'footer' => sprintf('<strong>%s</strong> %s<br><sup>Between %s and %s</sup>',
+                         'override_committee_name' => sprintf('<strong>%s</strong> %s', $committeeparticipation ->committee->name, $committeeparticipation->edition),
+                         'footer' => sprintf('<strong>%s</strong><br><sup>Between %s and %s</sup>',
                              ($committeeparticipation->role ? $committeeparticipation->role : 'General Member'),
-                             ($committeeparticipation->edition ? $committeeparticipation->edition : ''),
                              date('j F Y', strtotime($committeeparticipation->created_at)),
                              date('j F Y', strtotime($committeeparticipation->deleted_at))),
                           'photo_pop' => false

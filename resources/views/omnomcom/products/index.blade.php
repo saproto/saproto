@@ -82,7 +82,7 @@
 
             <div class="card mb-3">
 
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-dark text-white mb-1">
                     Product overview
                 </div>
 
@@ -92,14 +92,14 @@
 
                         <thead>
 
-                        <tr>
+                        <tr class="bg-dark text-white">
 
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Visible</th>
-                            <th>Alcoholic</th>
-                            <th></th>
+                            <td>Name</td>
+                            <td>Price</td>
+                            <td>Stock</td>
+                            <td>Visible</td>
+                            <td>Alcoholic</td>
+                            <td></td>
 
                         </tr>
 
@@ -111,19 +111,18 @@
 
                             <tr>
 
-                                <td>
-                                    <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                                        {{ $product->name }}
-                                    </a>
-                                </td>
+                                <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
                                 <td class="text-right">
+                                    <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
+                                        <i class="fas fa-edit mr-2"></i>
+                                    </a>
                                     <a onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
                                        href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">
-                                        <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                        <i class="fas fa-trash text-danger"></i>
                                     </a>
                                 </td>
 

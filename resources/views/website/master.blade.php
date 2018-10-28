@@ -13,7 +13,7 @@
     <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto"
           href="{{ route('search::opensearch') }}"/>
 
-    <title>@if(config('app.env') != 'production') [DEV] @endif S.A. Proto
+    <title>@if(config('app.env') != 'production') [{{ strtoupper(config('app.env')) }}] @endif S.A. Proto
         | @yield('page-title','Default Page Title')</title>
 
     @section('head')
