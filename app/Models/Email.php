@@ -125,7 +125,7 @@ class Email extends Model
         $footer = [];
         $lists = Email::whereId($email_id)->firstOrFail()->lists;
         foreach ($lists as $list) {
-            $footer[] = sprintf('%s (<a href="%s">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
+            $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }
         return implode(', ', $footer);
     }
