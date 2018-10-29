@@ -33,6 +33,13 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @endif
             <strong>{{ $event->title }}</strong>
 
+            @if($event->is_educational)
+                <br>
+
+                <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+                Study related
+            @endif
+
             <br>
 
             <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
@@ -49,8 +56,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @if($event->is_external)
                 <br>
 
-                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i> Not Organized
-                by S.A. Proto
+                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                Not Organized by S.A. Proto
             @endif
 
         </div>

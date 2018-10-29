@@ -36,7 +36,8 @@ class Kernel extends ConsoleKernel
         Commands\VerifyPersonalDetailsEmailCron::class,
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
-        Commands\MemberRenewCron::class
+        Commands\MemberRenewCron::class,
+        Commands\OmNomComCleanup::class
     ];
 
     /**
@@ -48,22 +49,29 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('proto:aliassync')->everyMinute();
-        $schedule->command('proto:adsync')->everyTenMinutes();
-        $schedule->command('proto:adsync --full')->daily()->at('04:00');
-        $schedule->command('proto:clearsessions')->daily();
         $schedule->command('proto:emailcron')->everyMinute();
-        $schedule->command('proto:birthdaycron')->daily()->at('00:01');
-        $schedule->command('proto:flickrsync')->hourly();
-        $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
-        $schedule->command('proto:achievementscron')->daily()->at('00:10');
-        $schedule->command('proto:usercleanup')->hourly();
-        $schedule->command('proto:filecleanup')->daily()->at('04:00');
-        $schedule->command('proto:feecron')->daily()->at('02:00');
-        $schedule->command('proto:checkutaccounts')->monthly();
-        $schedule->command('proto:spotifysync')->daily()->at('00:00');
+
+        $schedule->command('proto:adsync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
-        $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
+
+        $schedule->command('proto:flickrsync')->hourly();
+        $schedule->command('proto:usercleanup')->hourly();
+
+        $schedule->command('proto:birthdaycron')->daily()->at('00:01');
+        $schedule->command('proto:achievementscron')->daily()->at('00:10');
+        $schedule->command('proto:clearsessions')->daily()->at('01:00');
+        $schedule->command('proto:feecron')->daily()->at('02:00');
+        $schedule->command('proto:adsync --full')->daily()->at('03:00');
+        $schedule->command('proto:filecleanup')->daily()->at('04:00');
+        $schedule->command('proto:spotifysync')->daily()->at('05:00');
+        $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
+
+        $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
+
+        $schedule->command('proto:checkutaccounts')->monthly();
+        $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
+
         $schedule->command('proto:memberrenewcron')->cron('0 2 1 8 *');
     }
 }

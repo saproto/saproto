@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Session;
 use Proto\Mail\OmnomcomFailedWithdrawalNotification;
 use Proto\Mail\OmnomcomWithdrawalNotification;
 use Proto\Models\FailedWithdrawal;
@@ -74,6 +75,7 @@ class WithdrawalController extends Controller
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
 
             if ($orderline->isPayed()) continue;
+            if ($orderline->user === null) continue;
             if ($orderline->user->bank == null) continue;
 
             if ($max != null) {
@@ -398,6 +400,10 @@ class WithdrawalController extends Controller
 
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
             if ($orderline->isPayed()) continue;
+            if ($orderline->user === null) {
+                Session::flash('flash_message', 'There are unpaid anonymous orderlines. Please contact the IT committee.');
+                continue;
+            }
             if ($orderline->user->bank) continue;
             if (!in_array($orderline->user->id, array_keys($users))) {
                 $users[$orderline->user->id] = (object)[

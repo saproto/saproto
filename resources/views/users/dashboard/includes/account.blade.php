@@ -163,19 +163,57 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <th>OmNomCom</th>
+                    <td>
+
+                        <div class="form-group form-check">
+
+                            @if($user->member)
+                                <input name="show_omnomcom_total" type="checkbox" class="form-check-input"
+                                       id="dashboard__check__omnomtot" {{ ($user->show_omnomcom_total == 1 ? 'checked' : '') }}>
+                                <label class="form-check-label" for="dashboard__check__omnomtot">
+                                    After checkout, show how much I've spent today.
+                                </label>
+                                <small class="form-text text-muted">
+                                    This feature was requested by members who want to be aware of how much they spend.
+                                </small>
+
+                                <br>
+                            @endif
+
+                            <input name="keep_omnomcom_history" type="checkbox" class="form-check-input"
+                                   id="dashboard__keep_history"
+                                    {{ ($user->keep_omnomcom_history == 1 ? 'checked' : '') }}>
+                            <label class="form-check-label" for="dashboard__keep_history">
+                                Keep my personal orderline history.
+                            </label>
+                            <small class="form-text text-muted">
+                                We are required to keep financial information for 7 years.<br>
+                                If you disable this setting, your purchases will be anonymised after this time.
+                            </small>
+
+                        </div>
+
+                    </td>
+                </tr>
 
                 @if($user->member)
 
                     <tr>
-                        <th>OmNomCom</th>
+                        <th>Privacy</th>
                         <td>
 
-                            <div class="form-group form-check">
-                                <input name="show_omnomcom_total" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__omnomtot" {{ ($user->show_omnomcom_total == 1 ? 'checked' : '') }}>
-                                <label class="form-check-label" for="dashboard__check__omnomtot">After checkout, show
-                                    how much I've spent today.</label>
-                            </div>
+                            <input name="show_achievements" type="checkbox" class="form-check-input"
+                                   id="dashboard__show_achievements"
+                                    {{ ($user->show_achievements == 1 ? 'checked' : '') }}>
+                            <label class="form-check-label" for="dashboard__show_achievements">
+                                Show my achievements on my profile.
+                            </label>
+                            <small class="form-text text-muted">
+                                Achievements you obtain may reveal some personal details.<br>
+                                Only members can see your achievements.
+                            </small>
 
                         </td>
                     </tr>

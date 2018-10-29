@@ -26,9 +26,13 @@
                                 {{ $orderline->user->name }}
                             @endif
 
-                        @else
+                        @elseif($orderline->cashier)
 
                             [Cashier: {{ $orderline->cashier->name }}]
+
+                        @else
+
+                            <em class="text-muted">Anonymised</em>
 
                         @endif
 
@@ -49,16 +53,16 @@
 
         </table>
 
-    <div class="card-footer pb-0">
-        {!! $orderlines->render() !!}
-    </div>
+        <div class="card-footer pb-0">
+            {!! $orderlines->render() !!}
+        </div>
 
     @else
 
         <div class="card-body">
-        <p class="card-text text-center">
-            There are no orders for this product.
-        </p>
+            <p class="card-text text-center">
+                There are no orders for this product.
+            </p>
         </div>
 
     @endif

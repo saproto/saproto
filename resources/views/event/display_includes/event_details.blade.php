@@ -61,13 +61,19 @@
         @if ($event->involves_food == true)
             <a class="list-group-item bg-info text-white" href="{{ route("user::dashboard") }}#alergies">
                 <i class="fas fa-fw fa-utensils" aria-hidden="true"></i> There will be food, please indicate
-                any allergies or diets on your dashboard.
+                any allergies or diets on your dashboard
             </a>
+        @endif
+
+        @if ($event->is_educational == true)
+            <li class="list-group-item">
+                <i class="fas fa-fw fa-book-open" aria-hidden="true"></i> This event is directly related to your study
+            </li>
         @endif
 
         @if ($event->is_external == true)
             <li class="list-group-item">
-                <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto.
+                <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto
             </li>
         @endif
 

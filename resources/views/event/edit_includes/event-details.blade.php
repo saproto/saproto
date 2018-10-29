@@ -112,6 +112,18 @@
 
                             <div class="checkbox">
                                 <label>
+                                    <input type="checkbox" name="force_calendar_sync"
+                                            {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
+                                    Always sync this event to user calendars.
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="checkbox">
+                                <label>
                                     <input type="checkbox" name="is_external"
                                             {{ ($event && $event->is_external ? 'checked' : '') }}>
                                     This activity is not organized by Proto.
@@ -124,9 +136,9 @@
 
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="force_calendar_sync"
-                                            {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
-                                    Always sync this event to user calendars.
+                                    <input type="checkbox" name="is_educational"
+                                            {{ ($event && $event->is_educational ? 'checked' : '') }}>
+                                    This activity is educational.
                                 </label>
                             </div>
 

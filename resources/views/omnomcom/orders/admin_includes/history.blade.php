@@ -48,8 +48,10 @@
                             @else
                                 {{ $orderline->user->name }}
                             @endif
-                        @else
+                        @elseif($orderline->cashier)
                             [Cashier: {{ $orderline->cashier->name }}]
+                        @else
+                            <em class="text-muted">Anonymised</em>
                         @endif
                     </td>
                     <td>{!! $orderline->generateHistoryStatus() !!}</td>
