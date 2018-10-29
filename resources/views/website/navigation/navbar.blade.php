@@ -184,6 +184,9 @@
                                 <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">
                                     Soundboard Sounds
                                 </a>
+                                <a class="dropdown-item" href="{{ route("headerimage::index") }}">
+                                    Header Images
+                                </a>
                                 <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
                                 <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
                                 <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
@@ -234,7 +237,7 @@
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
                                 <a class="dropdown-item" href="{{ route('omnomcom::orders::list') }}">
                                     Purchase History

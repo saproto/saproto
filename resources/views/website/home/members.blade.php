@@ -13,6 +13,12 @@
 
         <div class="col-xl-4 col-md-12">
 
+            @include('website.layouts.macros.upcomingevents', ['n' => 5])
+
+        </div>
+
+        <div class="col-xl-4 col-md-12">
+
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">News</div>
                 <div class="card-body">
@@ -43,12 +49,6 @@
 
         </div>
 
-        <div class="col-xl-4 col-md-12">
-
-            @include('website.layouts.macros.upcomingevents', ['n' => 5])
-
-        </div>
-
         @if (count($birthdays) > 0)
 
             <div class="col-xl-4 col-md-12">
@@ -62,6 +62,27 @@
                             @include('users.includes.usercard', [
                                 'user' => $user,
                                 'subtitle' => '<em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>'
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+
+        @else
+
+            <div class="col-xl-4 col-md-12">
+
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">Most recent videos</div>
+                    <div class="card-body">
+
+                        @foreach($videos as $video)
+
+                            @include('videos.includes.video_block', [
+                                'video' => $video,
                             ])
 
                         @endforeach

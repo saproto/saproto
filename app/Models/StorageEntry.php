@@ -45,7 +45,8 @@ class StorageEntry extends Model
             Committee::where('image_id', $id)->count() == 0 &&
             Event::where('image_id', $id)->count() == 0 &&
             Newsitem::where('featured_image_id', $id)->count() == 0 &&
-            SoundboardSound::where('file_id', $id)->count() == 0;
+            SoundboardSound::where('file_id', $id)->count() == 0 &&
+            HeaderImage::where('image_id', $id)->count() == 0;
     }
 
     public function createFromFile($file)

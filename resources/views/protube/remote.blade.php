@@ -104,14 +104,6 @@
             display: none;
         }
 
-        #protube__remote__nav {
-            background-color: #7FBA00;
-
-            padding: 10px 0px;
-
-            color: #fff;
-        }
-
         #protube__remote__nav .btn {
             border: 0;
         }
@@ -126,11 +118,6 @@
             line-height: 36px;
 
             text-align: right;
-        }
-
-        #protube__remote__profilePic {
-            padding-left: 20px;
-            cursor: pointer;
         }
 
         #protube__remote__userModal .modal-content {
@@ -190,7 +177,7 @@
         }
 
         #protube__remote__searchResults {
-            margin-bottom: 200px;
+            margin-bottom: 70px;
         }
 
         .protube__remote__searchResults__result {
@@ -483,11 +470,6 @@
             #protube__remote__showToggle {
                 text-align: left;
             }
-
-            #protube__remote__profilePic {
-                margin-top: 5px;
-                text-align: right;
-            }
         }
 
         input[type=number] {
@@ -551,7 +533,8 @@
             <img id="protube__remote__login__photo" src="{{ asset('images/protube/incognito.png') }}"
                  alt="Profile picture">
             <h2 id="protube__remote__login__status"><strong>You are not logged in</strong> <br/> <a
-                        class="btn btn-default" href="{{ env('APP_URL') . route('protube::login', array(), false)  }}" data-toggle="tooltip"
+                        class="btn btn-default" href="{{ env('APP_URL') . route('protube::login', array(), false)  }}"
+                        data-toggle="tooltip"
                         data-placement="right"
                         title="Logging in will keep your personal ProTube history, and will show other members you entered a song into the queue.">Login</a>
             </h2>
@@ -570,14 +553,26 @@
 
 <div id="protube__remote__loggedIn">
 
-    <nav class="navbar navbar-default navbar-fixed-top" id="protube__remote__nav">
+    <nav class="navbar navbar-dark fixed-top bg-primary text-white justify-content-center align-items-center"
+         id="protube__remote__nav">
 
-        <div class="container">
-            <div class="row vertical-align">
-                <div class="col-md-2 col-xs-9 col-md-push-9" id="protube__remote__showToggle">
-                    <i class="fas fa-picture-o" aria-hidden="true"></i>
+        <div class="container row">
 
-                    <label class="switch">
+            <div class="col-md-8 col-12 justify-content-center">
+
+                <form id="protube__remote__ytSearch_form"><input type="search" id="protube__remote__ytSearch"
+                                                                 class="form-control" placeholder="Search..."
+                                                                 style="width: 100%;">
+                </form>
+
+            </div>
+
+            <div class="col-md-3 col-6">
+
+                <div class="text-left" id="protube__remote__showToggle">
+                    <i class="fas fa-images" aria-hidden="true"></i>
+
+                    <label class="switch mb-0">
                         <input type="checkbox" id="protube__remote__videoToggle" checked>
                         <span class="slider round"></span>
                     </label>
@@ -585,18 +580,16 @@
                     <i class="fab fa-youtube" aria-hidden="true"></i>
                 </div>
 
-                <div class="col-md-1 col-xs-3 col-md-push-9" id="protube__remote__profilePic">
-                    <img class="profile__photo profile__photo--small" data-toggle="modal"
-                         data-target="#protube__remote__userModal" src="{{ asset('images/protube/incognito.png') }}"
-                         alt="Profile picture" style="border: 3px solid #fff">
-                </div>
-
-                <div class="col-md-9 col-xs-12 col-md-pull-3">
-                    <form id="protube__remote__ytSearch_form"><input type="search" id="protube__remote__ytSearch"
-                                                                     class="form-control" placeholder="Search...">
-                    </form>
-                </div>
             </div>
+
+            <div class="col-md-1 col-6 text-left">
+
+                <img class="rounded-circle" data-toggle="modal" id="protube__remote__profilePic"
+                     data-target="#protube__remote__userModal" src="{{ asset('images/protube/incognito.png') }}"
+                     alt="Profile picture" style="border: 2px solid #fff; height: 40px; width: 40px;">
+
+            </div>
+
         </div>
 
     </nav>
@@ -741,7 +734,7 @@
                         $("#protube__remote__login__status").html("Welcome back, <br /> <strong>" + userInfo.name + "</strong>");
                         $("#protube__remote__userModal__photo").attr("src", userInfo.photo);
                         $("#protube__remote__login__photo").attr("src", userInfo.photo);
-                        $("#protube__remote__profilePic").find("img").attr("src", userInfo.photo);
+                        $("#protube__remote__profilePic").attr("src", userInfo.photo);
                         $("#protube__remote__userModal__infoList").html("<a href=\"{{ route("protube::dashboard") }}\" target=\"_blank\" class=\"list-group-item\">\n" +
                             "                        <i class=\"fas fa-user-secret\" aria-hidden=\"true\"></i>\n\n\n" +
                             "                        Privacy settings</a>\n" +
@@ -836,7 +829,7 @@
                 $('#protube__remote__ytSearch_form').bind('submit', function (e) {
                     e.preventDefault();
                     remote.emit("search", encodeURIComponent($("#protube__remote__ytSearch").val()));
-                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px;\"><i class=\"fas fa-spinner fa-pulse fa-fw\"></i><br />\n" +
+                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px; width: 100%;\"><i class=\"fas fa-spinner fa-pulse fa-fw\"></i><br />\n" +
                         "Loading...</div>");
                     window.scrollTo(0, 0);
                 });

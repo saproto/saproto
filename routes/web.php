@@ -19,6 +19,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('fishcam', ['as' => 'fishcam', 'middleware' => ['member'], 'uses' => 'HomeController@fishcam']);
 
     /*
+     * Routes related to the header images.
+     */
+    Route::group(['prefix' => 'headerimage', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'headerimage::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'HeaderImageController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'HeaderImageController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'HeaderImageController@store']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'HeaderImageController@destroy']);
+    });
+
+    /*
      * Routes for the search function.
      */
     Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
