@@ -25,7 +25,7 @@
                         </a>
                     @endif
 
-                    @if($photo-> liked != null)
+                    @if($photo->liked != null)
                         <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info mr-3">
                             <i class="fas fa-heart"></i> {{ $photo->likes }}
                         </a>
@@ -35,6 +35,13 @@
                        class="btn btn-success mr-3">
                         <i class="fas fa-arrow-up mr-2" aria-hidden="true"></i> <i class="fas fa-images"></i>
                     </a>
+
+                    @if($photo->private)
+                        <a href="javascript:void();" class="btn btn-info mr-3" data-toggle="tooltip"
+                           data-placement="top" title="This photo is only visible to members.">
+                            <i class="fas fa-eye-slash"></i>
+                        </a>
+                    @endif
 
                     @if($photo->next != null)
                         <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
@@ -53,7 +60,8 @@
                 <div class="card-body bg-light">
                     <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}" class="btn btn-default btn-block">
                         <i class="fas fa-shield-alt fa-fw mr-3"></i>
-                        If you would like this photo removed, please contact photos&#64;{{ config('proto.emaildomain') }}.
+                        If you would like this photo removed, please contact
+                        photos&#64;{{ config('proto.emaildomain') }}.
                     </a>
                 </div>
             </div>

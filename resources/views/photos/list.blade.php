@@ -19,7 +19,9 @@
                         @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]) ,
                         'img' => $album->thumb,
-                        'html' => sprintf('<sub>%s</sub><br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name),
+                        'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
+                        $album->private ? '<i class="fas fa-eye-slash mr-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
+                        $album->name),
                         'photo_pop' => true,
                         'height' => 150
                         ])

@@ -32,7 +32,9 @@
                         'url' => route("photo::view", ["id"=> $photo->id]),
                         'img' => $photo->thumb,
                         'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
-                            $photo->getLikes(), $photo->private ? '<i class="fas fa-eye-slash ml-4 mr-2"></i> Members only' : null),
+                            $photo->getLikes(), $photo->private ?
+                            '<i class="fas fa-eye-slash ml-4 mr-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
+                             : null),
                         'photo_pop' => true,
                         'height' => 200
                         ])

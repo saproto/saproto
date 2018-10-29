@@ -64,6 +64,7 @@ class Flickr extends Model
         $data->photo_url = FlickrItem::where("id", "=", $photoID)->first()->url;
         $data->album_id = FlickrItem::where("id", "=", $photoID)->first()->album_id;
         $data->album_name = FlickrAlbum::where("id", "=", $data->album_id)->first()->name;
+        $data->private = FlickrItem::where("id", "=", $photoID)->first()->private;
         $data->likes = PhotoLikes::where("photo_id", "=", $photoID)->count();
         $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count() : 0;
 

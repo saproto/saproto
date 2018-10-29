@@ -55,21 +55,26 @@
                         <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
                             <td class="text-right">
                                 @if(!$user->deleted_at)
-                                    <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
+                                    <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
+                                       data-toggle="tooltip" data-placement="top" title="Go to public profile">
                                         <i class="fas fa-info-circle fa-fw mr-2 text-info" aria-hidden="true"></i>
                                     </a>
-                                    <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}">
+                                    <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
+                                       data-toggle="tooltip" data-placement="top" title="Go to user admin">
                                         <i class="fas fa-user-circle fa-fw mr-2 text-primary" aria-hidden="true"></i>
                                     </a>
-                                    <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}">
+                                    <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
+                                       data-toggle="tooltip" data-placement="top" title="Impersonate">
                                         <i class="fas fa-sign-in-alt fa-fw mr-2 text-warning" aria-hidden="true"></i>
                                     </a>
                                     @if ($user->isTempadmin())
-                                        <a href="{{ route('tempadmin::end', ['id'=>$user->id]) }}">
+                                        <a href="{{ route('tempadmin::end', ['id'=>$user->id]) }}"
+                                           data-toggle="tooltip" data-placement="top" title="Revoke temp admin">
                                             <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
                                         </a>
                                     @else
-                                        <a href="{{ route('tempadmin::make', ['id'=>$user->id]) }}">
+                                        <a href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
+                                           data-toggle="tooltip" data-placement="top" title="Grant temp admin till midnight">
                                             <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
                                         </a>
                                     @endif
