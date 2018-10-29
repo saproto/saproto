@@ -11,7 +11,7 @@
 
 <br><br><br>
 
-<table style="background-color: #fff; width: 500px; margin: 0 auto; padding: 0; border: 1px solid #ddd; border-top: 5px solid #8AC017; border-bottom: none;">
+<table style="background-color: #fff; width: 500px; margin: 0 auto; padding: 0; border: 1px solid #ddd; border-top: 5px solid #83b716; border-bottom: none;">
     <tr style="padding: 0; margin: 0;">
         <td style="padding: 20px 40px; text-align: justify;">
             @yield('body')
@@ -23,7 +23,7 @@
     <tr style="padding: 0; margin: 0;">
         <td style="color: #fff; margin: 0; padding: 0;" width="50%">
             <strong>
-                <span style="color: #c1ff00;">S.A. Proto</span>
+                <span style="color: #83b716;">S.A. Proto</span>
             </strong>
             <br>
             Zilverling A230<br>
