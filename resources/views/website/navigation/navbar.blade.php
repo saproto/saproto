@@ -208,11 +208,15 @@
 
             <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
                 {{ csrf_field() }}
-                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search"
-                       value="{{ isset($term) ? $term : null }}">
-                <button type="submit" class="btn btn-outline-light my-2 my-sm-0" style="">
-                    <i class="fas fa-search"></i>
-                </button>
+                <div class="input-group">
+                    <input type="text" class="form-control"
+                           placeholder="Search" type="search" name="query" style="max-width: 125px;">
+                    <div class="input-group-append">
+                        <button type="submit" class="input-group-text btn btn-info">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
             </form>
 
             @if (Auth::check())
@@ -225,7 +229,7 @@
                             <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
-                                {{ Auth::user()->name }}
+                                {{ Auth::user()->calling_name }}
                                 <img class="rounded-circle ml-2"
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
