@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="signup_start">Sign-up start:</label>
                             @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'signup_start',
+                                'name' => 'registration_start',
                                 'format' => 'datetime',
                                 'placeholder' => $event->activity ? $event->activity->registration_start : null
                             ])
@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label for="signup_end">Sign-up end:</label>
                             @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'signup_end',
+                                'name' => 'registration_end',
                                 'format' => 'datetime',
                                 'placeholder' => $event->activity ? $event->activity->registration_end : null
                             ])
@@ -55,7 +55,7 @@
                         <div class="form-group">
                             <label for="signout_end">Sign-out end:</label>
                             @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'signout_end',
+                                'name' => 'deregistration_end',
                                 'format' => 'datetime',
                                 'placeholder' => $event->activity ? $event->activity->deregistration_end : null
                             ])
@@ -80,7 +80,11 @@
 
                     <div class="col-md-6">
 
-                        <label for="no_show_fee">No show fee:</label>
+                        <label for="no_show_fee">
+                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                               title="Input only the additional no show fee."></i>
+                            No show fee:
+                        </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">&euro;</span>
@@ -95,7 +99,11 @@
 
                     <div class="col-md-6">
 
-                        <label for="participants">Participant limit:</label>
+                        <label for="participants">
+                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                               title="Use -1 for unlimited.<br>Use 0 for helpers only."></i>
+                            Participant limit:
+                        </label>
                         <input type="number" class="form-control" id="participants"
                                name="participants" min="-1" required
                                value="{{ ($event->activity ? $event->activity->participants : '') }}">

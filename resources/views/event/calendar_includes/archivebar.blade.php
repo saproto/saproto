@@ -1,10 +1,11 @@
-<div class="row">
+<div class="row" style="overflow-x: auto;">
 
     <div class="col text-center">
 
-        <div class="btn-group mb-3" role="group" aria-label="Basic example">
+        <div class="btn-group mb-3">
 
-            <a href="{{ route("event::list") }}" class="btn btn-primary">
+            <a href="{{ route("event::list") }}"
+               class="btn btn-{{ Route::currentRouteName() == 'event::list' ? 'primary' : 'light' }}">
                 Upcoming
             </a>
 
@@ -14,7 +15,8 @@
 
             @foreach($years as $y)
 
-                <a href="{{ route('event::archive', ['year'=>$y]) }}" class="btn btn-light">
+                <a href="{{ route('event::archive', ['year'=>$y]) }}"
+                   class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}">
                     {{ $y }}
                 </a>
 

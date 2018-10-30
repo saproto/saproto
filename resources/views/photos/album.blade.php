@@ -47,10 +47,11 @@
 
         </div>
 
-        <div class="card-footer">
-            <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}" class="btn btn-default btn-block">
-                <i class="fas fa-shield-alt fa-fw mr-3"></i>
-                If there is a photo that you would like removed, please contact photos&#64;{{ config('proto.emaildomain') }}.
+        <div class="card-footer text-center">
+            <i class="fas fa-shield-alt fa-fw mr-3"></i>
+            If there is a photo that you would like removed, please contact
+            <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
+                photos&#64;{{ config('proto.emaildomain') }}.
             </a>
         </div>
 

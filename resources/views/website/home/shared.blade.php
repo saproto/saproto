@@ -6,28 +6,6 @@
 
 @section('container')
 
-    @if(count($companies) > 0)
-
-        <div class="card mb-3">
-            <div class="card-body pb-0">
-                <div class="row justify-content-center align-items-center">
-
-                    @foreach($companies as $i => $company)
-
-                        <div class="col-2 mb-3 text-center align-items-center">
-                            <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                <img src="{{ $company->image->generateImagePath(null, 50) }}">
-                            </a>
-                        </div>
-
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-
-    @endif
-
     <div class="row">
 
         <div class="col-xl-9 col-md-12">
@@ -61,6 +39,28 @@
                 </div>
             </div>
 
+            @if(count($companies) > 0)
+
+                <div class="card mb-3">
+                    <div class="card-body pb-0">
+                        <div class="row justify-content-center align-items-center">
+
+                            @foreach($companies as $i => $company)
+
+                                <div class="col-2 mb-3 text-center align-items-center">
+                                    <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                        <img src="{{ $company->image->generateImagePath(null, 50) }}">
+                                    </a>
+                                </div>
+
+                            @endforeach
+
+                        </div>
+                    </div>
+                </div>
+
+            @endif
+
             @section('left-column')
             @show
 
@@ -73,9 +73,9 @@
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white">Proto.ink articles</div>
                 <div class="card-body">
-                    <ul id="protoink" class="list-group mb-3">
-                        <li class="list-group-item ">Loading articles...</li>
-                    </ul>
+                    <div id="protoink">
+                        <p class="card-text mb-3">Loading articles...</p>
+                    </div>
                     <a href="https://www.proto.ink" class="btn btn-info btn-block">Visit Proto.ink</a>
                 </div>
             </div>
@@ -110,7 +110,7 @@
 
                     for (i in data) {
                         var item = data[i];
-                        $("#protoink").append("<a href='" + item.link.replace('http://', 'https://') + "' class='list-group-item leftborder leftborder-info' style='text-decoration: none !important;'>" + item.title + "</a>");
+                        $("#protoink").append(item.card_html);
                     }
 
                 },

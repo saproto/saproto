@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Feeds;
 use Exception;
+use Carbon\Carbon;
 
 class ProtoInk extends Model
 {
@@ -27,7 +28,13 @@ class ProtoInk extends Model
                     'description' => $item->get_description(),
                     'link' => $item->get_permalink(),
                     'date' => $item->get_date('U'),
-                    'thumbnail' => ProtoInk::extractThumbFromItem($item)
+                    'thumbnail' => ProtoInk::extractThumbFromItem($item),
+                    'card_html' => view('website.layouts.macros.card-bg-image', [
+                        'url' => $item->get_permalink(),
+                        'img' => ProtoInk::extractThumbFromItem($item),
+                        'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $item->get_title(), Carbon::createFromTimestamp($item->get_date('U'))->diffForHumans()),
+                        'leftborder' => 'info'
+                    ])->render()
                 ];
             }
 

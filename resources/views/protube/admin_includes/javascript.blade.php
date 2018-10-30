@@ -297,6 +297,14 @@
                 if (confirm('Are you sure you want to restart the Protube system?')) admin.emit("protubeReboot");
             });
 
+            $("#showVideo").click(function () {
+                $(this).blur();
+                console.log("click");
+            });
+            $("#showVideo").blur(function () {
+                console.log("blur");
+            });
+
             admin.on("volume", function (data) {
                 $("#youtubeV").slider('setValue', data.youtube);
                 $("#radioV").slider('setValue', data.radio);
@@ -313,7 +321,7 @@
                 '<div class="col-9">';
 
             if (opts.type == 'queue') {
-                result = result + '<div class="float-right">' +
+                result = result + '<div class="float-right" style="font-size: 1.15rem;">' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('down') >= 0 ? 'fa-caret-square-down down' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('veto') >= 0 ? 'fa-minus-square veto' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('up') >= 0 ? 'fa-caret-square-up up' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +

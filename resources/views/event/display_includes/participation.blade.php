@@ -8,7 +8,8 @@
                 <li class="list-group-item bg-danger text-white">
                     This activity is closed and cannot be changed anymore.<br>
                     @if ($event->activity->closedAccount)
-                        (Account {{ $event->activity->closedAccount->account_number }}, {{ $event->activity->closedAccount->name }})
+                        (Account {{ $event->activity->closedAccount->account_number }}
+                        , {{ $event->activity->closedAccount->name }})
                     @else()
                         (Unknown account.)
                     @endif
@@ -22,7 +23,7 @@
                     </li>
                 @else
                     <li class="list-group-item bg-success text-white">
-                        You are signed up for this activity!
+                        You are signed up!
                     </li>
                 @endif
             @else
@@ -30,6 +31,18 @@
                     You are <strong>not signed up</strong> for this activity.
                 </li>
             @endif
+
+            <li class="list-group-item">
+                Activity cost:
+
+                <strong>
+                    @if ($event->activity->price > 0)
+                    &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
+                    @else
+                    &euro;0,-
+                    @endif
+                </strong>
+            </li>
 
             @if ($event->activity->no_show_fee > 0)
                 <a href="#" class="list-group-item bg-info text-white" data-toggle="modal" data-target="#noshow-modal">
@@ -60,15 +73,11 @@
                             @else
                                 Sign me up!
                             @endif
-                        </strong>
-
-                        Activity cost:
-
-                        <strong>
+                            |
                             @if ($event->activity->price > 0)
                             &euro;{{ number_format($event->activity->price, 2, '.', ',') }}
                             @else
-                            &euro;0,-
+                                Free!
                             @endif
                         </strong>
                     </a>
@@ -202,9 +211,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">No show fee</h4>
+                <h5 class="modal-title">No show fee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
 

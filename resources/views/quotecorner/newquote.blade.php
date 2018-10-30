@@ -10,7 +10,7 @@
 
         <div class="card-body">
             <textarea class="form-control" rows="4" cols="30" name="quote" required
-                      placeholder="With greate quotes come great responsibility"></textarea>
+                      placeholder="With great quotes come great responsibility"></textarea>
         </div>
 
         <div class="card-footer">
