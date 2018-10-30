@@ -4,7 +4,7 @@
 
     Error {{ $exception->getStatusCode() }}
 
-@show
+@endsection
 
 @section('page-body')
 

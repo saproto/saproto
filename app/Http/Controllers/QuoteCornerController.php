@@ -23,7 +23,7 @@ class QuoteCornerController extends Controller
 
     public function overview()
     {
-        $quotes = Quote::where('updated_at', '>', Carbon::now()->subWeeks(1))->get();
+        $quotes = Quote::where('updated_at', '>', Carbon::now()->subWeeks(4))->get();
         $popular = null;
         $popularLikes = 0;
         foreach ($quotes as $key => $quote) {
@@ -33,7 +33,7 @@ class QuoteCornerController extends Controller
                 $popularLikes = count($likes);
             }
         }
-        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(25), 'popular' => $popular]);
+        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
     }
 
     public function add(Request $request)

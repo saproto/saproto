@@ -1,43 +1,51 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    RFID Card
-@endsection
-
-@section('panel-title')
     {{ ($card == null ? "Add new RFID card." : "Edit existing RFID card.") }}
 @endsection
 
-@section('panel-body')
+@section('container')
 
-    <form method="post"
-          action="{{ ($card == null ? route("user::rfid::add") : route("user::rfid::edit", ['id' => $card->id])) }}"
-          enctype="multipart/form-data">
+    <div class="row justify-content-center">
 
-        {!! csrf_field() !!}
+        <div class="col-md-3">
 
-        <div class="row">
+            <form method="post"
+                  action="{{ ($card == null ? route("user::rfid::add") : route("user::rfid::edit", ['id' => $card->id])) }}"
+                  enctype="multipart/form-data">
 
-            <div class="col-md-12">
+                {!! csrf_field() !!}
 
-                <div class="form-group">
-                    <label for="name">Card name:</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                           placeholder="My Albert Heijn Bonus Card" value="{{ $card->name or '' }}" required>
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group">
+                        <label for="name">Card name:</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               placeholder="My Albert Heijn Bonus Card" value="{{ $card->name or '' }}" required>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+
+                    <button type="submit" class="btn btn-success float-right">Submit</button>
+
+                    <a href="{{ route("user::dashboard", ['id' => $card->user->id]) }}" class="btn btn-default">Cancel</a>
+
                 </div>
 
             </div>
 
+            </form>
+
         </div>
 
-        @endsection
-
-        @section('panel-footer')
-
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
-
-            <a href="{{ route("user::dashboard", ['id' => $card->user->id]) }}" class="btn btn-default pull-right">Cancel</a>
-
-    </form>
+    </div>
 
 @endsection

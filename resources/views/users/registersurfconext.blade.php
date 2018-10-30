@@ -1,16 +1,12 @@
-@extends('website.layouts.panel')
+@extends('auth.template')
 
 @section('page-title')
-    New Account Registration
+    Register account
 @endsection
 
-@section('panel-title')
-    Registering a new account
-@endsection
+@section('login-body')
 
-@section('panel-body')
-
-    <form method="POST" action="{{ route('login::register::surfconext') }}">
+    <form method="POST" class="text-justify" action="{{ route('login::register::surfconext') }}">
 
         @if(Session::get('wizard'))
             @include('users.registerwizard_macro')
@@ -60,18 +56,24 @@
 
         <hr>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="privacy_policy_acceptance" required>
-                I have read and agree with the <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
-                                                  target="_blank">privacy policy</a> of S.A. Proto.
-            </label>
-        </div>
+            <p>
+                <a a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+                   target="_blank" class="btn btn-outline-secondary btn-block">
+                    Privacy policy
+                </a>
+            </p>
 
-        @endsection
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="privacy_policy_acceptance" required>
+                    I have read and acknowledge the privacy policy.
+                </label>
+            </div>
 
-        @section('panel-footer')
-            <button type="submit" class="btn btn-success pull-right">Create my account</button>
+            <hr>
+
+        <button type="submit" class="btn btn-success pull-right">Create my account</button>
 
     </form>
+
 @endsection

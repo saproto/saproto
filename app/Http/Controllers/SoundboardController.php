@@ -21,7 +21,7 @@ class SoundboardController extends Controller
      */
     public function index()
     {
-        $sounds = SoundboardSound::all();
+        $sounds = SoundboardSound::orderBy('name', 'asc')->paginate(50);
         return view('protube.soundboard.index', ['sounds' => $sounds]);
     }
 

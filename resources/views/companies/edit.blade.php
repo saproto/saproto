@@ -1,10 +1,10 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Company Administration
+    {{ ($company == null ? "Create new company." : "Edit company " . $company->name .".") }}
 @endsection
 
-@section('content')
+@section('container')
 
     <form method="post"
           action="{{ ($company == null ? route("companies::add") : route("companies::edit", ['id' => $company->id])) }}"
@@ -12,96 +12,24 @@
 
         {!! csrf_field() !!}
 
-        <div class="row">
-
-            <div class="col-md-8">
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        Descriptions
-                    </div>
-
-                    <div class="panel-body">
-
-                        <div class="row">
-
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label for="editor">Excerpt</label>
-                                    <textarea id="editor-excerpt"
-                                              name="excerpt">{{ $company->excerpt or 'A small paragraph about this company.' }}</textarea>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label for="editor">Long</label>
-                                    <textarea id="editor-description"
-                                              name="description">{{ $company->description or 'A text dedicated to the company. Be as elaborate as you need to be!' }}</textarea>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        Descriptions for membercard
-                    </div>
-
-                    <div class="panel-body">
-
-                        <div class="row">
-
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label for="editor">Excerpt for membercard</label>
-                                    <textarea id="editor-membercard_excerpt"
-                                              name="membercard_excerpt" placeholder="A small paragraph about what this company does on our membercard.">{{ $company->membercard_excerpt or '' }}</textarea>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <label for="editor">Long for membercard</label>
-                                    <textarea id="editor-membercard_long"
-                                              name="membercard_long" placeholder="A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!">{{ $company->membercard_long or '' }}</textarea>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
+        <div class="row justify-content-center">
 
             <div class="col-md-4">
-                <div class="panel panel-default">
 
-                    <div class="panel-heading">
+                <div class="card md-3">
 
-                        {{ ($company == null ? "Create new company." : "Edit company " . $company->name .".") }}
-
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
 
                         @if($company && $company->image)
 
-                            <img src="{!! $company->image->generateImagePath(500, null) !!}" style="width: 100%">
+                            <div class="text-center">
+                                <img src="{!! $company->image->generateImagePath(500, null) !!}"
+                                     style="max-height: 100px;">
+                            </div>
 
                             <hr>
 
@@ -141,64 +69,86 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox"
-                                       name="in_logo_bar" {{ ($company && $company->on_membercard? 'checked' : '') }}>
-                                    Visible on membercard page.
+                                       name="on_membercard" {{ ($company && $company->on_membercard? 'checked' : '') }}>
+                                Visible on membercard page.
                             </label>
                         </div>
 
                         <hr>
 
-                        <div class="form-group">
-                            <label for="image">Image file:</label>
-                            <input type="file" class="form-control" id="image" name="image">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="image">
+                            <label class="custom-file-label" for="customFile">Upload a new image</label>
                         </div>
 
-                        <hr>
+                    </div>
 
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success float-right">
                             Submit
                         </button>
 
-                        <a href="{{ route("companies::admin") }}" class="btn btn-default pull-right">Cancel</a>
+                        <a href="{{ route("companies::admin") }}" class="btn btn-default">Cancel</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="card md-3">
+
+                    <div class="card-header bg-dark text-white">
+                        Description
+                    </div>
+
+                    <div class="card-body row">
+
+                        <div class="col-6">
+                            <label for="editor">Company excerpt</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'excerpt',
+                                'placeholder' => !$company ? 'A small paragraph about this company.' : null,
+                                'value' => !$company ? null : $company->excerpt
+                            ])
+                        </div>
+
+                        <div class="col-6">
+                            <label for="editor">Company description</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'description',
+                                'placeholder' => !$company ? 'A text dedicated to the company. Be as elaborate as you need to be!' : null,
+                                'value' => !$company ? null : $company->description
+                            ])
+                        </div>
+
+                        <div class="col-6">
+                            <label for="editor">Membercard excerpt</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'membercard_excerpt',
+                                'placeholder' => !$company ? 'A small paragraph about what this company does on our membercard.' : null,
+                                'value' => !$company ? null : $company->membercard_excerpt
+                            ])
+                        </div>
+
+                        <div class="col-6">
+                            <label for="editor">Membercard description</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'membercard_long',
+                                'placeholder' => !$company ? 'A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!' : null,
+                                'value' => !$company ? null : $company->membercard_long
+                            ])
+                        </div>
 
                     </div>
 
                 </div>
+
             </div>
 
         </div>
 
     </form>
-
-@endsection
-
-
-
-@section('javascript')
-
-    @parent
-
-    <script>
-        var simplemde1 = new SimpleMDE({
-            element: $("#editor-excerpt")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
-            spellChecker: false
-        });
-        var simplemde2 = new SimpleMDE({
-            element: $("#editor-description")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
-            spellChecker: false
-        });
-        var simplemde3 = new SimpleMDE({
-            element: $("#editor-membercard_excerpt")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
-            spellChecker: false
-        });
-        var simplemde4 = new SimpleMDE({
-            element: $("#editor-membercard_long")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
-            spellChecker: false
-        });
-    </script>
 
 @endsection

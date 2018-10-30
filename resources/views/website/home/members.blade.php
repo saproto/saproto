@@ -2,99 +2,96 @@
 
 @section('greeting')
 
-    <h1>
-        <strong>Hi, {{ Auth::user()->calling_name }}</strong>
-    </h1>
-    <h3>
-        @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
-    </h3>
+    <strong>Hi, {{ Auth::user()->calling_name }}</strong><br>
+    @if($message != null) {{ $message->message }} @else Nice to see you back! @endif
 
 @endsection
 
-@section('visitor-specific')
+@section('left-column')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-8">
+        <div class="col-xl-4 col-md-12">
 
-            @include('website.home.news')
-
-            @if(count($newsitems) <= 2)
-                @include('website.home.recentphotos')
-            @endif
+            @include('website.layouts.macros.upcomingevents', ['n' => 5])
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-xl-4 col-md-12">
 
-            @if (count($birthdays) > 0)
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">News</div>
+                <div class="card-body">
+
+                    @if(count($newsitems) > 0)
 
 
-                <div class="panel panel-default homepage__calendar">
+                        @foreach($newsitems as $index => $newsitem)
 
-                    <div class="panel-body calendar">
-
-                        <h4 style="text-align: center;">
-                            Today's birthdays
-                        </h4>
-
-                        <hr>
-
-                        @foreach($birthdays as $key => $user)
-
-                            <div class="member ellipsis">
-                                <div class="member-picture"
-                                     style="background-image:url('{!! $user->generatePhotoPath(100, 100) !!}');">
-                                </div>
-                                <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">{{ $user->name }}</a>
-                            </div>
+                            @include('website.layouts.macros.card-bg-image', [
+                            'url' => $newsitem->url(),
+                            'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
+                            'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
+                            'leftborder' => 'info'
+                            ])
 
                         @endforeach
 
-                    </div>
+                    @else
 
+                        <p>There is no news...</p>
+
+                    @endif
+
+                    <a href="{{ route("news::list") }}" class="btn btn-info btn-block">View older news</a>
                 </div>
-
-            @endif
-
-
-            <div class="panel panel-default homepage__calendar">
-
-                <div class="panel-body calendar">
-
-                    <h4 style="text-align: center;">
-                        Upcoming activities
-                    </h4>
-
-                    <hr>
-
-                    <?php if (isset($events[0])) $week = date('W', $events[0]->start); ?>
-
-                    @foreach($events as $key => $event)
-
-                        @if($week != date('W', $event->start))
-                            <hr>
-                        @endif
-
-                        @include('event.display_includes.event_block', ['event'=> $event])
-
-                        <?php $week = date('W', $event->start); ?>
-
-                    @endforeach
-
-                    <hr>
-
-                    <a class="btn btn-success" style="width: 100%;" href="{{ route('event::list') }}">More upcoming
-                        events</a>
-
-                </div>
-
             </div>
 
         </div>
 
-        @if(count($newsitems) > 2)
-            @include('website.home.recentphotos')
+        @if (count($birthdays) > 0)
+
+            <div class="col-xl-4 col-md-12">
+
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">Birthdays</div>
+                    <div class="card-body">
+
+                        @foreach($birthdays as $key => $user)
+
+                            @include('users.includes.usercard', [
+                                'user' => $user,
+                                'subtitle' => '<em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>'
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+
+        @else
+
+            <div class="col-xl-4 col-md-12">
+
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">Most recent videos</div>
+                    <div class="card-body">
+
+                        @foreach($videos as $video)
+
+                            @include('videos.includes.video_block', [
+                                'video' => $video,
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            </div>
+
         @endif
 
     </div>

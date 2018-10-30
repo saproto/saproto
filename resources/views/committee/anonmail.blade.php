@@ -1,28 +1,28 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     Send an anonymous e-mail to the {{ $committee->name }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-md-6 col-sm-8 col-xs-12">
 
             <form method="post" action="{{ route("committee::anonymousmail", ["id" => $committee->getPublicId()]) }}">
 
                 {!! csrf_field() !!}
 
-                <div class="panel panel-default">
+                <div class="card">
 
-                    <div class="panel-heading">
+                    <div class="card-header bg-dark text-white">
                         <strong>Compose your anonymous e-mail</strong>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
 
-                        <p>
+                        <p class="card-text">
 
                             Via this e-mail form you can send an anonymous e-mail to the {{ $committee->name }}. You can
                             use this form to contact the committee if you wish to share information with them without
@@ -30,21 +30,19 @@
 
                         </p>
 
-                        <p>
+                        <p class="card-text">
 
                             Please write your anonymous message below.
 
                         </p>
 
-                        <hr>
-
                         <textarea name="message" class="form-control" rows="10"></textarea>
 
                     </div>
 
-                    <div class="panel-footer">
+                    <div class="card-footer">
 
-                        <input type="submit" class="btn btn-success" style="width: 100%;"
+                        <input type="submit" class="btn btn-success btn-block"
                                value="I have read and understand the privacy notice, please send my e-mail!">
 
                     </div>
@@ -55,17 +53,17 @@
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-4 col-xs-12">
 
-            <div class="panel panel-warning">
+            <div class="card">
 
-                <div class="panel-heading">
+                <div class="card-header bg-danger text-white">
                     <strong>Important privacy notice!</strong>
                 </div>
 
-                <div class="panel-body">
+                <div class="card-body">
 
-                    <p>
+                    <p class="card-text">
                         Please take note that the receiving committee will not know your name and or e-mail address, so
                         they cannot get back to you. Also, in order to prevent spam, it is possible for the receiving
                         committee to notify the webmasters of the fact that spam has been sent. The webmasters and the

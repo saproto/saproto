@@ -1,147 +1,156 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     OmNomCom Product Administration
 @endsection
 
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
-
-        $("#product-search-submit").click(function () {
-            document.getElementById('product-search-form').submit();
-        });
-
-    </script>
-
-@endsection
-
-@section('content')
+@section('container')
 
     <div class="row">
 
         <div class="col-md-3">
 
-            <div class="form-group">
+            <div class="card mb-3">
 
-                <form id="product-search-form" method="get" action="{{ route("omnomcom::products::list") }}">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="search">
-                        <span id="product-search-submit" class="input-group-addon" style="cursor: pointer;">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                </form>
+                <div class="card-header bg-dark text-white">
+                    Products
+                </div>
+
+                <div class="card-header">
+
+                    <form id="product-search-form" method="get" action="{{ route("omnomcom::products::list") }}">
+
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="search">
+                            <div class="input-group-append">
+                                <button type="submit" class="input-group-text" id="basic-addon2"><i
+                                            class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="card-body">
+
+                    <a href="{{ route('omnomcom::products::add') }}" class="btn btn-success btn-block mb-3">
+                        Create a new product
+                    </a>
+
+                    <a href="{{ route('omnomcom::products::export_csv') }}" class="btn btn-success btn-block">
+                        Export products as CSV
+                    </a>
+
+                </div>
 
             </div>
-
-            <hr>
-
-            <div class="btn-group btn-group-justified">
-
-                <a href="{{ route('omnomcom::products::add') }}" class="btn btn-success">Create a new product</a>
-
-            </div>
-
-            <hr>
 
             <form method="post" action="{{ route("omnomcom::products::bulkupdate") }}">
 
                 {!! csrf_field() !!}
 
-                <p>
-                    Bulk update stock by inserting a comma-seperated list of product_id's and the amount you want to
-                    add.
-                </p>
+                <div class="card">
 
-                <textarea name="update" style="width: 100%;" rows="7"></textarea>
+                    <div class="card-header bg-dark text-white">
+                        Update the stock
+                    </div>
 
-                <input type="submit" class="btn btn-success" value="Bulk update stock" style="width: 100%;">
+                    <div class="card-body">
+
+                        <p class="card-text">
+                            Bulk update stock by inserting a comma-seperated list of product_id's and the amount you
+                            want to add.
+                        </p>
+
+                        <textarea name="update" class="form-control w-100" rows="7"></textarea>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-success btn-block" value="Update">
+                    </div>
+
+                </div>
 
             </form>
 
-            <hr>
-
-            <div class="btn-group btn-group-justified">
-
-                <a href="{{ route('omnomcom::products::export_csv') }}" class="btn btn-success">Export all as CSV</a>
-
-            </div>
-
-
         </div>
 
-        <div class="col-md-8 col-md-offset-1">
+        <div class="col-md-9">
 
-            @if (count($products) > 0)
+            <div class="card mb-3">
 
-                <table class="table">
+                <div class="card-header bg-dark text-white mb-1">
+                    Product overview
+                </div>
 
-                    <thead>
+                @if (count($products) > 0)
 
-                    <tr>
+                    <table class="table table-hover table-sm">
 
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Visible</th>
-                        <th>Alcoholic</th>
+                        <thead>
 
-                    </tr>
+                        <tr class="bg-dark text-white">
 
-                    </thead>
-
-                    @foreach($products as $product)
-
-                        <tr>
-
-                            <td>{{ $product->id }}</td>
-                            <td>
-                                <a href="{{ route('omnomcom::products::show', ['id' => $product->id]) }}">
-                                    {{ $product->name }}
-                                </a>
-                            </td>
-                            <td>{{ $product->price }}</td>
-                            <td>{{ $product->stock }}</td>
-                            <td>{{ $product->is_visible }}</td>
-                            <td>{{ $product->is_alcoholic }}</td>
-                            <td>
-                                <a class="btn btn-xs btn-default"
-                                   href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}" role="button">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </a>
-                                <a class="btn btn-xs btn-danger"
-                                   onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
-                                   href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}"
-                                   role="button">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </a>
-                            </td>
+                            <td>Name</td>
+                            <td>Price</td>
+                            <td>Stock</td>
+                            <td>Visible</td>
+                            <td>Alcoholic</td>
+                            <td></td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        <tbody>
 
-                @if($paginate)
+                        @foreach($products as $product)
 
-                    <div style="margin: 0 auto;">
-                        {!! $products->render() !!}
+                            <tr>
+
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->price }}</td>
+                                <td>{{ $product->stock }}</td>
+                                <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
+                                <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
+                                <td class="text-right">
+                                    <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
+                                        <i class="fas fa-edit mr-2"></i>
+                                    </a>
+                                    <a onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
+                                       href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                        </tbody>
+
+                    </table>
+
+                    @if(method_exists($products, 'links'))
+                        <div class="card-footer pb-0">
+                            {!! $products->links() !!}
+                        </div>
+                    @endif
+
+                @else
+
+                    <div class="card-body">
+                        <p class="card-text text-center">
+                            There are no products matching your query.
+                        </p>
                     </div>
 
                 @endif
 
-            @else
-
-                <p style="text-align: center;">
-                    There are no products matching your query.
-                </p>
-
-            @endif
+            </div>
 
         </div>
 

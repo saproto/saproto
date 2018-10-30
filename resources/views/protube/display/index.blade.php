@@ -1,98 +1,111 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     ProTube Display Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    <table class="table">
+    <div class="row justify-content-center">
 
-        <thead>
+        <div class="col-md-7">
 
-        <tr>
+            <div class="card mb-3">
 
-            <th>#</th>
-            <th>Name</th>
-            <th>Display URL</th>
-            <th>Display Number</th>
-            <th>Controls</th>
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                </div>
 
-        </tr>
+                <table class="table table-hover">
 
-        </thead>
-
-        <tbody>
-
-        @if (count($stations) > 0)
-
-            @foreach($stations as $station)
-
-                <form method="post" action="{{route('protube::display::update', ['id'=>$station->id])}}">
-
-                    {!! csrf_field() !!}
+                    <thead>
 
                     <tr>
 
-                        <td>{{ $station->id }}</td>
-                        <td>
-                            <input class="form-control" type="text" name="name" value="{{ $station->name }}">
-                        </td>
-                        <td>
-                            <input class="form-control" type="text" name="url" value="{{ $station->url }}">
-                        </td>
-                        <td>
-                            <input class="form-control" type="text" name="display" value="{{ $station->display }}">
-                        </td>
-                        <td>
-                            <a class="btn btn-danger"
-                               onclick="return confirm('Are you sure you want to delete {{ $station->name }}?');"
-                               href="{{ route('protube::display::delete', ['id' => $station->id]) }}" role="button">
-                                <i class="fa fa-trash-o"></i> Delete
-                            </a>
-                            <button class="btn btn-success" type="submit"
-                                    href="{{ route('protube::display::update', ['id' => $station->id]) }}"
-                                    role="button">
-                                <i class="fa fa-pencil"></i> Update
-                            </button>
-                        </td>
+                        <td>Name</td>
+                        <td>Display URL</td>
+                        <td>Display Number</td>
+                        <td></td>
 
                     </tr>
 
-                </form>
+                    </thead>
 
-            @endforeach
+                    <tbody>
 
-        @endif
+                    @if (count($displays) > 0)
 
-        <form method="post" action="{{ route('protube::display::store') }}">
+                        @foreach($displays as $display)
 
-            {!! csrf_field() !!}
+                            <form method="post" action="{{route('protube::display::update', ['id'=>$display->id])}}">
 
-            <tr>
+                                {!! csrf_field() !!}
 
-                <td></td>
-                <td>
-                    <input class="form-control" type="text" name="name" placeholder="Screen name">
-                </td>
-                <td>
-                    <input class="form-control" type="text" name="url" placeholder="Screen URL">
-                </td>
-                <td>
-                    <input class="form-control" type="text" name="display" placeholder="Screen #">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-success" role="button">
-                        <i class="fa fa-save" aria-hidden="true"></i> Save
-                    </button>
-                </td>
+                                <tr>
 
-            </tr>
+                                    <td>
+                                        <input class="form-control" type="text" name="name" value="{{ $display->name }}">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" name="url" value="{{ $display->url }}">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" name="display" value="{{ $display->display }}">
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger"
+                                           onclick="return confirm('Are you sure you want to delete {{ $display->name }}?');"
+                                           href="{{ route('protube::display::delete', ['id' => $display->id]) }}" role="button">
+                                            <i class="fas fa-trash mr-2"></i> Delete
+                                        </a>
+                                        <button class="btn btn-success" type="submit"
+                                                href="{{ route('protube::display::update', ['id' => $display->id]) }}"
+                                                role="button">
+                                            <i class="fas fa-edit"></i> Update
+                                        </button>
+                                    </td>
 
-        </form>
+                                </tr>
 
-        </tbody>
+                            </form>
 
-    </table>
+                        @endforeach
+
+                    @endif
+
+                    <form method="post" action="{{ route('protube::display::store') }}">
+
+                        {!! csrf_field() !!}
+
+                        <tr>
+
+                            <td>
+                                <input class="form-control" type="text" name="name" placeholder="Screen name">
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" name="url" placeholder="Screen URL">
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" name="display" placeholder="Screen #">
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-success" role="button">
+                                    <i class="fas fa-save mr-2" aria-hidden="true"></i> Save
+                                </button>
+                            </td>
+
+                        </tr>
+
+                    </form>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

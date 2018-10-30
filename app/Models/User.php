@@ -95,7 +95,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->password = Hash::make($password);
         $this->save();
 
-        if (config('app.env') !== 'local') {
+        if (config('app.env') == 'production') {
             // Update Active Directory Password
             $ad = new Adldap();
             $provider = new Provider(config('adldap.proto'));
@@ -367,12 +367,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $r;
     }
 
-    public function withdrawals()
+    public function withdrawals($limit = 0)
     {
         $withdrawals = [];
         foreach (Withdrawal::orderBy('date', 'desc')->get() as $withdrawal) {
             if ($withdrawal->orderlinesForUser($this)->count() > 0) {
                 $withdrawals[] = $withdrawal;
+                if ($limit > 0 && count($withdrawals) > $limit) {
+                    break;
+                }
             }
         }
         return $withdrawals;
@@ -518,6 +521,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getPhotoPreviewAttribute()
     {
         return $this->generatePhotoPath();
+    }
+
+    public function getIcalUrl()
+    {
+        return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
     }
 
 }

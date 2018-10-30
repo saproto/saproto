@@ -19,6 +19,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::get('fishcam', ['as' => 'fishcam', 'middleware' => ['member'], 'uses' => 'HomeController@fishcam']);
 
     /*
+     * Routes related to the header images.
+     */
+    Route::group(['prefix' => 'headerimage', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'headerimage::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'HeaderImageController@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'HeaderImageController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'HeaderImageController@store']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'HeaderImageController@destroy']);
+    });
+
+    /*
      * Routes for the search function.
      */
     Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
@@ -499,12 +509,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
-            Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
-            Route::get('history/{user_id?}/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
-
             Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
             Route::post('add/single', ['as' => 'add', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
+
+            Route::get('history/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
+            Route::get('{date?}', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
         });
 
         Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie|omnomcom'], 'as' => 'tipcie::'], function () {
@@ -535,8 +545,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
             Route::post('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
 
-            Route::get('{id}', ['as' => 'show', 'uses' => 'ProductController@show']);
-
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
             Route::get('rank/{category}/{product}/{direction}', ['as' => 'rank', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@rank']);
         });
@@ -545,7 +553,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'ProductCategoryController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'ProductCategoryController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'ProductCategoryController@store']);
-            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ProductCategoryController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ProductCategoryController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ProductCategoryController@destroy']);
             Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);

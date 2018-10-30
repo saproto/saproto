@@ -1,91 +1,89 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Withdrawal Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-10">
 
-            <p style="text-align: center;">
-                There are currently <strong>{{ WithdrawalController::openOrderlinesTotal() }}</strong> unpaid orderlines
-                for
-                a grand total of
-                <strong>&euro;{{ number_format(WithdrawalController::openOrderlinesSum(), 2, ',', '.') }}</strong>.
-            </p>
+            <div class="card mb-3">
 
-            <p style="text-align: center;">
-                <a href="{{ route('omnomcom::withdrawal::add') }}">Create a new withdrawal.</a>
-            </p>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('omnomcom::withdrawal::add') }}" class="badge badge-info float-right">
+                        Create a new withdrawal.
+                    </a>
+                </div>
 
-            <hr>
+                @if ($withdrawals->count() > 0)
 
-            @if ($withdrawals->count() > 0)
+                    <table class="table table-hover">
 
-                <table class="table">
+                        <thead>
 
-                    <thead>
+                        <tr class="bg-dark text-white">
 
-                    <tr>
-
-                        <th>#</th>
-                        <th>ID</th>
-                        <th>Withdrawal Date</th>
-                        <th>Users</th>
-                        <th>Orderlines</th>
-                        <th>Sum</th>
-                        <th>Status</th>
-                        <th>View</th>
-
-                    </tr>
-
-                    </thead>
-
-                    @foreach($withdrawals as $withdrawal)
-
-                        <tr>
-
-                            <td>
-                                <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
-                                    {{ $withdrawal->id }}
-                                </a>
-                            </td>
-                            <td>{{ $withdrawal->withdrawalId() }}</td>
-                            <td>{{ $withdrawal->date }}</td>
-                            <td>{{ $withdrawal->userCount() }}</td>
-                            <td>{{ $withdrawal->orderlines->count() }}</td>
-                            <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
-                            <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
-                            <td>
-                                <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
-                                    Withdrawal
-                                </a>
-
-                                /
-
-                                <a href="{{ route('omnomcom::withdrawal::showAccounts', ['id' => $withdrawal->id]) }}">
-                                    Accounts
-                                </a>
-                            </td>
+                            <td>#</td>
+                            <td>ID</td>
+                            <td>Withdrawal Date</td>
+                            <td>Users</td>
+                            <td>Orderlines</td>
+                            <td>Sum</td>
+                            <td>Status</td>
+                            <td>View</td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        @foreach($withdrawals as $withdrawal)
 
-                <div style="text-align: center;">{{ $withdrawals->links() }}</div>
+                            <tr>
 
-            @else
+                                <td>
+                                    <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
+                                        {{ $withdrawal->id }}
+                                    </a>
+                                </td>
+                                <td>{{ $withdrawal->withdrawalId() }}</td>
+                                <td>{{ $withdrawal->date }}</td>
+                                <td>{{ $withdrawal->userCount() }}</td>
+                                <td>{{ $withdrawal->orderlines->count() }}</td>
+                                <td>&euro;{{ number_format($withdrawal->total(), 2, ',', '.') }}</td>
+                                <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
+                                <td>
+                                    <a href="{{ route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]) }}">
+                                        Withdrawal
+                                    </a>
 
-                <p style="text-align: center;">
-                    There are no withdrawals.
-                </p>
+                                    /
 
-            @endif
+                                    <a href="{{ route('omnomcom::withdrawal::showAccounts', ['id' => $withdrawal->id]) }}">
+                                        Accounts
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                    <div class="card-footer pb-0">{{ $withdrawals->links() }}</div>
+
+                @else
+
+                    <p style="text-align: center;">
+                        There are no withdrawals.
+                    </p>
+
+                @endif
+
+            </div>
 
         </div>
 

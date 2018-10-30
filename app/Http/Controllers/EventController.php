@@ -55,11 +55,9 @@ class EventController extends Controller
             $reminder = null;
         }
 
-        $relevant_only = Auth::check() && Auth::user()->getCalendarRelevantSetting() ? true : false;
-
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'relevant_only' => $relevant_only]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
     }
 
     /**
@@ -131,6 +129,7 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->is_educational = $request->has('is_educational');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
@@ -207,6 +206,7 @@ class EventController extends Controller
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
+        $event->is_educational = $request->has('is_educational');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {

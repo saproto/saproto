@@ -107,8 +107,8 @@
         Ticket Scanner for {{ $event->title }}
     </p>
 
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
             <input type="text" id="scanner-field" onblur="javascript:focus();"
                    onsubmit="javascript:scan();">
         </div>

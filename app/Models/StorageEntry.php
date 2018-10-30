@@ -45,7 +45,8 @@ class StorageEntry extends Model
             Committee::where('image_id', $id)->count() == 0 &&
             Event::where('image_id', $id)->count() == 0 &&
             Newsitem::where('featured_image_id', $id)->count() == 0 &&
-            SoundboardSound::where('file_id', $id)->count() == 0;
+            SoundboardSound::where('file_id', $id)->count() == 0 &&
+            HeaderImage::where('image_id', $id)->count() == 0;
     }
 
     public function createFromFile($file)
@@ -87,12 +88,21 @@ class StorageEntry extends Model
 
     public function generatePath()
     {
-        return route('file::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename]);
+        $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename]);
+        if (config('app-proto.assets-domain')) {
+            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        }
+        return $url;
     }
 
     public function generateImagePath($w, $h)
     {
-        return route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
+        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
+        if (config('app-proto.assets-domain')) {
+            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        }
+        return $url;
+
     }
 
     public function getBase64($w = null, $h = null)

@@ -7,11 +7,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
-<body style="background-color: #333; margin: 0; padding: 0; font-family: Arial, sans-serif;">
+<body style="background-color: #f3f3f3; margin: 0; padding: 0; font-family: Arial, sans-serif;">
 
 <br><br><br>
 
-<table style="background-color: #fff; width: 500px; margin: 0 auto; padding: 0; border: none;">
+<table style="background-color: #fff; width: 500px; margin: 0 auto; padding: 0; border: 1px solid #ddd; border-top: 5px solid #83b716; border-bottom: none;">
     <tr style="padding: 0; margin: 0;">
         <td style="padding: 20px 40px; text-align: justify;">
             @yield('body')
@@ -19,11 +19,11 @@
     </tr>
 </table>
 
-<table style="background-color: #111; width: 500px; margin: 0px auto 40px auto; padding: 20px 40px; border: none; border-bottom: 5px solid #c1ff00;">
+<table style="background-color: #333; width: 500px; margin: 0px auto 40px auto; padding: 20px 40px; border: 1px solid #ddd; border-top: none;">
     <tr style="padding: 0; margin: 0;">
         <td style="color: #fff; margin: 0; padding: 0;" width="50%">
             <strong>
-                <span style="color: #c1ff00;">S.A. Proto</span>
+                <span style="color: #83b716;">S.A. Proto</span>
             </strong>
             <br>
             Zilverling A230<br>
@@ -44,14 +44,14 @@
             <br>
             <sub>
                 If you feel that you should not have received this e-mail, please contact
-                <a href="mailto:abuse@proto.utwente.nl" style="color: #c1ff00; text-decoration: none;">abuse@proto.utwente.nl</a>.
+                <a href="mailto:abuse@proto.utwente.nl" style="color: #00aac0; text-decoration: none;">abuse@proto.utwente.nl</a>.
             </sub>
         </td>
     </tr>
 </table>
 
 <center>
-    <img src="{{ asset('images/logo/inverse.png') }}" style="width: 30%; max-width: 200px;"/>
+    <img src="{{ asset('images/logo/regular.png') }}" style="width: 30%; max-width: 200px;"/>
 </center>
 
 <br><br><br>

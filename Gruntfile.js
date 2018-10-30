@@ -5,8 +5,11 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 
 		copy: {
-			options: {
-				noProcess: ['**/*.{eot,woff2,woff,ttf,svg,dae,tga}']
+			fontawesome: {
+				expand: true,
+				cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
+				src: '**',
+				dest: '<%= pkg.paths.assets %>/fonts/'
 			}
 		},
 
@@ -51,11 +54,11 @@ module.exports = function (grunt) {
 
 		bump: {
 			options: {
-				files: ['package.json', 'bower.json'],
+				files: ['package.json'],
 				updateConfigs: [],
 				commit: true,
 				commitMessage: 'Release %VERSION%',
-				commitFiles: ['package.json', 'bower.json'],
+				commitFiles: ['package.json'],
 				createTag: true,
 				tagName: '%VERSION%',
 				tagMessage: 'Version %VERSION%',
@@ -75,13 +78,12 @@ module.exports = function (grunt) {
 			importer: importOnce,
 			importOnce: {
 				index: false,
-				css: true,
-				bower: false
+				css: true
 			},
 			options: {
 				outputStyle: 'expanded',
 				sourceComments: true,
-				includePaths: ['./resources/assets/bower/'],
+				includePaths: [],
 			},
 			dist: {
 				files: {
@@ -158,6 +160,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
 	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'cssmin', 'autoprefixer']);
 
-	grunt.registerTask('default', ['build:js', 'build:sass']);
+	grunt.registerTask('default', ['build:js', 'build:sass', 'copy:fontawesome']);
 
 };

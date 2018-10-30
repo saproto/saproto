@@ -1,122 +1,109 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     OmNomCom Account Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-3">
-
-            <h3 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">
-
-                {{ $account->name }}
-
-            </h3>
-
-            <p style="text-align: center;">Account number: <strong>{{ $account->account_number }}</strong></p>
-
-            <hr>
+        <div class="col-md-2">
 
             <form method="post" action="{{ route('omnomcom::accounts::aggregate', ['account' => $account->id]) }}">
 
                 {!! csrf_field() !!}
 
-                <p><strong>Aggregated sales overview</strong></p>
+                <div class="card mb-3">
 
-                <div class="form-group">
-                    <label for="start">Start</label>
-                    <input type="text" class="form-control datetime-picker" id="start" name="start" required>
+                    <div class="card-header bg-dark text-white">
+                        {{ $account->name }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <p class="card-text text-center">
+                            Account number: <strong>{{ $account->account_number }}</strong>
+                        </p>
+
+                    </div>
+
                 </div>
 
-                <div class="form-group">
-                    <label for="end">End</label>
-                    <input type="text" class="form-control datetime-picker" id="end" name="end" required>
-                </div>
+                <div class="card mb-3">
 
-                <button type="submit" class="btn btn-success">Generate</button>
+                    <div class="card-header bg-dark text-white">
+                        Aggregated sales overview
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="start">Start</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'start',
+                                'format' => 'datetime'
+                            ])
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end">End</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'end',
+                                'format' => 'datetime'
+                            ])
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success btn-block">Generate</button>
+                    </div>
+
+                </div>
 
             </form>
 
         </div>
 
-        <div class="col-md-9">
+        <div class="col-md-4">
 
-            <h3>Products linked to this account</h3>
+            <div class="card mb-3">
 
-            <p><strong>{{ $products->count() }}</strong> products</p>
-
-            <hr>
-
-            @if ($products->count() > 0)
-
-                <div style="margin: 0 auto;">
-                    {!! $products->render() !!}
+                <div class="card-header bg-dark text-white mb-1">
+                    Account products
                 </div>
 
-                <div class="row">
+                <div class="card-body pb-0">
 
-                    @foreach($products as $product)
+                    @if ($products->count() > 0)
 
-                        <div class="col-md-4 product__account">
+                        <li class="list-group">
+                            @foreach($products as $product)
+                                <a href="{{ route("omnomcom::products::edit",['id' => $product->id]) }}"
+                                   class="list-group-item">
+                                    {{ $product->name }}
+                                </a>
+                            @endforeach
+                        </li>
 
-                            <div class="product__account__image">
+                    <hr>
 
-                                @if($product->image != null)
+                        {!! $products->links() !!}
 
-                                    <div class="product__account__image__inner"
-                                         style="background-image: url('{!! $product->image->generateImagePath(500, null) !!}');">
-                                    </div>
+                    @else
+                        <p class="card-text text-center">
+                            There are no products for this account.
+                        </p>
 
-                                @endif
-
-                            </div>
-
-                            <div class="product__account__name">
-
-                                <a href="{{ route("omnomcom::products::show",['id' => $product->id]) }}">{{ $product->name }}</a>
-
-                            </div>
-
-                        </div>
-
-                    @endforeach
+                    @endif
 
                 </div>
 
-            @else
-
-                <p style="text-align: center;">
-                    There are no products for this account.
-                </p>
-
-            @endif
+            </div>
 
         </div>
 
     </div>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
-            },
-            format: 'DD-MM-YYYY HH:mm'
-        });
-    </script>
 
 @endsection

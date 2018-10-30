@@ -1,41 +1,48 @@
 @extends('website.master')
 
 @section('page-title')
+
     Whoops!
+
 @endsection
 
 @section('body')
 
-    <div id="error__header">
+    <div class="row justify-content-center">
 
-        <h2>@yield('page-title')</h2>
+        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-11 text-center">
 
-    </div>
+            <div class="card mb-3 mt-5">
 
-    <div id="error__container" class="col-lg-4 col-lg-offset-4 col-sm-4 col-sm-offset-4 col-xs-10 col-xs-offset-1">
+                <div class="card-header text-center bg-dark text-white">
+                    S.A. Proto | @yield('page-title')
+                </div>
 
-        @yield('page-body')
+                <div class="card-body text-center">
 
-        <p>
-            <sub>
-                @if(!empty(Sentry::getLastEventID()))
-                    This incident has already been reported: #{{ Sentry::getLastEventID() }}
-                @else
-                    This incident has <strong>not</strong> been reported.
-                @endif
-            </sub>
-        </p>
+                    @yield('page-body')
 
-        <p style="text-align: center">
-            <img id="error__logo" src="{{ asset('images/logo/inverse.png') }}" width="150px">
-        </p>
+                    <p>
+                        <sub>
+                            @if(!empty(Sentry::getLastEventID()))
+                                This incident has already been reported: #{{ Sentry::getLastEventID() }}
+                            @else
+                                This incident has <strong>not</strong> been reported.
+                            @endif
+                        </sub>
+                    </p>
 
-        <p style="text-align: center;">
-            <br>
-            <a href="/" style="color: #fff;">
-                <sub>Go back to homepage.</sub>
-            </a>
-        </p>
+                </div>
+
+                <a href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
+                    Go back to homepage.
+                </a>
+
+            </div>
+
+            <img src="{{ asset('images/logo/regular.png') }}" width="60%" class="mb-3 mt-5">
+
+        </div>
 
     </div>
 

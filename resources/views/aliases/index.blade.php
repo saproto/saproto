@@ -1,103 +1,123 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Alias Management
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-9">
+        <div class="col-md-7">
 
-            <table class="table">
+            <div class="card mb-3">
 
-                <thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                </div>
 
-                <tr>
+                <table class="table table-hover">
 
-                    <th style="text-align: right;">Alias</th>
-                    <th>Destination</th>
+                    <thead>
 
-                </tr>
+                    <tr class="bg-dark text-white">
 
-                </thead>
-
-                @foreach($aliases as $alias => $destinations)
-
-                    <tr>
-
-                        <td style="text-align: right;">
-
-                            <a href="{{ route('alias::delete', ['idOrAlias' => $alias]) }}">
-                                <span class="label label-danger pull-left">delete alias</span>
-                            </a>
-
-                            <strong>{{ $alias }}</strong> @ {{ config('proto.emaildomain') }}
-
-                        </td>
-                        <td>
-
-                            @foreach($destinations as $destination)
-
-                                @if($destination->destination)
-                                    {{ $destination->destination }}
-                                @elseif($destination->user)
-                                    @if($destination->user->isMember)
-                                        <a href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}">
-                                    @endif
-                                        @if($destination->user->trashed())
-                                            <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
-                                        @else
-                                            {{ $destination->user->name }}
-                                        @endif
-                                        @if($destination->user->isMember)
-                                            </a>
-                                        @endif
-                                @else
-                                    <i>deleted user</i>
-                                @endif
-
-                                <a href="{{ route('alias::delete', ['idOrAlias' => $destination->id]) }}">
-                                    <span class="label label-danger pull-right">delete destination</span>
-                                </a>
-
-                                <br>
-
-                            @endforeach
-
-                        </td>
+                        <td class="text-right">Alias</td>
+                        <td>Destination</td>
 
                     </tr>
 
-                @endforeach
+                    </thead>
 
-            </table>
+                    @foreach($aliases as $alias => $destinations)
+
+                        <tr>
+
+                            <td class="text-right">
+
+                                <strong>{{ $alias }}</strong> @ {{ config('proto.emaildomain') }}
+
+                                <a href="{{ route('alias::delete', ['idOrAlias' => $alias]) }}" class="ml-2">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+
+                            </td>
+                            <td>
+
+                                @foreach($destinations as $destination)
+
+                                    <a href="{{ route('alias::delete', ['idOrAlias' => $destination->id]) }}" class="mr-2">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+
+                                    @if($destination->destination)
+                                        {{ $destination->destination }}
+                                    @elseif($destination->user)
+                                        @if($destination->user->isMember)
+                                            <a href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}">
+                                                @endif
+                                                @if($destination->user->trashed())
+                                                    <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
+                                                @else
+                                                    {{ $destination->user->name }}
+                                                @endif
+                                                @if($destination->user->isMember)
+                                            </a>
+                                        @endif
+                                    @else
+                                        <i>deleted user</i>
+                                    @endif
+
+                                    <br>
+
+                                @endforeach
+
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </table>
+
+            </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
 
-            <p>
-                <a href="{{ route('alias::add') }}" class="form-control btn btn-success">Create a new alias.</a>
-            </p>
+            <div class="card mb-3">
 
-            <p style="text-align: center;">
-                - or -
-            </p>
+                <div class="card-header bg-dark text-white">
+                    Make changes
+                </div>
 
-            <form method="post" action="{{ route('alias::update') }}">
+                <div class="card-body">
 
-                {{ csrf_field() }}
+                    <p>
+                        <a href="{{ route('alias::add') }}" class="form-control btn btn-success">Create a new alias.</a>
+                    </p>
 
-                <input class="form-control" name="from" placeholder="old alias name">
-                <input class="form-control" name="into" placeholder="new alias name">
+                    <p style="text-align: center;">
+                        - or -
+                    </p>
 
-                <br>
+                    <form method="post" action="{{ route('alias::update') }}">
 
-                <input type="submit" class="form-control btn btn-success" value="Rename">
+                        {{ csrf_field() }}
 
-            </form>
+                        <input class="form-control mb-3" name="from" placeholder="old alias name">
+                        <input class="form-control" name="into" placeholder="new alias name">
+
+                        <br>
+
+                        <input type="submit" class="form-control btn btn-success" value="Rename">
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 

@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Storage;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
@@ -12,12 +13,14 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Company;
 use Proto\Models\Event;
+use Proto\Models\HeaderImage;
 use Proto\Models\OrderLine;
 use Proto\Models\Page;
 use Proto\Models\User;
 
 use Auth;
 use Carbon;
+use Proto\Models\Video;
 use Proto\Models\WelcomeMessage;
 use Proto\Models\Newsitem;
 
@@ -30,16 +33,18 @@ class HomeController extends Controller
     public function show()
     {
 
-        $events = Event::where('secret', false)->where('end', '>=', date('U'))->orderBy('start')->limit(5)->get();
-        $companies = Company::where('in_logo_bar', true)->get();
+        $companies = Company::where('in_logo_bar', true)->orderBy('sort', 'asc')->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subMonths(1))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
+        $header = HeaderImage::inRandomOrder()->first();
+        $videos = Video::orderBy('video_date', 'desc')->limit(3)->get();
 
         if (Auth::check() && Auth::user()->member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
-            return view('website.home.members', ['events' => $events, 'companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays]);
+            return view('website.home.members', ['companies' => $companies, 'message' => $message,
+                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'header' => $header, 'videos' => $videos]);
         } else {
-            return view('website.home.external', ['events' => $events, 'companies' => $companies]);
+            return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
 
     }

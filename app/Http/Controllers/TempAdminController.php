@@ -73,7 +73,7 @@ class TempAdminController extends Controller
     public function index()
     {
         $tempadmins = Tempadmin::where('end_at', '>', DB::raw("NOW()"))->orderBy('end_at', 'desc')->get();
-        $pastTempadmins = Tempadmin::where('end_at', '<=', DB::raw("NOW()"))->orderBy('end_at', 'desc')->take(20)->get();
+        $pastTempadmins = Tempadmin::where('end_at', '<=', DB::raw("NOW()"))->orderBy('end_at', 'desc')->take(10)->get();
 
         return view("tempadmin.list", ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
@@ -89,8 +89,8 @@ class TempAdminController extends Controller
 
         $tempadmin->user()->associate(User::findOrFail($request->user_id));
         $tempadmin->creator()->associate(Auth::user());
-        $tempadmin->start_at = $request->start_at;
-        $tempadmin->end_at = $request->end_at;
+        $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
+        $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
 
         $tempadmin->save();
 
@@ -108,8 +108,8 @@ class TempAdminController extends Controller
     {
         $tempadmin = Tempadmin::findOrFail($id);
 
-        $tempadmin->start_at = $request->start_at;
-        $tempadmin->end_at = $request->end_at;
+        $tempadmin->start_at = date('Y-m-d H:i:s', strtotime($request->start_at));
+        $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
 
         $tempadmin->save();
 

@@ -19,7 +19,7 @@ class AchievementController extends Controller
 
     public function overview()
     {
-        return view('achievement.list', ['achievements' => Achievement::orderBy('created_at', 'asc')->get()]);
+        return view('achievement.list', ['achievements' => Achievement::orderBy('name', 'asc')->paginate(15)]);
     }
 
     public function create()
@@ -68,17 +68,17 @@ class AchievementController extends Controller
     public function give($achievement_id, Request $request)
     {
         $achievement = Achievement::find($achievement_id);
-        $user = User::find($request->user_id);
-        if (!$user || !$achievement) abort(404);
+        $user = User::find($request->get('user-id'));
+        if (!$user || !$achievement) abort(500, 'User or achievement not found.');
         $achieved = $user->achieved();
         $hasAchievement = false;
         foreach ($achieved as $entry) {
-            if ($entry->id == $achievement_id) $hasAchievement = true;
+            if ($entry->id == $achievement->id) $hasAchievement = true;
         }
         if (!$hasAchievement) {
             $new = array(
-                'user_id' => $request->user_id,
-                'achievement_id' => $achievement_id
+                'user_id' => $user->id,
+                'achievement_id' => $achievement->id
             );
             $relation = new AchievementOwnership($new);
             $relation->save();

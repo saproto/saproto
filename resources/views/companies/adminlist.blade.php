@@ -1,80 +1,87 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Company Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($companies) > 0)
+    <div class="row justify-content-center">
 
-        <p style="text-align: center;">
-            <a href="{{ route('companies::add') }}">Create a new company.</a>
-        </p>
+        <div class="col-md-8">
 
-        <table class="table">
+            <div class="card mb-3">
 
-            <thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('companies::add') }}" class="badge badge-info float-right">
+                        Create a new company.
+                    </a>
+                </div>
 
-            <tr>
+                <table class="table table-sm table-hover">
 
-                <th>#</th>
-                <th>Name</th>
-                <th>URL</th>
-                <th>Visible</th>
-                <th>Logo Bar</th>
-                <th>Controls</th>
+                    <thead>
 
-            </tr>
+                    <tr class="bg-dark text-white">
 
-            </thead>
+                        <td>Name</td>
+                        <td>URL</td>
+                        <td>Visible</td>
+                        <td>Logo Bar</td>
+                        <td></td>
 
-            @foreach($companies as $company)
+                    </tr>
 
-                <tr>
+                    </thead>
 
-                    <td>{{ $company->id }}</td>
-                    <td>{{ $company->name }}</td>
-                    <td><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
-                    <td>{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
-                    <td>{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('companies::edit', ['id' => $company->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('companies::delete', ['id' => $company->id]) }}" onclick="return confirm('Are you sure you want to delete this company?')" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                        @if($company->sort > 0)
-                            <a class="btn btn-xs btn-default"
-                               href="{{ route('companies::orderUp', ['id' => $company->id]) }}" role="button">
-                                <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                            </a>
-                        @endif
+                    @foreach($companies as $company)
 
-                        @if($company->sort != $companies->count() - 1)
-                            <a class="btn btn-xs btn-default"
-                               href="{{ route('companies::orderDown', ['id' => $company->id]) }}" role="button">
-                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                            </a>
-                        @endif
-                    </td>
+                        <tr>
 
-                </tr>
+                            <td>{{ $company->name }}</td>
+                            <td><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
+                            <td>{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
+                            <td>{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
+                            <td>
 
-            @endforeach
+                                <a href="{{ route('companies::edit', ['id' => $company->id]) }}">
+                                    <i class="fas fa-edit mr-2 fa-fw"></i>
+                                </a>
 
-        </table>
+                                <a href="{{ route('companies::delete', ['id' => $company->id]) }}"
+                                   onclick="return confirm('Are you sure you want to delete this company?')">
+                                    <i class="fas fa-trash mr-2 fa-fw text-danger"></i>
+                                </a>
 
-    @else
+                                @if($company->sort > 0)
+                                    <a href="{{ route('companies::orderUp', ['id' => $company->id]) }}">
+                                        <i class="fas fa-arrow-up mr-2 fa-fw text-info"></i>
+                                    </a>
+                                @endif
 
-        <p style="text-align: center;">
-            There are no companies in the system.
-            <a href="{{ route('companies::add') }}">Create a new company.</a>
-        </p>
+                                @if($company->sort != $companies->count())
+                                    <a href="{{ route('companies::orderDown', ['id' => $company->id]) }}">
+                                        <i class="fas fa-arrow-down mr-2 fa-fw text-info"></i>
+                                    </a>
+                                @endif
 
-    @endif
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </table>
+
+                <div class="card-footer">
+                    {!! $companies->links() !!}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

@@ -26,7 +26,10 @@ class EmailController extends Controller
     public function index()
     {
 
-        return view('emailadmin.overview', []);
+        return view('emailadmin.overview', [
+            'lists' => EmailList::all(),
+            'emails' => Email::orderBy('id', 'desc')->paginate(10)
+        ]);
 
     }
 

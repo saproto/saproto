@@ -111,7 +111,7 @@ class Committee extends Model
         foreach (
             CommitteeMembership::withTrashed()->where('committee_id', $this->id)
                 ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->orderBy('deleted_at', 'desc')
                 ->get()
             as $membership

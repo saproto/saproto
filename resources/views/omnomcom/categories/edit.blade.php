@@ -1,52 +1,62 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Category Administration
-@endsection
-
-@section('panel-title')
     {{ ($category == null ? "Create new category." : "Edit category " . $category->name .".") }}
 @endsection
 
-@section('panel-body')
+@section('container')
 
-    <form method="post"
-          action="{{ ($category == null ? route("omnomcom::categories::add") : route("omnomcom::categories::edit", ['id' => $category->id])) }}"
-          enctype="multipart/form-data">
+    <div class="row justify-content-center">
 
-        {!! csrf_field() !!}
+        <div class="col-md-3">
 
-        <div class="row">
+            <form method="post"
+                  action="{{ ($category == null ? route("omnomcom::categories::add") : route("omnomcom::categories::edit", ['id' => $category->id])) }}"
+                  enctype="multipart/form-data">
 
-            <div class="col-md-6">
+                {!! csrf_field() !!}
 
-                <div class="form-group">
-                    <label for="name">Category name:</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                           placeholder="Special Products for Unicorns" value="{{ $category->name or '' }}" required>
+                <div class="card mb-3">
+
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
+                    </div>
+
+                    <div class="card-body">
+                        <label for="name">Category name:</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               placeholder="Special Products for Unicorns" value="{{ $category->name or '' }}" required>
+                    </div>
+
+                    <div class="card-footer">
+
+                        @if($category)
+                            <a class="btn btn-danger"
+                               onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
+                               href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
+                                Delete
+                            </a>
+                        @endif
+
+                        <button type="submit" class="btn btn-success float-right ml-3">Submit</button>
+
+                        <a href="{{ route("omnomcom::categories::list") }}"
+                           class="btn btn-default float-right">Cancel</a>
+
+                    </div>
+
                 </div>
 
-            </div>
+            </form>
 
         </div>
 
-        @endsection
+        <div class="col-md-3">
 
-        @section('panel-footer')
+            @include('omnomcom.categories.edit_includes.order')
 
-            @if($category)
-                <a class="btn btn-danger"
-                   onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
-                   href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}"
-                   role="button">
-                    Delete
-                </a>
-            @endif
+        </div>
 
-            <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit</button>
-
-            <a href="{{ route("omnomcom::categories::list") }}" class="btn btn-default pull-right">Cancel</a>
-
-    </form>
+    </div>
 
 @endsection

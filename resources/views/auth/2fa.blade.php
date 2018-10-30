@@ -15,7 +15,7 @@
                    placeholder="Enter the code from your app">
         </div>
 
-        <button type="submit" class="btn btn-default" style="width: 100%;">Verify</button>
+        <button type="submit" class="btn btn-success" style="width: 100%;">Verify</button>
 
     </form>
 

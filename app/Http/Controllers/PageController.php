@@ -31,7 +31,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $pages = Page::all();
+        $pages = Page::orderBy('created_at', 'desc')->paginate(20);
         return view("pages.list", ['pages' => $pages]);
     }
 

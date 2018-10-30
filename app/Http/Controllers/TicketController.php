@@ -31,7 +31,7 @@ class TicketController extends Controller
     public function index()
     {
 
-        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->get()]);
+        return view('tickets.index', ['tickets' => Ticket::orderBy('id', 'desc')->paginate(20)]);
 
     }
 

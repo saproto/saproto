@@ -1,64 +1,64 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Job offer Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($joboffers) > 0)
+    <div class="row justify-content-center">
 
-        <p style="text-align: center;">
-            <a href="{{ route('joboffers::add') }}">Create a new job offer.</a>
-        </p>
+        <div class="col-md-6">
 
-        <table class="table">
+            <div class="card mb-3">
 
-            <thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('joboffers::add') }}" class="badge badge-info float-right">
+                        Create a new job offer.
+                    </a>
+                </div>
 
-            <tr>
+                <table class="table table-sm table-hover">
 
-                <th>#</th>
-                <th>Company</th>
-                <th>Title</th>
-                <th>Controls</th>
+                    <thead>
 
-            </tr>
+                    <tr class="bg-dark text-white">
 
-            </thead>
+                        <td>Company</td>
+                        <td>Title</td>
+                        <td></td>
 
-            @foreach($joboffers as $joboffer)
+                    </tr>
 
-                <tr>
+                    </thead>
 
-                    <td>{{ $joboffer->id }}</td>
-                    <td>{{ $joboffer->company->name }}</td>
-                    <td>{{ $joboffer->title}}</td>
+                    @foreach($joboffers as $joboffer)
 
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('joboffers::delete', ['id' => $joboffer->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                        <tr>
 
-                </tr>
+                            <td>{{ $joboffer->company->name }}</td>
+                            <td>{{ $joboffer->title}}</td>
 
-            @endforeach
+                            <td>
+                                <a href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}">
+                                    <i class="fas fa-edit mr-2 fa-fw"></i>
+                                </a>
+                                <a href="{{ route('joboffers::delete', ['id' => $joboffer->id]) }}">
+                                    <i class="fas fa-trash text-danger fa-fw"></i>
+                                </a>
+                            </td>
 
-        </table>
+                        </tr>
 
-    @else
+                    @endforeach
 
-        <p style="text-align: center;">
-            There are no job offers in the system.
-            <a href="{{ route('joboffers::add') }}">Create a new job offer.</a>
-        </p>
+                </table>
 
-    @endif
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

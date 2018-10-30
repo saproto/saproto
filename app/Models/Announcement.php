@@ -70,7 +70,7 @@ class Announcement extends Model
     {
         switch ($this->show_style) {
             case 0:
-                return 'success';
+                return 'primary';
             case 1:
                 return 'info';
             case 2:

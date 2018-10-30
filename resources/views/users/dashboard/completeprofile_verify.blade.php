@@ -1,40 +1,55 @@
-@extends('website.layouts.panel')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Complete membership profile
 @endsection
 
-@section('panel-title')
-    Complete membership profile
-@endsection
+@section('container')
 
-@section('panel-body')
+    <div class="row justify-content-center">
 
-    <form method="POST" action="{{ route('user::memberprofile::complete') }}">
+        <div class="col-md-4">
 
-        @include('users.registerwizard_macro')
+            <form method="POST" action="{{ route('user::memberprofile::complete') }}">
 
-        {!! csrf_field() !!}
+                <div class="card mb-3">
 
-        <input type="hidden" name="verified" value="true">
+                    <div class="card-header bg-dark text-white">@yield('page-title')</div>
 
-        <p style="text-align: center;">
-            Please check that you've entered the information below correctly.
-        </p>
+                    <div class="card-body">
 
-        <hr>
+                        @include('users.registerwizard_macro')
 
-        <p style="text-align: center;">
-            My date of birth is <strong>{{ date('F j, Y', strtotime($userdata['birthdate'])) }}</strong> ({{ $age }}
-            years).
-        </p>
+                        {!! csrf_field() !!}
 
-        @endsection
+                        <input type="hidden" name="verified" value="true">
 
-        @section('panel-footer')
+                        <p style="text-align: center;">
+                            Please check that you've entered the information below correctly.
+                        </p>
 
-            <button type="submit" class="btn btn-success pull-right">The information above is correct.</button>
+                        <hr>
 
-    </form>
+                        <p style="text-align: center;">
+                            My date of birth is <strong>{{ date('F j, Y', strtotime($userdata['birthdate'])) }}</strong>
+                            ({{ $age }}
+                            years).
+                        </p>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-primary btn-block">
+                            The information above is correct.
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 @endsection

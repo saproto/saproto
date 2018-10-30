@@ -21,7 +21,7 @@ class DisplayController extends Controller
     public function index()
     {
         $displays = Display::all();
-        return view('protube.display.index', ['stations' => $displays]);
+        return view('protube.display.index', ['displays' => $displays]);
     }
 
     /**

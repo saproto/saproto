@@ -9,45 +9,30 @@
 
         <!-- Actual form data in JSON //-->
         <div class="form-group">
-            <label for="street" class="col-sm-3 control-label">Street</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way"
-                       value="{{ $address->street or "" }}">
-            </div>
+            <label for="street">Street</label>
+            <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way"
+                   value="{{ $user->address->street or "" }}">
         </div>
         <div class="form-group">
-            <label for="number" class="col-sm-3 control-label">Number</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="number" name="number" placeholder="42"
-                       value="{{ $address->number or "" }}">
-            </div>
+            <label for="number">Number</label>
+            <input type="text" class="form-control" id="number" name="number" placeholder="42"
+                   value="{{ $user->address->number or "" }}">
         </div>
         <div class="form-group">
-            <label for="zipcode" class="col-sm-3 control-label">ZIP Code</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN"
-                       value="{{ $address->zipcode or "" }}">
-            </div>
+            <label for="zipcode">ZIP Code</label>
+            <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN"
+                   value="{{ $user->address->zipcode or "" }}">
         </div>
         <div class="form-group">
-            <label for="city" class="col-sm-3 control-label">City</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="city" name="city" placeholder="Sydney"
-                       value="{{ $address->city or "" }}">
-            </div>
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" name="city" placeholder="Sydney"
+                   value="{{ $user->address->city or "" }}">
         </div>
         <div class="form-group">
-            <label for="country" class="col-sm-3 control-label">Country</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="country" name="country" placeholder="Australia"
-                       value="{{ $address->country or "" }}">
-            </div>
+            <label for="country">Country</label>
+            <input type="text" class="form-control" id="country" name="country" placeholder="Australia"
+                   value="{{ $user->address->country or "" }}">
         </div>
-
-        <a href="{{ route("user::dashboard", ['id' => $user->id]) }}" class="btn btn-default pull-right" style="width: 100px;">
-            Cancel
-        </a>
-        <button type="submit" class="btn btn-success pull-right" style="margin-right: 15px; width: 100px;">Save</button>
 
     </div>
 

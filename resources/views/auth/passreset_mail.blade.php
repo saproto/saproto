@@ -28,7 +28,7 @@
         <hr>
 
         <p>
-            <a class="btn btn-default" href="https://tap.utwente.nl/tap/pwman/index.php" target="_blank"
+            <a class="btn btn-outline-secondary " href="https://tap.utwente.nl/tap/pwman/index.php" target="_blank"
                style="width: 100%;">
                 Reset UTwente password
             </a>

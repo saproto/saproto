@@ -1,36 +1,53 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     {{ $video->title }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <p style="text-align: left; float: left; color: #fff;">
-        From <span style="color: red;"><i class="fa fa-youtube-play" aria-hidden="true"></i> YouTube</span> &mdash;
-        <a href="{{ $video->getYouTubeUrl() }}" class="underline-on-hover" target="_blank" style="color: #fff;">
-            {{ $video->youtube_title }}
-        </a>
-        by
-        <a href="{{ $video->getYouTubeChannelUrl() }}" target="_blank" style="color: #fff;" class="underline-on-hover">
-            {{ $video->youtube_user_name }}
-        </a>
-    </p>
+    <div class="row justify-content-center">
 
-    @if($video->event)
-        <p style="text-align: right; float: right; color: #fff;">
-            <i class="fa fa-calendar" aria-hidden="true"></i>
-            <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}"
-               style="color: #fff;" class="underline-on-hover">
-                {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
-            </a>
-        </p>
-    @endif
+        <div class="col-md-8 col-sm-10 col-xs-12">
 
-    <div class="clearfix"></div>
+            <div class="card">
 
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="{{ $video->getYouTubeEmbedUrl() }}" allowfullscreen></iframe>
+                <div class="card-header bg-dark text-white">
+
+                    <a href="{{ route('video::index') }}" class="btn btn-info mr-2">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+
+                    <a href="{{ $video->getYouTubeUrl() }}" class="btn btn-danger" target="_blank">
+                        <i class="fab fa-youtube mr-2" aria-hidden="true"></i> {{ $video->youtube_title }} by {{ $video->youtube_user_name }}
+                    </a>
+
+                    @if($video->event)
+                        <p style="text-align: right; float: right; color: #fff;">
+
+
+                        </p>
+
+                        <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}" class="btn btn-info float-right">
+                            <i class="fas fa-calendar mr-2" aria-hidden="true"></i> {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
+                        </a>
+
+                    @endif
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{ $video->getYouTubeEmbedUrl() }}" allowfullscreen></iframe>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 @endsection

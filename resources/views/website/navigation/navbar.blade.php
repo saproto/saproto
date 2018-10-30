@@ -1,36 +1,39 @@
-<nav id="nav" class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ route('homepage') }}">Study Association Proto</a>
-        </div>
+<header>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
+    <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
+
+        <a class="navbar-brand" href="{{ route('homepage') }}">
+            @if(config('app.env') != 'production') <i class="fas fa-hammer mr-2"></i> @endif
+            S.A. Proto
+            @if(config('app.env') != 'production') | <span class="text-uppercase">{{ config('app.env') }}</span> @endif
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="navbar">
-            <ul class="nav navbar-nav navbar-right">
+
+            <ul class="navbar-nav mr-auto">
+
                 @foreach($menuItems as $menuItem)
 
                     @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->member()))
 
                         @if($menuItem->children->count() > 0)
 
-                            <li class="dropdown">
-                                <a href="{{ $menuItem->getUrl()  }}" class="dropdown-toggle" data-toggle="dropdown"
+                            <li class="nav-item dropdown">
+                                <a href="{{ $menuItem->getUrl()  }}" class="nav-link dropdown-toggle"
+                                   data-toggle="dropdown"
                                    role="button" aria-haspopup="true"
-                                   aria-expanded="false">{{ $menuItem->menuname }} <span class="caret"></span></a>
+                                   aria-expanded="false">{{ $menuItem->menuname }}</a>
                                 <ul class="dropdown-menu">
 
                                     @foreach($menuItem->children->sortBy('order') as $childItem)
                                         @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->member()))
-                                            <li><a href="{{ $childItem->getUrl()  }}">{{ $childItem->menuname }}</a>
-                                            </li>
+                                            <a class="dropdown-item" href="{{ $childItem->getUrl()  }}">
+                                                {{ $childItem->menuname }}
+                                            </a>
                                         @endif
                                     @endforeach
 
@@ -39,8 +42,8 @@
 
                         @else
 
-                            <li>
-                                <a href="{{ $menuItem->getUrl() }}" role="button" aria-haspopup="false"
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ $menuItem->getUrl() }}" role="button" aria-haspopup="false"
                                    aria-expanded="false">{{ $menuItem->menuname }}</a>
                             </li>
 
@@ -51,88 +54,103 @@
                 @endforeach
 
                 @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie"]))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">OmNomCom <span class="caret"></span></a>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">OmNomCom</a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route("omnomcom::store::show") }}">Application</a></li>
+
+                            @foreach(config('omnomcom.stores') as $name => $store)
+                                @if(in_array(Request::ip(), $store->addresses) || Auth::user()->can($store->roles))
+                                    <a class="dropdown-item"
+                                       href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
+                                        Open store: {{ $store->name }}
+                                    </a>
+                                @endif
+                            @endforeach
+
                             @if (Auth::check() && Auth::user()->can("omnomcom"))
-                                <li role="separator" class="divider"></li>
-                                <li><a class="navbar-title">Administration:</a></li>
-                                <li><a href="{{ route("omnomcom::orders::adminlist") }}">Orders</a></li>
-                                <li><a href="{{ route("omnomcom::products::list") }}">Products</a></li>
-                                <li><a href="{{ route("omnomcom::categories::list") }}">Categories</a></li>
-                                <li><a href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a></li>
-                                <li><a href="{{ route("omnomcom::products::statistics") }}">Sales statistics</a></li>
+                                <li role="separator" class="dropdown-divider"></li>
+                                <a class="dropdown-item" href="{{ route("omnomcom::orders::adminlist") }}">Orders</a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::products::list") }}">Products</a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::categories::list") }}">Categories</a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::generateorder") }}">
+                                    Generate Supplier Order
+                                </a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::products::statistics") }}">
+                                    Sales statistics
+                                </a>
                             @endif
 
-                            <li role="separator" class="divider"></li>
+                            <li role="separator" class="dropdown-divider"></li>
 
-                            <li><a class="navbar-title">Utilities:</a></li>
-                            <li><a href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie Order Overview</a></li>
-                            <li><a href="{{ route("passwordstore::index") }}">Password Store</a></li>
+                            <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
+                                TIPCie Order Overview
+                            </a>
+                            <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
                         </ul>
                     </li>
                 @endif
 
                 @if (Auth::check() && (Auth::user()->can(["board","finadmin","alfred"])))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Admin Tools <span class="caret"></span></a>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
                             @if (Auth::user()->can("board"))
 
-                                <li><a href="{{ route("user::admin::list") }}">Users</a></li>
-                                <li><a href="{{ route("tickets::list") }}">Tickets</a></li>
-                                <li><a href="{{ route("protube::admin") }}">ProTube Admin</a></li>
-                                <li><a href="{{ route("tempadmin::index") }}">Temp Admin Admin</a></li>
+                                <a class="dropdown-item" href="{{ route("user::admin::list") }}">Users</a>
+                                <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
+                                <a class="dropdown-item" href="{{ route("protube::admin") }}">ProTube Admin</a>
+                                <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
 
-                                <li role="separator" class="divider"></li>
+                                <li role="separator" class="dropdown-divider"></li>
 
-                                <li><a href="{{ route("committee::add") }}">Add Committee</a></li>
-                                <li><a href="{{ route("event::add") }}">Add Event</a></li>
+                                <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
+                                <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
 
-                                <li role="separator" class="divider"></li>
+                                <li role="separator" class="dropdown-divider"></li>
 
-                                <li><a class="navbar-title">External Affairs:</a></li>
-                                <li><a href="{{ route("narrowcasting::list") }}">Narrowcasting</a></li>
-                                <li><a href="{{ route("companies::admin") }}">Companies</a></li>
-                                <li><a href="{{ route("joboffers::admin") }}">Job offers</a></li>
+                                <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
+                                <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
+                                <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
 
-                                <li role="separator" class="divider"></li>
+                                <li role="separator" class="dropdown-divider"></li>
 
-                                <li><a class="navbar-title">Internal Affairs:</a></li>
-                                <li><a href="{{ route("newsletter::show") }}">Edit Newsletter</a></li>
+                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Edit Newsletter</a>
 
                             @endif
 
                             @if (Auth::user()->can("board") && Auth::user()->can("finadmin"))
 
-                                <li role="separator" class="divider"></li>
+                                <li role="separator" class="dropdown-divider"></li>
 
                             @endif
 
                             @if (Auth::user()->can("finadmin"))
 
-                                <li><a class="navbar-title">Financial:</a></li>
-                                <li><a href="{{ route("omnomcom::accounts::list") }}">Accounts</a></li>
-                                <li><a href="{{ route("event::financial::list") }}">Activities</a></li>
-                                <li><a href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a></li>
-                                <li><a href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a></li>
-                                <li><a href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a></li>
+                                <a class="dropdown-item" href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
+                                <a class="dropdown-item" href="{{ route("event::financial::list") }}">Activities</a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::list") }}">
+                                    Withdrawals
+                                </a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::unwithdrawable") }}">
+                                    Unwithdrawable
+                                </a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">
+                                    Mollie Payments
+                                </a>
 
                             @endif
 
-
                             @if(Auth::user()->can(["alfred","board"]))
 
-                                <li role="separator" class="divider"></li>
+                                <li role="separator" class="dropdown-divider"></li>
 
-                                <li><a class="navbar-title">SmartXp:</a></li>
-
-                                <li><a href="{{ route("dmx::index") }}">Fixtures</a></li>
-                                <li><a href="{{ route("dmx::override::index") }}">Override</a></li>
+                                <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
+                                <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
 
                             @endif
 
@@ -141,109 +159,136 @@
                 @endif
 
                 @if (Auth::check() && Auth::user()->can("board"))
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Web Admin <span class="caret"></span></a>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">Site <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route("menu::list") }}">Menu</a></li>
-                            <li><a href="{{ route("video::admin::index") }}">Videos</a></li>
-                            <li><a href="{{ route("page::list") }}">Pages</a></li>
-                            <li><a href="{{ route("news::admin") }}">News</a></li>
-                            <li><a href="{{ route("email::admin") }}">Email</a></li>
-                            <li><a href="{{ route("achievement::list") }}">Achievements</a></li>
-                            <li><a href="{{ route("welcomeMessages::list") }}">Welcome Messages</a></li>
+                            <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
+                            <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
+                            <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
+                            <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
+                            <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
+                            <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                            <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
 
                             @if(Auth::user()->can('sysadmin'))
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{{ route("protube::radio::index") }}">ProTube Radio Stations</a></li>
-                                <li><a href="{{ route("protube::display::index") }}">ProTube Displays</a></li>
-                                <li><a href="{{ route("protube::soundboard::index") }}">Soundboard Sounds</a></li>
-                                <li><a href="{{ route("alias::index") }}">Aliases</a></li>
-                                <li><a href="{{ route("announcement::index") }}">Announcements</a></li>
-                                <li><a href="{{ route("authorization::overview") }}">Authorization</a></li>
+                                <li role="separator" class="dropdown-divider"></li>
+                                <a class="dropdown-item" href="{{ route("protube::radio::index") }}">
+                                    ProTube Radio Stations
+                                </a>
+                                <a class="dropdown-item" href="{{ route("protube::display::index") }}">
+                                    ProTube Displays
+                                </a>
+                                <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">
+                                    Soundboard Sounds
+                                </a>
+                                <a class="dropdown-item" href="{{ route("headerimage::index") }}">
+                                    Header Images
+                                </a>
+                                <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
+                                <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
+                                <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                             @endif
 
-                            <li role="separator" class="divider"></li>
+                            <li role="separator" class="dropdown-divider"></li>
 
-                            <li><a class="navbar-title">Utilities:</a></li>
-                            <li><a href="{{ route("passwordstore::index") }}">Password Store</a></li>
+                            <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
 
                         </ul>
                     </li>
                 @endif
 
-                <form method="post" action="{{ route('search') }}" class="navbar-form navbar-right navbar__search">
-                    {{ csrf_field() }}
-                    <div class="input-group">
-                        <input class="navbar__search__input form-control"
-                               type="search" name="query" placeholder="Search">
-                        <!--<span class="navbar__search__icon input-group-addon">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                        </span>-->
-                        <span class="input-group-btn">
-                            <button type="submit" class="navbar__search__icon" style=""><i class="fa fa-search"
-                                                                                           aria-hidden="true"></i></button>
-                        </span>
-                    </div>
-                </form>
-
-                @if (Auth::check())
-
-                    @if(Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board')))
-                        <li>
-                            <a href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
-                               aria-expanded="false">ProTube Admin</a>
-                        </li>
-                    @endif
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false"><img class="profile__photo profile__photo--small"
-                                                      src="{{ Auth::user()->generatePhotoPath(64, 64) }}"
-                                                      alt="{{ Auth::user()->name }}"> <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ route('user::dashboard') }}">Dashboard</a></li>
-                            <li><a href="{{ route('omnomcom::orders::list') }}">Purchase History</a></li>
-
-                            @if(Auth::check() && Auth::user()->member)
-                                <li><a href="{{ route('user::profile') }}">My Profile</a></li>
-                            @else
-                                <li><a href="{{ route('becomeamember') }}">Become a member!</a></li>
-                            @endif
-
-                            @if (Auth::check() && Auth::user()->member)
-                                <li>
-                                    <a href="#" data-toggle="modal" data-target="#slack-modal">
-                                        Slack
-                                        <span class="badge"><i class="fa fa-circle green" aria-hidden="true"></i> <span
-                                                    id="slack__online">...</span></span>
-                                    </a>
-                                </li>
-                            @endif
-
-                            @if (Session::has('impersonator'))
-                                <li><a href="{{ route('user::quitimpersonating') }}">Quit Impersonation</a></li>
-                            @else
-                                <li><a href="{{ route('login::logout') }}">Logout</a></li>
-                            @endif
-                        </ul>
+                @if(Auth::check() && (Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board'))))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
+                           aria-expanded="false">ProTube Admin</a>
                     </li>
-                @else
-
-                    <li>
-                        <a href="{{ route('login::register') }}">New Account</a>
-                    </li>
-
-                    <form class="navbar-form navbar-right">
-                        <a class="btn btn-success" href="{{ route('login::show') }}">
-                            LOG-IN
-                        </a>
-                    </form>
-
                 @endif
 
             </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+
+            <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
+                {{ csrf_field() }}
+                <div class="input-group">
+                    <input type="text" class="form-control"
+                           placeholder="Search" type="search" name="query" style="max-width: 125px;">
+                    <div class="input-group-append">
+                        <button type="submit" class="input-group-text btn btn-info">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            @if (Auth::check())
+
+                <form class="form-inline mt-2 mt-md-0">
+
+                    <ul class="navbar-nav mr-auto">
+
+                        <li class="nav-item dropdown float-right">
+                            <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">
+                                {{ Auth::user()->calling_name }}
+                                <img class="rounded-circle ml-2"
+                                     src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
+                                     style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
+                                <a class="dropdown-item" href="{{ route('omnomcom::orders::list') }}">
+                                    Purchase History
+                                </a>
+
+                                @if(Auth::check() && Auth::user()->member)
+                                    <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
+                                @else
+                                    <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
+                                @endif
+
+                                @if (Auth::check() && Auth::user()->member)
+                                    <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
+                                        Slack
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-circle green"></i> <span id="slack__online">...</span>
+                                        </span>
+                                    </a>
+                                @endif
+
+                                @if (Session::has('impersonator'))
+                                    <a class="dropdown-item" href="{{ route('user::quitimpersonating') }}">
+                                        Quit Impersonation
+                                    </a>
+                                @else
+                                    <a class="dropdown-item" href="{{ route('login::logout') }}">Logout</a>
+                                @endif
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </form>
+
+            @else
+
+                <form class="form-inline mt-2 mt-md-0">
+                    <a class="btn btn-outline-light" href="{{ route('login::register') }}"
+                       style="margin-right: 10px;">
+                        <i class="fas fa-user-plus mr-2"></i> Register
+                    </a>
+                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i>
+                        Log-in</a>
+                </form>
+
+                </form>
+
+            @endif
+
+        </div>
+
+    </nav>
+
+</header>

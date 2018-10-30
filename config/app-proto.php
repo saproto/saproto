@@ -8,6 +8,7 @@ return [
 
     'primary-domain' => env('PRIMARY_DOMAIN'),
     'app-url' => config('app.url'),
+    'assets-domain' => env('REDIRECT_ASSETS_DOMAIN', null),
 
     /*
      * Whitelist for debug environment
@@ -31,15 +32,6 @@ return [
      */
     'google-key-public' => env('GOOGLE_KEY_PUBLIC'),
     'google-key-private' => env('GOOGLE_KEY_PRIVATE'),
-
-    /*
-     * DirectAdmin config
-     */
-    'directadmin-hostname' => env('DA_HOSTNAME', null),
-    'directadmin-port' => env('DA_PORT', null),
-    'directadmin-username' => env('DA_USERNAME', null),
-    'directadmin-password' => env('DA_PASSWORD', null),
-    'directadmin-domain' => env('DA_DOMAIN', null),
 
     /*
      * Spotify config

@@ -1,93 +1,28 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Archive for {{ $year }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    @include('event.calendar_includes.archivebar')
 
-        <div class="col-md-12">
+    <div class="row justify-content-center">
 
-            <div class="panel panel-default">
+        @foreach($months as $key => $month)
 
-                <div class="panel-body">
+            @if(date('F Y', strtotime($year.'-'.$key.'-25')) < date('U') || count($month) > 0)
 
-                    <span style="font-weight: 700; margin: 0 15px;">Archive</span>
+                @include('event.calendar_includes.rendermonth', [
+                    'events' => $month,
+                    'month_name' => date('F Y', strtotime($year.'-'.$key.'-25'))
+                ])
 
-                    @foreach($years as $y)
+            @endif
 
-                        <span style="padding: 5px 15px; background-color: rgba(0,0,0,0.05); margin-right: 15px;">
-                        <a href="{{ route('event::archive', ['year'=>$y]) }}" style="text-decoration: none;">
-                            {{ $y }}
-                        </a>
-                        </span>
-
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        </div>
+        @endforeach
 
     </div>
-
-    @foreach($months as $key => $month)
-
-        @if($key % 3 == 1)
-
-            <div class="row calendar">
-
-                @endif
-
-                <div class="col-md-4">
-
-                    <div class="panel panel-default">
-
-                        <div class="panel-body">
-
-                            <h3 style="text-align: center;">
-                                {{ date('F Y', strtotime($year.'-'.$key.'-25')) }}
-                            </h3>
-
-                            <hr>
-
-                            @if(count($month) > 0)
-
-                                <?php $week = date('W', $month[0]->start); ?>
-
-                                @foreach($month as $i => $event)
-
-                                    @if($week != date('W', $event->start))
-                                        <hr>
-                                    @endif
-
-                                    @include('event.display_includes.event_block', ['event'=> $event])
-
-                                    <?php $week = date('W', $event->start); ?>
-
-                                @endforeach
-
-                            @else
-                                <p style="font-style: italic; text-align: center;">
-                                    No activities to show...
-                                </p>
-                            @endif
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                @if($key % 3 === 0)
-
-            </div>
-
-        @endif
-
-    @endforeach
 
 @endsection

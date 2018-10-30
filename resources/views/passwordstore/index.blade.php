@@ -1,4 +1,4 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('head')
     @parent
@@ -9,113 +9,147 @@
     Password Store
 @endsection
 
-@section('content')
+@section('container')
 
-    <p style="text-align: center;">
-        <a href="{{ route('passwordstore::add', ['type' => 'password']) }}" class="btn btn-success">
-            Add Password
-        </a>
-        <a href="{{ route('passwordstore::add', ['type' => 'note']) }}" class="btn btn-success">
-            Add Secure Note
-        </a>
-    </p>
+    <div class="row justify-content-center">
 
-    <hr>
+        <div class="col-2 mb-3">
 
-    @if (count($passwords) > 0)
+            <a href="{{ route('passwordstore::add', ['type' => 'password']) }}" class="btn btn-success btn-block mb-3">
+                Add Password
+            </a>
+            <a href="{{ route('passwordstore::add', ['type' => 'note']) }}" class="btn btn-success btn-block">
+                Add Secure Note
+            </a>
 
-        <table class="table">
+        </div>
 
-            <thead>
+        <div class="col-8">
 
-            <tr>
+            <div class="card mb-3">
 
-                <th>#</th>
-                <th>&nbsp;</th>
-                <th>Description</th>
-                <th>Access</th>
-                <th>URL</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Age</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
+                <div class="card-header bg-dark text-white mb-1">
+                    Password store
+                </div>
 
-            </tr>
 
-            </thead>
+                @if (count($passwords) > 0)
 
-            <?php $i = 0; ?>
+                    <table class="table table-hover table-borderless table-sm">
 
-            @foreach($passwords as $password)
+                        <thead>
 
-                <?php $i++; ?>
+                        <tr class="bg-dark text-white">
 
-                @if($password->canAccess(Auth::user()))
+                            <td></td>
+                            <td>Description</td>
+                            <td>Access</td>
+                            <td>URL</td>
+                            <td>Username</td>
+                            <td>Password</td>
+                            <td>Age</td>
+                            <td></td>
+                            <td></td>
 
-                    <tr>
+                        </tr>
 
-                        <td>{{ $password->id }}</td>
+                        </thead>
 
-                        <td>
-                            @if($password->isNote())
-                                <i class="fa fa-sticky-note-o" aria-hidden="true"></i>
-                            @else
-                                <i class="fa fa-key" aria-hidden="true"></i>
+                        <?php $i = 0; ?>
+
+                        @foreach($passwords as $password)
+
+                            <?php $i++; ?>
+
+                            @if($password->canAccess(Auth::user()))
+
+                                <tr>
+
+                                    <td class="text-right">
+                                        @if($password->isNote())
+                                            <i class="fas fa-sticky-note" aria-hidden="true"></i>
+                                        @else
+                                            <i class="fas fa-key" aria-hidden="true"></i>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        {{ $password->description }}
+                                    </td>
+                                    <td>{{ $password->permission->display_name }}</td>
+
+                                    @if($password->isNote())
+
+                                        <td colspan="3">
+                                            <span class="passwordmanager__shownote" data-toggle="modal"
+                                                  data-target="#passwordmodal-{{ $password->id }}">
+                                                Click here to view this secure note.
+                                            </span>
+                                        </td>
+
+                                    @else
+
+                                        <td>
+                                            @if($password->url)
+                                                <a href="{{ $password->url }}">
+                                                    <i class="fas fa-globe-africa" aria-hidden="true"></i>
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a class="passwordmanager__copy" href="#" copyTarget="user_{{ $i }}">
+                                                <i class="fas fa-clipboard"></i>
+                                            </a>
+                                            <input type="text" class="passwordmanager__hidden" id="user_{{ $i }}"
+                                                   value="{{ Crypt::decrypt($password->username) }}">
+                                        </td>
+                                        <td>
+                                            <a class="passwordmanager__copy" href="#"
+                                               copyTarget="pass_{{ $i }}">
+                                                <i class="fas fa-clipboard"></i>
+                                            </a>
+                                            <input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}"
+                                                   value="{{ Crypt::decrypt($password->password) }}">
+                                        </td>
+
+                                    @endif
+
+                                    <td class="{{ ($password->age() > 12 ? 'text-danger' : 'text-primary') }}">
+                                        {{ $password->age() }} months
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}">
+                                            <i class="fas fa-edit mr-2"></i>
+                                        </a>
+                                        <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+
                             @endif
-                        </td>
 
-                        <td>
-                            {{ $password->description }}
-                        </td>
-                        <td>{{ $password->permission->display_name }}</td>
+                        @endforeach
 
-                        @if($password->isNote())
+                    </table>
 
-                            <td colspan="3">
-                                <span class="passwordmanager__shownote" data-toggle="modal"
-                                      data-target="#passwordmodal-{{ $password->id }}">
-                                    Click here to view this secure note.
-                                </span>
-                            </td>
+                @else
 
-                        @else
-
-                            <td>
-                                @if($password->url)
-                                    <a href="{{ $password->url }}" class="btn btn-default"><i class="fa fa-external-link" aria-hidden="true"></i>
-                                    </a>
-                                @endif
-                            </td>
-                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="user_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="user_{{ $i }}" value="{{ Crypt::decrypt($password->username) }}"></td>
-                            <td><a class="passwordmanager__copy btn btn-default" href="#" copyTarget="pass_{{ $i }}"><i class="fa fa-clipboard" aria-hidden="true"></i></a><input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}" value="{{ Crypt::decrypt($password->password) }}"></td>
-
-                        @endif
-
-                        <td style="color: {{ ($password->age() > 12 ? '#ff0000' : '#00ff00') }};">
-                            {{ $password->age() }} months
-                        </td>
-
-                        <td>
-                            <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                            <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        </td>
-
-                    </tr>
+                    <div class="card-body">
+                        <p class="card-text text-centerØ">
+                            There is nothing for you to see.
+                        </p>
+                    </div>
 
                 @endif
 
-            @endforeach
+            </div>
 
-        </table>
+        </div>
 
-    @else
-
-        <p style="text-align: center;">
-            There is nothing for you to see.
-        </p>
-
-    @endif
+    </div>
 
     @foreach($passwords as $password)
 
@@ -150,7 +184,7 @@
     @parent
 
     <script type="text/javascript">
-        $(".passwordmanager__copy").click(function() {
+        $(".passwordmanager__copy").click(function () {
             //copyToClipboard($("#" + $(this).attr("copyTarget")));
             copyToClipboard(document.getElementById($(this).attr("copyTarget")));
         });
@@ -187,7 +221,7 @@
             var succeed;
             try {
                 succeed = document.execCommand("copy");
-            } catch(e) {
+            } catch (e) {
                 succeed = false;
             }
             // restore original focus

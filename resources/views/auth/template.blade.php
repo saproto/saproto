@@ -2,26 +2,31 @@
 
 @section('body')
 
-    <div id="auth__header">
+    <div class="row justify-content-center">
 
-        <h2>@yield('page-title')</h2>
+        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12 text-center">
 
-    </div>
+            <div class="card mb-3 mt-5">
 
-    <div id="auth__container" class="col-lg-2 col-lg-offset-5 col-sm-4 col-sm-offset-4 col-xs-10 col-xs-offset-1">
+                <div class="card-header text-center bg-dark text-white">
+                    S.A. Proto | @yield('page-title')
+                </div>
 
-        <p style="text-align: center">
-            <img id="auth__logo" src="{{ asset('images/logo/inverse.png') }}" width="150px">
-        </p>
+                <div class="card-body text-center">
 
-        @yield('login-body')
+                    @yield('login-body')
 
-        <p style="text-align: center;">
-            <br>
-            <a href="/" style="color: #fff;">
-                <sub>Go back to homepage.</sub>
-            </a>
-        </p>
+                </div>
+
+                <a href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
+                    Go back to homepage.
+                </a>
+
+            </div>
+
+            <img src="{{ asset('images/logo/regular.png') }}" width="60%" class="mb-3 mt-5">
+
+        </div>
 
     </div>
 
@@ -33,7 +38,7 @@
 
     <style>
 
-        #footer {
+        footer {
             display: none;
         }
 

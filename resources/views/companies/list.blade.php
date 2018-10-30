@@ -1,54 +1,48 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
-    Creative Technology Companies
+    Interesting companies
 @endsection
 
-@section('content')
+@section('container')
 
-    @foreach($companies as $key => $company)
+    <div class="row row-eq-height justify-content-center">
 
-        <div class="company__row">
+        @foreach($companies as $key => $company)
 
-            <div class="row">
+            <div class="col-md-4 mb-4">
 
-                <div class="col-md-5 col-xs-12">
-
-                    <div class="company__row__image">
-
-                        <div style="{{ ($company->image ? "background-image: url(".$company->image->generateImagePath(600, null).");" : '') }}">
-
+                <div class="card h-100">
+                    <div class="card-header text-center">
+                        <div class="align-items-center row " style="height: 120px;">
+                            <div class="col" style="display: block;">
+                                @if($company->image)
+                                    <img src="{{ $company->image->generateImagePath(null, null) }}"
+                                         style="max-width: 70%; max-height: 100px;">
+                                @endif
+                            </div>
                         </div>
-
                     </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $company->name }}</h5>
 
-                </div>
+                        <a href="{{ route('companies::show', ['id' => $company->id]) }}" class="card-link text-info">
+                            Learn more
+                        </a>
+                        <a href="{{ $company->url }}" class="card-link text-info">
+                            Visit website
+                        </a>
 
-                <div class="col-md-7 col-xs-12 company__row__excerpt">
-
-                    <div class="panel panel-default">
-
-                        <div class="panel-body">
-
-                            <h3>{{ $company->name }}</h3>
-
-                            <a href="{{ route('companies::show', ['id' => $company->id]) }}">Learn more about this
-                                company</a> or <a href="{{$company->url}}" target="_blank">visit their website!</a>
-
-                            <hr>
-
+                        <div class="mt-3">
                             {!! Markdown::convertToHtml($company->excerpt) !!}
-
                         </div>
-
                     </div>
-
                 </div>
 
             </div>
 
-        </div>
+        @endforeach
 
-    @endforeach
+    </div>
 
 @endsection

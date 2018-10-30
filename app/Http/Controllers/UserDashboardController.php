@@ -64,7 +64,10 @@ class UserDashboardController extends Controller
         if ($user->member) {
             $userdata['show_birthday'] = $request->has('show_birthday');
             $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
+            $userdata['show_achievements'] = $request->has('show_achievements');
         }
+
+        $userdata['keep_omnomcom_history'] = $request->has('keep_omnomcom_history');
 
         if ($userdata['email'] !== $user->email) {
 
@@ -161,6 +164,7 @@ class UserDashboardController extends Controller
         }
 
         if (Session::has('flash_userdata') && $request->has('verified')) {
+            $userdata['birthdate'] = date('Y-m-d', strtotime($userdata['birthdate']));
             $user->fill($userdata);
             $user->save();
 

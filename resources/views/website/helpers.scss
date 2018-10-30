@@ -3,3 +3,26 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.leftborder {
+
+  border-left-width: 5px !important;
+  border-left-style: solid !important;
+  
+  &-primary {
+    border-left-color: $primary;
+  }
+  &-success {
+    border-left-color: $success;
+  }
+  &-info {
+    border-left-color: $info;
+  }
+  &-warning {
+    border-left-color: $warning;
+  }
+  &-danger {
+    border-left-color: $danger;
+  }
+
+}

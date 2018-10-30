@@ -4,6 +4,8 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
@@ -52,7 +54,8 @@ class OmNomController extends Controller
             return view('omnomcom.store.show', ['categories' => $categories, 'store' => $storedata, 'storeslug' => $store, 'minors' => $minors]);
 
         } else {
-            return view('omnomcom.store.pick', ['stores' => $stores]);
+            Session::flash('flash_message', 'This store does not exist. Please check the URL.');
+            return Redirect::route('homepage');
         }
     }
 

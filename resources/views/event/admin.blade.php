@@ -1,193 +1,207 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     Event Admin
 @endsection
 
-@section('content')
+@section('container')
 
-    @if(Auth::user()->can("finadmin") && $event->activity && $event->activity->closed)
-        <p style="text-align: center;">
-            @if ($event->activity->closedAccount)
-                This activity was closed on account {{ $event->activity->closedAccount->account_number }}
-                ({{ $event->activity->closedAccount->name }}).
-            @else
-                This activity is closed on an unknown account.
-            @endif
-        </p>
-        <hr>
-    @endif
+    <div class="row justify-content-center">
 
-    <div class="btn-group btn-group-justified">
-        <a href="{{ route("event::checklist", ['id' => $event->id]) }}" class="btn btn-success">
-            Participant Checklist
-        </a>
-    </div>
+        <div class="col-md-4">
 
-    <hr>
-
-    @if ($event->shouldShowDietInfo())
-
-        <p style="text-align: center;">
-            Diet and alergy information for Event.
-        </p>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>User</th>
-                <th>Diet and Allergy Info</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            @foreach($event->returnAllUsers() as $user)
-
-                @if($user->hasDiet())
-
-                    <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{!! $user->renderDiet() !!}</td>
-                    </tr>
-
-                @endif
-
-            @endforeach
-
-            </tbody>
-        </table>
-
-    @else
-
-        <p style="text-align: center;">
-            There is no diet and allergy information available for this event.
-        </p>
-
-    @endif
-
-    @if (count($event->tickets) > 0)
-
-        <hr>
-
-        <p style="text-align: center;">
-            <a class="form-control btn btn-success" href="{{ route('event::scan', ['id' => $event->id]) }}">
-                Start Scanner Application for Event
+            <a href="{{ route("event::checklist", ['id' => $event->id]) }}" class="btn btn-success btn-block mb-3">
+                Participant Checklist
             </a>
-        </p>
 
-        @foreach($event->tickets as $ticket)
+            @if ($event->shouldShowDietInfo())
 
-            <div class="panel panel-default">
-                <div class="panel-heading" data-toggle="collapse" href="#ticket-{{ $ticket->id }}"
-                     style="cursor: pointer;">
-                    <h1 class="panel-title">
-                        <strong>{{ $ticket->product->name }}</strong>
-                        <span class="label label-success pull-right">
-                            {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
-                        </span>
-                        <span class="label label-info pull-right" style="margin-right: 10px;">
-                            &euro;{{ number_format($ticket->turnover(), 2) }}
-                        </span>
-                    </h1>
-                </div>
-                <div id="ticket-{{ $ticket->id }}" class="panel-collapse collapse" role="tabpanel">
+                <div class="card">
 
-                    @if ($ticket->purchases->count() > 0)
+                    <div class="card-header bg-dark text-white">
+                        Diet and allergy information.
+                    </div>
+
+                    <div class="card-body">
+
                         <table class="table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>User</th>
-                                @if($event->shouldShowDietInfo())
-                                    <th>Diet</th>
-                                @endif
-                                <th class="dontprint">Price</th>
-                                <th class="dontprint">Date of Purchase</th>
-                                <th>Ticket Scanned</th>
-                                @if (Auth::user()->can('board'))
-                                    <th class="dontprint">Delete Ticket</th>
-                                @endif
-                            </tr>
-                            </thead>
                             <tbody>
-                            @foreach($ticket->purchases as $purchase)
-                                <tr>
-                                    <td>{{ $purchase->id }}</td>
-                                    <td>
-                                        {{ $purchase->user->name }}
-                                        @if($purchase->user->age() >= 18)
-                                            <span class="label label-success">
-                                                <i class="fa fa-check" aria-hidden="true"></i> 18+
-                                            </span>
-                                        @else
-                                            <span class="label label-danger">
-                                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> 18-
-                                            </span>
-                                        @endif
-                                    </td>
-                                    @if($event->shouldShowDietInfo())
-                                        <td>
-                                            @if ($purchase->user->hasDiet())
-                                                <span class="label label-danger">
-                                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> yes
-                                                </span>
-                                            @else
-                                                <span class="label label-success">
-                                                    <i class="fa fa-check" aria-hidden="true"></i> no
-                                                </span>
-                                            @endif
-                                        </td>
-                                    @endif
-                                    <td class="dontprint">
-                                        &euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
-                                    <td class="dontprint">{{ $purchase->created_at }}</td>
-                                    <td class="events__scanned">
-                                        @if ($purchase->scanned === null)
-                                            <a data-id="{{ $purchase->barcode }}"
-                                               class="events__scannedButton dontprint" href="#">
-                                                Scan Manually
-                                            </a>
-                                        @else
-                                            {{ $purchase->scanned }} /
-                                            <a href="{{ route('tickets::unscan', ['barcode' => $purchase->barcode]) }}">
-                                                Unscan
-                                            </a>
-                                        @endif
-                                    </td>
-                                    @if (Auth::user()->can('board'))
-                                        <td class="dontprint">
-                                            @if($purchase->orderline->isPayed())
-                                                Already Paid
-                                            @elseif($purchase->scanned)
-                                                Already Used
-                                            @else
-                                                <a href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
-                                                   onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
-                                            <span class="label label-danger">
-                                                Delete
-                                            </span>
-                                                </a>
-                                            @endif
-                                        </td>
-                                    @endif
-                                </tr>
+
+                            @foreach($event->returnAllUsers() as $user)
+
+                                @if($user->hasDiet())
+
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{!! $user->renderDiet() !!}</td>
+                                    </tr>
+
+                                @endif
+
                             @endforeach
+
                             </tbody>
                         </table>
-                    @else
-                        <div class="panel-body">
-                            <p style="text-align: center">
-                                This ticket has not sold yet.
-                            </p>
-                        </div>
-                    @endif
+
+                    </div>
 
                 </div>
+
+            @endif
+
+        </div>
+
+        @if (count($event->tickets) > 0)
+
+            <div class="col-md-8">
+
+                <div class="card">
+
+                    <div class="card-header bg-dark text-white">
+                        Event tickets
+                    </div>
+
+                    <div class="card-body">
+
+                        <a class="btn btn-success btn-block" href="{{ route('event::scan', ['id' => $event->id]) }}">
+                            Start Scanner Application for Event
+                        </a>
+
+                        <hr>
+
+                        @foreach($event->tickets as $ticket)
+
+                            <div class="card mb-3">
+
+                                <div class="card-header bg-dark text-white" style="cursor: pointer;"
+                                     data-toggle="collapse" data-target="#ticket__collapse__{{ $ticket->id }}">
+                                    Ticket <strong>{{ $ticket->product->name }}</strong>
+                                    <span class="badge badge-primary float-right">
+                                        {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
+                                    </span>
+                                    <span class="badge badge-info float-right" style="margin-right: 10px;">
+                                        &euro;{{ number_format($ticket->turnover(), 2) }}
+                                    </span>
+                                </div>
+
+                                <div class="collapse" id="ticket__collapse__{{ $ticket->id }}">
+
+                                    <div class="card-body">
+
+                                        @if ($ticket->purchases->count() > 0)
+
+                                            <table class="table">
+
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>User</th>
+                                                    <th></th>
+                                                    @if($event->shouldShowDietInfo())
+                                                        <th>Diet</th>
+                                                    @endif
+                                                    <th>Price</th>
+                                                    <th>Date of Purchase</th>
+                                                    <th>Ticket Scanned</th>
+                                                    @if (Auth::user()->can('board'))
+                                                        <th></th>
+                                                    @endif
+                                                </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                @foreach($ticket->purchases as $purchase)
+                                                    <tr>
+                                                        <td>{{ $purchase->id }}</td>
+                                                        <td>{{ $purchase->user->name }}</td>
+                                                        <td>
+                                                            @if($purchase->user->age() >= 18)
+                                                                <span class="badge badge-success">
+                                                                <i class="fas fa-check" aria-hidden="true"></i> 18+
+                                                            </span>
+                                                            @else
+                                                                <span class="badge badge-danger">
+                                                                <i class="fas fa-exclamation-triangle"
+                                                                   aria-hidden="true"></i> 18-
+                                                            </span>
+                                                            @endif
+                                                        </td>
+                                                        @if($event->shouldShowDietInfo())
+                                                            <td>
+                                                                @if ($purchase->user->hasDiet())
+                                                                    <span class="badge badge-danger">
+                                                                    <i class="fas fa-exclamation-triangle"
+                                                                       aria-hidden="true"></i>
+                                                                </span>
+                                                                @else
+                                                                    <span class="label label-success">
+                                                                    <i class="badge badge-check" aria-hidden="true"></i>
+                                                                </span>
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                        <td>
+                                                            &euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
+                                                        <td>{{ $purchase->created_at }}</td>
+                                                        <td class="events__scanned">
+                                                            @if ($purchase->scanned === null)
+                                                                <a data-id="{{ $purchase->barcode }}"
+                                                                   class="events__scannedButton dontprint" href="#">
+                                                                    Scan Manually
+                                                                </a>
+                                                            @else
+                                                                {{ $purchase->scanned }} /
+                                                                <a href="{{ route('tickets::unscan', ['barcode' => $purchase->barcode]) }}">
+                                                                    Unscan
+                                                                </a>
+                                                            @endif
+                                                        </td>
+                                                        @if (Auth::user()->can('board'))
+                                                            <td class="dontprint">
+                                                                @if($purchase->scanned)
+                                                                    Used
+                                                                @elseif($purchase->orderline->isPayed())
+                                                                    Paid
+                                                                @else
+                                                                    <a class="badge badge-danger"
+                                                                       href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
+                                                                       onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
+                                                                        Delete
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+
+                                            </table>
+
+                                        @else
+
+                                            <p class="card-text text-center">
+                                                This ticket has not sold yet.
+                                            </p>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        @endforeach
+
+                    </div>
+
+                </div>
+
             </div>
 
-        @endforeach
+        @endif
 
-    @endif
+    </div>
 
 @endsection
 
@@ -219,19 +233,4 @@
 
     </script>
 
-@endsection
-
-@section('stylesheet')
-    @parent
-    <style type="text/css">
-        @media print {
-            a[href]:after {
-                content: none !important;
-            }
-
-            #footer, #header, p, textarea, hr, .dontprint {
-                display: none !important;
-            }
-        }
-    </style>
 @endsection

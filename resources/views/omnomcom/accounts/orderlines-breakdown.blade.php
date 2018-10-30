@@ -1,60 +1,70 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     {{ $title }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-4">
 
-            <table class="table table-hover">
+            <div class="card mb-3">
 
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                </div>
 
-                <tbody>
+                <table class="table table-hover table-sm">
 
-                @foreach($accounts as $key => $account)
-
-                    <tr data-toggle="collapse" data-target=".{{ $key }}" style="cursor: pointer;">
-                        <th>{{ $key }}</th>
-                        <th>{{ $account->name }}</th>
-                        <th>&euro; {{ number_format($account->total, 2) }}</th>
-
+                    <thead>
+                    <tr class="bg-dark text-white">
+                        <td></td>
+                        <td>Name</td>
+                        <td>Total</td>
                     </tr>
+                    </thead>
 
-                    @foreach($account->byDate as $date => $amount)
-                        <tr class="collapse {{ $key }}">
-                            <td></td>
-                            <td>{{ $date }}</td>
-                            <td>&euro; {{ number_format($amount, 2) }}</td>
+                    <tbody>
+
+                    @foreach($accounts as $key => $account)
+
+                        <tr data-toggle="collapse" data-target=".collapse-{{ $key }}" style="cursor: pointer;">
+                            <th>{{ $key }}</th>
+                            <td>{{ $account->name }}</td>
+                            <td>&euro; {{ number_format($account->total, 2) }}</td>
+
                         </tr>
+
+                        @foreach($account->byDate as $date => $amount)
+                            <tr class="collapse collapse-{{ $key }}">
+                                <td></td>
+                                <td>{{ $date }}</td>
+                                <td>&euro; {{ number_format($amount, 2) }}</td>
+                            </tr>
+                        @endforeach
+
                     @endforeach
 
-                @endforeach
+                    @if(isset($total))
 
-                @if(isset($total))
+                        <tr>
+                            <td></td>
+                            <td class="text-right">Total</td>
+                            <td class="font-weight-bold">
+                                &euro; {{ number_format($total, 2) }}
+                            </td>
 
-                    <tr>
-                        <th>&nbsp;</th>
-                        <th style="text-align: right;"><br>Total</th>
-                        <th><br>&euro; {{ number_format($total, 2) }}</th>
+                        </tr>
 
-                    </tr>
+                    @endif
 
-                @endif
+                    </tbody>
 
-                </tbody>
+                </table>
 
-            </table>
+            </div>
 
         </div>
 

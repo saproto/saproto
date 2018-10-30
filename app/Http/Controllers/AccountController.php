@@ -60,7 +60,7 @@ class AccountController extends Controller
     public function show($id)
     {
         $account = Account::findOrFail($id);
-        return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::where('account_id', $account->id)->paginate(30)]);
+        return view('omnomcom.accounts.show', ['account' => $account, 'products' => Product::where('account_id', $account->id)->paginate(10)]);
     }
 
     /**

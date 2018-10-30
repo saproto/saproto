@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Session;
 use Proto\Mail\OmnomcomFailedWithdrawalNotification;
 use Proto\Mail\OmnomcomWithdrawalNotification;
 use Proto\Models\FailedWithdrawal;
@@ -22,6 +23,7 @@ use DB;
 
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\SepaUtilities\SepaUtilities;
+use AbcAeffchen\Sephpa\SephpaInputException;
 
 class WithdrawalController extends Controller
 {
@@ -32,7 +34,7 @@ class WithdrawalController extends Controller
      */
     public function index()
     {
-        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(12)]);
+        return view("omnomcom.withdrawals.index", ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(6)]);
     }
 
     /**
@@ -73,6 +75,7 @@ class WithdrawalController extends Controller
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
 
             if ($orderline->isPayed()) continue;
+            if ($orderline->user === null) continue;
             if ($orderline->user->bank == null) continue;
 
             if ($max != null) {
@@ -308,16 +311,20 @@ class WithdrawalController extends Controller
 
         $i = 1;
         foreach ($withdrawal->users() as $user) {
-            $direct_debit->addPayment([
-                'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
-                'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
-                'mndtId' => $user->bank->machtigingid,
-                'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
-                'bic' => $user->bank->bic,
-                'dbtr' => $user->name,
-                'iban' => $user->bank->iban,
-            ]);
-            $i++;
+            try {
+                $direct_debit->addPayment([
+                    'pmtId' => sprintf('%s-1-%s', $withdrawal->withdrawalId(), $i),
+                    'instdAmt' => number_format($withdrawal->totalForUser($user), 2, '.', ''),
+                    'mndtId' => $user->bank->machtigingid,
+                    'dtOfSgntr' => date('Y-m-d', strtotime($user->bank->created_at)),
+                    'bic' => $user->bank->bic,
+                    'dbtr' => $user->name,
+                    'iban' => $user->bank->iban,
+                ]);
+                $i++;
+            } catch (SephpaInputException $e) {
+                abort(400, sprintf("Error for user #%s: %s", $user->id, $e->getMessage()));
+            }
         }
 
         $response = $direct_debit->generateOutput([], false)[0];
@@ -393,6 +400,10 @@ class WithdrawalController extends Controller
 
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
             if ($orderline->isPayed()) continue;
+            if ($orderline->user === null) {
+                Session::flash('flash_message', 'There are unpaid anonymous orderlines. Please contact the IT committee.');
+                continue;
+            }
             if ($orderline->user->bank) continue;
             if (!in_array($orderline->user->id, array_keys($users))) {
                 $users[$orderline->user->id] = (object)[

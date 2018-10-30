@@ -1,4 +1,4 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     @if($new)
@@ -8,76 +8,34 @@
     @endif
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="{{ ($new ? 'col-md-6 col-md-offset-3' : 'col-md-7') }}">
+        <div class="col-md-5">
 
-            @include('committee.form-members')
-
-            @include('committee.form-committee')
+            @include('committee.include.form-committee')
 
         </div>
 
         @if(!$new)
 
-            <div class="col-md-5">
+            <div class="col-md-3">
 
-                @include('committee.members-list')
+                @include('committee.include.form-image')
+
+                @include('committee.include.form-members')
+
+            </div>
+
+            <div class="col-md-4">
+
+                @include('committee.include.members-list')
 
             </div>
 
         @endif
 
     </div>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script>
-        var simplemde = new SimpleMDE({
-            element: $("#editor")[0],
-            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "link", "quote", "table", "code", "|", "preview"],
-            spellChecker: false
-        });
-
-        $('#committee-tab a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        })
-    </script>
-
-    <script type="text/javascript">
-        // Initializes datetimepickers for consistent options
-        $('.datetime-picker').datetimepicker({
-            icons: {
-                time: "fa fa-clock-o",
-                date: "fa fa-calendar",
-                up: "fa fa-arrow-up",
-                down: "fa fa-arrow-down",
-                next: "fa fa-chevron-right",
-                previous: "fa fa-chevron-left"
-            },
-            format: 'DD-MM-YYYY'
-        });
-    </script>
-
-@endsection
-
-@section('stylesheet')
-
-    @parent
-
-    <style type="text/css">
-
-        .committee-seperator {
-            margin: 10px 0;
-        }
-
-    </style>
 
 @endsection

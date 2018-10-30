@@ -70,9 +70,9 @@ class MollieController extends Controller
     {
         if ($request->has('user_id')) {
             $user = User::findOrFail($request->get('user_id'));
-            return view('omnomcom.mollie.list', ['user' => $user, 'transactions' => MollieTransaction::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(20)]);
+            return view('omnomcom.mollie.list', ['user' => $user, 'transactions' => MollieTransaction::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(15)]);
         } else {
-            return view('omnomcom.mollie.list', ['user' => null, 'transactions' => MollieTransaction::orderBy('created_at', 'desc')->paginate(20)]);
+            return view('omnomcom.mollie.list', ['user' => null, 'transactions' => MollieTransaction::orderBy('created_at', 'desc')->paginate(15)]);
         }
     }
 

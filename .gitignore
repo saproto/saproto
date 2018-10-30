@@ -3,7 +3,6 @@
 
 # External assets
 /vendor
-/resources/assets/bower
 
 # Development tools
 /node_modules
@@ -24,8 +23,10 @@ _ide_helper_models.php
 composer.phar
 
 # Generated files
-/public/assets/*
+/public/assets/saproto-sp-test.xml
 /resources/assets/sass/components.scss
+/public/assets/application.*
+/public/assets/fonts
 
 # Dammit, Mac users
 .DS_Store

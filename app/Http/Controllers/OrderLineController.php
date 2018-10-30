@@ -24,18 +24,10 @@ class OrderLineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $user_id = null, $date = null)
+    public function index($date = null)
     {
 
-        if ($user_id == null) {
-            $user = Auth::user();
-        } else {
-            $user = User::findOrFail($user_id);
-        }
-
-        if ($user->id != Auth::id() && !Auth::user()->can('board')) {
-            abort(403);
-        }
+        $user = Auth::user();
 
         $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
@@ -73,14 +65,18 @@ class OrderLineController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param null $date
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function adminindex(Request $request)
+    public function adminindex(Request $request, $date = null)
     {
 
-        $date = ($request->has('date') ? $request->input('date') : null);
+        if ($request->has('date')) {
+            return Redirect::route('omnomcom::orders::adminlist', ['date' => $request->get('date')]);
+        }
+
+        $date = ($date ? $date : date('Y-m-d'));
 
         $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
 
@@ -88,7 +84,7 @@ class OrderLineController extends Controller
             $orderlines = $orderlines->where('created_at', '<=', Carbon::parse($date . ' 23:59:59')->format('Y-m-d H:i:s'));
         }
 
-        $orderlines = $orderlines->orderBy('created_at', 'desc')->get();
+        $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
 
         if (Auth::user()->can('alfred')) {
             $neworderlines = [];

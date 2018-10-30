@@ -1,40 +1,41 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic-sidebar')
 
 @section('page-title')
     {{ $company->name }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="company__row">
+        <div class="row justify-content-center">
 
-        <div class="row">
+            <div class="col-md-7">
 
-            <div class="col-md-5 col-xs-6">
+                <div class="card mb-3">
 
-                <div class="company__row__image">
+                    @if($company->image)
+                        <div class="card-header text-center">
+                            <div class="align-items-center row " style="height: 200px;">
+                                <div class="col" style="display: block;">
+                                    <img src="{{ $company->image->generateImagePath(null, null) }}"
+                                         style="max-width: 70%; max-height: 160px;">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
-                    <div style="{{ ($company->image ? "background-image: url(".$company->image->generateImagePath(600, null).");" : '') }}">
+                    <div class="card-body">
 
-                    </div>
+                        <h2 class="card-title">
+                            {{ $company->name }}
+                        </h2>
 
-                </div>
+                        <div class="mt-3">
+                            {!! Markdown::convertToHtml($company->description) !!}
+                        </div>
 
-            </div>
-
-            <div class="col-md-7 col-xs-6 company__row__excerpt">
-
-                <div class="panel panel-default">
-
-                    <div class="panel-body">
-
-                        <h3>{{ $company->name }}</h3>
-
-                        <a href="{{$company->url}}" target="_blank">Visit {{ $company->name }}'s website!</a>
-
-                        <hr>
-
-                        {!! Markdown::convertToHtml($company->description) !!}
+                        <a href="{{ $company->url }}" class="card-link text-info">
+                            Visit website
+                        </a>
 
                     </div>
 
@@ -43,7 +44,5 @@
             </div>
 
         </div>
-
-    </div>
 
 @endsection

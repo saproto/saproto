@@ -1,98 +1,92 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Activity Administration
 @endsection
 
-@section('content')
+@section('container')
 
     @if (count($activities) > 0)
 
-        <p style="text-align: center">
-            This overview encompasses all activities to be closed.
-        </p>
+        <div class="row justify-content-center">
 
-        <table class="table">
+            <div class="col-md-8">
 
-            <thead>
+                <div class="card mb-3">
 
-            <tr>
+                    <div class="card-header bg-dark text-white mb-1">
+                        All unclosed activities.
+                    </div>
 
-                <th>#</th>
-                <th>Event</th>
-                <th>Fee</th>
-                <th>Participants</th>
-                <th>Registration period</th>
-                <th>Account</th>
-                <th></th>
+                    <table class="table table-hover">
 
-            </tr>
+                        <thead>
 
-            </thead>
+                        <tr class="bg-dark text-white">
 
-            @foreach($activities as $activity)
+                            <td>Event</td>
+                            <td>Fee</td>
+                            <td>Participants</td>
+                            <td>Account</td>
+                            <td></td>
 
-                <form method="post" action="{{ route("event::financial::close", ['id' => $activity->id]) }}">
+                        </tr>
 
-                    <tr>
+                        </thead>
 
-                        {{ csrf_field() }}
+                        @foreach($activities as $activity)
 
-                        <td>{{ $activity->id }}</td>
+                            <form method="post" action="{{ route("event::financial::close", ['id' => $activity->id]) }}">
 
-                        @if ($activity->event)
-                            <td>
-                                <a href="{{ route("event::show", ['id' => $activity->event->getPublicId()]) }}">{{ $activity->event->title }}</a><br>
-                                {{ date('D j F Y', $activity->event->start) }}
-                            </td>
-                        @else
-                            <td>-</td>
-                        @endif
+                                <tr>
 
-                        <td>&euro; {{ number_format($activity->price, 2) }}</td>
+                                    {{ csrf_field() }}
 
-                        <td>{{ $activity->users->count() }}</td>
+                                    <td>
+                                    @if ($activity->event)
+                                            <a href="{{ route("event::show", ['id' => $activity->event->getPublicId()]) }}">{{ $activity->event->title }}</a><br>
+                                            {{ date('D j F Y', $activity->event->start) }}
+                                    @endif
+                                    </td>
 
-                        <td>
-                            {{ date('d-m-Y H:i:s', $activity->registration_start) }}
-                            <br>
-                            <span style="margin-left: 10%;">
-                                {{ date('d-m-Y H:i:s', $activity->registration_end) }} (registration end)
-                            </span>
-                            <br>
-                            <span style="margin-left: 10%;">
-                                {{ date('d-m-Y H:i:s', $activity->deregistration_end) }} (deregistration end)
-                            </span>
-                        </td>
+                                    <td>&euro;{{ number_format($activity->price, 2) }}</td>
 
-                        <td>
-                            <select name="account" class="form-control">
-                                @foreach(\Proto\Models\Account::orderBy('account_number', 'asc')->get() as $account)
-                                    <option value="{{ $account->id }}">({{ $account->account_number }}
-                                        ) {{ $account->name }}</option>
-                                @endforeach
-                            </select>
-                        </td>
+                                    <td>{{ $activity->users->count() }}</td>
 
-                        <td>
-                            @if($activity->event && !$activity->event->over())
-                                <button class="btn btn-info" disabled>Not ended yet.</button>
-                            @else
-                                <button type="submit" class="btn btn-warning">Close</button>
-                            @endif
-                        </td>
+                                    <td>
+                                        <select name="account" class="form-control">
+                                            @foreach(\Proto\Models\Account::orderBy('account_number', 'asc')->get() as $account)
+                                                <option value="{{ $account->id }}">({{ $account->account_number }}
+                                                    ) {{ $account->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
 
-                    </tr>
+                                    <td>
+                                        @if($activity->event && !$activity->event->over())
+                                            <button class="btn btn-info btn-block" disabled>Not ended yet.</button>
+                                        @else
+                                            <button type="submit" class="btn btn-warning btn-block">Close</button>
+                                        @endif
+                                    </td>
 
-                </form>
+                                </tr>
 
-            @endforeach
+                            </form>
 
-        </table>
+                        @endforeach
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
 
     @else
 
-        <p style="text-align: center;">
+        <p class="text-center mt-3">
             There are no activities to close! Hurray!
         </p>
 

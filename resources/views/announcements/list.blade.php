@@ -1,67 +1,74 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Announcements
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($announcements) > 0)
+    <div class="row justify-content-center">
 
-        <table class="table">
+        <div class="col-md-8">
 
-            <thead>
+            <div class="card mb-3">
 
-            <tr>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('announcement::clear') }}" class="badge badge-info float-right">
+                        Delete all past announcements.
+                    </a>
+                    <a href="{{ route('announcement::add') }}" class="badge badge-info float-right mr-2">
+                        Add announcement.
+                    </a>
+                </div>
 
-                <th>#</th>
-                <th></th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Visibility</th>
-                <th></th>
+                @if (count($announcements) > 0)
 
-            </tr>
+                    <table class="table table-hover table-sm">
 
-            </thead>
+                        <thead>
 
-            @foreach($announcements as $announcement)
+                        <tr class="bg-dark text-white">
 
-                <tr {!! (!$announcement->showByTime() ? 'style="opacity: 0.5;"': '') !!}>
+                            <td></td>
+                            <td>Start</td>
+                            <td>End</td>
+                            <td>Visibility</td>
+                            <td></td>
 
-                    <td>{{ $announcement->id }}</td>
-                    <td>{{ $announcement->description }}</td>
-                    <td>{{ $announcement->display_from }}</td>
-                    <td>{{ $announcement->display_till }}</td>
-                    <td>{{ $announcement->textualVisibility() }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('announcement::edit', ['id' => $announcement->id]) }}" role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('announcement::delete', ['id' => $announcement->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                        </tr>
 
-                </tr>
+                        </thead>
 
-            @endforeach
+                        @foreach($announcements as $announcement)
 
-        </table>
+                            <tr {!! (!$announcement->showByTime() ? 'style="opacity: 0.5;"': '') !!}>
 
-        <p style="text-align: center;">
-            <a href="{{ route('announcement::add') }}">Add announcement</a> or <a
-                    href="{{ route('announcement::clear') }}">delete all past announcements</a>.
-        </p>
+                                <td>{{ $announcement->description }}</td>
+                                <td>{{ $announcement->display_from }}</td>
+                                <td>{{ $announcement->display_till }}</td>
+                                <td>{{ $announcement->textualVisibility() }}</td>
+                                <td>
+                                    <a href="{{ route('announcement::edit', ['id' => $announcement->id]) }}">
+                                        <i class="fas fa-edit mr-2"></i>
+                                    </a>
+                                    <a href="{{ route('announcement::delete', ['id' => $announcement->id]) }}">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
 
-    @else
+                            </tr>
 
-        <p style="text-align: center;">
-            There are currently no announcements. <a href="{{ route('announcement::add') }}">Add announcement.</a>
-        </p>
+                        @endforeach
 
-    @endif
+                    </table>
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

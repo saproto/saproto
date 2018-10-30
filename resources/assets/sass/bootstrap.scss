@@ -1,37 +1,17 @@
-// Colors from http://paletton.com/#uid=72m0u0kvJuNjIBVp1wQxUoaDBiX
-$brand-primary: #C1FF00;
-$brand-success: #7FBA00;
-$brand-info: #7F38A9;
-$brand-warning: #C75600;
-$brand-danger: #C50005;
+$primary: #83b716;
 
-$link-color: $brand-success;
+$brand-primary: $primary;
+$success: #00aac0;
+$info: $success;
+$warning: #f37e16;
+$danger: #C50005;
 
-// Navbar
-$navbar-default-bg: transparent;
-
-$navbar-default-color: #fff;
-
-$navbar-default-brand-color: $navbar-default-color;
-$navbar-default-brand-hover-color: $navbar-default-color;
-
-$navbar-default-link-color: $navbar-default-color;
-$navbar-default-link-hover-color: $navbar-default-color;
-
-$navbar-default-link-active-bg: transparent;
-$navbar-default-link-active-color: $navbar-default-color;
-
-// Border radius
-$border-radius-small: 0px;
-$border-radius-base: 0px;
-$border-radius-large: 0px;
-
-// Panels
-$panel-default-heading-bg: #222;
-$panel-default-text: #fff;
+$link-color: #333;
+$navbar-dark-color: rgba(255, 255, 255, .75);
+$navbar-dark-hover-color: #fff;
 
 @import url(https://fonts.googleapis.com/css?family=Lato);
 
 $font-family-sans-serif: 'Lato', sans-serif;
 
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";

@@ -104,7 +104,7 @@
     @endif
     <div id="power-icons">
         @if($user->isInCommitteeBySlug('protopeners'))
-            <i class="fa fa-unlock-alt" aria-hidden="true"></i><br>
+            <i class="fas fa-unlock-alt" aria-hidden="true"></i><br>
         @endif
     </div>
 </div>

@@ -1,31 +1,23 @@
-@extends('website.layouts.default-nobg')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     {{ $user->name }}
 @endsection
 
-@section('content')
+@section('container')
 
-    <div class="row">
-        <div class="col-md-4">
-            @include('users.profile.about')
+    <div class="row justify-content-center">
+        <div class="col-xl-3 col-lg-6 col-md-12">
+            @include('users.profile.includes.about')
         </div>
-        <div class="col-md-8">
-            <div class="panel panel-default container-panel">
-                <div class="panel-body">
-                    @include('users.profile.committees')
-
-                    <hr class="rule">
-
-                    @include('users.profile.committeespast')
-                </div>
-            </div>
-            <div class="panel panel-default container-panel">
-                <div class="panel-body">
-                    @include('users.profile.achieved')
-                </div>
-            </div>
+        <div class="col-xl-6 col-lg-6 col-md-12">
+            @include('users.profile.includes.committees')
         </div>
+        @if($user->show_achievements && count($user->achieved()) > 0)
+            <div class="col-xl-3 col-lg-6 col-md-12">
+                @include('users.profile.includes.achievements')
+            </div>
+        @endif
     </div>
 
 @endsection

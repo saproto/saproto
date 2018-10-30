@@ -1,8 +1,29 @@
-.select2-selection {
-  border-color: #ccc !important;
-  border-radius: 0 !important;
-}
-
 .underline-on-hover:hover {
   text-decoration: underline !important;
+}
+
+.card > .table tr > td {
+  &:first-child {
+    padding-left: 20px !important;
+  }
+  &:last-child {
+    padding-right: 20px !important;
+  }
+}
+
+.card > .table tr > th {
+  &:first-child {
+    padding-left: 20px !important;
+  }
+  &:last-child {
+    padding-right: 20px !important;
+  }
+}
+
+.alert > p {
+  margin: 0 !important;
+}
+
+img {
+  max-width: 100%;
 }

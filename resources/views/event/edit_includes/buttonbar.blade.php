@@ -1,4 +1,4 @@
-<div class="panel-footer clearfix">
+<div class="card-footer border-bottom">
 
     <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
     </button>

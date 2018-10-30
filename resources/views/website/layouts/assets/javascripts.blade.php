@@ -85,7 +85,7 @@
 <!-- Search complete fields -->
 <script type="text/javascript">
 
-    $.fn.select2.defaults.set("theme", "default");
+    $.fn.select2.defaults.set("theme", "bootstrap4");
 
     $(".user-search").select2({
         ajax: {
@@ -117,10 +117,7 @@
             } else {
                 opacity = 0.3;
             }
-            return "<div class='member ellipsis'>" +
-                "<div class='member-picture' style='background-image:url(\"" + item.photo_preview + "\");'></div>" +
-                "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>" +
-                "</div>";
+            return "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>";
         },
         templateSelection: function (item) {
             if (item.id == "") {

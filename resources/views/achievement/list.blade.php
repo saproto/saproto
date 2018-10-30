@@ -1,75 +1,79 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Achievement Administration
 @endsection
 
-@section('content')
+@section('container')
 
-    @if (count($achievements) > 0)
+    <div class="row justify-content-center">
 
-        <strong class="visible-sm visible-xs" style="text-align: center;">- Some columns have been hidden because the screen is too small -</strong>
+        <div class="col-md-6">
 
-        <table class="table achievement-admin-list">
+            <div class="card mb-3">
 
-            <thead>
+                <div class="card-header bg-dark text-white mb-1">
+                    @yield('page-title')
+                    <a href="{{ route('achievement::add') }}" class="badge badge-info float-right">
+                        Create a new achievement.
+                    </a>
+                </div>
 
-                <tr>
+                <table class="table table-hover table-sm">
 
-                    <th class="hidden-sm hidden-xs">#</th>
-                    <th class="hidden-sm hidden-xs">Icon</th>
-                    <th>Title</th>
-                    <th class="hidden-sm hidden-xs">Description</th>
-                    <th class="hidden-sm hidden-xs">Tier</th>
-                    <th>Controls</th>
+                    <thead>
 
-                </tr>
+                    <tr class="bg-dark text-white">
 
-            </thead>
+                        <td></td>
+                        <td>Title</td>
+                        <td>Awarded</td>
+                        <td>Description</td>
+                        <td>Tier</td>
+                        <td class="text-dark">Controls</td>
 
-            @foreach($achievements as $achievement)
+                    </tr>
 
-                <tr>
+                    </thead>
 
-                    <td class="hidden-sm hidden-xs">{{ $achievement->id }}</td>
-                    <td class="hidden-sm hidden-xs {{ $achievement->tier }}">
-                        @if($achievement->fa_icon)
-                            <div><i class="{{ $achievement->fa_icon }}" aria-hidden="true"></i></div>
-                        @else
-                            No icon available
-                        @endif
-                    </td>
-                    <td>{{ $achievement->name }}</td>
-                    <td class="hidden-sm hidden-xs">{{ $achievement->desc }}</td>
-                    <td class=" hidden-sm hidden-xs {{ $achievement->tier }}">{{ $achievement->tier }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-default"
-                           href="{{ route('achievement::manage', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-bars" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('achievement::delete', ['id' => $achievement->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                    @foreach($achievements as $achievement)
 
-                </tr>
+                        <tr>
 
-            @endforeach
+                            <td class="hidden-sm hidden-xs {{ $achievement->tier }}">
+                                @if($achievement->fa_icon)
+                                    <div><i class="{{ $achievement->fa_icon }} fa-fw"></i></div>
+                                @else
+                                    No icon available
+                                @endif
+                            </td>
+                            <td>{{ $achievement->name }}</td>
+                            <td>{{ count($achievement->currentOwners(true)) }}</td>
+                            <td>{{ $achievement->desc }}</td>
+                            <td>{{ $achievement->tier }}</td>
+                            <td class="text-right">
+                                <a href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">
+                                    <i class="fas fa-edit mr-2"></i>
+                                </a>
+                                <a href="{{ route('achievement::delete', ['id' => $achievement->id]) }}">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+                            </td>
 
-        </table>
+                        </tr>
 
-        <p style="text-align: center;">
-            <a href="{{ route('achievement::add') }}">Create a new achievement.</a>
-        </p>
+                    @endforeach
 
-    @else
+                </table>
 
-        <p style="text-align: center;">
-            There are no achievements.
-            <a href="{{ route('achievement::add') }}">Create a new achievement.</a>
-        </p>
+                <div class="card-footer pb-0">
+                    {!! $achievements->links() !!}
+                </div>
 
-    @endif
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

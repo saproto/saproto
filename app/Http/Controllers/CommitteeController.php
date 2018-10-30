@@ -45,8 +45,7 @@ class CommitteeController extends Controller
         }
 
         return view('committee.show', ['committee' => $committee, 'members' => $committee->allmembers(),
-            'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user()),
-            'is_committee_member' => Auth::check() && $committee->isMember(Auth::user())
+            'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user())
         ]);
     }
 
@@ -250,7 +249,8 @@ class CommitteeController extends Controller
             'email' => $committee->getEmailAddress()
         ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
 
-        Session::flash("flash_message", "Your anonymous e-mail has been sent!");
+        Session::flash("flash_message", sprintf("Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.",
+            $committee->name));
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
 

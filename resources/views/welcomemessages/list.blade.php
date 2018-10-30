@@ -1,68 +1,78 @@
-@extends('website.layouts.default')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
     Welcome Messages
 @endsection
 
-@section('content')
+@section('container')
 
-    @include('welcomemessages.addmessage')
+    <div class="row justify-content-center">
 
-    <hr>
+        <div class="col-md-6">
 
-    @if (count($messages) > 0)
+            <div class="card mb-3">
 
-        <table class="table">
+                <div class="card-header bg-dark text-white">
+                    @yield('page-title')
+                </div>
 
-            <thead>
+                <div class="card-body">
 
-            <tr>
+                    @include('welcomemessages.addmessage')
 
-                <th>#</th>
-                <th>User</th>
-                <th>Message</th>
-                <th>Date Set</th>
+                </div>
 
-            </tr>
+                @if (count($messages) > 0)
 
-            </thead>
+                    <table class="table table-sm table-hover">
 
-            @foreach($messages as $message)
+                        <thead>
 
-                <tr>
+                        <tr class="bg-dark text-white">
 
-                    <td>{{ $message->id }}</td>
-                    <td>
-                        @if($message->user->isMember)
-                            <a href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}">{{ $message->user->name }}</a>
-                        @else
-                            {{ $message->user->name }}
-                        @endif
-                    </td>
+                            <td style="min-width: 200px;">User</td>
+                            <td>Message</td>
+                            <td>Date Set</td>
+                            <td></td>
 
-                    <td>{{ $message->message }}</td>
+                        </tr>
 
-                    <td>{{ $message->updated_at->format('d/m/Y') }}</td>
+                        </thead>
 
-                    <td>
-                        <a class="btn btn-xs btn-danger"
-                           href="{{ route('welcomeMessages::delete', ['id' => $message->id]) }}" role="button">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
+                        @foreach($messages as $message)
 
-                </tr>
+                            <tr>
 
-            @endforeach
+                                <td>
+                                    @if($message->user->isMember)
+                                        <a href="{{ route('user::profile', ['id' => $message->user->getPublicId()]) }}">{{ $message->user->name }}</a>
+                                    @else
+                                        {{ $message->user->name }}
+                                    @endif
+                                </td>
 
-        </table>
+                                <td>{{ $message->message }}</td>
 
-    @else
+                                <td>{{ $message->updated_at->format('d/m/Y') }}</td>
 
-        <p style="text-align: center;">
-            No current welcome messages set
-        </p>
+                                <td>
+                                    <a href="{{ route('welcomeMessages::delete', ['id' => $message->id]) }}">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </td>
 
-    @endif
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                @endif
+
+            </div>
+
+        </div>
+
+    </div>
 
 @endsection

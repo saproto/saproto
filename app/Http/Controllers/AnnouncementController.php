@@ -30,8 +30,10 @@ class AnnouncementController extends Controller
 
     public function store(Request $request)
     {
-
-        $announcement = Announcement::create($request->except('_token'));
+        $data = $request->except('_token');
+        $data['display_from'] = date('Y-m-d H:i:s', strtotime($data['display_from']));
+        $data['display_till'] = date('Y-m-d H:i:s', strtotime($data['display_till']));
+        $announcement = Announcement::create($data);
         $announcement->save();
 
         Session::flash('flash_message', 'Announcement created.');
@@ -50,7 +52,10 @@ class AnnouncementController extends Controller
     {
 
         $announcement = Announcement::findOrFail($id);
-        $announcement->fill($request->except(['_token', 'id']));
+        $data = $request->except(['_token', 'id']);
+        $data['display_from'] = date('Y-m-d H:i:s', strtotime($data['display_from']));
+        $data['display_till'] = date('Y-m-d H:i:s', strtotime($data['display_till']));
+        $announcement->fill($data);
         $announcement->save();
 
         Session::flash('flash_message', 'Announcement updated.');

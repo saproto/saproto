@@ -31,7 +31,7 @@ class AddressController extends Controller
 
         if ($request->wizard) Session::flash("wizard", true);
 
-        return view('users.addresses.add', ['user' => $user]);
+        return view('users.addresses.edit', ['user' => $user, 'action' => 'add']);
     }
 
     public function delete()
@@ -117,7 +117,7 @@ class AddressController extends Controller
 
         if ($request->wizard) Session::flash("wizard", true);
 
-        return view('users.addresses.edit', ['user' => $user, 'address' => $address]);
+        return view('users.addresses.edit', ['user' => $user, 'action' => 'edit']);
     }
 
     public function toggleHidden()

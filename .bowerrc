@@ -1,6 +1,0 @@
-{
-  "directory": "resources/assets/bower",
-  "scripts": {
-    "postinstall": "gulp"
-  }
-}
