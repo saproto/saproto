@@ -221,7 +221,7 @@
                 for (var i in data) {
                     var station = data[i];
 
-                    stationsHtml += "<a class='dropdown-item' href='javascript:void();' data-id=" + i + ">" + station.name + "</a>";
+                    stationsHtml += "<a class='dropdown-item' style='cursor: pointer;' data-id=" + i + ">" + station.name + "</a>";
                 }
 
                 $("#radiostationDropdown").html(stationsHtml);
