@@ -2,8 +2,8 @@
 
 @section('greeting')
 
-    <strong>Welcome to Study Association Proto</strong><br>
-    S.A. Proto is the study association for Creative Technology at the University of Twente.
+    <strong>Welcome to S.A. Proto</strong><br>
+    Study Association Proto is the study association for Creative Technology at the University of Twente.
 
 @endsection
 

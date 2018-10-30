@@ -56,11 +56,11 @@
                             <td class="text-right">
                                 @if(!$user->deleted_at)
                                     <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
-                                       data-toggle="tooltip" data-placement="top" title="Go to public profile">
+                                       data-toggle="tooltip" data-placement="top" title="Go to user admin">
                                         <i class="fas fa-info-circle fa-fw mr-2 text-info" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
-                                       data-toggle="tooltip" data-placement="top" title="Go to user admin">
+                                       data-toggle="tooltip" data-placement="top" title="Go to public profile">
                                         <i class="fas fa-user-circle fa-fw mr-2 text-primary" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"

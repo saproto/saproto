@@ -8,7 +8,7 @@
             @if(config('app.env') != 'production') | <span class="text-uppercase">{{ config('app.env') }}</span> @endif
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
-                aria-expanded="false" aria-label="Toggle navigation">
+                aria-expanded="false" aria-label="Toggle navigation" style="outline: none !important;">
             <span class="navbar-toggler-icon"></span>
         </button>
 

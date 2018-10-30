@@ -57,10 +57,10 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-body bg-light">
-                    <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}" class="btn btn-default btn-block">
-                        <i class="fas fa-shield-alt fa-fw mr-3"></i>
-                        If you would like this photo removed, please contact
+                <div class="card-body text-center">
+                    <i class="fas fa-shield-alt fa-fw mr-3"></i>
+                    If there is a photo that you would like removed, please contact
+                    <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
                         photos&#64;{{ config('proto.emaildomain') }}.
                     </a>
                 </div>

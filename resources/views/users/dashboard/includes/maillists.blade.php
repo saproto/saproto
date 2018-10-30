@@ -8,7 +8,11 @@
             We offer a number of e-mail lists you can subscribe to to receive information related to you. We
             chose this approach so that you can finely tune what information is relevant for you. You can always
             unsubscribe from an e-mail list below, or by following the link at the bottom of an e-mail. Please note that
-            you cannot unsubscribe for some e-mails. Click on the list for more info.
+            you cannot unsubscribe for some e-mails.
+        </p>
+
+        <p class="card-text">
+            <em>Click on a list for more info.</em>
         </p>
 
         @if(EmailList::all()->count() > 0)
@@ -19,7 +23,7 @@
 
                     <div class="card border">
                         <div class="card-header border-bottom-0" data-toggle="collapse"
-                             data-target="#email__collapse__{{ $list->id }}">
+                             data-target="#email__collapse__{{ $list->id }}" style="cursor: pointer;">
                             {{ $list->name }}
 
                             @if($list->isSubscribed($user))

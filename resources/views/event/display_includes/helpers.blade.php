@@ -32,7 +32,7 @@
 
                 @endif
 
-                @if($instance->committee->isMember(Auth::user()))
+                @if(!$event->activity->closed && $instance->committee->isMember(Auth::user()))
 
                     @if($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
                         <a class="btn btn-outline-warning btn-block mt-1" style="width: 100%;"
@@ -48,7 +48,7 @@
 
                 @endif
 
-                @if(Auth::user()->can('board'))
+                @if(Auth::user()->can('board') && !$event->activity->closed)
 
                     <form class="form-horizontal mt-2" method="post"
                           action="{{ route("event::addparticipationfor", ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}">
