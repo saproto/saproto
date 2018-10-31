@@ -14,11 +14,13 @@
 
         </div>
 
-        <div class="col-md-4">
+        @if($product)
+            <div class="col-md-4">
 
-            @include('omnomcom.products.edit_includes.purchases')
+                @include('omnomcom.products.edit_includes.purchases')
 
-        </div>
+            </div>
+        @endif
 
     </div>
 
