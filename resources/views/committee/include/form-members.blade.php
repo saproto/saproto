@@ -46,7 +46,8 @@
                         <div class="form-group">
                             <label>Till</label>
                             @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'end'
+                                'name' => 'end',
+                                'not_required' => true
                             ])
                         </div>
                     </div>
