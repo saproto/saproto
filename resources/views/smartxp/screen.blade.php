@@ -15,21 +15,23 @@
 
     <style type="text/css">
 
-        * {
-            box-sizing: border-box;
-        }
+        html, body, #container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
 
-        html, body {
             font-family: Lato, sans-serif;
 
             padding: 15px 10px;
             margin: 0;
 
-            background-color: #555;
+            background-color: #333;
         }
 
-        .container-fluid, .row, .col-md-4 {
-            height: 100%;
+        .green {
+            color: #c1ff00;
         }
 
         .box-partial {
@@ -50,6 +52,8 @@
             background-color: rgba(0, 0, 0, 0.5);
             border-bottom: 5px solid #c1ff00;
             box-shadow: 0 0 20px -7px #000;
+
+            border-radius: .25rem;
 
             overflow: hidden;
         }
@@ -98,7 +102,7 @@
 
             color: #fff;
             font-size: 35px;
-            width: 185px;
+            width: 230px;
 
             overflow: visible;
         }
@@ -111,6 +115,8 @@
 
             height: 5px;
             width: 100%;
+
+            border-radius: .25rem;
 
             background-color: #c1ff00;
         }
@@ -132,7 +138,7 @@
         }
 
         .activity:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .activity.past {
@@ -141,6 +147,11 @@
 
         .activity.current {
             color: #c1ff00;
+        }
+
+        span.current {
+            color: #c1ff00;
+            font-weight: bold;
         }
 
         .busentry {
@@ -200,27 +211,24 @@
 
 <body>
 
-<div class="container-fluid">
+<div id="container" class="row row-eq-height" style="height: 100%;">
 
-    <div class="row">
+    <div class="col-md-4">
 
-        <div class="col-md-4">
+        <div class="box-partial" style="height: 100%;">
 
-            <div class="box-partial" style="height: 100%;">
+            <div class="box" style="height: 100%;">
 
-                <div class="box" style="height: 100%;">
+                <div class="box-header">
 
-                    <div class="box-header">
+                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
+                    Timetable
 
-                        Timetable
+                </div>
 
-                    </div>
+                <div id="timetable">
 
-                    <div id="timetable">
-
-                        <div class="notice">Loading timetable...</div>
-
-                    </div>
+                    <div class="notice">Loading timetable...</div>
 
                 </div>
 
@@ -228,46 +236,72 @@
 
         </div>
 
-        <div class="col-md-4">
+    </div>
 
-            <div class="box-partial" style="height: 33.33%; text-align: center;">
+    <div class="col-md-4">
 
-                <div id="time" class="box">
-                    <div id="clock">
-                        NOW!
-                    </div>
-                    <div id="ticker"></div>
+        <div class="box-partial" style="height: 33.33%; text-align: center;">
+
+            <div id="time" class="box">
+                <div id="clock">
+                    NOW!
+                </div>
+                <div id="ticker"></div>
+            </div>
+
+            <br>
+
+            <img src="{{ asset('images/logo/inverse.png') }}" style="max-width: 100%; max-height: 100%;"/>
+
+        </div>
+
+        <div class="box-partial" style="height: 33.33%;">
+
+            <div id="protube" class="box inactive" style="height: 100%;">
+
+                <div id="protube-title" class="box-header">
+                    Connecting to ProTube...
                 </div>
 
-                <br>
-
-                <img src="{{ asset('images/logo/inverse.png') }}" style="max-width: 100%; max-height: 100%;"/>
+                <div id="protube-ticker"></div>
 
             </div>
 
-            <div class="box-partial" style="height: 33.33%;">
+        </div>
 
-                <div id="protube" class="box inactive" style="height: 100%;">
+        <div class="box-partial" style="height: 33.33%;">
 
-                    <div id="protube-title" class="box-header">
-                        Connecting to ProTube...
-                    </div>
+            <div id="protopeners" class="box" style="height: 100%;">
 
-                    <div id="protube-ticker"></div>
-
+                <div class="box-header small">
+                    <i class="fas fa-door-closed fa-fw mr-2" id="protopolis-fa"></i>
+                    Protopolis
                 </div>
+
+                <div id="protopeners-timetable"></div>
 
             </div>
 
-            <div class="box-partial" style="height: 33.33%;">
+        </div>
 
-                <div id="protopeners" class="box" style="height: 100%;">
+    </div>
 
-                    <div class="box-header small">
-                        Protopolis (<span id="protopolis-status">Checking</span>)
-                    </div>
+    <div class="col-md-4">
 
-                    <div id="protopeners-timetable"></div>
+        <div class="box-partial" style="height: 66.66%;">
+
+            <div class="box" style="height: 100%;">
+
+                <div class="box-header">
+
+                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
+                    Activities
+
+                </div>
+
+                <div id="activities">
+
+                    <div class="notice">Loading activities...</div>
 
                 </div>
 
@@ -275,35 +309,16 @@
 
         </div>
 
-        <div class="col-md-4">
+        <div class="box-partial" style="height: 33.33%;">
 
-            <div class="box-partial" style="height: 66.66%;">
+            <div class="box" style="height: 100%;">
 
-                <div class="box" style="height: 100%;">
-
-                    <div class="box-header">
-
-                        Activities
-
-                    </div>
-
-                    <div id="activities">
-
-                        <div class="notice">Loading activities...</div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="box-partial" style="height: 33.33%;">
-
-                <div class="box" style="height: 100%;">
+                <div class="row px-4">
 
                     <div class="col-md-6">
 
                         <div class="box-header small">
+                            <i class="fas fa-bus fa-fw mr-1"></i>
                             Hallenweg
                         </div>
 
@@ -316,6 +331,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
+                            <i class="fas fa-bus fa-fw mr-1"></i>
                             Westerbegraafplaats
                         </div>
 
@@ -343,7 +359,7 @@
 
     function updateClock() {
         var now = moment();
-        $("#clock").html(now.format('HH:mm:ss'));
+        $("#clock").html('<i class="fas fa-clock fa-fw mr-2"></i>' + now.format('HH:mm:ss'));
         $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
 
@@ -362,13 +378,16 @@
                             var start = moment.unix(data[i].start);
                             var end = moment.unix(data[i].end);
                             var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                            var title = (data[i].studyShort ? '<span style="color: #c1ff00;">' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) + data[i].title;
-                            var displayTime = time + ' @ ' + data[i].place + ' (' + data[i].type + ')';
-                            $("#timetable").append('<div class="activity ' + (data[i].current ? "current" : "") + '">' +
-                                '<strong>' + title + '</strong>' +
+                            var title = data[i].title;
+                            var displayTime = '<i class="fas fa-clock fa-fw mr-1"></i>' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i>' + data[i].place + '</span>';
+                            $("#timetable").append('<div class="activity">' +
+                                (data[i].studyShort ? '<span class="float-right ml-2">' + '<i class="fas fa-graduation-cap fa-fw mr-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
+                                '<strong>' + data[i].type + '</strong><br>' +
+                                '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span>' +
                                 '<br>' +
                                 displayTime + '' +
-                                '</div>');
+                                '</div>'
+                            );
                             count++;
                         }
                     }
@@ -404,7 +423,7 @@
                         } else {
                             var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '">' + time + ' @ ' + data[i].location + '<br><strong>' + data[i].title + '</strong></div>');
+                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
@@ -471,14 +490,14 @@
 
                         $("#protopeners-timetable").append('' +
                             '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
-                            '<div class="pull-left">' + time + '</div>' +
-                            '<div class="pull-right"><strong>' + data[i].title + '</strong></div>' +
+                            '<div class="float-left">' + time + '</div>' +
+                            '<div class="float-right"><strong>' + data[i].title + '</strong></div>' +
                             '</div>');
                     }
                     if (open) {
-                        $("#protopolis-status").addClass('green').html("Open");
+                        $("#protopolis-fa").addClass('fa-door-open green').removeClass('fa-door-closed');
                     } else {
-                        $("#protopolis-status").removeClass('green').html("Closed");
+                        $("#protopolis-fa").removeClass('fa-door-open green').addClass('fa-door-closed');
                     }
                     if (count == 0) {
                         $("#protopeners-timetable").html('<div class="notice">Protopolis closed for today!</div>');
@@ -522,13 +541,13 @@
 
         nowplaying = data;
         if (typeof data.title == "undefined") {
-            $("#protube-title").html("ProTube Idle");
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ProTube Idle');
             $("#protube-ticker").css("width", "100%");
             $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
             var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
             $("#protube-ticker").css("width", "0%");
-            $("#protube-title").html(data.title);
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ' + data.title);
             $("#protube").removeClass('inactive').css("background-image", url);
         }
 
