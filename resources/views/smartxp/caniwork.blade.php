@@ -49,6 +49,8 @@
             box-shadow: 0 0 20px -7px #000;
 
             overflow: auto;
+
+            border-radius: .25rem;
         }
 
         .box-header {
@@ -130,7 +132,7 @@
 
 <div class="container-fluid">
 
-    <div class="row" style="margin-bottom: 50px;">
+    <div class="row justify-content-center" style="margin-bottom: 50px;">
 
         <div class="box-header">
             The SmartXp is currently
@@ -185,7 +187,7 @@
 
     <div class="row">
 
-        <div class="col-md-12" style="text-align: center;">
+        <div class="col-md-12 mt-3" style="text-align: center;">
 
             <a href="https://www.proto.utwente.nl/">
                 <img src="{{ asset('images/logo/inverse.png') }}" style="width: 300px; margin: 40px;">

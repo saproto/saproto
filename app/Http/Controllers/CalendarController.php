@@ -49,7 +49,7 @@ class CalendarController extends Controller
 
             if (property_exists($entry, 'description')) {
                 preg_match(" /Type: (.*)/", $entry->description, $type);
-                preg_match('/Student set\(s\):.*(CRE MOD[0-9]{2}|IT M [0-9]{1}[a-zA-Z]{1}).*/', $entry->description, $study);
+                preg_match('/Student set\(s\):.*(CRE MOD[0-9]{2}|ITECH M [0-9]{1}[a-zA-Z]{1}).*/', $entry->description, $study);
             } else {
                 $type = null;
                 $study = null;
@@ -63,7 +63,7 @@ class CalendarController extends Controller
                     $year = ceil(intval(str_replace("CRE MOD", "", $study)) / 4);
                     $study = "Creative Technology";
                     $studyShort = "CreaTe";
-                } elseif (substr($study, 0, 2) == "IT") {
+                } elseif (substr($study, 0, 5) == "ITECH") {
                     $study = "Interaction Technology";
                     $studyShort = "ITech";
                 }
