@@ -6,7 +6,7 @@ $info: $success;
 $warning: #f37e16;
 $danger: #C50005;
 
-$link-color: #333;
+$link-color: darken($info, 10%);
 $navbar-dark-color: rgba(255, 255, 255, .75);
 $navbar-dark-hover-color: #fff;
 

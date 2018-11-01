@@ -9,8 +9,8 @@
         <form id="searchForm">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                <span id="showVideo" class="input-group-text btn btn-info active" data-toggle="button">
-                    <i class="fas fa-eye fa-fw"></i>
+                <span id="showVideo" class="input-group-text" style="cursor: pointer;">
+                    <i class="fab fa-youtube fa-fw"></i>
                 </span>
                 </div>
                 <input type="text" class="form-control" id="searchBox" placeholder="Search on YouTube (or YouTube ID)">

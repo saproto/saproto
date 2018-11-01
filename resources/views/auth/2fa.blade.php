@@ -6,7 +6,7 @@
 
 @section('login-body')
 
-    <form method="POST" action="{{ route('login::post') }}">
+    <form method="POST" action="{{ route('login::post') }}" autocomplete="off">
 
         {!! csrf_field() !!}
 

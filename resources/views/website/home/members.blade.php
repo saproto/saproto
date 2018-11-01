@@ -49,9 +49,9 @@
 
         </div>
 
-        @if (count($birthdays) > 0)
+        <div class="col-xl-4 col-md-12">
 
-            <div class="col-xl-4 col-md-12">
+            @if (count($birthdays) > 0)
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">Birthdays</div>
@@ -69,30 +69,25 @@
                     </div>
                 </div>
 
-            </div>
+            @endif
 
-        @else
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">Most recent videos</div>
+                <div class="card-body">
 
-            <div class="col-xl-4 col-md-12">
+                    @foreach($videos as $video)
 
-                <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">Most recent videos</div>
-                    <div class="card-body">
+                        @include('videos.includes.video_block', [
+                            'video' => $video,
+                            'photo_pop' => false
+                        ])
 
-                        @foreach($videos as $video)
+                    @endforeach
 
-                            @include('videos.includes.video_block', [
-                                'video' => $video,
-                            ])
-
-                        @endforeach
-
-                    </div>
                 </div>
-
             </div>
 
-        @endif
+        </div>
 
     </div>
 

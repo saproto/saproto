@@ -6,6 +6,7 @@
             color: #fff;
             text-shadow: 0 0 10px #000;
     @else
+            color: #222;
             text-shadow: 0 0 10px #fff;
     @endif
     @if(isset($img) && $img)

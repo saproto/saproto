@@ -25,6 +25,15 @@
             }
         });
 
+        // Scroll to top of collapse on click.
+        // Code borrowed from: https://stackoverflow.com/a/44303674/7316014
+        $('.collapse').on('shown.bs.collapse', function(e) {
+            var $card = $(this).closest('.card');
+            $('html,body').animate({
+                scrollTop: $card.offset().top - 50
+            }, 500);
+        });
+
         @if (Auth::check() && Auth::user()->member)
         initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
         @endif

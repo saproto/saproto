@@ -45,9 +45,31 @@
                     <div class="card-body pb-0">
                         <div class="row justify-content-center align-items-center">
 
+                            @php
+                                switch(count($companies)) {
+                                    case 1:
+                                        $col = 12;
+                                        break;
+                                    case 2:
+                                        $col = 6;
+                                        break;
+                                    case 3:
+                                        $col = 4;
+                                        break;
+                                    case 4:
+                                        $col = 3;
+                                        break;
+                                    case 5:
+                                    case 6:
+                                        $col = 2;
+                                        break;
+                                    default:
+                                        $col = 3;
+                                }
+                            @endphp
                             @foreach($companies as $i => $company)
 
-                                <div class="col-2 mb-3 text-center align-items-center">
+                                <div class="col-{{ $col }} mb-3 text-center align-items-center">
                                     <a href="{{ route('companies::show', ['id' => $company->id]) }}">
                                         <img src="{{ $company->image->generateImagePath(null, 50) }}">
                                     </a>

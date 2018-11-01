@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.generic')
+@extends('website.layouts.redesign.generic-nonav')
 
 @section('page-title')
     About the website of S.A. Proto
@@ -10,22 +10,22 @@
 
         <div class="col-md-7">
 
-            <div class="row mb-3">
-                <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4 mb-3">
                     <a class="btn btn-warning btn-block"
                        href="https://wiki.proto.utwente.nl/ict/services">
                         <i class="fas fa-info-circle mr-2"></i>
                         Manuals
                     </a>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <a class="btn btn-info btn-block"
                        href="https://wiki.proto.utwente.nl/ict/issues">
                         <i class="fas fa-graduation-cap mr-2"></i>
                         Learn how to report errors!
                     </a>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 mb-3">
                     <a class="btn btn-success btn-block"
                        href="https://wiki.proto.utwente.nl/ict/issues">
                         <i class="fas fa-question-circle mr-2"></i>

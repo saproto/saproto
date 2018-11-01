@@ -99,13 +99,13 @@
 
                     $("#nowPlaying").show().html("").append(generateResult(data, {'type': 'nowPlaying'}))
                         .append('<hr><div class="row">' +
-                            '<div class="col-2 text-right">' +
+                            '<div class="col-3 text-right">' +
                             '<strong id="current_time">0:00</strong>' +
                             '</div>' +
-                            '<div class="col-8">' +
+                            '<div class="col-6">' +
                             '<input class="slider" id="progress" data-slider-id="progressSlider" type="text" data-slider-min="0" data-slider-max="' + data.duration + '" data-slider-step="1" data-slider-value="' + data.progress + '">' +
                             '</div>' +
-                            '<div class="col-2 text-left">' +
+                            '<div class="col-3 text-left">' +
                             '<strong>' + prettifyDuration(data.duration) + '</strong>' +
                             '</div>' +
                             '</div>'
@@ -186,7 +186,7 @@
                         e.preventDefault();
                         admin.emit("add", {
                             id: current.attr("ytId"),
-                            showVideo: ($("#showVideo").hasClass("active") ? true : false)
+                            showVideo: ($("#showVideo > i:first-child").hasClass("fa-youtube") ? true : false)
                         });
                     });
                 });
@@ -298,11 +298,7 @@
             });
 
             $("#showVideo").click(function () {
-                $(this).blur();
-                console.log("click");
-            });
-            $("#showVideo").blur(function () {
-                console.log("blur");
+                $("#showVideo > i").toggleClass('fab fa-youtube fas fa-images');
             });
 
             admin.on("volume", function (data) {

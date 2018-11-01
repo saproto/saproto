@@ -8,59 +8,60 @@
 
     <div id="achievement-accordion">
 
-    <?php $stars = 1; ?>
+        <?php $stars = 1; ?>
 
-    @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
+        @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
-        <div class="card mb-3 achievement-{{ $tier }}">
+            <div class="card mb-3 achievement-{{ $tier }}" name="achievement-{{ $tier }}">
 
-            <div class="card-header text-white" data-toggle="collapse" data-target="#collapse-achievement-{{ $tier }}"
-            style="cursor: pointer;">
+                <div class="card-header text-white" data-toggle="collapse"
+                     data-target="#collapse-achievement-{{ $tier }}"
+                     style="cursor: pointer;">
 
-                @for($i = 0; $i < 5; $i++)
-                    @if ($i >= $achievements[0]->numberOfStars())
-                        <i class="far fa-star"></i>
-                    @else
-                        <i class="fas fa-star"></i>
-                    @endif
-                @endfor
+                    @for($i = 0; $i < 5; $i++)
+                        @if ($i >= $achievements[0]->numberOfStars())
+                            <i class="far fa-star"></i>
+                        @else
+                            <i class="fas fa-star"></i>
+                        @endif
+                    @endfor
 
-                <span class="text-capitalize ml-3">
+                    <span class="text-capitalize ml-3">
                     <strong>{{ $tier }}</strong>
                 </span>
 
-            </div>
+                </div>
 
-            <div class="card-body bg-white collapse {{ ($tier == 'common' ? 'show' : '') }}"
-                 id="collapse-achievement-{{ $tier }}" data-parent="#achievement-accordion">
+                <div class="card-body bg-white collapse {{ ($tier == 'common' ? 'show' : '') }}"
+                     id="collapse-achievement-{{ $tier }}" data-parent="#achievement-accordion">
 
-                <div class="row">
+                    <div class="row">
 
-                    @if(count($achievements) > 0)
+                        @if(count($achievements) > 0)
 
-                        @foreach($achievements as $achievement)
+                            @foreach($achievements as $achievement)
 
-                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="col-xl-4 col-md-6 col-sm-12">
 
-                                @include('achievement.includes.achievement_include', [
-                                'achievement' => $achievement
-                                ])
+                                    @include('achievement.includes.achievement_include', [
+                                    'achievement' => $achievement
+                                    ])
 
-                            </div>
+                                </div>
 
-                        @endforeach
+                            @endforeach
 
-                    @endif
+                        @endif
 
-                    <?php $stars++; ?>
+                        <?php $stars++; ?>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
-
-    @endforeach
+        @endforeach
 
     </div>
 

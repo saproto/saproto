@@ -63,9 +63,11 @@
 
         </table>
 
-        <div class="card-footer pb-0">
-            {!! $orderlines->links() !!}
-        </div>
+        @if(method_exists($orderlines, 'links'))
+            <div class="card-footer pb-0">
+                {!! $orderlines->links() !!}
+            </div>
+        @endif
 
     @else
         <div class="card-body">
