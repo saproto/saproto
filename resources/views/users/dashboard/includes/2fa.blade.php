@@ -17,7 +17,7 @@
         @else
 
             <p class="card-text">
-                Two-factor authentication adds a second authentication factor, other then your password, to your
+                Two-factor authentication adds a second authentication factor, other than your password, to your
                 account. This makes your account more secure against people guessing your password or using your
                 computer with a password manager open. You will need to use this second authentication factor
                 whenever you sign in to the website.
