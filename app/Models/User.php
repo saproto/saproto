@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Proto\Models\HashMapItem;
+use Proto\Models\WelcomeMessage;
 
 use Adldap\Adldap;
 use Adldap\Connections\Provider;
@@ -42,7 +43,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $guarded = ['password', 'remember_token'];
 
-    protected $appends = ['is_member', 'photo_preview'];
+    protected $appends = ['is_member', 'photo_preview', 'welcome_message'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -526,6 +527,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getIcalUrl()
     {
         return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
+    }
+
+    public function getWelcomeMessageAttribute()
+    {
+        $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
+        if($welcomeMessage) {
+            return $welcomeMessage->message;
+        }else{
+            return null;
+        }
     }
 
 }
