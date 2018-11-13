@@ -1218,7 +1218,7 @@
                 }
             }
 
-            if (anythingincart) {
+            if (anythingincart && !$("#modal-overlay").is(':visible')) {
                 idleWarning = true;
                 $("#modal-overlay").show();
                 $("#idlewarning-modal").removeClass('inactive');
