@@ -114,7 +114,9 @@
 
     <script type="text/javascript">
 
-        $('#orderlineaddrow').click(function () {
+        $('#orderlineaddrow').click(function (e) {
+            e.preventDefault();
+
             var oldrow = $('.orderlinerow').last();
 
             $('#orderlinemodal .modal-body').append(oldrow.wrap('<p/>').parent().html());
