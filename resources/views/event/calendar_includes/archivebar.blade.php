@@ -23,8 +23,14 @@
             @endforeach
 
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fas fa-calendar-plus mr-2"></i> Import calendar
+                <i class="fas fa-calendar-alt mr-2"></i> Import calendar
             </button>
+
+            @if(Auth::check() && Auth::user()->can('board'))
+                <a href="{{ route("event::add") }}" class="btn btn-info">
+                    <i class="fas fa-calendar-plus mr-2"></i> Create event
+                </a>
+            @endif
 
         </div>
 
