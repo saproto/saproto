@@ -62,8 +62,6 @@ class NewsletterCron extends Command
 
             $this->info("Done!");
 
-            Newsletter::updateText(null);
-
         } else {
 
             $this->info("No activities scheduled for the newsletter. Newsletter not sent.");

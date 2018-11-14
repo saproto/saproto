@@ -13,14 +13,39 @@
 
         <div class="col-xl-4 col-md-12">
 
-            @include('website.layouts.macros.upcomingevents', ['n' => 5])
+            @include('website.layouts.macros.upcomingevents', ['n' => 6])
 
         </div>
 
         <div class="col-xl-4 col-md-12">
 
+            @if (count($birthdays) > 0)
+
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <i class="fas fa-birthday-cake fa-fw mr-2"></i> Birthdays
+                    </div>
+                    <div class="card-body">
+
+                        @foreach($birthdays as $key => $user)
+
+                            @php($emojies = ['🎉', '🎈', '🎂', '🎊'])
+
+                            @include('users.includes.usercard', [
+                                'user' => $user,
+                                'subtitle' => sprintf('<em>has their birthday today!</em> %s',
+                                $emojies[array_rand($emojies)])
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            @endif
+
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white">News</div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw mr-2"></i> News</div>
                 <div class="card-body">
 
                     @if(count($newsitems) > 0)
@@ -39,7 +64,10 @@
 
                     @else
 
-                        <p>There is no news...</p>
+                        <p class="card-text text-center mt-2 mb-4">
+                            No recent news. It's
+                            <a href="https://en.wikipedia.org/wiki/Silly_season" target="_blank">cucumber time</a>. 😴
+                        </p>
 
                     @endif
 
@@ -49,45 +77,22 @@
 
         </div>
 
-        <div class="col-xl-4 col-md-12">
+        @if(Newsletter::showTextOnHomepage())
 
-            @if (count($birthdays) > 0)
+            <div class="col-xl-4 col-md-12">
 
                 <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">Birthdays</div>
+                    <div class="card-header bg-dark text-white">
+                        <i class="fas fa-bullhorn fa-fw mr-2"></i> Weekly update
+                    </div>
                     <div class="card-body">
-
-                        @foreach($birthdays as $key => $user)
-
-                            @include('users.includes.usercard', [
-                                'user' => $user,
-                                'subtitle' => '<em>has their birthday today! <i class="fas fa-birthday-cake"></i></em>'
-                            ])
-
-                        @endforeach
-
+                        {!! Markdown::convertToHtml(Newsletter::text()) !!}
                     </div>
                 </div>
 
-            @endif
-
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">Most recent videos</div>
-                <div class="card-body">
-
-                    @foreach($videos as $video)
-
-                        @include('videos.includes.video_block', [
-                            'video' => $video,
-                            'photo_pop' => false
-                        ])
-
-                    @endforeach
-
-                </div>
             </div>
 
-        </div>
+        @endif
 
     </div>
 

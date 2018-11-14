@@ -90,10 +90,34 @@
 
         <div class="col-xl-3 col-md-12">
 
+            @if(count($videos) > 0)
+
+                <div class="card mb-3">
+                    <div class="card-header bg-dark text-white">
+                        <i class="fab fa-youtube fa-fw mr-2"></i> Recent videos
+                    </div>
+                    <div class="card-body">
+
+                        @foreach($videos as $video)
+
+                            @include('videos.includes.video_block', [
+                                'video' => $video,
+                                'photo_pop' => false
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+
+            @endif
+
             @include('website.layouts.macros.recentalbums', ['n' => 4])
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white">Proto.ink articles</div>
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-newspaper fa-fw mr-2"></i> Proto.ink articles
+                </div>
                 <div class="card-body">
                     <div id="protoink">
                         <p class="card-text mb-3">Loading articles...</p>
@@ -120,7 +144,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '{{ route('api::protoink') }}?max=4',
+                url: '{{ route('api::protoink') }}?max=2',
                 dataType: 'json',
                 success: function (data) {
 
