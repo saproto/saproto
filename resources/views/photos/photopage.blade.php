@@ -11,7 +11,13 @@
         <div class="col-md-12 col-lg-10 col-xl-8">
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-center">
+
+                <div class="card-header bg-dark text-right">
+
+                    <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
+                       class="btn btn-success float-left mr-3">
+                        <i class="fas fa-images mr-3"></i> {{ $photo->album_name }}
+                    </a>
 
                     @if ($photo->previous != null)
                         <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark mr-3">
@@ -31,11 +37,6 @@
                         </a>
                     @endif
 
-                    <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
-                       class="btn btn-success mr-3">
-                        <i class="fas fa-arrow-up mr-2" aria-hidden="true"></i> <i class="fas fa-images"></i>
-                    </a>
-
                     @if($photo->private)
                         <a href="javascript:void();" class="btn btn-info mr-3" data-toggle="tooltip"
                            data-placement="top" title="This photo is only visible to members.">
@@ -50,10 +51,9 @@
                     @endif
 
                 </div>
-            </div>
 
-            <div class="card mb-3">
-                <img class="card-img-bottom card-img-top" src="{!! $photo->photo_url !!}">
+                <img class="card-img-bottom" src="{!! $photo->photo_url !!}">
+
             </div>
 
             <div class="card mb-3">
@@ -81,6 +81,8 @@
         document.onkeydown = checkKey;
 
         function checkKey(e) {
+
+            e.preventDefault();
 
             e = e || window.event;
 
