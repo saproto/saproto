@@ -936,12 +936,26 @@
                     finishPurchase();
                 } else if (data.startsWith("OK")) {
                     data = data.split(",");
-                    if (data[1] == 'TOTAL') {
-                        total = "You have spent a total of <strong>€" + parseFloat(data[3]).toFixed(2) + "</strong> today, " + data[2] + ".";
-                        finishPurchase(total);
+                    var message = "";
+                    if (data[1] == 'TOTAL' || data[1] == 'CALORIE') {
+                      if(data[1] == 'TOTAL') {
+                        message += "You have spent a total of <strong>€" + parseFloat(data[3]).toFixed(2) + "</strong>";
+                      }
+                      if (data[4] == 'CALORIE') {
+                        message+="<br>and ";
+                      }
+                      if(data[1] == 'CALORIE') {
+                        message+="You have ";
+                      }
+                      if(data[1] == 'CALORIE' || data[4] == 'CALORIE') {
+                        calorieIndex = data.indexOf('CALORIE');
+                        message+= "bought a total of <strong>"+data[calorieIndex+2]+" calories</strong>";
+                      }
+                      message+=" today, " + data[2] + ".";
                     } else {
                         finishPurchase("Unknown message type: " + data[1]);
                     }
+                    finishPurchase(message);
                 } else {
                     $("#purchase-modal .modal-status").html(data);
                     purchase_processing = null;

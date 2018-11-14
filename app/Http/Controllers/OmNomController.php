@@ -140,18 +140,25 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false));
+                $product->buyForUser($user, $amount, $amount * $product->price, $amount * $product->calories, ($withCash == "true" ? true : false));
                 if ($product->id == config('omnomcom.protube-skip')) {
                     file_get_contents(config('herbert.server') . "/skip?secret=" . config('herbert.secret'));
                 }
             }
         }
 
+        $display_message = "OK";
+
         if ($user->show_omnomcom_total) {
-            return sprintf("OK,TOTAL,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
-        } else {
-            return "OK";
+          $display_message .= sprintf(",TOTAL,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
         }
+
+        if($user->show_omnomcom_calories){//$user->show_calorie_total) {
+          $display_message .= sprintf(",CALORIE,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_calories'));
+          //$display_message .= sprintf(",CALORIE,%s,%s", $user->calling_name, 2001);
+        }
+
+        return $display_message;
 
     }
 

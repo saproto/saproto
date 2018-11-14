@@ -96,6 +96,7 @@
 
                             <td>Name</td>
                             <td>Price</td>
+                            <td>Calories</td>
                             <td>Stock</td>
                             <td>Visible</td>
                             <td>Alcoholic</td>
@@ -113,6 +114,7 @@
 
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
+                                <td>{{ $product->calories }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
