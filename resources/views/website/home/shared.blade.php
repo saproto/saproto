@@ -90,7 +90,7 @@
 
         <div class="col-xl-3 col-md-6 col-sm-12">
 
-            @if(count($videos) > 0)
+            @if(isset($videos) && count($videos) > 0)
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">

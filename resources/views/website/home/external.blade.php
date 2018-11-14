@@ -9,9 +9,9 @@
 
 @section('left-column')
 
-    <div class="row row-eq-height mb-3">
+    <div class="row row-eq-height">
 
-        <div class="col-md-12 col-xl-6">
+        <div class="col-md-12 col-xl-6 mb-3">
 
             <div class="card leftborder leftborder-info h-100">
                 <div class="card-body">
@@ -32,7 +32,7 @@
 
         </div>
 
-        <div class="col-md-12 col-xl-6">
+        <div class="col-md-12 col-xl-6 mb-3">
 
             <div class="card leftborder leftborder-info h-100">
                 <div class="card-body">
@@ -57,9 +57,9 @@
 
     </div>
 
-    <div class="row row-eq-height mb-3">
+    <div class="row row-eq-height">
 
-        <div class="col-md-12 col-xl-6">
+        <div class="col-md-12 col-xl-6 mb-3">
 
             <div class="card leftborder leftborder-info h-100">
                 <div class="card-body">
@@ -76,7 +76,7 @@
 
         </div>
 
-        <div class="col-md-12 col-xl-6">
+        <div class="col-md-12 col-xl-6 mb-3">
 
             <div class="card leftborder leftborder-info h-100">
                 <div class="card-body">
@@ -96,7 +96,7 @@
     <div class="row mb-3">
 
         <div class="col-md-12 col-xl-6">
-            <a href="{{ route('page::show', ['slug' => 'board']) }}" class="btn btn-info btn-block">
+            <a href="{{ route('page::show', ['slug' => 'board']) }}" class="btn btn-info btn-block mb-3">
                 <i class="fas fa-user mr-2" aria-hidden="true"></i> Contact
             </a>
         </div>
