@@ -22,7 +22,7 @@
     @endif
     {{ isset($height) ? sprintf('height: %spx;', $height) : null }}
             ">
-        <p class="card-text" style="align-self: flex-end;">
+        <p class="card-text ellipsis" style="align-self: flex-end;">
             {!! $html !!}
         </p>
     </a>

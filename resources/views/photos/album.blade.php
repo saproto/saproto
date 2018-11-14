@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.generic-sidebar')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})

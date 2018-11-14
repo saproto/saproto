@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.generic-sidebar')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     Send an anonymous e-mail to the {{ $committee->name }}
