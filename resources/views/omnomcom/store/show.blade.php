@@ -559,7 +559,13 @@
 
     @endforeach
 
-<!-- This is for the minor member tool //-->
+    @if(Auth::check())
+        <div class="category_button inactive ellipsis" onclick="window.location='{{ route("login::logout") }}'">
+           Log out <strong>{{ Auth::user()->calling_name }}</strong>
+        </div>
+    @endif
+
+    <!-- This is for the minor member tool //-->
     @if(count($minors) > 0)
 
         <div class="category_button inactive" data-id="static-minors">

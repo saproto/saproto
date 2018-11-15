@@ -182,6 +182,11 @@ class OmNomController extends Controller
         }
     }
 
+    public function choose()
+    {
+        return view('omnomcom.choose');
+    }
+
     public function miniSite()
     {
         return view('omnomcom.minisite');
