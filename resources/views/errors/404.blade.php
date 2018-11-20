@@ -1,9 +1,13 @@
-@extends('errors.default')
+@extends('errors.template')
+
+@section('page-title')
+
+    Page not found
+
+@endsection
 
 @section('page-body')
 
-    <p>
-        The page you requested could not be found.
-    </p>
+    Sorry, but we could not find the page you were looking for.
 
 @endsection

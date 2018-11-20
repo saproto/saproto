@@ -8,8 +8,6 @@
 
 @section('page-body')
 
-    <p>
-        {{ $exception->getMessage() }}
-    </p>
+    {{ $exception->getMessage() }}
 
 @endsection
