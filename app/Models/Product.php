@@ -44,14 +44,13 @@ class Product extends Model
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    public function buyForUser(User $user, $amount, $total_price = null, $total_calories = null, $withCash = false, $description = null)
+    public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $description = null)
     {
 
         $this->stock -= $amount;
         $this->save();
 
         $total_price = ($total_price ? $total_price : $this->price * $amount);
-        $total_calories = ($total_calories ? $total_calories : $this->calories * $amount);
 
         $orderline = OrderLine::create([
             'user_id' => ($withCash ? null : $user->id),
@@ -60,7 +59,6 @@ class Product extends Model
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'total_calories' => $total_calories,
             'payed_with_cash' => ($withCash || $total_price == 0 ? date('Y-m-d H:i:s') : null),
             'description' => $description !== '' ? $description : null
         ]);
