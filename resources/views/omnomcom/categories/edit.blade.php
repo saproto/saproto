@@ -51,11 +51,13 @@
 
         </div>
 
-        <div class="col-md-3">
+        @if($category != null)
+            <div class="col-md-3">
 
-            @include('omnomcom.categories.edit_includes.order')
+                @include('omnomcom.categories.edit_includes.order')
 
-        </div>
+            </div>
+        @endif
 
     </div>
 
