@@ -54,10 +54,10 @@
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="isPrize" value="0">
-                <input type="checkbox" id="isPrize" name="isPrize"
-                       value="1" {{ (!$new && $achievement->isPrize ? 'checked' : '') }}>
-                <label for="isPrize">Is prize</label>
+                <input type="hidden" name="excludeFromAllAchievements" value="0">
+                <input type="checkbox" id="excludeFromAllAchievements" name="excludeFromAllAchievements"
+                       value="1" {{ (!$new && $achievement->excludeFromAllAchievements ? 'checked' : '') }}>
+                <label for="isPrize">Exclude from 'all achievements' achievement</label>
             </div>
 
         </div>

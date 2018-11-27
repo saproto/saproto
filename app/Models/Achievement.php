@@ -8,7 +8,7 @@ class Achievement extends Model
 {
     protected $table = 'achievement';
 
-    protected $fillable = ['name', 'desc', 'fa_icon', 'tier', 'isPrize'];
+    protected $fillable = ['name', 'desc', 'fa_icon', 'tier', 'excludeFromAllAchievements'];
 
     public function users()
     {
