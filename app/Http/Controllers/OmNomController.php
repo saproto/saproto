@@ -151,28 +151,28 @@ class OmNomController extends Controller
             }
         }
 
-        if(isset($result->message)) {
-          return json_encode($result);
-        }
+        if(!isset($result->message)) {
 
-        $result->status = "OK";
 
-        if ($user->show_omnomcom_total) {
-          if(!isset($result->message)) $result->message = "";
-          $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
-        }
+          $result->status = "OK";
 
-        if($user->show_omnomcom_calories){
-          if(!isset($result->message)) $result->message = "";
-          if($user->show_omnomcom_total) {
-            $result->message .= "<br>and ";
-          } else {
-            $result->message .= "You have ";
+          if ($user->show_omnomcom_total) {
+            if(!isset($result->message)) $result->message = "";
+            $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
           }
-          $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
-        }
 
-        $result->message .= sprintf(" today, %s.", $user->calling_name);
+          if($user->show_omnomcom_calories){
+            if(!isset($result->message)) $result->message = "";
+            if($user->show_omnomcom_total) {
+              $result->message .= "<br>and ";
+            } else {
+              $result->message .= "You have ";
+            }
+            $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
+          }
+
+          $result->message .= sprintf(" today, %s.", $user->calling_name);
+        }
 
         return json_encode($result);
 
