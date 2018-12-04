@@ -1,10 +1,14 @@
-@extends('website.layouts.redesign.generic-sidebar')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     {{ $page->title }}
 @endsection
 
 @section('container')
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
 
     <div class="card mb-3">
 
@@ -39,6 +43,10 @@
 
             </p>
         </div>
+    </div>
+
+    </div>
+
     </div>
 
 @endsection

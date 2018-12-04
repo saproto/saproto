@@ -323,7 +323,7 @@ class WithdrawalController extends Controller
                 ]);
                 $i++;
             } catch (SephpaInputException $e) {
-                abort(400, sprintf("Error for user #%s: %s", $user->id, $e->getMessage()));
+                abort(500, sprintf("Error for user #%s: %s", $user->id, $e->getMessage()));
             }
         }
 

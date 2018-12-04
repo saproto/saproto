@@ -33,6 +33,17 @@ class Newsletter extends Model
         return $lastSent;
     }
 
+    public static function getTextLastUpdated() {
+        $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
+        if ($lastUpdated == null) {
+            $lastUpdated = HashMapItem::create([
+                'key' => 'newsletter_text_updated',
+                'value' => 0
+            ]);
+        }
+        return $lastUpdated;
+    }
+
     public static function lastSent()
     {
         return Newsletter::getLastSent()->value;
@@ -41,6 +52,11 @@ class Newsletter extends Model
     public static function text()
     {
         return Newsletter::getText()->value;
+    }
+
+    public static function textUpdated()
+    {
+        return Newsletter::getTextLastUpdated()->value;
     }
 
     public static function updateLastSent()
@@ -55,12 +71,16 @@ class Newsletter extends Model
 
     public static function updateText($text)
     {
-        $lastSent = Newsletter::getText();
+        $newsletterText = Newsletter::getText();
+        $textUpdated = Newsletter::getTextLastUpdated();
 
-        $lastSent->value = $text;
-        $lastSent->save();
+        $newsletterText->value = $text;
+        $newsletterText->save();
 
-        return $lastSent->value;
+        $textUpdated->value = date('U');
+        $textUpdated->save();
+
+        return $newsletterText->value;
     }
 
     public static function canBeSent()
@@ -68,6 +88,13 @@ class Newsletter extends Model
         $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
         $current = date('Y') * 52 + date('W');
         return $current > $lastSent;
+    }
+
+    public static function showTextOnHomepage()
+    {
+        if (Newsletter::text() == "") return false;
+        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) return false;
+        return true;
     }
 
     public static function send()

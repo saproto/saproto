@@ -34,10 +34,10 @@ class HomeController extends Controller
     {
 
         $companies = Company::where('in_logo_bar', true)->orderBy('sort', 'asc')->get();
-        $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subMonths(1))->orderBy('published_at', 'desc')->take(3)->get();
+        $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
         $header = HeaderImage::inRandomOrder()->first();
-        $videos = Video::orderBy('video_date', 'desc')->limit(3)->get();
+        $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 
         if (Auth::check() && Auth::user()->member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();

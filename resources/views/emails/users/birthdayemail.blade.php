@@ -14,6 +14,8 @@
         a free birthday pull during the drink. Have a great day!
     </p>
 
+    <img src="{{ asset('images/emails/birthday.jpg') }}" style="width: 100%;">
+
     <p>
         Kind regards,
         {{ config('proto.internal') }}

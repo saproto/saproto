@@ -397,7 +397,7 @@ class AchievementsCron extends Command
     {
         $selected = array();
         foreach (User::all() as $user) {
-            if (count($user->achieved()) == count(Achievement::where('isPrize', 0)->get())) {
+            if (count($user->achieved()) == count(Achievement::where('excludeFromAllAchievements', 0)->get())) {
                 $selected[] = $user;
             }
         }

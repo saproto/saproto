@@ -503,6 +503,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('minisite', ['uses' => 'OmNomController@miniSite']);
 
         Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
+            Route::get('', ['as' => 'show', 'uses' => 'OmNomController@choose']);
             Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
             Route::post('rfid/add', ['as' => 'rfidadd', 'uses' => 'RfidCardController@store']);
             Route::post('{store}/buy', ['as' => 'buy', 'uses' => 'OmNomController@buy']);

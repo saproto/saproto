@@ -1,9 +1,14 @@
-@extends('errors.default')
+@extends('errors.template')
+
+@section('page-title')
+
+    Website under maintenance
+
+@endsection
 
 @section('page-body')
 
-    <p>
-        The website is temporarily unavailable. Please check back in a minute.
-    </p>
+    The website is currently undergoing planned maintenance.<br>
+    Please check back in a few minutes.
 
 @endsection

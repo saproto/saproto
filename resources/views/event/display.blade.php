@@ -18,9 +18,17 @@
 
     <div class="row justify-content-center">
 
-        @if(($event->activity && $event->activity->withParticipants()) || $event->tickets()->count() > 0)
+        <div class="col-md-4">
 
-            <div class="col-md-3">
+            @include('event.display_includes.event_details', [
+                'event' => $event
+            ])
+
+        </div>
+
+        @if(Auth::check() && (($event->activity && $event->activity->withParticipants()) || $event->tickets()->count() > 0))
+
+            <div class="col-md-4">
 
                 @include('event.display_includes.tickets', [
                     'event' => $event
@@ -34,17 +42,9 @@
 
         @endif
 
-        <div class="col-md-4">
-
-            @include('event.display_includes.event_details', [
-                'event' => $event
-            ])
-
-        </div>
-
         @if($event->activity && Auth::check() && Auth::user()->member && count($event->activity->helpingCommitteeInstances) > 0)
 
-            <div class="col-md-3">
+            <div class="col-md-4">
 
                 @include('event.display_includes.helpers', [
                     'event' => $event

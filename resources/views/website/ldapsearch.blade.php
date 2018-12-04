@@ -1,4 +1,4 @@
-@extends('website.layouts.redesign.generic-sidebar')
+@extends('website.layouts.redesign.generic')
 
 @section('page-title')
     UTwente Address Book Search
@@ -8,7 +8,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-3 col-sm-12">
+        <div class="col-xl-3 col-lg-12">
 
             <form method="post" action="{{ route('ldap::search') }}">
 
@@ -36,7 +36,7 @@
 
         @if($term)
 
-            <div class="col-md-9 col-sm-12">
+            <div class="col-xl-9 col-lg-12">
 
                 <div class="card">
 
@@ -58,7 +58,7 @@
 
                                 @foreach($data as $result)
 
-                                    <div class="col-md-4 col-sm-12 mb-3">
+                                    <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
                                         <div class="card h-100 leftborder leftborder-info">
 

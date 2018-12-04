@@ -10,7 +10,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-xl-3 col-lg-5 col-md-6 col-sm-10 col-xs-12 mx-3 text-center">
+        <div class="col-xl-4 col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-3 text-center">
 
             <div class="card mb-3 mt-5">
 
@@ -20,7 +20,9 @@
 
                 <div class="card-body text-center">
 
-                    @yield('page-body')
+                    <p>
+                        @yield('page-body')
+                    </p>
 
                     <p>
                         <sub>

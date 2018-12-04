@@ -9,7 +9,7 @@
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <title>S.A. Proto | @yield('page-title','Default Page Title')</title>
+    <title>S.A. Proto | Narrowcasting</title>
 
     @include('website.layouts.assets.stylesheets')
 
@@ -28,6 +28,8 @@
             padding: 0;
 
             overflow: hidden;
+
+            background-color: #333;
         }
 
         #fullpagetext {
