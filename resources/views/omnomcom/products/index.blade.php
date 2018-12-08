@@ -111,7 +111,7 @@
 
                             <tr>
 
-                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->name }} <span class="text-muted">(#{{ $product->id }})</span></td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
