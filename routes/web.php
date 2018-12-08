@@ -191,10 +191,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
      * Routes related to files.
      */
     Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-        Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@get']);
+        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@get']);
+        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@get']);
     });
     Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
-        Route::get('{id}/{hash}/{name}', ['as' => 'get', 'uses' => 'FileController@getImage']);
+        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
+        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
     });
 
     /*
