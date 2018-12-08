@@ -15,10 +15,14 @@
 
             @foreach($years as $y)
 
-                <a href="{{ route('event::archive', ['year'=>$y]) }}"
-                   class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}">
-                    {{ $y }}
-                </a>
+                @if(Event::countEventsPerYear($y) > 0)
+
+                    <a href="{{ route('event::archive', ['year'=>$y]) }}"
+                       class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}">
+                        {{ $y }}
+                    </a>
+
+                @endif
 
             @endforeach
 
@@ -54,7 +58,8 @@
                     You can then to copy the URL below.
                 </p>
                 <p>
-                    <input class="form-control" onclick="this.select()" value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}">
+                    <input class="form-control" onclick="this.select()"
+                           value="{{ Auth::check() ? Auth::user()->getIcalUrl() : route("ical::calendar") }}">
                 </p>
 
                 <hr>
@@ -76,7 +81,8 @@
                             You are currently syncing all events.
                         @endif
 
-                        <a class="btn btn-{{ Auth::check() && Auth::user()->getCalendarRelevantSetting() ? 'success':'danger' }}" type="button"
+                        <a class="btn btn-{{ Auth::check() && Auth::user()->getCalendarRelevantSetting() ? 'success':'danger' }}"
+                           type="button"
                            style="width: 100%;" href="{{ route('event::toggle_relevant_only') }}">
                             @if (Auth::user()->getCalendarRelevantSetting())
                                 Sync all my events.
@@ -96,7 +102,8 @@
                     <p style="text-align: center;">
                         <sub>
                             @if (Auth::user()->getCalendarAlarm())
-                                You are currently recieving a reminder {{ Auth::user()->getCalendarAlarm() }} hours before an
+                                You are currently recieving a reminder {{ Auth::user()->getCalendarAlarm() }} hours
+                                before an
                                 activity you participate in.
                             @else
                                 You are currently <strong>not</strong> receiving a reminder before an activity you
@@ -115,7 +122,8 @@
                             <div class="{{ Auth::user()->getCalendarAlarm() ? 'col-md-4' : 'col-md-4 col-md-offset-2' }}">
                                 <div class="input-group">
                                     <input class="form-control" type="number" step="0.01" placeholder="0.5"
-                                           name="hours" value="{{ Auth::user()->getCalendarAlarm() ? Auth::user()->getCalendarAlarm() : '' }}">
+                                           name="hours"
+                                           value="{{ Auth::user()->getCalendarAlarm() ? Auth::user()->getCalendarAlarm() : '' }}">
                                     <div class="input-group-addon">hours</div>
                                 </div>
                             </div>

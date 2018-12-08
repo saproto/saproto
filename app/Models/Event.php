@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Vinkla\Hashids\Facades\Hashids;
 
+use Auth;
+
 class Event extends Model
 {
     use SoftDeletes;
@@ -185,6 +187,17 @@ class Event extends Model
     public function videos()
     {
         return $this->hasMany('Proto\Models\Video');
+    }
+
+    public static function countEventsPerYear($year)
+    {
+        $yearStart = strtotime('January 1, ' . $year);
+        $yearEnd = strtotime('January 1, ' . ($year + 1));
+        $events = Event::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
+        if (!Auth::check() || !Auth::user()->can('board')) {
+            $events = $events->where('secret', 0);
+        }
+        return $events->count();
     }
 
 }
