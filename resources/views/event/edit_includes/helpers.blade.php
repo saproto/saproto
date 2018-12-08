@@ -6,11 +6,11 @@
             Helping committees
         </div>
 
-        <form method="post" action="{{ route('event::addhelp', ['id'=>$event->id]) }}">
+        <div class="card-body">
 
-            {!! csrf_field() !!}
+            <form method="post" action="{{ route('event::addhelp', ['id'=>$event->id]) }}">
 
-            <div class="card-body">
+                {!! csrf_field() !!}
 
                 <div class="form-group">
                     <select class="form-control committee-search" name="committee" required></select>
@@ -34,31 +34,66 @@
 
                 </div>
 
-                @if($event->activity->helpingCommittees->count() > 0)
+            </form>
+
+            @if($event->activity->helpingCommittees->count() > 0)
+
+                <hr>
+
+                @foreach($event->activity->helpingCommittees as $committee)
+
+                    <p>
+
+                        <strong>{{ $committee->name }}</strong><br>
+                        Helps with
+                        {{ $event->activity->helpingUsers($committee->pivot->id)->count() }} people.
+                        {{ $committee->pivot->amount }} are needed.
+
+                    </p>
+
+                    <form method="post" action="{{ route('event::updatehelp', ['id' => $committee->pivot->id]) }}">
+
+                        {!! csrf_field() !!}
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+
+                                <a href="{{ route('event::deletehelp', ['id' => $committee->pivot->id]) }}"
+                                   class="btn btn-danger btn-sm btn-block">
+                                    Delete
+                                </a>
+
+                            </div>
+
+                            <div class="col-md-9">
+
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Update to
+                                        </button>
+                                    </div>
+                                    <input type="number" class="form-control" name="amount" min="1" required
+                                           value="{{ $committee->pivot->amount }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">people</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
 
                     <hr>
 
-                    @foreach($event->activity->helpingCommittees as $committee)
+                @endforeach
 
-                        <p>
+            @endif
 
-                            <strong>{{ $committee->name }}</strong><br>
-                            Helps with
-                            {{ $event->activity->helpingUsers($committee->pivot->id)->count() }} people.
-                            {{ $committee->pivot->amount }} are needed.
-                            <a href="{{ route('event::deletehelp', ['id'=>$committee->pivot->id]) }}" class="text-danger">
-                                Delete.
-                            </a>
-
-                        </p>
-
-                    @endforeach
-
-                @endif
-
-            </div>
-
-        </form>
+        </div>
 
     </div>
 

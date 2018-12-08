@@ -145,6 +145,22 @@ class ActivityController extends Controller
         return Redirect::back();
     }
 
+    public function updateHelp(Request $request, $id)
+    {
+        $help = HelpingCommittee::findOrFail($id);
+        $amount = $request->input('amount');
+
+        $help->amount = ($amount > 0 ? $amount : $help->amount);
+        $help->save();
+
+        foreach ($help->committee->users as $user) {
+            Mail::to($user)->queue((new CommitteeHelpNeeded($user, $help))->onQueue('medium'));
+        }
+
+        $request->session()->flash('flash_message', 'Updated ' . $help->committee->name . ' as helping committee.');
+        return Redirect::back();
+    }
+
     public function deleteHelp(Request $request, $id)
     {
         $help = HelpingCommittee::findOrFail($id);
