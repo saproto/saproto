@@ -9,7 +9,7 @@ class CommitteeMembership extends Model
 {
     use SoftDeletes;
 
-    protected $hidden = ['id', 'committee_id', 'user_id'];
+    protected $hidden = ['id', 'committee_id','user_id'];
     protected $dates = ['deleted_at'];
 
     /**
