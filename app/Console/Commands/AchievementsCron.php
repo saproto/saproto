@@ -7,7 +7,10 @@ use Illuminate\Console\Command;
 use Carbon\Carbon;
 
 use Proto\Models\Achievement;
+use Proto\Models\Committee;
+use Proto\Models\Product;
 use Proto\Models\ProductCategory;
+use Proto\Models\ProductCategoryEntry;
 use Proto\Models\User;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\OrderLine;
@@ -62,6 +65,11 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->youreSpecial(), 30);
         $this->giveAchievement($this->bigKid(), 32);
         $this->giveAchievement($this->collector(), 18);
+        $this->giveAchievement($this->NoLife(), 52);
+        $this->giveAchievement($this->First(), 51);
+        $this->giveAchievement($this->ForeverMember(),38);
+        $this->giveAchievement($this->GoodHuman(),53);
+        $this->giveAchievement($this->IAmNoodle(),54);
 
         $this->info('Auto achievement gifting done!');
     }
@@ -81,7 +89,9 @@ class AchievementsCron extends Command
 
                 if ($user) {
 
-                    $achieved = $user->achieved();
+                    try{
+                        $achieved = $user->achieved();
+
                     $hasAchievement = false;
 
                     foreach ($achieved as $test) {
@@ -89,6 +99,9 @@ class AchievementsCron extends Command
                             $hasAchievement = true;
                             break;
                         }
+                    }
+                    } catch(Exception $e) {
+                        dd($e);
                     }
 
                     if (!$hasAchievement) {
@@ -211,6 +224,58 @@ class AchievementsCron extends Command
         return $selected;
     }
 
+
+    /**
+     * 4ever committee member = you've been a committee member for more than three years
+    */
+
+    private function ForeverMember()
+    {
+        $selected = array();
+
+        foreach (User::all() as $user) {
+            $forever = False;
+            foreach (Committee::all() as $committee) {
+                $memberships = CommitteeMembership::withTrashed()->where('user_id', $user->id)->where('committee_id', $committee->id)->get();
+                $days = 0;
+                foreach ($memberships as $membership) {
+                    if ($membership->deleted_at != null) {
+                        $diff = $membership->deleted_at->diff($membership->created_at);
+                    } else {
+                        $diff = Carbon::now()->diff($membership->created_at);
+                    }
+                    $days += $diff->days;
+                }
+                if ($days >= 1095) {
+                    $forever = True;
+                }
+            }
+            if ($forever){
+                $selected[] = $user;
+            }
+        }
+        return $selected;
+    }
+
+
+    /**
+     *  Good Human = you have donated to a committee!
+     */
+
+    private function GoodHuman(){
+
+        $selected = array();
+        $products = ProductCategoryEntry::where('category_id', 28)->get();
+        foreach ($products as $product) {
+            $orders = OrderLine::where('product_id', $product->id)->get();
+            foreach ($orders as $order) {
+                $user = User::find($order['user_id']);
+                $selected[] = $user;
+            }
+        }
+        return $selected;
+    }
+
     /**
      *  I am Bread = you bought more than 100 croque monsieurs
      */
@@ -230,6 +295,28 @@ class AchievementsCron extends Command
         }
         return $selected;
     }
+
+    /**
+     *  I am Bread = you bought more than 100 noodles;
+     */
+    private function IAmNoodle()
+    {
+        $users = User::all();
+        $selected = array();
+        foreach ($users as $user) {
+            $orders = Orderline::where('user_id', $user->id)->where('product_id', 39)->get();
+            $count = 0;
+            foreach ($orders as $order) {
+                $count += $order->units;
+            }
+            if ($count >= 100) {
+                $selected[] = $user;
+            }
+        }
+
+        return $selected;
+    }
+
 
     /**
      *  Gotta catch 'em all! = at least in 10 different committees
@@ -273,6 +360,30 @@ class AchievementsCron extends Command
     }
 
     /**
+     * FIRST!!!! = you were the first to buy a product
+     */
+
+    private function First()
+    {
+
+        $products = Product::all();
+        $selected = array();
+
+        foreach ($products as $product) {
+
+            if ($product->is_visible == 1) {
+                $order = OrderLine::orderBy('id')->where('product_id', $product->id)->first();
+                if ($order != NULL) {
+                    $user = User::find($order['user_id']);
+                    $selected[] = $user;
+                 }
+            }
+        }
+
+        return $selected;
+    }
+
+    /**
      *  Fristi Member = you're no CreaTer and you bought a Fristi
      */
     private function FristiMember()
@@ -308,6 +419,28 @@ class AchievementsCron extends Command
             }
         } else {
             $this->info('Its not the first of the month! Cancelling Big Spender...');
+        }
+        return $selected;
+    }
+
+    
+    /**
+     *  No Life = when you have bought the will to live product 777 times.
+     */
+
+    private function NoLife()
+    {
+        $selected = array();
+        $users = User::all();
+        foreach ($users as $user) {
+            $amount = 0;
+            $orders = OrderLine::where('product_id', 987)->where('user_id', $user->id)->get();
+            foreach ($orders as $order) {
+                $amount += $order->units;
+            }
+            if ($amount >= 777) {
+                $selected[] = $user;
+            }
         }
         return $selected;
     }
