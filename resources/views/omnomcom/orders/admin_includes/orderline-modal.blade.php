@@ -34,7 +34,7 @@
 
                             <select name="product[]" class="form-control orderlineproduct">
                                 @foreach(Proto\Models\Product::where('is_visible', true)->orderBy('name', 'asc')->get() as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }}
+                                    <option value="{{ $product->id }}" data-price="{{ $product->price }}">{{ $product->name }}
                                         (&euro;{{ $product->price }}, #{{ $product->id }})
                                     </option>
                                 @endforeach
@@ -75,6 +75,13 @@
 
                     </div>
 
+                </div>
+
+                <div class="card-footer border-bottom">
+                    <div class="row">
+                        <div class="col-md-2 offset-md-8 text-right">Total price:</div>
+                        <div class="col-md-2" id="totalprice">&euro; 0.00</div>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -126,11 +133,38 @@
             $(".orderlineproduct:eq(-1)").val($(".orderlineproduct:eq(-2)").val());
             $(".orderlineunits:eq(-1)").val($(".orderlineunits:eq(-2)").val());
             $(".orderlineprice:eq(-1)").val($(".orderlineprice:eq(-2)").val());
+
+            calculateTotalPrice();
         });
 
         $('div').delegate('.orderlinedeleterow', 'click', function () {
             $(this).parents('.orderlinerow').remove();
+            calculateTotalPrice();
         });
+
+        function calculateTotalPrice() {
+            var totalPrice = 0;
+
+            $(".orderlinerow").each(function() {
+                var currentPrice = 0;
+
+                if($(this).find(".orderlineprice").val() === '') {
+                    currentPrice = $(this).find(".orderlineproduct").find(":selected").data('price');
+                }else{
+                    currentPrice = $(this).find(".orderlineprice").val();
+                }
+
+                totalPrice += (currentPrice * $(this).find(".orderlineunits").val());
+            });
+
+            $("#totalprice").html("&euro; " + totalPrice.toFixed(2));
+        }
+
+        $('#orderlinemodal').on('change', 'input, select', function() {
+            calculateTotalPrice();
+        });
+
+        calculateTotalPrice();
 
     </script>
 

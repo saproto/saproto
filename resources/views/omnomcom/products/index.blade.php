@@ -112,7 +112,7 @@
 
                             <tr>
 
-                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->name }} <span class="text-muted">(#{{ $product->id }})</span></td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->calories }}</td>
                                 <td>{{ $product->stock }}</td>

@@ -22,7 +22,7 @@
 
         <div class="col-xl-3 col-md-12">
 
-            <a href="{{ route('api::gdpr_export') }}" target="_blank" class="btn btn-outline-info btn-block mb-3"
+            <a href="{{ route('api::gdpr_export') }}" target="_blank" class="btn btn-outline-info btn-block mb-3 ellipsis"
                onclick="return confirm('You are about to download all your personal data as a JSON file. This can take a few seconds. Continue?');">
                 <strong>Download all my personal information. (GDPR)</strong>
             </a>

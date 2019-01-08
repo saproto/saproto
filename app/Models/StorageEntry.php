@@ -88,7 +88,7 @@ class StorageEntry extends Model
 
     public function generatePath()
     {
-        $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename]);
+        $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
@@ -97,7 +97,7 @@ class StorageEntry extends Model
 
     public function generateImagePath($w, $h)
     {
-        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'name' => $this->original_filename, 'w' => $w, 'h' => $h]);
+        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }

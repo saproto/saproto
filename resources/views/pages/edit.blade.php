@@ -57,9 +57,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="editor">Content</label>
+                            <label for="content">Content</label>
                             @include('website.layouts.macros.markdownfield', [
-                                'name' => 'editor',
+                                'name' => 'content',
                                 'placeholder' => 'Text goes here.',
                                 'value' => $item ? $item->content : null
                             ])
