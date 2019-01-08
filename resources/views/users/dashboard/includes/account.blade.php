@@ -180,6 +180,18 @@
                                 </small>
 
                                 <br>
+
+                                <!-- Uncomment when calories have been added
+                                <input name="show_omnomcom_calories" type="checkbox" class="form-check-input"
+                                       id="dashboard__check__omnomcal" {{ ($user->show_omnomcom_calories == 1 ? 'checked' : '') }}>
+                                <label class="form-check-label" for="dashboard__check__omnomcal">
+                                    After checkout, show how much calories worth of food I've bought today.
+                                </label>
+                                <small class="form-text text-muted">
+                                    This feature was requested by members who want to be aware of how much calories they eat.
+                                </small>
+
+                                <br>-->
                             @endif
 
                             <input name="keep_omnomcom_history" type="checkbox" class="form-check-input"

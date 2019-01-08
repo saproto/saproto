@@ -108,6 +108,17 @@
 
             </div>
 
+            <div class="row mb-3">
+
+              <div class="col-md-4">
+                <label for="price">Calories:</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories or '' }}" required>
+                </div>
+              </div>
+
+            </div>
+
             <div class="checkbox">
                 <label>
                     <input type="checkbox"

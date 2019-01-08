@@ -938,18 +938,16 @@
             },
             dataType: 'html',
             success: function (data) {
-                if (data == "OK") {
+                data = JSON.parse(data);
+
+                if (data.status == "OK") {
+                  if(!data.hasOwnProperty('message')) {
                     finishPurchase();
-                } else if (data.startsWith("OK")) {
-                    data = data.split(",");
-                    if (data[1] == 'TOTAL') {
-                        total = "You have spent a total of <strong>€" + parseFloat(data[3]).toFixed(2) + "</strong> today, " + data[2] + ".";
-                        finishPurchase(total);
-                    } else {
-                        finishPurchase("Unknown message type: " + data[1]);
-                    }
+                  } else {
+                  finishPurchase(data.message);
+                }
                 } else {
-                    $("#purchase-modal .modal-status").html(data);
+                    $("#purchase-modal .modal-status").html(data.message);
                     purchase_processing = null;
                 }
             },

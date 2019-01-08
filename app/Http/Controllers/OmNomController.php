@@ -17,6 +17,7 @@ use Proto\Models\QrAuthRequest;
 
 use Auth;
 use Proto\Models\ProductCategory;
+use DB;
 
 class OmNomController extends Controller
 {
@@ -64,53 +65,56 @@ class OmNomController extends Controller
 
         $stores = config('omnomcom.stores');
 
+        $result = new \stdClass();
+        $result->status = "ERROR";
+
         if (array_key_exists($store, $stores)) {
             $storedata = $stores[$store];
             if (!in_array($request->ip(), $storedata->addresses) && !Auth::user()->can($storedata->roles)) {
-                return "<span style='color: red;'>You are not authorized to do this.</span>";
+                $result->message = "<span style='color: red;'>You are not authorized to do this.</span>";
             }
         } else {
-            return "<span style='color: red;'>This store doesn't exist.</span>";
+            $result->message = "<span style='color: red;'>This store doesn't exist.</span>";
         }
 
         switch ($request->input('credentialtype')) {
             case 'card':
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (!$card) {
-                    return "<span style='color: red;'>Unknown card.</span>";
+                    $result->message = "<span style='color: red;'>Unknown card.</span>";
                 }
                 $card->touch();
                 $user = $card->user;
                 if (!$user) {
-                    return "<span style='color: red;'>Unknown user.</span>";
+                    $result->message = "<span style='color: red;'>Unknown user.</span>";
                 }
                 break;
 
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 if (!$qrAuthRequest) {
-                    return "<span style='color: red;'>Invalid authentication token.</span>";
+                    $result->message = "<span style='color: red;'>Invalid authentication token.</span>";
                 }
 
                 $user = $qrAuthRequest->authUser();
                 if (!$user) {
-                    return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
+                    $result->message = "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                 }
                 break;
 
             default:
-                return "<span style='color: red;'>Invalid credential type.</span>";
+                $result->message = "<span style='color: red;'>Invalid credential type.</span>";
                 break;
         }
 
         if (!$user->member) {
-            return "<span style='color: red;'>Only members can use the OmNomCom.</span>";
+            $result->message = "<span style='color: red;'>Only members can use the OmNomCom.</span>";
         }
 
         $withCash = $request->input('cash');
 
         if ($withCash == "true" && !$storedata->cash_allowed) {
-            return "<span style='color: red;'>You cannot use cash in this store.</span>";
+            $result->message = "<span style='color: red;'>You cannot use cash in this store.</span>";
         }
 
         $cart = $request->input('cart');
@@ -119,20 +123,20 @@ class OmNomController extends Controller
             if ($amount > 0) {
                 $product = Product::find($id);
                 if (!$product) {
-                    return "<span style='color: red;'>You tried to buy a product that didn't exist!</span>";
+                    $result->message = "<span style='color: red;'>You tried to buy a product that didn't exist!</span>";
                 }
                 if (!$product->isVisible()) {
-                    return "<span style='color: red;'>You tried to buy a product that is not available!</span>";
+                    $result->message = "<span style='color: red;'>You tried to buy a product that is not available!</span>";
                 }
                 if ($product->stock < $amount) {
-                    return "<span style='color: red;'>You tried to buy more of a product than was in stock!</span>";
+                    $result->message = "<span style='color: red;'>You tried to buy more of a product than was in stock!</span>";
                 }
                 if ($product->is_alcoholic && $user->age() < 18) {
-                    return "<span style='color: red;'>You tried to buy alcohol, youngster!</span>";
+                    $result->message = "<span style='color: red;'>You tried to buy alcohol, youngster!</span>";
                 }
 
                 if ($product->is_alcoholic && $stores[$store]->alcohol_time_constraint && !(date('Hi') > str_replace(':', '', config('omnomcom.alcohol-start')) || date('Hi') < str_replace(':', '', config('omnomcom.alcohol-end')))) {
-                    return "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between " . config('omnomcom.alcohol-start') . " and " . config('omnomcom.alcohol-end') . ".</span>";
+                    $result->message = "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between " . config('omnomcom.alcohol-start') . " and " . config('omnomcom.alcohol-end') . ".</span>";
                 }
             }
         }
@@ -147,11 +151,30 @@ class OmNomController extends Controller
             }
         }
 
-        if ($user->show_omnomcom_total) {
-            return sprintf("OK,TOTAL,%s,%s", $user->calling_name, OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
-        } else {
-            return "OK";
+        if(!isset($result->message)) {
+
+
+          $result->status = "OK";
+
+          if ($user->show_omnomcom_total) {
+            if(!isset($result->message)) $result->message = "";
+            $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
+          }
+
+          if($user->show_omnomcom_calories){
+            if(!isset($result->message)) $result->message = "";
+            if($user->show_omnomcom_total) {
+              $result->message .= "<br>and ";
+            } else {
+              $result->message .= "You have ";
+            }
+            $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
+          }
+
+          $result->message .= sprintf(" today, %s.", $user->calling_name);
         }
+
+        return json_encode($result);
 
     }
 
