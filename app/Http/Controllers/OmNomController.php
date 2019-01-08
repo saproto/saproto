@@ -157,8 +157,8 @@ class OmNomController extends Controller
           $result->status = "OK";
 
           if ($user->show_omnomcom_total) {
-            if(!isset($result->message)) $result->message = "";
-            $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
+              if(!isset($result->message)) $result->message = "";
+              $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
           }
 
           if($user->show_omnomcom_calories){
@@ -171,7 +171,7 @@ class OmNomController extends Controller
             $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
           }
 
-          $result->message .= sprintf(" today, %s.", $user->calling_name);
+          if(isset($result->message)) $result->message .= sprintf(" today, %s.", $user->calling_name);
         }
 
         return json_encode($result);
