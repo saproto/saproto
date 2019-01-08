@@ -149,9 +149,11 @@
                                         <i class="fas fa-trash text-danger mr-2"></i>
                                     </a>
                                     @if (!$email->ready)
-                                        <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
-                                            <i class="fas fa-paper-plane text-warning mr-2"></i>
-                                        </a>
+                                        @if (!$email->to_member || Auth::user()->can('sysadmin'))
+                                            <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
+                                                <i class="fas fa-paper-plane text-warning mr-2"></i>
+                                            </a>
+                                        @endif
                                         <a href="{{ route('email::edit', ['id' => $email->id]) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
