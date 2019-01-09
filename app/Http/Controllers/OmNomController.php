@@ -82,11 +82,13 @@ class OmNomController extends Controller
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (!$card) {
                     $result->message = "<span style='color: red;'>Unknown card.</span>";
+                    return json_encode($result);
                 }
                 $card->touch();
                 $user = $card->user;
                 if (!$user) {
                     $result->message = "<span style='color: red;'>Unknown user.</span>";
+                    return json_encode($result);
                 }
                 break;
 
@@ -94,11 +96,13 @@ class OmNomController extends Controller
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 if (!$qrAuthRequest) {
                     $result->message = "<span style='color: red;'>Invalid authentication token.</span>";
+                    return json_encode($result);
                 }
 
                 $user = $qrAuthRequest->authUser();
                 if (!$user) {
                     $result->message = "<span style='color: red;'>QR authentication hasn't been completed.</span>";
+                    return json_encode($result);
                 }
                 break;
 
@@ -109,12 +113,14 @@ class OmNomController extends Controller
 
         if (!$user->member) {
             $result->message = "<span style='color: red;'>Only members can use the OmNomCom.</span>";
+            return json_encode($result);
         }
 
         $withCash = $request->input('cash');
 
         if ($withCash == "true" && !$storedata->cash_allowed) {
             $result->message = "<span style='color: red;'>You cannot use cash in this store.</span>";
+            return json_encode($result);
         }
 
         $cart = $request->input('cart');
@@ -124,19 +130,24 @@ class OmNomController extends Controller
                 $product = Product::find($id);
                 if (!$product) {
                     $result->message = "<span style='color: red;'>You tried to buy a product that didn't exist!</span>";
+                    return json_encode($result);
                 }
                 if (!$product->isVisible()) {
                     $result->message = "<span style='color: red;'>You tried to buy a product that is not available!</span>";
+                    return json_encode($result);
                 }
                 if ($product->stock < $amount) {
                     $result->message = "<span style='color: red;'>You tried to buy more of a product than was in stock!</span>";
+                    return json_encode($result);
                 }
                 if ($product->is_alcoholic && $user->age() < 18) {
                     $result->message = "<span style='color: red;'>You tried to buy alcohol, youngster!</span>";
+                    return json_encode($result);
                 }
 
                 if ($product->is_alcoholic && $stores[$store]->alcohol_time_constraint && !(date('Hi') > str_replace(':', '', config('omnomcom.alcohol-start')) || date('Hi') < str_replace(':', '', config('omnomcom.alcohol-end')))) {
                     $result->message = "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between " . config('omnomcom.alcohol-start') . " and " . config('omnomcom.alcohol-end') . ".</span>";
+                    return json_encode($result);
                 }
             }
         }
