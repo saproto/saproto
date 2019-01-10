@@ -185,7 +185,8 @@
                                 <input name="show_omnomcom_calories" type="checkbox" class="form-check-input"
                                        id="dashboard__check__omnomcal" {{ ($user->show_omnomcom_calories == 1 ? 'checked' : '') }}>
                                 <label class="form-check-label" for="dashboard__check__omnomcal">
-                                    After checkout, show how much calories worth of food I've bought today.
+                                    After checkout, show how much calories worth of food I've bought today.<br>
+                                    <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not always be accurate</small>
                                 </label>
                                 <small class="form-text text-muted">
                                     This feature was requested by members who want to be aware of how much calories they eat.
