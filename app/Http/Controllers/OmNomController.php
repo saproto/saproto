@@ -19,6 +19,7 @@ use Auth;
 use Proto\Models\ProductCategory;
 use DB;
 
+
 class OmNomController extends Controller
 {
     public function display(Request $request, $store = null)
@@ -169,7 +170,7 @@ class OmNomController extends Controller
 
           if ($user->show_omnomcom_total) {
               if(!isset($result->message)) $result->message = "";
-              $result->message .= sprintf("You have spent a total of <strong>€%s</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
+              $result->message .= sprintf("You have spent a total of <strong>€%0.2f</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
           }
 
           if($user->show_omnomcom_calories){
@@ -179,7 +180,7 @@ class OmNomController extends Controller
             } else {
               $result->message .= "You have ";
             }
-            $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
+            $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->join('products','products.id','=','orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
           }
 
           if(isset($result->message)) $result->message .= sprintf(" today, %s.", $user->calling_name);
