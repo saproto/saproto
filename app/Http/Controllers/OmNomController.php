@@ -19,7 +19,6 @@ use Auth;
 use Proto\Models\ProductCategory;
 use DB;
 
-use Illuminate\Support\Facades\Log;
 
 class OmNomController extends Controller
 {
@@ -181,7 +180,6 @@ class OmNomController extends Controller
             } else {
               $result->message .= "You have ";
             }
-            //Log::debug(Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->select(DB::raw('(orderlines.unit * products.calories) as total_calories'))->leftjoin('products','products.id','=','orderlines.product_id')->sum('total_calories'));
             $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->join('products','products.id','=','orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
           }
 
