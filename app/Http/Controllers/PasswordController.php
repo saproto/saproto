@@ -84,7 +84,7 @@ class PasswordController extends Controller
                 'username' => Crypt::encrypt($request->get('username')),
                 'password' => Crypt::encrypt($request->get('password')),
                 'url' => ($request->get('url') == "" ? null : $request->get('url')),
-                'note' => null
+                'note' => Crypt::encrypt($request->get('note'))
             ]);
 
             $request->session()->flash('flash_message', 'Password saved.');
@@ -126,7 +126,7 @@ class PasswordController extends Controller
             $request->session()->flash('flash_message', 'You are not allowed to edit this entry.');
             return Redirect::route('passwordstore::index');
         }
-        return view('passwordstore.edit', ['password' => $password, 'type' => ($password->isNote() ? 'note' : 'password')]);
+        return view('passwordstore.edit', ['password' => $password, 'type' => ($password->password == null ? 'note' : 'password')]);
     }
 
     /**
@@ -163,7 +163,7 @@ class PasswordController extends Controller
                 'username' => Crypt::encrypt($request->get('username')),
                 'password' => Crypt::encrypt($request->get('password')),
                 'url' => ($request->get('url') == "" ? null : $request->get('url')),
-                'note' => null
+                'note' => Crypt::encrypt($request->get('note'))
             ]);
 
             $password->save();
