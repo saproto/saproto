@@ -14,7 +14,7 @@ class HeaderImageController extends Controller
 {
     public function index()
     {
-        return view('website.headerimages.index', ['images' => HeaderImage::paginate(20)]);
+        return view('website.headerimages.index', ['images' => HeaderImage::paginate(5)]);
     }
 
     public function create()

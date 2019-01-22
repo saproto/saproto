@@ -23,8 +23,8 @@
                     <thead>
 
                     <tr class="bg-dark text-white">
+                        <td></td>
                         <td>Title</td>
-                        <td>Credits</td>
                         <td></td>
                     </tr>
 
@@ -34,12 +34,17 @@
 
                         <tr>
 
-                            <td>{{ $image->title }}</td>
-                            <td>{!! $image->user ? $image->user->name : '<em>None</em>' !!}</td>
                             <td>
-                                <a href="{{ route('headerimage::delete', ['id' => $image->id]) }}">
-                                    <i class="fas fa-trash text-danger" aria-hidden="true"></i>
-                                </a>
+                                <a href="{{ route('headerimage::delete', ['id' => $image->id]) }}"
+                                   class="fa fa-trash-alt text-danger"></a>
+                            </td>
+                            <td>
+                                <strong>{{ $image->title }}</strong><br>
+                                <em>{!! $image->user ? $image->user->name : 'None' !!}</em>
+                            </td>
+                            <td>
+                                <img src="{{ $image->image->generateImagePath(1500, 400) }}" class="rounded float-right" height="100px">
+
                             </td>
 
                         </tr>
