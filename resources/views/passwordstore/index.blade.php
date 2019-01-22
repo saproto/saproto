@@ -45,8 +45,9 @@
                             <td>Description</td>
                             <td>Access</td>
                             <td>URL</td>
-                            <td>Username</td>
-                            <td>Password</td>
+                            <td>User</td>
+                            <td>Pass</td>
+                            <td>Comment</td>
                             <td>Age</td>
                             <td></td>
                             <td></td>
@@ -66,7 +67,7 @@
                                 <tr>
 
                                     <td class="text-right">
-                                        @if($password->isNote())
+                                        @if($password->username == null)
                                             <i class="fas fa-sticky-note" aria-hidden="true"></i>
                                         @else
                                             <i class="fas fa-key" aria-hidden="true"></i>
@@ -78,41 +79,43 @@
                                     </td>
                                     <td>{{ $password->permission->display_name }}</td>
 
-                                    @if($password->isNote())
-
-                                        <td colspan="3">
-                                            <span class="passwordmanager__shownote" data-toggle="modal"
-                                                  data-target="#passwordmodal-{{ $password->id }}">
-                                                Click here to view this secure note.
-                                            </span>
-                                        </td>
-
-                                    @else
-
-                                        <td>
-                                            @if($password->url)
-                                                <a href="{{ $password->url }}">
-                                                    <i class="fas fa-globe-africa" aria-hidden="true"></i>
-                                                </a>
-                                            @endif
-                                        </td>
-                                        <td>
+                                    <td class="text-center">
+                                        @if($password->url)
+                                            <a href="{{ $password->url }}">
+                                                <i class="fas fa-globe-africa" aria-hidden="true"></i>
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($password->username != null)
+                                            <i class="fas fa-user mr-1"></i>
                                             <a class="passwordmanager__copy" href="#" copyTarget="user_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
                                             </a>
                                             <input type="text" class="passwordmanager__hidden" id="user_{{ $i }}"
                                                    value="{{ Crypt::decrypt($password->username) }}">
-                                        </td>
-                                        <td>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($password->password != null)
+                                            <i class="fas fa-key mr-1"></i>
                                             <a class="passwordmanager__copy" href="#"
                                                copyTarget="pass_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
                                             </a>
                                             <input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}"
                                                    value="{{ Crypt::decrypt($password->password) }}">
-                                        </td>
+                                        @endif
+                                    </td>
 
-                                    @endif
+                                    <td class="text-center">
+                                        @if($password->note)
+                                            <span class="passwordmanager__shownote" data-toggle="modal"
+                                                  data-target="#passwordmodal-{{ $password->id }}">
+                                            <i class="fas fa-sticky-note"></i>
+                                        </span>
+                                        @endif
+                                    </td>
 
                                     <td class="{{ ($password->age() > 12 ? 'text-danger' : 'text-primary') }}">
                                         {{ $password->age() }} months
@@ -153,20 +156,20 @@
 
     @foreach($passwords as $password)
 
-        @if($password->isNote())
+        @if($password->note != null)
 
             <div class="modal fade" id="passwordmodal-{{ $password->id }}" tabindex="-1" role="dialog"
                  aria-labelledby="passwordmodal-label-{{ $password->id }}">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                        aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title"
-                                id="passwordmodal-label-{{ $password->id }}">{{ $password->description }}</h4>
+                            <h5 class="modal-title">{{ $password->description }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
-                            <textarea class="form-control" rows="30"
+                            <textarea class="form-control" rows="15"
                                       readonly>{{ Crypt::decrypt($password->note) }}</textarea>
                         </div>
                     </div>
