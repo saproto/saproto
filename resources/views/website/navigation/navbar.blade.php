@@ -158,20 +158,28 @@
                     </li>
                 @endif
 
-                @if (Auth::check() && Auth::user()->can("board"))
+                @if (Auth::check() && Auth::user()->can(["board", "header-image"]))
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Site <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
-                            <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
-                            <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
-                            <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
-                            <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
-                            <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
-                            <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                            @if(Auth::user()->can('board'))
+                                <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
+                                <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
+                                <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
+                                <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
+                                <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
+                                <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                            @endif
+
+                            @if(Auth::user()->can('header-image'))
+                                <a class="dropdown-item" href="{{ route("headerimage::index") }}">
+                                    Header Images
+                                </a>
+                            @endif
 
                             @if(Auth::user()->can('sysadmin'))
                                 <li role="separator" class="dropdown-divider"></li>
@@ -183,9 +191,6 @@
                                 </a>
                                 <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">
                                     Soundboard Sounds
-                                </a>
-                                <a class="dropdown-item" href="{{ route("headerimage::index") }}">
-                                    Header Images
                                 </a>
                                 <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
                                 <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
