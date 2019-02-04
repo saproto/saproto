@@ -54,16 +54,18 @@
                                    value="{{ $password ? Crypt::decrypt($password->password) : '' }}">
 
                             <label>Website URI:</label>
-                            <input class="form-control" type="text" name="url" value="{{ $password->url or '' }}">
+                            <input class="form-control mb-3" type="text" name="url" value="{{ $password->url or '' }}">
+
+                            <label>Comment:</label>
 
                         @else
 
                             <input type="hidden" name="type" value="note">
 
-                            <textarea class="form-control mb-3" name="note" rows="10"
-                                      placeholder="The content for this note.">{{ $password ? Crypt::decrypt($password->note) : '' }}</textarea>
-
                         @endif
+
+                        <textarea class="form-control mb-3" name="note" rows="10"
+                                  placeholder="The content.">{{ $password && $password->note ? Crypt::decrypt($password->note) : '' }}</textarea>
 
                     </div>
 

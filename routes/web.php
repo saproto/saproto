@@ -21,7 +21,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Routes related to the header images.
      */
-    Route::group(['prefix' => 'headerimage', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'headerimage::'], function () {
+    Route::group(['prefix' => 'headerimage', 'middleware' => ['auth', 'permission:header-image'], 'as' => 'headerimage::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'HeaderImageController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'HeaderImageController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'HeaderImageController@store']);

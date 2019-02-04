@@ -14,11 +14,6 @@ class PasswordEntry extends Model
 
     protected $guarded = ['id'];
 
-    public function isNote()
-    {
-        return $this->note !== null;
-    }
-
     public function canAccess(User $user)
     {
         $permission = $this->permission;
