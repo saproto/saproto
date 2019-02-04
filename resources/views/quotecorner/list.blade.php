@@ -31,7 +31,7 @@
 
     <script>
 
-        $(".qq_like").click(function (event) {
+        $(".qq_like i").click(function (event) {
 
             var id = $(event.target).parent().attr('data-id');
 
