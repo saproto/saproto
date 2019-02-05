@@ -13,8 +13,8 @@ class AddOmnomcomShowCaloriesToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table) {
-          $table->boolean('show_omnomcom_calories')->after('show_omnomcom_total')->default(0);
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('show_omnomcom_calories')->after('show_omnomcom_total')->default(0);
         });
     }
 
@@ -25,6 +25,8 @@ class AddOmnomcomShowCaloriesToUsers extends Migration
      */
     public function down()
     {
-        $table->dropColumn('show_omnomcom_calories');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('show_omnomcom_calories');
+        });
     }
 }

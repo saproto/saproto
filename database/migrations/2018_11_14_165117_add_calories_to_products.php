@@ -14,7 +14,7 @@ class AddCaloriesToProducts extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-          $table->integer('calories')->after('price')->default(0);
+            $table->integer('calories')->after('price')->default(0);
         });
     }
 
@@ -25,6 +25,8 @@ class AddCaloriesToProducts extends Migration
      */
     public function down()
     {
-        $table->dropColumn('calories');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('calories');
+        });
     }
 }
