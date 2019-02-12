@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
+use Carbon;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\OrderLine;
@@ -44,6 +45,30 @@ class UserApiController extends Controller
     public function getPurchases()
     {
         return Orderline::where('user_id', Auth::id())->with('product')->limit(100)->get();
+    }
+
+    public function getNextWithdrawal()
+    {
+        $next_withdrawal = $orderlines = Orderline::where('user_id', Auth::id())->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
+
+        return $next_withdrawal;
+    }
+
+    public function getPurchasesMonth()
+    {
+        $orderlines = OrderLine::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get()->groupBy(function ($date) {
+            return Carbon::parse($date->created_at)->format('Y-m');
+        });
+
+        $total = 0;
+        if ($orderlines->has(date('Y-m'))) {
+            $selected_orders = $orderlines[Carbon::parse(date('Y-m'))->format('Y-m')];
+            foreach ($selected_orders as $orderline) {
+                $total += $orderline->total_price;
+            }
+        }
+
+        return $total;
     }
 
 }
