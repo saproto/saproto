@@ -81,7 +81,7 @@
                         'done' => Auth::check() && Auth::user()->member,
                         'heading' => "Become a member!",
                         'icon' => "fas fa-trophy",
-                        'text' => "That's it, you've done it! Now it's up to the board to push some buttons, and make you a member. You can usually find at least one of them in the Protopolis (Zilverling A230)."
+                        'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230)."
                     ])
 
                 </ul>
