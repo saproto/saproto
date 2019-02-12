@@ -67,6 +67,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('address', ['uses' => 'UserApiController@getAddress']);
         Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
         Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
+        Route::get('purchases', ['uses' => 'UserApiController@getPurchases']);
     });
 
 });

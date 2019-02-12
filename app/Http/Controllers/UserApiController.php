@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\CommitteeMembership;
+use Proto\Models\OrderLine;
 
 class UserApiController extends Controller
 {
@@ -38,6 +39,11 @@ class UserApiController extends Controller
     public function getAchievements()
     {
         return AchievementOwnership::where('user_id', Auth::id())->with('achievement')->get();
+    }
+
+    public function getPurchases()
+    {
+        return Orderline::where('user_id', Auth::id())->with('product')->limit(100)->get();
     }
 
 }
