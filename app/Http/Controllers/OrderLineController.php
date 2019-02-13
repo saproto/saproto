@@ -78,23 +78,19 @@ class OrderLineController extends Controller
 
         $date = ($date ? $date : date('Y-m-d'));
 
-        $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
+        if (Auth::user()->can('alfred')) {
+            $orderlines = OrderLine::whereHas('product', function($query) {
+                $query->where('account_id', '=', config('omnomcom.alfred-account'));
+            })->where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
+        } else {
+            $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
+        }
 
         if ($date != null) {
             $orderlines = $orderlines->where('created_at', '<=', Carbon::parse($date . ' 23:59:59')->format('Y-m-d H:i:s'));
         }
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
-
-        if (Auth::user()->can('alfred')) {
-            $neworderlines = [];
-            foreach ($orderlines as $orderline) {
-                if ($orderline->product->account->id == config('omnomcom.alfred-account')) {
-                    $neworderlines[] = $orderline;
-                }
-            }
-            $orderlines = collect($neworderlines);
-        }
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
