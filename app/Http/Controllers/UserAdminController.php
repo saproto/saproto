@@ -16,6 +16,7 @@ use Proto\Mail\UserReactivated;
 use Proto\Models\Member;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
+use Proto\Models\HashMapItem;
 
 use PDF;
 use Auth;
@@ -172,6 +173,12 @@ class UserAdminController extends Controller
         Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
+
+        HashMapItem::create([
+            'key' => 'wizard',
+            'subkey' => $user->id,
+            'value' => 1
+        ]);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
