@@ -133,7 +133,75 @@ class UserDashboardController extends Controller
         } else {
             $user = null;
         }
-        return view("users.becomeamember", ['user' => $user]);
+
+        $steps = [
+            [
+                'url' => sprintf('%s?wizard=1', route("login::register")),
+                'unlocked' => true,
+                'done' => Auth::check(),
+                'heading' => "Create an account",
+                'icon' => "fas fa-user-plus",
+                'text' => "In order to become a member of Study Association Proto, you need a Proto account. You can create that here. After creating your account, activate it by using the link mailed to you."
+            ],
+            [
+                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::edu::add', ['id' => $user->id])) : null,
+                'unlocked' => Auth::check(),
+                'done' => Auth::check() && Auth::user()->edu_username,
+                'heading' => "Link your UTwente account",
+                'icon' => "fas fa-university",
+                'text' => "If you are a student at the University of Twente, we would appreciate it if you would add your student account to your Proto account. If you don't study at the University of Twente, you can skip this step."
+            ],
+            [
+                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::memberprofile::complete')) : null,
+                'unlocked' => Auth::check(),
+                'done' => Auth::check() && Auth::user()->hasCompletedProfile(),
+                'heading' => "Provide some personal details",
+                'icon' => "fas fa-id-card",
+                'text' => "To enter your in our member administration, you need to provide is with some extra information."
+            ],
+            [
+                'url' => Auth::check() ? sprintf('%s?wizard=1', route("user::bank::add", ["id"=>$user->id])) : null,
+                'unlocked' => Auth::check(),
+                'done' => Auth::check() && Auth::user()->bank,
+                'heading' => "Provide payment details",
+                'icon' => "fas fa-euro-sign",
+                'text' => "We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend."
+            ],
+            [
+                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::address::add', ['id' => $user->id])) : null,
+                'unlocked' => Auth::check(),
+                'done' => Auth::check() && Auth::user()->address,
+                'heading' => "Provide contact details",
+                'icon' => "fas fa-home",
+                'text' => "To make you a member of our association, we need your postal address. Please add it to your account here."
+            ],
+            [
+                'url' => sprintf('%s?wizard=1', route('page::show', ['slug' => 'board'])),
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
+                'done' => Auth::check() && Auth::user()->member,
+                'heading' => "Become a member!",
+                'icon' => "fas fa-trophy",
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230)."
+            ],
+            [
+                'url' => sprintf('%s?wizard=1', route('user::dashboard')),
+                'unlocked' => Auth::check() && Auth::user()->member,
+                'done' => false,
+                'heading' => "Add some additional info on your dashboard",
+                'icon' => "fas fa-tachometer-alt",
+                'text' => "Congratulations, you're now a member of Study Association Proto! As a next step, we would like to guide you to your dashboard, where you can sign up for (educational) mailing lists, some of which provide you regular information about your study, as well as some that provide you with Proto-related information. On your dashboard you can also add a profile picture and indicate any allergies or dietary restrictions you may have so Proto can take those into account when you're visiting an activity."
+            ]
+        ];
+
+        $todo = [];
+        $done = [];
+
+        foreach($steps as $step) {
+            if($step['done']) array_push($done, $step);
+            else array_push($todo, $step);
+        }
+
+        return view("users.becomeamember", ['user' => $user, 'todo' => $todo, 'done' => $done]);
     }
 
     public function getCompleteProfile()
