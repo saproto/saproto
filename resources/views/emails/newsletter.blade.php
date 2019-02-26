@@ -123,7 +123,8 @@
 
     <p>
         Kind regards,<br>
-        {{ config('proto.internal') }}
+        {{ config('proto.internal') }}<br>
+        <em>Officer of Internal Affairs</em>
     </p>
 
     <p>
