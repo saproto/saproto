@@ -67,7 +67,7 @@ class Email extends Model
         } elseif ($this->to_event != false) {
             $userids = [];
             foreach ($this->events as $event) {
-                if ($event && $event->activity) {
+                if ($event) {
                     $userids = array_merge($userids, $event->returnAllUsers()->pluck('id')->toArray());
                 }
             }
