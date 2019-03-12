@@ -485,8 +485,8 @@ class EventController extends Controller
     public function toggleRelevantOnly()
     {
         $user = Auth::user();
-        $newSetting = $user->toggleCalendarRelevantSetting();
-        if ($newSetting === true) {
+        $user->toggleCalendarRelevantSetting();
+        if ($user->pref_calendar_relevant_only) {
             Session::flash('flash_message', 'From now on your calendar will only sync events relevant to you.');
         } else {
             Session::flash('flash_message', 'From now on your calendar will sync all events.');
