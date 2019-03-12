@@ -32,7 +32,7 @@
             @if($user->member)
                 <a class="list-group-item"
                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
-                    Got to profile
+                    Go to profile
                 </a>
             @endif
 
