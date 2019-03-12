@@ -83,6 +83,20 @@ class Committee extends Model
     }
 
     /**
+     * @return mixed All events at which this committee helped out.
+     */
+    public function pastHelpedEvents()
+    {
+        $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+        $events = array();
+        foreach ($activities as $activity) {
+            $event = $activity->event;
+            if ($event && !$event->secret && $event->end < time()) $events[] = $event;
+        }
+        return $events;
+    }
+
+    /**
      * @return mixed All users currently associated with this committee.
      */
     public function users()
