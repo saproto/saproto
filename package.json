@@ -46,6 +46,7 @@
     "eslint-config-eslint": "^1.0.1",
     "grunt": "^0.4.5",
     "grunt-autoprefixer": "^3.0.0",
+    "grunt-banner": "^0.6.0",
     "grunt-bump": "^0.3.0",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "~0.5.1",
@@ -53,8 +54,9 @@
     "grunt-contrib-cssmin": "^0.13.0",
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-sass": "^1.0.0",
+    "grunt-sass": "^1.2.1",
     "load-grunt-tasks": "^3.1.0",
+    "node-sass": "^4.11.0",
     "node-sass-import-once": "^1.2.0"
   },
   "paths": {
@@ -70,12 +72,7 @@
         "./node_modules/bootstrap-slider/dist/bootstrap-slider.min.js",
         "./node_modules/js-cookie/src/js.cookie.js",
         "./node_modules/simplemde/dist/simplemde.min.js",
-        "./node_modules/angular/angular.js",
         "./node_modules/socket.io-client/dist/socket.io.js",
-        "./node_modules/chocolat/dist/js/jquery.chocolat.min.js",
-        "./node_modules/Croppie/croppie.min.js",
-        "./node_modules/ng-img-crop/compile/minified/ng-img-crop.js",
-        "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js",
         "./node_modules/select2/dist/js/select2.full.min.js",
         "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js"
       ],
@@ -97,16 +94,13 @@
     },
     "sass": {
       "src": [
-        "./resources/assets/sass/framework/**/*.scss",
         "./resources/views/**/*.scss",
-        "./node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css",
-        "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css",
-        "./node_modules/simplemde/dist/simplemde.min.css",
-        "./node_modules/font-awesome/css/font-awesome.css",
-        "./node_modules/chocolat/dist/css/chocolat.css",
+        "./node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css",
+        "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
+        "./node_modules/simplemde/dist/simplemde.css",
         "./node_modules/select2/dist/css/select2.min.css",
-        "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css",
-        "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css"
+        "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.scss",
+        "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [
