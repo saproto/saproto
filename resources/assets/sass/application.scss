@@ -2,6 +2,11 @@
 
 // Custom variables
 @import 'variables';
+@import 'dark-theme';
+
+@import url(https://fonts.googleapis.com/css?family=Lato);
+$font-family-sans-serif: 'Lato', sans-serif;
+@import 'node_modules/bootstrap/scss/bootstrap';
 
 // FontAwesome
 $fa-font-path: 'fonts/';

@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 					separator: '\n'
 				},
 				src: '<%= pkg.paths.sass.src %>',
-				dest: '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>'
+				dest: '<%= pkg.paths.sass.dest %>'
 			}
 		},
 
@@ -112,6 +112,22 @@ module.exports = function (grunt) {
 				src: '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>' // globbing is also possible here
 			}
 		},
+
+		// Watch for changes in directories
+		watch: {
+			javascripts: {
+				files: '<%= pkg.paths.javascripts.watch %>',
+				tasks: ['build:js']
+			},
+			html: {
+				files: './app/**/*.html',
+				tasks: ['build:html']
+			},
+			sass: {
+				files: '<%= pkg.paths.sass.watch %>',
+				tasks: ['build:sass']
+			}
+		}
 	};
 
 	grunt.initConfig();
@@ -127,6 +143,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-banner');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	/*	Register tasks	*/
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
