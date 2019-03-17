@@ -1,0 +1,57 @@
+//colours
+$grey-light: #424242;
+$grey-medium: #303030;
+$grey-dark: #212121;
+$dark: $grey-medium;
+
+//background colours
+$body-bg: $grey-light;
+$card-bg: $grey-medium;
+$card-color: #f1f1f1;
+
+//tables
+$table-color: #fff;
+$table-border-color: #aaaaaa;
+
+//input
+$input-group-addon-border-color: $grey-light;
+$input-group-addon-bg: $grey-light;
+$input-group-addon-color: #fff;
+$input-border-color: #aaaaaa;
+
+//links
+$link-color: darken($info, 10%);
+$link-hover-color: lighten($info, 5%);
+
+//navbar
+$navbar-dark-color: rgba(255, 255, 255, .75);
+$navbar-dark-hover-color: #fff;
+
+//photos
+$photo_pop-color: #fff;
+$photo_pop-text-shadow: 0 0 5px #fff;
+$photo-color: #fff;
+$photo-hover-color: #fff;
+$photo-text-shadow: 0 0 5px #fff;
+$photo-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+
+.card.leftborder.leftborder-info {
+  background-color: $grey-dark;
+}
+
+//scrollbar (webkit only)
+html {
+  scrollbar-face-color: $grey-dark;
+  scrollbar-base-color: $grey-dark;
+  scrollbar-3dlight-color: $grey-dark;
+  scrollbar-highlight-color: $grey-dark;
+  scrollbar-track-color: $grey-medium;
+  scrollbar-shadow-color: $grey-dark;
+}
+
+::-webkit-scrollbar { width: 10px; height: 3px; }
+::-webkit-scrollbar-track { background-color: $grey-dark; }
+::-webkit-scrollbar-track-piece { background-color: #000; }
+::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
+::-webkit-scrollbar-corner { background-color: $grey-dark; }
+::-webkit-resizer { background-color: #666; }
