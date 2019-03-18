@@ -219,9 +219,14 @@
                                id="dashboard__use_dark_theme"
                                 {{ ($user->use_dark_theme == 1 ? 'checked' : '') }}>
                         <label class="form-check-label" for="dashboard__use_dark_theme">
-                            Use the dark theme.
+                            Use the dark theme.<br>
+                            <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not always be accurate</small>
                         </label>
-                        
+                        <small class="form-text text-muted">
+                            This feature was requested by vampires. <i class="fas fa-moon"></i>
+                        </small>
+
+
                     </td>
                 </tr>
 
