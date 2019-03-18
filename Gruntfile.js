@@ -76,12 +76,12 @@ module.exports = function (grunt) {
 			}
 		},
 
-		// Compile application.scss to application.css
+		// Compile application-light.scss to application.css
 		sass: {
 			build: {
 				files: [{
-					src: '<%= pkg.paths.stylesheets.src %>',
-					dest: '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>': '<%= pkg.paths.stylesheets.light.src %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>'
 				}]
 			}
 		},
@@ -94,8 +94,8 @@ module.exports = function (grunt) {
 			},
 			target: {
 				files: {
-					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.destmin %>': [
-						'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>']
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>'
 				}
 			}
 		},
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
 						inline: false
 					}
 				},
-				src: '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>' // globbing is also possible here
+				src: '<%= pkg.paths.assets %>/application-*.css' // globbing is also possible here
 			}
 		},
 
