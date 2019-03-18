@@ -211,6 +211,20 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <th>Website</th>
+                    <td>
+
+                        <input name="use_dark_theme" type="checkbox" class="form-check-input"
+                               id="dashboard__use_dark_theme"
+                                {{ ($user->use_dark_theme == 1 ? 'checked' : '') }}>
+                        <label class="form-check-label" for="dashboard__use_dark_theme">
+                            Use the dark theme.
+                        </label>
+                        
+                    </td>
+                </tr>
+
                 @if($user->member)
 
                     <tr>

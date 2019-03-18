@@ -4,14 +4,12 @@ $grey-medium: #303030;
 $grey-dark: #212121;
 $dark: $grey-medium;
 
-//background colours
+//background colour
 $body-bg: $grey-light;
-$card-bg: $grey-medium;
-$card-color: #f1f1f1;
 
 //tables
 $table-color: #fff;
-$table-border-color: #aaaaaa;
+$table-border-color: $grey-light;
 
 //input
 $input-group-addon-border-color: $grey-light;
@@ -20,8 +18,8 @@ $input-group-addon-color: #fff;
 $input-border-color: #aaaaaa;
 
 //links
-$link-color: darken($info, 10%);
-$link-hover-color: lighten($info, 5%);
+$link-color: $info;
+$link-hover-color: lighten($info, 10%);
 
 //navbar
 $navbar-dark-color: rgba(255, 255, 255, .75);
@@ -35,8 +33,28 @@ $photo-hover-color: #fff;
 $photo-text-shadow: 0 0 5px #fff;
 $photo-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
 
+//cards
 .card.leftborder.leftborder-info {
   background-color: $grey-dark;
+}
+.card-header.bg-dark {
+  background-color: $grey-dark !important;
+}
+$card-bg: $grey-medium;
+$card-color: #f1f1f1;
+$card-collapse-bg: #fff;
+
+//pagination
+$pagination-bg: $grey-light;
+$pagination-border-color: $grey-dark;
+$pagination-hover-bg: $grey-medium;
+$pagination-hover-border-color: $grey-dark;
+$pagination-disabled-bg: $grey-medium;
+$pagination-disabled-border-color: $grey-light;
+
+//custom file label
+.custom-file-label::after {
+  color: #fff !important;
 }
 
 //scrollbar (webkit only)

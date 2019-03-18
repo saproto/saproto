@@ -83,14 +83,26 @@
       ]
     },
     "stylesheets": {
-      "src": [
-        "./resources/assets/sass/application.scss"
-      ],
-      "dest": "application.css",
-      "destmin": "application.min.css",
-      "watch": [
-        "./resources/assets/**/*.scss"
-      ]
+      "light": {
+        "src": [
+          "./resources/assets/sass/application-light.scss"
+        ],
+        "dest": "application-light.css",
+        "destmin": "application-light.min.css",
+        "watch": [
+          "./resources/assets/**/*.scss"
+        ]
+      },
+      "dark": {
+        "src": [
+          "./resources/assets/sass/application-dark.scss"
+        ],
+        "dest": "application-dark.css",
+        "destmin": "application-dark.min.css",
+        "watch": [
+          "./resources/assets/**/*.scss"
+        ]
+      }
     },
     "sass": {
       "src": [
