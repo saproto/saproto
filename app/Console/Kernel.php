@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         Commands\ClearSessionTable::class,
         Commands\CountPrimaryMembers::class,
         Commands\VerifyPersonalDetailsEmailCron::class,
+        Commands\HelperNotificationsCron::class,
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
         Commands\MemberRenewCron::class,
