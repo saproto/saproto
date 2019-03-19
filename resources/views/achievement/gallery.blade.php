@@ -32,7 +32,7 @@
 
                 </div>
 
-                <div class="card-body collapse {{ ($tier == 'common' ? 'show' : '') }}"
+                <div class="card-body bg-white collapse {{ ($tier == 'common' ? 'show' : '') }}"
                      id="collapse-achievement-{{ $tier }}" data-parent="#achievement-accordion">
 
                     <div class="row">
