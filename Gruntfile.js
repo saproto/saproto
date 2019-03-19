@@ -135,7 +135,7 @@ module.exports = function (grunt) {
 				tasks: ['build:sass']
 			}
 		}
-	};
+	}
 
 	require('load-grunt-tasks')(grunt); // npm install --save-dev load-grunt-tasks
 	var importOnce = require('node-sass-import-once');
