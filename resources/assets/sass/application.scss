@@ -1,14 +1,6 @@
-@charset "UTF-8"; // Make sure the charset is set appropriately
+// Make sure the charset is set appropriately
+@charset "UTF-8";
 
-// Custom variables
-@import 'variables';
-
-// FontAwesome
-$fa-font-path: 'fonts/';
-@import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
-@import 'node_modules/@fortawesome/fontawesome-free/scss/brands';
-@import 'node_modules/@fortawesome/fontawesome-free/scss/regular';
-@import 'node_modules/@fortawesome/fontawesome-free/scss/solid';
-
-// concatenated SCSS from views
+@import 'bootstrap';
+@import 'fontawesome';
 @import 'components';

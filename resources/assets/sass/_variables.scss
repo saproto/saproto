@@ -6,10 +6,7 @@ $info: $success;
 $warning: #f37e16;
 $danger: #C50005;
 
-//dark theme
-$body-bg: #414141;
-$card-bg: #303030;
-$card-color: #fff;
+$body-bg: #000 !important;
 
 $link-color: darken($info, 10%);
 $navbar-dark-color: rgba(255, 255, 255, .75);
@@ -17,5 +14,3 @@ $navbar-dark-hover-color: #fff;
 
 @import url(https://fonts.googleapis.com/css?family=Lato);
 $font-family-sans-serif: 'Lato', sans-serif;
-
-@import 'node_modules/bootstrap/scss/bootstrap';
