@@ -23,7 +23,6 @@
             {!! $html !!}
         </p>
     </a>
-
     @if(isset($footer) && $footer != null)
         <div class="card-footer ellipsis">
             {!! $footer !!}
