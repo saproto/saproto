@@ -1,21 +1,18 @@
 <div class="card mb-3 {{ isset($classes) ? implode(' ', $classes) : null }}
 {{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}"
    style="text-decoration: none !important;">
-    <a href="{{ $url or '#' }}" class="card-body" style="display: flex; text-decoration: none !important;
+    <a href="{{ $url or '#' }}" class="card-body
     @if(isset($photo_pop) && $photo_pop)
-            color: #fff;
-            text-shadow: 0 0 10px #000;
+            photo_pop
     @else
-            color: #222;
-            text-shadow: 0 0 10px #fff;
+            photo
     @endif
+            " style="display: flex; text-decoration: none !important;
     @if(isset($img) && $img)
     @if(isset($photo_pop) && $photo_pop)
-            background: {{ sprintf('url(%s);', $img) }};
-            background-size: cover; background-position: center center; height: 100px;
+            background-image: {{ sprintf('url(%s);', $img) }};
     @else
-            background: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9)), {{ sprintf('url(%s);', $img) }};
-            background-size: cover; background-position: center center; height: 100px;
+            background-image: {{ sprintf('url(%s);', $img) }};
     @endif
     @else
             background: #333;
@@ -26,6 +23,7 @@
             {!! $html !!}
         </p>
     </a>
+
     @if(isset($footer) && $footer != null)
         <div class="card-footer ellipsis">
             {!! $footer !!}

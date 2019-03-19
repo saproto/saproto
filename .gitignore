@@ -23,10 +23,8 @@ _ide_helper_models.php
 composer.phar
 
 # Generated files
-/public/assets/saproto-sp-test.xml
+/public/assets
 /resources/assets/sass/components.scss
-/public/assets/application.*
-/public/assets/fonts
 
 # Dammit, Mac users
 .DS_Store
