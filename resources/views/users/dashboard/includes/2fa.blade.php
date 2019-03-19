@@ -36,18 +36,17 @@
 
         @if($user->tfa_totp_key)
 
-            <div class="btn btn-outline-danger btn-block">
-                <a href="{{ route('user::2fa::deletetimebased') }}"
-                   onclick="return confirm('Do really want to unset time-based 2FA?')">
-                    Disable two-factor authentication
-                </a>
-            </div>
+            <a href="{{ route('user::2fa::deletetimebased') }}"
+               class="btn btn-outline-danger btn-block" onclick="return confirm('Do really want to unset time-based 2FA?')">
+                Disable two-factor authentication
+            </a>
 
         @else
 
-            <div data-toggle="modal" data-target="#totp-modal" class="btn btn-outline-info btn-block">
+
+            <a data-toggle="modal" data-target="#totp-modal" class="btn btn-outline-info btn-block">
                 Configure Two-Factor Authentication
-            </div>
+            </a>
 
             @include('users.2fa.timebased')
 
