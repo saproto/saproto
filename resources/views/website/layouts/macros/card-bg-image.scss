@@ -1,8 +1,7 @@
-$photo_pop-color: #222 !default;
-$photo_pop-text-shadow: 0 0 2px #000 !default
-$photo-color: #fff !default;
+$photo_pop-color: #fff !default;
+$photo-color: #222 !default;
 $photo-hover-color: #222 !default;
-$photo-text-shadow: 0 0 2px #000 !default;
+$photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)) !default;
 $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) !default;
 
 .photo_pop {
@@ -12,6 +11,14 @@ $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0
   height: 100px;
 }
 
+.photo_pop:hover {
+  color: $photo_pop-color;
+}
+
+.photo_pop:hover strong {
+  text-decoration: underline;
+}
+
 .photo {
   color: $photo-color;
   background-size: cover;
@@ -19,7 +26,7 @@ $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0
   height: 100px;
 }
 
-.photo::before {
+.photo::after {
   position: absolute;
   top: 0;
   left: 0;
@@ -29,12 +36,14 @@ $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0
   content: '';
 }
 
-.photo_pop:hover {
-  color: $photo_pop-color;
-  text-shadow: $photo_pop-text-shadow;
+.photo > p {
+  z-index: 1;
 }
 
 .photo:hover {
   color: $photo-color;
-  text-shadow: $photo-text-shadow;
+}
+
+.photo:hover.photo::after {
+  background-image: $photo-hover-gradient;
 }

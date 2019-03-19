@@ -12006,13 +12006,19 @@ a.card {
   background-position: center center;
   height: 100px; }
 
+.photo_pop:hover {
+  color: #fff; }
+
+.photo_pop:hover strong {
+  text-decoration: underline; }
+
 .photo {
   color: #fff;
   background-size: cover;
   background-position: center center;
   height: 100px; }
 
-.photo::before {
+.photo::after {
   position: absolute;
   top: 0;
   left: 0;
@@ -12021,13 +12027,14 @@ a.card {
   background-image: linear-gradient(rgba(0, 0, 0, 0.8), transparent);
   content: ''; }
 
-.photo_pop:hover {
-  color: #fff;
-  text-shadow: 0 0 5px #fff; }
+.photo > p {
+  z-index: 1; }
 
 .photo:hover {
-  color: #fff;
-  text-shadow: 0 0 5px #fff; }
+  color: #fff; }
+
+.photo:hover.photo::after {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)); }
 
 /*@preserve
  * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)

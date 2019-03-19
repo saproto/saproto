@@ -57,7 +57,7 @@ body {
   line-height: 1.5;
   color: #212529;
   text-align: left;
-  background-color: #fff; }
+  background-color: #f1f1f1; }
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -395,7 +395,7 @@ mark,
 
 .img-thumbnail {
   padding: 0.25rem;
-  background-color: #fff;
+  background-color: #f1f1f1;
   border: 1px solid #dee2e6;
   border-radius: 0.25rem;
   max-width: 100%;
@@ -2958,11 +2958,11 @@ input[type="button"].btn-block {
   .custom-range:focus {
     outline: none; }
     .custom-range:focus::-webkit-slider-thumb {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
+      box-shadow: 0 0 0 1px #f1f1f1, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
     .custom-range:focus::-moz-range-thumb {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
+      box-shadow: 0 0 0 1px #f1f1f1, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
     .custom-range:focus::-ms-thumb {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
+      box-shadow: 0 0 0 1px #f1f1f1, 0 0 0 0.2rem rgba(131, 183, 26, 0.25); }
   .custom-range::-moz-focus-outer {
     border: 0; }
   .custom-range::-webkit-slider-thumb {
@@ -3098,8 +3098,8 @@ input[type="button"].btn-block {
   .nav-tabs .nav-link.active,
   .nav-tabs .nav-item.show .nav-link {
     color: #495057;
-    background-color: #fff;
-    border-color: #dee2e6 #dee2e6 #fff; }
+    background-color: #f1f1f1;
+    border-color: #dee2e6 #dee2e6 #f1f1f1; }
   .nav-tabs .dropdown-menu {
     margin-top: -1px;
     border-top-left-radius: 0;
@@ -11962,18 +11962,24 @@ a.card {
   color: #222; }
 
 .photo_pop {
-  color: #222;
-  background-size: cover;
-  background-position: center center;
-  height: 100px; }
-
-.photo {
   color: #fff;
   background-size: cover;
   background-position: center center;
   height: 100px; }
 
-.photo::before {
+.photo_pop:hover {
+  color: #fff; }
+
+.photo_pop:hover strong {
+  text-decoration: underline; }
+
+.photo {
+  color: #222;
+  background-size: cover;
+  background-position: center center;
+  height: 100px; }
+
+.photo::after {
   position: absolute;
   top: 0;
   left: 0;
@@ -11982,13 +11988,14 @@ a.card {
   background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5));
   content: ''; }
 
-.photo_pop:hover {
-  color: #222;
-  text-shadow: 0 0 2px #000; }
+.photo > p {
+  z-index: 1; }
 
 .photo:hover {
-  color: #fff;
-  text-shadow: 0 0 2px #000; }
+  color: #222; }
+
+.photo:hover.photo::after {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)); }
 
 /*@preserve
  * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
