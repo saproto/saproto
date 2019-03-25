@@ -7,7 +7,7 @@
     @else
             photo
     @endif
-            " style="display: flex; text-decoration: none !important;
+            " style="height: 100px; display: flex; text-decoration: none !important;
     @if(isset($img) && $img)
     @if(isset($photo_pop) && $photo_pop)
             background-image: {{ sprintf('url(%s);', $img) }};

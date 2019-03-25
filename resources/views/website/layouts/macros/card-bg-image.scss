@@ -23,7 +23,6 @@ $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0
   color: $photo-color;
   background-size: cover;
   background-position: center center;
-  height: 100px;
 }
 
 .photo::after {
@@ -34,9 +33,10 @@ $photo-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0
   height: 100%;
   background-image: $photo-gradient;
   content: '';
+  z-index: 0;
 }
 
-.photo > p {
+.photo * {
   z-index: 1;
 }
 

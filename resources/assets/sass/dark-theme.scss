@@ -12,11 +12,17 @@ $body-color: #fff;
 $table-color: #fff;
 $table-border-color: $grey-light;
 
-//input
+//lists
+$list-group-bg: $grey-medium;
+
+//inputs
 $input-group-addon-border-color: $grey-light;
 $input-group-addon-bg: $grey-light;
 $input-group-addon-color: #fff;
 $input-border-color: #aaaaaa;
+
+//buttons
+$light: $grey-medium;
 
 //links
 $link-color: $info;
@@ -33,6 +39,10 @@ $photo-color: #fff;
 $photo-hover-color: #fff;
 $photo-text-shadow: 0 0 5px #fff;
 $photo-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+
+//calendar events
+$event-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+$event-bg: $grey-dark;
 
 //cards
 .card.leftborder.leftborder-info {
@@ -53,7 +63,7 @@ $pagination-hover-border-color: $grey-dark;
 $pagination-disabled-bg: $grey-medium;
 $pagination-disabled-border-color: $grey-light;
 
-//custom file label
+//custom file labels
 .custom-file-label::after {
   color: #fff !important;
 }
