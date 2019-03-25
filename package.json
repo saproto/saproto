@@ -74,7 +74,8 @@
         "./node_modules/simplemde/dist/simplemde.min.js",
         "./node_modules/socket.io-client/dist/socket.io.js",
         "./node_modules/select2/dist/js/select2.full.min.js",
-        "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js"
+        "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js",
+        "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -109,7 +110,7 @@
         "./resources/views/**/*.scss",
         "./node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css",
         "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
-        "./node_modules/simplemde/dist/simplemde.css",
+        "./node_modules/simplemde/dist/simplemde.min.css",
         "./node_modules/select2/dist/css/select2.min.css",
         "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.scss",
         "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css"

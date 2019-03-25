@@ -63,6 +63,16 @@ $card-bg: $grey-medium;
 $card-color: #f1f1f1;
 $card-collapse-bg: #fff;
 
+//simplemde
+.editor-toolbar .fa {
+  color: #fff !important;
+}
+
+//datetimepicker
+.bootstrap-datetimepicker-widget.dropdown-menu {
+  background-color: $grey-dark !important;
+}
+
 //pagination
 $pagination-bg: $grey-light;
 $pagination-border-color: $grey-dark;
