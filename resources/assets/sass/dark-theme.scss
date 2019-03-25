@@ -21,6 +21,17 @@ $input-group-addon-bg: $grey-light;
 $input-group-addon-color: #fff;
 $input-border-color: #aaaaaa;
 
+//select2
+.select2-container {
+  background-color: #fff !important;
+  border: solid #aaa 1px !important;
+  border-radius: .25rem !important;
+}
+.select2-dropdown {
+  background-color: $grey-dark !important;
+  border: 1px solid rgba(0,0,0,.125) !important;
+}
+
 //buttons
 $light: $grey-medium;
 
@@ -45,12 +56,9 @@ $event-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
 $event-bg: $grey-dark;
 
 //cards
-.card.leftborder.leftborder-info {
-  background-color: $grey-dark;
-}
-.card-header.bg-dark {
-  background-color: $grey-dark !important;
-}
+.card.leftborder.leftborder-info { background-color: $grey-dark; }
+.card-header.bg-dark { background-color: $grey-dark !important; }
+.card-header.bg-white { background-color: $grey-dark !important; }
 $card-bg: $grey-medium;
 $card-color: #f1f1f1;
 $card-collapse-bg: #fff;
