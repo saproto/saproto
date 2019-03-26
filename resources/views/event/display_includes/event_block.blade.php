@@ -5,9 +5,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
     <a class="card mb-3 leftborder leftborder-info" style="text-decoration: none !important;"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
-        <div class="card-body" style="text-align: left;
-                background: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9)), {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('url(%s);', $event->image->generateImagePath(800,300)) : '#eee;' }};
-                background-size: cover; background-position: center center;">
+        <div class="card-body event {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}" style="text-align: left;
+                {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: url(%s);', $event->image->generateImagePath(800,300)) : '' }}">
 
             @if($event->secret)
                 <span class="badge badge-info float-right"
@@ -38,28 +37,37 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @if($event->is_educational)
                 <br>
 
-                <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-                Study related
+                <span>
+                    <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
+                    Study related
+                </span>
             @endif
 
             <br>
 
-            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+                <span>
+                    <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
             @if (isset($include_year))
-                {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
-            @else
-                {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
-            @endif
+                        {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
+                    @else
+                        {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
+                    @endif
+                </span>
 
             <br>
 
-            <i class="fas fa-map-marker-alt fa-fw" aria-hidden="true"></i> {{ $event->location }}
+            <span>
+                <i class="fas fa-map-marker-alt fa-fw" aria-hidden="true"></i>
+                {{ $event->location }}
+            </span>
 
             @if($event->is_external)
                 <br>
 
-                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-                Not Organized by S.A. Proto
+                <span>
+                    <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                    Not Organized by S.A. Proto
+                </span>
             @endif
 
         </div>
