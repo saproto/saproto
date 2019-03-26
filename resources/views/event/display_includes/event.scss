@@ -1,5 +1,7 @@
 $event-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.5)) !default;
+$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)) !default;
 $event-bg: #eee !default;
+$event-hover-bg: #aaa !default;
 
 .event::after {
   position: absolute;
@@ -9,16 +11,24 @@ $event-bg: #eee !default;
   height: 100%;
   background-image: $event-gradient;
   content: '';
-  z-index: 0;
+  z-index: 1;
+}
+
+.event:hover.event::after {
+  background-image: $event-hover-gradient;
 }
 
 .event.no-img {
   background: $event-bg;
 }
 
+.event.no-img:hover {
+  background: $event-hover-bg;
+}
+
 .event * {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .event p {

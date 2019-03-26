@@ -6,7 +6,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body event {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}" style="text-align: left;
-                background: {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('url(%s);', $event->image->generateImagePath(800,300)) : '' }};">
+                {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: url(%s);', $event->image->generateImagePath(800,300)) : '' }}">
 
             @if($event->secret)
                 <span class="badge badge-info float-right"
