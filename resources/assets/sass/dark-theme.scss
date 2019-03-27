@@ -27,6 +27,7 @@ $input-border-color: #aaaaaa;
   border: 1px solid rgba(0,0,0,.125) !important;
 }
 .select2-container {
+  width: 100% !important;
 }
 
 .select2-selection__rendered {
@@ -40,6 +41,7 @@ $input-border-color: #aaaaaa;
 }
 
 .select2-search__field {
+  width: 100% !important;
   height: calc(1.5em + .75rem + 2px) !important;
   padding: .375rem .75rem !important;
   border-radius: .25rem !important;
