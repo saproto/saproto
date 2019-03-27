@@ -1,7 +1,24 @@
 //background colour
 $body-bg: #f1f1f1;
 
+//select2
+.select2-dropdown {
+  background-color: #fff !important;
+  border: 1px solid rgba(0,0,0,.125) !important;
+}
 .select2-container {
-  border: solid #f1f1f1 1px !important;
+  width: 100% !important;
+}
+
+.select2-search__field {
+  width: 100% !important;
+  height: calc(1.5em + .75rem + 2px) !important;
+  padding: .375rem .75rem !important;
   border-radius: .25rem !important;
+  border: solid #aaa 1px !important;
+}
+
+.select2-selection__choice__remove {
+  margin-right: 2px;
+  color: $warning;
 }

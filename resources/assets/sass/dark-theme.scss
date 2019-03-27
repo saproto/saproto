@@ -22,14 +22,33 @@ $input-group-addon-color: #fff;
 $input-border-color: #aaaaaa;
 
 //select2
-.select2-container {
-  background-color: #fff !important;
-  border: solid #aaa 1px !important;
-  border-radius: .25rem !important;
-}
 .select2-dropdown {
   background-color: $grey-dark !important;
   border: 1px solid rgba(0,0,0,.125) !important;
+}
+.select2-container {
+}
+
+.select2-selection__rendered {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.select2-search {
+  width: 100%;
+}
+
+.select2-search__field {
+  height: calc(1.5em + .75rem + 2px) !important;
+  padding: .375rem .75rem !important;
+  border-radius: .25rem !important;
+  border: solid #aaa 1px !important;
+}
+
+.select2-selection__choice__remove {
+  margin-right: 2px;
+  color: $warning;
 }
 
 //buttons

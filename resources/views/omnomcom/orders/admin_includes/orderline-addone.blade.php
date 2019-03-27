@@ -29,4 +29,9 @@
 
     </div>
 
+    <script>
+        $('.form-control').select2({width: 'resolve'});
+    </script>
+
+
 </form>
