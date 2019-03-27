@@ -33,3 +33,14 @@ $body-bg: #f1f1f1;
   margin-right: 2px;
   color: $warning;
 }
+
+//buttons
+.btn.lampOn:hover {
+  background: $primary;
+  border-color: $primary;
+}
+
+.btn.lampOff:hover {
+  background: $warning;
+  border-color: $warning;
+}

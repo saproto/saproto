@@ -3,6 +3,7 @@ $grey-light: #424242;
 $grey-medium: #303030;
 $grey-dark: #212121;
 $dark: $grey-medium;
+$light: $grey-medium;
 
 //body
 $body-bg: $grey-light;
@@ -55,7 +56,24 @@ $input-border-color: #aaaaaa;
 }
 
 //buttons
-$light: $grey-medium;
+.btn.btn-outline-dark {
+  color: #fff;
+  border-color: #aaa;
+}
+
+.btn.btn-outline-dark:hover {
+  background: $info;
+}
+
+.btn.lampOn:hover {
+  background: $primary;
+  border-color: $primary;
+}
+
+.btn.lampOff:hover {
+  background: $warning;
+  border-color: $warning;
+}
 
 //links
 $link-color: $info;
