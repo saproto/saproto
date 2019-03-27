@@ -10,6 +10,16 @@ $body-bg: #f1f1f1;
   width: 100% !important;
 }
 
+.select2-selection__rendered {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.select2-search {
+  width: 100%;
+}
+
 .select2-search__field {
   width: 100% !important;
   height: calc(1.5em + .75rem + 2px) !important;
@@ -19,6 +29,7 @@ $body-bg: #f1f1f1;
 }
 
 .select2-selection__choice__remove {
+  margin-left: 10px;
   margin-right: 2px;
   color: $warning;
 }
