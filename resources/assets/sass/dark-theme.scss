@@ -75,6 +75,13 @@ $input-border-color: #aaaaaa;
   border-color: $warning;
 }
 
+//modals
+$modal-content-bg: $grey-medium;
+.modal-header button {
+  color: #fff;
+  text-shadow: 0 1px 0 $grey-dark;
+}
+
 //links
 $link-color: $info;
 $link-hover-color: lighten($info, 10%);
