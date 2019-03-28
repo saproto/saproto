@@ -146,6 +146,11 @@ $pagination-disabled-border-color: $grey-light;
   color: #fff !important;
 }
 
+//protube admin search results
+.video:nth-child(2n) {
+  background-color: $grey-dark !important;
+}
+
 //scrollbar (webkit only)
 html {
   scrollbar-face-color: $grey-dark;
