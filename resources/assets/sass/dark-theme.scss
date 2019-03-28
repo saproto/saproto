@@ -9,12 +9,24 @@ $light: $grey-medium;
 $body-bg: $grey-light;
 $body-color: #fff;
 
+//horizontal line
+hr {
+  border-color: $grey-light !important;
+}
+
 //tables
 $table-color: #fff;
 $table-border-color: $grey-light;
 
 //lists
 $list-group-bg: $grey-medium;
+.list-group-item {
+  background-color: $grey-light !important;
+}
+.list-group-item-dark {
+  background-color: $grey-dark !important;
+  color: #fff !important;
+}
 
 //inputs
 $input-group-addon-border-color: $grey-light;
