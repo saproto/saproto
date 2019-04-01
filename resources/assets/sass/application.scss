@@ -15,6 +15,7 @@
 
 
 .box {
+  pointer-events: none;
   position: absolute;
   animation: rotate 2.5s infinite linear;
   margin: 0;
