@@ -67,6 +67,8 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('address', ['uses' => 'UserApiController@getAddress']);
         Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
         Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
+        Route::get('qr_auth_approve/{code}', ['uses' => 'QrAuthController@apiApprove']);
+        Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::group(['prefix' => 'orders'], function () {
             Route::get('', ['uses' => 'UserApiController@getPurchases']);
             Route::get('total_month', ['uses' => 'UserApiController@getPurchasesMonth']);

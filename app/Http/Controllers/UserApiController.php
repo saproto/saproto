@@ -44,7 +44,7 @@ class UserApiController extends Controller
 
     public function getPurchases()
     {
-        return Orderline::where('user_id', Auth::id())->with('product')->limit(100)->get();
+        return Orderline::where('user_id', Auth::id())->with('product')->orderBy('created_at', 'DESC')->limit(100)->get();
     }
 
     public function getNextWithdrawal()
