@@ -81,7 +81,8 @@ module.exports = function (grunt) {
 			build: {
 				files: [{
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>': '<%= pkg.paths.stylesheets.light.src %>',
-					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>'
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.dest %>': '<%= pkg.paths.stylesheets.rainbowbarf.src %>'
 				}]
 			}
 		},
@@ -95,7 +96,8 @@ module.exports = function (grunt) {
 			target: {
 				files: {
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>',
-					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>'
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.dest %>'
 				}
 			}
 		},

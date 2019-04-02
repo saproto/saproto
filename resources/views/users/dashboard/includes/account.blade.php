@@ -215,17 +215,21 @@
                     <th>Website</th>
                     <td>
 
-                        <input name="use_dark_theme" type="checkbox" class="form-check-input"
-                               id="dashboard__use_dark_theme"
-                                {{ ($user->use_dark_theme == 1 ? 'checked' : '') }}>
-                        <label class="form-check-label" for="dashboard__use_dark_theme">
-                            Use the dark theme.<br>
-                            <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not always be accurate</small>
-                        </label>
-                        <small class="form-text text-muted">
-                            This feature was requested by vampires. <i class="fas fa-moon"></i>
+                        <p class="form-check-label" for="dashboard__theme">
+                            Choose a theme!
+                        </p>
+                        <select class="form-control" name="theme">
+                            @foreach(config('proto.themes') as $name => $file)
+                            <option value="{{ $file }}" {{ ($user->theme == $file) ? 'selected' : '' }}>{{ $name }} - {{ $file }}</option>
+                            @endforeach
+                        </select>
+                        <small>
+                            <i class="fas fa-flask"></i>
+                            Experimental feature, might not always be accurate
                         </small>
-
+                        <small class="form-text text-muted">
+                            This feature was requested by pretty much everyone.
+                        </small>
 
                     </td>
                 </tr>

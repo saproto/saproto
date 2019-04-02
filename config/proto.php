@@ -259,4 +259,18 @@ return [
 
     'openiban_url' => env('OPENIBAN_URL', 'https://openiban.proto.utwente.nl'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Website Theme configuration
+    |--------------------------------------------------------------------------
+    |
+    | The different css themes.
+    |
+    */
+
+    'themes' => [
+        'Light' => 'assets/application-light.css',
+        'Dark' => 'assets/application-dark.css',
+        'Rainbow Barf' => 'assets/application-rainbowbarf.css'
+    ]
 ];

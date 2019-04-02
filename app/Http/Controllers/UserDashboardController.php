@@ -65,7 +65,7 @@ class UserDashboardController extends Controller
             $userdata['show_birthday'] = $request->has('show_birthday');
             $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
             $userdata['show_omnomcom_calories'] = $request->has('show_omnomcom_calories');
-            $userdata['use_dark_theme'] = $request->has('use_dark_theme');
+            $userdata['theme'] = $request->input('theme');
             $userdata['show_achievements'] = $request->has('show_achievements');
         }
 

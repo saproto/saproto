@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUseDarkThemeToUsersTable extends Migration
+class AddThemeToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddUseDarkThemeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('use_dark_theme')->after('keep_omnomcom_history')->default(0);
+            $table->string('theme')->after('keep_omnomcom_history')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddUseDarkThemeToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('use_dark_theme');
+            $table->dropColumn('theme');
         });
     }
 }

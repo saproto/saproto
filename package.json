@@ -94,6 +94,16 @@
           "./resources/assets/**/*.scss"
         ]
       },
+      "rainbowbarf": {
+        "src": [
+          "./resources/assets/sass/application-rainbowbarf.scss"
+        ],
+        "dest": "application-rainbowbarf.css",
+        "destmin": "application-rainbowbarf.min.css",
+        "watch": [
+          "./resources/assets/**/*.scss"
+        ]
+      },
       "dark": {
         "src": [
           "./resources/assets/sass/application-dark.scss"
