@@ -25,7 +25,7 @@
 
     </div>
 
-    <div class="card-body bg-white text-dark">
+    <div class="card-body text-dark">
 
         {{ $achievement->desc }}
 

@@ -1,29 +1,32 @@
 module.exports = function (grunt) {
-	window = {};
-
+	/*	Configuration	*/
 	var json = {
 		pkg: grunt.file.readJSON('package.json'),
 
-		copy: {
-			fontawesome: {
-				expand: true,
-				cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
-				src: '**',
-				dest: '<%= pkg.paths.assets %>/fonts/'
+		// Grunt banner
+		usebanner: {
+			dist: {
+				options: {
+					position: 'top',
+					banner:
+						'/*! This code was created for S.A. Proto */\n\n' +
+						'/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+						'<%= grunt.template.today("yyyy-mm-dd") %> */\n\n\n\n',
+					linebreak: true
+				},
+				files: {
+					src: ['<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.destmin %>', '<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.destmin %>']
+				}
 			}
 		},
 
-		/*
-		 * Concatenate Javascript files
-		 */
+		// Concatenate JavaScript and SCSS files
 		concat: {
+			// Concatenate application.js
 			js: {
 				options: {
-					separator: ';\n',
 					stripBanners: true,
-					banner: '/*! This code was created for S.A. Proto */\n\n' +
-						'/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-						'<%= grunt.template.today("yyyy-mm-dd") %> */\n\n\n\n',
+					separator: ';\n',
 					process: function (src, filepath) {
 						return '// Source: ' + filepath + '\n' +
 							src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
@@ -32,24 +35,26 @@ module.exports = function (grunt) {
 				src: '<%= pkg.paths.javascripts.src %>',
 				dest: '<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.dest %>'
 			},
+			// Concatenate components.scss
 			sass: {
 				options: {
 					separator: '\n'
 				},
 				src: '<%= pkg.paths.sass.src %>',
-				dest: './<%= pkg.paths.sass.dest %>'
+				dest: '<%= pkg.paths.sass.dest %>'
 			}
 		},
 
+		// Initialise JavaScript
 		uglify: {
 			my_target: {
-		      options: {
-		        sourceMap: true
-		      },
-		      files: {
-		        '<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.destmin %>': ['<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.dest %>']
-		      }
-		    }
+				options: {
+					sourceMap: true
+				},
+				files: {
+					'<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.destmin %>': ['<%= pkg.paths.assets %>/<%= pkg.paths.javascripts.dest %>']
+				}
+			}
 		},
 
 		bump: {
@@ -71,41 +76,33 @@ module.exports = function (grunt) {
 			}
 		},
 
-		/*
-		 * Initialise SASS
-		 */
+		// Compile application-light.scss to application.css
 		sass: {
-			importer: importOnce,
-			importOnce: {
-				index: false,
-				css: true
-			},
-			options: {
-				outputStyle: 'expanded',
-				sourceComments: true,
-				includePaths: [],
-			},
-			dist: {
-				files: {
-					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>': '<%= pkg.paths.stylesheets.src %>'
-				}
+			build: {
+				files: [{
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>': '<%= pkg.paths.stylesheets.light.src %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.dest %>': '<%= pkg.paths.stylesheets.rainbowbarf.src %>'
+				}]
 			}
 		},
 
 		cssmin: {
 			options: {
 				sourceMap: true,
-				keepSpecialComments: 1,
+				keepSpecialComments: 0,
 				roundingPrecision: -1
 			},
 			target: {
 				files: {
-					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.destmin %>': [
-						'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>']
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>',
+					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.destmin %>': '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.rainbowbarf.dest %>'
 				}
 			}
 		},
 
+		// Adds vendor-prefixed CSS properties
 		autoprefixer: {
 			files: {
 				options: {
@@ -114,13 +111,11 @@ module.exports = function (grunt) {
 						inline: false
 					}
 				},
-				src: '<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dest %>' // globbing is also possible here
+				src: '<%= pkg.paths.assets %>/application-*.css' // globbing is also possible here
 			}
 		},
 
-		/*
-		 * Watch for changes in directories
-		 */
+		// Watch for changes in directories
 		watch: {
 			javascripts: {
 				files: '<%= pkg.paths.javascripts.watch %>',
@@ -135,17 +130,12 @@ module.exports = function (grunt) {
 				tasks: ['build:sass']
 			}
 		}
-	}
-
-	require('load-grunt-tasks')(grunt); // npm install --save-dev load-grunt-tasks
-	var importOnce = require('node-sass-import-once');
+	};
 
 	grunt.initConfig();
 	grunt.config.merge(json);
 
-	/*
-	 * Load NPM Plugins
-	 */
+	/*	Load plugins	*/
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -153,13 +143,14 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-bump');
 	grunt.loadNpmTasks('grunt-autoprefixer');
+	grunt.loadNpmTasks('grunt-sass');
+	grunt.loadNpmTasks('grunt-banner');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	/*
-	 * Register Tasks
-	 */
+	/*	Register tasks	*/
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
-	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'cssmin', 'autoprefixer']);
+	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'autoprefixer', 'cssmin']);
 
-	grunt.registerTask('default', ['build:js', 'build:sass', 'copy:fontawesome']);
+	grunt.registerTask('default', [ 'build:js', 'build:sass', 'usebanner:dist']);
 
 };

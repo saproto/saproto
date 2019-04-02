@@ -69,6 +69,7 @@ class UserDashboardController extends Controller
         }
 
         $userdata['keep_omnomcom_history'] = $request->has('keep_omnomcom_history');
+        $userdata['theme'] = $request->input('theme');
 
         if ($userdata['email'] !== $user->email) {
 

@@ -38,7 +38,7 @@
 </head>
 
 <body class="template-{{ $viewName }}"
-      style="background-color: #f3f3f3; margin-bottom: 216px; @section('body-style')@show">
+      style="margin-bottom: 216px; @section('body-style')@show">
 
 @yield('body')
 

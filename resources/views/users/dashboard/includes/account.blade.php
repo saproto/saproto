@@ -211,6 +211,29 @@
                     </td>
                 </tr>
 
+                <tr>
+                    <th>Website</th>
+                    <td>
+
+                        <p class="form-check-label" for="dashboard__theme">
+                            Choose a theme!
+                        </p>
+                        <select class="form-control" name="theme">
+                            @foreach(config('proto.themes') as $name => $file)
+                            <option value="{{ $file }}" {{ ($user->theme == $file) ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
+                        </select>
+                        <small>
+                            <i class="fas fa-flask"></i>
+                            Experimental feature, might not always be accurate
+                        </small>
+                        <small class="form-text text-muted">
+                            This feature was requested by pretty much everyone.
+                        </small>
+
+                    </td>
+                </tr>
+
                 @if($user->member)
 
                     <tr>
