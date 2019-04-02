@@ -57,6 +57,20 @@ class QrAuthController extends Controller
         return view('auth.qr.done');
     }
 
+    public function apiApprove($code)
+    {
+        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+
+        if (!$qrAuthRequest) abort(403);
+
+        $qrAuthRequest->approved_at = \Carbon::now();
+        $qrAuthRequest->user_id = Auth::id();
+
+        $qrAuthRequest->save();
+
+        return response()->json([ "status" => "ok" ], 200);
+    }
+
     public function isApproved(Request $request)
     {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $request->code)->first();
