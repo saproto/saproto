@@ -216,7 +216,7 @@
                     <td>
 
                         <p class="form-check-label" for="dashboard__theme">
-                            Choose a theme!
+                            Choose a theme
                         </p>
                         <select class="form-control" name="theme">
                             @foreach(config('proto.themes') as $name => $file)
@@ -264,7 +264,7 @@
         <div class="card-footer">
 
             <button type="submit" class="btn btn-outline-info btn-block">
-                Update account
+                Save settings
             </button>
 
             @if($user->hasCompletedProfile() && !$user->member)
