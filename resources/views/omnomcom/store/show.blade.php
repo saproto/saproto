@@ -440,11 +440,14 @@
         }
 
         .modal {
+            position: relative;
+
             width: 700px;
+
             margin: 150px auto;
 
             /* This overrides bootstrap */
-            bottom: auto !important;
+            margin-bottom: 20px !important;
 
             text-align: center;
 

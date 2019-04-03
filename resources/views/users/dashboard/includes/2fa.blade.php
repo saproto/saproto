@@ -35,13 +35,10 @@
     <div class="card-footer">
 
         @if($user->tfa_totp_key)
-
-            <div class="btn btn-outline-danger btn-block">
-                <a href="{{ route('user::2fa::deletetimebased') }}"
-                   onclick="return confirm('Do really want to unset time-based 2FA?')">
-                    Disable two-factor authentication
-                </a>
-            </div>
+            <a class="btn btn-outline-danger btn-block" href="{{ route('user::2fa::deletetimebased') }}"
+               onclick="return confirm('Do really want to unset time-based 2FA?')">
+                Disable two-factor authentication
+            </a>
 
         @else
 
