@@ -71,6 +71,15 @@ class QrAuthController extends Controller
         return response()->json([ "status" => "ok" ], 200);
     }
 
+    public function apiInfo($code)
+    {
+        $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
+
+        if (!$qrAuthRequest) abort(404);
+
+        return response()->json(["description" => $qrAuthRequest->description], 200);
+    }
+
     public function isApproved(Request $request)
     {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $request->code)->first();
