@@ -117,6 +117,11 @@ class OmNomController extends Controller
             return json_encode($result);
         }
 
+        if ($user->disable_omnomcom) {
+            $result->message = "<span style='color: orange;'>You've disabled the OmNomCom for yourself. Contact the board to enable it again.</span>";
+            return json_encode($result);
+        }
+
         $withCash = $request->input('cash');
 
         if ($withCash == "true" && !$storedata->cash_allowed) {

@@ -219,6 +219,16 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
+    public function unblockOmnomcom($id)
+    {
+        $user = User::findOrFail($id);
+        $user->disable_omnomcom = false;
+        $user->save();
+
+        Session::flash("flash_message", "OmNomCom unblocked for " . $user->name . ".");
+        return redirect()->back();
+    }
+
     public function toggleStudiedCreate($id)
     {
         $user = User::findOrFail($id);
