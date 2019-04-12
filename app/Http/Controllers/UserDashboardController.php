@@ -68,6 +68,10 @@ class UserDashboardController extends Controller
             $userdata['show_achievements'] = $request->has('show_achievements');
         }
 
+        if ($request->has('disable_omnomcom')) {
+            $userdata['disable_omnomcom'] = true;
+        }
+
         $userdata['keep_omnomcom_history'] = $request->has('keep_omnomcom_history');
         $userdata['theme'] = $request->input('theme');
 
@@ -160,7 +164,7 @@ class UserDashboardController extends Controller
                 'text' => "To enter your in our member administration, you need to provide is with some extra information."
             ],
             [
-                'url' => Auth::check() ? sprintf('%s?wizard=1', route("user::bank::add", ["id"=>$user->id])) : null,
+                'url' => Auth::check() ? sprintf('%s?wizard=1', route("user::bank::add", ["id" => $user->id])) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->bank,
                 'heading' => "Provide payment details",
@@ -196,8 +200,8 @@ class UserDashboardController extends Controller
         $todo = [];
         $done = [];
 
-        foreach($steps as $step) {
-            if($step['done']) array_push($done, $step);
+        foreach ($steps as $step) {
+            if ($step['done']) array_push($done, $step);
             else array_push($todo, $step);
         }
 

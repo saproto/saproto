@@ -29,6 +29,12 @@
                     Make temporary admin
                 </a>
             @endif
+            @if($user->disable_omnomcom)
+                <a href="{{ route('user::admin::unblock_omnomcom', ['id' => $user->id]) }}"
+                   class="list-group-item">
+                    Unblock OmNomCom
+                </a>
+            @endif
             @if($user->member)
                 <a class="list-group-item"
                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
