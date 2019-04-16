@@ -447,11 +447,13 @@
             margin: 150px auto;
 
             /* This overrides bootstrap */
-            margin-bottom: 20px !important;
+            margin-top: 200px !important;
 
             text-align: center;
 
             overflow: hidden;
+
+            height: auto;
 
             padding: 50px;
 
