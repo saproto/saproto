@@ -181,15 +181,35 @@
 
                                 <br>
 
-                                
+
                                 <input name="show_omnomcom_calories" type="checkbox" class="form-check-input"
                                        id="dashboard__check__omnomcal" {{ ($user->show_omnomcom_calories == 1 ? 'checked' : '') }}>
                                 <label class="form-check-label" for="dashboard__check__omnomcal">
                                     After checkout, show how much calories worth of food I've bought today.<br>
-                                    <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not always be accurate</small>
+                                    <small><i class="fas fa-flask"></i>&nbsp;&nbsp;Experimental feature, might not
+                                        always be accurate
+                                    </small>
                                 </label>
                                 <small class="form-text text-muted">
-                                    This feature was requested by members who want to be aware of how much calories they eat.
+                                    This feature was requested by members who want to be aware of how much calories they
+                                    eat.
+                                </small>
+
+                                <br>
+
+
+                                <input name="disable_omnomcom" type="checkbox" class="form-check-input"
+                                       id="dashboard__check__omnomcal" {{ ($user->disable_omnomcom == 1 ? 'checked disabled' : '') }}>
+                                <label class="form-check-label" for="disable_omnomcom">
+                                    Don't let me use the OmNomCom. Only the board can allow you access to the OmNomCom
+                                    again.<br>
+                                    <small><i class="fas fa-info-circle"></i>&nbsp;&nbsp;You can still sign-up for
+                                        activities, and the board can manually buy something for you if you need that.
+                                    </small>
+                                </label>
+                                <small class="form-text text-muted">
+                                    This feature was requested by members who wanted some help controlling their
+                                    personal spendings.
                                 </small>
 
                                 <br>
@@ -216,11 +236,11 @@
                     <td>
 
                         <p class="form-check-label" for="dashboard__theme">
-                            Choose a theme!
+                            Choose a theme
                         </p>
                         <select class="form-control" name="theme">
                             @foreach(config('proto.themes') as $name => $file)
-                            <option value="{{ $file }}" {{ ($user->theme == $file) ? 'selected' : '' }}>{{ $name }}</option>
+                                <option value="{{ $file }}" {{ ($user->theme == $file) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                         <small>
@@ -264,7 +284,7 @@
         <div class="card-footer">
 
             <button type="submit" class="btn btn-outline-info btn-block">
-                Update account
+                Save settings
             </button>
 
             @if($user->hasCompletedProfile() && !$user->member)
