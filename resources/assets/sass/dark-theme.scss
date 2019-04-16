@@ -108,12 +108,12 @@ $photo_pop-text-shadow: 0 0 5px #fff;
 $photo-color: #fff;
 $photo-hover-color: #fff;
 $photo-text-shadow: 0 0 5px #fff;
-$photo-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-$photo-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+$photo-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
+$photo-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
 
 //calendar events
-$event-gradient: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
-$event-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+$event-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
+$event-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
 $event-bg: $grey-dark;
 $event-hover-bg: $grey-medium;
 

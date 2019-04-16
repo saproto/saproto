@@ -446,12 +446,11 @@
 
             margin: 150px auto;
 
-            /* This overrides bootstrap */
-            margin-bottom: 20px !important;
-
             text-align: center;
 
             overflow: hidden;
+
+            height: auto;
 
             padding: 50px;
 
@@ -1174,7 +1173,7 @@
     $("#purchase").on("click", function () {
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
-        doQrAuth($("#purchase-modal .qrAuth"), "Payment of &euro; " + $("#total").text() + " for purchases in Omnomcom", purchase);
+        doQrAuth($("#purchase-modal .qrAuth"), "Payment for purchases in Omnomcom", purchase);
 
         $("#purchase-modal h1").html("Complete your purchase");
         cash = false;
@@ -1185,7 +1184,7 @@
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
         $("#purchase-cash").addClass('modal-toggle-true');
-        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment &euro; " + $("#total").text() + " for purchases in Omnomcom", purchase);
+        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for purchases in Omnomcom", purchase);
 
         $("#purchase-modal h1").html("Complete purchase as cashier");
         cash = true;
