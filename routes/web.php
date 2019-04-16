@@ -596,6 +596,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+
     /*
      * Routes related to webhooks.
      */
@@ -635,7 +636,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
-     * Routes related to Flickr photos.
+     * Routes related to photos.
      */
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
@@ -647,7 +648,22 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/like/{id}', ['as' => 'likes', 'middleware' => ['auth'], 'uses' => 'PhotoController@likePhoto']);
         Route::get('/dislike/{id}', ['as' => 'dislikes', 'middleware' => ['auth'], 'uses' => 'PhotoController@dislikePhoto']);
         Route::get('/photo/{id}', ['as' => 'view', 'uses' => 'PhotoController@photo']);
+
+
+        /*
+         * Routes related to the photo admin
+         */
+        Route::group(['prefix' => 'admin', 'middleware' => ['permission:protography'], 'as' => 'admin::'], function () {
+            Route::get('index', ['as' => 'index', 'uses' => 'PhotoAdminController@index']);
+            Route::post('index', ['as' => 'index', 'uses' => 'PhotoAdminController@search']);
+            Route::post('add', ['as' => 'add', 'uses' => 'PhotoAdminController@create']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PhotoAdminController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'PhotoAdminController@save']);
+            Route::post('edit/{id}/upload', ['as' => 'upload', 'uses' => 'PhotoAdminController@upload']);
+            Route::get('publish/{id}', ['as' => 'publish', 'uses' => 'PhotoAdminController@publish']);
+        });
     });
+
 
     Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
         Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);

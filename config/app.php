@@ -191,6 +191,11 @@ return [
         nickurt\PwnedPasswords\ServiceProvider::class,
 
 
+
+        /*
+         * Temp tinker
+         */
+        Laravel\Tinker\TinkerServiceProvider::class,
     ],
 
     /*

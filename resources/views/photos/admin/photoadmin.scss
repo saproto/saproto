@@ -1,0 +1,23 @@
+#photoadmin__droparea {
+  display: none;
+  z-index: 99999;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top:0;
+  left: 0;
+  background: rgba(200,200,200,0.5);
+  color: white;
+}
+
+#photoadmin__droparea * {
+  pointer-events: none;
+}
+
+#photoadmin__droparea__content {
+  font-size: 5rem;
+  position: fixed;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+}

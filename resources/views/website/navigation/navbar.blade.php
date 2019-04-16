@@ -172,7 +172,8 @@
                                 <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
-                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
+                                    Messages</a>
                             @endif
 
                             @if(Auth::user()->can('header-image'))
@@ -209,6 +210,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
                            aria-expanded="false">ProTube Admin</a>
+                    </li>
+                @endif
+
+                @if(Auth::check() && Auth::user()->can('protography'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button" aria-haspopup="false"
+                           aria-expanded="false">Photo Admin</a>
                     </li>
                 @endif
 
