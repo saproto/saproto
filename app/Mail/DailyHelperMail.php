@@ -12,17 +12,17 @@ class DailyHelperMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $help;
+    public $events;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $help)
+    public function __construct($user, $events)
     {
         $this->user = $user;
-        $this->help = $help;
+        $this->events = $events;
     }
 
     /**
@@ -34,7 +34,7 @@ class DailyHelperMail extends Mailable
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')
-            ->subject('The activity ' . $this->help->activity->event->title . ' needs your help.')
+            ->subject(count($this->events) . ' ' . (count($this->events) === 1 ? 'activity needs' : 'activities need') . ' your help!')
             ->view('emails.dailyhelpermail');
     }
 }
