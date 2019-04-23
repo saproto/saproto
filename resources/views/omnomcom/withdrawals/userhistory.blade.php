@@ -8,7 +8,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-4">
+        <div class="col-lg-6 col-md-10 col-sm-12">
 
             <div class="card mb-3 bg-dark text-white">
 
