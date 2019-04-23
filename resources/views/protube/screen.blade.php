@@ -343,11 +343,6 @@
 
         var idle = true;
 
-        screen.on("radioStation", function (data) {
-            radioStation = data;
-            if (idle) startRadio();
-        });
-
         function onYouTubePlayerReady() {
             $("#connecting").hide(0);
 
@@ -461,6 +456,11 @@
                         soundboardPlayers.splice(i, 1);
                     }
                 }
+            });
+
+            screen.on("radioStation", function (data) {
+                radioStation = data;
+                if (idle) startRadio();
             });
 
         }
