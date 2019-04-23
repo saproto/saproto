@@ -43,7 +43,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $guarded = ['password', 'remember_token'];
 
-    protected $appends = ['is_member', 'photo_preview', 'welcome_message'];
+    protected $appends = ['is_member', 'photo_preview', 'welcome_message', 'is_protube_admin'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -223,6 +223,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return false;
+    }
+
+    public function isProtubeAdmin()
+    {
+        return $this->can('protube') || $this->isTempadmin();
     }
 
     /**
@@ -519,6 +524,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->member !== null;
     }
 
+    public function getIsProtubeAdminAttribute()
+    {
+        return $this->isProtubeAdmin();
+    }
+
     public function getPhotoPreviewAttribute()
     {
         return $this->generatePhotoPath();
@@ -532,9 +542,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getWelcomeMessageAttribute()
     {
         $welcomeMessage = WelcomeMessage::where('user_id', $this->id)->first();
-        if($welcomeMessage) {
+        if ($welcomeMessage) {
             return $welcomeMessage->message;
-        }else{
+        } else {
             return null;
         }
     }
