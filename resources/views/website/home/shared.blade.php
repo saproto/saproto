@@ -114,57 +114,8 @@
 
             @include('website.layouts.macros.recentalbums', ['n' => 4])
 
-            <div class="card mb-3">
-                <div class="card-header bg-dark text-white">
-                    <i class="fas fa-newspaper fa-fw mr-2"></i> Proto.ink articles
-                </div>
-                <div class="card-body">
-                    <div id="protoink">
-                        <p class="card-text mb-3">Loading articles...</p>
-                    </div>
-                    <a href="https://www.proto.ink" class="btn btn-info btn-block">Visit Proto.ink</a>
-                </div>
-            </div>
-
         </div>
 
     </div>
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script type="application/javascript">
-
-        $(document).ready(function () {
-
-            $.ajax({
-                type: 'GET',
-                url: '{{ route('api::protoink') }}?max=2',
-                dataType: 'json',
-                success: function (data) {
-
-                    $("#protoink").html("");
-
-                    if (data.length < 1) {
-                        $("#protoink").html("<li class='list-group-item'>Could not load articles.</a>");
-                    }
-
-                    for (i in data) {
-                        var item = data[i];
-                        $("#protoink").append(item.card_html);
-                    }
-
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    $("#protoink").html('<p style="text-align: center">Something went wrong loading the ProtoInk articles!<p>');
-                }
-            });
-
-        });
-
-    </script>
 
 @endsection
