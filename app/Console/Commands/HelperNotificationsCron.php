@@ -46,6 +46,8 @@ class HelperNotificationsCron extends Command
     {
         $users = User::all();
 
+        $handledHelps = [];
+
         foreach($users as $user) {
 
             if(!$user->isActiveMember()) {
@@ -70,6 +72,8 @@ class HelperNotificationsCron extends Command
 
                         $events[$help->activity->event->id]->help[] = $helpInfo;
                     }
+
+                    $handledHelps[] = $help;
                 }
             }
 
@@ -78,5 +82,12 @@ class HelperNotificationsCron extends Command
                 Mail::to($user)->queue((new DailyHelperMail($user, $events))->onQueue('low'));
             }
         }
+
+        foreach($handledHelps as $handledHelp) {
+            $handledHelp->notification_sent = true;
+            $handledHelp->save();
+        }
+
+        $this->info('Done.');
     }
 }
