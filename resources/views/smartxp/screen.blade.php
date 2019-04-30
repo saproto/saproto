@@ -367,7 +367,7 @@
 
     function updateTimetable() {
         $.ajax({
-            url: '{{ route('api::timetable') }}',
+            url: '{{ route('api::screen::timetable') }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
@@ -446,7 +446,7 @@
 
     function updateBus(stop, element) {
         $.ajax({
-            url: "{{ urldecode(route('api::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
+            url: "{{ urldecode(route('api::screen::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
@@ -469,7 +469,7 @@
 
     function updateProtopeners() {
         $.ajax({
-            url: '{{ route('api::timetable::protopeners') }}',
+            url: '{{ route('api::screen::timetable::protopeners') }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
