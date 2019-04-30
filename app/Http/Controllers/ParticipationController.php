@@ -43,6 +43,8 @@ class ParticipationController extends Controller
 
         $data = ['activity_id' => $event->activity->id, 'user_id' => Auth::user()->id];
 
+        $is_web = Auth::guard('web')->user();
+
         if ($request->has('helping_committee_id')) {
             $helping = HelpingCommittee::findOrFail($request->helping_committee_id);
             if (!$helping->committee->isMember(Auth::user())) {
@@ -53,12 +55,16 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
             Mail::queue((new HelperMutation(Auth::user(), $helping, true))->onQueue('medium'));
-        } else {
+        } elseif($is_web) {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
             } else {
                 $request->session()->flash('flash_message', 'You claimed a spot for ' . $event->title . '.');
+            }
+        } else {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+                $data['backup'] = true;
             }
         }
 
@@ -66,7 +72,15 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        return Redirect::back();
+        if($is_web) {
+            return Redirect::back();
+        } else {
+            if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
+                abort(200, 'You have been placed on the back-up list for ' . $event->title . '.');
+            } else {
+                abort(200, 'You claimed a spot for ' . $event->title . '.');
+            }
+        }
 
     }
 
@@ -132,6 +146,7 @@ class ParticipationController extends Controller
             $notify = true;
         }
 
+        $is_web = Auth::guard('web')->user();
 
         if ($participation->committees_activities_id === null) {
 
@@ -147,7 +162,10 @@ class ParticipationController extends Controller
                 Mail::to($participation->user)->queue((new ActivityUnsubscribedFrom($participation))->onQueue('high'));
             }
 
-            $request->session()->flash('flash_message', $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.');
+            $message = $participation->user->name . ' is not attending ' . $participation->activity->event->title . ' anymore.';
+            if ($is_web) {
+                $request->session()->flash('flash_message', $message);
+            }
 
             $participation->delete();
 
@@ -157,7 +175,10 @@ class ParticipationController extends Controller
 
         } else {
 
-            $request->session()->flash('flash_message', $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.');
+            $message = $participation->user->name . ' is not helping with ' . $participation->activity->event->title . ' anymore.';
+            if ($is_web) {
+                $request->session()->flash('flash_message', $message);
+            }
 
             if ($notify) {
                 Mail::to($participation->user)->queue((new ActivityUnsubscribedToHelp($participation))->onQueue('high'));
@@ -170,7 +191,11 @@ class ParticipationController extends Controller
 
         }
 
-        return Redirect::back();
+        if ($is_web) {
+            return Redirect::back();
+        } else {
+            abort(200, $message);
+        }
 
     }
 
