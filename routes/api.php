@@ -34,7 +34,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
-            Route::get('user', ['as' => 'list_for_user', 'uses' => 'EventController@apiEventsForUser']);
+            Route::get('upcoming/for_user/{limit?}', ['as' => 'list_for_user', 'uses' => 'EventController@apiUpcomingEvents']);
         });
         Route::group(['middleware' => ['web']], function () {
             Route::get('upcoming/{limit?}', ['as' => 'upcoming', 'uses' => 'EventController@apiUpcomingEvents']);
