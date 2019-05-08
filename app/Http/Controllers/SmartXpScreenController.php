@@ -36,61 +36,6 @@ class SmartXpScreenController extends Controller
 
     }
 
-    public function smartxpTimetable()
-    {
-
-        $url = "https://www.googleapis.com/calendar/v3/calendars/" . config('proto.smartxp-google-timetable-id') . "/events?singleEvents=true&orderBy=startTime&key=" . config('app-proto.google-key-private') . "&timeMin=" . urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))) . "&timeMax=" . urlencode(date('c', strtotime('next monday'))) . "";
-
-        $data = json_decode(str_replace("$", "", file_get_contents($url)));
-
-        $roster = [
-            'monday' => [],
-            'tuesday' => [],
-            'wednesday' => [],
-            'thursday' => [],
-            'friday' => [],
-            'weekend' => []
-        ];
-
-        $answer = true;
-
-        foreach ($data->items as $entry) {
-
-            $endtime = (isset($entry->end->date) ? $entry->end->date : $entry->end->dateTime);
-            $starttime = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
-
-            $name = $entry->summary;
-            $name_exp = explode(" ", $name);
-            if (is_numeric($name_exp[0])) {
-                $name_exp[0] = "";
-            }
-            $name = "";
-            foreach ($name_exp as $key => $val) {
-                $name .= $val . " ";
-            }
-
-            preg_match("/Type: (.*)/", $entry->description, $type);
-
-            $current = (strtotime($starttime) < time() && strtotime($endtime) > time() ? true : false);
-
-            if ($current) {
-                $answer = false;
-            }
-
-            $roster[strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($starttime))))][] = (object)array(
-                'title' => $name,
-                'start' => strtotime($starttime),
-                'end' => strtotime($endtime),
-                'type' => $type[1],
-                'over' => (strtotime($endtime) < time() ? true : false),
-                'current' => $current
-            );
-        }
-
-        return (object)['roster' => $roster, 'answer' => $answer];
-
-    }
-
     public function bus($stop)
     {
         try {
