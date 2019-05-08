@@ -86,7 +86,7 @@ return [
     */
 
     'autoSubscribeUser' => [],
-    'autoSubscribeMember' => [8],
+    'autoSubscribeMember' => [8, 12],
 
     /*
     |--------------------------------------------------------------------------
