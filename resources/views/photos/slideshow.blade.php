@@ -113,15 +113,13 @@
             "July", "August", "September", "October", "November", "December"
         ];
 
-        var protoServer = '{{ URL::to('/') }}';
-
         $(document).ready(function () {
             startSlideshow();
         });
 
         function startSlideshow() {
             $.ajax({
-                url: protoServer + '/api/photos',
+                url: '{{ route("api::photos::albums") }}',
                 dataType: 'json',
                 success: function (data) {
                     $('#albums').html('');
@@ -134,7 +132,7 @@
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus)
+                    console.log(textStatus);
                     alert('Error');
                 }
             });
@@ -152,7 +150,7 @@
         function displayAlbum(id) {
             $('#slideshow').addClass('loading').html('');
             $.ajax({
-                url: protoServer + '/api/photos/' + id,
+                url: '{{ route("api::photos::albumList", ['id' => null]) }}/' + id,
                 dataType: 'json',
                 success: function (data) {
 
