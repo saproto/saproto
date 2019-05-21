@@ -376,6 +376,7 @@ class EventController extends Controller
                 'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
                 'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
                 'user_signedup_backup' => (bool)($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'user_signedup_id' => ($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
                 'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null)
