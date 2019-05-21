@@ -153,10 +153,6 @@ class EmailController extends Controller
                 $request->session()->flash('flash_message', 'An e-mail can only be queued for delivery if the delivery time is at least 5 minutes in the future.');
                 return Redirect::route('email::admin');
             }
-            else if ($email->to_member && !Auth::user()->can('sysadmin')) {
-                $request->session()->flash('flash_message', 'Only admins can queue mails to all members.');
-                return Redirect::route('email::admin');
-            }
             $email->ready = true;
             $email->save();
             $request->session()->flash('flash_message', 'The e-mail has been queued for deliver at the specified time.');
