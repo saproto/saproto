@@ -378,6 +378,7 @@ class EventController extends Controller
                 'user_signedup_backup' => (bool)($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null)
             ];
         }
 
