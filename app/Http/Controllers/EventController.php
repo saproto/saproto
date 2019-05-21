@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Proto\Models\Account;
 use Proto\Models\Activity;
+use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\FlickrAlbum;
@@ -354,6 +355,8 @@ class EventController extends Controller
     public function apiUpcomingEvents($limit = 20)
     {
 
+        $user = (Auth::check() ? Auth::user() : null);
+
         $events = Event::where('secret', 0)->where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
 
         $data = [];
@@ -367,34 +370,16 @@ class EventController extends Controller
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
-                'over' => $event->over()
+                'over' => $event->over(),
+                'has_signup' => $event->activity !== null,
+                'price' => ($event->activity ? $event->activity->price : null),
+                'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
+                'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
+                'user_signedup_backup' => (bool)($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
+                'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null)
             ];
-        }
-
-        return $data;
-
-    }
-
-
-    public function apiEventsForUser(Request $request)
-    {
-
-        if (!Auth::check() || !Auth::user()->member) {
-            abort(403);
-        }
-
-        $events = Event::all();
-        $data = array();
-
-        foreach ($events as $event) {
-            $item = new \stdClass();
-            $item->id = $event->id;
-            $item->title = $event->title;
-            $item->description = $event->description;
-            $item->start = $event->start;
-            $item->end = $event->end;
-            $item->location = $event->location;
-            $data[] = $item;
         }
 
         return $data;
