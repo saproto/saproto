@@ -27,6 +27,10 @@ class Committee extends Model
         return $this->slug;
     }
 
+    /**
+     * @param $public_id
+     * @return mixed
+     */
     public static function fromPublicId($public_id)
     {
         return Committee::where('slug', $public_id)->firstOrFail();
@@ -69,15 +73,16 @@ class Committee extends Model
     }
 
     /**
+     * @param $includeSecret
      * @return mixed All events at which this committee helped out.
      */
-    public function helpedEvents()
+    public function helpedEvents($includeSecret = false)
     {
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
         $events = array();
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && !$event->secret) $events[] = $event;
+            if ($event && (!$event->secret || $includeSecret)) $events[] = $event;
         }
         return $events;
     }
