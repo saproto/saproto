@@ -2,12 +2,12 @@
 
 @section('page-title')
 
-    Page not found
+    Error {{ $exception->getStatusCode() }}
 
 @endsection
 
 @section('page-body')
 
-    Sorry, but we could not find the page you were looking for.
+    Sorry, but we could not find the page or resource you were looking for.
 
 @endsection
