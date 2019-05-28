@@ -46,7 +46,7 @@ class Flickr extends Model
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
-        $items = $items->orderBy('date_taken', 'asc')->get();
+        $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get();
         $data = new \stdClass();
         $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
         $data->album_date = FlickrAlbum::where("id", "=", $albumID)->first()->date_taken;
