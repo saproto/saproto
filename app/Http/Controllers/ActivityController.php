@@ -39,6 +39,9 @@ class ActivityController extends Controller
         if ($newnoshow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
             return Redirect::route('event::edit', ['id' => $event->id]);
+        } elseif ($newnoshow < 0) {
+            $request->session()->flash('flash_message', 'The no show fee should be a positive amount.');
+            return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
         if ($newprice > floatval($activity->price) && $activity->users->count() > 0) {

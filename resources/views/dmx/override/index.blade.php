@@ -36,53 +36,43 @@
 
                         </thead>
 
+                        <tr>
+                            <th>
+                                <i>Active overrides</i>
+                            </th>
+                            <th colspan="6">
+                                <i>Overrides are applied from the bottom of this list to the top. The top most override is applied last.</i>
+                            </th>
+                        </tr>
+
                         @foreach($overrides as $override)
+                            @include('dmx.override.override_macro', [
+                                'override' => $override
+                            ])
+                        @endforeach
 
-                            <tr style="{{ $override->active() ? '' : 'opacity: 0.5;' }}">
+                        <tr>
+                            <th colspan="7">
+                                <i>Upcoming overrides</i>
+                            </th>
+                        </tr>
 
-                                <td>
-                                    @foreach($override->getFixtures() as $fixture)
-                                        {{ $fixture->name }}<br>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <span style="color: red;">
-                                        <i class="fas fa-tint" aria-hidden="true"></i>
-                                        {{ $override->red() }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style="color: green;">
-                                        <i class="fas fa-tint" aria-hidden="true"></i>
-                                        {{ $override->green() }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style="color: blue;">
-                                        <i class="fas fa-tint" aria-hidden="true"></i>
-                                        {{ $override->blue() }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <i class="fas fa-sun" aria-hidden="true"></i>
-                                    {{ $override->brightness() }}
-                                </td>
-                                <td>
-                                    Start: {{ date('l F j Y, H:i', $override->start) }}<br>
-                                    End: {{ date('l F j Y, H:i', $override->end) }}
-                                </td>
-                                <td>
-                                    <a class="btn btn-xs btn-default mr-2"
-                                       href="{{ route('dmx::override::edit', ['id' => $override->id]) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="btn btn-xs btn-danger"
-                                       href="{{ route('dmx::override::delete', ['id' => $override->id]) }}">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </td>
+                        @foreach($upcoming_overrides as $override)
+                            @include('dmx.override.override_macro', [
+                                'override' => $override
+                            ])
+                        @endforeach
 
-                            </tr>
+                        <tr>
+                            <th colspan="7">
+                                <i>Previous overrides</i>
+                            </th>
+                        </tr>
+
+                        @foreach($past_overrides as $override)
+                            @include('dmx.override.override_macro', [
+                                'override' => $override
+                            ])
                         @endforeach
 
                     </table>
