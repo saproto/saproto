@@ -59,6 +59,9 @@ class Flickr extends Model
     public static function getPhoto($photoID)
     {
         $photo = FlickrItem::where('id', $photoID)->first();
+        if (!$photo) {
+            abort(404, "This photo does not exist.");
+        }
 
         $data = new \stdClass();
         $data->photo_url = FlickrItem::where("id", "=", $photoID)->first()->url;
