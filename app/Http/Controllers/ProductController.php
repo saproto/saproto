@@ -104,8 +104,6 @@ class ProductController extends Controller
         }
         $product->categories()->sync($categories);
 
-        $this->setRanks();
-
         $product->save();
 
         $request->session()->flash('flash_message', 'The new product has been created!');
@@ -171,8 +169,6 @@ class ProductController extends Controller
             }
         }
         $product->categories()->sync($categories);
-
-        $this->setRanks();
 
         $product->save();
 
@@ -290,44 +286,5 @@ class ProductController extends Controller
 
         return response()->stream($callback, 200, $headers);
 
-    }
-
-    public function rank($category_id, $product_id, $direction)
-    {
-        $relation = ProductCategoryEntry::where('product_id', $product_id)->where('category_id', $category_id)->first();
-        if (!$relation) return Redirect::route('omnomcom::categories', ['id' => $category_id]);
-        $rank = $relation->rank;
-        $rows = ProductCategoryEntry::where('category_id', $category_id)->orderBy('rank')->get();
-        foreach ($rows as $key => $row) {
-            if ($row->rank == $rank) {
-                if ($direction == 'up') {
-                    if ($key < count($rows) - 1) {
-                        $relation->rank = $rows[$key + 1]->rank;
-                        $relation->save();
-                        $rows[$key + 1]->rank = $rank;
-                        $rows[$key + 1]->save();
-                        return Redirect::back();
-                    }
-                } else {
-                    if ($key > 0) {
-                        $relation->rank = $rows[$key - 1]->rank;
-                        $relation->save();
-                        $rows[$key - 1]->rank = $rank;
-                        $rows[$key - 1]->save();
-                        return Redirect::back();
-                    }
-                }
-            }
-        }
-        return Redirect::back();
-    }
-
-    private function setRanks()
-    {
-        $newEntries = ProductCategoryEntry::where('rank', 0)->get();
-        foreach ($newEntries as $entry) {
-            $entry->rank = $entry->id;
-            $entry->save();
-        }
     }
 }

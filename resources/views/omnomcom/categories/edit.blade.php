@@ -47,17 +47,28 @@
 
                 </div>
 
+                <div class="card mb-3">
+
+                    <div class="card-header bg-dark text-white">
+                        Products in this category
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        @foreach($category->products() as $product)
+                            <li class="list-group-item">
+                                {{ $product->name }}
+                                <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
+                                    <i class="fa fa-edit float-right"></i>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                </div>
+
             </form>
 
         </div>
-
-        @if($category != null)
-            <div class="col-md-3">
-
-                @include('omnomcom.categories.edit_includes.order')
-
-            </div>
-        @endif
 
     </div>
 
