@@ -48,42 +48,45 @@ class HelperNotificationsCron extends Command
 
         $handledHelps = [];
 
-        foreach($users as $user) {
+        foreach ($users as $user) {
 
-            if(!$user->isActiveMember()) {
+            if (!$user->isActiveMember()) {
                 continue;
             }
 
             $events = [];
 
-            foreach($user->committees as $committee) {
+            foreach ($user->committees as $committee) {
                 $helps = HelpingCommittee::where('committee_id', $committee->id)->where('notification_sent', '0')->get();
 
-                foreach($helps as $help) {
-                    if(isset($help->activity->event->id)) {
-                        if (!isset($events[$help->activity->event->id])) {
-                            $events[$help->activity->event->id] = new \stdClass();
-                            $events[$help->activity->event->id]->help = [];
+                foreach ($helps as $help) {
+                    if ($help->amount > $help->getHelpingCount() && $help->activity->event->start > time()) {
+
+                        if (isset($help->activity->event->id)) {
+                            if (!isset($events[$help->activity->event->id])) {
+                                $events[$help->activity->event->id] = new \stdClass();
+                                $events[$help->activity->event->id]->help = [];
+                            }
+
+                            $helpInfo = new \stdClass();
+                            $helpInfo->amount = $help->amount;
+                            $helpInfo->committeeName = $help->committee->name;
+
+                            $events[$help->activity->event->id]->help[] = $helpInfo;
                         }
 
-                        $helpInfo = new \stdClass();
-                        $helpInfo->amount = $help->amount;
-                        $helpInfo->committeeName = $help->committee->name;
-
-                        $events[$help->activity->event->id]->help[] = $helpInfo;
+                        $handledHelps[] = $help;
                     }
-
-                    $handledHelps[] = $help;
                 }
             }
 
-            if(count($events) > 0) {
+            if (count($events) > 0) {
                 $this->info('Sending notification mail to ' . $user->name . ' with ' . count($events) . ' events.');
                 Mail::to($user)->queue((new DailyHelperMail($user, $events))->onQueue('low'));
             }
         }
 
-        foreach($handledHelps as $handledHelp) {
+        foreach ($handledHelps as $handledHelp) {
             $handledHelp->notification_sent = true;
             $handledHelp->save();
         }
