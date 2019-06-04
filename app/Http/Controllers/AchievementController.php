@@ -137,11 +137,11 @@ class AchievementController extends Controller
 
     public function gallery()
     {
-        $common = Achievement::where('tier', 'COMMON')->get();
-        $uncommon = Achievement::where('tier', 'UNCOMMON')->get();
-        $rare = Achievement::where('tier', 'RARE')->get();
-        $epic = Achievement::where('tier', 'EPIC')->get();
-        $legendary = Achievement::where('tier', 'LEGENDARY')->get();
+        $common = Achievement::where('tier', 'COMMON')->where('is_archived', false)->get();
+        $uncommon = Achievement::where('tier', 'UNCOMMON')->where('is_archived', false)->get();
+        $rare = Achievement::where('tier', 'RARE')->where('is_archived', false)->get();
+        $epic = Achievement::where('tier', 'EPIC')->where('is_archived', false)->get();
+        $legendary = Achievement::where('tier', 'LEGENDARY')->where('is_archived', false)->get();
         $obtained = array();
         if (Auth::check()) {
             $achievements = Auth::user()->achieved();

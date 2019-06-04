@@ -38,7 +38,7 @@
 
                     @foreach($achievements as $achievement)
 
-                        <tr>
+                        <tr class="{{ $achievement->is_archived ? "text-muted" : null }}">
 
                             <td class="hidden-sm hidden-xs {{ $achievement->tier }}">
                                 @if($achievement->fa_icon)
