@@ -551,7 +551,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
 
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
-            Route::get('rank/{category}/{product}/{direction}', ['as' => 'rank', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@rank']);
         });
 
         Route::group(['prefix' => 'categories', 'middleware' => ['permission:omnomcom'], 'as' => 'categories::'], function () {
