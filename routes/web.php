@@ -824,6 +824,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+    /*
+     * Queries
+     */
+    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function (){
+
+        Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
+        Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
+
+    });
+
     Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
 
 });
