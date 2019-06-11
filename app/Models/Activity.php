@@ -48,6 +48,14 @@ class Activity extends Validatable
     }
 
     /**
+     * @return mixed A list of present participants to this activity.
+     */
+    public function presentUsers()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('activities_users.is_present', true)->where('backup', false)->withTimestamps();
+    }
+
+    /**
      * @return mixed A list of participants to this activity.
      */
     public function allUsers()

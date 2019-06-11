@@ -24,7 +24,7 @@ class FlickrItem extends Model
         $result = FlickrItem::where('album_id', $this->album_id)->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get()->pluck('id')->toArray();
         $index = array_search($this->id, $result);
 
-        if (($next == false && $index == 0) || ($next == true && $index > (count($result) - 1))) {
+        if (($next == false && $index == 0) || ($next == true && $index >= (count($result) - 1))) {
             return null;
         } else {
             $adjacentIndex = $index + ($next ? 1 : -1);

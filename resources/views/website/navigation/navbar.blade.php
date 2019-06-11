@@ -173,6 +173,9 @@
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
                                 <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <li role="separator" class="dropdown-divider"></li>
+                                <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
+                                <li role="separator" class="dropdown-divider"></li>
                             @endif
 
                             @if(Auth::user()->can('header-image'))

@@ -38,7 +38,8 @@ class Kernel extends ConsoleKernel
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
         Commands\MemberRenewCron::class,
-        Commands\OmNomComCleanup::class
+        Commands\OmNomComCleanup::class,
+        Commands\MakeAdmin::class
     ];
 
     /**
