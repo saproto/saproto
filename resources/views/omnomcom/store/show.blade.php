@@ -1025,16 +1025,21 @@
      RFID scanner integration
      */
 
-    if (navigator.userAgent.indexOf('Electron') >= 0) {
+    var server;
 
-        var server = new WebSocket("ws://localhost:3000", "nfc");
+    establishNfcConnection();
+
+    function establishNfcConnection() {
+        $("#status").addClass("inactive").html("RFID Service: Connecting...");
+        server = new WebSocket("ws://localhost:3000", "nfc");
 
         server.onopen = function () {
             $("#status").removeClass("inactive").html("RFID Service: Connected");
         };
 
         server.onclose = function () {
-            $("#status").addClass("inactive").html("RFID Service: Reconnecting");
+            $("#status").addClass("inactive").html("RFID Service: Disconnected");
+            setTimeout(establishNfcConnection, 5000);
         };
 
         server.onmessage = function (raw) {
@@ -1095,7 +1100,6 @@
             }
 
         };
-
     }
 
     function doQrAuth(element, description, onComplete) {
