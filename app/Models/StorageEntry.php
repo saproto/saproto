@@ -49,12 +49,16 @@ class StorageEntry extends Model
             HeaderImage::where('image_id', $id)->count() == 0;
     }
 
-    public function createFromFile($file)
+    public function createFromFile($file, $customPath = null)
     {
 
         $this->hash = $this->generateHash();
 
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        if($customPath) {
+            $this->filename = $customPath.$this->hash;
+        }
 
         Storage::disk('local')->put($this->filename, File::get($file));
 
@@ -65,12 +69,16 @@ class StorageEntry extends Model
 
     }
 
-    public function createFromData($data, $mime, $name)
+    public function createFromData($data, $mime, $name, $customPath = null)
     {
 
         $this->hash = $this->generateHash();
 
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        if($customPath) {
+            $this->filename = $customPath.$this->filename;
+        }
 
         Storage::disk('local')->put($this->filename, $data);
 
@@ -136,5 +144,13 @@ class StorageEntry extends Model
     public function getFileHash($algo = 'md5')
     {
         return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+    }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($file) {
+            Storage::disk('local')->delete($file->filename);
+        });
     }
 }

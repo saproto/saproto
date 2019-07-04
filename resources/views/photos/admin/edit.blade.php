@@ -63,6 +63,42 @@
 
                 <div class="card-footer">
                     <input type="submit" class="btn btn-success btn-block" value="Save">
+                    <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal">
+                        Delete Album
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Album</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            This will delete the album and all the photos inside.<br>
+                            Are you sure you want to delete the album?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">Delete Album</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card mb-3">
+
+                <div class="card-header bg-dark text-white text-center">
+                    Thumbnail
+                </div>
+
+                <div class="card-body" style="height: 300px; background: url({{ $photos->thumb }})">
                 </div>
 
             </div>
@@ -101,37 +137,73 @@
 
 
             <div class="card mb-3">
+                <form method="POST" action="{{ route('photo::admin::action', ['id' => $photos->album_id]) }}">
+                    {{ csrf_field() }}
 
-                <div class="card-header bg-dark text-white text-center">
-                    {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
-                </div>
-
-                <div class="card-body">
-
-                    <div id="photoview" class="row">
-
-                        @foreach($photos->photos as $key => $photo)
-
-                            <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-
-                                @include('website.layouts.macros.card-bg-image', [
-                                'url' => route("photo::view", ["id"=> $photo->id]),
-                                'img' => $photo->thumb(),
-                                'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
-                                    $photo->getLikes(), $photo->private ?
-                                    '<i class="fas fa-eye-slash ml-4 mr-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
-                                     : null),
-                                'photo_pop' => true,
-                                'height' => 200
-                                ])
-
-                            </div>
-
-                        @endforeach
-
+                    <div class="card-header bg-dark text-white text-center">
+                        {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
                     </div>
 
-                </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12" style="margin-bottom:15px;">
+                                <div class="btn-group" role="group" aria-label="Toolbar">
+                                    <button type="submit" name="submit" value="remove" class="btn btn-danger"><i
+                                                class="fa fa-trash"></i> Remove
+                                    </button>
+                                    <button type="submit" name="submit" value="thumbnail" class="btn btn-success"><i
+                                                class="fa fa-image"></i> Set thumbnail
+                                    </button>
+                                    <button type="submit" name="submit" value="private" class="btn btn-warning"><i
+                                                class="fa fa-eye"></i> Toggle private
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="photoview" class="row">
+
+                            @foreach($photos->photos as $key => $photo)
+
+                                <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
+                                    <div class="photo-select">
+                                        <input name="photo[{{ $photo->id }}]" type="checkbox"
+                                               style="align-self: flex-start;" id="photo_{{ $photo->id }}">
+                                        <div class="card mb-3">
+                                            <label for="photo_{{ $photo->id }}" class="card-img photo_pop"
+                                                   style="display: flex; height: 200px; background-image: url({{ $photo->thumb() }});">
+                                                @if($photo->private)
+                                                    <p class="card-text ellipsis" style="align-self: flex-end;">
+                                                        <i class="fas fa-eye-slash ml-4 mr-2 text-info"
+                                                           data-toggle="tooltip" data-placement="top"
+                                                           title="This photo is only visible to members."></i>
+                                                    </p>
+                                                @endif
+                                            </label>
+
+                                        </div>
+                                    </div>
+
+                                    {{--                                @include('website.layouts.macros.card-bg-image', [--}}
+                                    {{--                                'url' => route("photo::view", ["id"=> $photo->id]),--}}
+                                    {{--                                'img' => $photo->thumb(),--}}
+                                    {{--                                'html' => sprintf('<i class="fas fa-heart"></i> %s',--}}
+                                    {{--                                    $photo->getLikes()),--}}
+                                    {{--                                'photo_pop' => true,--}}
+                                    {{--                                'height' => 200,--}}
+                                    {{--                                'footer' => sprintf('<button class="btn fa fa-image btn-%s></button>--}}
+                                    {{--                                                     <button class="btn btn-danger fa fa-trash"></button>',--}}
+                                    {{--                                ($photo->id == $photos->thumb) ? 'secondary" disabled' : 'success"')--}}
+                                    {{--                                ])--}}
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -144,6 +216,9 @@
     @parent
 
     <script>
+
+
+        //Handle Drag and drop file uploading
 
         var fileQueue = [];
         var nextId = 1;
@@ -166,6 +241,11 @@
                 window.addEventListener('drop', dropFiles, false);
             }
         }());
+
+
+        function addFileDropListeners() {
+
+        }
 
 
         function dropFiles(e) {
@@ -209,7 +289,7 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log('Response: '+uploadFile.id);
+                    console.log('Response: ' + uploadFile.id);
                     $('#file' + uploadFile.id).remove();
                     $('#photoview').append('<div class="col-lg-2 col-lg-3 col-md-4 col-sm-6"><img alt="uploadedImage" src="' + response + '"/></div>');
                 },

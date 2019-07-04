@@ -56,4 +56,12 @@ class Photo extends Model
     public function url() {
         return $this->file()->first()->generatePath();
     }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($photo) {
+            $photo->file()->delete();
+        });
+    }
 }

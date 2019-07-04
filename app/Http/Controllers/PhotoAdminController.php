@@ -57,8 +57,12 @@ class PhotoAdminController extends Controller
         if($request->has('file')) {
             $uploadFile = $request->file('file');
 
+            $album = PhotoAlbum::where('id', $id)->get()->first();
+
+            $path = "photos/".$album->name."/";
+
             $file = new StorageEntry();
-            $file->createFromFile($uploadFile);
+            $file->createFromFile($uploadFile, $path);
             $file->save();
 
             $photo = new Photo();
@@ -69,6 +73,41 @@ class PhotoAdminController extends Controller
             $response = $photo->thumb();
         }
         return $response;
+    }
+
+    public function action(Request $request, $id) {
+        $action = $request->input('submit');
+        $photos = $request->input('photo');
+        $album = PhotoAlbum::where('id', $id)->get()->first();
+        switch($action) {
+            case "remove":
+                foreach($photos as $photoId=>$photo) {
+                    Photo::find($photoId)->delete();
+                }
+                break;
+
+            case "thumbnail":
+                foreach($photos as $photoId=>$photo) {
+                    $album->thumb_id = $photoId;
+                    break;
+                }
+                break;
+
+            case "private":
+                foreach($photos as $photoId=>$photo) {
+                    $photo = Photo::find($photoId);
+                    $photo->private=!$photo->private;
+                    $photo->save();
+                }
+                break;
+        }
+        $album->save();
+        return redirect(route('photo::admin::edit', ['id' => $id]));
+    }
+
+    public function delete($id) {
+        PhotoManager::deleteAlbum($id);
+        return redirect(route('photo::admin::index'));
     }
 
     public function publish($id) {

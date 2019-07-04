@@ -61,11 +61,15 @@ class PhotoManager extends Model
         $items = $items->orderBy('date_taken', 'asc')->get();
         $data = new \stdClass();
         $data->album_id = $albumID;
-        $data->album_title = PhotoAlbum::where("id", "=", $albumID)->first()->name;
-        $data->album_date = PhotoAlbum::where("id", "=", $albumID)->first()->date_taken;
-        $data->event = (PhotoAlbum::where("id", "=", $albumID)->first()->event ? PhotoAlbum::where("id", "=", $albumID)->first()->event : null);
-        $data->private = PhotoAlbum::where("id", "=", $albumID)->first()->private;
-        $data->published = PhotoAlbum::where("id", "=", $albumID)->first()->published;
+
+        $album = $album->first();
+
+        $data->album_title = $album->name;
+        $data->album_date = $album->date_taken;
+        $data->event = ($album->event ? $album->event : null);
+        $data->private = $album->private;
+        $data->published = $album->published;
+        $data->thumb = $album->thumb();
         $data->photos = $items;
 
         return $data;
@@ -98,6 +102,17 @@ class PhotoManager extends Model
         $data->id = $photoID;
 
         return $data;
+    }
+
+    public static function deleteAlbum($albumID)
+    {
+        $album = PhotoAlbum::where('id', $albumID)->get()->first();
+        $photos = Photo::where('album_id', $albumID)->get();
+
+        foreach($photos as $photo) {
+            $photo->delete();
+        }
+        $album->delete();
     }
 
 

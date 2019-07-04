@@ -29,6 +29,7 @@
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
                         @include('website.layouts.macros.card-bg-image', [
+                        'id' => sprintf('photo_%s', $photo->id),
                         'url' => route("photo::view", ["id"=> $photo->id]),
                         'img' => $photo->thumb(),
                         'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
@@ -64,6 +65,7 @@
     @parent
 
     <script>
+        /*
         (function (window, location) {
             history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
             history.pushState(null, document.title, location.pathname);
@@ -77,6 +79,7 @@
                 }
             }, false);
         }(window, location));
+        */
     </script>
 
 @endsection
