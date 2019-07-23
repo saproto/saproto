@@ -142,6 +142,9 @@
                                 <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">
                                     Mollie Payments
                                 </a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::payments::statistics") }}">
+                                    Cash & Card Payments
+                                </a>
 
                             @endif
 

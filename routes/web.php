@@ -537,6 +537,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('aggregate/{account}', ['as' => 'aggregate', 'uses' => 'AccountController@showAggregation']);
         });
 
+        Route::group(['prefix' => 'payments', 'middleware' => ['permission:finadmin'], 'as' => 'payments::'], function () {
+            Route::get('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
+            Route::post('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
+        });
+
         Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'ProductController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'ProductController@create']);
