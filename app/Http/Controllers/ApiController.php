@@ -154,7 +154,9 @@ class ApiController extends Controller
         foreach (OrderLine::where('user_id', $user->id)->get() as $orderline) {
             $payment_method = null;
             if ($orderline->payed_with_cash) {
-                $payment_method = 'cash';
+                $payment_method = 'cash_cashier';
+            } elseif ($orderline->payed_with_bank_card) {
+                $payment_method = 'bank_card_cashier';
             } elseif ($orderline->molliePayment) {
                 $payment_method = sprintf('mollie_%s', $orderline->molliePayment->mollie_id);
             } elseif ($orderline->withdrawal) {

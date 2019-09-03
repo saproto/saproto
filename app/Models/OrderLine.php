@@ -37,7 +37,7 @@ class OrderLine extends Model
 
     public function isPayed()
     {
-        return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null);
+        return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null || $this->payed_with_bank_card !== null);
     }
 
     public function molliePayment()
@@ -52,8 +52,9 @@ class OrderLine extends Model
             if ($this->payed_with_withdrawal !== null) {
                 return "Withdrawal <a href='" . route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]) . "'>#" . $this->payed_with_withdrawal . "</a>";
             } elseif ($this->payed_with_cash !== null) {
-
                 return "Cash";
+            } elseif ($this->payed_with_bank_card !== null) {
+                return "Bank Card";
             } elseif ($this->payed_with_mollie !== null) {
                 return "Mollie <a href='" . route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) . "'>#" . $this->payed_with_mollie . "</a>";
             }

@@ -16,6 +16,7 @@ use Proto\Models\TicketPurchase;
 use Proto\Models\User;
 
 use Redirect;
+use DB;
 
 class OrderLineController extends Controller
 {
@@ -29,7 +30,7 @@ class OrderLineController extends Controller
 
         $user = Auth::user();
 
-        $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
+        $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
         $orderlines = OrderLine::where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->groupBy(function ($date) {
             return Carbon::parse($date->created_at)->format('Y-m');
@@ -79,7 +80,7 @@ class OrderLineController extends Controller
         $date = ($date ? $date : date('Y-m-d'));
 
         if (Auth::user()->can('alfred')) {
-            $orderlines = OrderLine::whereHas('product', function($query) {
+            $orderlines = OrderLine::whereHas('product', function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
         } else {
@@ -173,5 +174,32 @@ class OrderLineController extends Controller
 
         $request->session()->flash('flash_message', 'The orderline was deleted.');
         return Redirect::back();
+    }
+
+
+    /**
+     * Display aggregated payment totals for cash and card payments to check the financial administration.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showPaymentStatistics(Request $request)
+    {
+        if ($request->has('start') && $request->has('end')) {
+            $start = date('Y-m-d H:i:s', strtotime($request->start));
+            $end = date('Y-m-d H:i:s', strtotime($request->end));
+            $total_cash = DB::table('orderlines')->where('created_at', '>', $start)->where('created_at', '<', $end)
+                ->whereNotNull('payed_with_cash')->select(DB::raw('SUM(total_price) as total'))->get()[0]->total;
+            $total_card = DB::table('orderlines')->where('created_at', '>', $start)->where('created_at', '<', $end)
+                ->whereNotNull('payed_with_bank_card')->select(DB::raw('SUM(total_price) as total'))->get()[0]->total;
+            return view('omnomcom.statistics.payments', [
+                'start' => $request->start,
+                'end' => $request->end,
+                'total_cash' => $total_cash,
+                'total_card' => $total_card
+            ]);
+        } else {
+            return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to calculate payment totals.']);
+        }
     }
 }

@@ -123,9 +123,15 @@ class OmNomController extends Controller
         }
 
         $withCash = $request->input('cash');
+        $withBankCard = $request->input('bank_card');
 
         if ($withCash == "true" && !$storedata->cash_allowed) {
             $result->message = "<span style='color: red;'>You cannot use cash in this store.</span>";
+            return json_encode($result);
+        }
+
+        if ($withBankCard == "true" && !$storedata->bank_card_allowed) {
+            $result->message = "<span style='color: red;'>You cannot use a bank card in this store.</span>";
             return json_encode($result);
         }
 
@@ -161,34 +167,34 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false));
+                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false), ($withBankCard == "true" ? true : false));
                 if ($product->id == config('omnomcom.protube-skip')) {
                     file_get_contents(config('herbert.server') . "/skip?secret=" . config('herbert.secret'));
                 }
             }
         }
 
-        if(!isset($result->message)) {
+        if (!isset($result->message)) {
 
 
-          $result->status = "OK";
+            $result->status = "OK";
 
-          if ($user->show_omnomcom_total) {
-              if(!isset($result->message)) $result->message = "";
-              $result->message .= sprintf("You have spent a total of <strong>€%0.2f</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
-          }
-
-          if($user->show_omnomcom_calories){
-            if(!isset($result->message)) $result->message = "";
-            if($user->show_omnomcom_total) {
-              $result->message .= "<br>and ";
-            } else {
-              $result->message .= "You have ";
+            if ($user->show_omnomcom_total) {
+                if (!isset($result->message)) $result->message = "";
+                $result->message .= sprintf("You have spent a total of <strong>€%0.2f</strong>", OrderLine::where('user_id', $user->id)->where('created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->sum('total_price'));
             }
-            $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->join('products','products.id','=','orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
-          }
 
-          if(isset($result->message)) $result->message .= sprintf(" today, %s.", $user->calling_name);
+            if ($user->show_omnomcom_calories) {
+                if (!isset($result->message)) $result->message = "";
+                if ($user->show_omnomcom_total) {
+                    $result->message .= "<br>and ";
+                } else {
+                    $result->message .= "You have ";
+                }
+                $result->message .= sprintf("bought a total of <strong>%s calories</strong>", Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf("%s %%", date('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
+            }
+
+            if (isset($result->message)) $result->message .= sprintf(" today, %s.", $user->calling_name);
         }
 
         return json_encode($result);

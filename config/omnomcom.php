@@ -19,6 +19,7 @@ return [
             'addresses' => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
             'roles' => ['board', 'omnomcom'],
             'cash_allowed' => false,
+            'bank_card_allowed' => false,
             'alcohol_time_constraint' => true,
         ],
         'tipcie' => (object)[
@@ -27,6 +28,7 @@ return [
             'addresses' => [],
             'roles' => ['board', 'tipcie', 'drafters'],
             'cash_allowed' => true,
+            'bank_card_allowed' => true,
             'col_override' => 3,
             'alcohol_time_constraint' => false,
         ]

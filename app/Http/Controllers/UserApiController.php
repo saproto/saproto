@@ -49,7 +49,7 @@ class UserApiController extends Controller
 
     public function getNextWithdrawal()
     {
-        $next_withdrawal = $orderlines = Orderline::where('user_id', Auth::id())->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
+        $next_withdrawal = $orderlines = Orderline::where('user_id', Auth::id())->whereNull('payed_with_bank_card')->whereNull('payed_with_cash')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
         return $next_withdrawal;
     }
