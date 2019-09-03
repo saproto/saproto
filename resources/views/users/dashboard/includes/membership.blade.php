@@ -35,6 +35,21 @@
                         </td>
                     </tr>
                 @endif
+                <tr>
+                    <th>Membership type</th>
+                    @if($user->member->getMembertype())
+                        <td>{{ ucfirst($user->member->getMembertype()) }} member
+                            <br>
+                            <sup class="text-muted">{{ $user->member->getMembershipOrderline() ? '&euro; '. $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) : 'Not paid this year.' }}</sup>
+                        </td>
+                    @else
+                        <td>
+                            Currently unknown
+                            <br>
+                            <sup class="text-muted">Will be determined on October 1st.</sup>
+                        </td>
+                    @endif
+                </tr>
                 @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong)
                     <tr>
                         <th>Special status</th>
