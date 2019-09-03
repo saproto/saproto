@@ -3,7 +3,7 @@
 @section('greeting')
 
     <strong>Welcome to S.A. Proto</strong><br>
-    Study Association Proto is the study association for Creative Technology at the University of Twente.
+    Study Association of Creative Technology and Interaction Technology
 
 @endsection
 
