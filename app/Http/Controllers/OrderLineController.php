@@ -116,7 +116,7 @@ class OrderLineController extends Controller
             $price = ($request->input('price')[$i] != "" ? floatval(str_replace(",", ".", $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
 
-            $product->buyForUser($user, $units, $price * $units, null, $request->input('description'));
+            $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'));
 
         }
 
