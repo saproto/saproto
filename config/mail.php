@@ -16,8 +16,8 @@ return [
     */
 
     'driver' => env('MAIL_DRIVER', 'log'),
-    'host' => 'localhost',
-    'port' => 25,
+    'host' => env('SMTP_HOST', 'localhost'),
+    'port' => env('SMTP_PORT', 25),
     'encryption' => false,
     'username' => env('SMTP_USERNAME'),
     'password' => env('SMTP_PASSWORD'),
