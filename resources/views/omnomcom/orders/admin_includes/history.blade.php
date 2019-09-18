@@ -13,6 +13,7 @@
 
                 <tr>
                     <td>
+                        <span class="text-muted">{{ $orderline->id }}</span>
                         @if(!$orderline->isPayed())
                             <a href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
                                @if ($orderline->isPayed())

@@ -49,6 +49,10 @@ class RfidCardController extends Controller
         }
 
         $uid = $request->input('card');
+        if (strlen($uid) == 0) {
+            return "<span style='color: red;'>Empty card UID provided. Did you scan your card properly?</span>";
+        }
+
         $card = RfidCard::where('card_id', $uid)->first();
         if ($card) {
             if ($card->user->id == $user->id) {
