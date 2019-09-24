@@ -37,7 +37,16 @@ class OrderLine extends Model
 
     public function isPayed()
     {
-        return ($this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null || $this->payed_with_bank_card !== null);
+        return ($this->total_price == 0 || $this->payed_with_cash !== null || $this->payed_with_mollie !== null || $this->payed_with_withdrawal !== null || $this->payed_with_bank_card !== null);
+    }
+
+    public function canBeDeleted() {
+        if ($this->total_price == 0) {
+            return true;
+        } elseif ($this->isPayed()) {
+            return false;
+        }
+        return true;
     }
 
     public function molliePayment()
@@ -57,6 +66,10 @@ class OrderLine extends Model
                 return "Bank Card";
             } elseif ($this->payed_with_mollie !== null) {
                 return "Mollie <a href='" . route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]) . "'>#" . $this->payed_with_mollie . "</a>";
+            } elseif ($this->total_price == 0) {
+                return "Free!";
+            } else {
+                return "Dunnow 🤷🏽";
             }
         } else {
             return "Unpaid";
