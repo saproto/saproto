@@ -9,7 +9,7 @@
         <table class="table table-hover table-sm">
 
             <tbody>
-            @foreach($orderlines as $orderline)s
+            @foreach($orderlines as $orderline)
 
                 <tr>
                     <td>
