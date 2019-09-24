@@ -7,7 +7,7 @@
     <div class="card-body">
 
         <form id="searchForm">
-            <div class="input-group mb-3">
+            <div class="input-group mb-1">
                 <div class="input-group-prepend">
                 <span id="showVideo" class="input-group-text" style="cursor: pointer;">
                     <i class="fab fa-youtube fa-fw"></i>
@@ -33,6 +33,13 @@
                 <!-- Filled by Javascript //-->
             </div>
         </div>
+
+    </div>
+
+    <div class="card-footer text-center">
+
+        Developed with
+        <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
 
     </div>
 

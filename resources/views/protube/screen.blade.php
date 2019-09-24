@@ -247,6 +247,20 @@
             filter: blur(7px) contrast(115%) brightness(80%);
         }
 
+        #developed-with-youtube {
+            position: absolute;
+
+            top: 30px;
+            left: 30px;
+
+            z-index: 9999;
+
+            color: #FFFFFF;
+            font-size: 30px;
+
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+        }
+
         #clock {
             position: absolute;
 
@@ -637,6 +651,11 @@
 <div id="slideshow"></div>
 
 <div id="clock"> 00:00</div>
+
+
+<div id="developed-with-youtube">
+    <sup>Developed with <strong>YouTube</strong></sup>
+</div>
 
 </body>
 </html>
