@@ -72,6 +72,7 @@ class MenuController extends Controller
         }
 
         $menuItem->save();
+        $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
         return Redirect::route("menu::list");
     }
@@ -102,15 +103,8 @@ class MenuController extends Controller
     {
         $menuItem = MenuItem::findOrFail($id);
 
-        if($request->parent != $menuItem->parent) {
-            $change = MenuItem::where('parent', '=', $menuItem->parent)->get();
-
-            foreach($change as $item) {
-                if($item->order > $menuItem->order && $item->id != $menuItem->id) {
-                    $item->order = $item->order - 1;
-                    $item->save();
-                }
-            }
+        if ($request->parent != $menuItem->parent) {
+            $oldparent = $menuItem->parent;
         }
 
         $menuItem->menuname = $request->menuname;
@@ -141,6 +135,9 @@ class MenuController extends Controller
 
         $menuItem->save();
 
+        $this->fixDuplicateMenuItemsOrder($oldparent);
+        $this->fixDuplicateMenuItemsOrder($menuItem->parent);
+
         return Redirect::route("menu::list");
     }
 
@@ -148,17 +145,12 @@ class MenuController extends Controller
     {
         $menuItem = MenuItem::findOrFail($id);
 
-        if ($menuItem->order <= 0) abort(500);
+        $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
-        $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', $menuItem->order - 1)->first();
+        if (!$menuItemAbove) abort(400, 'Item is already top item.');
 
-        if(!$menuItemAbove) abort(500, 'Unable to change order.');
-
-        $menuItemAbove->order++;
-        $menuItemAbove->save();
-
-        $menuItem->order--;
-        $menuItem->save();
+        $this->switchMenuItems($menuItem, $menuItemAbove);
+        $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
         return Redirect::route("menu::list");
     }
@@ -167,19 +159,37 @@ class MenuController extends Controller
     {
         $menuItem = MenuItem::findOrFail($id);
 
-        if ($menuItem->order >= MenuItem::all()->count() - 1) abort(500);
+        $menuItemBelow = MenuItem::where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
-        $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', $menuItem->order + 1)->first();
+        if (!$menuItemBelow) abort(400, 'Item is already bottom item.');
 
-        if(!$menuItemAbove) abort(500, 'Unable to change order.');
-
-        $menuItemAbove->order--;
-        $menuItemAbove->save();
-
-        $menuItem->order++;
-        $menuItem->save();
+        $this->switchMenuItems($menuItem, $menuItemBelow);
+        $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
         return Redirect::route("menu::list");
+    }
+
+    private function switchMenuItems($item1, $item2)
+    {
+        $newOrderForItem1 = $item2->order;
+        $newOrderForItem2 = $item1->order;
+
+        $item1->order = $newOrderForItem1;
+        $item2->order = $newOrderForItem2;
+
+        $item1->save();
+        $item2->save();
+    }
+
+    private function fixDuplicateMenuItemsOrder($parent)
+    {
+        $menuItems = MenuItem::where('parent', $parent)->orderBy('order', 'asc')->get();
+        $i = 0;
+        foreach ($menuItems as $menuItem) {
+            $menuItem->order = $i;
+            $menuItem->save();
+            $i++;
+        }
     }
 
     /**
@@ -199,8 +209,8 @@ class MenuController extends Controller
 
         $change = MenuItem::where('parent', '=', $menuItem->parent)->get();
 
-        foreach($change as $item) {
-            if($item->order > $menuItem->order && $item->id != $menuItem->id) {
+        foreach ($change as $item) {
+            if ($item->order > $menuItem->order && $item->id != $menuItem->id) {
                 $item->order = $item->order - 1;
                 $item->save();
             }

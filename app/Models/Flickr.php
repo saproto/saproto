@@ -46,7 +46,7 @@ class Flickr extends Model
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
-        $items = $items->orderBy('date_taken', 'asc')->get();
+        $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get();
         $data = new \stdClass();
         $data->album_title = FlickrAlbum::where("id", "=", $albumID)->first()->name;
         $data->album_date = FlickrAlbum::where("id", "=", $albumID)->first()->date_taken;
@@ -59,6 +59,9 @@ class Flickr extends Model
     public static function getPhoto($photoID)
     {
         $photo = FlickrItem::where('id', $photoID)->first();
+        if (!$photo) {
+            abort(404, "This photo does not exist.");
+        }
 
         $data = new \stdClass();
         $data->photo_url = FlickrItem::where("id", "=", $photoID)->first()->url;

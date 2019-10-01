@@ -91,7 +91,7 @@ class AccountController extends Controller
             return view('omnomcom.accounts.aggregation', ['aggregation' => $account->generatePeriodAggregation($request->start, $request->end),
                 'start' => $request->start, 'end' => $request->end, 'account' => $account]);
         } else {
-            return view('omnomcom.statistics.date-select');
+            return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to aggregate OmNomCom product sales.']);
         }
     }
 

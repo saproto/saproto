@@ -87,6 +87,13 @@
 
     </div>
 
+    <div class="card-footer text-center">
+
+        Developed with
+        <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
+
+    </div>
+
 </div>
 
 <!-- Now playing //-->
@@ -104,6 +111,13 @@
         <p class="card-text text-center">
             Nothing is playing right now.
         </p>
+    </div>
+
+    <div class="card-footer text-center">
+
+        Developed with
+        <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
+
     </div>
 
 </div>

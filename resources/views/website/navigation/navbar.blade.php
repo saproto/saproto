@@ -142,6 +142,9 @@
                                 <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">
                                     Mollie Payments
                                 </a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::payments::statistics") }}">
+                                    Cash & Card Payments
+                                </a>
 
                             @endif
 
@@ -172,8 +175,10 @@
                                 <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
-                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
-                                    Messages</a>
+                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <li role="separator" class="dropdown-divider"></li>
+                                <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
+                                <li role="separator" class="dropdown-divider"></li>
                             @endif
 
                             @if(Auth::user()->can('header-image'))

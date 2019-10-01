@@ -39,6 +39,9 @@ class ActivityController extends Controller
         if ($newnoshow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
             return Redirect::route('event::edit', ['id' => $event->id]);
+        } elseif ($newnoshow < 0) {
+            $request->session()->flash('flash_message', 'The no show fee should be a positive amount.');
+            return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
         if ($newprice > floatval($activity->price) && $activity->users->count() > 0) {
@@ -134,12 +137,9 @@ class ActivityController extends Controller
         $help = HelpingCommittee::create([
             'activity_id' => $event->activity->id,
             'committee_id' => $committee->id,
-            'amount' => $amount
+            'amount' => $amount,
+            'notification_sent' => false
         ]);
-
-        foreach ($committee->users as $user) {
-            Mail::to($user)->queue((new CommitteeHelpNeeded($user, $help))->onQueue('medium'));
-        }
 
         $request->session()->flash('flash_message', 'Added ' . $committee->name . ' as helping committee.');
         return Redirect::back();
@@ -152,13 +152,8 @@ class ActivityController extends Controller
         $oldamount = $help->amount;
 
         $help->amount = ($amount > 0 ? $amount : $help->amount);
+        $help->notification_sent = false;
         $help->save();
-
-        if ($help->amount > $oldamount) {
-            foreach ($help->committee->users as $user) {
-                Mail::to($user)->queue((new CommitteeHelpNeeded($user, $help))->onQueue('medium'));
-            }
-        }
 
         $request->session()->flash('flash_message', 'Updated ' . $help->committee->name . ' as helping committee.');
         return Redirect::back();
@@ -167,10 +162,6 @@ class ActivityController extends Controller
     public function deleteHelp(Request $request, $id)
     {
         $help = HelpingCommittee::findOrFail($id);
-
-        foreach ($help->users as $user) {
-            Mail::to($user)->queue((new CommitteeHelpNotNeeded($user, $help->activity->event->title, $help->committee->name))->onQueue('medium'));
-        }
 
         foreach (ActivityParticipation::withTrashed()->where('committees_activities_id', $help->id)->get() as $participation) {
             $participation->delete();

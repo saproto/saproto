@@ -44,40 +44,40 @@
                 Single days.
              */
             @if(date('U') > strtotime('November 25') && date('U') < strtotime('December 6'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/sinterklaas.png') }}');
             @elseif(date('U') > strtotime('May 4') && date('U') < strtotime('May 5'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/may4th.png') }}');
             @elseif(date('U') > strtotime('September 19') && date('U') < strtotime('September 20'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/talklikeapirate.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/talklikeapirate.png') }}');
             @elseif(date('U') > strtotime('February 14') && date('U') < strtotime('February 15'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/valentine.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/valentine.png') }}');
             /**
                 Periods
              */
             @elseif(date('U') > strtotime('April 1') && date('U') < strtotime('April 21'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/dies.png') }}');
             @elseif(date('U') > strtotime('March 10') && date('U') < strtotime('March 18'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/stpatrick.png') }}');
             @elseif(date('U') > (easter_date() - 3600*24*7) && date('U') < (easter_date() + 3600*24))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/easter.png') }}');
             @elseif(date('U') > strtotime('September 22') && date('U') < strtotime('October 3'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/oktoberfest.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/oktoberfest.png') }}');
             @elseif(date('U') > strtotime('October 24') && date('U') < strtotime('November 1'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/halloween.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/halloween.png') }}');
             @elseif(date('U') > strtotime('December 6') && date('U') < strtotime('December 31'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/christmas.png') }}');
             /**
                 Seasons
              */
             @elseif(date('U') > strtotime('September 23') && date('U') < strtotime('December 22'))
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/autumn.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster_seasonal/autumn.png') }}');
             /**
                 Default
              */
             @else
-                         background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
+                          background-image: url('{{ asset('images/omnomcom/cookiemonster.png') }}');
             @endif
-            background-position: center 220%;
+             background-position: center 220%;
             background-repeat: no-repeat;
         }
 
@@ -382,13 +382,13 @@
             color: #fff;
         }
 
-        #purchase, #purchase-cash-initiate {
+        #purchase, #purchase-cash-initiate, #purchase-bank-card-initiate {
             transition: all 0.5s;
             transform: translate(0, 0);
             opacity: 1;
         }
 
-        #purchase.inactive, #purchase-cash-initiate.inactive {
+        #purchase.inactive, #purchase-cash-initiate.inactive, #purchase-bank-card-initiate.inactive {
             transform: translate(200px, 0);
             opacity: 0;
         }
@@ -565,11 +565,11 @@
 
     @if(Auth::check())
         <div class="category_button inactive ellipsis" onclick="window.location='{{ route("login::logout") }}'">
-           Log out <strong>{{ Auth::user()->calling_name }}</strong>
+            Log out <strong>{{ Auth::user()->calling_name }}</strong>
         </div>
     @endif
 
-    <!-- This is for the minor member tool //-->
+<!-- This is for the minor member tool //-->
     @if(count($minors) > 0)
 
         <div class="category_button inactive" data-id="static-minors">
@@ -721,9 +721,18 @@
 
     <div id="buttons">
 
-        <span id="purchase" class="button inactive">Complete order</span>
+        <span id="purchase" class="button inactive">
+            <i class="fas fa-cookie-bite mr-2"></i> Complete order
+        </span>
         @if($store->cash_allowed)
-            <span id="purchase-cash-initiate" class="button inactive">Complete with cash</span>
+            <span id="purchase-cash-initiate" class="button inactive">
+                <i class="fas fa-coins mr-2"></i> Complete with cash
+            </span>
+        @endif
+        @if($store->bank_card_allowed)
+            <span id="purchase-bank-card-initiate" class="button inactive">
+                <i class="fas fa-credit-card mr-2"></i> Complete with PIN
+            </span>
         @endif
         <span id="rfid" class="button">Link RFID card</span>
         <span class="info" style="font-weight: bold;">Order total: &euro;<span id="total">0.00</span></span>
@@ -782,6 +791,17 @@
 
     </div>
 
+    <div id="badcard-modal" class="modal inactive">
+
+        <h1 class="text-danger">Not so hasty!</h1>
+
+        <span class="modal-status">
+            It looks like you've scanned your card incorrectly.
+            Please close this window, try again and hold your card close to the reader!
+        </span>
+
+    </div>
+
     <div id="purchase-modal" class="modal inactive">
 
         <h1>Complete your purchase</h1>
@@ -810,6 +830,7 @@
     var rfid_link_card = null;
 
     var cash = false;
+    var bank_card = false;
 
     /*
      Loading the necessary data.
@@ -937,7 +958,8 @@
                     username: $("#purchase-username").val(),
                     password: $("#purchase-password").val()
                 }),
-                cash: {!! ($store->cash_allowed ? "cash" : "false") !!},
+                cash: {{ ($store->cash_allowed ? "cash" : "false") }},
+                bank_card: {{ ($store->bank_card_allowed ? "bank_card" : "false") }},
                 cart: cart_to_object(cart)
             },
             dataType: 'html',
@@ -945,11 +967,11 @@
                 data = JSON.parse(data);
 
                 if (data.status == "OK") {
-                  if(!data.hasOwnProperty('message')) {
-                    finishPurchase();
-                  } else {
-                  finishPurchase(data.message);
-                }
+                    if (!data.hasOwnProperty('message')) {
+                        finishPurchase();
+                    } else {
+                        finishPurchase(data.message);
+                    }
                 } else {
                     $("#purchase-modal .modal-status").html(data.message);
                     purchase_processing = null;
@@ -1003,9 +1025,11 @@
         if (anythingincart) {
             $("#purchase").removeClass("inactive");
             $("#purchase-cash-initiate").removeClass("inactive");
+            $("#purchase-bank-card-initiate").removeClass("inactive");
         } else {
             $("#purchase").addClass("inactive");
             $("#purchase-cash-initiate").addClass("inactive");
+            $("#purchase-bank-card-initiate").addClass("inactive");
         }
         $("#total").html(ordertotal.toFixed(2));
 
@@ -1025,21 +1049,48 @@
      RFID scanner integration
      */
 
-    if (navigator.userAgent.indexOf('Electron') >= 0) {
+    var server;
 
-        var server = new WebSocket("ws://localhost:3000", "nfc");
+    establishNfcConnection();
+
+    function establishNfcConnection() {
+        try {
+            $("#status").addClass("inactive").html("RFID Service: Connecting...");
+            server = new WebSocket("ws://localhost:3000", "nfc");
+        } catch (err) {
+            if (err.message.indexOf("insecure") !== -1) {
+                $("#status").addClass("inactive").html("RFID Service: Not Supported");
+                return;
+            } else {
+                console.log("Unexpected error:", err.message);
+            }
+        }
 
         server.onopen = function () {
             $("#status").removeClass("inactive").html("RFID Service: Connected");
         };
 
         server.onclose = function () {
-            $("#status").addClass("inactive").html("RFID Service: Reconnecting");
+            $("#status").addClass("inactive").html("RFID Service: Disconnected");
+            setTimeout(establishNfcConnection, 5000);
         };
 
         server.onmessage = function (raw) {
             data = JSON.parse(raw.data).uid;
             console.log('Received card input: ' + data);
+
+            if (modal_status == "badcard") {
+                return;
+            }
+
+            if (data == "") {
+                $("#modal-overlay").show();
+                $(".modal").addClass('inactive');
+                $("#badcard-modal").removeClass('inactive');
+                modal_status = "badcard";
+                return;
+            }
+            $("#badcard-modal").addClass('inactive');
 
             if (modal_status == 'rfid') {
 
@@ -1095,7 +1146,6 @@
             }
 
         };
-
     }
 
     function doQrAuth(element, description, onComplete) {
@@ -1155,7 +1205,6 @@
         $("#modal-overlay").hide();
         $(".modal-input").val('');
         $("#osk-container .osk-hide").trigger('click');
-        $("#purchase-cash").removeClass('modal-toggle-true');
         modal_status = null;
     });
 
@@ -1175,19 +1224,32 @@
         $("#purchase-modal").removeClass('inactive');
         doQrAuth($("#purchase-modal .qrAuth"), "Payment for purchases in Omnomcom", purchase);
 
-        $("#purchase-modal h1").html("Complete your purchase");
+        $("#purchase-modal h1").html("Complete purchase using your <i class=\"fas fa-cookie-bite\"></i> OmNomCom bill.");
         cash = false;
+        bank_card = false;
         modal_status = 'purchase';
     });
 
     $("#purchase-cash-initiate").on("click", function () {
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
-        $("#purchase-cash").addClass('modal-toggle-true');
-        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for purchases in Omnomcom", purchase);
+        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for cash purchases in Omnomcom", purchase);
 
-        $("#purchase-modal h1").html("Complete purchase as cashier");
+        $("#purchase-modal h1").html("Complete purchase as cashier, payed with cash.");
         cash = true;
+        bank_card = false;
+        modal_status = 'purchase';
+    });
+
+    $("#purchase-bank-card-initiate").on("click", function () {
+        $("#modal-overlay").show();
+        $("#purchase-modal").removeClass('inactive');
+        $("#purchase-bank-card").addClass('modal-toggle-true');
+        doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for bank card purchases in Omnomcom", purchase);
+
+        $("#purchase-modal h1").html("Complete purchase as cashier, payed with bank card.");
+        cash = false;
+        bank_card = true;
         modal_status = 'purchase';
     });
 

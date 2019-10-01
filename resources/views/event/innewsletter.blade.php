@@ -30,7 +30,7 @@
 
                         <input type="button" class="btn btn-success btn-block" data-toggle="modal"
                                data-target="#sendnewsletter"
-                               value="{{ (Newsletter::canBeSent() ? 'Send the weekly newsletter!' : 'Weekly newsletter can be sent again next week.') }}"
+                               value="{{ (Newsletter::canBeSent() ? 'Send the weekly newsletter!' : 'Weekly newsletter can not be sent right now.') }}"
                                 {{ (!Newsletter::canBeSent() ? 'disabled' : '') }}>
 
                         <hr>

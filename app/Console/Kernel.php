@@ -35,10 +35,12 @@ class Kernel extends ConsoleKernel
         Commands\ClearSessionTable::class,
         Commands\CountPrimaryMembers::class,
         Commands\VerifyPersonalDetailsEmailCron::class,
+        Commands\HelperNotificationsCron::class,
         Commands\HelperReminderCron::class,
         Commands\PrintActiveMembers::class,
         Commands\MemberRenewCron::class,
-        Commands\OmNomComCleanup::class
+        Commands\OmNomComCleanup::class,
+        Commands\MakeAdmin::class
     ];
 
     /**
@@ -67,6 +69,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:spotifysync')->daily()->at('05:00');
         $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
+        $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
 
         $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
 

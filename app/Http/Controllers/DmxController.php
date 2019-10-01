@@ -62,7 +62,7 @@ class DmxController extends Controller
         }
 
         // And we apply the overrides.
-        foreach (DmxOverride::orderBy('end', 'asc')->get() as $override) {
+        foreach (DmxOverride::getActiveSorted()->reverse() as $override) {
             if (!$override->active() && !$override->justOver()) {
                 continue;
             }
@@ -100,7 +100,11 @@ class DmxController extends Controller
 
     public function overrideIndex()
     {
-        return view('dmx.override.index', ['overrides' => DmxOverride::all()]);
+        return view('dmx.override.index', [
+            'overrides' => DmxOverride::getActiveSorted(),
+            'upcoming_overrides' => DmxOverride::getUpcomingSorted(),
+            'past_overrides' => DmxOverride::getPastSorted()
+        ]);
     }
 
     public function create()

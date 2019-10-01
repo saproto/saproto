@@ -54,10 +54,10 @@
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="excludeFromAllAchievements" value="0">
-                <input type="checkbox" id="excludeFromAllAchievements" name="excludeFromAllAchievements"
-                       value="1" {{ (!$new && $achievement->excludeFromAllAchievements ? 'checked' : '') }}>
-                <label for="isPrize">Exclude from 'all achievements' achievement</label>
+                <input type="hidden" name="is_archived" value="0">
+                <input type="checkbox" id="is_archived" name="is_archived"
+                       value="1" {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
+                <label for="is_archived">Archive this achievement</label>
             </div>
 
         </div>

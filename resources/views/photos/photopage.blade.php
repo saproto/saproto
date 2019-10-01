@@ -23,6 +23,10 @@
                         <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark mr-3">
                             <i class="fas fa-arrow-left"></i>
                         </a>
+                    @else
+                        <a class="btn btn-dark mr-3" disabled>
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
                     @endif
 
                     @if ($photo->liked == null)
@@ -46,6 +50,10 @@
 
                     @if($photo->next != null)
                         <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    @else
+                        <a class="btn btn-dark" disabled>
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif

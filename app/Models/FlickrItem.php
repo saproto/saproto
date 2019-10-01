@@ -21,20 +21,14 @@ class FlickrItem extends Model
 
     private function getAdjacentPhoto($next = true)
     {
-        if ($next) {
-            $func = 'MIN';
-            $comp = '>';
-        } else {
-            $func = 'MAX';
-            $comp = '<';
-        }
+        $result = FlickrItem::where('album_id', $this->album_id)->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get()->pluck('id')->toArray();
+        $index = array_search($this->id, $result);
 
-        $result = DB::select(DB::raw(sprintf("SELECT id FROM flickr_items WHERE album_id = %s AND date_taken = (SELECT %s(date_taken) FROM flickr_items WHERE date_taken %s %s)", $this->album_id, $func, $comp, $this->date_taken)));
-        if (count($result) > 0) {
-            $id = $result[0]->id;
-            return FlickrItem::where('id', $id)->first();
-        } else {
+        if (($next == false && $index == 0) || ($next == true && $index >= (count($result) - 1))) {
             return null;
+        } else {
+            $adjacentIndex = $index + ($next ? 1 : -1);
+            return FlickrItem::where('id', $result[$adjacentIndex])->first();
         }
     }
 
@@ -50,6 +44,6 @@ class FlickrItem extends Model
 
     public function getLikes()
     {
-        return PhotoLikes::where("photo_id","=", $this->id)->count();
+        return PhotoLikes::where("photo_id", "=", $this->id)->count();
     }
 }

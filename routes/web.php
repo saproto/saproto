@@ -537,6 +537,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('aggregate/{account}', ['as' => 'aggregate', 'uses' => 'AccountController@showAggregation']);
         });
 
+        Route::group(['prefix' => 'payments', 'middleware' => ['permission:finadmin'], 'as' => 'payments::'], function () {
+            Route::get('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
+            Route::post('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
+        });
+
         Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'ProductController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'ProductController@create']);
@@ -551,7 +556,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('statistics', ['as' => 'statistics', 'uses' => 'AccountController@showOmnomcomStatistics']);
 
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
-            Route::get('rank/{category}/{product}/{direction}', ['as' => 'rank', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@rank']);
         });
 
         Route::group(['prefix' => 'categories', 'middleware' => ['permission:omnomcom'], 'as' => 'categories::'], function () {
@@ -841,6 +845,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@overrideDelete']);
 
         });
+
+    });
+
+    /*
+     * Queries
+     */
+    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function (){
+
+        Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
+        Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
 
     });
 

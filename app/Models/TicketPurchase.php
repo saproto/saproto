@@ -38,4 +38,13 @@ class TicketPurchase extends Model
         return false;
     }
 
+    public function getApiAttributesAttribute()
+    {
+        return array(
+            'id' => $this->id,
+            'barcode' => $this->canBeDownloaded() ? $this->barcode : null,
+            'scanned' => $this->scanned
+        );
+    }
+
 }

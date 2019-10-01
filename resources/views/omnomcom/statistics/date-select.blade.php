@@ -10,7 +10,7 @@
 
         <div class="col-md-3">
 
-            <form method="post" action="{{ route("omnomcom::products::statistics") }}">
+            <form method="post">
 
                 {!! csrf_field() !!}
 
@@ -23,7 +23,11 @@
                     <div class="card-body">
 
                         <p class="card-text">
-                            Select the dates for which you want to generate OmNomCom statistics:
+                            @if(isset($select_text))
+                                {!! $select_text !!}
+                            @else
+                                Select a time range to generate statistics
+                            @endif
                         </p>
 
                         <hr>

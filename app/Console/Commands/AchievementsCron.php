@@ -64,7 +64,6 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->fourOClock(), 29);
         $this->giveAchievement($this->youreSpecial(), 30);
         $this->giveAchievement($this->bigKid(), 32);
-        $this->giveAchievement($this->collector(), 18);
         $this->giveAchievement($this->NoLife(), 52);
         $this->giveAchievement($this->First(), 51);
         $this->giveAchievement($this->ForeverMember(),38);
@@ -519,20 +518,6 @@ class AchievementsCron extends Command
             }
         } else {
             $this->info('Its not the first of the month! Cancelling Big kid...');
-        }
-        return $selected;
-    }
-
-    /**
-     *  Collector 9001 = collected all achievements
-     */
-    private function collector()
-    {
-        $selected = array();
-        foreach (User::all() as $user) {
-            if (count($user->achieved()) == count(Achievement::where('excludeFromAllAchievements', 0)->get())) {
-                $selected[] = $user;
-            }
         }
         return $selected;
     }

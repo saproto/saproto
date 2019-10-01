@@ -113,7 +113,7 @@
               <div class="col-md-4">
                 <label for="price">Calories:</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories or '' }}" required>
+                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories or '' }}">
                 </div>
               </div>
 

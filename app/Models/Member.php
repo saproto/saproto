@@ -27,4 +27,37 @@ class Member extends Model
         }
         return User::whereIn('id', $userids)->orderBy('name', 'asc')->count();
     }
+
+    public function getMembershipOrderline()
+    {
+        if (intval(date('n')) >= 9) {
+            $yearstart = intval(date('Y'));
+        } else {
+            $yearstart = intval(date('Y')) - 1;
+        }
+
+        $orderline = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))
+            ->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->where('user_id', '=', $this->id)->first();
+
+        return $orderline;
+    }
+
+    public function getMemberType()
+    {
+        $membershipOrderline = $this->getMembershipOrderline();
+
+        if ($membershipOrderline) {
+            switch ($this->getMembershipOrderline()->product->id) {
+                case config('omnomcom.fee')['regular']:
+                    return 'regular';
+                    break;
+                case config('omnomcom.fee')['reduced']:
+                    return 'secondary';
+                default:
+                    return 'unknown';
+            }
+        }
+
+        return null;
+    }
 }
