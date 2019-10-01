@@ -77,21 +77,29 @@ class FlickrToPhoto extends Command
                 $photo->private = $flickrItem->private;
                 $photo->album_id = $id;
                 $photo->file_id = $photoFile->id;
-                $photo->save();
 
                 if($flickrItem->thumb == $flickrThumb) {
                     $thumb = $photo->id;
                 }
 
                 foreach(FlickrLikes::where("photo_id","=", $flickrItem->id) as $flickrLike) {
+                    if($flickrLike->migrated) continue;
                     $photoLike = new PhotoLikes();
                     $photoLike->photo_id = $photo->id;
                     $photoLike->user_id = $flickrLike->user_id;
                     $photoLike->save();
+                    $flickrLike->migrated = true;
+                    $flickrLike->save();
                 }
+
+                $photo->save();
+                $flickrItem->migrated = true;
+                $flickrItem->save();
             }
             $photoAlbum->thumb_id = $thumb;
             $photoAlbum->save();
+            $flickrAlbum->migrated = true;
+            $flickrAlbum->save();
         }
     }
 }

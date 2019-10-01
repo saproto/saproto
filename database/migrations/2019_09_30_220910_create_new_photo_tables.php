@@ -13,6 +13,18 @@ class CreateNewPhotoTables extends Migration
      */
     public function up()
     {
+        Schema::table('flickr_albums', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
+        });
+
+        Schema::table('flickr_items', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
+        });
+
+        Schema::table('flickr_likes', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
+        });
+
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
