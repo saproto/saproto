@@ -105,7 +105,11 @@
                                 <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
                                 <a class="dropdown-item" href="{{ route("protube::admin") }}">ProTube Admin</a>
                                 <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
-
+                                @if(Auth::user()->can('protography'))
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
+                                    </li>
+                                @endif
                                 <li role="separator" class="dropdown-divider"></li>
 
                                 <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
@@ -218,7 +222,7 @@
                     </li>
                 @endif
 
-                @if(Auth::check() && Auth::user()->can('protography'))
+                @if(Auth::check() && Auth::user()->can('protography') && !Auth::user()->can('board'))
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button" aria-haspopup="false"
                            aria-expanded="false">Photo Admin</a>
