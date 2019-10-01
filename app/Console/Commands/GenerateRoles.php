@@ -109,6 +109,12 @@ class GenerateRoles extends Command
             $permissions['protography']->save();
             $this->info('Added protography permission.');
         }
+        $permissions['publishalbums'] = Permission::where('name', '=', 'publishalbums')->first();
+        if ($permissions['publishalbums'] == null) {
+            $permissions['publishalbums'] = new Permission(array('name' => 'publishalbums', 'display_name' => 'Publish Albums', 'description' => 'Allows publishing photo albums.'));
+            $permissions['publishalbums']->save();
+            $this->info('Added publishalbums permission.');
+        }
 
         $roles['sysadmin'] = Role::where('name', '=', 'sysadmin')->first();
         if ($roles['sysadmin'] == null) {
@@ -197,7 +203,7 @@ class GenerateRoles extends Command
         $this->info('Synced drafters role with permissions.');
         $roles['alfred']->perms()->sync(array($permissions['alfred']->id, $permissions['omnomcom']->id));
         $this->info('Synced alfred role with permissions.');
-        $roles['protography-admin']->perms()->sync(array($permissions['header-image']->id));
+        $roles['protography-admin']->perms()->sync(array($permissions['header-image']->id, $permissions['publishalbums']->id));
         $this->info('Synced protography-admin role with permissions.');
         $roles['protography']->perms()->sync(array($permissions['protography']->id));
         $this->info('Synced protography role with permissions.');

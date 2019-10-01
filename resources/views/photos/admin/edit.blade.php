@@ -6,9 +6,21 @@
 
 @section('container')
 
-    @if($photos->published == False)
-
-        @if(Auth::check() && Auth::user()->can('protography'))
+    @if($photos->published == True)
+        @if(Auth::check() && Auth::user()->can('publishalbums'))
+            <a class="btn btn-warning text-white btn-block mb-3"
+               href="{{ route('photo::admin::unpublish', ['id'=>$photos->album_id]) }}">
+                This album is published so editing is limited
+                , click here to unpublish the album.
+            </a>
+        @else
+            <span class="btn btn-warning text-white btn-block mb-3" style="cursor: default;">
+            This album is published so editing is limited
+            , ask a Protography admin to unpublish it if you wish to make changed.
+            </span>
+        @endif
+    @else
+        @if(Auth::check() && Auth::user()->can('publishalbums'))
             <a class="btn btn-warning text-white btn-block mb-3"
                href="{{ route('photo::admin::publish', ['id'=>$photos->album_id]) }}">
                 This album is not yet published
@@ -20,7 +32,6 @@
             , ask a Protography admin to publish it.
             </span>
         @endif
-
     @endif
 
     @if($photos->event !== null)
@@ -36,41 +47,58 @@
         <div class="col-lg-3">
             <div class="card mb-3">
 
-                <div class="card-header bg-dark text-white text-center">
-                    Edit album
-                </div>
-
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="album">Album name:</label>
-                        <input type="text" id="album" name="album" class="form-control"
-                               value="{{ $photos->album_title }}">
+                @if(Auth::user()->can('publishalbums'))
+                    <div class="card-header bg-dark text-white text-center">
+                        Edit album
                     </div>
-                    <div class="form-group">
-                        <label for="date">Album date:</label>
-                        @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'date',
-                                'format' => 'date',
-                                'placeholder' => date($photos->album_date)
-                            ])
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="private"
-                               name="private" {{ $photos->private ? "checked" : "" }}>
-                        <label class="form-check-label" for="private">Private album</label>
-                    </div>
-                </div>
 
-                <div class="card-footer">
-                    <input type="submit" class="btn btn-success btn-block" value="Save">
-                    <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#deleteModal">
-                        Delete Album
-                    </button>
-                </div>
+                    <form method="post">
+                        {{ csrf_field() }}
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="album">Album name:</label>
+                                <input type="text" id="album" name="album" class="form-control"
+                                       value="{{ $photos->album_title }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="date">Album date:</label>
+                                @include('website.layouts.macros.datetimepicker', [
+                                        'name' => 'date',
+                                        'format' => 'date',
+                                        'placeholder' => date($photos->album_date)
+                                    ])
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="private"
+                                       name="private" {{ $photos->private ? "checked" : "" }}>
+                                <label class="form-check-label" for="private">Private album</label>
+                            </div>
+                        </div>
 
+                        <div class="card-footer">
+                            <input type="submit" class="btn btn-success btn-block" value="Save">
+                            <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
+                                    data-target="#deleteModal">
+                                Delete Album
+                            </button>
+                        </div>
+
+                    </form>
+                @else
+                    <div class="card-header bg-dark text-white text-center">
+                        Edit album
+                    </div>
+
+                    <div class="card-body">
+                        <b>Album name:</b> {{ $photos->album_title }}<br>
+                        <b>Album date:</b> {{ date('d-m-Y', $photos->album_date) }}<br>
+                        <b>Private album:</b> <i class="fa fa-{{ $photos->private ? "check" : "times"}}"></i>
+                    </div>
+                @endif
             </div>
 
-            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -85,7 +113,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">Delete Album</a>
+                            <a class="btn btn-danger"
+                               href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">Delete Album</a>
                         </div>
                     </div>
                 </div>
@@ -110,29 +139,29 @@
                 <div class="card-header bg-dark text-white text-center">
                     Add photos
                 </div>
+                @if(!$photos->published)
+                    <div class="card-body">
 
-                <div class="card-body">
+                        <div id="uploadview" class="row" style="min-height: 200px;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                Drag photos here
+                            </div>
 
-                    <div id="uploadview" class="row" style="min-height: 200px;">
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            Drag photos here
+                        </div>
+
+                        <div id="photoadmin__droparea">
+                            <div id="photoadmin__droparea__content" class="text-center">
+                                <span class="fa fa-images" style="font-size: 10rem;"></span><br>
+                                <span>Drop photos to upload</span>
+                            </div>
                         </div>
 
                     </div>
-
-                    <div id="photoadmin__droparea">
-                        <div id="photoadmin__droparea__content" class="text-center">
-                            <span class="fa fa-images" style="font-size: 10rem;"></span><br>
-                            <span>Drop photos to upload</span>
-                        </div>
+                @else
+                    <div class="card-footer text-center">
+                        Uploading is disabled for published albums, unpublish the album to upload extra photos.
                     </div>
-
-                </div>
-
-                <div class="card-footer text-center">
-                    Doe ff upload balkje ofzo hier
-                </div>
-
+                @endif
             </div>
 
 
@@ -145,58 +174,76 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12" style="margin-bottom:15px;">
-                                <div class="btn-group" role="group" aria-label="Toolbar">
-                                    <button type="submit" name="submit" value="remove" class="btn btn-danger"><i
-                                                class="fa fa-trash"></i> Remove
-                                    </button>
-                                    <button type="submit" name="submit" value="thumbnail" class="btn btn-success"><i
-                                                class="fa fa-image"></i> Set thumbnail
-                                    </button>
-                                    <button type="submit" name="submit" value="private" class="btn btn-warning"><i
-                                                class="fa fa-eye"></i> Toggle private
-                                    </button>
+                        @if(!$photos->published || Auth::user()->can('publishalbums'))
+                            <div class="row">
+                                <div class="col-12" style="margin-bottom:15px;">
+                                    <div class="btn-group" role="group" aria-label="Toolbar">
+                                        <button
+                                                @if($photos->published)
+                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                @else
+                                                type="submit"
+                                                @endif
+                                                name="submit" value="remove" class="btn btn-danger"><i
+                                                    class="fa fa-trash"></i> Remove
+                                        </button>
+                                        <button
+                                                @if($photos->published)
+                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                @else
+                                                type="submit"
+                                                @endif
+                                                name="submit" value="thumbnail" class="btn btn-success"><i
+                                                    class="fa fa-image"></i> Set thumbnail
+                                        </button>
+                                        <button
+                                                @if($photos->published)
+                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                @else
+                                                type="submit"
+                                                @endif
+                                                name="submit" value="private" class="btn btn-warning"><i
+                                                    class="fa fa-eye"></i> Toggle private
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal fade" id="publishedModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="exampleModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Perform action</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    This album has already been published.<br>
+                                                    Are you sure you want perform this action?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <button id="confirmButton" type="submit" name="submit" value=""
+                                                            class="btn"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div id="photoview" class="row">
 
                             @foreach($photos->photos as $key => $photo)
 
-                                <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
-                                    <div class="photo-select">
-                                        <input name="photo[{{ $photo->id }}]" type="checkbox"
-                                               style="align-self: flex-start;" id="photo_{{ $photo->id }}">
-                                        <div class="card mb-3">
-                                            <label for="photo_{{ $photo->id }}" class="card-img photo_pop"
-                                                   style="display: flex; height: 200px; background-image: url({{ $photo->thumb() }});">
-                                                @if($photo->private)
-                                                    <p class="card-text ellipsis" style="align-self: flex-end;">
-                                                        <i class="fas fa-eye-slash ml-4 mr-2 text-info"
-                                                           data-toggle="tooltip" data-placement="top"
-                                                           title="This photo is only visible to members."></i>
-                                                    </p>
-                                                @endif
-                                            </label>
+                                @include('website.layouts.macros.selectablephoto', ['photo' => $photo])
 
-                                        </div>
-                                    </div>
-
-                                    {{--                                @include('website.layouts.macros.card-bg-image', [--}}
-                                    {{--                                'url' => route("photo::view", ["id"=> $photo->id]),--}}
-                                    {{--                                'img' => $photo->thumb(),--}}
-                                    {{--                                'html' => sprintf('<i class="fas fa-heart"></i> %s',--}}
-                                    {{--                                    $photo->getLikes()),--}}
-                                    {{--                                'photo_pop' => true,--}}
-                                    {{--                                'height' => 200,--}}
-                                    {{--                                'footer' => sprintf('<button class="btn fa fa-image btn-%s></button>--}}
-                                    {{--                                                     <button class="btn btn-danger fa fa-trash"></button>',--}}
-                                    {{--                                ($photo->id == $photos->thumb) ? 'secondary" disabled' : 'success"')--}}
-                                    {{--                                ])--}}
-
-                                </div>
 
                             @endforeach
 
@@ -217,6 +264,17 @@
 
     <script>
 
+        $('#publishedModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var value = button.attr('value');
+            var text = button.html();
+            var classes = button.attr('class');
+            var modal = $(this);
+            var newButton = modal.find('#confirmButton');
+            newButton.html(text);
+            newButton.attr('value', value);
+            newButton.attr('class', classes);
+        });
 
         //Handle Drag and drop file uploading
 
@@ -289,12 +347,15 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log('Response: ' + uploadFile.id);
                     $('#file' + uploadFile.id).remove();
-                    $('#photoview').append('<div class="col-lg-2 col-lg-3 col-md-4 col-sm-6"><img alt="uploadedImage" src="' + response + '"/></div>');
+                    if (response === "ERROR") {
+                        alert('Upload failed');
+                    } else {
+                        $('#photoview').append(response);
+                    }
                 },
                 error: function (jqXhr, textStatus, errorThrown) {
-                    console.log('Upload failed')
+                    alert('Upload failed');
                 }
             });
             if (fileQueue.length > 0) {

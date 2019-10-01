@@ -17,15 +17,18 @@ use Redirect;
 
 class PhotoAdminController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view('photos.admin.index', ['query' => '']);
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         return view('photos.admin.index', ['query' => $request->input('query')]);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $album = new PhotoAlbum();
         $album->name = $request->input('name');
         $album->date_taken = strtotime($request->input('date'));
@@ -37,7 +40,8 @@ class PhotoAdminController extends Controller
         return redirect(route('photo::admin::edit', ['id' => $album->id]));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
 
         $photos = PhotoManager::getPhotos($id);
 
@@ -46,74 +50,112 @@ class PhotoAdminController extends Controller
         abort(404);
     }
 
-    public function setThumb(Request $request, $id) {
-        if($request->has('photoid')) {
-
+    public function update(Request $request, $id)
+    {
+        $album = PhotoAlbum::find($id);
+        $album->name = $request->input('album');
+        $album->date_taken = strtotime($request->input('date'));
+        if ($request->input('private')) {
+            $album->private = True;
+        } else {
+            $album->private = False;
         }
+        $album->save();
+        return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
-    public function upload(Request $request, $id) {
+    public function upload(Request $request, $id)
+    {
+        $album = PhotoAlbum::find($id);
         $response = "ERROR";
-        if($request->has('file')) {
+        if ($request->has('file') && !$album->published) {
             $uploadFile = $request->file('file');
 
-            $album = PhotoAlbum::where('id', $id)->get()->first();
+            $photo = $this->createPhotoFromUpload($uploadFile, $id);
 
-            $path = "photos/".$album->name."/";
-
-            $file = new StorageEntry();
-            $file->createFromFile($uploadFile, $path);
-            $file->save();
-
-            $photo = new Photo();
-            $photo->date_taken = $uploadFile->getCTime();
-            $photo->album_id = $id;
-            $photo->file_id = $file->id;
-            $photo->save();
-            $response = $photo->thumb();
+            $response = view('website.layouts.macros.selectablephoto', ['photo' => $photo]);
         }
         return $response;
     }
 
-    public function action(Request $request, $id) {
+    public function action(Request $request, $id)
+    {
         $action = $request->input('submit');
         $photos = $request->input('photo');
-        $album = PhotoAlbum::where('id', $id)->get()->first();
-        switch($action) {
-            case "remove":
-                foreach($photos as $photoId=>$photo) {
-                    Photo::find($photoId)->delete();
-                }
-                break;
 
-            case "thumbnail":
-                foreach($photos as $photoId=>$photo) {
-                    $album->thumb_id = $photoId;
+        if($photos)
+        {
+            $album = PhotoAlbum::where('id', $id)->get()->first();
+
+            if ($album->published && !Auth::user()->can('publishalbums')) {
+                abort(403, 'Unauthorized action.');
+            }
+
+
+            switch ($action) {
+                case "remove":
+                    foreach ($photos as $photoId => $photo) {
+                        Photo::find($photoId)->delete();
+                    }
                     break;
-                }
-                break;
 
-            case "private":
-                foreach($photos as $photoId=>$photo) {
-                    $photo = Photo::find($photoId);
-                    $photo->private=!$photo->private;
-                    $photo->save();
-                }
-                break;
+                case "thumbnail":
+                    foreach ($photos as $photoId => $photo) {
+                        $album->thumb_id = $photoId;
+                        break;
+                    }
+                    break;
+
+                case "private":
+                    foreach ($photos as $photoId => $photo) {
+                        $photo = Photo::find($photoId);
+                        if ($album->published && $photo->private) continue;
+                        $photo->private = !$photo->private;
+                        $photo->save();
+                    }
+                    break;
+            }
+            $album->save();
         }
-        $album->save();
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         PhotoManager::deleteAlbum($id);
         return redirect(route('photo::admin::index'));
     }
 
-    public function publish($id) {
+    public function publish($id)
+    {
         $album = PhotoAlbum::where('id', '=', $id)->first();
         $album->published = true;
         $album->save();
         return redirect(route('photo::admin::edit', ['id' => $id]));
+    }
+
+    public function unpublish($id)
+    {
+        $album = PhotoAlbum::where('id', '=', $id)->first();
+        $album->published = false;
+        $album->save();
+        return redirect(route('photo::admin::edit', ['id' => $id]));
+    }
+
+    private function createPhotoFromUpload($uploadedPhoto, $albumID)
+    {
+        $path = "photos/" . $albumID . "/";
+
+        $file = new StorageEntry();
+        $file->createFromFile($uploadedPhoto, $path);
+        $file->save();
+
+        $photo = new Photo();
+        $photo->date_taken = $uploadedPhoto->getCTime();
+        $photo->album_id = $albumID;
+        $photo->file_id = $file->id;
+        $photo->save();
+
+        return $photo;
     }
 }

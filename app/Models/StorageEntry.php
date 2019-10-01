@@ -18,6 +18,7 @@ use Proto\Models\NarrowcastingItem;
 use Proto\Models\Page;
 use Proto\Models\Product;
 use Proto\Models\SoundboardSound;
+use Proto\Models\Photo;
 
 class StorageEntry extends Model
 {
@@ -46,7 +47,8 @@ class StorageEntry extends Model
             Event::where('image_id', $id)->count() == 0 &&
             Newsitem::where('featured_image_id', $id)->count() == 0 &&
             SoundboardSound::where('file_id', $id)->count() == 0 &&
-            HeaderImage::where('image_id', $id)->count() == 0;
+            HeaderImage::where('image_id', $id)->count() == 0 &&
+            Photo::where('file_id', $id)->count() == 0;
     }
 
     public function createFromFile($file, $customPath = null)

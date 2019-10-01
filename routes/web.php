@@ -658,11 +658,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('index', ['as' => 'index', 'uses' => 'PhotoAdminController@search']);
             Route::post('add', ['as' => 'add', 'uses' => 'PhotoAdminController@create']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PhotoAdminController@edit']);
-            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'PhotoAdminController@save']);
+            Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@update']);
             Route::post('edit/{id}/action', ['as' => 'action', 'uses' => 'PhotoAdminController@action']);
             Route::post('edit/{id}/upload', ['as' => 'upload', 'uses' => 'PhotoAdminController@upload']);
-            Route::get('edit/{id}/delete', ['as' => 'delete', 'uses' => 'PhotoAdminController@delete']);
-            Route::get('publish/{id}', ['as' => 'publish', 'uses' => 'PhotoAdminController@publish']);
+            Route::get('edit/{id}/delete', ['as' => 'delete', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@delete']);
+            Route::get('publish/{id}', ['as' => 'publish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@publish']);
+            Route::get('unpublish/{id}', ['as' => 'unpublish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@unpublish']);
         });
     });
 

@@ -46,6 +46,7 @@ class FlickrToPhoto extends Command
     {
         $this->info('Downloading all albums');
         foreach (FlickrAlbum::all() as $flickrAlbum) {
+            if($flickrAlbum->migrated) continue;
             $this->info('Downloading album '.$flickrAlbum->name);
             $photoAlbum = new PhotoAlbum();
             $photoAlbum->name = $flickrAlbum->name;
@@ -53,10 +54,13 @@ class FlickrToPhoto extends Command
             $photoAlbum->date_taken = $flickrAlbum->date_taken;
             $photoAlbum->event_id = $flickrAlbum->event_id;
             $photoAlbum->private = $flickrAlbum->private;
+            $photoAlbum->published = True;
             $photoAlbum->save();
             $id = $photoAlbum->id;
-            $thumb = $flickrAlbum->thumb;
+            $flickrThumb = $flickrAlbum->thumb;
+            $thumb = null;
             foreach ($flickrAlbum->items as $flickrItem) {
+                if($flickrItem->migrated) continue;
                 $this->info('Downloading photo '.$flickrItem->url);
                 $photoUrl = $flickrItem->url;
                 $photoData = file_get_contents($photoUrl);
@@ -75,14 +79,14 @@ class FlickrToPhoto extends Command
                 $photo->file_id = $photoFile->id;
                 $photo->save();
 
-                if($flickrItem->thumb == $thumb) {
+                if($flickrItem->thumb == $flickrThumb) {
                     $thumb = $photo->id;
                 }
 
-                foreach(PhotoLikes::where("photo_id","=", $flickrItem->id) as $flickrLike) {
+                foreach(FlickrLikes::where("photo_id","=", $flickrItem->id) as $flickrLike) {
                     $photoLike = new PhotoLikes();
                     $photoLike->photo_id = $photo->id;
-                    $photoLike->user_id = $flickrItem->user_id;
+                    $photoLike->user_id = $flickrLike->user_id;
                     $photoLike->save();
                 }
             }
