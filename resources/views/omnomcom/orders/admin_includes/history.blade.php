@@ -13,18 +13,12 @@
 
                 <tr>
                     <td>
-                        @if(!$orderline->isPayed())
-                            <a href="{{ ($orderline->isPayed() ? '#' : route('omnomcom::orders::delete', ['id' => $orderline->id])) }}"
-                               @if ($orderline->isPayed())
-                               disabled
-                               @else
-                               onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');"
-                                    @endif
-                            >
+                        <span class="text-muted">{{ $orderline->id }}</span>
+                        @if($orderline->canBeDeleted())
+                            <a href="{{ route('omnomcom::orders::delete', ['id' => $orderline->id]) }}"
+                               onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
                                 <i class="fas fa-trash ml-3 text-danger" aria-hidden="true"></i>
                             </a>
-                        @else
-                            <i class="fas fa-trash ml-3 text-muted" aria-hidden="true"></i>
                         @endif
                     </td>
                     <td class="text-right">

@@ -565,6 +565,12 @@
                                                                  style="width: 100%;">
                 </form>
 
+                <sub>
+                    <i class="fas fa-bolt mr-1"></i>
+                    Developed with
+                    <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
+                </sub>
+
             </div>
 
             <div class="col-md-3 col-6">

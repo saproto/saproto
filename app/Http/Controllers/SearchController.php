@@ -138,19 +138,20 @@ class SearchController extends Controller
     {
 
         $terms = explode(' ', str_replace("*", "%", $query));
-        $results = collect([]);
-        foreach ($terms as $term) {
-            if (strlen(str_replace("%", "", $term)) < 3) {
-                continue;
-            }
-            $query = $model::query();
-            $t = sprintf('%%%s%%', $term);
-            foreach ($attributes as $attr) {
-                $query = $query->orWhere($attr, 'LIKE', $t);
-            }
-            $results = $results->merge($query->get());
+        $query = $model::query();
+
+        foreach ($attributes as $attr) {
+            $query = $query->orWhere(function ($query) use ($terms, $attr) {
+                foreach ($terms as $term) {
+                    if (strlen(str_replace("%", "", $term)) < 3) {
+                        continue;
+                    }
+                    $query = $query->where($attr, 'LIKE', sprintf('%%%s%%', $term));
+                }
+            });
         }
-        return $results->unique();
+
+        return $query->get();
     }
 
 }

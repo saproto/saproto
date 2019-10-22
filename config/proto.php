@@ -130,7 +130,7 @@ return [
     |
     */
 
-    'internal' => 'Philippe Tuinman',
+    'internal' => 'Renske Mulder',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ return [
     |
     */
 
-    'treasurer' => 'Maxim de Leeuw',
+    'treasurer' => ' Sanne Bouman',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,7 +152,7 @@ return [
     |
     */
 
-    'secretary' => 'Emiel Steegh',
+    'secretary' => 'Hannah Ottenschot',
 
     /*
     |--------------------------------------------------------------------------

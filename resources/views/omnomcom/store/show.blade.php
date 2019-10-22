@@ -791,6 +791,17 @@
 
     </div>
 
+    <div id="badcard-modal" class="modal inactive">
+
+        <h1 class="text-danger">Not so hasty!</h1>
+
+        <span class="modal-status">
+            It looks like you've scanned your card incorrectly.
+            Please close this window, try again and hold your card close to the reader!
+        </span>
+
+    </div>
+
     <div id="purchase-modal" class="modal inactive">
 
         <h1>Complete your purchase</h1>
@@ -1067,6 +1078,19 @@
         server.onmessage = function (raw) {
             data = JSON.parse(raw.data).uid;
             console.log('Received card input: ' + data);
+
+            if (modal_status == "badcard") {
+                return;
+            }
+
+            if (data == "") {
+                $("#modal-overlay").show();
+                $(".modal").addClass('inactive');
+                $("#badcard-modal").removeClass('inactive');
+                modal_status = "badcard";
+                return;
+            }
+            $("#badcard-modal").addClass('inactive');
 
             if (modal_status == 'rfid') {
 
