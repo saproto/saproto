@@ -27,7 +27,7 @@
 
         // Scroll to top of collapse on click.
         // Code borrowed from: https://stackoverflow.com/a/44303674/7316014
-        $('.collapse').on('shown.bs.collapse', function(e) {
+        $('.collapse').on('shown.bs.collapse', function (e) {
             var $card = $(this).closest('.card');
             $('html,body').animate({
                 scrollTop: $card.offset().top - 50
@@ -38,6 +38,7 @@
         initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
         @endif
 
+        initializeCountdowns();
 
     });
 </script>
@@ -275,4 +276,63 @@
         }
     });
 
+</script>
+
+<script type="text/javascript">
+
+    function initializeCountdowns() {
+        $(".proto-countdown").each(function (i, el) {
+            setInterval(updateCountdown(el), 1000)
+        });
+    }
+
+    function updateCountdown(e) {
+        return function () {
+            const start = new Date(e.getAttribute('data-countdown-start') * 1000);
+            const countdown_text = e.getAttribute('data-countdown-text-counting');
+            const finished_text = e.getAttribute('data-countdown-text-finished');
+            const delta = Date.parse(start) - Date.parse(new Date());
+
+            let text;
+            if (delta < 0) {
+                text = finished_text
+            } else {
+                const deltaText = updateCountdownGetTimestring(delta)
+                text = countdown_text.replace("{}", deltaText)
+
+            }
+            $(e).html(text);
+        }
+    }
+
+    function updateCountdownGetTimestring(delta) {
+        const seconds = Math.floor((delta / 1000) % 60);
+        const minutes = Math.floor((delta / 1000 / 60) % 60);
+        const hours = Math.floor((delta / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(delta / (1000 * 60 * 60 * 24));
+
+        let timestring;
+
+        if (days > 3) {
+            timestring = days + ' days';
+        } else if (hours > 0) {
+            timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+        } else if (seconds > 0) {
+            timestring = seconds + ' seconds';
+        } else {
+            timestring = '0 seconds';
+        }
+
+        return timestring;
+
+    }
+
+</script>
+
+<script type="text/javascript">
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
 </script>

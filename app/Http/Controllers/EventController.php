@@ -131,6 +131,7 @@ class EventController extends Controller
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
         $event->is_educational = $request->has('is_educational');
+        $event->is_featured = $request->has('is_featured');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
@@ -208,6 +209,7 @@ class EventController extends Controller
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
         $event->is_educational = $request->has('is_educational');
+        $event->is_featured = $request->has('is_featured');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
