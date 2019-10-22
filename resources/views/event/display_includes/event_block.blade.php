@@ -8,12 +8,25 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
         <div class="card-body event {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}" style="text-align: left;
                 {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: url(%s);', $event->image->generateImagePath(800,300)) : '' }}">
 
+            @if(isset($countdown) && $countdown)
+                <div class="btn btn-info btn-block mb-3 ">
+                    <i class="fas fa-history fa-fw fa-pulse mr-2" aria-hidden="true"></i>
+                    <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
+                        Counting down...
+                    </span>
+                </div>
+            @endif
+
             @if($event->secret)
                 <span class="badge badge-info float-right"
                       data-toggle="tooltip" data-placement="top" title="Secret activities can only be visited if you know the link. You can see it now because you are an admin.">
                     <i class="fas fa-eye-slash fa-fw mr-1"></i> Secret activity!</span>
             @endif
 
+            @if($event->is_featured)
+                <i class="fas fa-star fa-fw" aria-hidden="true" style="color: gold"
+                   data-toggle="tooltip" data-placement="top" title="This is a featured activity!"></i>
+            @endif
             @if($event->activity && Auth::check())
                 @if($event->activity->isParticipating(Auth::user()))
                     <i class="fas fa-check text-primary fa-fw" aria-hidden="true"

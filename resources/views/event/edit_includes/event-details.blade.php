@@ -144,6 +144,18 @@
 
                         </div>
 
+                        <div class="col-md-6 mb-3">
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_featured"
+                                            {{ ($event && $event->is_featured ? 'checked' : '') }}>
+                                    Feature this event on the homepage.
+                                </label>
+                            </div>
+
+                        </div>
+
                     </div>
 
                     @if($event && $event->image)
