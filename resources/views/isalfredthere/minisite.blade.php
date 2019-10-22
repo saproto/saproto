@@ -49,7 +49,7 @@
 
         function lookForAlfred() {
             $.ajax({
-                url: '{{ route('api::isalfredthere') }}',
+                url: 'https://www.proto.utwente.nl/api/isalfredthere', // TODO Need to figure out how to get the route for a specific domain.
                 dataType: 'json',
                 success: function (data) {
                     if (data.status == "there") {
