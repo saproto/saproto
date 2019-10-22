@@ -26,3 +26,9 @@ foreach ($domains['developers'] as $domain) {
         Route::get('', ['as' => 'developers', 'uses' => 'HomeController@developers']);
     });
 }
+
+foreach ($domains['isalfredthere'] as $domain) {
+    Route::group(['domain' => $domain], function () {
+        Route::get('', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@showMiniSite']);
+    });
+}

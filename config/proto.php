@@ -216,6 +216,10 @@ return [
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
             'www.haveyoutriedturningitoffandonagain.nl'
+        ],
+        'isalfredthere' => [
+            'isalfredthere.nl',
+            'www.isalfredthere.nl'
         ]
     ],
 

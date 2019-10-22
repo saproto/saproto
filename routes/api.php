@@ -80,5 +80,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('product', ['as' => 'product', 'uses' => 'SearchController@getProductSearch']);
     });
 
+    Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
 
 });
