@@ -157,6 +157,16 @@
 
                             @endif
 
+                            @if(Auth::user()->can(["alfred","sysadmin"]))
+
+                                <li role="separator" class="dropdown-divider"></li>
+
+                                <a class="dropdown-item" href="{{ route("minisites::isalfredthere::admin") }}">
+                                    Is Alfred There?
+                                </a>
+
+                            @endif
+
                         </ul>
                     </li>
                 @endif

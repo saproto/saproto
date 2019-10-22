@@ -288,6 +288,9 @@
 
     function updateCountdown(e) {
         return function () {
+            if (!$(e).hasClass('proto-countdown')) {
+                return;
+            }
             const start = new Date(e.getAttribute('data-countdown-start') * 1000);
             const countdown_text = e.getAttribute('data-countdown-text-counting');
             const finished_text = e.getAttribute('data-countdown-text-finished');
@@ -313,8 +316,10 @@
 
         let timestring;
 
-        if (days > 3) {
+        if (days > 1) {
             timestring = days + ' days';
+        } else if (days == 1) {
+            timestring = '1 day';
         } else if (hours > 0) {
             timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
         } else if (seconds > 0) {
