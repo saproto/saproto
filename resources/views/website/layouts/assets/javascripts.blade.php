@@ -320,12 +320,10 @@
             timestring = days + ' days';
         } else if (days == 1) {
             timestring = '1 day';
-        } else if (hours > 0) {
+        } else if (hours > 0 || minutes > 0) {
             timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-        } else if (seconds > 0) {
-            timestring = seconds + ' seconds';
         } else {
-            timestring = '0 seconds';
+            timestring = seconds + ' seconds';
         }
 
         return timestring;
