@@ -25,7 +25,7 @@
 
             <h1 class="mt-5 mb-5" id="alfred-emoji" style="font-size: 120px;">🤔</h1>
 
-            <a href="{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
+            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
                 <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
             </a>
 
@@ -67,7 +67,7 @@
 
         function lookForAlfred() {
             $.ajax({
-                url: '{{ route('api::isalfredthere') }}',
+                url: '//{{ config('app-proto.primary-domain') }}{{ route('api::isalfredthere', [], false) }}',
                 dataType: 'json',
                 success: function (data) {
                     if (data.status == "there") {
