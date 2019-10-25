@@ -24,35 +24,13 @@ class TIPCieController extends Controller
         $date = $request->has('date') ? $request->date : null;
 
         $tipcieProducts = Account::find(config('omnomcom.tipcie-account'))->products;
+        $tipcieProductIds = $tipcieProducts->pluck('id')->toArray();
+        $tipcieProductNames = $tipcieProducts->pluck('name')->toArray();
 
         $tipcieOrders = [];
 
         $dailyAmount = 0;
         $dailyTotal = 0;
-
-        foreach($tipcieProducts as $tipcieProduct) {
-            $orders = $tipcieProduct->orderlines()
-                ->where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
-                ->where('created_at', '<', ($date ? Carbon::parse($date)->addHours(30)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
-                ->get();
-
-            if(count($orders) > 0) {
-                $productInfo = new \stdClass();
-
-                $productInfo->name = $tipcieProduct->name;
-                $productInfo->amount = 0;
-                $productInfo->totalPrice = 0;
-
-                foreach($orders as $order) {
-                    $productInfo->amount += $order->units;
-                    $productInfo->totalPrice += $order->total_price;
-                }
-
-                $dailyAmount += $productInfo->amount;
-                $dailyTotal += $productInfo->totalPrice;
-                $tipcieOrders[] = $productInfo;
-            }
-        }
 
         $pinOrders = [];
         $pinTotal = 0;
@@ -62,13 +40,32 @@ class TIPCieController extends Controller
             ->get();
 
         foreach ($orders as $order) {
-            if ($order->payed_with_bank_card) {
-                $time = (string) $order->created_at;
-                if (!array_key_exists($time, $pinOrders)) {
-                    $pinOrders[$time] = 0;
+            if (in_array($order->product_id, $tipcieProductIds)) {
+
+                $pid = (string)$order->product_id;
+
+                if (!array_key_exists($pid, $tipcieOrders)) {
+                    $productInfo = new \stdClass();
+                    $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
+                    $productInfo->amount = 0;
+                    $productInfo->totalPrice = 0;
+                    $tipcieOrders[$pid] = $productInfo;
                 }
-                $pinOrders[$time] += $order->total_price;
-                $pinTotal += $order->total_price;
+
+                $tipcieOrders[$pid]->amount += $order->units;
+                $tipcieOrders[$pid]->totalPrice += $order->total_price;
+                $dailyAmount += $order->units;
+                $dailyTotal += $order->total_price;
+
+                if ($order->payed_with_bank_card) {
+                    $time = (string)$order->created_at;
+                    if (!array_key_exists($time, $pinOrders)) {
+                        $pinOrders[$time] = 0;
+                    }
+                    $pinOrders[$time] += $order->total_price;
+                    $pinTotal += $order->total_price;
+                }
+
             }
         }
 
