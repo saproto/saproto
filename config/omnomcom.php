@@ -27,7 +27,7 @@ return [
             'categories' => [15, 18, 25],
             'addresses' => [],
             'roles' => ['board', 'tipcie', 'drafters'],
-            'cash_allowed' => true,
+            'cash_allowed' => false,
             'bank_card_allowed' => true,
             'col_override' => 3,
             'alcohol_time_constraint' => false,

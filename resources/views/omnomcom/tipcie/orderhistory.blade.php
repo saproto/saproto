@@ -55,7 +55,7 @@
 
         <div class="col-md-4">
 
-            <div class="card">
+            <div class="card mb-3">
 
                 @if(count($orders) > 0)
                     <table class="table table-borderless table-hover">
@@ -77,6 +77,34 @@
                 @else
                     <div class="card-body">
                         <p class="card-text text-center">No orders for the specified date.</p>
+                    </div>
+                @endif
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+                    Recorded PIN Transactions
+                    <span class="float-right">
+                        &euro; {{ number_format($pinTotal, 2) }}
+                    </span>
+                </div>
+
+                @if(count($pinOrders) > 0)
+                    <table class="table table-borderless table-hover">
+                        <tbody>
+                        @foreach($pinOrders as $time => $amount)
+                            <tr>
+                                <td>{{ $time }}</td>
+                                <td>&euro; {{ number_format($amount, 2) }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <div class="card-body">
+                        <p class="card-text text-center">No PIN orders recorded for the specified date.</p>
                     </div>
                 @endif
 

@@ -10,6 +10,7 @@ use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Account;
+use Proto\Models\OrderLine;
 
 class TIPCieController extends Controller
 {
@@ -53,6 +54,24 @@ class TIPCieController extends Controller
             }
         }
 
-        return view('omnomcom.tipcie.orderhistory', ['orders' => $tipcieOrders, 'date' => $date, 'dailyTotal' => $dailyTotal, 'dailyAmount' => $dailyAmount]);
+        $pinOrders = [];
+        $pinTotal = 0;
+
+        $orders = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->addHours(6)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
+            ->where('created_at', '<', ($date ? Carbon::parse($date)->addHours(30)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')))
+            ->get();
+
+        foreach ($orders as $order) {
+            if ($order->payed_with_bank_card) {
+                $time = (string) $order->created_at;
+                if (!array_key_exists($time, $pinOrders)) {
+                    $pinOrders[$time] = 0;
+                }
+                $pinOrders[$time] += $order->total_price;
+                $pinTotal += $order->total_price;
+            }
+        }
+
+        return view('omnomcom.tipcie.orderhistory', ['orders' => $tipcieOrders, 'date' => $date, 'dailyTotal' => $dailyTotal, 'dailyAmount' => $dailyAmount, 'pinOrders' => $pinOrders, 'pinTotal' => $pinTotal]);
     }
 }
