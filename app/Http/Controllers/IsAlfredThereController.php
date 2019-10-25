@@ -17,6 +17,7 @@ class IsAlfredThereController extends Controller
 
     public function getApi()
     {
+        header("Access-Control-Allow-Origin: *");
         return json_encode(IsAlfredThereController::getAlfredsStatusObject());
     }
 
