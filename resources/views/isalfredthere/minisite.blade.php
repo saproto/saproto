@@ -11,7 +11,7 @@
 
 @section('container')
 
-    <div class="row">
+    <div class="row" style="color: #fff;">
 
         <div class="col-md-12 text-center">
 
@@ -25,13 +25,31 @@
 
             <h1 class="mt-5 mb-5" id="alfred-emoji" style="font-size: 120px;">🤔</h1>
 
-            <a href="{{ route('homepage') }}">
-                <img src="{{ asset('images/logo/regular.png') }}" height="120px">
+            <a href="{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
+                <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
             </a>
 
         </div>
 
     </div>
+
+@endsection
+
+@section('stylesheet')
+
+    @parent
+
+    <style rel="stylesheet" type="text/css">
+        body {
+            background-color: darkorange;
+        }
+        main {
+            border: none !important;
+        }
+        .main-footer {
+            display: none !important;
+        }
+    </style>
 
 @endsection
 
@@ -49,17 +67,19 @@
 
         function lookForAlfred() {
             $.ajax({
-                url: 'https://www.proto.utwente.nl/api/isalfredthere', // TODO Need to figure out how to get the route for a specific domain.
+                url: '{{ route('api::isalfredthere') }}',
                 dataType: 'json',
                 success: function (data) {
                     if (data.status == "there") {
                         $("#alfred-text").removeClass("proto-countdown").html("Alfred is there!");
                         $("#alfred-actualtime").html("").hide();
                         $("#alfred-emoji").html("🎉😁");
+                        $("body").css("background-color", 'darkgreen');
                     } else if (data.status == "unknown") {
                         $("#alfred-text").removeClass("proto-countdown").html("We couldn't find Alfred...");
                         $("#alfred-actualtime").html("").hide();
                         $("#alfred-emoji").html("👀");
+                        $("body").css("background-color", 'darkorange');
                     } else if (data.status == "away") {
                         $("#alfred-text").addClass("proto-countdown").attr("data-countdown-start", data.backunix);
                         $("#alfred-actualtime").html("That would be " + data.back + ".").show();
@@ -68,11 +88,13 @@
                             initializeCountdowns();
                             alfredCountdownStarted = true;
                         }
+                        $("body").css("background-color", 'darkred');
                     }
                 },
                 error: function () {
                     $("#alfred-text").html("We couldn't find Alfred...");
                     $("#alfred-emoji").html("👀");
+                    $("body").css("background-color", 'darkorange');
                 }
             })
 
