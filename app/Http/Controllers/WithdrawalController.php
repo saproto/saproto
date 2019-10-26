@@ -78,21 +78,29 @@ class WithdrawalController extends Controller
             if ($orderline->user === null) continue;
             if ($orderline->user->bank == null) continue;
 
-            if ($max != null) {
-                if (!array_key_exists($orderline->user->id, $totalPerUser)) {
-                    $totalPerUser[$orderline->user->id] = 0;
-                }
+            if (!array_key_exists($orderline->user->id, $totalPerUser)) {
+                $totalPerUser[$orderline->user->id] = 0;
+            }
 
+            if ($max != null) {
                 if ($totalPerUser[$orderline->user->id] + $orderline->total_price > $max) continue;
             }
 
             $orderline->withdrawal()->associate($withdrawal);
             $orderline->save();
 
-            if ($max != null) {
-                $totalPerUser[$orderline->user->id] += $orderline->total_price;
-            }
+            $totalPerUser[$orderline->user->id] += $orderline->total_price;
 
+        }
+
+        foreach ($totalPerUser as $user_id => $total) {
+            if ($total < 0) {
+                $user = User::findOrFail($user_id);
+                foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+                    $orderline->withdrawal()->dissociate();
+                    $orderline->save();
+                }
+            }
         }
 
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);

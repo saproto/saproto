@@ -50,7 +50,9 @@ class OrderLineController extends Controller
         if ($orderlines->has($selected_month)) {
             $selected_orders = $orderlines[Carbon::parse($date)->format('Y-m')];
             foreach ($selected_orders as $orderline) {
-                $total += $orderline->total_price;
+                if ($orderline->total_price > 0) {
+                    $total += $orderline->total_price;
+                }
             }
         }
 
