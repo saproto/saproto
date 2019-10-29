@@ -159,8 +159,8 @@ class OrderLineController extends Controller
     {
         $order = OrderLine::findOrFail($id);
 
-        if ($order->isPayed()) {
-            $request->session()->flash('flash_message', 'The orderline cannot be deleted, as it has already been paid for.');
+        if (!$order->canBeDeleted()) {
+            $request->session()->flash('flash_message', 'The orderline cannot be deleted.');
             return Redirect::back();
         }
 

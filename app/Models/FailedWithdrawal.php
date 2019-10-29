@@ -13,7 +13,7 @@ class FailedWithdrawal extends Model
 
     public function correction_orderline()
     {
-        return $this->hasOne('Proto\Models\OrderLine', 'correction_orderline_id');
+        return $this->belongsTo('Proto\Models\OrderLine', 'correction_orderline_id');
     }
 
     public function withdrawal()

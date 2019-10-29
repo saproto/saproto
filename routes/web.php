@@ -832,7 +832,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Queries
      */
-    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function (){
+    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function () {
 
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
@@ -840,5 +840,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
+
+    Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
+
+        Route::group(['prefix' => 'isalfredthere', 'as' => 'isalfredthere::'], function () {
+            Route::get('/', ['as' => 'index', 'uses' => 'IsAlfredThereController@showMiniSite']);
+            Route::get('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@getAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
+            Route::post('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@postAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
+        });
+
+    });
 
 });

@@ -130,7 +130,7 @@ return [
     |
     */
 
-    'internal' => 'Philippe Tuinman',
+    'internal' => 'Renske Mulder',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ return [
     |
     */
 
-    'treasurer' => 'Maxim de Leeuw',
+    'treasurer' => ' Sanne Bouman',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,7 +152,7 @@ return [
     |
     */
 
-    'secretary' => 'Emiel Steegh',
+    'secretary' => 'Hannah Ottenschot',
 
     /*
     |--------------------------------------------------------------------------
@@ -216,6 +216,10 @@ return [
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
             'www.haveyoutriedturningitoffandonagain.nl'
+        ],
+        'isalfredthere' => [
+            'isalfredthere.nl',
+            'www.isalfredthere.nl'
         ]
     ],
 

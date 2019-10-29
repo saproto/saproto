@@ -61,7 +61,7 @@ class Product extends Model
             'original_unit_price' => $this->price,
             'units' => $amount,
             'total_price' => $total_price,
-            'payed_with_cash' => ($withCash || $total_price == 0 ? date('Y-m-d H:i:s') : null),
+            'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null),
             'payed_with_bank_card' => ($withBankCard ? date('Y-m-d H:i:s') : null),
             'description' => $description !== '' ? $description : null
         ]);

@@ -217,6 +217,11 @@ class WithdrawalController extends Controller
             $orderline->save();
         }
 
+        foreach (FailedWithdrawal::where('withdrawal_id', $withdrawal->id)->get() as $failed_withdrawal) {
+            $failed_withdrawal->correction_orderline->delete();
+            $failed_withdrawal->delete();
+        }
+
         $withdrawal->delete();
 
         $request->session()->flash('flash_message', 'Withdrawal deleted.');
@@ -270,7 +275,7 @@ class WithdrawalController extends Controller
         $product = Product::findOrFail(config('omnomcom.failed-withdrawal'));
         $total = $withdrawal->totalForUser($user);
 
-        $failedOrderline = OrderLine::findOrFail($product->buyForUser($user, 1, $total, false,
+        $failedOrderline = OrderLine::findOrFail($product->buyForUser($user, 1, $total, null, null,
             sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date)))));
 
         FailedWithdrawal::create([

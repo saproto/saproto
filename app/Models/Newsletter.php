@@ -87,7 +87,8 @@ class Newsletter extends Model
     {
         $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
         $current = date('Y') * 52 + date('W');
-        return $current > $lastSent;
+        $events = Event::getEventsForNewsletter();
+        return $current > $lastSent && $events->count() > 0;
     }
 
     public static function showTextOnHomepage()
