@@ -3,6 +3,15 @@ module.exports = function (grunt) {
 	var json = {
 		pkg: grunt.file.readJSON('package.json'),
 
+		copy: {
+			fontawesome: {
+				expand: true,
+				cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
+				src: '**',
+				dest: '<%= pkg.paths.assets %>/fonts/'
+			}
+		},
+
 		// Grunt banner
 		usebanner: {
 			dist: {
@@ -151,6 +160,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
 	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'autoprefixer', 'cssmin']);
 
-	grunt.registerTask('default', [ 'build:js', 'build:sass', 'usebanner:dist']);
+	grunt.registerTask('default', [ 'build:js', 'build:sass', 'usebanner:dist', 'copy:fontawesome']);
 
 };

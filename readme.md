@@ -63,3 +63,36 @@ ln -s /home/user/domains/example.saproto.nl/saproto/public /home/user/domains/ex
 ```
 
 That's it, everything should be up and running!
+
+
+## Running with Docker
+
+This repository can be run through Docker by using `docker-compose`. This still a work in progress, but for now can be run using the instructions below.
+
+##### Configuration
+```
+cp .env.docker.example .env
+```
+
+##### Client-side dependencies
+```
+npm install
+grunt
+```
+
+##### Server-side dependencies
+```
+docker-compose up -d
+docker-compose exec app /bin/bash
+composer install
+exit
+docker-compose stop
+```
+
+##### Running
+```
+docker-compose stop
+docker-compose up -d
+```
+
+After this, the website will be exposed at port `8080`, PhpMyAdmin will be exposed at port `8081` and Mailhog will be exposed at port `8082`. Please make sure to load a valid database through PhpMyAdmin, as a seeder is currently not available.
