@@ -208,8 +208,8 @@ class UserAdminController extends Controller
 
     public function toggleNda($id)
     {
-        if (!Auth::user()->can('sysadmin')) {
-            abort(403, "Only system administrators can do this.");
+        if (!Auth::user()->can('board')) {
+            abort(403, "Only board members can do this.");
         }
         $user = User::findOrFail($id);
         $user->signed_nda = !$user->signed_nda;
