@@ -66,18 +66,18 @@
                                 field is ignored and hidden.</sup>
                         </p>
 
-                        @if($item && $item->video())
+                        @if($item && $item->youtube_id)
 
                             <label>Current video:</label>
 
                             <div class="row">
 
                                 <div class="col-md-6">
-                                    <img src="{!! $item->video()->snippet->thumbnails->high->url !!}"
+                                    <img src="https://i.ytimg.com/vi/{{ $item->youtube_id }}/hqdefault.jpg"
                                          style="width: 100%">
                                 </div>
                                 <div class="col-md-6">
-                                    <strong><a href="https://youtu.be/{{ $item->video()->id }}"
+                                    <strong><a href="https://youtu.be/{{ $item->youtube_id }}"
                                                target="_blank">{{ $item->video()->snippet->title }}</a></strong>
                                     <br>
                                     <strong>{{ $item->video()->snippet->channelTitle }}</strong>
@@ -114,6 +114,10 @@
                         </button>
 
                         <a href="{{ route("narrowcasting::list") }}" class="btn btn-default">Cancel</a>
+
+                        <p class="text-center mb-0 mt-2">
+                            Developed with <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
+                        </p>
 
                     </div>
 
