@@ -181,7 +181,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
          */
         Route::group(['prefix' => '2fa', 'as' => '2fa::'], function () {
             Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
-            Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
+            Route::post('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
         });
     });
 

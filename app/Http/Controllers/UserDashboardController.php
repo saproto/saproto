@@ -24,7 +24,7 @@ class UserDashboardController extends Controller
     /**
      * Display the dashboard for a specific user.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show()
