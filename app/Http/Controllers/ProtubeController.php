@@ -9,10 +9,9 @@ use DB;
 use Session;
 use Redirect;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
+use Carbon\CarbonInterval;
 
 class ProtubeController extends Controller
 {
@@ -38,7 +37,9 @@ class ProtubeController extends Controller
 
     public function remote()
     {
-        return view('protube.remote');
+        error_reporting(0);
+        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server') . "/maxDuration?secret=" . config('herbert.secret')))->cascade()->forHumans();
+        return view('protube.remote', ['max_duration' => $max_duration]);
     }
 
     public function loginRedirect()
