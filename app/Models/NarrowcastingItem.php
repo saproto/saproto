@@ -34,7 +34,7 @@ class NarrowcastingItem extends Model
 
     public function videoDuration()
     {
-        if ($this->video()) {
+        if ($this->youtube_id) {
             return date_create('@0')->add(new DateInterval($this->video()->contentDetails->duration))->getTimestamp();
         } else {
             return 0;
