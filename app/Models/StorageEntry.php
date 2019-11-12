@@ -59,7 +59,7 @@ class StorageEntry extends Model
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
 
         if($customPath) {
-            $this->filename = $customPath.$this->hash;
+            $this->filename = $customPath . $this->hash;
         }
 
         Storage::disk('local')->put($this->filename, File::get($file));
@@ -79,7 +79,7 @@ class StorageEntry extends Model
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
 
         if($customPath) {
-            $this->filename = $customPath.$this->filename;
+            $this->filename = $customPath . $this->hash;
         }
 
         Storage::disk('local')->put($this->filename, $data);

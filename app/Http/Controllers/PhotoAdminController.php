@@ -33,7 +33,7 @@ class PhotoAdminController extends Controller
         $album->name = $request->input('name');
         $album->date_taken = strtotime($request->input('date'));
         if ($request->input('private')) {
-            $album->private = True;
+            $album->private = true;
         }
         $album->save();
 
@@ -56,9 +56,9 @@ class PhotoAdminController extends Controller
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
         if ($request->input('private')) {
-            $album->private = True;
+            $album->private = true;
         } else {
-            $album->private = False;
+            $album->private = false;
         }
         $album->save();
         return redirect(route('photo::admin::edit', ['id' => $id]));
@@ -100,10 +100,8 @@ class PhotoAdminController extends Controller
                     break;
 
                 case "thumbnail":
-                    foreach ($photos as $photoId => $photo) {
-                        $album->thumb_id = $photoId;
-                        break;
-                    }
+                    reset($photos);
+                    $album->thumb_id = key($photos);
                     break;
 
                 case "private":

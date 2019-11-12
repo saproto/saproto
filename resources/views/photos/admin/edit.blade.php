@@ -263,27 +263,26 @@
     @parent
 
     <script>
-
-        $('#publishedModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var value = button.attr('value');
-            var text = button.html();
-            var classes = button.attr('class');
-            var modal = $(this);
-            var newButton = modal.find('#confirmButton');
-            newButton.html(text);
-            newButton.attr('value', value);
-            newButton.attr('class', classes);
-        });
-
-        //Handle Drag and drop file uploading
-
         var fileQueue = [];
         var nextId = 1;
         var uploadRunning = false;
         var droparea = document.getElementById('photoadmin__droparea');
 
         (function () {
+            $('#publishedModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var value = button.attr('value');
+                var text = button.html();
+                var classes = button.attr('class');
+                var modal = $(this);
+                var newButton = modal.find('#confirmButton');
+                newButton.html(text);
+                newButton.attr('value', value);
+                newButton.attr('class', classes);
+            });
+
+            //Handle Drag and drop file uploading
+
             if (window.File && window.FileReader && window.FileList && window.Blob) {
                 window.addEventListener('dragover', function (e) {
                     droparea.style.display = 'block';
@@ -364,20 +363,6 @@
                 uploadRunning = false;
             }
         }
-
-        (function (window, location) {
-            history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
-            history.pushState(null, document.title, location.pathname);
-
-            window.addEventListener("popstate", function () {
-                if (location.hash === "#!/stealingyourhistory") {
-                    history.replaceState(null, document.title, location.pathname);
-                    setTimeout(function () {
-                        location.replace("{{ route('photo::admin::index')}}");
-                    }, 0);
-                }
-            }, false);
-        }(window, location));
     </script>
 
 @endsection

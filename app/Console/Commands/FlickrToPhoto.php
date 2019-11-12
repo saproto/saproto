@@ -61,28 +61,24 @@ class FlickrToPhoto extends Command
             $thumb = null;
             foreach ($flickrAlbum->items as $flickrItem) {
                 if($flickrItem->migrated) continue;
-                $this->info('Downloading photo '.$flickrItem->url);
                 $photoUrl = $flickrItem->url;
                 $photoData = file_get_contents($photoUrl);
                 $photoMime = get_headers($photoUrl, 1)['Content-Type'];
                 $photoName = basename($photoUrl);
+                $photoPath = "photos/" . $id . "/";
                 $photoFile = new StorageEntry();
-                $photoFile->createFromData($photoData, $photoMime, $photoName);
+                $photoFile->createFromData($photoData, $photoMime, $photoName, $photoPath);
                 $photoFile->save();
-                $this->info('New url: '.$photoFile->generatePath());
 
                 $photo = new Photo();
-                $photo->album_id = $flickrItem->album_id;
                 $photo->date_taken = $flickrItem->date_taken;
                 $photo->private = $flickrItem->private;
                 $photo->album_id = $id;
                 $photo->file_id = $photoFile->id;
 
-                if($flickrItem->thumb == $flickrThumb) {
-                    $thumb = $photo->id;
-                }
+                $photo->save();
 
-                foreach(FlickrLikes::where("photo_id","=", $flickrItem->id) as $flickrLike) {
+                foreach(FlickrLikes::where("photo_id","=", intval($flickrItem->id))->get() as $flickrLike) {
                     if($flickrLike->migrated) continue;
                     $photoLike = new PhotoLikes();
                     $photoLike->photo_id = $photo->id;
@@ -95,6 +91,11 @@ class FlickrToPhoto extends Command
                 $photo->save();
                 $flickrItem->migrated = true;
                 $flickrItem->save();
+
+                if($flickrItem->thumb == $flickrThumb) {
+                    $this->info('Found thumb');
+                    $thumb = $photo->id;
+                }
             }
             $photoAlbum->thumb_id = $thumb;
             $photoAlbum->save();

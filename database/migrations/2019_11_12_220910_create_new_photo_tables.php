@@ -13,23 +13,12 @@ class CreateNewPhotoTables extends Migration
      */
     public function up()
     {
-        Schema::table('flickr_albums', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
-        });
-
-        Schema::table('flickr_items', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
-        });
-
-        Schema::table('flickr_likes', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
-        });
 
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->unsignedInteger('file_id');
-            $table->unsignedInteger('album_id');
+            $table->integer('file_id');
+            $table->integer('album_id');
             $table->integer('date_taken');
             $table->boolean('private');
         });
@@ -41,18 +30,29 @@ class CreateNewPhotoTables extends Migration
             $table->integer('date_create');
             $table->integer('date_taken');
             $table->integer('thumb_id');
-            $table->unsignedInteger('event_id')->nullable()->default(null);
+            $table->integer('event_id')->nullable()->default(null);
             $table->boolean('private');
             $table->boolean('published')->default(False);
         });
 
-        Schema::rename('photo_likes', 'flickr_likes');
 
         Schema::create('photo_likes', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->integer('photo_id');
             $table->integer('user_id');
+        });
+
+        Schema::table('flickr_albums', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
+        });
+
+        Schema::table('flickr_items', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
+        });
+
+        Schema::table('flickr_likes', function (Blueprint $table) {
+            $table->boolean('migrated')->default(False);
         });
     }
 
@@ -63,6 +63,19 @@ class CreateNewPhotoTables extends Migration
      */
     public function down()
     {
+
+        Schema::table('flickr_albums', function (Blueprint $table) {
+            $table->dropColumn('migrated');
+        });
+
+        Schema::table('flickr_items', function (Blueprint $table) {
+            $table->dropColumn('migrated');
+        });
+
+        Schema::table('flickr_likes', function (Blueprint $table) {
+            $table->dropColumn('migrated');
+        });
+
         Schema::dropIfExists('photo_likes');
         Schema::rename('flickr_likes', 'photo_likes');
         Schema::dropIfExists('photo_albums');

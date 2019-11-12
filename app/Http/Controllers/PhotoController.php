@@ -23,7 +23,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $albums = PhotoManager::getAlbums(null);
+        $albums = PhotoManager::getAlbums();
 
         return view('photos.list', ['albums' => $albums]);
     }

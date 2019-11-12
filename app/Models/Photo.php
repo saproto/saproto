@@ -42,7 +42,11 @@ class Photo extends Model
 
     public function getLikes()
     {
-        return PhotoLikes::where("photo_id","=", $this->id)->count();
+        return $this->likes()->count();
+    }
+
+    public function likes() {
+        return $this->hasMany('Proto\Models\PhotoLikes');
     }
 
     private function file() {

@@ -9,7 +9,7 @@ use Exception;
 
 class PhotoManager extends Model
 {
-    public static function getAlbums($max = null, $query=null, $unpublished=False, $no_thumb=False)
+    public static function getAlbums($max = null, $query=null, $unpublished=false, $no_thumb=true)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -21,9 +21,9 @@ class PhotoManager extends Model
             $base = $base->where('name', 'LIKE', '%'.$query.'%');
         }
         if ($unpublished) {
-            $base = $base->where('published', '=', False);
+            $base = $base->where('published', '=', false);
         } else {
-            $base = $base->where('published', '=', True);
+            $base = $base->where('published', '=', true);
         }
         if (!$no_thumb) {
             $base = $base->where('thumb_id', '!=', 'null');
