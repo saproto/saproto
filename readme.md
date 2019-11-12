@@ -85,6 +85,7 @@ grunt
 docker-compose up -d
 docker-compose exec app /bin/bash
 composer install
+php artisan key:generate
 exit
 docker-compose stop
 ```
