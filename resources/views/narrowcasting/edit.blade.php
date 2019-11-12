@@ -115,6 +115,10 @@
 
                         <a href="{{ route("narrowcasting::list") }}" class="btn btn-default">Cancel</a>
 
+                        <p class="text-center mb-0 mt-2">
+                            Developed with <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
+                        </p>
+
                     </div>
 
                 </form>

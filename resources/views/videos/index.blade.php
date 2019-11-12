@@ -25,9 +25,13 @@
                         <input type="text" class="form-control" name="youtube_id" placeholder="M11SvDtPBhA">
                     </div>
 
-                    <div class="card-footer">
+                    <div class="card-footer text-center">
                         <button type="submit" class="btn btn-success btn-block">Add video</button>
+                        <br>
+                        Developed with
+                        <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
                     </div>
+
 
                 </div>
 
