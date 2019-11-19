@@ -62,7 +62,8 @@
     "laravel/passport": "4.*",
     "vinkla/hashids": "3.3.*",
     "nickurt/laravel-pwned-passwords": "1.*",
-    "abcaeffchen/sephpa": "~2.0.0-beta1"
+    "abcaeffchen/sephpa": "~2.0.0-beta1",
+    "api-postcode/api-postcode-laravel": "^1.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

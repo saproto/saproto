@@ -140,7 +140,7 @@ class UserDashboardController extends Controller
 
         $steps = [
             [
-                'url' => sprintf('%s?wizard=1', route("login::register")),
+                'url' => route("login::register", ['wizard' => 1]),
                 'unlocked' => true,
                 'done' => Auth::check(),
                 'heading' => "Create an account",
@@ -148,7 +148,7 @@ class UserDashboardController extends Controller
                 'text' => "In order to become a member of Study Association Proto, you need a Proto account. You can create that here. After creating your account, activate it by using the link mailed to you."
             ],
             [
-                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::edu::add', ['id' => $user->id])) : null,
+                'url' => Auth::check() ? route('user::edu::add', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->edu_username,
                 'heading' => "Link your UTwente account",
@@ -156,7 +156,7 @@ class UserDashboardController extends Controller
                 'text' => "If you are a student at the University of Twente, we would appreciate it if you would add your student account to your Proto account. If you don't study at the University of Twente, you can skip this step."
             ],
             [
-                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::memberprofile::complete')) : null,
+                'url' => Auth::check() ? route('user::memberprofile::complete', ['wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->hasCompletedProfile(),
                 'heading' => "Provide some personal details",
@@ -164,7 +164,7 @@ class UserDashboardController extends Controller
                 'text' => "To enter your in our member administration, you need to provide is with some extra information."
             ],
             [
-                'url' => Auth::check() ? sprintf('%s?wizard=1', route("user::bank::add", ["id" => $user->id])) : null,
+                'url' => Auth::check() ? route("user::bank::add", ["id" => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->bank,
                 'heading' => "Provide payment details",
@@ -172,7 +172,7 @@ class UserDashboardController extends Controller
                 'text' => "We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend."
             ],
             [
-                'url' => Auth::check() ? sprintf('%s?wizard=1', route('user::address::add', ['id' => $user->id])) : null,
+                'url' => Auth::check() ? route('user::address::add', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->address,
                 'heading' => "Provide contact details",
@@ -180,7 +180,7 @@ class UserDashboardController extends Controller
                 'text' => "To make you a member of our association, we need your postal address. Please add it to your account here."
             ],
             [
-                'url' => sprintf('%s?wizard=1', route('page::show', ['slug' => 'board'])),
+                'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
                 'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
                 'done' => Auth::check() && Auth::user()->member,
                 'heading' => "Become a member!",
@@ -188,7 +188,7 @@ class UserDashboardController extends Controller
                 'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230)."
             ],
             [
-                'url' => sprintf('%s?wizard=1', route('user::dashboard')),
+                'url' => route('user::dashboard', ['wizard' => 1]),
                 'unlocked' => Auth::check() && Auth::user()->member,
                 'done' => false,
                 'heading' => "Add some additional info on your dashboard",

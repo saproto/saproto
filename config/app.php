@@ -189,7 +189,7 @@ return [
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-
+        ApiPostcode\ApiPostcodeServiceProvider::class,
 
     ],
 
@@ -295,7 +295,9 @@ return [
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
 
-        'NumberFormatter' => NumberFormatter::class
+        'NumberFormatter' => NumberFormatter::class,
+
+        'Postcode' => ApiPostcode\Facade\Postcode::class,
 
     ],
 

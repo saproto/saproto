@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9791a4c02ce67f1110a241785d3869b4",
+    "content-hash": "21b8aa4f39531cfbe8aee332f20aecb9",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -268,6 +268,94 @@
                 "youtube"
             ],
             "time": "2017-07-14T12:12:39+00:00"
+        },
+        {
+            "name": "api-postcode/api-postcode-laravel",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/api-postcode/api-postcode-laravel.git",
+                "reference": "b22748d12b25122454a003b077650599c868fe86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/api-postcode/api-postcode-laravel/zipball/b22748d12b25122454a003b077650599c868fe86",
+                "reference": "b22748d12b25122454a003b077650599c868fe86",
+                "shasum": ""
+            },
+            "require": {
+                "api-postcode/php-client": "^1.0",
+                "illuminate/support": "^5.1",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ApiPostcode\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Api Postcode",
+                    "email": "info@api-postcode.nl"
+                }
+            ],
+            "description": "Laravel package for api-postcode",
+            "homepage": "https://api-postcode.nl",
+            "keywords": [
+                "address",
+                "api",
+                "api-postcode",
+                "laravel",
+                "postcode"
+            ],
+            "time": "2017-06-12T12:39:45+00:00"
+        },
+        {
+            "name": "api-postcode/php-client",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/api-postcode/php-client.git",
+                "reference": "5761e575ad06bd0ab4d7e8e45f38e7fac4a13aad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/api-postcode/php-client/zipball/5761e575ad06bd0ab4d7e8e45f38e7fac4a13aad",
+                "reference": "5761e575ad06bd0ab4d7e8e45f38e7fac4a13aad",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "php-client-api-postcode",
+            "autoload": {
+                "psr-4": {
+                    "ApiPostcode\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Api Postcode",
+                    "email": "info@api-postcode.nl"
+                }
+            ],
+            "description": "PHP Client Api Postcode",
+            "homepage": "https://github.com/api-postcode/php-client",
+            "keywords": [
+                "postcode",
+                "postcode-api",
+                "zipcode"
+            ],
+            "time": "2017-06-10T19:02:12+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2049,12 +2137,12 @@
             "version": "2.0.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ivanakimov/hashids.php.git",
+                "url": "https://github.com/vinkla/hashids.git",
                 "reference": "7a945a5192d4a5c8888364970feece9bc26179df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/7a945a5192d4a5c8888364970feece9bc26179df",
+                "url": "https://api.github.com/repos/vinkla/hashids/zipball/7a945a5192d4a5c8888364970feece9bc26179df",
                 "reference": "7a945a5192d4a5c8888364970feece9bc26179df",
                 "shasum": ""
             },
@@ -5980,6 +6068,7 @@
                 "markdown",
                 "table"
             ],
+            "abandoned": "league/commonmark-ext-table",
             "time": "2017-01-11T14:52:17+00:00"
         },
         {
