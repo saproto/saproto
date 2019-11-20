@@ -27,16 +27,23 @@ This is the environment configuration. In this file you will establish your own 
 * `DEBUG` should be set to `true` so you can see in detail what goes wrong if an error occurs.
 * All the `DB_*` settings should be set to reflect your database set-up.
 * `DEV_ALLOWED` is a comma separated list of IP addresses (IPv4 or IPv6) that may access your application. As long as `APP_ENV` is `local`, only whitelisted IP's are allowed to connect.
-* `PERSONAL_PROTO_KEY` should be set to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'real' Proto site.
+* `PERSONAL_PROTO_KEY` should be set to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'live' Proto site.
 
 You can skip all the other stuff (mailing API, Google API) until you need to work on the specific part of the website that uses them.
 
-Now we need to initialize the project:
+To run grunt you need to first install `grunt-cli` globaly with the following command.
+
+```
+npm install -g grunt-cli
+```
+
+Now we can initialize the project.
 
 ```
 chmod +x update.sh
 composer install
 npm install
+grunt
 php artisan key:generate
 ```
 
@@ -67,14 +74,30 @@ That's it, everything should be up and running!
 
 ## Running with Docker
 
-This repository can be run through Docker by using `docker-compose`. This still a work in progress, but for now can be run using the instructions below.
+This repository can be run through Docker by using `docker-compose`. This is still a work in progress, but for now the website can be run localy using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
+
+For more information on installing and using Docker check out their documentation at https://docs.docker.com
+
+After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
 
 ##### Configuration
+Copy and rename `.env.docker.example` to `.env`.
+
 ```
 cp .env.docker.example .env
 ```
 
+After that open the new `.env` file and set the `PERSONAL_PROTO_KEY`  to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'live' Proto site.
+
 ##### Client-side dependencies
+To run grunt you need to first install `grunt-cli` globaly with the following command.
+
+```
+npm install -g grunt-cli
+```
+
+After that you can setup the client-side dependencies
+
 ```
 npm install
 grunt
@@ -96,4 +119,4 @@ docker-compose stop
 docker-compose up -d
 ```
 
-After this, the website will be exposed at port `8080`, PhpMyAdmin will be exposed at port `8081` and Mailhog will be exposed at port `8082`. Please make sure to load a valid database through PhpMyAdmin, as a seeder is currently not available.
+When you have finished the setup and Docker is running the website will be exposed at port `8080`, PhpMyAdmin will be exposed at port `8081` and Mailhog will be exposed at port `8082`. Please make sure to load a valid database through PhpMyAdmin, as a seeder is currently not available.
