@@ -50,12 +50,12 @@ class UserDashboardController extends Controller
         $userdata['website'] = $request->input('website');
 
         if ($user->phone) {
-            $userdata['phone'] = str_replace(' ', '', $request->input('phone'));
+            $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $request->input('phone'));
             $userdata['phone_visible'] = $request->has('phone_visible');
             $userdata['receive_sms'] = $request->has('receive_sms');
             $validator = Validator::make($userdata, [
                 'phone' => 'required|regex:(\+[0-9]{8,16})'
-            ]);
+            ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
             if ($validator->fails()) {
                 return Redirect::route('user::dashboard')->withErrors($validator);
             }
@@ -228,11 +228,12 @@ class UserDashboardController extends Controller
         }
 
         $userdata = Session::has('flash_userdata') ? Session::get('flash_userdata') : $request->only(['birthdate', 'phone']);
+        $userdata['phone'] = str_replace([' ', '-', '(', ')'], ['', '', '', ''], $userdata['phone']);
 
         $validator = Validator::make($userdata, [
             'birthdate' => 'required|date',
             'phone' => 'required|regex:(\+[0-9]{8,16})'
-        ]);
+        ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
         }
