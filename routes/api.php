@@ -29,6 +29,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
         Route::group(['middleware' => ['web']], function () {
             Route::get('gdpr_export', ['as' => 'gdpr_export', 'middleware' => ['auth'], 'uses' => 'ApiController@gdprExport']);
+            Route::get('dev_export/{table}/{personal_key}', ['as' => 'dev_export', 'middleware' => ['auth'], 'uses' => 'ExportController@export']);
         });
     });
 
