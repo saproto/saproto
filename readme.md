@@ -80,6 +80,8 @@ For more information on installing and using Docker check out their documentatio
 
 After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
 
+### Setup
+
 ##### Configuration
 Copy and rename `.env.docker.example` to `.env`.
 
@@ -87,7 +89,7 @@ Copy and rename `.env.docker.example` to `.env`.
 cp .env.docker.example .env
 ```
 
-After that open the new `.env` file and set the `PERSONAL_PROTO_KEY`  to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'live' Proto site.
+After that open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'real' Proto site.
 
 ##### Client-side dependencies
 To run grunt you need to first install `grunt-cli` globaly with the following command.
@@ -103,20 +105,33 @@ npm install
 grunt
 ```
 
-##### Server-side dependencies
+##### Initial application setup
 ```
 docker-compose up -d
 docker-compose exec app /bin/bash
 composer install
 php artisan key:generate
-exit
-docker-compose stop
+php artisan migrate
+php artisan db:seed
 ```
+
+When you have finished the setup and Docker is running the website will be exposed at port `8080`, PhpMyAdmin will be exposed at port `8081` and Mailhog will be exposed at port `8082`.
+
+You can sign in with the same Proto username you use on the 'real' site and the password given to you during the database seeding. This user will have full rights on the website.
+
+### Handy commands
 
 ##### Running
 ```
-docker-compose stop
 docker-compose up -d
 ```
 
-When you have finished the setup and Docker is running the website will be exposed at port `8080`, PhpMyAdmin will be exposed at port `8081` and Mailhog will be exposed at port `8082`. Please make sure to load a valid database through PhpMyAdmin, as a seeder is currently not available.
+##### Stopping
+```
+docker-compose stop
+```
+
+##### Access to PHP container
+```
+docker-compose exec app /bin/bash
+```
