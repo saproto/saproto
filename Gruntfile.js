@@ -1,3 +1,5 @@
+const sass = require('node-sass');
+
 module.exports = function (grunt) {
 	/*	Configuration	*/
 	var json = {
@@ -88,6 +90,9 @@ module.exports = function (grunt) {
 		// Compile application-light.scss to application.css
 		sass: {
 			build: {
+				options: {
+					implementation: sass
+				},
 				files: [{
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>': '<%= pkg.paths.stylesheets.light.src %>',
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>',
