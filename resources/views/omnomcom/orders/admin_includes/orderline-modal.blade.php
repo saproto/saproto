@@ -138,6 +138,9 @@
         });
 
         $('div').delegate('.orderlinedeleterow', 'click', function () {
+            if ($('.orderlinerow').length <= 1) {
+                return;
+            }
             $(this).parents('.orderlinerow').remove();
             calculateTotalPrice();
         });
