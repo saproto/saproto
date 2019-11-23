@@ -113,7 +113,15 @@ class SearchController extends Controller
     public function getUserSearch(Request $request)
     {
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
-        return $this->getGenericSearch(User::class, $request->get('q'), $search_attributes);
+        $result = [];
+        foreach ($this->getGenericSearch(User::class, $request->get('q'), $search_attributes) as $user) {
+            $result[] = (object)[
+                'id' => $user->id,
+                'name' => $user->name,
+                'is_member' => $user->is_member
+            ];
+        }
+        return $result;
     }
 
     public function getEventSearch(Request $request)
@@ -139,6 +147,17 @@ class SearchController extends Controller
 
         $terms = explode(' ', str_replace("*", "%", $query));
         $query = $model::query();
+
+        $check_at_least_one_valid_term = false;
+        foreach ($terms as $term) {
+            if (strlen(str_replace("%", "", $term)) < 3) {
+                continue;
+            }
+            $check_at_least_one_valid_term = true;
+        }
+        if ($check_at_least_one_valid_term == false) {
+            return [];
+        }
 
         foreach ($attributes as $attr) {
             $query = $query->orWhere(function ($query) use ($terms, $attr) {
