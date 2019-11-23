@@ -10,8 +10,8 @@ $factory->define(Proto\Models\Member::class,
             'proto_username' => strtolower(str_random(16)),
             'created_at' => $faker->dateTime($picktime)->format('Y-m-d H:i:s'),
             'deleted_at' => (mt_rand(0, 1) === 1 ? null : $faker->dateTimeBetween($picktime, '+1 year')->format('Y-m-d H:i:s')),
-            'is_lifelong' => mt_rand(0, 20) > 15 ? 1 : 0,
-            'is_honorary' => mt_rand(0, 20) > 15 ? 1 : 0,
-            'is_donator' => mt_rand(0, 20) > 15 ? 1 : 0,
+            'is_lifelong' => mt_rand(0, 100) > 94 ? 1 : 0,
+            'is_honorary' => mt_rand(0, 100) > 98 ? 1 : 0,
+            'is_donator' => mt_rand(0, 100) > 98 ? 1 : 0,
         ];
     });

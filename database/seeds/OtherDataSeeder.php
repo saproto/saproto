@@ -36,14 +36,19 @@ class OtherDataSeeder extends Seeder
         factory(User::class, $n)->create()->each(function ($user) {
             /** @var $user User */
             if (mt_rand(1, 5) > 1) {
+                $user->member()->save(factory(Member::class)->make());
+                $user->bank()->save(factory(Bank::class)->make());
                 $user->address()->save(factory(Address::class)->make());
             }
-            if (mt_rand(1, 5) > 1) {
-                $user->bank()->save(factory(Bank::class)->make());
+
+            if (mt_rand(1, 20) > 15) {
+                if(!$user->is_member) $user->address()->save(factory(Bank::class)->make());
             }
-            if (mt_rand(1, 5) > 1) {
-                $user->member()->save(factory(Member::class)->make());
+
+            if (mt_rand(1, 20) > 15) {
+                if(!$user->is_member) $user->bank()->save(factory(Bank::class)->make());
             }
+
         });
 
         $users = array_merge(array_rand(User::all()->pluck('id')->toArray(), 75), [1]);
@@ -52,7 +57,7 @@ class OtherDataSeeder extends Seeder
         $n = 10000;
         echo "Creating $n orderlines" . PHP_EOL;
 
-        $mintime = date('U', strtotime('April 20, 2011'));
+        $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('now'));
 
         for ($i = 0; $i < $n; $i++) {
@@ -71,7 +76,7 @@ class OtherDataSeeder extends Seeder
             if (mt_rand(1, 100) == 1) {
                 // Simulate Pay via Cash
                 $data['cashier_id'] = $users[array_rand($users)];
-                $data['payed_with_cash'] = $d;
+                $data['payed_with_bank_card'] = $d;
             }
             OrderLine::create($data);
         }
