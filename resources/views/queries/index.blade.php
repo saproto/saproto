@@ -42,6 +42,18 @@
 
                     </tr>
 
+                    <tr>
+
+                        <td>Membership totals</td>
+                        <td>Shows an overview of a number of membership totals.</td>
+                        <td>
+                            <a href="{{ route("queries::membership_totals") }}">
+                                <i class="fas fa-running"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+
                 </table>
 
             </div>
