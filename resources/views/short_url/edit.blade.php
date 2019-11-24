@@ -12,8 +12,7 @@
 
             <div class="card mb-3">
 
-                <form method="post" action="{{ route("short_url::edit", ['id' => $url ? $url->id : 'new' ]) }}"
-                      enctype="multipart/form-data">
+                <form method="post" action="{{ route("short_url::edit", ['id' => $url ? $url->id : 'new' ]) }}">
 
                     {!! csrf_field() !!}
 
