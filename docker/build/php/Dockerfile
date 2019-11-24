@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     libgmp-dev \
     libmcrypt-dev \
-    libldap2-dev
+    libldap2-dev \
+    wkhtmltopdf
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
