@@ -105,6 +105,7 @@
                                 <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
                                 <a class="dropdown-item" href="{{ route("protube::admin") }}">ProTube Admin</a>
                                 <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
+                                <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 
