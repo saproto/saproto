@@ -219,8 +219,7 @@ return [
         ],
         'isalfredthere' => [
             'isalfredthere.nl',
-            'www.isalfredthere.nl',
-            'minisite.saproto'
+            'www.isalfredthere.nl'
         ]
     ],
 

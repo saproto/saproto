@@ -805,6 +805,19 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Short URL Service
+     */
+    Route::group(['prefix' => 'short_url', 'as' => 'short_url::', 'middleware' => ['auth', 'permission:board']], function () {
+
+        Route::get('', ['as' => 'index', 'uses' => 'ShortUrlController@index']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
+
+    });
+    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+
+    /*
      * DMX Management
      */
     Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:board|alfred']], function () {
