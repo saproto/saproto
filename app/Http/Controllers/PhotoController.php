@@ -40,7 +40,7 @@ class PhotoController extends Controller
 
         if ($photos) return view('photos.album', ['photos' => $photos]);
 
-        abort(404);
+        abort(404, 'Album not found.');
     }
 
     public function photo($id)

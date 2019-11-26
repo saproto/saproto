@@ -49,7 +49,7 @@ class PhotoManager extends Model
         $album = $album->get();
 
         if ($album->count() == 0) {
-            abort(404, "This album does not exist.");
+            return null;
         }
 
         $items = Photo::where('album_id', $albumID);
