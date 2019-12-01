@@ -111,6 +111,7 @@
 
                                 <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
                                 <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
+                                <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Add Dinner Form</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 

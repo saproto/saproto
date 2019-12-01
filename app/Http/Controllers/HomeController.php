@@ -17,6 +17,7 @@ use Proto\Models\HeaderImage;
 use Proto\Models\OrderLine;
 use Proto\Models\Page;
 use Proto\Models\User;
+use Proto\Models\Dinnerform;
 
 use Auth;
 use Carbon;
@@ -36,13 +37,14 @@ class HomeController extends Controller
         $companies = Company::where('in_logo_bar', true)->orderBy('sort', 'asc')->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
+        $dinnerform = Dinnerform::all()->first();
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 
         if (Auth::check() && Auth::user()->member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
             return view('website.home.members', ['companies' => $companies, 'message' => $message,
-                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'header' => $header, 'videos' => $videos]);
+                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerform' => $dinnerform, 'header' => $header, 'videos' => $videos]);
         } else {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }

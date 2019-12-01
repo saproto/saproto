@@ -44,6 +44,11 @@ return [
             'length' => '16',
         ],
 
+        'dinnerform' => [
+            'salt' => getenv('HASHIDS_SECRET_DINNERFORM'),
+            'length' => '16',
+        ]
+
     ],
 
 ];

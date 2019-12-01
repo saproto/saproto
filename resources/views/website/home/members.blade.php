@@ -44,12 +44,26 @@
 
             @endif
 
+                @if($dinnerform && !$dinnerform->hasEnded())
+
+                    <div class="card mb-3">
+
+                        <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw mr-2"></i> Dinner Form</div>
+                        <div class="card-body">
+
+                            @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform])
+
+                        </div>
+
+                    </div>
+
+                @endif
+
             <div class="card mb-3">
                 <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw mr-2"></i> News</div>
                 <div class="card-body">
 
                     @if(count($newsitems) > 0)
-
 
                         @foreach($newsitems as $index => $newsitem)
 
