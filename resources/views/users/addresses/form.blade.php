@@ -1,60 +1,74 @@
-{!! csrf_field() !!}
 
-<div class="row">
+<div class="row mt-2">
 
     <div class="col-md-6 col-xs-12">
 
-        <!-- We need a map... //-->
-        <div id="map" style="display: none;"></div>
+        <form class="form-horizontal" method="POST"
+              action="{{ $action == 'add' ? route('user::address::add', ['id' => $user->id]) : route('user::address::edit', ['id' => $user->id]) }}">
 
-        <!-- Actual form data in JSON //-->
-        <div class="form-group">
-            <label for="street">Street</label>
-            <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way"
-                   value="{{ $user->address->street or "" }}">
-        </div>
-        <div class="form-group">
-            <label for="number">Number</label>
-            <input type="text" class="form-control" id="number" name="number" placeholder="42"
-                   value="{{ $user->address->number or "" }}">
-        </div>
-        <div class="form-group">
-            <label for="zipcode">ZIP Code</label>
-            <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN"
-                   value="{{ $user->address->zipcode or "" }}">
-        </div>
-        <div class="form-group">
-            <label for="city">City</label>
-            <input type="text" class="form-control" id="city" name="city" placeholder="Sydney"
-                   value="{{ $user->address->city or "" }}">
-        </div>
-        <div class="form-group">
-            <label for="country">Country</label>
-            <input type="text" class="form-control" id="country" name="country" placeholder="Australia"
-                   value="{{ $user->address->country or "" }}">
-        </div>
+            {!! csrf_field() !!}
+
+            <p class="text-center text-uppercase">
+                The Netherlands<br>
+                <img src="{{ asset('images/flags-large/nl.png') }}" height="70px;" class="rounded-lg mt-2 mb-2">
+            </p>
+
+            <hr>
+
+            <div class="form-group">
+                <label for="zipcode">ZIP Code</label>
+                <input type="text" class="form-control" id="zipcode" name="zipcode-nl" placeholder="2003FN">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="number">Street number</label>
+                <input type="text" class="form-control" id="number" name="number-nl" placeholder="42">
+            </div>
+
+            <button type="submit" class="btn btn-success btn-block" name="nl-lookup">Look-up and save</button>
+
+        </form>
 
     </div>
 
     <div class="col-md-6 col-xs-12">
 
-        <div class="panel">
-            <div class="panel-body">
+        <form class="form-horizontal" method="POST"
+              action="{{ $action == 'add' ? route('user::address::add', ['id' => $user->id]) : route('user::address::edit', ['id' => $user->id]) }}">
 
-                <p>You can use the form below to search for an address and auto-complete the form. You can also manually
-                    fill in the form.</p>
+            {!! csrf_field() !!}
 
-                <input type="text" class="form-control" id="address-string"
-                       placeholder="42 Wallaby Way, Sydney">
+            <p class="text-center text-uppercase">
+                World<br>
+                <img src="{{ asset('images/flags-large/world.jpg') }}" height="70px;" class="rounded-lg mt-2 mb-2">
+            </p>
 
-                <hr>
+            <hr>
 
-                <ul id="autocomplete-results" class="list-group">
-                    <a class="list-group-item">Enter search term...</a>
-                </ul>
-
+            <div class="form-group">
+                <label for="street">Street</label>
+                <input type="text" class="form-control" id="street" name="street" placeholder="Wallaby Way">
             </div>
-        </div>
+            <div class="form-group">
+                <label for="number">Number</label>
+                <input type="text" class="form-control" id="number" name="number" placeholder="42">
+            </div>
+            <div class="form-group">
+                <label for="zipcode">ZIP Code</label>
+                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="2003FN">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="Sydney">
+            </div>
+            <div class="form-group mb-4">
+                <label for="country">Country</label>
+                <input type="text" class="form-control" id="country" name="country" placeholder="Australia">
+            </div>
+
+            <button type="submit" class="btn btn-success btn-block">Save</button>
+
+        </form>
 
     </div>
 

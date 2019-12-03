@@ -10,7 +10,7 @@
 
         <div class="col-md-8 col-sm-10 col-xs-12">
 
-            <div class="card">
+            <div class="card mb-3">
 
                 <div class="card-header bg-dark text-white">
 
@@ -42,6 +42,10 @@
                         <iframe class="embed-responsive-item" src="{{ $video->getYouTubeEmbedUrl() }}" allowfullscreen></iframe>
                     </div>
 
+                </div>
+
+                <div class="card-footer text-center">
+                    Developed with <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
                 </div>
 
             </div>

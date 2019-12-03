@@ -7,7 +7,7 @@
     <div class="card-body">
 
         <p class="card-text">
-            Total for {{ date('F Y', strtotime($selected_month)) }}
+            Total spent in {{ date('F Y', strtotime($selected_month)) }}
         </p>
 
         <h3 class="card-title">
@@ -24,11 +24,21 @@
                 &euro; {{ number_format($next_withdrawal, 2, '.', '') }}
             </h3>
 
+        @elseif($next_withdrawal < 0)
+
+            <p class="card-text">
+                OmNomCom credit left
+            </p>
+
+            <h3 class="card-title">
+                &euro; {{ number_format(-$next_withdrawal, 2, '.', '') }}
+            </h3>
+
         @endif
 
     </div>
 
-    @if($next_withdrawal)
+    @if($next_withdrawal > 0)
 
         <div class="card-footer">
 
@@ -36,6 +46,14 @@
                     data-target="#mollie-modal">
                 Pay now
             </a>
+
+        </div>
+
+    @elseif($next_withdrawal < 0)
+
+        <div class="card-footer">
+
+            You won't be charged as long as you have OmNomCom credit.
 
         </div>
 

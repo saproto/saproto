@@ -2,20 +2,16 @@
 
 namespace Proto\Http\Controllers;
 
+use ApiPostcode\Facade\Postcode;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
-use PhpParser\Node\Expr\Cast\Object_;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Address;
-use Proto\Models\User;
 
 use Auth;
-use Entrust;
 use Session;
 use Redirect;
+
+use Exception;
 
 
 class AddressController extends Controller
@@ -29,7 +25,7 @@ class AddressController extends Controller
             return Redirect::route('user::address::edit', ['id' => $user->id, 'wizard' => $request->wizard]);
         }
 
-        if ($request->wizard) Session::flash("wizard", true);
+        if ($request->has('wizard')) Session::flash("wizard", true);
 
         return view('users.addresses.edit', ['user' => $user, 'action' => 'add']);
     }
@@ -58,21 +54,7 @@ class AddressController extends Controller
         // Establish new address
         $address = new Address();
 
-        $addressdata = $request->all();
-        $addressdata['user_id'] = $user->id;
-        if (!$address->validate($addressdata)) {
-            return Redirect::route('user::address::add')->withErrors($address->errors());
-        }
-        $address->fill($addressdata);
-
-        // Save it baby!
-        $address->save();
-
-        Session::flash("flash_message", "The address has been added.");
-
-        if (Session::get('wizard')) return Redirect::route('becomeamember');
-
-        return Redirect::route('user::dashboard');
+        return AddressController::saveAddressData($request, $address, $user);
 
     }
 
@@ -87,26 +69,12 @@ class AddressController extends Controller
             return Redirect::back();
         }
 
-        $addressdata = $request->all();
-        $addressdata['user_id'] = $user->id;
-
-        if (!$address->validate($addressdata)) {
-            return Redirect::route('user::address::edit')->withErrors($address->errors());
-        }
-        $address->fill($addressdata);
-        $address->save();
-
-        Session::flash("flash_message", "The address has been edited.");
-
-        if (Session::get('wizard')) return Redirect::route('becomeamember');
-
-        return Redirect::route('user::dashboard');
+        return AddressController::saveAddressData($request, $address, $user);
 
     }
 
     public function editForm(Request $request)
     {
-
         $user = Auth::user();
         $address = $user->address;
 
@@ -115,7 +83,7 @@ class AddressController extends Controller
             return Redirect::back();
         }
 
-        if ($request->wizard) Session::flash("wizard", true);
+        if ($request->has('wizard')) Session::flash("wizard", true);
 
         return view('users.addresses.edit', ['user' => $user, 'action' => 'edit']);
     }
@@ -131,6 +99,49 @@ class AddressController extends Controller
         Session::flash("flash_message", "Your primary address is now " . ($user->address_visible ? 'visible' : 'hidden') . " for members.");
 
         return Redirect::back();
+
+    }
+
+    public static function saveAddressData($request, $address, $user)
+    {
+
+        $addressdata = $request->all();
+        $addressdata['user_id'] = $user->id;
+
+        if ($request->has(['nl-lookup'])) {
+
+            try {
+                $fetched_address = Postcode::fetchAddress($addressdata['zipcode-nl'], $addressdata['number-nl']);
+                $address->fill([
+                    'street' => $fetched_address->getStreet(),
+                    'number' => $fetched_address->getHouseNumber(),
+                    'zipcode' => $fetched_address->getZipCode(),
+                    'city' => $fetched_address->getCity(),
+                    'country' => 'The Netherlands'
+                ]);
+                Session::flash("flash_message", sprintf("The address has been saved as: %s %s, %s, %s (%s)",
+                    $address->street, $address->number, $address->zipcode, $address->city, $address->country));
+            } catch (Exception $e) {
+                Session::flash("flash_message", sprintf("No address could be found for %s, %s.",
+                    $addressdata['zipcode-nl'], $addressdata['number-nl']));
+            }
+
+        } else {
+
+            if (!$address->validate($addressdata)) {
+                return Redirect::route('user::address::edit')->withErrors($address->errors());
+            }
+            $address->fill($request->except(['zipcode-nl', 'number-nl']));
+            Session::flash("flash_message", "Your address has been saved!");
+
+        }
+
+        $address['user_id'] = $user->id;
+        $address->save();
+
+        if (Session::get('wizard')) return Redirect::route('becomeamember');
+
+        return Redirect::route('user::dashboard');
 
     }
 

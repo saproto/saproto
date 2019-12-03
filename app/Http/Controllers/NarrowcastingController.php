@@ -4,21 +4,13 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Carbon\Carbon;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
-use Auth;
 use Session;
 use Redirect;
 
 use Youtube;
 
-use Carbon\CarbonInterval;
 use DateInterval;
 
-use Proto\Models\Committee;
 use Proto\Models\NarrowcastingItem;
 use Proto\Models\StorageEntry;
 
@@ -44,11 +36,10 @@ class NarrowcastingController extends Controller
         $data = [];
         foreach (
             NarrowcastingItem::where('campaign_start', '<', date('U'))->where('campaign_end', '>', date('U'))->get() as $item) {
-            if ($item->video()) {
+            if ($item->youtube_id) {
                 $data[] = [
-                    // Because this is the fucking only shortest way to convert an interval to seconds. Wtf.
-                    'slide_duration' => $item->videoDuration(),
-                    'video' => $item->video()->id
+                    'slide_duration' => $item->slide_duration,
+                    'video' => $item->youtube_id
                 ];
             } elseif ($item->image) {
                 $data[] = [
@@ -73,7 +64,7 @@ class NarrowcastingController extends Controller
     /**
      * Store a newly created campaign.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -99,9 +90,11 @@ class NarrowcastingController extends Controller
 
         }
 
-        if ($request->has('youtube_id') && strlen($request->get('youtube_id')) > 0) {
+        $youtube_id = $request->get('youtube_id');
 
-            $video = Youtube::getVideoInfo($request->get('youtube_id'));
+        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+
+            $video = Youtube::getVideoInfo($youtube_id);
 
             if (!$video) {
                 Session::flash("flash_message", "This is an invalid video ID!");
@@ -113,7 +106,9 @@ class NarrowcastingController extends Controller
                 return Redirect::back();
             }
 
-            $narrowcasting->youtube_id = $video->id;
+            $narrowcasting->youtube_id = $youtube_id;
+            $narrowcasting->save();
+            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
 
         }
 
@@ -127,7 +122,7 @@ class NarrowcastingController extends Controller
     /**
      * Show the form for editing the specified campaign.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -144,8 +139,8 @@ class NarrowcastingController extends Controller
     /**
      * Update the specified campaign.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -169,16 +164,20 @@ class NarrowcastingController extends Controller
             $narrowcasting->image()->associate($file);
         }
 
-        if ($request->has('youtube_id') && strlen($request->get('youtube_id')) > 0) {
+        $youtube_id = $request->get('youtube_id');
 
-            $video = Youtube::getVideoInfo($request->get('youtube_id'));
+        if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
+
+            $video = Youtube::getVideoInfo($youtube_id);
 
             if (!$video) {
                 Session::flash("flash_message", "This is an invalid video ID!");
                 return Redirect::back();
             }
 
-            $narrowcasting->youtube_id = $video->id;
+            $narrowcasting->youtube_id = $youtube_id;
+            $narrowcasting->save();
+            $narrowcasting->slide_duration = $narrowcasting->videoDuration();
 
         } else {
 
@@ -196,7 +195,7 @@ class NarrowcastingController extends Controller
     /**
      * Remove the specified campaign.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

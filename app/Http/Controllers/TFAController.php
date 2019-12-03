@@ -41,14 +41,20 @@ class TFAController extends Controller
 
     }
 
-    public function timebasedDelete(Request $request)
+    public function timebasedDelete(Request $request, Google2FA $google2fa)
     {
 
         $user = Auth::user();
+        $code = $request->input('2facode');
 
         if ($user->tfa_totp_key !== null) {
-            $user->tfa_totp_key = null;
-            $user->save();
+            if ($google2fa->verifyKey($user->tfa_totp_key, $code)) {
+                $user->tfa_totp_key = null;
+                $user->save();
+            } else {
+                $request->session()->flash('flash_message', 'Invalid code supplied, could not disable 2FA!');
+                return Redirect::back();
+            }
         }
 
         $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');

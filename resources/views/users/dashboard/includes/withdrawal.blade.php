@@ -61,7 +61,7 @@
 
 @else
 
-    <a type="submit" class="btn btn-outline-info btn-block" href="{{ route("user::bank::add") }}">
+    <a type="submit" class="btn btn-outline-info btn-block mb-3" href="{{ route("user::bank::add") }}">
         Issue SEPA direct withdrawal authorisation
     </a>
 

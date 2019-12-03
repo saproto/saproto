@@ -5,10 +5,6 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Proto\Models\QuoteLike;
-use Proto\Models\StorageEntry;
-use Proto\Http\Requests;
-
-use Proto\Models\User;
 use Proto\Models\Quote;
 
 use Carbon\Carbon;
@@ -57,6 +53,7 @@ class QuoteCornerController extends Controller
         if ($quote == null) {
             abort(404, "Quote $id not found.");
         }
+        QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
         Session::flash("flash_message", "Quote deleted.");
         return Redirect::route('quotes::list');

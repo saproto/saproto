@@ -6,7 +6,7 @@
 
         @if(Auth::user()->can('board'))
             <a class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
-               href="{{ Auth::user()->can('sysadmin') ? route('user::admin::toggle_nda', ['id' => $user->id]) : 'javascript:void();' }}">
+               href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
                 User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
             </a>
         @endif

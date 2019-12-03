@@ -189,7 +189,7 @@ return [
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-
+        ApiPostcode\ApiPostcodeServiceProvider::class,
 
 
         /*
@@ -222,7 +222,6 @@ return [
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
-        'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
@@ -300,7 +299,9 @@ return [
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
 
-        'NumberFormatter' => NumberFormatter::class
+        'NumberFormatter' => NumberFormatter::class,
+
+        'Postcode' => ApiPostcode\Facade\Postcode::class,
 
     ],
 

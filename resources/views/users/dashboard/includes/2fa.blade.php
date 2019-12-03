@@ -35,10 +35,10 @@
     <div class="card-footer">
 
         @if($user->tfa_totp_key)
-            <a class="btn btn-outline-danger btn-block" href="{{ route('user::2fa::deletetimebased') }}"
-               onclick="return confirm('Do really want to unset time-based 2FA?')">
+
+            <div data-toggle="modal" data-target="#totp-modal-disable" class="btn btn-outline-danger btn-block">
                 Disable two-factor authentication
-            </a>
+            </div>
 
         @else
 
@@ -46,9 +46,9 @@
                 Configure Two-Factor Authentication
             </div>
 
-            @include('users.2fa.timebased')
-
         @endif
+
+        @include('users.2fa.timebased')
 
     </div>
 

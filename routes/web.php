@@ -181,7 +181,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
          */
         Route::group(['prefix' => '2fa', 'as' => '2fa::'], function () {
             Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
-            Route::get('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
+            Route::post('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
         });
     });
 
@@ -824,6 +824,19 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Short URL Service
+     */
+    Route::group(['prefix' => 'short_url', 'as' => 'short_url::', 'middleware' => ['auth', 'permission:board']], function () {
+
+        Route::get('', ['as' => 'index', 'uses' => 'ShortUrlController@index']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
+
+    });
+    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+
+    /*
      * DMX Management
      */
     Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:board|alfred']], function () {
@@ -851,13 +864,24 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
      * Queries
      */
-    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function (){
+    Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function () {
 
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
+        Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
 
     });
 
     Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
+
+    Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
+
+        Route::group(['prefix' => 'isalfredthere', 'as' => 'isalfredthere::'], function () {
+            Route::get('/', ['as' => 'index', 'uses' => 'IsAlfredThereController@showMiniSite']);
+            Route::get('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@getAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
+            Route::post('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@postAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
+        });
+
+    });
 
 });

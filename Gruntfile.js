@@ -1,7 +1,18 @@
+const sass = require('node-sass');
+
 module.exports = function (grunt) {
 	/*	Configuration	*/
 	var json = {
 		pkg: grunt.file.readJSON('package.json'),
+
+		copy: {
+			fontawesome: {
+				expand: true,
+				cwd: './node_modules/@fortawesome/fontawesome-free/webfonts',
+				src: '**',
+				dest: '<%= pkg.paths.assets %>/fonts/'
+			}
+		},
 
 		// Grunt banner
 		usebanner: {
@@ -79,6 +90,9 @@ module.exports = function (grunt) {
 		// Compile application-light.scss to application.css
 		sass: {
 			build: {
+				options: {
+					implementation: sass
+				},
 				files: [{
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.light.dest %>': '<%= pkg.paths.stylesheets.light.src %>',
 					'<%= pkg.paths.assets %>/<%= pkg.paths.stylesheets.dark.dest %>': '<%= pkg.paths.stylesheets.dark.src %>',
@@ -151,6 +165,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('build:js', ['concat:js', 'uglify']);
 	grunt.registerTask('build:sass', ['concat:sass', 'sass', 'autoprefixer', 'cssmin']);
 
-	grunt.registerTask('default', [ 'build:js', 'build:sass', 'usebanner:dist']);
+	grunt.registerTask('default', [ 'build:js', 'build:sass', 'usebanner:dist', 'copy:fontawesome']);
 
 };

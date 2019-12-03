@@ -561,7 +561,7 @@
             <div class="col-md-8 col-12 justify-content-center">
 
                 <form id="protube__remote__ytSearch_form"><input type="search" id="protube__remote__ytSearch"
-                                                                 class="form-control" placeholder="Search on Youtube (maximum duration <?php echo(\Carbon\CarbonInterval::seconds(file_get_contents(config('herbert.server') . "/maxDuration?secret=" . config('herbert.secret')))->cascade()->forHumans()); ?>)..."
+                                                                 class="form-control" placeholder="Search on Youtube (maximum duration {{ $max_duration }})..."
                                                                  style="width: 100%;">
                 </form>
 

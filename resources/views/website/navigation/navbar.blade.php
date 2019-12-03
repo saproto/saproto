@@ -110,6 +110,8 @@
                                         <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
                                     </li>
                                 @endif
+                                <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
+
                                 <li role="separator" class="dropdown-divider"></li>
 
                                 <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
@@ -158,6 +160,16 @@
 
                                 <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
                                 <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
+
+                            @endif
+
+                            @if(Auth::user()->can(["alfred","sysadmin"]))
+
+                                <li role="separator" class="dropdown-divider"></li>
+
+                                <a class="dropdown-item" href="{{ route("minisites::isalfredthere::admin") }}">
+                                    Is Alfred There?
+                                </a>
 
                             @endif
 
