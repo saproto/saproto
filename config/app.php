@@ -185,11 +185,11 @@ return [
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
         Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
-        Aacotroneo\Saml2\Saml2ServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         ApiPostcode\ApiPostcodeServiceProvider::class,
+        Aacotroneo\Saml2\Saml2ServiceProvider::class
 
     ],
 
@@ -285,8 +285,6 @@ return [
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 
         'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
-
-        'Saml2' => Aacotroneo\Saml2\Facades\Saml2Auth::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
 
