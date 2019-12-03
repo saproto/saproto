@@ -473,7 +473,7 @@ class AuthController extends Controller
     public function startSurfConextAuth()
     {
         Session::reflash();
-        return redirect('saml2/surfconext/login');
+        return redirect(route('saml2_login', ['idpName' => 'surfconext']));
     }
 
     /**
