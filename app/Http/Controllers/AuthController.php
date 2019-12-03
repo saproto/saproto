@@ -473,7 +473,7 @@ class AuthController extends Controller
     public function startSurfConextAuth()
     {
         Session::reflash();
-        return redirect('saml2/login');
+        return redirect(route('saml2_login', ['idpName' => 'surfconext']));
     }
 
     /**
@@ -484,7 +484,6 @@ class AuthController extends Controller
      */
     public function surfConextAuthPost(Request $request)
     {
-
         if (!Session::has('surfconext_sso_user')) {
             return Redirect::route('login::show');
         }
