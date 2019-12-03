@@ -191,11 +191,6 @@ return [
         nickurt\PwnedPasswords\ServiceProvider::class,
         ApiPostcode\ApiPostcodeServiceProvider::class,
 
-
-        /*
-         * Temp tinker
-         */
-        Laravel\Tinker\TinkerServiceProvider::class,
     ],
 
     /*
