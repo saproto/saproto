@@ -5,7 +5,7 @@ namespace Proto\Models;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Support\Facades\URL;
 use Vinkla\Hashids\Facades\Hashids;
 
 use Auth;
@@ -20,8 +20,6 @@ class Dinnerform extends Model
      * @var string
      */
     protected $table = 'dinnerforms';
-
-    protected $appends = ['is_future', 'formatted_date'];
 
     public function getPublicId()
     {
@@ -47,14 +45,13 @@ class Dinnerform extends Model
 
     protected $guarded = ['id'];
 
-    public function hasEnded()
+    public function hasExpired()
     {
         return date('U') - $this->end > 3600;
     }
 
-    public function getIsFutureAttribute()
-    {
-        return date('U') < $this->start;
+    public function isCurrent() {
+        return $this->start < date('U') && $this->end > date('U');
     }
 
     public function getFormattedDateAttribute()

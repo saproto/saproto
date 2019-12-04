@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Proto\Models\Account;
 use Proto\Models\Dinnerform;
-use Proto\Models\StorageEntry;
-use Proto\Models\User;
 
 use Session;
 use Redirect;
@@ -24,7 +22,9 @@ class DinnerformController extends Controller
      */
     public function create()
     {
-        return view('dinnerform.admin', ['dinnerform' => null]);
+        $dinnerformList = Dinnerform::all();
+
+        return view('dinnerform.admin', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
 
     /**
@@ -64,7 +64,7 @@ class DinnerformController extends Controller
     {
         $dinnerform = Dinnerform::fromPublicId($id);
 
-        if ($dinnerform->start < date('U') && $dinnerform->end > date('U')) {
+        if ($dinnerform->isCurrent()) {
             return Redirect::away($dinnerform->url);
         } else {
             Session::flash("flash_message", "Sorry, you can't order anymore, because food is already on its way");
@@ -80,11 +80,13 @@ class DinnerformController extends Controller
      */
     public function edit($id)
     {
-        $dinnerform = Dinnerform::findOrFail($id);
-        if($dinnerform != null) {
-            return view('dinnerform.admin', ['dinnerform' => $dinnerform]);
+        $dinnerformCurrent = Dinnerform::findOrFail($id);
+        $dinnerformList = Dinnerform::all();
+
+        if($dinnerformCurrent != null) {
+            return view('dinnerform.admin', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
         } else {
-            return Redirect::route('homepage');
+            return view('dinnerform.admin', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
         }
     }
 
@@ -134,7 +136,7 @@ class DinnerformController extends Controller
     {
         $dinnerform = Dinnerform::findOrFail($id);
 
-        Session::flash("flash_message", "The dinner form '" . $dinnerform->restaurant . "' has been deleted.");
+        Session::flash("flash_message", "The dinner form for '" . $dinnerform->restaurant . "' has been deleted.");
 
         if(URL::previous() != route('dinnerform::edit', ['id' => $dinnerform->id])) {
             $dinnerform->delete();

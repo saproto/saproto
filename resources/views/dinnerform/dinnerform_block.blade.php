@@ -2,7 +2,7 @@
     <a style="text-decoration: none !important;"
        href="{{ route("dinnerform::show", ['id' => $dinnerform->getPublicId()]) }}">
         <div class="card-body" style="text-align: left;">
-            @if($dinnerform->hasEnded())
+            @if($dinnerform->hasExpired())
                 <div class="btn btn-danger btn-block mb-3 ">
                     <i class="fas fa-lock fa-fw mr-2" aria-hidden="true"></i>
                     <span> This dinner form has ended </span>
@@ -36,7 +36,7 @@
             </span>
         </div>
     </a>
-    @if(Auth::user()->can('board'))
+    @if($canEdit)
         <div class="card-footer bg-light border-bottom">
             <a href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}"
                class="btn btn-danger pull-left">Close</a>

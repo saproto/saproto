@@ -3,8 +3,8 @@
     <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
     </button>
 
-    @if($dinnerform)
-        <a href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}"
+    @if($dinnerformCurrent)
+        <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
            class="btn btn-danger pull-left">Delete</a>
     @endif
 

@@ -1,5 +1,5 @@
 <form method="post"
-      action="{{ ($dinnerform == null ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerform->id])) }}"
+      action="{{ ($dinnerformCurrent == null ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
       enctype="multipart/form-data">
 
     {!! csrf_field() !!}
@@ -20,10 +20,10 @@
 
                         <div class="col-md-12 mb-3">
 
-                            <label for="restaurant">dinner form restaurant:</label>
+                            <label for="restaurant">Dinner form restaurant:</label>
                             <input type="text" class="form-control" id="restaurant" name="restaurant"
                                    placeholder="Elat Roma"
-                                   value="{{ $dinnerform->restaurant or '' }}"
+                                   value="{{ $dinnerformCurrent->restaurant or '' }}"
                                    required>
 
                         </div>
@@ -34,7 +34,7 @@
 
                             <label for="description">Description:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Order with us at Elat Roma" value="{{ $dinnerform->description or '' }}" required>
+                                   placeholder="Order with us at Elat Roma" value="{{ $dinnerformCurrent->description or '' }}" required>
 
                         </div>
                     </div>
@@ -43,7 +43,7 @@
 
                             <label for="url">Url:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="https://forms.gle/t2hDEnkNCLXNpvYTA" value="{{ $dinnerform->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
+                                   placeholder="https://forms.gle/t2hDEnkNCLXNpvYTA" value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
 
                         </div>
                     </div>
@@ -56,10 +56,10 @@
 
                             <div class="form-group">
                                 <label for="dinnerform_start">dinnerform start:</label>
-                                @include('website.layouts.macros.datetimepicker',[
+                                @include('website.layouts.macros.datetimepicker', [
                                     'name' => 'start',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerform ? $dinnerform->start : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start : null
                                 ])
                             </div>
 
@@ -72,7 +72,7 @@
                                 @include('website.layouts.macros.datetimepicker',[
                                     'name' => 'end',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerform ? $dinnerform->end : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end : null
                                 ])
                             </div>
 
