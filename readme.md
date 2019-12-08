@@ -14,6 +14,8 @@ Installing the website on your own server should be quite simple. First you'll h
 git clone git@github.com:saproto/saproto.git
 ```
 
+**If you want to run a development environment in Docker (you most likely do), you can now move on to the 'Running with Docker' section below.**
+
 In the repository you'll find a file called `.env.example`. Make a copy of this file called `.env`:
 
 ```
