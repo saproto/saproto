@@ -234,7 +234,8 @@ return [
     */
 
     'soundboardSounds' => [
-        '1337' => 9
+        '1337' => 9,
+        'new-member' => 60,
     ],
 
     /*
