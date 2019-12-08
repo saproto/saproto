@@ -173,7 +173,7 @@ class UserAdminController extends Controller
             'value' => 1
         ]);
 
-        Artisan::call('proto:playsound ' . config('proto.soundboardSounds')['new-member']);
+        Artisan::call('proto:playsound', [ 'sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
