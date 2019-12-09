@@ -5,14 +5,14 @@
             @if($dinnerform->hasExpired())
                 <div class="btn btn-danger btn-block mb-3 ">
                     <i class="fas fa-lock fa-fw mr-2" aria-hidden="true"></i>
-                    <span> This dinner form has ended </span>
+                    <span>This dinner form has ended</span>
                 </div>
             @else
                 <div class="btn btn-info btn-block mb-3 ">
                     <i class="fas fa-history fa-fw fa-pulse mr-2" aria-hidden="true"></i>
                     <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is underway!">
-                            Counting down...
-                        </span>
+                        Counting down...
+                    </span>
                 </div>
             @endif
 
