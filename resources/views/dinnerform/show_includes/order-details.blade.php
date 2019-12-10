@@ -1,13 +1,11 @@
 <form method="post"
-      action="{{ ($dinnerformCurrent == null ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
       enctype="multipart/form-data">
-
     {!! csrf_field() !!}
 
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Dinner form details
+            Dinner form Order Details
         </div>
 
         <div class="card-body">
@@ -20,10 +18,10 @@
 
                         <div class="col-md-12 mb-3">
 
-                            <label for="restaurant">Dinner form restaurant:</label>
-                            <input type="text" class="form-control" id="restaurant" name="restaurant"
-                                   placeholder="Elat Roma"
-                                   value="{{ $dinnerformCurrent->restaurant or '' }}"
+                            <label for="food">What are you ordering?:</label>
+                            <input type="text" class="form-control" id="food" name="food"
+                                   placeholder="Nomnomnoms"
+                                   value="{{ $order->food or '' }}"
                                    required>
 
                         </div>
@@ -32,21 +30,10 @@
                     <div class="row align-items-end mb-6">
                         <div class="col-md-12 mb-3">
 
-                            <label for="description">Description:</label>
+                            <label for="price">How expensive is it?:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Order with us at Elat Roma"
-                                   value="{{ $dinnerformCurrent->description or '' }}"
-                                   required>
-
-                        </div>
-                    </div>
-                    <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3">
-
-                            <label for="url">Url:</label>
-                            <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="https://forms.gle/t2hDEnkNCLXNpvYTA"
-                                   value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}"
+                                   placeholder="(€X,XX)"
+                                   value="{{ $order->price or '' }}"
                                    required>
 
                         </div>

@@ -58,14 +58,14 @@ class DinnerformController extends Controller
      * Display the specified event.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
         $dinnerform = Dinnerform::fromPublicId($id);
 
         if ($dinnerform->isCurrent()) {
-            return Redirect::away($dinnerform->url);
+            return view('dinnerform.show', ['dinnerform' => $dinnerform]);
         } else {
             Session::flash("flash_message", "Sorry, you can't order anymore, because food is already on its way");
             return Redirect::route('homepage');
