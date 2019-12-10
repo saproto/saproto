@@ -3,18 +3,11 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
-use Proto\Http\Controllers\AuthController;
-use Proto\Http\Controllers\EmailListController;
-
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 
 use Proto\Mail\MembershipEnded;
 use Proto\Mail\MembershipStarted;
-use Proto\Mail\UserReactivated;
 use Proto\Models\Member;
-use Proto\Models\Tempadmin;
 use Proto\Models\User;
 use Proto\Models\HashMapItem;
 
@@ -179,6 +172,8 @@ class UserAdminController extends Controller
             'subkey' => $user->id,
             'value' => 1
         ]);
+
+        Artisan::call('proto:playsound', [ 'sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
