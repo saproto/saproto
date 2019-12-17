@@ -49,6 +49,7 @@
                         @endif
                     </td>
                     <td>{!! $orderline->generateHistoryStatus() !!}</td>
+                    <td class="text-muted">{{ $orderline->authenticated_by }}</td>
                     <td>{{ date('H:i:s', strtotime($orderline->created_at)) }}</td>
                 </tr>
 

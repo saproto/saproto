@@ -80,6 +80,7 @@ class OmNomController extends Controller
 
         switch ($request->input('credentialtype')) {
             case 'card':
+                $auth_method = sprintf('omnomcom_rfid_%s', $request->input('credentials'));
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (!$card) {
                     $result->message = "<span style='color: red;'>Unknown card.</span>";
@@ -95,6 +96,7 @@ class OmNomController extends Controller
 
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
+                $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
                 if (!$qrAuthRequest) {
                     $result->message = "<span style='color: red;'>Invalid authentication token.</span>";
                     return json_encode($result);
@@ -167,7 +169,7 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false), ($withBankCard == "true" ? true : false));
+                $product->buyForUser($user, $amount, $amount * $product->price, ($withCash == "true" ? true : false), ($withBankCard == "true" ? true : false), null, $auth_method);
                 if ($product->id == config('omnomcom.protube-skip')) {
                     file_get_contents(config('herbert.server') . "/skip?secret=" . config('herbert.secret'));
                 }

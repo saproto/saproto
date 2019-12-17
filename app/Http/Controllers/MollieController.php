@@ -43,7 +43,7 @@ class MollieController extends Controller
 
         $fee = config('omnomcom.mollie')['fixed_fee'] + $total * config('omnomcom.mollie')['variable_fee'];
 
-        $orderline = OrderLine::findOrFail(Product::findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(Auth::user(), 1, $fee));
+        $orderline = OrderLine::findOrFail(Product::findOrFail(config('omnomcom.mollie')['fee_id'])->buyForUser(Auth::user(), 1, $fee, null, null, null, 'mollie_transaction_fee'));
         $orderline->save();
 
         $orderlines[] = $orderline->id;
