@@ -50,7 +50,7 @@ class WithdrawalController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -110,7 +110,7 @@ class WithdrawalController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -121,7 +121,7 @@ class WithdrawalController extends Controller
     /**
      * Display the accounts associated with the withdrawal.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function showAccounts($id)
@@ -179,8 +179,8 @@ class WithdrawalController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -208,7 +208,7 @@ class WithdrawalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
@@ -284,7 +284,8 @@ class WithdrawalController extends Controller
         $total = $withdrawal->totalForUser($user);
 
         $failedOrderline = OrderLine::findOrFail($product->buyForUser($user, 1, $total, null, null,
-            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date)))));
+            sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
+            sprintf('failed_withdrawal_by_%u', Auth::user()->id)));
 
         FailedWithdrawal::create([
             'user_id' => $user->id,

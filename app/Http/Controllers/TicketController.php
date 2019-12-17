@@ -50,7 +50,7 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -78,7 +78,7 @@ class TicketController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -90,8 +90,8 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -123,7 +123,7 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -308,7 +308,7 @@ class TicketController extends Controller
 
             for ($i = 0; $i < $amount; $i++) {
 
-                $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price);
+                $oid = $ticket->product->buyForUser(Auth::user(), 1, $ticket->product->price, null, null, null, sprintf('ticket_bought_by_%u', Auth::user()->id));
 
                 if ($ticket->is_prepaid) {
                     $prepaid_tickets[] = $oid;
