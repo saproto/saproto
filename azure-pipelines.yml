@@ -22,12 +22,7 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
-- script: | 
-    composer install --no-interaction --prefer-dist --no-scripts
-    composer dump-autoload --optimize-autoloader
-    php artisan clear-compiled
-    php artisan optimize
-
+- script: composer install --no-interaction --prefer-dist
   displayName: 'Run composer install'
 
 - script: |
