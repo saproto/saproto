@@ -44,3 +44,18 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
   displayName: 'Archive build'
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: '$(Hosting server)'
+    username: '$(Hosting user)'
+    password: '$(Hosting password)'
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    filePatterns: '$(Build.BuildId).zip'
+    remoteDirectory: '/deployment/$(Build.BuildId)/'
+    clean: false
+    cleanContents: false
+    preservePaths: false
+    trustSSL: false
+  displayName: 'Upload to server'
