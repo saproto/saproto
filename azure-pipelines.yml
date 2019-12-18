@@ -39,9 +39,9 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.SourcesDirectory)'
-    includeRootFolder: true
+    includeRootFolder: false
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build.zip'
     replaceExistingArchive: true
   displayName: 'Archive build'
 
@@ -52,10 +52,10 @@ steps:
     username: '$(Hosting user)'
     password: '$(Hosting password)'
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
-    filePatterns: '$(Build.BuildId).zip'
-    remoteDirectory: '/deployment/$(Build.BuildId)/'
+    filePatterns: 'build.zip'
+    remoteDirectory: '/'
     clean: false
-    cleanContents: false
+    cleanContents: true
     preservePaths: false
     trustSSL: false
   displayName: 'Upload to server'
