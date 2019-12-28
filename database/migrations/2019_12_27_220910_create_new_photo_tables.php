@@ -13,6 +13,7 @@ class CreateNewPhotoTables extends Migration
      */
     public function up()
     {
+        Schema::rename('photo_likes', 'flickr_likes');
 
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
@@ -77,8 +78,9 @@ class CreateNewPhotoTables extends Migration
         });
 
         Schema::dropIfExists('photo_likes');
-        Schema::rename('flickr_likes', 'photo_likes');
         Schema::dropIfExists('photo_albums');
         Schema::dropIfExists('photos');
+
+        Schema::rename('flickr_likes', 'photo_likes');
     }
 }
