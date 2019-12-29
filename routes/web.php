@@ -865,6 +865,4 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
-    Route::post('saml2/acs', ['uses' => '\Aacotroneo\Saml2\Http\Controllers\Saml2Controller@acs'])->defaults('idpName', 'surfconext');
-
 });
