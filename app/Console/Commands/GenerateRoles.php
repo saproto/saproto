@@ -185,9 +185,9 @@ class GenerateRoles extends Command
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id));
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id));
         $this->info('Synced sysadmin role with permissions.');
-        $roles['admin']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id));
+        $roles['admin']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id));
         $this->info('Synced admin role with permissions.');
         $roles['protube']->perms()->sync(array($permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
