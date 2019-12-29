@@ -103,6 +103,18 @@ class GenerateRoles extends Command
             $permissions['header-image']->save();
             $this->info('Added header-image permission.');
         }
+        $permissions['protography'] = Permission::where('name', '=', 'protography')->first();
+        if ($permissions['protography'] == null) {
+            $permissions['protography'] = new Permission(array('name' => 'protography', 'display_name' => 'Photo Acess', 'description' => 'Allows managing photos and albums.'));
+            $permissions['protography']->save();
+            $this->info('Added protography permission.');
+        }
+        $permissions['publishalbums'] = Permission::where('name', '=', 'publishalbums')->first();
+        if ($permissions['publishalbums'] == null) {
+            $permissions['publishalbums'] = new Permission(array('name' => 'publishalbums', 'display_name' => 'Publish Albums', 'description' => 'Allows publishing photo albums.'));
+            $permissions['publishalbums']->save();
+            $this->info('Added publishalbums permission.');
+        }
 
         $roles['sysadmin'] = Role::where('name', '=', 'sysadmin')->first();
         if ($roles['sysadmin'] == null) {
@@ -164,6 +176,12 @@ class GenerateRoles extends Command
             $roles['protography-admin']->save();
             $this->info('Added protography-admin role.');
         }
+        $roles['protography'] = Role::where('name', '=', 'protography')->first();
+        if ($roles['protography'] == null) {
+            $roles['protography'] = new Role(array('name' => 'protography', 'display_name' => 'Protography', 'description' => 'Protography member'));
+            $roles['protography']->save();
+            $this->info('Added protography role.');
+        }
 
         $this->info('Now all roles and permissions exist.');
 
@@ -185,8 +203,10 @@ class GenerateRoles extends Command
         $this->info('Synced drafters role with permissions.');
         $roles['alfred']->perms()->sync(array($permissions['alfred']->id, $permissions['omnomcom']->id));
         $this->info('Synced alfred role with permissions.');
-        $roles['protography-admin']->perms()->sync(array($permissions['header-image']->id));
+        $roles['protography-admin']->perms()->sync(array($permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id));
         $this->info('Synced protography-admin role with permissions.');
+        $roles['protography']->perms()->sync(array($permissions['protography']->id));
+        $this->info('Synced protography role with permissions.');
 
         $this->info('Fixed required permissions and roles.');
 

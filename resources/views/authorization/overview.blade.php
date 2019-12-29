@@ -16,35 +16,37 @@
                     @yield('page-title')
                 </div>
 
-                <table class="table table-hover table-sm">
+                <div class="card-body" style="overflow-x: scroll; overflow-y: hidden;">
+                    <table class="table table-hover table-sm">
 
-                    <?php $width = 100 / (count($permissions) + 1) ?>
+                        <?php $width = 100 / (count($permissions) + 1) ?>
 
-                    <thead>
-                    <tr class="bg-dark text-white">
-                        <td>Role</td>
-                        <td colspan="{{ count($permissions) }}">Permissions</td>
-                    </tr>
-                    </thead>
+                        <thead>
+                        <tr class="bg-dark text-white">
+                            <td>Role</td>
+                            <td colspan="{{ count($permissions) }}">Permissions</td>
+                        </tr>
+                        </thead>
 
-                    <tbody>
-                    @foreach($roles as $role)
-                        <tr>
-                            <th width="{{ $width }}%">
-                                {{ $role->name }}
-                            </th>
-                            @foreach($permissions as $permission)
-                                <td width="{{ $width }}%">
+                        <tbody>
+                        @foreach($roles as $role)
+                            <tr>
+                                <th width="{{ $width }}%">
+                                    {{ $role->name }}
+                                </th>
+                                @foreach($permissions as $permission)
+                                    <td width="{{ $width }}%">
                         <span style="opacity: {{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '1' : '0.2' }};">
                             {{ $permission->name }}
                         </span>
-                                </td>
-                            @endforeach
-                        </tr>
-                    @endforeach
-                    </tbody>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
 
             </div>
 

@@ -126,7 +126,7 @@
                 if (location.hash === "#!/stealingyourhistory") {
                     history.replaceState(null, document.title, location.pathname);
                     setTimeout(function () {
-                        location.replace("{{ route('photo::album::list', ['id' => $photo->album_id]) }}");
+                        location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."#photo_".$photo->id }}");
                     }, 0);
                 }
             }, false);

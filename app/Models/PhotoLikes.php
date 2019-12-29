@@ -8,9 +8,9 @@ class PhotoLikes extends Model {
     protected $table = 'photo_likes';
     protected $guarded = ['id'];
 
-    public function flickrItem()
+    public function photo()
     {
-        return $this->belongsTo('Proto\Models\FlickrItem', 'photo_id');
+        return $this->belongsTo('Proto\Models\Photo', 'photo_id');
     }
 
 }
