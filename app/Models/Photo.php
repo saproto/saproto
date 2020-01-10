@@ -7,6 +7,9 @@ use DB;
 
 class Photo extends Model
 {
+
+    protected $appends = ['url'];
+
     public function album() {
         return $this->belongsTo('Proto\Models\PhotoAlbum', 'album_id');
     }
@@ -59,6 +62,10 @@ class Photo extends Model
 
     public function url() {
         return $this->file()->first()->generatePath();
+    }
+
+    public function getUrlAttribute() {
+        return $this->url();
     }
 
     public static function boot() {
