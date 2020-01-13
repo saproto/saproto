@@ -283,7 +283,7 @@ class EmailController extends Controller
                 $email->to_event = true;
 
                 $email->lists()->sync([]);
-                if (gettype($events) && count($events) > 0) {
+                if (isset($events) && count($events) > 0) {
                     $email->events()->sync($events);
                 }
                 break;
