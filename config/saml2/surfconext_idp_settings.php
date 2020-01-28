@@ -38,7 +38,7 @@ return $settings = array(
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-POST binding.
             // Leave blank to use the '{idpName}_acs' route, e.g. 'test_acs'
-            'url' => env('APP_URL') . 'saml2/surfconext/acs',
+            'url' => env('APP_URL') . '/saml2/surfconext/acs',
         ),
         // Specifies info about where and how the <Logout Response> message MUST be
         // returned to the requester, in this case our SP.
@@ -47,7 +47,7 @@ return $settings = array(
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-Redirect binding.
             // Leave blank to use the '{idpName}_sls' route, e.g. 'test_sls'
-            'url' => env('APP_URL') . 'saml2/surfconext/logout',
+            'url' => env('APP_URL') . '/saml2/surfconext/logout',
         ),
     ),
 
