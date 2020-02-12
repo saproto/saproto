@@ -18,8 +18,8 @@ class CreateDinnerformsTable extends Migration
             $table->string('restaurant');
             $table->string('description');
             $table->string('url');
-            $table->integer("start");
-            $table->integer('end');
+            $table->dateTime("start");
+            $table->dateTime('end');
             $table->timestamps();
         });
     }

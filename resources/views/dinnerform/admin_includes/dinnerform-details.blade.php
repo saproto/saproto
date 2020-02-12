@@ -59,7 +59,7 @@
                                 @include('website.layouts.macros.datetimepicker', [
                                     'name' => 'start',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->format('Z') : null
                                 ])
                             </div>
 
@@ -72,7 +72,7 @@
                                 @include('website.layouts.macros.datetimepicker',[
                                     'name' => 'end',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->format('Z') : null
                                 ])
                             </div>
 

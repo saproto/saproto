@@ -8,7 +8,6 @@
            class="btn btn-danger pull-left">Delete</a>
     @endif
 
-    <a href="{{ route("homepage") }}"
-       class="btn btn-default pull-right">Back to homepage</a>
+    <a href="{{ route("dinnerform::add") }}"></a>
 
 </div>

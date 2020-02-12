@@ -5,8 +5,8 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\URL;
-use Proto\Models\Account;
 use Proto\Models\Dinnerform;
+use Carbon\Carbon;
 
 use Session;
 use Redirect;
@@ -50,12 +50,12 @@ class DinnerformController extends Controller
         $dinnerform->save();
 
         Session::flash("flash_message", "Your dinner form at '" . $dinnerform->restaurant . "' has been added.");
-        return Redirect::route('homepage');
+        return Redirect::route('dinnerform::add');
 
     }
 
     /**
-     * Display the specified event.
+     * Display the specified resource.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -67,7 +67,7 @@ class DinnerformController extends Controller
         if ($dinnerform->isCurrent()) {
             return Redirect::away($dinnerform->url);
         } else {
-            Session::flash("flash_message", "Sorry, you can't order anymore, because food is already on its way");
+            Session::flash("flash_message", "Sorry, you can't order anymore, food is already on its way");
             return Redirect::route('homepage');
         }
     }
@@ -102,7 +102,7 @@ class DinnerformController extends Controller
 
         $dinnerform = Dinnerform::findOrFail($id);
 
-        $changed_important_details = $dinnerform->start != strtotime($request->start) || $dinnerform->end != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant ? true : false;
+        $changed_important_details = $dinnerform->start->format('c') != $request->start || $dinnerform->end->format('c') != $request->end || $dinnerform->restaurant != $request->restaurant ? true : false;
 
         $dinnerform->restaurant = $request->restaurant;
         $dinnerform->start = strtotime($request->start);
@@ -122,7 +122,7 @@ class DinnerformController extends Controller
             Session::flash("flash_message", "Your dinner form for '" . $dinnerform->restaurant . "' has been saved.");
         }
 
-        return Redirect::route('homepage');
+        return Redirect::route('dinnerform::add');
 
     }
 
@@ -145,6 +145,20 @@ class DinnerformController extends Controller
             $dinnerform->delete();
             return Redirect::route('dinnerform::add');
         }
+    }
+
+    /**
+     * Close the specified resource by changing the end time to the current time.
+     *
+     * @param $id
+     * @return \Illuminate\Http\Response
+     */
+    public function close($id)
+    {
+        $dinnerform = Dinnerform::findOrFail($id);
+        $dinnerform->end = Carbon::now();
+        $dinnerform->save();
+        return Redirect::route('dinnerform::add');
     }
 
 }

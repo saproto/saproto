@@ -37,7 +37,7 @@ class HomeController extends Controller
         $companies = Company::where('in_logo_bar', true)->orderBy('sort', 'asc')->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
-        $dinnerform = Dinnerform::where('start', '<=', Carbon::now()->timestamp)->where('end', '>', Carbon::now()->subHours(1)->timestamp)->first();
+        $dinnerform = Dinnerform::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now())->first();
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 

@@ -26,7 +26,7 @@
                     <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw mr-2"></i> Dinner Form</div>
                     <div class="card-body">
 
-                        @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform, 'canEdit' => false])
+                        @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform])
 
                     </div>
 

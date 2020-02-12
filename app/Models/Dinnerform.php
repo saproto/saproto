@@ -2,7 +2,7 @@
 
 namespace Proto\Models;
 
-use DateTime;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\URL;
@@ -12,7 +12,10 @@ use Auth;
 
 class Dinnerform extends Model
 {
+
     protected $hidden = ['created_at', 'updated_at'];
+
+    protected $dates = ['start', 'end'];
 
     /**
      * The database table used by the model.
@@ -32,36 +35,19 @@ class Dinnerform extends Model
         return Dinnerform::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
-    public function generateTimespanText($long_format, $short_format, $combiner)
+    public function generateTimespanText()
     {
-        return date($long_format, $this->start) . " " . $combiner . " " . (
-            (($this->end - $this->start) < 3600 * 24)
-                ?
-                date($short_format, $this->end)
-                :
-                date($long_format, $this->end)
-            );
+        return $this->start->format('D H:i') . " - " . Carbon::parse($this->end)->format('D H:i');
     }
 
     protected $guarded = ['id'];
 
-    public function hasExpired()
-    {
-        return date('U') - $this->end > 3600;
-    }
-
     public function isCurrent() {
-        return $this->start < date('U') && $this->end > date('U');
+        return $this->start->isPast() && $this->end->isFuture();
     }
 
-    public function getFormattedDateAttribute()
-    {
-        return (object)[
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start)
-        ];
+    public function hasExpired() {
+        return $this->end->addHours(1)->isPast();
     }
 
 }

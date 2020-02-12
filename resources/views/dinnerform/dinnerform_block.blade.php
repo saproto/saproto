@@ -10,7 +10,7 @@
             @else
                 <div class="btn btn-info btn-block mb-3 ">
                     <i class="fas fa-history fa-fw fa-pulse mr-2" aria-hidden="true"></i>
-                    <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is underway!">
+                    <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end->timestamp }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is underway!">
                         Counting down...
                     </span>
                 </div>
@@ -36,14 +36,5 @@
             </span>
         </div>
     </a>
-    @if($canEdit)
-        <div class="card-footer bg-light border-bottom">
-            <a href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}"
-               class="btn btn-danger pull-left">Close</a>
-
-            <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}"
-               class="btn btn-default">Edit dinner form</a>
-        </div>
-    @endif
 
 </div>
