@@ -4,11 +4,6 @@ namespace Proto\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\URL;
-use Vinkla\Hashids\Facades\Hashids;
-
-use Auth;
 
 class Dinnerform extends Model
 {
@@ -17,6 +12,8 @@ class Dinnerform extends Model
 
     protected $dates = ['start', 'end'];
 
+    protected $guarded = ['id'];
+
     /**
      * The database table used by the model.
      *
@@ -24,28 +21,30 @@ class Dinnerform extends Model
      */
     protected $table = 'dinnerforms';
 
-    public function getPublicId()
-    {
-        return Hashids::connection('dinnerform')->encode($this->id);
-    }
-
-    public static function fromPublicId($public_id)
-    {
-        $id = Hashids::connection('dinnerform')->decode($public_id);
-        return Dinnerform::findOrFail(count($id) > 0 ? $id[0] : 0);
-    }
-
+    /**
+     * Generate a timespan string with format 'D H:i'.
+     *
+     * @return string
+     */
     public function generateTimespanText()
     {
         return $this->start->format('D H:i') . " - " . Carbon::parse($this->end)->format('D H:i');
     }
 
-    protected $guarded = ['id'];
-
+    /**
+     * Check if a dinnerform is currently open.
+     *
+     * @return bool
+     */
     public function isCurrent() {
         return $this->start->isPast() && $this->end->isFuture();
     }
 
+    /**
+     * Check if dinnerform is more than 1 hour past end time.
+     *
+     * @return bool
+     */
     public function hasExpired() {
         return $this->end->addHours(1)->isPast();
     }

@@ -14,6 +14,8 @@
             <td>Open</td>
             <td>Start</td>
             <td>End</td>
+            <td>Controls</td>
+            <td></td>
         </tr>
 
         </thead>
@@ -55,6 +57,7 @@
         @else
             <tr>
                 <td>There are no dinnerforms available.</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

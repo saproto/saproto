@@ -4,12 +4,12 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Proto\Models\Dinnerform;
 use Carbon\Carbon;
 
 use Session;
-use Redirect;
 use Auth;
 use Response;
 
@@ -22,7 +22,7 @@ class DinnerformController extends Controller
      */
     public function create()
     {
-        $dinnerformList = Dinnerform::all();
+        $dinnerformList = Dinnerform::all()->sortByDesc('end');
 
         return view('dinnerform.admin', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
     }
@@ -62,7 +62,7 @@ class DinnerformController extends Controller
      */
     public function show($id)
     {
-        $dinnerform = Dinnerform::fromPublicId($id);
+        $dinnerform = Dinnerform::findOrFail($id);
 
         if ($dinnerform->isCurrent()) {
             return Redirect::away($dinnerform->url);
@@ -81,7 +81,7 @@ class DinnerformController extends Controller
     public function edit($id)
     {
         $dinnerformCurrent = Dinnerform::findOrFail($id);
-        $dinnerformList = Dinnerform::all();
+        $dinnerformList = Dinnerform::all()->sortByDesc('end');
 
         if($dinnerformCurrent != null) {
             return view('dinnerform.admin', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
@@ -102,7 +102,7 @@ class DinnerformController extends Controller
 
         $dinnerform = Dinnerform::findOrFail($id);
 
-        $changed_important_details = $dinnerform->start->format('c') != $request->start || $dinnerform->end->format('c') != $request->end || $dinnerform->restaurant != $request->restaurant ? true : false;
+        $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant ? true : false;
 
         $dinnerform->restaurant = $request->restaurant;
         $dinnerform->start = strtotime($request->start);
