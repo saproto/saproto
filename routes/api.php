@@ -17,6 +17,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('profile_picture', ['uses' => 'UserApiController@getUserProfilePicture']);
             Route::get('address', ['uses' => 'UserApiController@getAddress']);
             Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
+            Route::get('societies', ['uses' => 'UserApiController@getSocieties']);
             Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
             Route::get('qr_auth_approve/{code}', ['uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['uses' => 'QrAuthController@apiInfo']);

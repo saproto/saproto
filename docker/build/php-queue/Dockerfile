@@ -19,7 +19,9 @@ RUN apt-get update && apt-get install -y \
     curl \
     libgmp-dev \
     libmcrypt-dev \
-    libldap2-dev
+    libldap2-dev \
+    wkhtmltopdf \
+    zlib1g-dev libicu-dev g++
 
 
 # Clear cache
@@ -31,6 +33,8 @@ RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --wi
 RUN docker-php-ext-install gd
 RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
 RUN docker-php-ext-install ldap
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
 RUN pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt
 
 # Install composer

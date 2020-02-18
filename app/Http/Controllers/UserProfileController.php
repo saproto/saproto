@@ -34,9 +34,17 @@ class UserProfileController extends Controller
             ->with('committee')
             ->where('user_id', $user->id)
             ->whereNotIn('id', $user->committees->pluck('pivot.id'))
-            ->get();
+            ->get()
+            ->where('committee.is_society', false);
 
-        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees]);
+        $pastSocieties = CommitteeMembership::withTrashed()
+            ->with('committee')
+            ->where('user_id', $user->id)
+            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
+            ->get()
+            ->where('committee.is_society', true);
+
+        return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties]);
     }
 
 }

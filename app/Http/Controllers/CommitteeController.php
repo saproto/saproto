@@ -22,12 +22,12 @@ use Mail;
 class CommitteeController extends Controller
 {
 
-    public function overview()
+    public function overview($showSociety = false)
     {
         if (Auth::check() && Auth::user()->can('board')) {
-            return view('committee.list', ['data' => Committee::orderby('name', 'asc')->get()]);
+            return view('committee.list', ['data' => Committee::where('is_society', $showSociety ? 1 : 0)->orderby('name', 'asc')->get()]);
         } else {
-            $publicCommittees = Committee::where('public', 1)->get();
+            $publicCommittees = Committee::where('public', 1)->where('is_society', $showSociety ? 1 : 0)->get();
             $userCommittees = Auth::check() ? Auth::user()->committees : [];
 
             $mergedCommittees = $publicCommittees->merge($userCommittees)->sortBy('name');

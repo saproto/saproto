@@ -213,6 +213,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
+        Route::get('society/list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
 
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addForm']);
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
