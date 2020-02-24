@@ -283,7 +283,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
-     * @return mixed Returns all committees a user is currently a member of.
+     * @return mixed Returns all societies a user is currently a member of.
      */
     public function societies()
     {

@@ -25,7 +25,7 @@ class CreateSocietiesColumnForCommittees extends Migration
      */
     public function down()
     {
-        Schema::table('orderlines', function (Blueprint $table) {
+        Schema::table('committees', function (Blueprint $table) {
             $table->dropColumn('is_society');
         });
     }
