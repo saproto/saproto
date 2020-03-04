@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
@@ -18,19 +19,19 @@ class Photo extends Model
     {
         if ($next) {
             $func = 'MIN';
+            $ord = 'ASC';
             $comp = '>';
         } else {
             $func = 'MAX';
+            $ord = 'DESC';
             $comp = '<';
         }
 
-        $result = DB::select(DB::raw(sprintf("SELECT id FROM photos WHERE album_id = %s AND date_taken = (SELECT %s(date_taken) FROM flickr_items WHERE date_taken %s %s)", $this->album_id, $func, $comp, $this->date_taken)));
-        if (count($result) > 0) {
-            $id = $result[0]->id;
-            return Photo::where('id', $id)->first();
-        } else {
-            return null;
+        $result = Photo::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken)->orderBy('date_taken', $ord)->orderBy('id', $ord);
+        if ($result->count() > 1) {
+            return $result->where('id', $comp, $this->id)->first();
         }
+        return $result->first();
     }
 
     public function getNextPhoto()
