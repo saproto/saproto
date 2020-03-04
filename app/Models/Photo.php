@@ -2,7 +2,6 @@
 
 namespace Proto\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
@@ -18,11 +17,9 @@ class Photo extends Model
     private function getAdjacentPhoto($next = true)
     {
         if ($next) {
-            $func = 'MIN';
             $ord = 'ASC';
             $comp = '>';
         } else {
-            $func = 'MAX';
             $ord = 'DESC';
             $comp = '<';
         }
