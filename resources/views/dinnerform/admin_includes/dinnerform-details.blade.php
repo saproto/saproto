@@ -1,5 +1,5 @@
 <form method="post"
-      action="{{ ($dinnerformCurrent == null ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
+      action="{{ ( !isset($dinnerformCurrent) ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
       enctype="multipart/form-data">
 
     {!! csrf_field() !!}
@@ -24,7 +24,8 @@
                             <input type="text" class="form-control" id="restaurant" name="restaurant"
                                    placeholder="Elat Roma"
                                    value="{{ $dinnerformCurrent->restaurant or '' }}"
-                                   required>
+                                   required
+                            />
 
                         </div>
                     </div>

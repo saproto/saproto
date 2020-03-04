@@ -83,11 +83,7 @@ class DinnerformController extends Controller
         $dinnerformCurrent = Dinnerform::findOrFail($id);
         $dinnerformList = Dinnerform::all()->sortByDesc('end');
 
-        if($dinnerformCurrent != null) {
-            return view('dinnerform.admin', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
-        } else {
-            return view('dinnerform.admin', ['dinnerformCurrent' => null, 'dinnerformList' => $dinnerformList]);
-        }
+        return view('dinnerform.admin', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
     }
 
     /**
@@ -102,7 +98,7 @@ class DinnerformController extends Controller
 
         $dinnerform = Dinnerform::findOrFail($id);
 
-        $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant ? true : false;
+        $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant;
 
         $dinnerform->restaurant = $request->restaurant;
         $dinnerform->start = strtotime($request->start);

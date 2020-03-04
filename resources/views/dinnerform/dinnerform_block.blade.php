@@ -1,20 +1,25 @@
 <div class="card mb-3 leftborder leftborder-info">
-    <a style="text-decoration: none !important;"
-       href="{{ route("dinnerform::show", ['id' => $dinnerform->id]) }}">
+
         <div class="card-body" style="text-align: left;">
-            @if($dinnerform->hasExpired())
-                <div class="btn btn-danger btn-block mb-3 ">
-                    <i class="fas fa-lock fa-fw mr-2" aria-hidden="true"></i>
-                    <span>This dinner form has ended</span>
-                </div>
-            @else
-                <div class="btn btn-info btn-block mb-3 ">
-                    <i class="fas fa-history fa-fw fa-pulse mr-2" aria-hidden="true"></i>
-                    <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end->timestamp }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is on its way!">
-                        Counting down...
-                    </span>
-                </div>
-            @endif
+            <a class="stretched-link"
+               style="text-decoration: none;"
+               href="{{ route("dinnerform::show", ['id' => $dinnerform->id]) }}">
+
+                @if($dinnerform->hasExpired())
+                    <div class="btn btn-danger btn-block mb-3 ">
+                        <i class="fas fa-lock fa-fw mr-2" aria-hidden="true"></i>
+                        <span>This dinner form has ended</span>
+                    </div>
+                @else
+                    <div class="btn btn-info btn-block mb-3 ">
+                        <i class="fas fa-history fa-fw fa-pulse mr-2" aria-hidden="true"></i>
+                        <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end->timestamp }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is on its way!">
+                            Counting down...
+                        </span>
+                    </div>
+                @endif
+
+            </a>
 
             <span>
                 <i class="fas fa-utensils fa-fw" aria-hidden="true" style="color: gold"></i>
@@ -35,6 +40,5 @@
                 {{ $dinnerform->description }}
             </span>
         </div>
-    </a>
 
 </div>
