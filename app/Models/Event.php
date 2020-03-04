@@ -79,7 +79,7 @@ class Event extends Model
      */
     public function albums()
     {
-        return $this->hasMany('Proto\Models\FlickrAlbum', 'event_id');
+        return $this->hasMany('Proto\Models\PhotoAlbum', 'event_id');
     }
 
     /**
