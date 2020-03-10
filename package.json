@@ -38,7 +38,8 @@
     "simplemde": "~1.11.2",
     "socket.io-client": "~2.3.0",
     "tempusdominus-bootstrap-4": "~5.1.2",
-    "tempusdominus-core": "~5.0.3"
+    "tempusdominus-core": "~5.0.3",
+    "util.promisify": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "~10.0.3",
