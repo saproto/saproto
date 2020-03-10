@@ -1,5 +1,8 @@
 const sass = require('node-sass');
 
+const util = require('util');
+require('util.promisify').shim();
+
 module.exports = function (grunt) {
 	/*	Configuration	*/
 	var json = {
