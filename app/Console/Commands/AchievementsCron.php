@@ -238,11 +238,10 @@ class AchievementsCron extends Command
                 $memberships = CommitteeMembership::withTrashed()
                     ->where('user_id', $user->id)
                     ->where('committee_id', $committee->id)
-                    ->with('committee')
                     ->get();
                 $days = 0;
                 foreach ($memberships as $membership) {
-                    if ($membership->deleted_at != null && !$membership->committee->is_society) {
+                    if ($membership->deleted_at != null && !$committee->is_society) {
                         $diff = $membership->deleted_at->diff($membership->created_at);
                     } else {
                         $diff = Carbon::now()->diff($membership->created_at);
