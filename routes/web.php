@@ -108,7 +108,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('studied_itech/{id}', ['as' => 'toggle_studied_itech', 'uses' => 'UserAdminController@toggleStudiedITech']);
-            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
+            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:board'], 'uses' => 'UserAdminController@toggleNda']);
             Route::get('unblock_omnomcom/{id}', ['as' => 'unblock_omnomcom', 'uses' => 'UserAdminController@unblockOmnomcom']);
         });
 
