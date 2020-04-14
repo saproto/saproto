@@ -37,7 +37,7 @@ class Member extends Model
         }
 
         $orderline = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->where('user_id', '=', $this->id)->first();
+            ->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->where('user_id', '=', $this->user->id)->first();
 
         return $orderline;
     }
@@ -49,10 +49,14 @@ class Member extends Model
         if ($membershipOrderline) {
             switch ($this->getMembershipOrderline()->product->id) {
                 case config('omnomcom.fee')['regular']:
-                    return 'regular';
+                    return 'primary';
                     break;
                 case config('omnomcom.fee')['reduced']:
                     return 'secondary';
+                    break;
+                case config('omnomcom.fee')['remitted']:
+                    return 'non-paying';
+                    break;
                 default:
                     return 'unknown';
             }
