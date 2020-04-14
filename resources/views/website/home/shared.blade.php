@@ -1,5 +1,15 @@
 @extends('website.layouts.redesign.generic')
 
+@section('stylesheet')
+    @parent
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+@endsection
+
+@section('head')
+    @parent
+    <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+@endsection
+
 @section('page-title')
     Homepage
 @endsection
@@ -42,41 +52,20 @@
             @if(count($companies) > 0)
 
                 <div class="card mb-3">
-                    <div class="card-body pb-0">
-                        <div class="row justify-content-center align-items-center">
+                    <div class="card-body pb-0 position-relative">
+                        <div class="row mb-3 swiper-container" style="height:80px">
+                            <div class="swiper-wrapper">
+                                @foreach($companies as $i => $company)
 
-                            @php
-                                switch(count($companies)) {
-                                    case 1:
-                                        $col = 12;
-                                        break;
-                                    case 2:
-                                        $col = 6;
-                                        break;
-                                    case 3:
-                                        $col = 4;
-                                        break;
-                                    case 4:
-                                        $col = 3;
-                                        break;
-                                    case 5:
-                                    case 6:
-                                        $col = 2;
-                                        break;
-                                    default:
-                                        $col = 3;
-                                }
-                            @endphp
-                            @foreach($companies as $i => $company)
+                                    <div class="swiper-slide justify-content-center d-flex">
+                                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                            <img src="{{ $company->image->generateImagePath(null, 50) }}">
+                                        </a>
+                                    </div>
 
-                                <div class="col-{{ $col }} mb-3 text-center align-items-center">
-                                    <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                        <img src="{{ $company->image->generateImagePath(null, 50) }}">
-                                    </a>
-                                </div>
-
-                            @endforeach
-
+                                @endforeach
+                            </div>
+                            <div class="swiper-scrollbar"></div>
                         </div>
                     </div>
                 </div>
@@ -117,5 +106,30 @@
         </div>
 
     </div>
+
+    <script>
+        let mySwiper = new Swiper ('.swiper-container', {
+            loop: true,
+            slidesPerView: 2,
+            spaceBetween: 10,
+
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                draggable: true,
+            },
+
+            breakpoints: {
+                1200: {
+                    slidesPerView: 5,
+                    spaceBetween: 50,
+                },
+            },
+        })
+    </script>
 
 @endsection
