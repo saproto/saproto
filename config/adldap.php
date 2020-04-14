@@ -28,21 +28,16 @@ return [
         'follow_referrals' => false,
         'use_ssl' => true,
         'use_tls' => false,
+        'use_proxy' => false,
     ],
 
     'utwente' => [
         'account_prefix' => '',
         'account_suffix' => env('LDAP_UTWENTE_SUFFIX'),
         'domain_controllers' => [env('LDAP_UTWENTE_SERVER')],
-        'port' => 636,
-        'timeout' => 5,
         'base_dn' => env('LDAP_UTWENTE_BASE_DN'),
         'admin_account_suffix' => env('LDAP_UTWENTE_SUFFIX'),
-        'admin_username' => env('LDAP_UTWENTE_ADMIN_USER'),
-        'admin_password' => env('LDAP_UTWENTE_ADMIN_PASS'),
-        'follow_referrals' => false,
-        'use_ssl' => true,
-        'use_tls' => false,
+        'use_proxy' => true,
     ],
 
 ];
