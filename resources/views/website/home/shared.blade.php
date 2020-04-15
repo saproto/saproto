@@ -53,7 +53,7 @@
 
                 <div class="card mb-3">
                     <div class="card-body pb-0 position-relative">
-                        <div class="row mb-3 swiper-container" style="height:80px">
+                        <div class="row mb-1 swiper-container" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
 
@@ -109,8 +109,11 @@
 
     <script>
         let mySwiper = new Swiper ('.swiper-container', {
-            loop: true,
+            @if( count($companies) > 1 )
             slidesPerView: 2,
+            @else
+            slidePerView: 1,
+            @endif
             spaceBetween: 10,
 
             autoplay: {
@@ -122,13 +125,23 @@
                 el: '.swiper-scrollbar',
                 draggable: true,
             },
-
+            @if( count($companies) >= 5 )
             breakpoints: {
                 1200: {
                     slidesPerView: 5,
                     spaceBetween: 50,
+                    watchOverflow: true,
                 },
             },
+            @else
+            breakpoints: {
+                1200: {
+                    slidesPerView: "<?= count($companies) ?>",
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                },
+            },
+            @endif
         })
     </script>
 
