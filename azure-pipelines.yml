@@ -60,7 +60,7 @@ steps:
       filePatterns: 'checksum.txt'
       remoteDirectory: '/'
       clean: false
-      cleanContents: trueWa
+      cleanContents: true
       preservePaths: false
       trustSSL: false
     displayName: 'Upload checksum to server'
@@ -75,7 +75,7 @@ steps:
       filePatterns: 'build.zip'
       remoteDirectory: '/'
       clean: false
-      cleanContents: true
+      cleanContents: false
       preservePaths: false
       trustSSL: false
     displayName: 'Upload build artifacts to server'
