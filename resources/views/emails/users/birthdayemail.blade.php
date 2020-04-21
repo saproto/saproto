@@ -7,10 +7,10 @@
     </p>
 
     <p>
-        I am writing you to congratulate you with your birthday! If you are
-        able to drop by the Protopolis today I would love to congratulate you in person and offer you a free and
-        complimentary birthday cookie. Is there a Proto drink on your birthday? You can also choose to get
-        a free birthday pull during the drink. Have a great day!
+        We are writing you to congratulate you with your birthday! Because of the coronavirus, we cannot give you the
+        customary birthday cookie in Protopolis or the birthday pull at a Proto Drink. However, if we are able to do a
+        Proto Drink before the summer holidays, we would like to invite you to stop by and collect your free birthday
+        drink (one beer or one soda). 😄 We hope you have a great day!
     </p>
 
     <img src="{{ asset('images/emails/birthday.jpg') }}" style="width: 100%;">
