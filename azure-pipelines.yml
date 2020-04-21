@@ -47,6 +47,24 @@ steps:
     replaceExistingArchive: true
   displayName: 'Archive build'
 
+- script: 'openssl md5 update.sh | cut -d" " -f2 > $(Build.ArtifactStagingDirectory)/checksum.txt'
+  displayName: 'Calculating checksum'
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: '$(Hosting server)'
+    username: '$(Hosting user)'
+    password: '$(Hosting password)'
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    filePatterns: 'checksum.txt'
+    remoteDirectory: '/'
+    clean: false
+    cleanContents: trueWa
+    preservePaths: false
+    trustSSL: false
+  displayName: 'Upload checksum to server'
+
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
@@ -60,4 +78,4 @@ steps:
     cleanContents: true
     preservePaths: false
     trustSSL: false
-  displayName: 'Upload to server'
+  displayName: 'Upload build artifacts to server'
