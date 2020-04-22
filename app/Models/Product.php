@@ -44,7 +44,7 @@ class Product extends Model
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = null)
+    public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
     {
 
         $this->stock -= $amount;
