@@ -1,5 +1,46 @@
 @extends('website.layouts.redesign.generic')
 
+@section('javascript')
+    @parent
+    <script>
+        let mySwiper = new Swiper ('.swiper-container', {
+            @if( count($companies) > 1 )
+            slidesPerView: 2,
+            @else
+            slidePerView: 1,
+            @endif
+            spaceBetween: 10,
+
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                draggable: true,
+            },
+            @if( count($companies) >= 5 )
+            breakpoints: {
+                1200: {
+                    slidesPerView: 5,
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                },
+            },
+            @else
+            breakpoints: {
+                1200: {
+                    slidesPerView: "<?= count($companies) ?>",
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                },
+            },
+            @endif
+        })
+    </script>
+@endsection
+
 @section('page-title')
     Homepage
 @endsection
@@ -42,41 +83,20 @@
             @if(count($companies) > 0)
 
                 <div class="card mb-3">
-                    <div class="card-body pb-0">
-                        <div class="row justify-content-center align-items-center">
+                    <div class="card-body pb-0 position-relative">
+                        <div class="row mb-1 swiper-container" style="height:70px">
+                            <div class="swiper-wrapper">
+                                @foreach($companies as $i => $company)
 
-                            @php
-                                switch(count($companies)) {
-                                    case 1:
-                                        $col = 12;
-                                        break;
-                                    case 2:
-                                        $col = 6;
-                                        break;
-                                    case 3:
-                                        $col = 4;
-                                        break;
-                                    case 4:
-                                        $col = 3;
-                                        break;
-                                    case 5:
-                                    case 6:
-                                        $col = 2;
-                                        break;
-                                    default:
-                                        $col = 3;
-                                }
-                            @endphp
-                            @foreach($companies as $i => $company)
+                                    <div class="swiper-slide justify-content-center d-flex">
+                                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                            <img src="{{ $company->image->generateImagePath(null, 50) }}">
+                                        </a>
+                                    </div>
 
-                                <div class="col-{{ $col }} mb-3 text-center align-items-center">
-                                    <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                        <img src="{{ $company->image->generateImagePath(null, 50) }}">
-                                    </a>
-                                </div>
-
-                            @endforeach
-
+                                @endforeach
+                            </div>
+                            <div class="swiper-scrollbar"></div>
                         </div>
                     </div>
                 </div>
