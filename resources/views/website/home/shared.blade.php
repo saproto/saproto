@@ -1,13 +1,44 @@
 @extends('website.layouts.redesign.generic')
 
-@section('stylesheet')
+@section('javascript')
     @parent
-    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-@endsection
+    <script>
+        let mySwiper = new Swiper ('.swiper-container', {
+            @if( count($companies) > 1 )
+            slidesPerView: 2,
+            @else
+            slidePerView: 1,
+            @endif
+            spaceBetween: 10,
 
-@section('head')
-    @parent
-    <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+
+            scrollbar: {
+                el: '.swiper-scrollbar',
+                draggable: true,
+            },
+            @if( count($companies) >= 5 )
+            breakpoints: {
+                1200: {
+                    slidesPerView: 5,
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                },
+            },
+            @else
+            breakpoints: {
+                1200: {
+                    slidesPerView: "<?= count($companies) ?>",
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                },
+            },
+            @endif
+        })
+    </script>
 @endsection
 
 @section('page-title')
@@ -106,43 +137,5 @@
         </div>
 
     </div>
-
-    <script>
-        let mySwiper = new Swiper ('.swiper-container', {
-            @if( count($companies) > 1 )
-            slidesPerView: 2,
-            @else
-            slidePerView: 1,
-            @endif
-            spaceBetween: 10,
-
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-
-            scrollbar: {
-                el: '.swiper-scrollbar',
-                draggable: true,
-            },
-            @if( count($companies) >= 5 )
-            breakpoints: {
-                1200: {
-                    slidesPerView: 5,
-                    spaceBetween: 50,
-                    watchOverflow: true,
-                },
-            },
-            @else
-            breakpoints: {
-                1200: {
-                    slidesPerView: "<?= count($companies) ?>",
-                    spaceBetween: 50,
-                    watchOverflow: true,
-                },
-            },
-            @endif
-        })
-    </script>
 
 @endsection
