@@ -2,22 +2,17 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 class LdapController extends Controller
 {
 
     public static function searchUtwente($query, $onlyactive = false)
     {
-        $response = file_get_contents(getenv('LDAP_PROXY_URL') . '?key=' . getenv('LDAP_PROXY_KEY') . '&filter=(' . urlencode($query) . ')');
+        $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', config('ldap.proxy.utwente.url'), config('ldap.proxy.utwente.key'), urlencode($query)));
         $result = json_decode($response)->result;
 
-        if($onlyactive) {
-            $result = array_filter($result, function($row) {
-                if($row->active) {
+        if ($onlyactive) {
+            $result = array_filter($result, function ($row) {
+                if ($row->active) {
                     return true;
                 }
 
