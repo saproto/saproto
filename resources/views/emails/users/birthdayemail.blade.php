@@ -17,7 +17,7 @@
 
     <p>
         Kind regards,
-        {{ config('proto.internal') }}
+        Board {{ config('proto.boardnumber') }}
     </p>
 
 @endsection
