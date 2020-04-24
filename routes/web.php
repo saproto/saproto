@@ -213,7 +213,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
-        Route::get('society/list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
 
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addForm']);
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
@@ -230,6 +229,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
 
+    });
+
+    /*
+     * Routes related to societies
+     */
+
+    Route::group(['prefix' => 'society', 'as' => 'society::'], function () {
+        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
     });
 
     /*

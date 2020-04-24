@@ -1,6 +1,6 @@
 @if (!$committee->public)
     <div class="alert alert-info" role="alert">
-        This is a hidden committee!
+        This is a hidden @if($committee->is_society) society! @else committee! @endif
     </div>
 @endif
 

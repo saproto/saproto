@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="public">Committee type</label>
                         <select class="form-control" id="is_society" name="is_society">
-                            <option value="0" {{ (!$new && $committee->is_society ? '' : 'selected') }}>Regular committee
+                            <option value="0" {{ (!$new && $committee->is_society ? '' : 'selected') }}>Committee
                             </option>
                             <option value="1" {{ (!$new && $committee->is_society ? 'selected' : '') }}>Society
                             </option>

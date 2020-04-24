@@ -16,7 +16,7 @@ class UserProfileController extends Controller
      * Display the profile for a specific user.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show($id = null)
     {
@@ -30,21 +30,19 @@ class UserProfileController extends Controller
             abort(404);
         }
 
-        $pastCommittees = CommitteeMembership::withTrashed()
-            ->with('committee')
-            ->where('user_id', $user->id)
-            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
-            ->get()
-            ->where('committee.is_society', false);
-
-        $pastSocieties = CommitteeMembership::withTrashed()
-            ->with('committee')
-            ->where('user_id', $user->id)
-            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
-            ->get()
-            ->where('committee.is_society', true);
+        $pastCommittees = $this->getGroups($user, false);
+        $pastSocieties = $this->getGroups($user, true);
 
         return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties]);
+    }
+
+    private function getGroups($user, $getsocieties) {
+        return CommitteeMembership::withTrashed()
+            ->with('committee')
+            ->where('user_id', $user->id)
+            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
+            ->get()
+            ->where('committee.is_society', $getsocieties);
     }
 
 }
