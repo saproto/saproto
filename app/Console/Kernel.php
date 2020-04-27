@@ -17,7 +17,6 @@ class Kernel extends ConsoleKernel
         Commands\GenerateRoles::class,
         Commands\TestEmail::class,
         Commands\MailAliasSync::class,
-        Commands\ActiveDirectorySync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
@@ -55,7 +54,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:aliassync')->everyMinute();
         $schedule->command('proto:emailcron')->everyMinute();
 
-        $schedule->command('proto:adsync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
 
         $schedule->command('proto:flickrsync')->hourly();
