@@ -15,7 +15,8 @@ use Carbon\Carbon;
 use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
-
+use DirectAdmin\DirectAdmin;
+use Proto\Console\Commands\DirectAdminSync;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -88,6 +89,31 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         // Update Laravel Password
         $this->password = Hash::make($password);
         $this->save();
+
+        // Update DirectAdmin Password
+        if ($this->member != null) {
+            $da = new DirectAdmin;
+            $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
+            $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
+
+            $da->set_method('post');
+            $q = DirectAdminSync::constructQuery('CMD_API_POP', [
+                'action' => 'modify',
+                'domain' => env('DA_DOMAIN'),
+                'user' => $this->member->proto_username,
+                'newuser' => $this->member->proto_username,
+                'passwd' => $password,
+                'passwd2' => $password,
+                'quota' => 1,
+                'limit' => 0
+            ]);
+            $da->query($q);
+
+            echo($q);
+
+            dd($da->fetch_body());
+        }
+
 
         // Remove breach notification flag
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
