@@ -6,12 +6,6 @@ services:
     volumes:
       - .:/var/www
 
-  queue:
-    build: ./docker/build/php-queue
-    container_name: saproto-queue
-    volumes:
-      - .:/var/www
-
   mariadb:
     image: mariadb:latest
     container_name: saproto-mariadb

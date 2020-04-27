@@ -50,6 +50,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+//        $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
+
         $schedule->command('proto:aliassync')->everyMinute();
         $schedule->command('proto:emailcron')->everyMinute();
 
