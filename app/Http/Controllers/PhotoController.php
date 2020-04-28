@@ -23,7 +23,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $albums = PhotoManager::getAlbums();
+        $albums = PhotoManager::getAlbums(24);
 
         return view('photos.list', ['albums' => $albums]);
     }
@@ -36,7 +36,7 @@ class PhotoController extends Controller
      */
     public function show($id)
     {
-        $photos = PhotoManager::getPhotos($id);
+        $photos = PhotoManager::getPhotos($id, 24);
 
         if ($photos) return view('photos.album', ['photos' => $photos]);
 
