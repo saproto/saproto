@@ -35,19 +35,18 @@ class DinnerformController extends Controller
      */
     public function store(Request $request)
     {
-        $dinnerform = new Dinnerform();
-        $dinnerform->restaurant = $request->restaurant;
-        $dinnerform->description = $request->description;
-        $dinnerform->url = $request->url;
-        $dinnerform->start = strtotime($request->start);
-        $dinnerform->end = strtotime($request->end);
-
-        if ($dinnerform->end < $dinnerform->start) {
+        if ($request->end < $request->start) {
             Session::flash("flash_message", "You cannot let the dinner form close before it opens.");
             return Redirect::back();
         }
 
-        $dinnerform->save();
+        $dinnerform = Dinnerform::create([
+            'restaurant' => $request->restaurant,
+            'description' => $request->description,
+            'url' => $request->url,
+            'start' => strtotime($request->start),
+            'end' => strtotime($request->end),
+        ]);
 
         Session::flash("flash_message", "Your dinner form at '" . $dinnerform->restaurant . "' has been added.");
         return Redirect::route('dinnerform::add');
@@ -96,21 +95,21 @@ class DinnerformController extends Controller
     public function update(Request $request, $id)
     {
 
-        $dinnerform = Dinnerform::findOrFail($id);
-
-        $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant;
-
-        $dinnerform->restaurant = $request->restaurant;
-        $dinnerform->start = strtotime($request->start);
-        $dinnerform->end = strtotime($request->end);
-        $dinnerform->description = $request->description;
-
-        if ($dinnerform->end < $dinnerform->start) {
+        if ($request->end < $request->start) {
             Session::flash("flash_message", "You cannot let the dinnerform close before it opens.");
             return Redirect::back();
         }
 
-        $dinnerform->save();
+        $dinnerform = Dinnerform::findOrFail($id);
+
+        $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant;
+
+        $dinnerform->update([
+            'restaurant' => $request->restaurant,
+            'start' => strtotime($request->start),
+            'end' => strtotime($request->end),
+            'description' => $request->description,
+        ]);
 
         if ($changed_important_details) {
             Session::flash("flash_message", "Your dinner form for '" . $dinnerform->restaurant . "' has been saved. You updated some important information. Don't forget to update your participants with this info!");
@@ -134,11 +133,11 @@ class DinnerformController extends Controller
 
         Session::flash("flash_message", "The dinner form for '" . $dinnerform->restaurant . "' has been deleted.");
 
+        $dinnerform->delete();
+
         if(URL::previous() != route('dinnerform::edit', ['id' => $dinnerform->id])) {
-            $dinnerform->delete();
             return Redirect::back();
         } else {
-            $dinnerform->delete();
             return Redirect::route('dinnerform::add');
         }
     }
