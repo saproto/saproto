@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
-use Proto\Models\Flickr;
+use Proto\Models\PhotoManager;
+use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
 use Auth;
 
-use Proto\Models\FlickrAlbum;
 use Redirect;
 
 class PhotoController extends Controller
@@ -23,7 +23,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $albums = Flickr::getAlbums(null);
+        $albums = PhotoManager::getAlbums();
 
         return view('photos.list', ['albums' => $albums]);
     }
@@ -36,16 +36,16 @@ class PhotoController extends Controller
      */
     public function show($id)
     {
-        $photos = Flickr::getPhotos($id);
+        $photos = PhotoManager::getPhotos($id);
 
         if ($photos) return view('photos.album', ['photos' => $photos]);
 
-        abort(404);
+        abort(404, 'Album not found.');
     }
 
     public function photo($id)
     {
-        $photo = Flickr::getPhoto($id);
+        $photo = PhotoManager::getPhoto($id);
         if ($photo) return view('photos.photopage', ['photo' => $photo]);
     }
 
@@ -79,7 +79,7 @@ class PhotoController extends Controller
      */
     public function apiIndex()
     {
-        $albums = Flickr::getAlbums();
+        $albums = PhotoManager::getAlbums();
         return json_encode($albums);
     }
 
@@ -91,7 +91,7 @@ class PhotoController extends Controller
      */
     public function apiShow($id)
     {
-        $photos = Flickr::getPhotos($id);
+        $photos = PhotoManager::getPhotos($id);
         return json_encode($photos);
     }
 

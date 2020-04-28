@@ -15,17 +15,20 @@
 
             <div class="card leftborder leftborder-info h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Prototyping</h5>
+                    <h5 class="card-title">Projects</h5>
                     <p class="card-text">
                         Throughout the whole curriculum, Creative Technology students are faced with big ideas and
-                        little time. With project groups ranging from 2 to 15 people, this calls for dynamical schedules
-                        and different prototyping techniques. Through experience, the students learn to what extend they
-                        can develop their prototypes. From quick electrical circuits just to show that it works to
-                        advanced prototypes that only need better building materials: CreaTe students have seen it all.
+                        little time. Through experience, the students learn to what extent they can develop their
+                        prototypes. From quick electrical circuits just to show that it works to advanced prototypes
+                        that only need better building materials: CreaTe students have seen it all.
+
                     </p>
                     <p class="card-text">
-                        Next to creating working prototypes with little design, students also learn to develop lo-fi
-                        prototypes to quickly test their designs on the potential user groups.
+                        Interaction Technology aims to combine a scientific mindset with specialist technical knowledge.
+                        I-Techers analyse, design, validate and implement intelligent interactive systems in their
+                        operational context. Recent developments in hardware and computational technologies are used in
+                        all kinds of projects. Students are taught to become the new engineer: bridging disciplines
+                        within project groups and understanding tech and their users.
                     </p>
                 </div>
             </div>
@@ -38,11 +41,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Community</h5>
                     <p class="card-text">
-                        One thing Creative Technology stands out for is its diverse, but close community. Students with
-                        different nationalities, experiences, interests and skills form the basis on which this
-                        community is built. Active and eager students have come together and founded Study Association
-                        Proto, which currently consists of circa 500 members and 33 committees, all held together by a
-                        full-time student board.
+                        Active and eager students from Creative Technology and Interaction Technology come together in
+                        Study Association Proto. One thing Proto stands out for is its diverse, but close community.
+                        Students with different nationalities, experiences, interests and skills form the basis on which
+                        this community is built. Currently, Proto consists of circa 700 members and 35 committees, all
+                        held together by a full-time student board.
                     </p>
                     <p class="card-text">
                         Besides organising lots of interesting activities for entertainment and/or educational purposes,
@@ -67,9 +70,9 @@
                     <p class="card-text">
                         Where time is always the issue, creativity most certainly is not. With knowledge of user group
                         habits, the latest sensors, interfaces, databases and their advantages and limits, Creative
-                        Technology students learn how to connect the right dots. Thanks to many brainstorm lessons and
-                        sessions, the students know how to step outside the box and let their ideas flow, whether it is
-                        on their own or within a (multidisciplinary) project group.
+                        Technology and Interaction Technology students learn how to connect the right dots. Thanks to
+                        many brainstorm lessons and sessions, the students know how to step outside the box and let
+                        their ideas flow, whether it is on their own or within a (multidisciplinary) project group.
                     </p>
                 </div>
             </div>
@@ -84,7 +87,8 @@
                     <p class="card-text">
                         Combine creativity with technical knowledge and the possibilities are endless. Now include
                         entrepreneurial mindsets and an eye for missing products and new innovations arise. Innovation
-                        and improvement of our daily life is the key feature to a CreaTer’s philosophy.
+                        and improvement of our daily life is the key feature to a Creative or Interaction Technologist’s
+                        philosophy.
                     </p>
                 </div>
             </div>
@@ -96,7 +100,7 @@
     <div class="row mb-3">
 
         <div class="col-md-12 col-xl-6">
-            <a href="{{ route('page::show', ['slug' => 'board']) }}" class="btn btn-info btn-block mb-3">
+            <a href="{{ route('page::show', ['slug' => 'contact']) }}" class="btn btn-info btn-block mb-3">
                 <i class="fas fa-user mr-2" aria-hidden="true"></i> Contact
             </a>
         </div>

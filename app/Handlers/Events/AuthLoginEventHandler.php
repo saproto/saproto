@@ -36,6 +36,7 @@ class AuthLoginEventHandler
         $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
         $tipcie = Committee::find(config('proto.committee')['tipcie']);
         $drafters = Committee::find(config('proto.committee')['drafters']);
+        $protography = Committee::find(config('proto.committee')['protography']);
 
         if ($user->isInCommittee($rootcommittee) && $user->signed_nda) {
             if (!$user->hasRole('protube')) {
@@ -86,5 +87,16 @@ class AuthLoginEventHandler
                 $user->detachRole(Role::where('name', '=', 'drafters')->first());
             }
         }
+
+        if ($user->isInCommittee($protography)) {
+            if (!$user->hasRole('protography')) {
+                $user->attachRole(Role::where('name', '=', 'protography')->first());
+            }
+        } else {
+            if ($user->hasRole('protography')) {
+                $user->detachRole(Role::where('name', '=', 'protography')->first());
+            }
+        }
+
     }
 }

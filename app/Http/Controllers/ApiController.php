@@ -194,7 +194,7 @@ class ApiController extends Controller
         }
 
         foreach (PhotoLikes::where('user_id', $user->id)->get() as $photo_like) {
-            $data['liked_photos'][] = $photo_like->flickrItem->url;
+            $data['liked_photos'][] = $photo_like->photo->url;
         }
 
         foreach (Quote::where('user_id', $user->id)->get() as $quote) {
