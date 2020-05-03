@@ -5,6 +5,7 @@ namespace Proto\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Proto\Console\Commands\MemberRenewCron;
+use Proto\Console\Commands\SyncWikiAccounts;
 
 class Kernel extends ConsoleKernel
 {
@@ -39,7 +40,8 @@ class Kernel extends ConsoleKernel
         Commands\MemberRenewCron::class,
         Commands\OmNomComCleanup::class,
         Commands\MakeAdmin::class,
-        Commands\DirectAdminSync::class
+        Commands\DirectAdminSync::class,
+        Commands\SyncWikiAccounts::class
     ];
 
     /**
