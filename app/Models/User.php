@@ -108,10 +108,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'limit' => 0
             ]);
             $da->query($q);
-
-            echo($q);
-
-            dd($da->fetch_body());
         }
 
 
