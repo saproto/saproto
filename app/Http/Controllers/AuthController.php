@@ -5,7 +5,6 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 
 use PragmaRX\Google2FA\Google2FA;
-
 use nickurt\PwnedPasswords\PwnedPasswords;
 
 use Proto\Mail\PasswordResetEmail;

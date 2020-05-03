@@ -3,9 +3,6 @@
 namespace Proto\Models;
 
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +15,8 @@ use Carbon\Carbon;
 use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
-
+use DirectAdmin\DirectAdmin;
+use Proto\Console\Commands\DirectAdminSync;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -92,97 +90,33 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->password = Hash::make($password);
         $this->save();
 
-        if (config('app.env') == 'production') {
-            // Update Active Directory Password
-            $ad = new Adldap();
-            $provider = new Provider(config('adldap.proto'));
-            $ad->addProvider('proto', $provider);
-            $ad->connect('proto');
+        // Update DirectAdmin Password
+        if ($this->member != null) {
+            $da = new DirectAdmin;
+            $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
+            $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 
-            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
-            if ($ldapuser !== null) {
-                $ldapuser->setPassword($password);
-                $ldapuser->save();
-            }
+            $da->set_method('post');
+            $q = DirectAdminSync::constructQuery('CMD_API_POP', [
+                'action' => 'modify',
+                'domain' => env('DA_DOMAIN'),
+                'user' => $this->member->proto_username,
+                'newuser' => $this->member->proto_username,
+                'passwd' => $password,
+                'passwd2' => $password,
+                'quota' => 1,
+                'limit' => 0
+            ]);
+            $da->query($q);
+
+            echo($q);
+
+            dd($da->fetch_body());
         }
+
 
         // Remove breach notification flag
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
-    }
-
-    public function updateLdapUser()
-    {
-        if (!$this->member) {
-            return null;
-        }
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
-
-        if ($ldapuser == null) {
-            $ldapuser = $provider->make()->user();
-
-            $ldapuser->cn = $this->member->proto_username;
-            $ldapuser->description = $this->id;
-            $ldapuser->save();
-        }
-
-        $username = $this->member->proto_username;
-
-        // Put user in right OU
-        $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
-
-        // Update user fields
-        $ldapuser->displayName = trim($this->name);
-        $ldapuser->givenName = trim($this->calling_name);
-
-        $lastnameGuess = explode(" ", $this->name);
-        array_shift($lastnameGuess);
-        $ldapuser->sn = trim(implode(" ", $lastnameGuess));
-
-        $ldapuser->mail = $this->email;
-        $ldapuser->wWWHomePage = $this->website;
-
-        if ($this->address && $this->address_visible) {
-
-            $ldapuser->l = $this->address->city;
-            $ldapuser->postalCode = $this->address->zipcode;
-            $ldapuser->streetAddress = $this->address->street . " " . $this->address->number;
-            $ldapuser->co = $this->address->country;
-
-        } else {
-
-            $ldapuser->l = null;
-            $ldapuser->postalCode = null;
-            $ldapuser->streetAddress = null;
-            $ldapuser->co = null;
-
-        }
-
-        if ($this->phone_visible) {
-            $ldapuser->telephoneNumber = $this->phone;
-        } else {
-            $ldapuser->telephoneNumber = null;
-        }
-
-        if ($this->photo) {
-            try {
-                $ldapuser->jpegPhoto = base64_decode($this->photo->getBase64(500, 500));
-            } catch (\Intervention\Image\Exception\NotReadableException $e) {
-                $ldapuser->jpegPhoto = null;
-            }
-        } else {
-            $ldapuser->jpegPhoto = null;
-        }
-
-        $ldapuser->setAttribute('sAMAccountName', $username);
-        $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-        $ldapuser->save();
     }
 
     /**
