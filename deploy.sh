@@ -19,8 +19,10 @@ if [ "$CURRENT_CHECKSUM" == "$NEW_CHECKSUM" ]; then
 fi
 
 # Clean-up
-echo "Cleaning up old builds..."
 rm -rf previous_build
+
+# Remove old storage symlink
+rm live/storage
 
 # Prepare new build
 echo "Unzipping new build..."
@@ -35,6 +37,11 @@ echo "Bringing down builds..."
 echo "Rotating builds..."
 mv live previous_build
 mv new_build live
+
+echo "Symlinking storage..."
+rm -rf live/storage
+ln -s /path \
+  /other/path
 
 echo "Bringing new live build up..."
 (cd live && php artisan migrate --force && php artisan up)
