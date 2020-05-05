@@ -47,7 +47,7 @@
         <div class="col-lg-3">
             <div class="card mb-3">
 
-                @if(Auth::user()->can('publishalbums'))
+                @if(Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && !$photos->published))
                     <div class="card-header bg-dark text-white text-center">
                         Edit album
                     </div>
@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="album">Album name:</label>
-                                <input type="text" id="album" name="album" class="form-control"
+                                <input required type="text" id="album" name="album" class="form-control"
                                        value="{{ $photos->album_title }}">
                             </div>
                             <div class="form-group">
@@ -127,7 +127,7 @@
                     Thumbnail
                 </div>
 
-                <div class="card-body" style="height: 300px; background: url({{ $photos->thumb }})">
+                <div class="card-body" style="height: 300px; background: url({{ $photos->thumb }}) no-repeat center; background-size: cover;">
                 </div>
 
             </div>
@@ -141,12 +141,15 @@
                 </div>
                 @if(!$photos->published)
                     <div class="card-body">
-
-                        <div id="uploadview" class="row" style="min-height: 200px;">
+                        <div id="errorBar" class="alert alert-danger" style="display: none;" role="alert">
+                            <h4 class="alert-heading">Error uploading some files</h4>
+                            <p>The following files failed to upload:</p>
+                            <ul></ul>
+                        </div>
+                        <div id="uploadview" class="row position-relative" style="min-height: 200px;">
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                                 Drag photos here
                             </div>
-
                         </div>
 
                         <div id="photoadmin__droparea">
@@ -348,13 +351,13 @@
                 success: function (response) {
                     $('#file' + uploadFile.id).remove();
                     if (response === "ERROR") {
-                        alert('Upload failed');
+                        uploadError(uploadFile);
                     } else {
                         $('#photoview').append(response);
                     }
                 },
                 error: function (jqXhr, textStatus, errorThrown) {
-                    alert('Upload failed');
+                    uploadError(uploadFile);
                 }
             });
             if (fileQueue.length > 0) {
@@ -362,6 +365,10 @@
             } else {
                 uploadRunning = false;
             }
+        }
+        function uploadError(file) {
+            $('#errorBar').show();
+            $('#errorBar ul').append('<li>' + file.name + '</li>');
         }
     </script>
 

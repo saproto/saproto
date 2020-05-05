@@ -71,6 +71,11 @@ class Photo extends Model
 
         static::deleting(function($photo) {
             $photo->file()->delete();
+            if ($photo->id == $photo->album->thumb_id) {
+                $album = $photo->album;
+                $album->thumb_id = null;
+                $album->save();
+            }
         });
     }
 }
