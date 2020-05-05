@@ -47,6 +47,9 @@
             </div>
 
         </div>
+        <div class="card-footer">
+            {{ $photos->photos->links() }}
+        </div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw mr-3"></i>
