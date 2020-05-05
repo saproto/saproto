@@ -44,7 +44,7 @@
 
                             <label for="url">Url:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="https://forms.gle/t2hDEnkNCLXNpvYTA" value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
+                                   value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
 
                         </div>
                     </div>
@@ -86,8 +86,14 @@
             </div>
 
         </div>
+        <div class="card-footer border-bottom">
+            <button type="submit" class="btn btn-success">Submit</button>
 
-        @include('dinnerform.admin_includes.buttonbar')
+            @if($dinnerformCurrent)
+                <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
+                   class="btn btn-danger ml-4">Delete</a>
+            @endif
+        </div>
 
     </div>
 
