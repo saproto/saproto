@@ -195,6 +195,10 @@ class DirectAdminSync extends Command
             $data[] = $member->proto_username;
         }
 
+        foreach (config('proto.additional_mailboxes') as $additional) {
+            $data[] = $additional;
+        }
+
         return $data;
     }
 
@@ -326,7 +330,7 @@ class DirectAdminSync extends Command
                 'user' => $account,
                 'passwd' => $password,
                 'passwd2' => $password,
-                'quota' => 1,
+                'quota' => 0, # Unlimited
                 'limit' => 0 # Unlimited
             ]);
         }
