@@ -104,8 +104,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,
                 'passwd2' => $password,
-                'quota' => 1,
-                'limit' => 0
+                'quota' => 0, # Unlimited
+                'limit' => 0 # Unlimited
             ]);
             $da->query($q);
         }
