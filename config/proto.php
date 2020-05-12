@@ -246,6 +246,9 @@ return [
         'isalfredthere' => [
             'isalfredthere.nl',
             'www.isalfredthere.nl'
+        ],
+        'static' => [
+            'static.saproto.com'
         ]
     ],
 

@@ -188,18 +188,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
     Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
 
-    /**
-     * Routes related to files.
-     */
-    Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@get']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@get']);
-    });
-    Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
-    });
-
     /*
      * Routes related to committees.
      */
