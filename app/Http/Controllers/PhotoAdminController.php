@@ -11,6 +11,7 @@ use Proto\Models\PhotoManager;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
 use Auth;
+use Session;
 
 use Proto\Models\StorageEntry;
 use Redirect;
@@ -127,6 +128,12 @@ class PhotoAdminController extends Controller
     public function publish($id)
     {
         $album = PhotoAlbum::where('id', '=', $id)->first();
+
+        if(!count($album->items)>0 || $album->thumb_id == null) {
+            Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+            return Redirect::back();
+        }
+
         $album->published = true;
         $album->save();
         return redirect(route('photo::admin::edit', ['id' => $id]));

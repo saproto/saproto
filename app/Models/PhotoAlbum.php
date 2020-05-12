@@ -8,7 +8,7 @@ use Proto\Models\StorageEntry;
 class PhotoAlbum extends Model
 {
     public function items() {
-        return $this->hasMany('Proto\Models\Photo', 'photo_id');
+        return $this->hasMany('Proto\Models\Photo', 'album_id');
     }
 
     public function event() {

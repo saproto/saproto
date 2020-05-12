@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="name">Album name:</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                            <input required type="text" id="name" name="name" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="date">Album date:</label>
