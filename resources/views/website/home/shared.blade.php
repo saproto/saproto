@@ -36,6 +36,17 @@
             }
         })
     </script>
+    
+    <style type="text/css">
+    .company-athom {
+        animation: rotate 3s infinite linear;
+    }
+    
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    </style>
 @endsection
 
 @section('page-title')
@@ -86,7 +97,7 @@
                                 @foreach($companies as $i => $company)
 
                                     <div class="swiper-slide justify-content-center d-flex">
-                                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                        <a class="company-{{$company->id}}" href="{{ route('companies::show', ['id' => $company->id]) }}">
                                             <img src="{{ $company->image->generateImagePath(null, 50) }}">
                                         </a>
                                     </div>
