@@ -7,7 +7,7 @@
             @if( count($companies) > 1 )
             slidesPerView: 2,
             @else
-            slidePerView: 1,
+            slidesPerView: 1,
             @endif
             spaceBetween: 10,
 
@@ -20,23 +20,20 @@
                 el: '.swiper-scrollbar',
                 draggable: true,
             },
-            @if( count($companies) >= 5 )
+
             breakpoints: {
                 1200: {
-                    slidesPerView: 5,
+                    @if( count($companies) >= 4 )
+                    slidesPerView: 4,
                     spaceBetween: 50,
                     watchOverflow: true,
-                },
-            },
-            @else
-            breakpoints: {
-                1200: {
+                    @else
                     slidesPerView: "<?= count($companies) ?>",
                     spaceBetween: 50,
                     watchOverflow: true,
-                },
-            },
-            @endif
+                    @endif
+                }
+            }
         })
     </script>
 @endsection
