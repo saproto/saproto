@@ -302,6 +302,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
+        Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
+    });
+
     /*
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevent other ID. activity_id is in principle never used.
