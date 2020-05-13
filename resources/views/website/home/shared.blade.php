@@ -5,6 +5,7 @@
     <script>
         let mySwiper = new Swiper ('.swiper-container', {
             @if( count($companies) > 1 )
+            loop: true,
             slidesPerView: 2,
             @else
             slidesPerView: 1,
@@ -16,14 +17,10 @@
                 disableOnInteraction: false,
             },
 
-            scrollbar: {
-                el: '.swiper-scrollbar',
-                draggable: true,
-            },
-
             breakpoints: {
                 1200: {
                     @if( count($companies) >= 4 )
+                    loop: true,
                     slidesPerView: 4,
                     spaceBetween: 50,
                     watchOverflow: true,
@@ -36,17 +33,6 @@
             }
         })
     </script>
-    
-    <style type="text/css">
-    .company-athom {
-        animation: rotate 3s infinite linear;
-    }
-    
-    @keyframes rotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    </style>
 @endsection
 
 @section('page-title')
@@ -97,14 +83,13 @@
                                 @foreach($companies as $i => $company)
 
                                     <div class="swiper-slide justify-content-center d-flex">
-                                        <a class="company-{{$company->id}}" href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                            <img src="{{ $company->image->generateImagePath(null, 50) }}">
+                                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                            <img class="company-{{$company->name}}" src="{{ $company->image->generateImagePath(null, 50) }}">
                                         </a>
                                     </div>
 
                                 @endforeach
                             </div>
-                            <div class="swiper-scrollbar"></div>
                         </div>
                     </div>
                 </div>
