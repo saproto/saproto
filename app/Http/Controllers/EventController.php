@@ -364,12 +364,34 @@ class EventController extends Controller
         $data = [];
 
         foreach ($events as $event) {
+            $participants = ($user && $event->activity ? $event->activity->users->map(function ($item) {
+                return (object) [
+                    'name' => $item->name,
+                    'photo' => $item->photo_preview
+                ];
+            }) : null);
+            $backupParticipants = ($user && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+                return (object) [
+                    'name' => $item->name,
+                    'photo' => $item->photo_preview
+                ];
+            }) : null);
             $data[] = (object)[
                 'id' => $event->id,
                 'title' => $event->title,
                 'image' => ($event->image ? $event->image->generateImagePath(800,300) : null),
                 'description' => $event->description,
                 'start' => $event->start,
+                'organizing_committee' => ($event && $event->committee ? [
+                    'id' => $event->committee->id,
+                    'name' => $event->committee->name
+                ] : null),
+                'registration_start' => ($event && $event->activity ? $event->activity->registration_start : null),
+                'registration_end' => ($event && $event->activity ? $event->activity->registration_end : null),
+                'deregistration_end' => ($event && $event->activity ? $event->activity->deregistration_end : null),
+                'total_places' => ($event && $event->activity ? $event->activity->participants : null),
+                'available_places' => ($event && $event->activity ? $event->activity->freeSpots() : null),
+                'is_full' => ($event && $event->activity ? $event->activity->isFull() : null),
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
@@ -383,7 +405,11 @@ class EventController extends Controller
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
                 'can_signout' => ($user && $event->activity ? $event->activity->canUnsubscribe() : null),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null)
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
+                'participants' => $participants,
+                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
+                'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
+                'backupParticipants' => $backupParticipants
             ];
         }
 

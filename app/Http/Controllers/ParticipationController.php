@@ -76,10 +76,15 @@ class ParticipationController extends Controller
             return Redirect::back();
         } else {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
-                abort(200, 'You have been placed on the back-up list for ' . $event->title . '.');
+                $message = 'You have been placed on the back-up list for ' . $event->title . '.';
             } else {
-                abort(200, 'You claimed a spot for ' . $event->title . '.');
+                $message = 'You claimed a spot for ' . $event->title . '.';
             }
+            $data = json_encode((object)[
+               'message' => $message,
+               'participation_id' => $participation->id
+            ]);
+            abort(200, $data);
         }
 
     }
