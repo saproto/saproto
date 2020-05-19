@@ -364,13 +364,13 @@ class EventController extends Controller
         $data = [];
 
         foreach ($events as $event) {
-            $participants = ($user && $event->activity ? $event->activity->users->map(function ($item) {
+            $participants = ($user && $user->member && $event->activity ? $event->activity->users->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview
                 ];
             }) : null);
-            $backupParticipants = ($user && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+            $backupParticipants = ($user && $user->member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview
