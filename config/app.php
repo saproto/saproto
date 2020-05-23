@@ -260,7 +260,6 @@ return [
 
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
-        'Flickr' => Proto\Models\Flickr::class,
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
         'Role' => Proto\Models\Role::class,
@@ -271,7 +270,6 @@ return [
         'Event' => \Proto\Models\Event::class,
         'Product' => \Proto\Models\Product::class,
         'MollieTransaction' => \Proto\Models\MollieTransaction::class,
-        'FlickrAlbum' => \Proto\Models\FlickrAlbum::class,
         'Newsletter' => \Proto\Models\Newsletter::class,
         'PlayedVideo' => \Proto\Models\PlayedVideo::class,
         'Announcement' => \Proto\Models\Announcement::class,

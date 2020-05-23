@@ -21,8 +21,6 @@ class Kernel extends ConsoleKernel
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
-        Commands\FlickrSync::class,
-        Commands\FlickrToPhoto::class,
         Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
@@ -56,7 +54,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:dasync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
-        $schedule->command('proto:flickrsync')->hourly();
         $schedule->command('proto:usercleanup')->hourly();
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
