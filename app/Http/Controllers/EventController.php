@@ -9,7 +9,7 @@ use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\Event;
-use Proto\Models\FlickrAlbum;
+use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
@@ -335,7 +335,7 @@ class EventController extends Controller
     public function linkAlbum(Request $request, $event)
     {
         $event = Event::findOrFail($event);
-        $album = FlickrAlbum::findOrFail($request->album_id);
+        $album = PhotoAlbum::findOrFail($request->album_id);
         $album->event_id = $event->id;
         $album->save();
 
@@ -345,7 +345,7 @@ class EventController extends Controller
 
     public function unlinkAlbum($album)
     {
-        $album = FlickrAlbum::findOrFail($album);
+        $album = PhotoAlbum::findOrFail($album);
         $album->event_id = null;
         $album->save();
 

@@ -669,11 +669,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-
-    Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
-        Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);
-    });
-
     /*
      * Routes related to Spotify
      */
@@ -869,8 +864,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
 
     });
-
-    Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
 
     Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
 
