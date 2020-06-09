@@ -12,7 +12,7 @@
 
             <div class="row">
 
-                @foreach(\Proto\Models\PhotoManager::getAlbums() as $key => $album)
+                @foreach($albums as $key => $album)
 
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
@@ -32,6 +32,9 @@
 
             </div>
 
+        </div>
+        <div class="card-footer">
+            {{ $albums->links() }}
         </div>
 
         <div class="card-footer text-center">

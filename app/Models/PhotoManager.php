@@ -38,7 +38,7 @@ class PhotoManager extends Model
 
 
 
-    public static function getPhotos($albumID)
+    public static function getPhotos($albumID, $max = null)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -58,7 +58,12 @@ class PhotoManager extends Model
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
-        $items = $items->orderBy('date_taken', 'asc')->get();
+        $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc');
+        if($max != 0) {
+            $items = $items->paginate($max);
+        } else {
+            $items = $items->get();
+        }
         $data = new \stdClass();
         $data->album_id = $albumID;
 

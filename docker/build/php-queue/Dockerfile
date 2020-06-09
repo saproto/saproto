@@ -18,10 +18,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libgmp-dev \
-    libmcrypt-dev \
-    libldap2-dev \
-    wkhtmltopdf \
-    zlib1g-dev libicu-dev g++
+    libmcrypt-dev
 
 
 # Clear cache
@@ -31,10 +28,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl gmp
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
-RUN docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/
-RUN docker-php-ext-install ldap
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl
 RUN pecl install mcrypt-1.0.1 && docker-php-ext-enable mcrypt
 
 # Install composer

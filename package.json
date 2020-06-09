@@ -37,8 +37,10 @@
     "select2-bootstrap4-theme": "~1.0.0",
     "simplemde": "~1.11.2",
     "socket.io-client": "~2.3.0",
+    "swiper": "^5.3.7",
     "tempusdominus-bootstrap-4": "~5.1.2",
-    "tempusdominus-core": "~5.0.3"
+    "tempusdominus-core": "~5.0.3",
+    "util.promisify": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "~10.0.3",
@@ -76,7 +78,8 @@
         "./node_modules/socket.io-client/dist/socket.io.js",
         "./node_modules/select2/dist/js/select2.full.min.js",
         "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js",
-        "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js"
+        "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js",
+        "./node_modules/swiper/js/swiper.min.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",
@@ -124,7 +127,8 @@
         "./node_modules/simplemde/dist/simplemde.min.css",
         "./node_modules/select2/dist/css/select2.min.css",
         "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.scss",
-        "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css"
+        "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css",
+        "./node_modules/swiper/css/swiper.min.css"
       ],
       "dest": "./resources/assets/sass/components.scss",
       "watch": [

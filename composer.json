@@ -50,7 +50,6 @@
     "sentry/sentry-laravel": "0.8.*",
     "alaouy/youtube": "2.1.*",
     "webuni/commonmark-table-extension": "0.6.*",
-    "adldap2/adldap2": "6.1.*",
     "mollie/laravel-mollie": "1.5.*",
     "lisennk/laravel-slack-web-api": "0.1.*",
     "willvincent/feeds": "1.1.*",

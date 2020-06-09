@@ -7,6 +7,9 @@ use DB;
 
 class Photo extends Model
 {
+
+    protected $appends = ['url'];
+
     public function album() {
         return $this->belongsTo('Proto\Models\PhotoAlbum', 'album_id');
     }
@@ -14,20 +17,18 @@ class Photo extends Model
     private function getAdjacentPhoto($next = true)
     {
         if ($next) {
-            $func = 'MIN';
+            $ord = 'ASC';
             $comp = '>';
         } else {
-            $func = 'MAX';
+            $ord = 'DESC';
             $comp = '<';
         }
 
-        $result = DB::select(DB::raw(sprintf("SELECT id FROM photos WHERE album_id = %s AND date_taken = (SELECT %s(date_taken) FROM flickr_items WHERE date_taken %s %s)", $this->album_id, $func, $comp, $this->date_taken)));
-        if (count($result) > 0) {
-            $id = $result[0]->id;
-            return Photo::where('id', $id)->first();
-        } else {
-            return null;
+        $result = Photo::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken)->orderBy('date_taken', $ord)->orderBy('id', $ord);
+        if ($result->count() > 1) {
+            return $result->where('id', $comp, $this->id)->first();
         }
+        return $result->first();
     }
 
     public function getNextPhoto()
@@ -61,11 +62,20 @@ class Photo extends Model
         return $this->file()->first()->generatePath();
     }
 
+    public function getUrlAttribute() {
+        return $this->url();
+    }
+
     public static function boot() {
         parent::boot();
 
         static::deleting(function($photo) {
             $photo->file()->delete();
+            if ($photo->id == $photo->album->thumb_id) {
+                $album = $photo->album;
+                $album->thumb_id = null;
+                $album->save();
+            }
         });
     }
 }

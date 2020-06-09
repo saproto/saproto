@@ -15,9 +15,6 @@ use View;
 use Auth;
 use Session;
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 class SearchController extends Controller
 {
 
@@ -85,7 +82,6 @@ class SearchController extends Controller
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
                 $search = "&";
-                $data = [];
                 foreach ($terms as $term) {
                     if (Auth::user()->can('board')) {
                         $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";

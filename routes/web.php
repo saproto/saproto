@@ -108,7 +108,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('studied_itech/{id}', ['as' => 'toggle_studied_itech', 'uses' => 'UserAdminController@toggleStudiedITech']);
-            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
+            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:board'], 'uses' => 'UserAdminController@toggleNda']);
             Route::get('unblock_omnomcom/{id}', ['as' => 'unblock_omnomcom', 'uses' => 'UserAdminController@unblockOmnomcom']);
         });
 
@@ -187,18 +187,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
     Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
-
-    /**
-     * Routes related to files.
-     */
-    Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@get']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@get']);
-    });
-    Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
-    });
 
     /*
      * Routes related to committees.
@@ -309,6 +297,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('{id}', ['as' => 'show', 'uses' => 'JobofferController@show']);
 
+    });
+
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
+        Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@destroy']);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
     });
 
     /*
@@ -680,11 +678,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-
-    Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
-        Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);
-    });
-
     /*
      * Routes related to Spotify
      */
@@ -881,8 +874,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
-    Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
-
     Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
 
         Route::group(['prefix' => 'isalfredthere', 'as' => 'isalfredthere::'], function () {
@@ -892,7 +883,5 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
     });
-
-    Route::post('saml2/acs', ['uses' => '\Aacotroneo\Saml2\Http\Controllers\Saml2Controller@acs'])->defaults('idpName', 'surfconext');
 
 });

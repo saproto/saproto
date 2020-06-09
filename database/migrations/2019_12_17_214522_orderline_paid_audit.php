@@ -14,7 +14,7 @@ class OrderlinePaidAudit extends Migration
     public function up()
     {
         Schema::table('orderlines', function (Blueprint $table) {
-            $table->text('authenticated_by')->after('total_price')->nullable(false)->default('none');
+            $table->text('authenticated_by')->after('total_price')->nullable(false);
         });
     }
 
