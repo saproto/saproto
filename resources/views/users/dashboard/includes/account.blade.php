@@ -271,6 +271,19 @@
                                 Only members can see your achievements.
                             </small>
 
+                            <br>
+
+                            <input name="profile_in_almanac" type="checkbox" class="form-check-input"
+                                   id="dashboard__profile_in_almanac"
+                                    {{ ($user->profile_in_almanac == 1 ? 'checked' : '') }}>
+                            <label class="form-check-label" for="dashboard__profile_in_almanac">
+                                Use my profile picture in the Lustrum Almanac.
+                            </label>
+                            <small class="form-text text-muted">
+                                With this you allow for the use of my profile picture in the Lustrum Alamanac<br>
+                                if one will be published during your Proto membership
+                            </small>
+
                         </td>
                     </tr>
 
