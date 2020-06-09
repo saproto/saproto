@@ -270,16 +270,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
-            ->where(function ($query) {
-                $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
-            })
-            ->where('committees.is_society', false)
-            ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
-            ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+        return $this->getGroups()->where('is_society', false);
     }
 
     /**
@@ -287,16 +278,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function societies()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
-            ->where(function ($query) {
-                $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
-            })
-            ->where('committees.is_society', true)
-            ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
-            ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+        return $this->getGroups()->where('is_society', true);
     }
 
     /**
@@ -564,6 +546,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             return null;
         }
+    }
+
+    private function getGroups() {
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
+            ->where(function ($query) {
+                $query->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
     }
 
 }
