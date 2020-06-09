@@ -3,19 +3,12 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 
 use Proto\Models\Bank;
-use Proto\Models\User;
 
 use Auth;
-use Entrust;
 use Session;
 use Redirect;
-use Validator;
 
 
 class BankController extends Controller
@@ -136,6 +129,8 @@ class BankController extends Controller
 
     public static function doVerifyIban($iban, $bic = null)
     {
+        $iban = strtoupper($iban);
+
         $response = (object)[
             'status' => true,
             'message' => 'Valid',
@@ -157,27 +152,26 @@ class BankController extends Controller
 
         try {
 
-            $openiban_url = sprintf('%s/validate/' . $response->iban . '?validateBankCode=true&getBIC=true', config('proto.openiban_url'));
-            $openiban_response = json_decode(file_get_contents($openiban_url));
+            $country = substr($iban, 0, 2);
 
-            if (property_exists($openiban_response->bankData, 'bic')) {
-
-                $response->bic = $openiban_response->bankData->bic;
-
-            } else {
-
-                if ($response->bic != '' && BankController::verifyBic($response->bic)) {
-                    $response->status = false;
-                    $response->message = 'Your BIC is not valid.';
-                    return $response;
-                }
+            if ($country == 'NL') {
+                $response->bic = BankController::getNlBicFromIban($iban);
             }
 
-        } catch (\ErrorException $e) {
 
             if ($response->bic != '' && BankController::verifyBic($response->bic)) {
                 $response->status = false;
                 $response->message = 'Your BIC is not valid.';
+                return $response;
+            }
+
+        } catch (\Exception $e) {
+
+            dd($e);
+
+            if ($response->bic != '' && BankController::verifyBic($response->bic)) {
+                $response->status = false;
+                $response->message = 'Something went wrong retrieving your BIC.';
                 return $response;
             }
 
@@ -195,6 +189,92 @@ class BankController extends Controller
     public static function generateAuthorizationId($user)
     {
         return "PROTOX" . str_pad($user->id, 5, "0", STR_PAD_LEFT) . "X" . str_pad(mt_rand(0, 99999), 5, "0");
+    }
+
+    private static function getNlBicFromIban($iban)
+    {
+        $data = [ // Data from: https://www.betaalvereniging.nl/wp-content/uploads/BIC-lijst-NL.xlsx
+            "AABN" => "AABNNL2A",
+            "ABNA" => "ABNANL2A",
+            "FTSB" => "ABNANL2A",
+            "ABNC" => "ABNCNL2A",
+            "ADYB" => "ADYBNL2A",
+            "AEGO" => "AEGONL2U",
+            "ANDL" => "ANDLNL2A",
+            "ARBN" => "ARBNNL22",
+            "ARSN" => "ARSNNL21",
+            "ASNB" => "ASNBNL21",
+            "ATBA" => "ATBANL2A",
+            "BARC" => "BARCNL22",
+            "BCDM" => "BCDMNL22",
+            "BCIT" => "BCITNL2A",
+            "BICK" => "BICKNL2A",
+            "BINK" => "BINKNL21",
+            "BITS" => "BITSNL2A",
+            "BKCH" => "BKCHNL2R",
+            "BKMG" => "BKMGNL2A",
+            "BLGW" => "BLGWNL21",
+            "BMEU" => "BMEUNL21",
+            "BNDA" => "BNDANL2A",
+            "BNGH" => "BNGHNL2G",
+            "BNPA" => "BNPANL2A",
+            "BOFA" => "BOFANLNX",
+            "BOFS" => "BOFSNL21002",
+            "BOTK" => "BOTKNL2X",
+            "BUNQ" => "BUNQNL2A",
+            "CHAS" => "CHASNL2X",
+            "CITC" => "CITCNL2A",
+            "CITI" => "CITINL2X",
+            "COBA" => "COBANL2X",
+            "DELE" => "DELENL22",
+            "DEUT" => "DEUTNL2A",
+            "DHBN" => "DHBNNL2R",
+            "DLBK" => "DLBKNL2A",
+            "DNIB" => "DNIBNL2G",
+            "EBUR" => "EBURNL21",
+            "EBPB" => "EBPBNL22",
+            "FBHL" => "FBHLNL2A",
+            "FLOR" => "FLORNL2A",
+            "FRNX" => "FRNXNL2A",
+            "FVLB" => "FVLBNL22",
+            "GILL" => "GILLNL2A",
+            "HAND" => "HANDNL2A",
+            "HHBA" => "HHBANL22",
+            "HSBC" => "HSBCNL2A",
+            "ICBC" => "ICBCNL2A",
+            "ICBK" => "ICBKNL2A",
+            "INGB" => "INGBNL2A",
+            "ISAE" => "ISAENL2A",
+            "ISBK" => "ISBKNL2A",
+            "KABA" => "KABANL2A",
+            "KASA" => "KASANL2A",
+            "KNAB" => "KNABNL2H",
+            "KOEX" => "KOEXNL2A",
+            "KRED" => "KREDNL2X",
+            "LOCY" => "LOCYNL2A",
+            "LOYD" => "LOYDNL2A",
+            "LPLN" => "LPLNNL2F",
+            "MHCB" => "MHCBNL2A",
+            "MOYO" => "MOYONL21",
+            "NNBA" => "NNBANL2G",
+            "NWAB" => "NWABNL2G",
+            "PCBC" => "PCBCNL2A",
+            "RABO" => "RABONL2U",
+            "RBRB" => "RBRBNL21",
+            "SNSB" => "SNSBNL2A",
+            "SOGE" => "SOGENL2A",
+            "TRIO" => "TRIONL2U",
+            "UGBI" => "UGBINL2A",
+            "VOWA" => "VOWANL21",
+            "VPAY" => "VPAYNL22",
+            "ZWLB" => "ZWLBNL21"
+        ];
+        $bank = substr($iban, 4, 4);
+        if (array_key_exists($bank, $data)) {
+            return $data[$bank];
+        } else {
+            return null;
+        }
     }
 
 }
