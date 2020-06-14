@@ -79,6 +79,9 @@ class SearchController extends Controller
         $data = null;
         if ($request->has('query')) {
             $query = $request->input('query');
+            if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
+                abort(400, 'You cannot use special characters in your search query.');
+            }
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
                 $search = "&";
