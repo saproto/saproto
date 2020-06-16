@@ -359,19 +359,26 @@ class EventController extends Controller
 
         $user = (Auth::check() ? Auth::user() : null);
 
-        $events = Event::where('secret', 0)->where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
-
+        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {
+            if ($event->secret && ($user == null || $event->activity == null || (
+                        !$event->activity->isParticipating($user) &&
+                        !$event->activity->isHelping($user) &&
+                        !$event->activity->isOrganizing($user)
+                    ))) {
+                continue;
+            }
+
             $participants = ($user && $user->member && $event->activity ? $event->activity->users->map(function ($item) {
-                return (object) [
+                return (object)[
                     'name' => $item->name,
                     'photo' => $item->photo_preview
                 ];
             }) : null);
             $backupParticipants = ($user && $user->member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
-                return (object) [
+                return (object)[
                     'name' => $item->name,
                     'photo' => $item->photo_preview
                 ];
@@ -379,7 +386,7 @@ class EventController extends Controller
             $data[] = (object)[
                 'id' => $event->id,
                 'title' => $event->title,
-                'image' => ($event->image ? $event->image->generateImagePath(800,300) : null),
+                'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
                 'description' => $event->description,
                 'start' => $event->start,
                 'organizing_committee' => ($event && $event->committee ? [
@@ -497,7 +504,15 @@ class EventController extends Controller
 
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
-        foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+        foreach (Event::where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            if ($event->secret && ($user == null || $event->activity == null || (
+                        !$event->activity->isParticipating($user) &&
+                        !$event->activity->isHelping($user) &&
+                        !$event->activity->isOrganizing($user)
+                    ))) {
+                continue;
+            }
 
             if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;

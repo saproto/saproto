@@ -178,6 +178,11 @@ class Activity extends Validatable
         }
     }
 
+    public function isOrganizing(User $user)
+    {
+        return $this->event->committee != null && $this->event->committee->isMember($user);
+    }
+
     /**
      * @return bool Returns whether the activity is full or not.
      */
