@@ -38,10 +38,21 @@ class GoodIdeaController extends Controller
 
     public function delete($id) {
         $idea = GoodIdea::findOrFail($id);
+        if(!(Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
+            Session::flash('flash_message', 'You are not allowed to delete this idea.');
+            return Redirect::back();
+        }
         $idea->votes()->delete();
         $idea->delete();
         Session::flash('flash_message', 'Good Idea deleted.');
         return Redirect::route('goodideas::index');
+    }
+
+    public function deleteAll() {
+        $ideas = GoodIdea::all();
+        foreach($ideas as $idea) {
+            $idea->delete();
+        }
     }
 
     public function vote(Request $request) {

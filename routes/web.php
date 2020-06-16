@@ -505,7 +505,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
         Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
-        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@delete']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
         Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
         Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
     });
