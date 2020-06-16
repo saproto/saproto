@@ -46,7 +46,6 @@
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        console.log(response);
                         $(`span[data-id='${id}']`).html(response.voteScore);
                         switch(response.userVote) {
                             case 1:

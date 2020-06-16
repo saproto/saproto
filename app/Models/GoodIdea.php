@@ -20,8 +20,8 @@ class GoodIdea extends Model
         return $this->votes()->sum('vote');
     }
 
-    public function userVote() {
-        $vote = GoodIdeaVote::where('user_id', Auth::id())->where('good_idea_id', $this->id)->first();
+    public function userVote(User $user) {
+        $vote = $this->votes()->where('user_id', $user->id)->first();
         if($vote) return $vote->vote;
         return 0;
     }

@@ -6,9 +6,9 @@
         <span>
             <span data-id="{{ $idea->id }}">{{ $idea->voteScore() }}</span>
             <a data-id="{{ $idea->id }}"
-               class="gi_upvote fa-thumbs-up {{ $idea->userVote() == 1 ? "fas" : "far" }}"></a>
+               class="gi_upvote fa-thumbs-up {{ $idea->userVote(Auth::user()) == 1 ? "fas" : "far" }}"></a>
             <a data-id="{{ $idea->id }}"
-               class="gi_downvote fa-thumbs-down {{ $idea->userVote() == -1 ? "fas" : "far" }}"></a>
+               class="gi_downvote fa-thumbs-down {{ $idea->userVote(Auth::user()) == -1 ? "fas" : "far" }}"></a>
         </span>
 
         @if (Auth::user()->can("board") || Auth::user()->id == $idea->user->id)

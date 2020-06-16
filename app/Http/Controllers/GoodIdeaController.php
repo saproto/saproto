@@ -58,8 +58,8 @@ class GoodIdeaController extends Controller
     public function vote(Request $request) {
         $idea = GoodIdea::findOrFail($request->input('id'));
         $vote = GoodIdeaVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
-        $vote->vote = $request->input('voteValue');
+        $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
         $vote->save();
-        return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote()]);
+        return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote(Auth::user())]);
     }
 }

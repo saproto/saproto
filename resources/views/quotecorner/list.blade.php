@@ -53,7 +53,7 @@
                 },
                 error: function () {
 
-                    console.log('Something went wrong liking the quote. Please try again.');
+                    window.alert('Something went wrong liking the quote. Please try again.');
 
                 }
             });
