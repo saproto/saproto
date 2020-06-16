@@ -12,6 +12,7 @@
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12">
             @include('users.profile.includes.committees')
+            @include('users.profile.includes.societies')
         </div>
         @if($user->show_achievements && count($user->achieved()) > 0)
             <div class="col-xl-3 col-lg-6 col-md-12">

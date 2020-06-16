@@ -220,6 +220,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to societies
+     */
+
+    Route::group(['prefix' => 'society', 'as' => 'society::'], function () {
+        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
+    });
+
+    /*
      * Routes related to narrowcasting.
      */
     Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {

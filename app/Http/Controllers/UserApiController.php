@@ -34,7 +34,12 @@ class UserApiController extends Controller
 
     public function getCommittees()
     {
-        return CommitteeMembership::where('user_id', Auth::id())->with('committee')->get();
+        return CommitteeMembership::where('user_id', Auth::id())->with('committee')->get()->where('is_society', false);
+    }
+
+    public function getSocieties()
+    {
+        return CommitteeMembership::where('user_id', Auth::id())->with('committee')->get()->where('is_society', true);
     }
 
     public function getAchievements()
