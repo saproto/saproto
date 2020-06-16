@@ -946,7 +946,7 @@
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function () {
-        var u = "//metis.proto.utwente.nl/analytics/";
+        var u = "//{{ config('proto.analytics_url') }}/";
         _paq.push(['setTrackerUrl', u + 'piwik.php']);
         _paq.push(['setSiteId', '3']);
         var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
