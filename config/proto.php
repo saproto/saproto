@@ -295,5 +295,8 @@ return [
         'Light' => 'assets/application-light.css',
         'Dark' => 'assets/application-dark.css',
         'Rainbow Barf' => 'assets/application-rainbowbarf.css'
-    ]
+    ],
+
+    // Analytics URL
+    'analytics_url' => env('ANALYTICS_URL', '')
 ];
