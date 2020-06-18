@@ -1222,7 +1222,7 @@
     $("#purchase").on("click", function () {
         $("#modal-overlay").show();
         $("#purchase-modal").removeClass('inactive');
-        doQrAuth($("#purchase-modal .qrAuth"), "Payment for purchases in Omnomcom", purchase);
+        doQrAuth($("#purchase-modal .qrAuth"), "Payment of €" + $("#total").html() + " for purchases in Omnomcom", purchase);
 
         $("#purchase-modal h1").html("Complete purchase using your <i class=\"fas fa-cookie-bite\"></i> OmNomCom bill.");
         cash = false;
