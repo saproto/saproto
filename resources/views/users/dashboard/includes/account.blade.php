@@ -280,8 +280,8 @@
                                 Use my profile picture in the Lustrum Almanac.
                             </label>
                             <small class="form-text text-muted">
-                                With this you allow for the use of my profile picture in the Lustrum Alamanac<br>
-                                if one will be published during your Proto membership
+                                With this you allow for the use of your profile picture in the Lustrum Alamanac<br>
+                                if one will be published during your Proto membership.
                             </small>
 
                         </td>
