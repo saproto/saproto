@@ -200,15 +200,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
-            ->where(function ($query) {
-                $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
-            })
-            ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
-            ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+        return $this->getGroups()->where('is_society', false);
+    }
+
+    /**
+     * @return mixed Returns all societies a user is currently a member of.
+     */
+    public function societies()
+    {
+        return $this->getGroups()->where('is_society', true);
     }
 
     /**
@@ -282,7 +282,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->where(function ($q) {
                     $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })->get()
+                })
+                ->with('committee')
+                ->get()
+                ->where('committee.is_society', false)
             ) > 0;
     }
 
@@ -473,6 +476,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             return null;
         }
+    }
+
+    private function getGroups() {
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
+            ->where(function ($query) {
+                $query->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
     }
 
 }

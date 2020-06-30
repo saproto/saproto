@@ -51,18 +51,18 @@ class CheckUtwenteAccounts extends Command
         foreach ($users as $user) {
 
             // Find remote user
-            $userprincipalname = $user->utwente_username . '@utwente.nl';
-            $remoteusers = LdapController::searchUtwente("userprincipalname=$userprincipalname");
+            $utwente_username = $user->utwente_username;
+            $remoteusers = LdapController::searchUtwente("cn=$utwente_username");
 
             // See if user is active
             $active = true;
             if (count($remoteusers) < 1) {
-                $msg = "Not found: $userprincipalname (" . $user->name . ")";
+                $msg = "Not found: $utwente_username (" . $user->name . ")";
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;
             } else if (!$remoteusers[0]->active) {
-                $msg = "Inactive: $userprincipalname (" . $user->name . ")";
+                $msg = "Inactive: $utwente_username (" . $user->name . ")";
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;

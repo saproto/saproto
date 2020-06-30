@@ -29,7 +29,12 @@ class QuoteCornerController extends Controller
                 $popularLikes = count($likes);
             }
         }
-        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
+
+        if (request()->wantsJson()) {
+            return ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular];
+        } else {
+            return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
+        }
     }
 
     public function add(Request $request)

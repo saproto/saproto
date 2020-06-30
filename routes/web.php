@@ -220,6 +220,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to societies
+     */
+
+    Route::group(['prefix' => 'society', 'as' => 'society::'], function () {
+        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
+    });
+
+    /*
      * Routes related to narrowcasting.
      */
     Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
@@ -495,6 +504,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
         Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
+    });
+
+    /*
+     * Routes related to the Good Idea Board.
+     */
+    Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
+        Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
+        Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
+        Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
     });
 
     /*

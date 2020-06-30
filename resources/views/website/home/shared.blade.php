@@ -84,7 +84,7 @@
 
                                     <div class="swiper-slide justify-content-center d-flex">
                                         <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                            <img class="company-{{$company->name}}" src="{{ $company->image->generateImagePath(null, 50) }}">
+                                            <img class="company-{{strtolower($company->name)}}" src="{{ $company->image->generateImagePath(null, 50) }}">
                                         </a>
                                     </div>
 

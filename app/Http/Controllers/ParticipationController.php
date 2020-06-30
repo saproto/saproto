@@ -55,7 +55,7 @@ class ParticipationController extends Controller
             }
             $data['committees_activities_id'] = $helping->id;
             Mail::queue((new HelperMutation(Auth::user(), $helping, true))->onQueue('medium'));
-        } elseif($is_web) {
+        } elseif ($is_web) {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
                 $request->session()->flash('flash_message', 'You have been placed on the back-up list for ' . $event->title . '.');
                 $data['backup'] = true;
@@ -72,7 +72,7 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        if($is_web) {
+        if ($is_web) {
             return Redirect::back();
         } else {
             if ($event->activity->isFull() || !$event->activity->canSubscribe()) {
@@ -80,11 +80,11 @@ class ParticipationController extends Controller
             } else {
                 $message = 'You claimed a spot for ' . $event->title . '.';
             }
-            $data = json_encode((object)[
-               'message' => $message,
-               'participation_id' => $participation->id
-            ]);
-            abort(200, $data);
+            abort(200, json_encode((object)[
+                'success' => true,
+                'message' => $message,
+                'participation_id' => $participation->id
+            ]));
         }
 
     }
@@ -135,7 +135,7 @@ class ParticipationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id The id of the participation to be removed.
+     * @param int $id The id of the participation to be removed.
      * @return \Illuminate\Http\Response
      */
     public function destroy($participation_id, Request $request)
@@ -190,7 +190,7 @@ class ParticipationController extends Controller
             }
 
             Mail::queue((new HelperMutation($participation->user, $participation->help, false))
-                    ->onQueue('medium'));
+                ->onQueue('medium'));
 
             $participation->delete();
 
@@ -199,7 +199,10 @@ class ParticipationController extends Controller
         if ($is_web) {
             return Redirect::back();
         } else {
-            abort(200, $message);
+            abort(200, json_encode((object)[
+                'success' => true,
+                'message' => $message,
+            ]));
         }
 
     }
