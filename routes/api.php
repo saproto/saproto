@@ -56,8 +56,18 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
-    Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api']], function () {
+    Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api', 'member']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'QuoteCornerController@overview']);
+        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
+    });
+
+    Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
+        });
+        Route::group(['middleware' => ['web']], function () {
+            Route::get('unauthenticated', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
+        });
     });
 
     Route::group(['prefix' => 'slack', 'as' => 'slack::', 'middleware' => ['web']], function () {
