@@ -354,12 +354,14 @@ class EventController extends Controller
     }
 
 
-    public function apiUpcomingEvents($limit = 20)
+    public function apiUpcomingEvents($limit = 20, Request $request)
     {
 
         $user = (Auth::check() ? Auth::user() : null);
 
-        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
+
+        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {

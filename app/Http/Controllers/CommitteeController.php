@@ -61,6 +61,7 @@ class CommitteeController extends Controller
             $data[] = (object)[
                 'id' => $committee->id,
                 'name' => $committee->name,
+                'description' => $committee->description,
                 'email' => sprintf('%s@%s', $committee->slug, config('proto.emaildomain')),
                 'photo' => $committee->image->generateImagePath(null, null),
                 'current_members' => $current_members
