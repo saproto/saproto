@@ -50,7 +50,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $schedule->command('queue:work --daemon')->everyMinute()->withoutOverlapping();
         $schedule->command('proto:emailcron')->everyMinute();
         $schedule->command('proto:dasync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
@@ -68,6 +67,5 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
-        $schedule->command('proto:memberrenewcron')->cron('0 2 1 8 *');
     }
 }
