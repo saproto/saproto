@@ -188,6 +188,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
+     * @return mixed The membership contract of this user.
+     */
+    public function membershipContract() {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'membership_contract_id');
+    }
+
+    /**
      * @return mixed The associated addresses, if any.
      */
     public function address()

@@ -2,9 +2,11 @@
 
 namespace Proto\Http\Controllers;
 
+use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
+use Illuminate\Support\Facades\Storage;
 use Proto\Mail\MembershipEnded;
 use Proto\Mail\MembershipStarted;
 use Proto\Models\Member;
@@ -242,7 +244,7 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
-    public function showForm(Request $request, $id)
+    public function showMemberForm(Request $request, $id)
     {
 
         if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
@@ -251,12 +253,16 @@ class UserAdminController extends Controller
 
         $user = User::findOrFail($id);
 
+        if ($user->membershipContract) {
+            Storage::download($user->membershipContract->generatePath(), $user->name . ' membership contract.pdf');
+        }
+
         if ($user->address === null) {
             Session::flash("flash_message", "This user has no address!");
             return Redirect::back();
         }
 
-        $form = PDF::loadView('users.admin.membershipform', ['user' => $user]);
+        $form = PDF::loadView('users.admin.membershipform', ['user' => $user, 'signature' => null]);
 
         $form = $form->setPaper('a4');
 
@@ -268,7 +274,22 @@ class UserAdminController extends Controller
 
     }
 
-    public function printForm(Request $request)
+    public function destroyMemberForm($id)
+    {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+
+        $user->membershipContract()->dissociate();
+        $user->save();
+
+        Session::flash("flash_message", "The signed membership contract of " . $user->name . "has been deleted!");
+        return Redirect::back();
+    }
+
+    public function printMemberForm(Request $request)
     {
 
         $user = User::find($request->input('id'));

@@ -54,7 +54,7 @@
 </p>
 
 <p>
-    Membership of the association is renewed anually, following a timely notice reminding the member membership is
+    Membership of the association is renewed annually, following a timely notice reminding the member membership is
     renewed. Membership may be terminated, without cost, before the start of the new academic year.
 </p>
 
@@ -78,8 +78,11 @@
     at least one physical address of the undersigned.
 </p>
 
-<div style="height: 25mm;">
-    <p>Signature:</p>
+<div style="height: 30mm;">
+    <p style="margin-bottom: 0">Signature:</p>
+    @if ($signature)
+        <img src="{{ $signature }}" height="150">
+    @endif
 </div>
 
 <p>

@@ -33,14 +33,40 @@
                 <li class="list-group-item">
                     Not a member
                 </li>
-                <a href="javascript:void();" class="list-group-item" data-toggle="modal" data-target="#addMembership">
-                    Make member
-                </a>
-            @endif
-            @if($user->address&&$user->hasCompletedProfile())
-                <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
-                    Show membership form
-                </a>
+                @if($user->address&&$user->hasCompletedProfile())
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle text-success"></i>
+                        Has complete profile
+                    </li>
+                    @if ($user->membershipContract)
+                        <li class="list-group-item">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <b>Signed</b> membership form
+                        </li>
+                        <a href="javascript:void();" class="list-group-item" data-toggle="modal" data-target="#addMembership">
+                            Make member
+                        </a>
+                        <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
+                            Get signed membership form
+                        </a>
+                        <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMemberForm">
+                            Delete membership form
+                        </a>
+                    @else
+                        <li class="list-group-item">
+                            <i class="fas fa-times-circle text-danger"></i>
+                            <b>Has not signed</b> membership form
+                        </li>
+                        <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
+                            Generate membership form
+                        </a>
+                    @endif
+                @else
+                    <li class="list-group-item">
+                        <i class="fas fa-times-circle text-danger"></i>
+                        Has not completed profile yet
+                    </li>
+                @endif
             @endif
 
         </ul>

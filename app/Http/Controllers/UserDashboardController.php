@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
 use Proto\Mail\UserMailChange;
+use Proto\Models\StorageEntry;
 use Redirect;
 
 use Proto\Models\User;
@@ -13,6 +14,7 @@ use Proto\Models\User;
 use Carbon\Carbon;
 
 use DateTime;
+use PDF;
 use Auth;
 use Session;
 use Validator;
@@ -25,7 +27,7 @@ class UserDashboardController extends Controller
      * Display the dashboard for a specific user.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show()
     {
@@ -180,12 +182,20 @@ class UserDashboardController extends Controller
                 'text' => "To make you a member of our association, we need your postal address. Please add it to your account here."
             ],
             [
+                'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
+                'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->membership_contract_id,
+                'heading' => "Sign the membership contract",
+                'icon' => "fas fa-signature",
+                'text' => "To complete your membership we need you to sign the membership contract."
+            ],
+            [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address && Auth::user()->membership_contract_id,
                 'done' => Auth::check() && Auth::user()->member,
                 'heading' => "Become a member!",
                 'icon' => "fas fa-trophy",
-                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230)."
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server."
             ],
             [
                 'url' => route('user::dashboard', ['wizard' => 1]),
@@ -250,6 +260,32 @@ class UserDashboardController extends Controller
             return view("users.dashboard.completeprofile_verify",
                 ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]);
         }
+    }
+
+    public function getMemberForm() {
+        $user = Auth::user();
+        if ($user->hasCompletedProfile() && $user->signature) {
+            Session::flash("flash_message", "You have already signed the membership contract");
+            return Redirect::route('becomeamember');
+        }
+
+        return view("users.dashboard.membercontract", ['user' => $user]);
+    }
+
+    public function postMemberForm(Request $request) {
+        $user = Auth::user();
+
+        $contract = PDF::loadView('users.admin.membershipform', ['user' => $user, 'signature' => $request->input('signature')]);
+        $contract = $contract->setPaper('a4');
+
+        $file = new StorageEntry();
+        $file->createFromData($contract->output(), 'application/pdf', 'membership_contract_user_' . $user->id . '.pdf');
+
+        $user->membershipContract()->associate($file);
+        $user->save();
+
+        Session::flash("flash_message", "Thanks for signing the membership contract!");
+        return Redirect::route('becomeamember');
     }
 
     public function getClearProfile()
