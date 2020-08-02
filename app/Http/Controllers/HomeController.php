@@ -34,7 +34,7 @@ class HomeController extends Controller
     public function show()
     {
 
-        $companies = Company::where('in_logo_bar', true)->orderBy('sort', 'asc')->get();
+        $companies = Company::where('in_logo_bar', true)->inRandomOrder()->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get();
         $dinnerform = Dinnerform::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour(1))->first();
