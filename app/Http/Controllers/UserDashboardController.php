@@ -66,6 +66,7 @@ class UserDashboardController extends Controller
             $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
             $userdata['show_omnomcom_calories'] = $request->has('show_omnomcom_calories');
             $userdata['show_achievements'] = $request->has('show_achievements');
+            $userdata['profile_in_almanac'] = $request->has('profile_in_almanac');
         }
 
         if ($request->has('disable_omnomcom')) {
