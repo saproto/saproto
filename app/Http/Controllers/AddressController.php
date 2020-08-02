@@ -124,6 +124,7 @@ class AddressController extends Controller
             } catch (Exception $e) {
                 Session::flash("flash_message", sprintf("No address could be found for %s, %s.",
                     $addressdata['zipcode-nl'], $addressdata['number-nl']));
+                    return Redirect::back();
             }
 
         } else {
