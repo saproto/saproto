@@ -349,11 +349,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return (strlen(str_replace(["\r", "\n", " "], "", $this->diet)) > 0 ? true : false);
     }
 
-    public function renderDiet()
-    {
-        return nl2br($this->diet);
-    }
-
     public function getDisplayEmail()
     {
         return ($this->member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;

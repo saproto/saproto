@@ -33,7 +33,7 @@
 
                                     <tr>
                                         <td>{{ $user->name }}</td>
-                                        <td>{!! $user->renderDiet() !!}</td>
+                                        <td>{!! Markdown::convertToHtml($user->diet) !!}</td>
                                     </tr>
 
                                 @endif
