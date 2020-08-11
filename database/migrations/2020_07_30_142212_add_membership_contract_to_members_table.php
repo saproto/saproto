@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddMembershipContractToUsersTable extends Migration
+class AddMembershipContractToMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddMembershipContractToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->string('membership_contract_id')->after('image_id')->default(null);
+        Schema::table('members', function(Blueprint $table) {
+            $table->string('membership_contract_id')->after('proto_username')->nullable()->default(null);
+            $table->string('pending')->after('is_donator')->default(false);
         });
     }
 
@@ -25,8 +26,9 @@ class AddMembershipContractToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('members', function (Blueprint $table) {
             $table->dropColumn('membership_contract_id');
+            $table->dropColumn('pending');
         });
     }
 }

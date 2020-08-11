@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
 use Proto\Mail\UserMailChange;
+use Proto\Models\Member;
 use Proto\Models\StorageEntry;
 use Redirect;
 
@@ -63,7 +64,7 @@ class UserDashboardController extends Controller
             }
         }
 
-        if ($user->member) {
+        if ($user->is_member) {
             $userdata['show_birthday'] = $request->has('show_birthday');
             $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
             $userdata['show_omnomcom_calories'] = $request->has('show_omnomcom_calories');
@@ -185,22 +186,22 @@ class UserDashboardController extends Controller
             [
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
-                'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->membership_contract_id,
+                'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm(),
                 'heading' => "Sign the membership contract",
                 'icon' => "fas fa-signature",
-                'text' => "To complete your membership we need you to sign the membership contract."
+                'text' => "To complete your membership request we need you to sign the membership contract."
             ],
             [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address && Auth::user()->membership_contract_id,
-                'done' => Auth::check() && Auth::user()->member,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address && Auth::user()->hasSignedMembershipForm(),
+                'done' => Auth::check() && Auth::user()->is_member,
                 'heading' => "Become a member!",
                 'icon' => "fas fa-trophy",
-                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server."
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server (invite.gg/proto)."
             ],
             [
                 'url' => route('user::dashboard', ['wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->member,
+                'unlocked' => Auth::check() && Auth::user()->is_member,
                 'done' => false,
                 'heading' => "Add some additional info on your dashboard",
                 'icon' => "fas fa-tachometer-alt",
@@ -265,25 +266,28 @@ class UserDashboardController extends Controller
 
     public function getMemberForm() {
         $user = Auth::user();
-        if ($user->hasCompletedProfile() && $user->signature) {
+        if ($user->hasCompletedProfile() && $user->hasSignedMembershipForm()) {
             Session::flash("flash_message", "You have already signed the membership contract");
             return Redirect::route('becomeamember');
         }
 
-        return view("users.dashboard.membercontract", ['user' => $user]);
+        return view("users.dashboard.membershipform", ['user' => $user]);
     }
 
     public function postMemberForm(Request $request) {
         $user = Auth::user();
+        $member = Member::create();
+        $member->user()->associate($user);
+        $member->pending = true;
 
-        $contract = PDF::loadView('users.admin.membershipform', ['user' => $user, 'signature' => $request->input('signature')]);
+        $contract = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]);
         $contract = $contract->setPaper('a4');
 
         $file = new StorageEntry();
         $file->createFromData($contract->output(), 'application/pdf', 'membership_contract_user_' . $user->id . '.pdf');
 
-        $user->membershipContract()->associate($file);
-        $user->save();
+        $member->membershipContract()->associate($file);
+        $member->save();
 
         Session::flash("flash_message", "Thanks for signing the membership contract!");
         return Redirect::route('becomeamember');
@@ -295,7 +299,7 @@ class UserDashboardController extends Controller
         if (!$user->hasCompletedProfile()) {
             abort(403, "You have not yet completed your membership profile.");
         }
-        if ($user->member) {
+        if ($user->is_member) {
             abort(403, "You cannot clear your membership profile while your membership is active.");
         }
 
@@ -308,7 +312,7 @@ class UserDashboardController extends Controller
         if (!$user->hasCompletedProfile()) {
             abort(403, "You have not yet completed your membership profile.");
         }
-        if ($user->member) {
+        if ($user->is_member) {
             abort(403, "You cannot clear your membership profile while your membership is active.");
         }
 

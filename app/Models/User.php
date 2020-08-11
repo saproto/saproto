@@ -48,7 +48,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getPublicId()
     {
-        return ($this->member ? $this->member->proto_username : null);
+        return ($this->is_member ? $this->member->proto_username : null);
     }
 
     public static function fromPublicId($public_id)
@@ -91,7 +91,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->save();
 
         // Update DirectAdmin Password
-        if ($this->member != null) {
+        if ($this->is_member) {
             $da = new DirectAdmin;
             $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
             $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
@@ -185,13 +185,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             return asset('images/default-avatars/other.png');
         }
-    }
-
-    /**
-     * @return mixed The membership contract of this user.
-     */
-    public function membershipContract() {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'membership_contract_id');
     }
 
     /**
@@ -363,7 +356,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getDisplayEmail()
     {
-        return ($this->member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
     }
 
     /**
@@ -373,7 +366,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function isFirstYear()
     {
-        return $this->member
+        return $this->is_member
             && Carbon::instance(new DateTime($this->member->created_at))->age < 1
             && $this->did_study_create;
     }
@@ -386,6 +379,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasCompletedProfile()
     {
         return $this->birthdate !== null && $this->phone !== null;
+    }
+
+    public function hasSignedMembershipForm() {
+        if ($this->member) {
+            return $this->member->membershipContract !== null;
+        }
     }
 
     public function clearMemberProfile()
@@ -457,7 +456,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getIsMemberAttribute()
     {
-        return $this->member !== null;
+        return $this->member !== null && !$this->member->pending;
     }
 
     public function getIsProtubeAdminAttribute()

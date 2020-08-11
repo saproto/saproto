@@ -128,8 +128,13 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        $member = Member::create();
-        $member->user()->associate($user);
+        if (!$user->member) {
+            $member = Member::create();
+            $member->user()->associate($user);
+        } else {
+            $member = $user->member;
+            $member->pending = false;
+        }
 
         /** Create member alias */
 
@@ -246,15 +251,14 @@ class UserAdminController extends Controller
 
     public function showMemberForm(Request $request, $id)
     {
-
         if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
             abort(403);
         }
 
         $user = User::findOrFail($id);
 
-        if ($user->membershipContract) {
-            Storage::download($user->membershipContract->generatePath(), $user->name . ' membership contract.pdf');
+        if ($user->member->membershipContract) {
+            Storage::download($user->member->membershipContract->generatePath(), $user->name . ' membership contract.pdf');
         }
 
         if ($user->address === null) {
@@ -262,7 +266,7 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        $form = PDF::loadView('users.admin.membershipform', ['user' => $user, 'signature' => null]);
+        $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]);
 
         $form = $form->setPaper('a4');
 
@@ -281,9 +285,9 @@ class UserAdminController extends Controller
         }
 
         $user = User::findOrFail($id);
+        $member = $user->member;
 
-        $user->membershipContract()->dissociate();
-        $user->save();
+        $member::destroy();
 
         Session::flash("flash_message", "The signed membership contract of " . $user->name . "has been deleted!");
         return Redirect::back();

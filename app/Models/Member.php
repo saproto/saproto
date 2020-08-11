@@ -19,6 +19,10 @@ class Member extends Model
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
+    public function membershipContract() {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'membership_contract_id');
+    }
+
     public static function countActiveMembers()
     {
         $userids = [];

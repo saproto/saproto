@@ -24,7 +24,7 @@ class UsernameReminderEmail extends Mailable
     public function __construct(User $user)
     {
         $this->name = $user->calling_name;
-        $this->ismember = $user->member !== null;
+        $this->ismember = $user->is_member;
         $this->username = $this->ismember ? $user->member->proto_username : null;
     }
 
