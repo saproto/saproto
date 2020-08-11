@@ -123,7 +123,7 @@ class UserDashboardController extends Controller
 
         $user = Auth::user();
 
-        $user->diet = $request->input('diet');
+        $user->diet = htmlspecialchars($request->input('diet'));
         $user->save();
 
         Session::flash("flash_message", "Your diet and allergy information has been updated.");
