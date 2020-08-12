@@ -257,8 +257,8 @@ class UserAdminController extends Controller
 
         $user = User::findOrFail($id);
 
-        if ($user->member->membershipContract) {
-            Storage::download($user->member->membershipContract->generatePath(), $user->name . ' membership contract.pdf');
+        if ($user->member->membershipForm) {
+            Storage::download($user->member->membershipForm->generatePath(), $user->name . ' membership form.pdf');
         }
 
         if ($user->address === null) {
@@ -289,7 +289,7 @@ class UserAdminController extends Controller
 
         $member::destroy();
 
-        Session::flash("flash_message", "The signed membership contract of " . $user->name . "has been deleted!");
+        Session::flash("flash_message", "The signed membership form of " . $user->name . "has been deleted!");
         return Redirect::back();
     }
 

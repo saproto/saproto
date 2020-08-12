@@ -187,9 +187,9 @@ class UserDashboardController extends Controller
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
                 'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm(),
-                'heading' => "Sign the membership contract",
+                'heading' => "Sign the membership form",
                 'icon' => "fas fa-signature",
-                'text' => "To complete your membership request we need you to sign the membership contract."
+                'text' => "To complete your membership request we need you to sign the membership form."
             ],
             [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
@@ -267,7 +267,7 @@ class UserDashboardController extends Controller
     public function getMemberForm() {
         $user = Auth::user();
         if ($user->hasCompletedProfile() && $user->hasSignedMembershipForm()) {
-            Session::flash("flash_message", "You have already signed the membership contract");
+            Session::flash("flash_message", "You have already signed the membership form");
             return Redirect::route('becomeamember');
         }
 
@@ -280,16 +280,16 @@ class UserDashboardController extends Controller
         $member->user()->associate($user);
         $member->pending = true;
 
-        $contract = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]);
-        $contract = $contract->setPaper('a4');
+        $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]);
+        $form = $form->setPaper('a4');
 
         $file = new StorageEntry();
-        $file->createFromData($contract->output(), 'application/pdf', 'membership_contract_user_' . $user->id . '.pdf');
+        $file->createFromData($form->output(), 'application/pdf', 'membership_form_user_' . $user->id . '.pdf');
 
-        $member->membershipContract()->associate($file);
+        $member->membershipForm()->associate($file);
         $member->save();
 
-        Session::flash("flash_message", "Thanks for signing the membership contract!");
+        Session::flash("flash_message", "Thanks for signing the membership form!");
         return Redirect::route('becomeamember');
     }
 

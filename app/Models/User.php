@@ -383,7 +383,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasSignedMembershipForm() {
         if ($this->member) {
-            return $this->member->membershipContract !== null;
+            return $this->member->membershipForm !== null;
         }
     }
 
