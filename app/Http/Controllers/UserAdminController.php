@@ -249,16 +249,16 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
-    public function showMemberForm(Request $request, $id)
+    public function showMemberForm($id)
     {
-        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
             abort(403);
         }
 
         $user = User::findOrFail($id);
 
         if ($user->member->membershipForm) {
-            Storage::download($user->member->membershipForm->generatePath(), $user->name . ' membership form.pdf');
+            return Storage::download($user->member->membershipForm->generatePath(), $user->name . ' membership form.pdf');
         }
 
         if ($user->address === null) {
@@ -267,14 +267,9 @@ class UserAdminController extends Controller
         }
 
         $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]);
-
         $form = $form->setPaper('a4');
 
-        if ($request->ip() != config('app-proto.printer-host')) {
-            return $form->stream();
-        } else {
-            return $form->download();
-        }
+        return $form->download();
 
     }
 
@@ -293,10 +288,10 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
-    public function printMemberForm(Request $request)
+    public function printMemberForm($id)
     {
 
-        $user = User::find($request->input('id'));
+        $user = User::find($id);
 
         if (!$user) {
             return "This user could not be found!";

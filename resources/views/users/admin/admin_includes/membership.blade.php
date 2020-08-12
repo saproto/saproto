@@ -28,6 +28,11 @@
                 <a href="javascript:void();" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                     Print opener overlay
                 </a>
+                @if($user->hasSignedMembershipForm())
+                    <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
+                        Get signed membership form
+                    </a>
+                @endif
             @else
                 <li class="list-group-item">
                     Not a member
@@ -42,9 +47,6 @@
                             <i class="fas fa-check-circle text-success"></i>
                             <b>Signed</b> membership form
                         </li>
-                        <a href="javascript:void();" class="list-group-item" data-toggle="modal" data-target="#addMembership">
-                            Make member
-                        </a>
                         <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
                             Get signed membership form
                         </a>
@@ -56,13 +58,17 @@
                             <i class="fas fa-times-circle text-danger"></i>
                             <b>Has not signed</b> membership form
                         </li>
-                        <a href="javascript:void();" class="list-group-item" data-toggle="modal" data-target="#addMembership">
-                            Make member
-                        </a>
+
                         <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
-                            Generate membership form
+                            Download membership form
+                        </a>
+                        <a class="list-group-item" href="{{ route('memberform::print', ['id' => $user->id]) }}">
+                            Print membership form
                         </a>
                     @endif
+                    <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#addMembership">
+                        Make member
+                    </a>
                 @else
                     <li class="list-group-item">
                         <i class="fas fa-times-circle text-danger"></i>
