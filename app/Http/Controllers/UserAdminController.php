@@ -2,6 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -133,6 +134,7 @@ class UserAdminController extends Controller
             $member->user()->associate($user);
         } else {
             $member = $user->member;
+            $member->created_at = Carbon::now()->toDateTimeString();
             $member->pending = false;
         }
 
@@ -282,7 +284,7 @@ class UserAdminController extends Controller
         $user = User::findOrFail($id);
         $member = $user->member;
 
-        $member::destroy();
+        $member->forceDelete();
 
         Session::flash("flash_message", "The signed membership form of " . $user->name . "has been deleted!");
         return Redirect::back();
