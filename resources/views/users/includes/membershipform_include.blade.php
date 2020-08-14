@@ -14,12 +14,8 @@
 </p>
 
 <p>
-    The undersigned is aware of the
-    <a href="https://wiki.proto.utwente.nl/_media/proto/statues_v3_eng_censor.pdf" target="_blank">Bylaws</a>
-    (NL: <a href="https://wiki.proto.utwente.nl/_media/proto/statuten_v3_nl_censor.pdf" target="_blank">Statuten)</a> and
-    <a href="https://wiki.proto.utwente.nl/_media/proto/rules_and_regulations_s.a._proto_en_.pdf" target="_blank">Rules & Regulations</a>
-    (NL: <a href="https://wiki.proto.utwente.nl/_media/proto/rules_and_regulations_s.a._proto_nl_.pdf" target="_blank">Huishoudelijk Regelement)</a>
-    of the association and promises to follow them.
+    The undersigned is aware of the Bylaws (NL: Statuten) and Rules & Regulations (NL: Huishoudelijk Regelement) of the association and promises to follow them.
+    More information on the before mentioned documents can be found on the <a href="https://wiki.proto.utwente.nl/proto/start" target="_blank">DokuWiki</a>.
 </p>
 
 <p>
