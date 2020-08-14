@@ -24,12 +24,16 @@ class EventController extends Controller
     /**
      * Display a listing of upcoming activites.
      *
+     * @param integer $category
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($category = null)
     {
-
-        $events = Event::orderBy('start')->get();
+        if ($category != null) {
+            $events = Event::where('category', $category)->orderBy('start')->get();
+        } else {
+            $events = Event::orderBy('start')->get();
+        }
         $data = [[], [], []];
         $years = [];
 
@@ -119,7 +123,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
 
-
         $event = new Event();
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -127,10 +130,10 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->category = $request->category;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
-        $event->is_educational = $request->has('is_educational');
         $event->is_featured = $request->has('is_featured');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
@@ -205,10 +208,10 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->secret = $request->secret;
         $event->description = $request->description;
+        $event->category = $request->category;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_external = $request->has('is_external');
-        $event->is_educational = $request->has('is_educational');
         $event->is_featured = $request->has('is_featured');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 

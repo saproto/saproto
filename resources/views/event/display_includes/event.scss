@@ -34,3 +34,9 @@ $event-hover-bg: #aaa !default;
 .event p {
   margin: 0;
 }
+
+@include media-breakpoint-down("lg") {
+  #archive-bar {
+    overflow-x: auto;
+  }
+}

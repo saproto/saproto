@@ -56,6 +56,10 @@
         </li>
 
         <li class="list-group-item">
+            {!! $event->getEventCategory() !!}
+        </li>
+
+        <li class="list-group-item">
             <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> {{ $event->location }}
         </li>
 

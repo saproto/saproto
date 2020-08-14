@@ -40,7 +40,7 @@
 
                         <div class="col-md-4 mb-3">
 
-                            <label for="organisation">Organization: {!! $event && $event->committee ? $event->committee->name : null !!}</label>
+                            <label for="organisation">Organisation: {!! $event && $event->committee ? $event->committee->name : null !!}</label>
                             <select class="form-control committee-search" id="organisation" name="committee"></select>
 
                         </div>
@@ -73,25 +73,35 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label>Event visibility:</label>
-                            <select name="secret" class="form-control" required>
-                                <option value="1" {{ ($event != null && $event->secret ? 'selected' : '') }}>
-                                    This activity is
-                                    secret.
-                                </option>
-                                <option value="0" {{ ($event != null && !$event->secret ? 'selected' : '') }}>
-                                    This activity is
-                                    public.
-                                </option>
+                            <label>Event image:</label>
+                            <div class="custom-file">
+                                <label class="custom-file-label" for="customFile">Update event image.</label>
+                                <input type="file" class="custom-file-input" name="image">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label>Event category:</label>
+                            <select name="category" class="form-control" required>
+                                @foreach(config('event.category') as $category=>$index)
+                                    <option value="{{ $index }}" {{ ($event != null && $event->category == $index ? 'selected' : '') }}>
+                                        {{ $category }}
+                                    </option>
+                                @endforeach
                             </select>
 
                         </div>
 
                         <div class="col-md-6 mb-3">
 
-                            <div class="custom-file">
-                                <label class="custom-file-label" for="customFile">Update committee image.</label>
-                                <input type="file" class="custom-file-input" name="image">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="secret"
+                                            {{ ($event && $event->secret ? 'checked' : '') }}>
+                                    This event is secret and can only be seen by admins.
+                                </label>
                             </div>
 
                         </div>
@@ -127,18 +137,6 @@
                                     <input type="checkbox" name="is_external"
                                             {{ ($event && $event->is_external ? 'checked' : '') }}>
                                     This activity is not organized by Proto.
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_educational"
-                                            {{ ($event && $event->is_educational ? 'checked' : '') }}>
-                                    This activity is educational.
                                 </label>
                             </div>
 

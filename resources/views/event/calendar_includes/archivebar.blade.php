@@ -1,6 +1,6 @@
-<div class="row" style="overflow-x: auto;">
+<div class="row">
 
-    <div class="col text-center">
+    <div id="archive-bar" class="col text-center">
 
         <div class="btn-group mb-3">
 
@@ -9,7 +9,19 @@
                 Upcoming
             </a>
 
-            <button type="button" class="btn btn-secondary">
+            <button class="btn btn-{{ Route::currentRouteName() == 'event::sorted' ? 'primary' : 'secondary' }} d-none d-lg-block" type="button" id="sorted-dropdown-button" data-toggle="dropdown">
+                Sorted
+            </button>
+            <button class="btn btn-{{ Route::currentRouteName() == 'event::sorted' ? 'primary' : 'secondary' }} d-block d-lg-none" type="button" id="sorted-modal-button" data-toggle="modal" data-target="#category-modal">
+                Sorted
+            </button>
+            <div class="dropdown-menu" style="z-index: 10" aria-labelledby=sorted-dropdown-button>
+                @foreach(config('event.category') as $category=>$index)
+                    <a class="dropdown-item" href="{{ route("event::sorted", ['category'=>$index]) }}">{{ $category }}</a>
+                @endforeach
+            </div>
+
+            <button type="button" class="btn btn-secondary" disabled>
                 Archive
             </button>
 
@@ -27,12 +39,12 @@
             @endforeach
 
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fas fa-calendar-alt mr-2"></i> Import calendar
+                <i class="fas fa-calendar-alt mr-2 d-inline"></i> <span class="d-none d-xl-inline">Import calendar</span>
             </button>
 
             @if(Auth::check() && Auth::user()->can('board'))
                 <a href="{{ route("event::add") }}" class="btn btn-info">
-                    <i class="fas fa-calendar-plus mr-2"></i> Create event
+                    <i class="fas fa-calendar-plus mr-2 d-inline"></i> <span class="d-none d-xl-inline">Create event</span>
                 </a>
             @endif
 
@@ -42,13 +54,34 @@
 
 </div>
 
+<div id="category-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select a category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </div>
+            <div class="modal-body">
+                <ul class="nav flex-column">
+                @foreach(config('event.category') as $category=>$index)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route("event::sorted", ['category'=>$index]) }}">{{ $category }}</a>
+                    </li>
+                @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="calendar-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title">Import our calendar into yours!</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Import our calendar into yours!</h4>
             </div>
             <div class="modal-body">
 

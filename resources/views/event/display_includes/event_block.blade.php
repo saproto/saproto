@@ -47,25 +47,23 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @endif
             <strong>{{ $event->title }}</strong>
 
-            @if($event->is_educational)
+            @if($event->getEventCategory())
                 <br>
-
                 <span>
-                    <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-                    Study related
+                    {!! $event->getEventCategory() !!}
                 </span>
             @endif
 
             <br>
 
-                <span>
-                    <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-            @if (isset($include_year))
-                        {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
-                    @else
-                        {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
-                    @endif
-                </span>
+            <span>
+                <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
+                @if (isset($include_year))
+                    {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
+                @else
+                    {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
+                @endif
+            </span>
 
             <br>
 

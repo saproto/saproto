@@ -339,6 +339,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('checklist/{id}', ['as' => 'checklist', 'uses' => 'ActivityController@checklist']);
 
         Route::get('archive/{year}', ['as' => 'archive', 'uses' => 'EventController@archive']);
+        Route::get('sorted/{category}', ['as' => 'sorted', 'uses' => 'EventController@index']);
 
         // Related to presence
         Route::get('togglepresence/{id}', ['as' => 'togglepresence', 'middleware' => ['auth'], 'uses' => 'ParticipationController@togglePresence']);
