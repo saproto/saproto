@@ -188,20 +188,7 @@ class Event extends Model
      * Categories can be found in the event config file
      */
     public function getEventCategory() {
-        switch ($this->category) {
-            case config('event.category')['career']:
-                return '<i class="fas fa-briefcase fa-fw" aria-hidden="true"></i> Career';
-            case config('event.category')['educational']:
-                return '<i class="fas fa-graduation-cap fa-fw" aria-hidden></i> Educational';
-            case config('event.category')['drink']:
-                return '<i class="fas fa-beer fa-fw" aria-hidden="true"></i> Drink';
-            case config('event.category')['trip']:
-                return '<i class="fas fa-suitcase-rolling fa-fw" aria-hidden="true"></i> Trip';
-            case config('event.category')['recreational']:
-                return '<i class="fas fa-umbrella-beach fa-fw" aria-hidden="true"></i> Recreational';
-            default:
-                return null;
-        }
+        return config('event.categories')[$this->category];
     }
 
     public function videos()

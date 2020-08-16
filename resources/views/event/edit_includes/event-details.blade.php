@@ -85,9 +85,9 @@
 
                             <label>Event category:</label>
                             <select name="category" class="form-control" required>
-                                @foreach(config('event.category') as $category=>$index)
-                                    <option value="{{ $index }}" {{ ($event != null && $event->category == $index ? 'selected' : '') }}>
-                                        {{ $category }}
+                                @foreach(config('event.category') as $index=>$category)
+                                    <option value="{{ $index }}" {{ ($event != null && $event->category['name'] == $index ? 'selected' : '') }}>
+                                        {{ $category['name'] }}
                                     </option>
                                 @endforeach
                             </select>

@@ -50,7 +50,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @if($event->getEventCategory())
                 <br>
                 <span>
-                    {!! $event->getEventCategory() !!}
+                    {!! $event->getEventCategory()['icon'] !!} {{ $event->getEventCategory()['name'] }}
                 </span>
             @endif
 

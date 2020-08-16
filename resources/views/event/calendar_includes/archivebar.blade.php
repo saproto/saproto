@@ -6,7 +6,7 @@
 
             <a href="{{ route("event::list") }}"
                class="btn btn-{{ Route::currentRouteName() == 'event::list' ? 'primary' : 'light' }}">
-                Upcoming
+                All Events
             </a>
 
             <button class="btn btn-{{ Route::currentRouteName() == 'event::sorted' ? 'primary' : 'secondary' }} d-none d-lg-block" type="button" id="sorted-dropdown-button" data-toggle="dropdown">
@@ -16,10 +16,13 @@
                 Sorted
             </button>
             <div class="dropdown-menu" style="z-index: 10" aria-labelledby=sorted-dropdown-button>
-                @foreach(config('event.category') as $category=>$index)
-                    <a class="dropdown-item" href="{{ route("event::sorted", ['category'=>$index]) }}">{{ $category }}</a>
+                @foreach(config('event.categories') as $index=>$category)
+                    <a class="dropdown-item" href="{{ route("event::sorted", ['category'=>$index]) }}">{{ $category['name'] }}</a>
                 @endforeach
             </div>
+            @if($sorted_category !== null)
+                <button class="btn btn-light" disabled>{!! $sorted_category['icon'] !!} {{ $sorted_category['name'] }}</button>
+            @endif
 
             <button type="button" class="btn btn-secondary" disabled>
                 Archive
@@ -64,9 +67,9 @@
             </div>
             <div class="modal-body">
                 <ul class="nav flex-column">
-                @foreach(config('event.category') as $category=>$index)
+                @foreach(config('event.categories') as $index=>$category)
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route("event::sorted", ['category'=>$index]) }}">{{ $category }}</a>
+                        <a class="nav-link btn btn-outline-dark" href="{{ route("event::sorted", ['category'=>$index]) }}">{!! $category['icon'] !!} {{ $category['name'] }}</a>
                     </li>
                 @endforeach
                 </ul>

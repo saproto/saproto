@@ -25,7 +25,7 @@ class EventController extends Controller
      * Display a listing of upcoming activites.
      *
      * @param integer $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index($category = null)
     {
@@ -62,7 +62,9 @@ class EventController extends Controller
 
         $calendar_url = route("ical::calendar", ["personal_key" => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
+        $sorted_category = $category ? config('event.categories')[$category] : null;
+
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'sorted_category' => $sorted_category]);
     }
 
     /**
