@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 
 use Proto\Mail\UserMailChange;
+use Proto\Models\Member;
+use Proto\Models\StorageEntry;
 use Redirect;
 
 use Proto\Models\User;
@@ -13,6 +15,7 @@ use Proto\Models\User;
 use Carbon\Carbon;
 
 use DateTime;
+use PDF;
 use Auth;
 use Session;
 use Validator;
@@ -25,7 +28,7 @@ class UserDashboardController extends Controller
      * Display the dashboard for a specific user.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show()
     {
@@ -61,7 +64,7 @@ class UserDashboardController extends Controller
             }
         }
 
-        if ($user->member) {
+        if ($user->is_member) {
             $userdata['show_birthday'] = $request->has('show_birthday');
             $userdata['show_omnomcom_total'] = $request->has('show_omnomcom_total');
             $userdata['show_omnomcom_calories'] = $request->has('show_omnomcom_calories');
@@ -181,16 +184,24 @@ class UserDashboardController extends Controller
                 'text' => "To make you a member of our association, we need your postal address. Please add it to your account here."
             ],
             [
+                'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
+                'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm(),
+                'heading' => "Sign the membership form",
+                'icon' => "fas fa-signature",
+                'text' => "To complete your membership request we need you to sign the membership form."
+            ],
+            [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
-                'done' => Auth::check() && Auth::user()->member,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address && Auth::user()->hasSignedMembershipForm(),
+                'done' => Auth::check() && Auth::user()->is_member,
                 'heading' => "Become a member!",
                 'icon' => "fas fa-trophy",
-                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230)."
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server (invite.gg/proto)."
             ],
             [
                 'url' => route('user::dashboard', ['wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->member,
+                'unlocked' => Auth::check() && Auth::user()->is_member,
                 'done' => false,
                 'heading' => "Add some additional info on your dashboard",
                 'icon' => "fas fa-tachometer-alt",
@@ -253,13 +264,42 @@ class UserDashboardController extends Controller
         }
     }
 
+    public function getMemberForm() {
+        $user = Auth::user();
+        if ($user->hasCompletedProfile() && $user->hasSignedMembershipForm()) {
+            Session::flash("flash_message", "You have already signed the membership form");
+            return Redirect::route('becomeamember');
+        }
+
+        return view("users.dashboard.membershipform", ['user' => $user]);
+    }
+
+    public function postMemberForm(Request $request) {
+        $user = Auth::user();
+        $member = Member::create();
+        $member->user()->associate($user);
+        $member->pending = true;
+
+        $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]);
+        $form = $form->setPaper('a4');
+
+        $file = new StorageEntry();
+        $file->createFromData($form->output(), 'application/pdf', 'membership_form_user_' . $user->id . '.pdf');
+
+        $member->membershipForm()->associate($file);
+        $member->save();
+
+        Session::flash("flash_message", "Thanks for signing the membership form!");
+        return Redirect::route('becomeamember');
+    }
+
     public function getClearProfile()
     {
         $user = Auth::user();
         if (!$user->hasCompletedProfile()) {
             abort(403, "You have not yet completed your membership profile.");
         }
-        if ($user->member) {
+        if ($user->is_member) {
             abort(403, "You cannot clear your membership profile while your membership is active.");
         }
 
@@ -272,7 +312,7 @@ class UserDashboardController extends Controller
         if (!$user->hasCompletedProfile()) {
             abort(403, "You have not yet completed your membership profile.");
         }
-        if ($user->member) {
+        if ($user->is_member) {
             abort(403, "You cannot clear your membership profile while your membership is active.");
         }
 

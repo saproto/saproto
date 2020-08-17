@@ -42,6 +42,9 @@
     <!-- Modal for removing membership from user -->
     @include("users.admin.admin_includes.removemember-modal")
 
+    <!-- Modal for removing signed membership contract -->
+    @include("users.admin.admin_includes.removememberform-modal")
+
 @endsection
 
 @section('javascript')

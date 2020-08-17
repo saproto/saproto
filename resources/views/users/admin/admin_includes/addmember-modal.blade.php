@@ -13,7 +13,7 @@
 
                     <ul>
                         @if($user->utwente_username == null)
-                            <li style="color: red;">
+                            <li class="text-warning">
                                 <strong>
                                     {{ $user->calling_name }} has no University of Twente account linked to their user
                                     account. Please kindly ask the user to - if they are a student - link their UTwente
@@ -23,7 +23,7 @@
                         @endif
 
                         @if (!$user->hasCompletedProfile())
-                            <li style="color: red;">
+                            <li class="text-danger">
                                 <strong>
                                     {{ $user->calling_name }} has not yet completed their membership profile. Please ask
                                     them to complete their membership profile before making them a member.
@@ -31,7 +31,7 @@
                             </li>
                         @endif
                         @if (!$user->address)
-                            <li style="color: red;">
+                            <li class="text-danger">
                                 <strong>
                                     {{ $user->calling_name }} does not have an address linked to their account. Please
                                     ask them to register an address before making them a member.
@@ -39,13 +39,21 @@
                             </li>
                         @endif
                         @if (!$user->bank)
-                            <li style="color: red;">
+                            <li class="text-danger">
                                 <strong>
                                     {{ $user->calling_name }} does not have a current bank authorization. This is
                                     required for membership. Please ask them to enter a bank authorization before making
                                     them a member.
                                 </strong>
                             </li>
+                        @endif
+                        @if(!$user->hasSignedMembershipForm())
+                                <li class="text-danger">
+                                    <strong>
+                                        {{ $user->calling_name }} has not signed the membership form digitally,
+                                        make sure they sign it either digitally or physically.
+                                    </strong>
+                                </li>
                         @endif
                     </ul>
 
@@ -56,7 +64,10 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     @if ($user->address && $user->bank && $user->hasCompletedProfile())
                         <button type="submit" class="btn btn-success"
-                                onClick="return confirm('Did this user sign the membership form?')">Make member
+                                @if(!$user->hasSignedMembershipForm())
+                                    onClick="return confirm('Did this user sign the membership form?')
+                                @endif
+                        ">Make member
                         </button>
                     @endif
                 </div>

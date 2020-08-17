@@ -29,6 +29,7 @@
     "bootstrap": "~4.3.1",
     "bootstrap-slider": "~10.6.2",
     "fontawesome-iconpicker": "~3.2.0",
+    "jq-signature": "^2.0.0",
     "js-cookie": "~2.2.1",
     "moment": "~2.24.0",
     "moment-timezone": "~0.5.27",
@@ -59,7 +60,7 @@
     "grunt-contrib-watch": "~1.1.0",
     "grunt-sass": "~3.1.0",
     "load-grunt-tasks": "~5.1.0",
-    "node-sass": "~4.13.0",
+    "node-sass": "~4.14.1",
     "node-sass-import-once": "~1.2.0"
   },
   "paths": {
@@ -79,7 +80,8 @@
         "./node_modules/select2/dist/js/select2.full.min.js",
         "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js",
         "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js",
-        "./node_modules/swiper/js/swiper.min.js"
+        "./node_modules/swiper/js/swiper.min.js",
+        "./node_modules/jq-signature/jq-signature.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",

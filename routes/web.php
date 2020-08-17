@@ -185,8 +185,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
-    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
+    Route::group(['prefix' => 'memberform', 'as' => 'memberform::'], function() {
+        Route::get('sign', ['as' => 'sign', 'middleware' => ['auth'], 'uses' => 'UserDashboardController@getMemberForm']);
+        Route::post('sign', ['as' => 'sign', 'middleware' => ['auth'], 'uses' => 'UserDashboardController@postMemberForm']);
+        Route::get('{id}', ['as' => 'download', 'uses' => 'UserAdminController@showMemberForm']);
+        Route::post('print/{id}', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printMemberForm']);
+        Route::post('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@destroyMemberForm']);
+    });
 
     /*
      * Routes related to committees.
