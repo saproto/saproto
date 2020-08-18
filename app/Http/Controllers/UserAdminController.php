@@ -259,7 +259,7 @@ class UserAdminController extends Controller
 
         $user = User::findOrFail($id);
 
-        if ($user->member->membershipForm) {
+        if ($user->hasSignedMembershipForm()) {
             return Storage::download($user->member->membershipForm->generatePath(), $user->name . ' membership form.pdf');
         }
 

@@ -186,7 +186,7 @@ class UserDashboardController extends Controller
             [
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
-                'done' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm(),
+                'done' => Auth::check() && ((Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm()) || Auth::user()->is_member),
                 'heading' => "Sign the membership form",
                 'icon' => "fas fa-signature",
                 'text' => "To complete your membership request we need you to sign the membership form."
