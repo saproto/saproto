@@ -93,7 +93,7 @@
                 @endif
 
                 @if (Auth::check() && (Auth::user()->can(["board","finadmin","alfred"])))
-                    <li class="nav-item dropdown">
+                    <li id="admin-nav-item" class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Admin <span class="caret"></span></a>
