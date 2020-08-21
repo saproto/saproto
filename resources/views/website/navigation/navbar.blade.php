@@ -274,24 +274,35 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
-                                <a class="dropdown-item" href="{{ route('omnomcom::orders::list') }}">
-                                    Purchase History
-                                </a>
-
                                 @if(Auth::check() && Auth::user()->member)
                                     <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
                                 @else
                                     <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
                                 @endif
 
+                                <a href="#" data-toggle="modal" data-target="#discord-modal" class="dropdown-item">
+                                    Discord
+                                    <span class="badge badge-secondary" style="transform: translateY(-1px)">
+                                        <i class="fas fa-user mr-1"></i> <span id="discord__online">...</span>
+                                    </span>
+                                </a>
+
                                 @if (Auth::check() && Auth::user()->member)
                                     <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
                                         Slack
-                                        <span class="badge badge-secondary">
-                                            <i class="fas fa-circle green"></i> <span id="slack__online">...</span>
+                                        <span class="badge badge-secondary" style="transform: translateY(-1px)">
+                                            <i class="fas fa-user mr-1"></i> <span id="slack__online">...</span>
                                         </span>
                                     </a>
                                 @endif
+
+                                <a class="dropdown-item" href="{{ route('protube::dashboard') }}">
+                                    ProTube Dashboard
+                                </a>
+
+                                <a class="dropdown-item" href="{{ route('omnomcom::orders::list') }}">
+                                    Purchase History
+                                </a>
 
                                 @if (Session::has('impersonator'))
                                     <a class="dropdown-item" href="{{ route('user::quitimpersonating') }}">
