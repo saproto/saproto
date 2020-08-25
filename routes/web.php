@@ -48,30 +48,30 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['as' => 'login::'], function () {
         Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
-        Route::post('login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
+        Route::post('login', ['as' => 'post', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postLogin']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getReset']);
-        Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'AuthController@postReset']);
+        Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postReset']);
 
         Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getEmail']);
-        Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'AuthController@postEmail']);
+        Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postEmail']);
 
         Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordSyncGet']);
-        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordSyncPost']);
+        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordSyncPost']);
 
         Route::get('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangeGet']);
-        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangePost']);
+        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordChangePost']);
 
         Route::get('register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
-        Route::post('register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
-        Route::post('register/surfconext', ['as' => 'register::surfconext', 'uses' => 'AuthController@postRegisterSurfConext']);
+        Route::post('register', ['as' => 'register', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegister']);
+        Route::post('register/surfconext', ['as' => 'register::surfconext', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegisterSurfConext']);
 
         Route::get('surfconext', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
         Route::get('surfconext/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
 
         Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
-        Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
+        Route::post('username', ['as' => 'requestusername', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@requestUsername']);
     });
 
     /*

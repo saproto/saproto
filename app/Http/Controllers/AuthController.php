@@ -247,6 +247,14 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
+        $password = $request->input('password');
+        $auth_check = AuthController::verifyCredentials($user->email, $password);
+
+        if ($auth_check == null || $auth_check->id != $user->id) {
+            $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
+            return Redirect::back();
+        }
+
         if ($user->member) {
             $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
