@@ -20,6 +20,20 @@
   }
 }
 
+header > nav.navbar {
+  @media (max-width: 1200px) {
+  max-height: 100vh;
+  overflow-y: auto;
+  }
+}
+
+#admin-nav-item .dropdown-menu {
+  @media (min-width: 1200px) {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
 .alert > p {
   margin: 0 !important;
 }
