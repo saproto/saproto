@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'internal' => 'Renske Mulder',
+    'internal' => 'Sebastiaan van Loon',
 
     /*
     |--------------------------------------------------------------------------
