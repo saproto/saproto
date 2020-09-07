@@ -45,11 +45,65 @@ class UserDashboardController extends Controller
         return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
     }
 
+    public function updateMail(Request $request)
+    {
+        $user = Auth::user();
+
+        $password = $request->input('password');
+        $new_email = $request->input('email');
+        $auth_check = AuthController::verifyCredentials($user->email, $password);
+
+        if ($auth_check == null || $auth_check->id != $user->id) {
+            $request->session()->flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
+            return Redirect::back();
+        }
+
+        if ($new_email !== $user->email) {
+
+            $validator = Validator::make($request->only(['email']), [
+                'email' => 'required|email|unique:users',
+            ]);
+            if ($validator->fails()) {
+                return Redirect::route('user::dashboard')->withErrors($validator);
+            }
+
+            $email = [
+                'old' => $user->email,
+                'new' => $new_email
+            ];
+
+            $to = [
+                (object)[
+                    'email' => $email['old'],
+                    'name' => $user->name
+                ],
+                (object)[
+                    'email' => $email['new'],
+                    'name' => $user->name
+                ]
+            ];
+
+            $changer = [
+                'name' => Auth::user()->name,
+                'ip' => $request->ip()
+            ];
+
+            Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
+
+        }
+
+        $user->email = $new_email;
+        $user->save();
+
+        Session::flash("flash_message", "E-mail address changed.");
+        return Redirect::route('user::dashboard');
+
+    }
+
     public function update(Request $request)
     {
         $user = Auth::user();
 
-        $userdata['email'] = $request->input('email');
         $userdata['website'] = $request->input('website');
 
         if ($user->phone) {
@@ -78,40 +132,6 @@ class UserDashboardController extends Controller
 
         $userdata['keep_omnomcom_history'] = $request->has('keep_omnomcom_history');
         $userdata['theme'] = $request->input('theme');
-
-        if ($userdata['email'] !== $user->email) {
-
-            $validator = Validator::make($userdata, [
-                'email' => 'required|email|unique:users',
-            ]);
-            if ($validator->fails()) {
-                return Redirect::route('user::dashboard')->withErrors($validator);
-            }
-
-            $email = [
-                'old' => $user->email,
-                'new' => $userdata['email']
-            ];
-
-            $to = [
-                (object)[
-                    'email' => $email['old'],
-                    'name' => $user->name
-                ],
-                (object)[
-                    'email' => $email['new'],
-                    'name' => $user->name
-                ]
-            ];
-
-            $changer = [
-                'name' => Auth::user()->name,
-                'ip' => $request->ip()
-            ];
-
-            Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
-
-        }
 
         $user->fill($userdata);
         $user->save();
@@ -185,7 +205,7 @@ class UserDashboardController extends Controller
             ],
             [
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile()  && Auth::user()->bank && Auth::user()->address,
+                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
                 'done' => Auth::check() && ((Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm()) || Auth::user()->is_member),
                 'heading' => "Sign the membership form",
                 'icon' => "fas fa-signature",
@@ -264,7 +284,8 @@ class UserDashboardController extends Controller
         }
     }
 
-    public function getMemberForm() {
+    public function getMemberForm()
+    {
         $user = Auth::user();
         if ($user->hasCompletedProfile() && $user->hasSignedMembershipForm()) {
             Session::flash("flash_message", "You have already signed the membership form");
@@ -274,7 +295,8 @@ class UserDashboardController extends Controller
         return view("users.dashboard.membershipform", ['user' => $user]);
     }
 
-    public function postMemberForm(Request $request) {
+    public function postMemberForm(Request $request)
+    {
         $user = Auth::user();
         $member = Member::create();
         $member->user()->associate($user);
