@@ -22,7 +22,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-     $companies = Company::where('on_carreer_page', true)->orderBy('sort')->get();
+     $companies = Company::where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         } else {
@@ -38,7 +38,7 @@ class CompanyController extends Controller
      */
     public function indexMembercard()
     {
-        $companies = Company::where('on_membercard', true)->orderBy('sort')->get();
+        $companies = Company::where('on_membercard', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
