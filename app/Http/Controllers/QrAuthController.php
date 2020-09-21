@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Milon\Barcode\DNS2D;
 
 use Auth;
@@ -27,8 +28,8 @@ class QrAuthController extends Controller
 
         $qrAuthRequest = new QrAuthRequest();
         $qrAuthRequest->description = $request->description;
-        $qrAuthRequest->qr_token = str_random(8);
-        $qrAuthRequest->auth_token = md5(str_random(40));
+        $qrAuthRequest->qr_token = Str::random(8);
+        $qrAuthRequest->auth_token = md5(Str::random(40));
         $qrAuthRequest->save();
 
         return $qrAuthRequest;

@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Proto\Models\User;
 use Proto\Models\Member;
 use Proto\Models\Committee;
@@ -36,7 +37,7 @@ class ImportLiveDataSeeder extends Seeder
         $newUser = User::create($userData);
         $newUser->save();
 
-        $newPassword = str_random(16);
+        $newPassword = Str::random(16);
         $newUser->setPassword($newPassword);
 
         if ($memberData) {

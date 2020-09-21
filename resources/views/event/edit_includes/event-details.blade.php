@@ -25,7 +25,7 @@
                             <label for="name">Event name:</label>
                             <input type="text" class="form-control" id="name" name="title"
                                    placeholder="Lightsaber Building in the SmartXp"
-                                   value="{{ $event->title or '' }}"
+                                   value="{{ $event->title && '' }}"
                                    required>
 
                         </div>
@@ -34,7 +34,7 @@
 
                             <label for="location">Location:</label>
                             <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="SmartXp" value="{{ $event->location or '' }}" required>
+                                   placeholder="SmartXp" value="{{ $event->location && '' }}" required>
 
                         </div>
 

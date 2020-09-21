@@ -14,6 +14,7 @@ use DateTime;
 use Carbon\Carbon;
 use Hash;
 
+use Illuminate\Support\Str;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use DirectAdmin\DirectAdmin;
 use Proto\Console\Commands\DirectAdminSync;
@@ -409,7 +410,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function generateNewPersonalKey()
     {
-        $this->personal_key = str_random(64);
+        $this->personal_key = Str::random(64);
         $this->save();
     }
 

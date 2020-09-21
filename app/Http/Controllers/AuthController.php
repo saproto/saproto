@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
 use nickurt\PwnedPasswords\PwnedPasswords;
 
@@ -727,7 +728,7 @@ class AuthController extends Controller
 
         $reset = PasswordReset::create([
             'email' => $user->email,
-            'token' => str_random(128),
+            'token' => Str::random(128),
             'valid_to' => strtotime('+1 hour')
         ]);
 

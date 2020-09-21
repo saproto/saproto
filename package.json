@@ -25,9 +25,9 @@
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
   "private": false,
   "dependencies": {
-    "@fortawesome/fontawesome-free": "~5.11.2",
     "bootstrap": "~4.3.1",
     "bootstrap-slider": "~10.6.2",
+    "@fortawesome/fontawesome-free": "~5.11.2",
     "fontawesome-iconpicker": "~3.2.0",
     "jq-signature": "^2.0.0",
     "js-cookie": "~2.2.1",
