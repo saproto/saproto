@@ -61,6 +61,9 @@ $pagination-hover-border-color: $grey-dark;
 $pagination-disabled-bg: $grey-medium;
 $pagination-disabled-border-color: $grey-light;
 
+$popover-bg: $grey-medium;
+$popover-header-bg: $grey-dark;
+
 //import bootstrap after setting variables
 @import '../../../../node_modules/bootstrap/scss/bootstrap';
 

@@ -16,6 +16,7 @@
                     @yield('page-title')
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-sm table-hover">
 
                     <thead>
@@ -55,6 +56,7 @@
                     </tr>
 
                 </table>
+                </div>
 
             </div>
 

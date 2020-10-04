@@ -7,12 +7,13 @@
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(function () {
 
         // Enables tooltips
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        });
+        $('[data-toggle="tooltip"]').tooltip()
+
+        // Enable popover
+        $('[data-toggle="popover"]').popover()
 
         // Enables the fancy scrolling effect
         $(window).scroll(function () {

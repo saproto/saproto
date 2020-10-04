@@ -13,7 +13,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-2 mb-3">
+        <div class="col-12 col-sm-2 mb-3">
 
             <a href="{{ route('passwordstore::add', ['type' => 'password']) }}" class="btn btn-success btn-block mb-3">
                 Add Password
@@ -24,7 +24,7 @@
 
         </div>
 
-        <div class="col-8">
+        <div class="col-12 col-sm-8">
 
             <div class="card mb-3">
 
@@ -35,7 +35,8 @@
 
                 @if (count($passwords) > 0)
 
-                    <table class="table table-hover table-borderless table-sm">
+                    <div class="table-responsive">
+                    <table class="table table-hover table-sm">
 
                         <thead>
 
@@ -137,6 +138,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                 @else
 

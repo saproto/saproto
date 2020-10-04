@@ -855,7 +855,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
 
     });
-    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+    Route::get('go/{short?}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
 
     /*
      * DMX Management

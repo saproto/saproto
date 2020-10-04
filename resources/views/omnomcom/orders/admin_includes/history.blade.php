@@ -6,6 +6,7 @@
 
     @if(count($orderlines) > 0)
 
+        <div class="table-responsive">
         <table class="table table-hover table-sm">
 
             <tbody>
@@ -57,6 +58,7 @@
             </tbody>
 
         </table>
+        </div>
 
         @if(method_exists($orderlines, 'links'))
             <div class="card-footer pb-0">

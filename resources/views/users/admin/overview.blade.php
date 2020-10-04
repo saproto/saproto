@@ -64,21 +64,21 @@
                                        data-toggle="tooltip" data-placement="top" title="Go to public profile" class="text-decoration-none">
                                         <i class="fas fa-user-circle fa-fw mr-2 text-primary" aria-hidden="true"></i>
                                     </a>
-                                    <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
-                                       data-toggle="tooltip" data-placement="top" title="Impersonate" class="text-decoration-none">
-                                        <i class="fas fa-sign-in-alt fa-fw mr-2 text-warning" aria-hidden="true"></i>
-                                    </a>
                                     @if ($user->isTempadmin())
                                         <a href="{{ route('tempadmin::end', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Revoke temp admin" class="text-decoration-none">
-                                            <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
+                                            <i class="fas fa-user-lock fa-fw text-info" aria-hidden="true"></i>
                                         </a>
                                     @else
                                         <a href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
-                                            <i class="fas fa-clock fa-fw text-dark" aria-hidden="true"></i>
+                                            <i class="fas fa-user-clock fa-fw text-danger" aria-hidden="true"></i>
                                         </a>
                                     @endif
+                                    <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
+                                       data-toggle="tooltip" data-placement="top" title="Impersonate" class="text-decoration-none">
+                                        <i class="fas fa-sign-in-alt fa-fw mr-2 text-warning" aria-hidden="true"></i>
+                                    </a>
                                 @endif
                             </td>
                             <td class="text-right">#{{ $user->id }}</td>

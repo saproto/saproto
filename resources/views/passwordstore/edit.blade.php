@@ -28,7 +28,7 @@
 
                         <label>Resource description:</label>
                         <input class="form-control mb-3" type="text" name="description"
-                               value="{{ $password->description or '' }}">
+                               value="{{ $password->description ?? '' }}">
 
                         <label>Authorized users:</label>
                         <select name="permission_id" class="form-control mb-3" required>
@@ -54,7 +54,7 @@
                                    value="{{ $password ? Crypt::decrypt($password->password) : '' }}">
 
                             <label>Website URI:</label>
-                            <input class="form-control mb-3" type="text" name="url" value="{{ $password->url or '' }}">
+                            <input class="form-control mb-3" type="text" name="url" value="{{ $password->url ?? '' }}">
 
                             <label>Comment:</label>
 

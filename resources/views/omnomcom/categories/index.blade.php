@@ -21,6 +21,7 @@
 
                 @if (count($categories) > 0)
 
+                    <div class="table-responsive">
                     <table class="table table-borderless table-hover">
 
                         @foreach($categories as $category)
@@ -48,6 +49,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                 @endif
 
