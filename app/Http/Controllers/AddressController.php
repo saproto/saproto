@@ -10,6 +10,7 @@ use Proto\Models\Address;
 use Auth;
 use Session;
 use Redirect;
+use PostcodeApi;
 
 use Exception;
 
@@ -85,7 +86,7 @@ class AddressController extends Controller
 
         if ($request->has('wizard')) Session::flash("wizard", true);
 
-        return view('users.addresses.edit', ['user' => $user, 'action' => 'edit']);
+        return view('users.addresses.edit', ['user' => $user, 'address' => $address, 'action' => 'edit']);
     }
 
     public function toggleHidden()
@@ -111,14 +112,16 @@ class AddressController extends Controller
         if ($request->has(['nl-lookup'])) {
 
             try {
-                $fetched_address = Postcode::fetchAddress($addressdata['zipcode-nl'], $addressdata['number-nl']);
+                $fetched_address = PostcodeApi::create('ApiPostcode')->findByPostcodeAndHouseNumber($addressdata['zipcode-nl'], $addressdata['number-nl']);
+                $fetched_address_array = $fetched_address->toArray();
                 $address->fill([
-                    'street' => $fetched_address->getStreet(),
-                    'number' => $fetched_address->getHouseNumber(),
-                    'zipcode' => $fetched_address->getZipCode(),
-                    'city' => $fetched_address->getCity(),
+                    'street' => $fetched_address_array['street'],
+                    'number' => $fetched_address_array['house_no'],
+                    'zipcode' => $addressdata['zipcode-nl'],
+                    'city' => $fetched_address_array['town'],
                     'country' => 'The Netherlands'
                 ]);
+
                 Session::flash("flash_message", sprintf("The address has been saved as: %s %s, %s, %s (%s)",
                     $address->street, $address->number, $address->zipcode, $address->city, $address->country));
             } catch (Exception $e) {
