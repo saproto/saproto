@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label for="name">Card name:</label>
                         <input type="text" class="form-control" id="name" name="name"
-                               placeholder="My Albert Heijn Bonus Card" value="{{ $card->name or '' }}" required>
+                               placeholder="My Albert Heijn Bonus Card" value="{{ $card->name ?? '' }}" required>
                     </div>
 
                 </div>

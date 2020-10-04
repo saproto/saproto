@@ -19,19 +19,19 @@
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Be Awesome"
-                       value="{{ $achievement->name or '' }}" required>
+                       value="{{ $achievement->name ?? '' }}" required>
             </div>
 
             <div class="form-group">
                 <label for="desc">Description:</label>
                 <input type="text" class="form-control" id="desc" name="desc"
                        placeholder="Become member of Proto"
-                       value="{{ $achievement->desc or '' }}" required>
+                       value="{{ $achievement->desc ?? '' }}" required>
             </div>
 
             <div class="form-group">
                 <label for="tier">Tier:</label>
-                <select class="form-control {{ $achievement->tier or '' }}" name="tier">
+                <select class="form-control {{ $achievement->tier ?? '' }}" name="tier">
                     <option value="COMMON"
                             {{ (!$new && $achievement->tier == "COMMON" ? 'selected' : '') }}>
                         Common

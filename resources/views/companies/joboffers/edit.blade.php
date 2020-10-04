@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label for="title">Title</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Chief Executive Officer" value="{{ $joboffer->title or '' }}" required>
+                                   placeholder="Chief Executive Officer" value="{{ $joboffer->title ?? '' }}" required>
                         </div>
 
 

@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="menuname">Menu name:</label>
                             <input type="text" class="form-control" id="menuname" name="menuname"
-                                   placeholder="About Proto" value="{{ $item->menuname or '' }}" required>
+                                   placeholder="About Proto" value="{{ $item->menuname ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
@@ -68,7 +68,7 @@
                              @endif id="menu__otherUrl">
                             <label for="url">Other URL:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="http://www.proto.utwente.nl/" value="{{ $item->url or '' }}">
+                                   placeholder="http://www.proto.utwente.nl/" value="{{ $item->url ?? '' }}">
                         </div>
 
                         <div class="form-group" @if($new || !$item->pageId == null) style="display: none;"

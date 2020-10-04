@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <label for="name">Category name:</label>
                         <input type="text" class="form-control" id="name" name="name"
-                               placeholder="Special Products for Unicorns" value="{{ $category->name or '' }}" required>
+                               placeholder="Special Products for Unicorns" value="{{ $category->name ?? '' }}" required>
                     </div>
 
                     <div class="card-footer">

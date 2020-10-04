@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="About Proto" value="{{ $item->title or '' }}" required>
+                                   placeholder="About Proto" value="{{ $item->title ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
@@ -36,7 +36,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ route('page::show', '') }}/</span>
                                 </div>
-                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug or '' }}" required>
+                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug ?? '' }}" required>
                             </div>
                         </div>
 

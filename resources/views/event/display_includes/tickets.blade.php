@@ -32,7 +32,7 @@
                             @else
                                 <?php $has_unpaid_tickets = true; ?>
                                 <a class="card-link text-danger"
-                                   href="{{ $purchase->orderline->molliePayment->payment_url or route("omnomcom::orders::list") }}">
+                                   href="{{ $purchase->orderline->molliePayment->payment_url ?? route("omnomcom::orders::list") }}">
                                     Payment Required
                                 </a>
                             @endif
