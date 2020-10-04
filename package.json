@@ -132,10 +132,11 @@
         "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css",
         "./node_modules/swiper/css/swiper.min.css"
       ],
-      "dest": "./resources/assets/sass/components.scss",
+      "dest": "./resources/assets/sass/partials/_components.scss",
       "watch": [
         "./resources/views/**/*.scss",
-        "./resources/assets/**/*.scss"
+        "./resources/assets/sass/*.scss",
+        "./resources/assets/sass/partials/*.scss"
       ]
     }
   }

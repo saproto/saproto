@@ -35,11 +35,12 @@
                     @yield('page-title')
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-striped table-hover table-sm">
 
                     <thead>
                     <tr class="bg-dark text-white">
-                        <td class="text-right">Controls</td>
+                        <td>Controls</td>
                         <td></td>
                         <td>Name</td>
                         <td>Type</td>
@@ -53,7 +54,7 @@
                     <tbody>
                     @foreach($users as $user)
                         <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
-                            <td class="text-right">
+                            <td class="pl-4 pl-md-1">
                                 @if(!$user->deleted_at)
                                     <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
                                        data-toggle="tooltip" data-placement="top" title="Go to user admin" class="text-decoration-none">
@@ -75,7 +76,7 @@
                                     @else
                                         <a href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
-                                            <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
+                                            <i class="fas fa-clock fa-fw text-dark" aria-hidden="true"></i>
                                         </a>
                                     @endif
                                 @endif
@@ -114,6 +115,7 @@
                     </tbody>
 
                 </table>
+                </div>
 
                 <div class="card-footer pb-0">
                     {!! $users->appends($_GET)->links() !!}

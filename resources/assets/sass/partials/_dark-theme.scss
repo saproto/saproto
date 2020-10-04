@@ -1,4 +1,4 @@
-//colours
+//colors
 $grey-light: #424242;
 $grey-medium: #303030;
 $grey-dark: #212121;
@@ -9,17 +9,71 @@ $light: $grey-medium;
 $body-bg: $grey-light;
 $body-color: #fff;
 
+//modal
+$modal-content-bg: $grey-medium;
+
+//table
+$table-color: #fff;
+$table-border-color: $grey-light;
+
+//list group
+$list-group-bg: $grey-medium;
+
+//input
+$input-group-addon-border-color: $grey-light;
+$input-group-addon-bg: $grey-light;
+$input-group-addon-color: #fff;
+$input-border-color: #aaaaaa;
+
+//link
+$link-color: $info;
+$link-hover-color: lighten($info, 10%);
+
+//navbar
+$navbar-dark-color: rgba(255, 255, 255, .75);
+$navbar-dark-hover-color: #fff;
+
+//photos
+$photo_pop-color: #fff;
+$photo_pop-text-shadow: 0 0 5px #fff;
+$photo-color: #fff;
+$photo-hover-color: #fff;
+$photo-text-shadow: 0 0 5px #fff;
+$photo-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
+$photo-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
+
+//calendar events
+$event-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
+$event-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
+$event-bg: $grey-dark;
+$event-hover-bg: $grey-medium;
+
+//cards
+$card-bg: $grey-medium;
+$card-color: #f1f1f1;
+$card-collapse-bg: #fff;
+
+//pagination
+$pagination-bg: $grey-light;
+$pagination-border-color: $grey-dark;
+$pagination-hover-bg: $grey-medium;
+$pagination-hover-border-color: $grey-dark;
+$pagination-disabled-bg: $grey-medium;
+$pagination-disabled-border-color: $grey-light;
+
+//import bootstrap after setting variables
+@import '../../../../node_modules/bootstrap/scss/bootstrap';
+
+.text-dark {
+  color: #f1f1f1 !important;
+}
+
 //horizontal line
 hr {
   border-color: $grey-light !important;
 }
 
-//tables
-$table-color: #fff;
-$table-border-color: $grey-light;
-
-//lists
-$list-group-bg: $grey-medium;
+//list group
 .list-group-item {
   background-color: $grey-light !important;
 }
@@ -27,12 +81,6 @@ $list-group-bg: $grey-medium;
   background-color: $grey-dark !important;
   color: #fff !important;
 }
-
-//inputs
-$input-group-addon-border-color: $grey-light;
-$input-group-addon-bg: $grey-light;
-$input-group-addon-color: #fff;
-$input-border-color: #aaaaaa;
 
 //select2
 .select2-dropdown {
@@ -88,42 +136,15 @@ $input-border-color: #aaaaaa;
 }
 
 //modals
-$modal-content-bg: $grey-medium;
 .modal-header button {
   color: #fff;
   text-shadow: 0 1px 0 $grey-dark;
 }
 
-//links
-$link-color: $info;
-$link-hover-color: lighten($info, 10%);
-
-//navbar
-$navbar-dark-color: rgba(255, 255, 255, .75);
-$navbar-dark-hover-color: #fff;
-
-//photos
-$photo_pop-color: #fff;
-$photo_pop-text-shadow: 0 0 5px #fff;
-$photo-color: #fff;
-$photo-hover-color: #fff;
-$photo-text-shadow: 0 0 5px #fff;
-$photo-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
-$photo-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
-
-//calendar events
-$event-gradient: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6));
-$event-hover-gradient: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5));
-$event-bg: $grey-dark;
-$event-hover-bg: $grey-medium;
-
 //cards
 .card.leftborder.leftborder-info { background-color: $grey-dark; }
 .card-header.bg-dark { background-color: $grey-dark !important; }
 .card-header.bg-white { background-color: $grey-dark !important; }
-$card-bg: $grey-medium;
-$card-color: #f1f1f1;
-$card-collapse-bg: #fff;
 
 //simplemde
 .editor-toolbar .fa {
@@ -132,14 +153,6 @@ $card-collapse-bg: #fff;
 
 //datetimepicker
 .bootstrap-datetimepicker-widget.dropdown-menu { background-color: $grey-dark !important; }
-
-//pagination
-$pagination-bg: $grey-light;
-$pagination-border-color: $grey-dark;
-$pagination-hover-bg: $grey-medium;
-$pagination-hover-border-color: $grey-dark;
-$pagination-disabled-bg: $grey-medium;
-$pagination-disabled-border-color: $grey-light;
 
 //custom file labels
 .custom-file-label::after {
