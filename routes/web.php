@@ -309,6 +309,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
+        Route::post('{id}/order', ['as' => 'order', 'middleware' => ['member'], 'uses' => 'DinnerformController@addOrder']);
+        Route::get('{id}/orderlist', ['as'=> 'orderlist', 'middleware' => ['permission:board'], 'uses'=>'DinnerformController@returnOrders']);
     });
 
     /*

@@ -4,13 +4,15 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Proto\Models\DinnerOrderLine;
 use Proto\Models\Account;
 use Proto\Models\Dinnerform;
 
+
 use Session;
 use Redirect;
-use Auth;
 use Response;
 
 class DinnerformController extends Controller
@@ -38,7 +40,6 @@ class DinnerformController extends Controller
         $dinnerform = new Dinnerform();
         $dinnerform->restaurant = $request->restaurant;
         $dinnerform->description = $request->description;
-        $dinnerform->url = $request->url;
         $dinnerform->start = strtotime($request->start);
         $dinnerform->end = strtotime($request->end);
 
@@ -66,7 +67,11 @@ class DinnerformController extends Controller
 
         if ($dinnerform->isCurrent()) {
             return view('dinnerform.show', ['dinnerform' => $dinnerform]);
-        } else {
+        } elseif ($dinnerform->isBoardMember(Auth::user())) {
+            //SHOW ALL ORDERS OF A DINNERFORM
+            $dinnerform->returnAllOrders();
+        }
+        else {
             Session::flash("flash_message", "Sorry, you can't order anymore, because food is already on its way");
             return Redirect::route('homepage');
         }
@@ -147,4 +152,30 @@ class DinnerformController extends Controller
         }
     }
 
+    public function addOrder(Request $request)
+    {
+        $dinnerOrderLine = new DinnerOrderLine();
+        $dinnerOrderLine->user_id = Auth::user()->id;
+        $dinnerOrderLine->dinnerform_id = $request->id;
+        $dinnerOrderLine->dish = $request->dish;
+        $dinnerOrderLine->price = $request->price;
+
+        if($dinnerOrderLine->dish == null or $dinnerOrderLine->price == null)
+        {
+            Session::flash("flash_message", "Please fill in both the dish(es) you want to order and the price of your order.");
+            return Redirect::back();
+        }
+
+        $dinnerOrderLine->save();
+        Session::flash("flash_message", "You have ordered " . $dinnerOrderLine->dish . " at a price of ".$dinnerOrderLine->price);
+        return Redirect::route('homepage');
+    }
+
+    public function returnOrders($id){
+        $dinnerform = Dinnerform::findorfail($id);
+        $orders = $dinnerform->returnAllOrders();
+
+        return view ('dinnerform.admin-inlcudes.orderlist', ['Orders' => $orders]);
+
+    }
 }

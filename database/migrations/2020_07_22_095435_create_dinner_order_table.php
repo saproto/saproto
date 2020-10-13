@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDinnerformsTable extends Migration
+class CreateDinnerOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateDinnerformsTable extends Migration
      */
     public function up()
     {
-        Schema::create('dinnerforms', function (Blueprint $table) {
+        Schema::create('dinnerOrders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('restaurant');
-            $table->string('description');
-            $table->string('url');
-            $table->dateTime("start");
-            $table->dateTime('end');
+            $table->integer('user_id');
+            $table->integer('dinnerform_id');
+            $table->string('dish');
+            $table->float('price');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateDinnerformsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dinnerform');
+        Schema::dropIfExists('dinnerOrders');
     }
 }

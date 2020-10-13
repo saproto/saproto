@@ -10,10 +10,10 @@
             @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform, 'canEdit' => false])
         </div>
     </div>
-    <div class="row">
 
+    <div class="row">
         <div class="col-xl-4 offset-xl-4">
-            @include('dinnerform.dinnerform.show_includes.dinnerform-order')
+            @include('dinnerform.show_includes.order-details')
         </div>
     </div>
 @endsection

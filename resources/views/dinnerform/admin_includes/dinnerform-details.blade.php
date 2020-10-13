@@ -40,6 +40,7 @@
 
                         </div>
                     </div>
+                    <!--
                     <div class="row align-items-end mb-6">
                         <div class="col-md-12 mb-3">
 
@@ -51,6 +52,7 @@
 
                         </div>
                     </div>
+                    -->
                 </div>
 
                 <div class="col-md-6">

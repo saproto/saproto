@@ -64,4 +64,15 @@ class Dinnerform extends Model
         ];
     }
 
+    public function isBoardMember(User $user){
+        return $user->can('board');
+    }
+
+    public function returnAllOrders(){
+        // SEE Event.getAllUsers -> Ticket.getUsers -> TicketPurchase
+        $orders = DinnerOrderLine::where('dinnerform_id', $this->id)->get()->pluck('user_id', 'price')->toArray();
+        //tweede query die user ids koppelt aan namen
+
+        return $orders;
+    }
 }
