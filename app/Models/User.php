@@ -377,7 +377,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function hasSignedMembershipForm() {
-        if ($this->member) {
+        if ($this->is_member) {
             return $this->member->membershipForm !== null;
         }
     }
@@ -451,7 +451,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getIsMemberAttribute()
     {
-        return $this->member !== null && !$this->member->pending;
+        return $this->member && !$this->member->pending;
     }
 
     public function getIsProtubeAdminAttribute()

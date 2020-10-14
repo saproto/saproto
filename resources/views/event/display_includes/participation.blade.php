@@ -1,4 +1,4 @@
-@if($event->activity && Auth::check() && Auth::user()->member && $event->activity->withParticipants())
+@if($event->activity && Auth::check() && Auth::user()->is_member && $event->activity->withParticipants())
 
     <div class="card mb-3">
 
@@ -196,7 +196,7 @@
                     Please <a href="{{ route('event::login', ['id' => $event->getPublicId()]) }}">log-in</a>
                     if you are already a member.
                 </p>
-            @elseif(!Auth::user()->member)
+            @elseif(!Auth::user()->is_member)
                 <p class="card-text">
                     Please <a href="{{ route('becomeamember') }}">become a member</a> to sign-up for this
                     activity.

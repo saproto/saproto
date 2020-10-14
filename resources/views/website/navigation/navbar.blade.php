@@ -18,7 +18,7 @@
 
                 @foreach($menuItems as $menuItem)
 
-                    @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->member()))
+                    @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->is_member()))
 
                         @if($menuItem->children->count() > 0)
 
@@ -30,7 +30,7 @@
                                 <ul class="dropdown-menu">
 
                                     @foreach($menuItem->children->sortBy('order') as $childItem)
-                                        @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->member()))
+                                        @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->is_member()))
                                             <a class="dropdown-item" href="{{ $childItem->getUrl()  }}">
                                                 {{ $childItem->menuname }}
                                             </a>
@@ -274,7 +274,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
-                                @if(Auth::check() && Auth::user()->member)
+                                @if(Auth::check() && Auth::user()->is_member)
                                     <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
                                 @else
                                     <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
@@ -287,7 +287,7 @@
                                     </span>
                                 </a>
 
-                                @if (Auth::check() && Auth::user()->member)
+                                @if (Auth::check() && Auth::user()->is_member)
                                     <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
                                         Slack
                                         <span class="badge badge-secondary" style="transform: translateY(-1px)">

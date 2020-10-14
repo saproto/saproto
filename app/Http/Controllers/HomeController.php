@@ -41,7 +41,7 @@ class HomeController extends Controller
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 
-        if (Auth::check() && Auth::user()->member) {
+        if (Auth::check() && Auth::user()->is_member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
             return view('website.home.members', ['companies' => $companies, 'message' => $message,
                 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerform' => $dinnerform, 'header' => $header, 'videos' => $videos]);

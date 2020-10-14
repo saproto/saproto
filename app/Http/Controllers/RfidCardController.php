@@ -44,7 +44,7 @@ class RfidCardController extends Controller
                 break;
         }
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             return "<span style='color: red;'>You must be a member to use the OmNomCom.</span>";
         }
 

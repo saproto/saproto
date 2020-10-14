@@ -50,7 +50,7 @@ class SyncWikiAccounts extends Command
 
         foreach ($users as $user) {
 
-            if (!$user->member) {
+            if (!$user->is_member) {
                 continue;
             }
 

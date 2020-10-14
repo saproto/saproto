@@ -1,4 +1,4 @@
-@if (!$user->member)
+@if (!$user->is_member)
 
     <button type="submit" class="btn btn-outline-danger btn-block mb-3" data-toggle="modal" data-target="#modal-user-delete">
         Close your Proto account

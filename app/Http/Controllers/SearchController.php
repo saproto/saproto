@@ -24,11 +24,11 @@ class SearchController extends Controller
         $term = $request->input('query');
 
         $users = [];
-        if (Auth::check() && Auth::user()->member) {
+        if (Auth::check() && Auth::user()->is_member) {
             $presearch_users = $this->getGenericSearch(User::class, $term,
                 Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']);
             foreach ($presearch_users as $user) {
-                if ($user->member) {
+                if ($user->is_member) {
                     $users[] = $user;
                 }
 
@@ -39,7 +39,7 @@ class SearchController extends Controller
         $presearch_pages = $this->getGenericSearch(Page::class, $term,
             ['slug', 'title', 'content']);
         foreach ($presearch_pages as $page) {
-            if (!$page->is_member_only || (Auth::check() && Auth::user()->member)) {
+            if (!$page->is_member_only || (Auth::check() && Auth::user()->is_member)) {
                 $pages[] = $page;
             }
         }

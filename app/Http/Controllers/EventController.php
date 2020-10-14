@@ -373,13 +373,13 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user && $user->member && $event->activity ? $event->activity->users->map(function ($item) {
+            $participants = ($user && $user->is_member && $event->activity ? $event->activity->users->map(function ($item) {
                 return (object)[
                     'name' => $item->name,
                     'photo' => $item->photo_preview
                 ];
             }) : null);
-            $backupParticipants = ($user && $user->member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+            $backupParticipants = ($user && $user->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
                 return (object)[
                     'name' => $item->name,
                     'photo' => $item->photo_preview

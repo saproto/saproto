@@ -23,7 +23,7 @@
 
     <div class="card-body">
 
-        @if($user->member && $user->member->is_honorary)
+        @if($user->is_member && $user->member->is_honorary)
             <p class="card-text ellipsis">
                 <i class="fas fa-trophy fa-fw mr-3 text-primary" aria-hidden="true"></i>
                 <strong>{{ $user->calling_name }} is an honorary member.</strong>
@@ -67,7 +67,7 @@
 
         <p class="card-text ellipsis">
 
-            @if($user->member == null)
+            @if(!$user->is_member)
                 <i class="fas fa-user-times fa-fw mr-3"></i>
                 Not a member
             @else

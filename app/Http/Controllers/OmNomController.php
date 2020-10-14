@@ -114,7 +114,7 @@ class OmNomController extends Controller
                 break;
         }
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             $result->message = "<span style='color: red;'>Only members can use the OmNomCom.</span>";
             return json_encode($result);
         }

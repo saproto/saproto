@@ -36,9 +36,9 @@ class OtherDataSeeder extends Seeder
         factory(User::class, $n)->create()->each(function ($user) {
             /** @var $user User */
             if (mt_rand(1, 5) > 1) {
-                $user->member()->save(factory(Member::class)->make());
                 $user->bank()->save(factory(Bank::class)->make());
                 $user->address()->save(factory(Address::class)->make());
+                $user->member()->save(factory(Member::class)->make());
             }
 
             if (mt_rand(1, 20) > 15) {

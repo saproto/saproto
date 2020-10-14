@@ -13,5 +13,6 @@ $factory->define(Proto\Models\Member::class,
             'is_lifelong' => mt_rand(0, 100) > 94 ? 1 : 0,
             'is_honorary' => mt_rand(0, 100) > 98 ? 1 : 0,
             'is_donator' => mt_rand(0, 100) > 98 ? 1 : 0,
+            'pending' => mt_rand(0, 100) > 85 ? 1 : 0,
         ];
     });
