@@ -26,20 +26,36 @@ class UserAdminController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
 
         $search = $request->input('query');
+        $filter = $request->input('filter');
 
-        if ($search) {
-            $users = User::withTrashed()->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%')->paginate(20);
-        } else {
-            $users = User::withTrashed()->paginate(20);
+        switch ($filter) {
+            case 'pending':
+                $users = User::withTrashed()->join('members', 'members.user_id', '=', 'users.id')->where('members.pending', '=', 1)->where('members.deleted_at', '=', null)->select('users.*');
+                break;
+            case 'members':
+                $users = User::withTrashed()->join('members', 'members.user_id', '=', 'users.id')->where('members.pending', '=', 0)->where('members.deleted_at', '=', null)->select('users.*');
+                break;
+            case 'users':
+                $users = User::withTrashed()->whereNotIn('users.id', Member::pluck('user_id')->all());
+                break;
+            default:
+                $users = User::withTrashed();
         }
 
-        return view('users.admin.overview', ['users' => $users, 'query' => $search]);
+        if ($search) {
+            $users = $users->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%');
+        }
+
+        $users = $users->paginate(20);
+
+        return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
 
     }
 
