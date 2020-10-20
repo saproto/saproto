@@ -43,7 +43,7 @@ class CommitteeController extends Controller
         $data = [];
         foreach (Committee::where('public', 1)->where('is_society', $showSocieties)->orderBy('name', 'asc')->get() as $committee) {
 
-            if (Auth::user() && Auth::user()->member) {
+            if (Auth::user() && Auth::user()->is_member) {
                 $current_members = [];
                 foreach ($committee->users as $user) {
                     $current_members[] = (object)[

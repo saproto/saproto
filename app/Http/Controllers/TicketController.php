@@ -280,7 +280,7 @@ class TicketController extends Controller
                 Session::flash("flash_message", "Ticket ID#$ticket_id is not an existing ticket. Entire order cancelled.");
                 return Redirect::back();
             }
-            if ($ticket->members_only && !Auth::user()->member) {
+            if ($ticket->members_only && !Auth::user()->is_member) {
                 Session::flash("flash_message", "Ticket ID#$ticket_id is only available to members. You are not a member. Entire order cancelled.");
                 return Redirect::back();
             }

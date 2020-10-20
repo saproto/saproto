@@ -41,7 +41,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                 <i class="fas fa-ticket-alt fa-fw" style="color: dodgerblue;" aria-hidden="true"
                    data-toggle="tooltip" data-placement="top" title="You bought a ticket!"></i>
             @endif
-            @if (Auth::check() && Auth::user()->member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
+            @if (Auth::check() && Auth::user()->is_member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
                 <i class="fas fa-exclamation-triangle fa-fw" style="color: red;" aria-hidden="true"
                    data-toggle="tooltip" data-placement="top" title="This activity needs your help!"></i>
             @endif

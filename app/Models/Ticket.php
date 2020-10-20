@@ -45,7 +45,7 @@ class Ticket extends Model
 
     public function canBeSoldTo(User $user)
     {
-        return $user->member || !$this->members_only;
+        return $user->is_member || !$this->members_only;
     }
 
     public function isOnSale()

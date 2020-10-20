@@ -112,7 +112,7 @@ class MailAliasSync extends Command
         // Constructing user forwarders.
         $users = User::all();
         foreach ($users as $user) {
-            if ($user->member && $user->isActiveMember()) {
+            if ($user->is_member && $user->isActiveMember()) {
                 $data[$this->makeFullAlias($user->member->proto_username)] = [
                     $user->email
                 ];

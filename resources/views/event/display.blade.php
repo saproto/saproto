@@ -42,7 +42,7 @@
 
         @endif
 
-        @if($event->activity && Auth::check() && Auth::user()->member && count($event->activity->helpingCommitteeInstances) > 0)
+        @if($event->activity && Auth::check() && Auth::user()->is_member && count($event->activity->helpingCommitteeInstances) > 0)
 
             <div class="col-md-4">
 

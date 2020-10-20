@@ -8,7 +8,7 @@ $factory->define(Proto\Models\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name(($gender == 1 ? 'male' : 'female')),
         'calling_name' => $faker->firstName(($gender == 1 ? 'male' : 'female')),
-        'email' => $faker->email,
+        'email' => $faker->unique()->email,
         'password' => bcrypt(str_random(16)),
         'remember_token' => str_random(10),
         'birthdate' => $faker->date('Y-m-d', '-16 years'),
