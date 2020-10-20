@@ -18,7 +18,7 @@
 
                 @foreach($menuItems as $menuItem)
 
-                    @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->is_member()))
+                    @if(!$menuItem->is_member_only || (Auth::check() && Auth::user()->is_member))
 
                         @if($menuItem->children->count() > 0)
 
@@ -30,7 +30,7 @@
                                 <ul class="dropdown-menu">
 
                                     @foreach($menuItem->children->sortBy('order') as $childItem)
-                                        @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->is_member()))
+                                        @if(!$childItem->is_member_only || (Auth::check() && Auth::user()->is_member))
                                             <a class="dropdown-item" href="{{ $childItem->getUrl()  }}">
                                                 {{ $childItem->menuname }}
                                             </a>
