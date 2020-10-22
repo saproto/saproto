@@ -371,17 +371,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->tfa_totp_key !== null;
     }
 
-    public function hasCompletedProfile()
-    {
-        return $this->birthdate !== null && $this->phone !== null;
-    }
-
-    public function hasSignedMembershipForm() {
-        if ($this->is_member) {
-            return $this->member->membershipForm !== null;
-        }
-    }
-
     public function clearMemberProfile()
     {
         $this->birthdate = null;
@@ -449,9 +438,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->belongsTo('Proto\Models\HelperReminder');
     }
 
+    public function getCompletedProfileAttribute()
+    {
+        return $this->birthdate !== null && $this->phone !== null;
+    }
+
     public function getIsMemberAttribute()
     {
         return $this->member && !$this->member->pending;
+    }
+
+    public function getSignedMembershipFormAttribute() {
+        if ($this->member) {
+            return $this->member->membershipForm !== null;
+        }
     }
 
     public function getIsProtubeAdminAttribute()

@@ -182,7 +182,7 @@ class UserDashboardController extends Controller
             [
                 'url' => Auth::check() ? route('user::memberprofile::complete', ['wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
-                'done' => Auth::check() && Auth::user()->hasCompletedProfile(),
+                'done' => Auth::check() && Auth::user()->completed_profile,
                 'heading' => "Provide some personal details",
                 'icon' => "fas fa-id-card",
                 'text' => "To enter your in our member administration, you need to provide is with some extra information."
@@ -205,15 +205,15 @@ class UserDashboardController extends Controller
             ],
             [
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address,
-                'done' => Auth::check() && ((Auth::user()->hasCompletedProfile() && Auth::user()->hasSignedMembershipForm()) || Auth::user()->is_member),
+                'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address,
+                'done' => Auth::check() && ((Auth::user()->completed_profile && Auth::user()->signed_membership_form) || Auth::user()->is_member),
                 'heading' => "Sign the membership form",
                 'icon' => "fas fa-signature",
                 'text' => "To complete your membership request we need you to sign the membership form."
             ],
             [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
-                'unlocked' => Auth::check() && Auth::user()->hasCompletedProfile() && Auth::user()->bank && Auth::user()->address && Auth::user()->hasSignedMembershipForm(),
+                'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address && Auth::user()->signed_membership_form,
                 'done' => Auth::check() && Auth::user()->is_member,
                 'heading' => "Become a member!",
                 'icon' => "fas fa-trophy",
@@ -243,7 +243,7 @@ class UserDashboardController extends Controller
     public function getCompleteProfile()
     {
         $user = Auth::user();
-        if ($user->hasCompletedProfile()) {
+        if ($user->completed_profile) {
             Session::flash("flash_message", "Your membership profile is already complete.");
             return Redirect::route('becomeamember');
         }
@@ -254,7 +254,7 @@ class UserDashboardController extends Controller
     public function postCompleteProfile(Request $request)
     {
         $user = Auth::user();
-        if ($user->hasCompletedProfile()) {
+        if ($user->completed_profile) {
             Session::flash("flash_message", "Your membership profile is already complete.");
             return Redirect::route('becomeamember');
         }
@@ -287,7 +287,7 @@ class UserDashboardController extends Controller
     public function getMemberForm()
     {
         $user = Auth::user();
-        if ($user->hasCompletedProfile() && $user->hasSignedMembershipForm()) {
+        if ($user->is_member || $user->signed_membership_form) {
             Session::flash("flash_message", "You have already signed the membership form");
             return Redirect::route('becomeamember');
         }
@@ -298,6 +298,11 @@ class UserDashboardController extends Controller
     public function postMemberForm(Request $request)
     {
         $user = Auth::user();
+        if ($user->is_member || $user->signed_membership_form) {
+            Session::flash("flash_message", "You have already signed the membership form");
+            return Redirect::route('becomeamember');
+        }
+
         $member = Member::create();
         $member->user()->associate($user);
         $member->pending = true;
@@ -318,7 +323,7 @@ class UserDashboardController extends Controller
     public function getClearProfile()
     {
         $user = Auth::user();
-        if (!$user->hasCompletedProfile()) {
+        if (!$user->completed_profile) {
             abort(403, "You have not yet completed your membership profile.");
         }
         if ($user->is_member) {
@@ -331,7 +336,7 @@ class UserDashboardController extends Controller
     public function postClearProfile()
     {
         $user = Auth::user();
-        if (!$user->hasCompletedProfile()) {
+        if (!$user->completed_profile) {
             abort(403, "You have not yet completed your membership profile.");
         }
         if ($user->is_member) {
