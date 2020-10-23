@@ -67,11 +67,11 @@
                                 </td>
                                 <td>
                                     @if($user->member->is_lifelong)
-                                        <i class="fas fa-clock"></i> Lifelong
+                                        Lifelong <i class="fas fa-clock"></i>
                                     @elseif($user->member->is_honorary)
-                                        <i class="fas fa-hand-holding-heart"></i> Honorary
+                                        Honorary <i class="fas fa-trophy"></i>
                                     @elseif($user->member->is_donator)
-                                        <i class="fas fa-hand-holding-usd"></i> Donator
+                                        Donator <i class="fas fa-hand-holding-usd"></i>
                                     @else
                                         Regular
                                     @endif
@@ -111,7 +111,7 @@
                                     <td>
                                         {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
                                     </td>
-                                    @if($membership->membership_form_id)
+                                    @if($membership->membershipForm)
                                         <td>
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
@@ -156,7 +156,7 @@
                                 <td>
                                     {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
                                 </td>
-                                @if($membership->membership_form_id)
+                                @if($membership->membershipForm)
                                     <td>
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>

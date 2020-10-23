@@ -42,7 +42,9 @@ class UserDashboardController extends Controller
             $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
         }
 
-        return view('users.dashboard.dashboard', ['user' => $user, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
+        $memberships = $user->getMemberships();
+
+        return view('users.dashboard.dashboard', ['user' => $user, 'memberships' => $memberships, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
     }
 
     public function updateMail(Request $request)

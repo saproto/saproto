@@ -54,8 +54,8 @@ class UserAdminController extends Controller
     public function details($id)
     {
         $user = User::findOrFail($id);
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $user->id)->where('deleted_at', '=', null)->where('pending', '=', true)->get();
-        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $user->id)->where('deleted_at', '!=', null)->get();
+        $memberships = $user->getMemberships();
+
         return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
@@ -255,12 +255,19 @@ class UserAdminController extends Controller
 
     public function getSignedMemberForm($id)
     {
-        $form = Member::withTrashed()->where('membership_form_id', '=', $id)->get();
+        $user = Auth::user();
+        $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
+
+        if($user->id != $member->user_id && !$user->can('board')) {
+            abort(403);
+        }
+
+        $form = $member->membershipForm;
 
         return Redirect::to($form->generatePath());
     }
 
-    public function getnewMemberForm($id) {
+    public function getNewMemberForm($id) {
         $user = User::findOrFail($id);
 
         if ($user->address === null) {

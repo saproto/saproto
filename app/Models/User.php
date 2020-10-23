@@ -389,6 +389,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $token;
     }
 
+    public function getMemberships() {
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('pending', '=', true)->get();
+        $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
+
+        return $memberships;
+    }
+
     public function generateNewToken()
     {
         $token = new Token();

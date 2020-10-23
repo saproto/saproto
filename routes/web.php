@@ -191,7 +191,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'memberform', 'as' => 'memberform::', 'middleware' => ['auth']], function() {
         Route::get('sign', ['as' => 'sign', 'uses' => 'UserDashboardController@getMemberForm']);
         Route::post('sign', ['as' => 'sign', 'uses' => 'UserDashboardController@postMemberForm']);
-        Route::group(['prefix' => 'download', 'as' => 'download::', 'middleware' => ['permission:board']], function() {
+        Route::group(['prefix' => 'download', 'as' => 'download::'], function() {
             Route::get('{id}', ['as' => 'new', 'uses' => 'UserAdminController@getNewMemberForm']);
             Route::get('{id}', ['as' => 'signed', 'uses' => 'UserAdminController@getSignedMemberForm']);
         });
