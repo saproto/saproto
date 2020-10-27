@@ -61,7 +61,6 @@ class JobofferController extends Controller
     {
         $joboffer = Joboffer::create($request->all());
         $joboffer->save();
-
         return redirect(route("joboffers::admin"));
     }
 
@@ -105,6 +104,7 @@ class JobofferController extends Controller
 
         $joboffer->title = $request->title;
         $joboffer->description = $request->description;
+        $joboffer->redirect_url = $request->redirect_url;
 
         $joboffer->save();
 
