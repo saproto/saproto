@@ -54,7 +54,9 @@ class UserAdminController extends Controller
     public function details($id)
     {
         $user = User::findOrFail($id);
-        return view('users.admin.details', ['user' => $user]);
+        $memberships = $user->getMemberships();
+
+        return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
     public function update(Request $request, $id)
@@ -251,20 +253,30 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
-    public function showMemberForm($id)
+    public function getSignedMemberForm($id)
     {
-        if ((!Auth::check() || !Auth::user()->can('board'))) {
+        $user = Auth::user();
+        $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
+
+        if($user->id != $member->user_id && !$user->can('board')) {
             abort(403);
         }
 
-        $user = User::findOrFail($id);
+        $form = $member->membershipForm;
 
-        if ($user->hasSignedMembershipForm()) {
-            return Redirect::to($user->member->membershipForm->generatePath());
-        }
+        return Redirect::to($form->generatePath());
+    }
+
+    public function getNewMemberForm($id) {
+        $user = User::findOrFail($id);
 
         if ($user->address === null) {
             Session::flash("flash_message", "This user has no address!");
+            return Redirect::back();
+        }
+
+        if ($user->bank === null)  {
+            Session::flash("flash_message", "This user has no bank account!");
             return Redirect::back();
         }
 
@@ -272,7 +284,6 @@ class UserAdminController extends Controller
         $form = $form->setPaper('a4');
 
         return $form->download();
-
     }
 
     public function destroyMemberForm($id)

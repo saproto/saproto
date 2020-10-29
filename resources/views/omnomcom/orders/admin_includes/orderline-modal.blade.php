@@ -23,8 +23,9 @@
                         <div class="col-md-3">
 
                             <select name="user[]" class="form-control orderlineuser">
-                                @foreach(Proto\Models\User::orderBy('name', 'asc')->has('member')->get() as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }} (#{{ $user->id }})</option>
+                                {{ $members = Proto\Models\User::orderBy('name', 'asc')->has('member')->get()->reject(function($user, $index) { return $user->member->pending == 1; }) }}
+                                @foreach($members as $member)
+                                    <option value="{{ $member->id }}">{{ $member->name }} (#{{ $member->id }})</option>
                                 @endforeach
                             </select>
 
