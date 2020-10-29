@@ -23,7 +23,7 @@ class MemberCardController extends Controller
 
         $user = User::findOrFail($id);
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             abort(403, "Only members can have a member card printed.");
         }
 
@@ -50,7 +50,7 @@ class MemberCardController extends Controller
             return "This user could not be found!";
         }
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             return "Only members can have their card printed!";
         }
 
@@ -76,7 +76,7 @@ class MemberCardController extends Controller
             return "This user could not be found!";
         }
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             return "Only members can have their card printed!";
         }
 

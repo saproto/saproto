@@ -99,7 +99,7 @@
                         <th>Birthdate</th>
                         <td>
                             {{ date('F j, Y', strtotime($user->birthdate)) }}
-                            @if($user->member)
+                            @if($user->is_member)
                                 <div class="form-group form-check">
                                     <input name="show_birthday" type="checkbox" class="form-check-input"
                                            id="dashboard__check__birthdate" {{ ($user->show_birthday == 1 ? 'checked' : '') }}>
@@ -137,7 +137,7 @@
 
                         @if($user->address)
                             {{ $user->address->street }} {{ $user->address->number }}
-                            @if($user->member)
+                            @if($user->is_member)
                                 <a class="badge badge-pill badge-primary float-right"
                                    href="{{ route('user::address::edit') }}">
                                     <i class="far fa-edit fa-fw"></i>
@@ -216,7 +216,7 @@
 
                         <div class="form-group form-check">
 
-                            @if($user->member)
+                            @if($user->is_member)
                                 <input name="show_omnomcom_total" type="checkbox" class="form-check-input"
                                        id="dashboard__check__omnomtot" {{ ($user->show_omnomcom_total == 1 ? 'checked' : '') }}>
                                 <label class="form-check-label" for="dashboard__check__omnomtot">
@@ -301,7 +301,7 @@
                     </td>
                 </tr>
 
-                @if($user->member)
+                @if($user->is_member)
 
                     <tr>
                         <th>Privacy</th>
@@ -347,13 +347,13 @@
                 Save settings
             </button>
 
-            @if($user->hasCompletedProfile() && !$user->member)
+            @if($user->completed_profile && !$user->member)
                 <a href="{{ route('user::memberprofile::clear') }}" class="btn btn-outline-danger btn-block mt-3">
                     Clear information required only for members
                 </a>
             @endif
 
-            @if(!$user->hasCompletedProfile())
+            @if(!$user->completed_profile)
                 <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-info btn-block mt-3">
                     Complete profile for membership
                 </a>

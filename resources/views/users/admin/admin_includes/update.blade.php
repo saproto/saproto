@@ -18,7 +18,7 @@
             <input type="text" class="form-control mb-3" id="calling_name" name="calling_name"
                    value="{{ $user->calling_name }}" required>
 
-            @if($user->hasCompletedProfile())
+            @if($user->completed_profile)
                 <label>Birthday</label>
                 @include('website.layouts.macros.datetimepicker', [
                     'name' => 'birthdate',

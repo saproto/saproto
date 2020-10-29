@@ -35,7 +35,7 @@
                     Unblock OmNomCom
                 </a>
             @endif
-            @if($user->member)
+            @if($user->is_member)
                 <a class="list-group-item"
                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
                     Go to profile

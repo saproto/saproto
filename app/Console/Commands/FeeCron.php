@@ -81,7 +81,7 @@ class FeeCron extends Command
 
         foreach (Member::all() as $member) {
 
-            if (in_array($member->user->id, $already_paid)) {
+            if (in_array($member->user->id, $already_paid) || $member->pending) {
                 continue;
             }
 

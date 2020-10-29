@@ -2,6 +2,7 @@
 
 namespace Proto\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 
 class PlaySound extends Command
@@ -37,7 +38,11 @@ class PlaySound extends Command
      */
     public function handle()
     {
-        file_get_contents(config('herbert.server') . '/soundboard?secret=' . config('herbert.secret') . '&sound=' . $this->argument('sound'));
-        $this->info("Playing sound.");
+        try {
+            file_get_contents(config('herbert.server') . '/soundboard?secret=' . config('herbert.secret') . '&sound=' . $this->argument('sound'));
+            $this->info("Playing sound.");
+        } catch (Exception $e) {
+            $this->error("Could not find herbert:", $e->getMessage());
+        }
     }
 }

@@ -107,7 +107,7 @@ class EmailListController extends Controller
                 return Redirect::route('user::dashboard');
             }
         } else {
-            if ($list->is_member_only && !$user->member) {
+            if ($list->is_member_only && !$user->is_member) {
                 $request->session()->flash('flash_message', 'This list is only for members.');
                 return Redirect::route('user::dashboard');
             }

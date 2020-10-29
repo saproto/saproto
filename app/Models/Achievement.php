@@ -35,7 +35,7 @@ class Achievement extends Model
     {
         $users = array();
         foreach ($this->users as $user) {
-            if ((!$ismember || $user->member)) {
+            if ((!$ismember || $user->is_member)) {
                 $users[] = $user;
             }
         }

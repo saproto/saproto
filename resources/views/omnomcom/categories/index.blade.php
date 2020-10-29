@@ -8,7 +8,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-4">
+        <div class="col-lg-6">
 
             <div class="card mb-3">
 
@@ -21,33 +21,36 @@
 
                 @if (count($categories) > 0)
 
-                    <table class="table table-borderless table-hover">
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-hover">
 
-                        @foreach($categories as $category)
+                            @foreach($categories as $category)
 
-                            <tr>
+                                <tr>
 
-                                <td class="text-right">{{ $category->id }}</td>
-                                <td>
-                                    <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
+                                    <td class="text-right">{{ $category->id }}</td>
+                                    <td>
                                         {{ $category->name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ count($category->products()) }} products
-                                </td>
-                                <td>
-                                    <a onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
-                                       href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
-                                        <i class="fas fa-trash text-danger" aria-hidden="true"></i>
-                                    </a>
-                                </td>
+                                    </td>
+                                    <td>
+                                        {{ count($category->products()) }} products
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
+                                            <i class="fas fa-edit mr-2" aria-hidden="true"></i>
+                                        </a>
+                                        <a onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
+                                           href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
+                                            <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
 
-                            </tr>
+                                </tr>
 
-                        @endforeach
+                            @endforeach
 
-                    </table>
+                        </table>
+                    </div>
 
                 @endif
 

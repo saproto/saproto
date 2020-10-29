@@ -36,8 +36,8 @@ class Announcement extends Model
         // Verify user type requirement.
         if (
             !($this->show_guests && $user == null) &&
-            !($this->show_users && $user != null && $user->member == null) &&
-            !($this->show_members && $user != null && $user->member != null)
+            !($this->show_users && $user != null && !$user->is_member) &&
+            !($this->show_members && $user != null && $user->is_member)
         ) {
             return false;
         }
@@ -48,12 +48,12 @@ class Announcement extends Model
         }
 
         // Check for first years.
-        if ($this->show_only_firstyear && $user != null && $user->member != null && !$user->isFirstYear()) {
+        if ($this->show_only_firstyear && $user != null && $user->is_member && !$user->isFirstYear()) {
             return false;
         }
 
         // Check for first years.
-        if ($this->show_only_active && $user != null && $user->member != null && !$user->isActiveMember()) {
+        if ($this->show_only_active && $user != null && $user->is_member && !$user->isActiveMember()) {
             return false;
         }
 

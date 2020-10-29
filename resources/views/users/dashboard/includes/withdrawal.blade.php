@@ -40,7 +40,7 @@
 
             <div class="btn-group btn-block">
 
-                @if(!$user->member)
+                @if(!$user->is_member)
 
                     <a class="btn btn-outline-danger w-50" data-toggle="modal"
                             data-target="#bank-modal-cancel">
