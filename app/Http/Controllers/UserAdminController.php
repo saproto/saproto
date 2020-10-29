@@ -37,13 +37,17 @@ class UserAdminController extends Controller
 
         switch ($filter) {
             case 'pending':
-                $users = User::withTrashed()->join('members', 'members.user_id', '=', 'users.id')->where('members.pending', '=', 1)->where('members.deleted_at', '=', null)->select('users.*');
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 1)->where('deleted_at', '=', null);
+                });
                 break;
             case 'members':
-                $users = User::withTrashed()->join('members', 'members.user_id', '=', 'users.id')->where('members.pending', '=', 0)->where('members.deleted_at', '=', null)->select('users.*');
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 0)->where('deleted_at', '=', null);
+                });
                 break;
             case 'users':
-                $users = User::withTrashed()->whereNotIn('users.id', Member::pluck('user_id')->all());
+                $users = User::withTrashed()->doesntHave('member');
                 break;
             default:
                 $users = User::withTrashed();
