@@ -57,7 +57,7 @@
 
                         <thead>
                         <tr class="bg-dark text-white">
-                            <td class="text-right">Controls</td>
+                            <td class="pl-3">Controls</td>
                             <td></td>
                             <td>Name</td>
                             <td>Type</td>
@@ -71,16 +71,20 @@
                         <tbody>
                         @foreach($users as $user)
                             <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
-                                <td class="text-right">
+                                <td class="pl-3">
                                     @if(!$user->deleted_at)
                                         <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Go to user admin" class="text-decoration-none">
                                             <i class="fas fa-info-circle fa-fw mr-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
-                                           data-toggle="tooltip" data-placement="top" title="Go to public profile" class="text-decoration-none">
-                                            <i class="fas fa-user-circle fa-fw mr-2 text-primary" aria-hidden="true"></i>
-                                        </a>
+                                        @if($user->is_member)
+                                            <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
+                                               data-toggle="tooltip" data-placement="top" title="Go to public profile" class="text-decoration-none">
+                                                <i class="fas fa-user-circle fa-fw mr-2 text-primary" aria-hidden="true"></i>
+                                            </a>
+                                        @else
+                                            <i class="fas fa-user-circle fa-fw mr-2 text-muted" aria-hidden="true"></i>
+                                        @endif
                                         <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Impersonate" class="text-decoration-none">
                                             <i class="fas fa-sign-in-alt fa-fw mr-2 text-warning" aria-hidden="true"></i>
