@@ -162,17 +162,10 @@
 
 <script type="text/javascript">
 
-    var barcodetimeout;
-
     let prevRead = "";
 
     $(document).ready(function () {
         initializeCamera();
-        focus();
-        $("#scanner-field").on('keyup', function (e) {
-            clearTimeout(barcodetimeout);
-            barcodetimeout = setTimeout(scan, 100);
-        });
     });
 
     function initializeCamera() {
@@ -232,15 +225,10 @@
             default:
                 $("#scanner-field").prop('disabled', false);
                 $("#feedback-field").addClass('blinker').html("Searching for barcode...");
-                focus();
                 break;
 
         }
 
-    }
-
-    function focus() {
-        $("#scanner-field").focus();
     }
 
     function flash(color) {
@@ -265,8 +253,6 @@
                 setStatus('error');
             }
         })
-
-        $("#scanner-field").val("");
     }
 
     function parseReply(data) {
