@@ -4,12 +4,10 @@ use Faker\Generator as Faker;
 
 /** @var $factory Closure */
 $factory->define(Proto\Models\CommitteeMembership::class,
-    function (Faker $faker) {
+    function (Faker $faker, $attr) {
         $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('+1 year'));
 
-        $committeeId = Proto\Models\Committee::inRandomOrder()->pluck('id')->first();
-        $userId = Proto\Models\User::inRandomOrder()->whereHas('member', function($q) {$q->where('pending', '=', 0);})->pluck('id')->first();
         $date = [date('Y-m-d H:i:s', mt_rand($mintime, $maxtime)), date('Y-m-d H:i:s', mt_rand($mintime, $maxtime))];
         if ($date[0] < $date[1]) {
             $startDate = $date[0];
@@ -20,8 +18,6 @@ $factory->define(Proto\Models\CommitteeMembership::class,
         }
 
         return [
-            'user_id' => $userId,
-            'committee_id' => $committeeId,
             'role' => 'Automatically Added',
             'edition' => (mt_rand(1, 2) == 1 ? mt_rand(1, 5) : null),
             'created_at' => $startDate,

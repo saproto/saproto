@@ -30,8 +30,6 @@ class DatabaseSeeder extends Seeder
         Model::reguard();
 
         $time_end = microtime(true);
-        echo "Seeding took " . ($time_end - $time_start)/60 . " minutes" . PHP_EOL;
-
-        echo "Done!" . PHP_EOL;
+        echo "\e[32mSeeding:\e[0m Finished! (" . round(($time_end - $time_start), 2) . "s)" . PHP_EOL;
     }
 }

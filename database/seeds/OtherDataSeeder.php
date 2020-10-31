@@ -38,10 +38,10 @@ class OtherDataSeeder extends Seeder
         MenuItem::create([
             'menuname' => "member pages",
             'order' => 1,
-            'is_member_only' => 0,
+            'is_member_only' => 1,
         ]);
 
-        // Create Pages
+        // Create pages
         $n = 10;
         echo "Creating $n pages" . PHP_EOL;
         foreach(range(1, $n) as $index) {
@@ -56,27 +56,29 @@ class OtherDataSeeder extends Seeder
             ]);
         }
 
-
-
         // Create users
         $n = 100;
 
         foreach(range(1, $n) as $index) {
+            /** @var $user User */
             $user = factory(User::class)->create();
 
-                /** @var $user User */
+                // user is a member
                 if (mt_rand(1, 5) > 1) {
                     $user->bank()->save(factory(Bank::class)->make());
                     $user->address()->save(factory(Address::class)->make());
                     $user->member()->save(factory(Member::class)->make());
                 }
 
-                if (mt_rand(1, 20) > 15) {
-                    if (!$user->is_member) $user->address()->save(factory(Bank::class)->make());
-                }
+                // user is not a member
+                else {
+                    if (mt_rand(1, 20) > 15) {
+                        $user->address()->save(factory(Address::class)->make());
+                    }
 
-                if (mt_rand(1, 20) > 15) {
-                    if (!$user->is_member) $user->bank()->save(factory(Bank::class)->make());
+                    if (mt_rand(1, 20) > 15) {
+                        $user->bank()->save(factory(Bank::class)->make());
+                    }
                 }
 
             echo "Creating " . $index . "/" . $n . " users\r";
@@ -84,11 +86,16 @@ class OtherDataSeeder extends Seeder
 
         echo PHP_EOL;
 
+        // Create arrays of member user ids
+        $users = User::whereHas('member', function($q){ $q->where('pending', '=', 0); })->pluck('id')->toArray();
+
         // Create orderlines
         $n = 1000;
 
         foreach(range(1, $n) as $index) {
-            factory(Orderline::class)->create();
+            factory(Orderline::class)->create([
+                'user_id' => array_random($users),
+            ]);
             echo "Creating " . $index . "/" . $n . " orderlines\r";
         }
 
@@ -96,11 +103,20 @@ class OtherDataSeeder extends Seeder
 
         // Create committee participations
         $n = 50;
-        echo "Creating $n committee participations" . PHP_EOL;
-        factory(CommitteeMembership::class, $n)->create();
+        $committees = Committee::all()->pluck('id')->toArray();
+
+        foreach(range(1, $n) as $index) {
+            factory(CommitteeMembership::class, $n)->create([
+                'user_id' => array_random($users),
+                'committee_id' => array_random($committees),
+            ]);
+
+            echo "Creating " . $index . "/" . $n . " committee memberships\r";
+        }
+
+        echo PHP_EOL;
 
         // Create activity participations
-        $users = User::all()->pluck('id')->toArray();
         echo "Creating activity participations" . PHP_EOL;
 
         foreach (Activity::orderBy('id', 'desc')->take(25)->get() as $activity) {
@@ -119,7 +135,7 @@ class OtherDataSeeder extends Seeder
                 $endDate = date('Y-m-d H:i:s', ($maxtime > $startDate ? mt_rand($startDate, $maxtime) : $maxtime));
 
                 ActivityParticipation::create([
-                    'user_id' => $users[array_rand($users)],
+                    'user_id' => array_random($users),
                     'activity_id' => $activity->id,
                     'created_at' => date('Y-m-d H:i:s', $startDate),
                     'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
