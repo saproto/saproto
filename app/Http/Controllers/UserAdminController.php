@@ -26,20 +26,40 @@ class UserAdminController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
 
         $search = $request->input('query');
+        $filter = $request->input('filter');
 
-        if ($search) {
-            $users = User::withTrashed()->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%')->paginate(20);
-        } else {
-            $users = User::withTrashed()->paginate(20);
+        switch ($filter) {
+            case 'pending':
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 1)->where('deleted_at', '=', null);
+                });
+                break;
+            case 'members':
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 0)->where('deleted_at', '=', null);
+                });
+                break;
+            case 'users':
+                $users = User::withTrashed()->doesntHave('member');
+                break;
+            default:
+                $users = User::withTrashed();
         }
 
-        return view('users.admin.overview', ['users' => $users, 'query' => $search]);
+        if ($search) {
+            $users = $users->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%');
+        }
+
+        $users = $users->paginate(20);
+
+        return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
 
     }
 
