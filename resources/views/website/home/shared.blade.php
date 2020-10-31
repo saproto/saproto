@@ -2,7 +2,7 @@
 
 @section('javascript')
     @parent
-    <script>
+    <script type="text/javascript">
         let mySwiper = new Swiper ('.swiper-container', {
             @if( count($companies) > 1 )
             loop: true,
@@ -65,8 +65,7 @@
                         @endif
                     </small>
                 @endif
-                <div class="card-body"
-                     style="text-align: left; vertical-align: bottom; font-size: 30px; display: flex;">
+                <div class="card-body" style="text-align: left; vertical-align: bottom; font-size: 30px; display: flex;">
                     <p class="card-text ellipsis px-1" style="align-self: flex-end;">
                         @section('greeting')
                         @show
@@ -77,17 +76,18 @@
             @if(count($companies) > 0)
 
                 <div class="card mb-3">
-                    <div class="card-body pb-0 position-relative">
+                    <div class="card-body pb-0 pt-1 position-relative">
                         <div class="row mb-1 swiper-container" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
-
-                                    <div class="swiper-slide justify-content-center d-flex">
-                                        <a href="{{ route('companies::show', ['id' => $company->id]) }}">
-                                            <img class="company-{{strtolower($company->name)}}" src="{{ $company->image->generateImagePath(null, 50) }}">
-                                        </a>
-                                    </div>
-
+                                    @if($company->image)
+                                        <div class="swiper-slide justify-content-center align-items-center d-flex">
+                                            <a href="{{ route('companies::show', ['id' => $company->id]) }}">
+                                                <img class="company-{{strtolower($company->name)}}"
+                                                     src="{{ $company->image->generateImagePath(null, 50) }}"/>
+                                            </a>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
