@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 
 use Proto\Models\HashMapItem;
+use Proto\Models\MenuItem;
+use Proto\Models\Page;
 use Proto\Models\User;
 use Proto\Models\Committee;
 use Proto\Models\Address;
@@ -26,89 +28,95 @@ class OtherDataSeeder extends Seeder
 
         $faker = Faker\Factory::create();
 
-        // List of valid ID's
-        $products = Product::all()->pluck('id')->toArray();
-        $committees = Committee::all()->pluck('id')->toArray();
+        // Create parent menu items
+        MenuItem::create([
+            'menuname' => "public pages",
+            'order' => 0,
+            'is_member_only' => 0,
+        ]);
 
-        // Create users
-        $n = 500;
-        echo "Creating $n users" . PHP_EOL;
-        factory(User::class, $n)->create()->each(function ($user) {
-            /** @var $user User */
-            if (mt_rand(1, 5) > 1) {
-                $user->bank()->save(factory(Bank::class)->make());
-                $user->address()->save(factory(Address::class)->make());
-                $user->member()->save(factory(Member::class)->make());
-            }
+        MenuItem::create([
+            'menuname' => "member pages",
+            'order' => 1,
+            'is_member_only' => 1,
+        ]);
 
-            if (mt_rand(1, 20) > 15) {
-                if(!$user->is_member) $user->address()->save(factory(Bank::class)->make());
-            }
+        // Create pages
+        $n = 10;
+        echo "Creating $n pages" . PHP_EOL;
+        foreach(range(1, $n) as $index) {
+            $page = factory(Page::class)->create();
 
-            if (mt_rand(1, 20) > 15) {
-                if(!$user->is_member) $user->bank()->save(factory(Bank::class)->make());
-            }
-
-        });
-
-        $users = array_merge(array_rand(User::all()->pluck('id')->toArray(), 75), [1]);
-
-        // Create orderlines
-        $n = 10000;
-        echo "Creating $n orderlines" . PHP_EOL;
-
-        $mintime = date('U', strtotime('-1 year'));
-        $maxtime = date('U', strtotime('now'));
-
-        for ($i = 0; $i < $n; $i++) {
-            $p = Product::find($products[array_rand($products)]);
-            $d = date('Y-m-d H:i:s', mt_rand($mintime, $maxtime));
-            $u = mt_rand(1, 3);
-            $data = [
-                'user_id' => $users[array_rand($users)],
-                'product_id' => $p->id,
-                'original_unit_price' => $p->price,
-                'units' => $u,
-                'total_price' => $u * $p->price,
-                'created_at' => $d
-            ];
-
-            if (mt_rand(1, 100) == 1) {
-                // Simulate Pay via Cash
-                $data['cashier_id'] = $users[array_rand($users)];
-                $data['payed_with_bank_card'] = $d;
-            }
-            OrderLine::create($data);
-        }
-
-        // Create committee participations
-        $n = 1000;
-        echo "Creating $n committee participations" . PHP_EOL;
-        $maxtime = date('U', strtotime('+1 year'));
-
-        for ($i = 0; $i < $n; $i++) {
-            $c = Committee::find($committees[array_rand($committees)]);
-            $d = [date('Y-m-d H:i:s', mt_rand($mintime, $maxtime)), date('Y-m-d H:i:s', mt_rand($mintime, $maxtime))];
-            if ($d[0] < $d[1]) {
-                $sd = $d[0];
-                $ed = $d[1];
-            } else {
-                $sd = $d[1];
-                $ed = $d[0];
-            }
-
-            CommitteeMembership::create([
-                'user_id' => $users[array_rand($users)],
-                'committee_id' => $committees[array_rand($committees)],
-                'role' => 'Automatically Added',
-                'edition' => (mt_rand(1, 2) == 1 ? mt_rand(1, 5) : null),
-                'created_at' => $sd,
-                'deleted_at' => (mt_rand(1, 3) == 1 ? $ed : null)
+            MenuItem::create([
+                'parent' => $page->is_member_only + 1,
+                'menuname' => $page->title,
+                'page_id' => $page->id,
+                'order' => $index + 1,
+                'is_member_only' => $page->is_member_only,
             ]);
         }
 
+        // Create users
+        $n = 100;
+
+        foreach(range(1, $n) as $index) {
+            /** @var $user User */
+            $user = factory(User::class)->create();
+
+                // user is a member
+                if (mt_rand(1, 5) > 1) {
+                    $user->bank()->save(factory(Bank::class)->make());
+                    $user->address()->save(factory(Address::class)->make());
+                    $user->member()->save(factory(Member::class)->make());
+                }
+
+                // user is not a member
+                else {
+                    if (mt_rand(1, 20) > 15) {
+                        $user->address()->save(factory(Address::class)->make());
+                    }
+
+                    if (mt_rand(1, 20) > 15) {
+                        $user->bank()->save(factory(Bank::class)->make());
+                    }
+                }
+
+            echo "Creating " . $index . "/" . $n . " users\r";
+        }
+
+        echo PHP_EOL;
+
+        // Create arrays of member user ids
+        $users = User::whereHas('member', function($q){ $q->where('pending', '=', 0); })->pluck('id')->toArray();
+
+        // Create orderlines
+        $n = 1000;
+
+        foreach(range(1, $n) as $index) {
+            factory(Orderline::class)->create([
+                'user_id' => array_random($users),
+            ]);
+            echo "Creating " . $index . "/" . $n . " orderlines\r";
+        }
+
+        echo PHP_EOL;
+
+        // Create committee participations
+        $n = 50;
+        $committees = Committee::all()->pluck('id')->toArray();
+
+        foreach(range(1, $n) as $index) {
+            factory(CommitteeMembership::class, $n)->create([
+                'user_id' => array_random($users),
+                'committee_id' => array_random($committees),
+            ]);
+
+            echo "Creating " . $index . "/" . $n . " committee memberships\r";
+        }
+
+        echo PHP_EOL;
+
         // Create activity participations
-        $users = User::all()->pluck('id')->toArray();
         echo "Creating activity participations" . PHP_EOL;
 
         foreach (Activity::orderBy('id', 'desc')->take(25)->get() as $activity) {
@@ -123,13 +131,14 @@ class OtherDataSeeder extends Seeder
 
             $j = 0;
             for ($i = 0; $i < $p; $i++) {
-                $d = date('Y-m-d H:i:s', ($maxtime > $mintime ? mt_rand($mintime, $maxtime) : $mintime));
+                $startDate = date('U', ($maxtime > $mintime ? mt_rand($mintime, $maxtime) : $mintime));
+                $endDate = date('Y-m-d H:i:s', ($maxtime > $startDate ? mt_rand($startDate, $maxtime) : $maxtime));
 
                 ActivityParticipation::create([
-                    'user_id' => $users[array_rand($users)],
+                    'user_id' => array_random($users),
                     'activity_id' => $activity->id,
-                    'created_at' => $d,
-                    'deleted_at' => (mt_rand(1, 3) == 1 ? $ed : null),
+                    'created_at' => date('Y-m-d H:i:s', $startDate),
+                    'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
                     'backup' => ($activity->participants != -1 && $j > $activity->participants)
                 ]);
 
