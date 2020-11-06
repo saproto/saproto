@@ -312,8 +312,9 @@ class UserAdminController extends Controller
             abort(403);
         }
 
-        $user = User::findOrFail($id);
-        $member = $user->member;
+        $member = Member::where('membership_form_id', '=', $id)->first();
+        $user = User::findOrFail($member->user_id);
+
 
         $member->forceDelete();
 

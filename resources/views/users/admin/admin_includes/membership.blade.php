@@ -116,7 +116,7 @@
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                                 <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -161,7 +161,7 @@
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                             <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
                                         </a>
                                     </td>
