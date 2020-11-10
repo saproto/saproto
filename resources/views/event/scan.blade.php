@@ -17,6 +17,7 @@
     <title>Ticket Scanner for {{ $event->title }}</title>
 
     @include('website.layouts.assets.stylesheets')
+    @include('website.layouts.assets.javascripts')
 
     <style type="text/css">
 
@@ -24,12 +25,15 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            font-family: Lato, sans-serif;
-
-            padding: 20px;
-
+        html {
             background-color: #555;
+
+            font-family: Lato, sans-serif;
+        }
+
+        body {
+            padding: 20px;
+            background-color: transparent;
         }
 
         .title {
@@ -50,7 +54,7 @@
             border: none;
 
             text-align: center;
-            background-color: #555;
+            background-color: transparent;
             color: #fff;
 
             display: block;
@@ -78,6 +82,25 @@
             display: none;
         }
 
+        #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        #video video, canvas {
+            width: 100%;
+            height: auto;
+        }
+
+        #video video.drawingBuffer, canvas.drawingBuffer {
+            display: none;
+        }
+
         .history th, .history td {
             color: #fff !important;
         }
@@ -100,22 +123,15 @@
 </head>
 
 <body>
-
+<div id="video"></div>
 <div class="container-fluid">
 
     <p class="title">
         Ticket Scanner for {{ $event->title }}
     </p>
 
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <input type="text" id="scanner-field" onblur="javascript:focus();"
-                   onsubmit="javascript:scan();">
-        </div>
-    </div>
-
     <p id="feedback-field" class="blinker">
-        Waiting for input...
+        Searching barcode...
     </p>
 
     <hr>
@@ -138,7 +154,6 @@
 </div>
 
 <div id="flash">
-
 </div>
 
 @section('javascript')
@@ -147,15 +162,43 @@
 
 <script type="text/javascript">
 
-    var barcodetimeout;
+    let prevRead = "";
 
     $(document).ready(function () {
-        focus();
-        $("#scanner-field").on('keyup', function (e) {
-            clearTimeout(barcodetimeout);
-            barcodetimeout = setTimeout(scan, 100);
-        });
+        initializeCamera();
     });
+
+    function initializeCamera() {
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                constraints: {
+                    facingMode: "environment"
+                },
+                target: document.querySelector('#video')
+            },
+            decoder: {
+                readers: ["codabar_reader"],
+                multiple: false
+            }
+        }, function(err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log("Scanner intialized!");
+            Quagga.start();
+        });
+        Quagga.onDetected(function (data) {
+            const rawCode = data.codeResult.code;
+            const code = rawCode.substring(1, rawCode.length-1);
+            if (code !== prevRead) {
+                scan(code);
+                prevRead = code;
+            }
+        });
+    }
 
     function setStatus(s) {
 
@@ -181,24 +224,18 @@
 
             default:
                 $("#scanner-field").prop('disabled', false);
-                $("#feedback-field").addClass('blinker').html("Waiting for input...");
-                focus();
+                $("#feedback-field").addClass('blinker').html("Searching for barcode...");
                 break;
 
         }
 
     }
 
-    function focus() {
-        $("#scanner-field").focus();
-    }
-
     function flash(color) {
         $("#flash").css('background-color', color).css("opacity", 0.5).show().fadeOut(1000);
     }
 
-    function scan() {
-        var barcode = $("#scanner-field").val();
+    function scan(barcode) {
         if (barcode === "") return;
 
         setStatus("got");
@@ -216,8 +253,6 @@
                 setStatus('error');
             }
         })
-
-        $("#scanner-field").val("");
     }
 
     function parseReply(data) {

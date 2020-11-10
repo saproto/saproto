@@ -34,6 +34,7 @@
     "moment": "~2.24.0",
     "moment-timezone": "^0.5.31",
     "popper.js": "^1.16.1",
+    "quagga": "^0.12.1",
     "select2": "^4.0.13",
     "select2-bootstrap4-theme": "~1.0.0",
     "simplemde": "~1.11.2",
@@ -41,7 +42,8 @@
     "swiper": "^5.4.5",
     "tempusdominus-bootstrap-4": "~5.1.2",
     "tempusdominus-core": "~5.0.3",
-    "util.promisify": "^1.0.1"
+    "util.promisify": "^1.0.1",
+    "webrtc-adapter": "^7.7.0"
   },
   "devDependencies": {
     "babel-eslint": "~10.0.3",
@@ -81,7 +83,9 @@
         "./node_modules/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js",
         "./node_modules/jquery-dateFormat/dist/jquery-dateFormat.min.js",
         "./node_modules/swiper/js/swiper.min.js",
-        "./node_modules/jq-signature/jq-signature.js"
+        "./node_modules/jq-signature/jq-signature.js",
+        "./node_modules/quagga/dist/quagga.js",
+        "./node_modules/webrtc-adapter/out/adapter.js"
       ],
       "dest": "application.js",
       "destmin": "application.min.js",

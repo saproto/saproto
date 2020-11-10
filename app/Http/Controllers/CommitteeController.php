@@ -27,12 +27,17 @@ class CommitteeController extends Controller
         if (Auth::check() && Auth::user()->can('board')) {
             return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
         } else {
-            $publicCommittees = Committee::where('public', 1)->where('is_society', $showSociety)->get();
-            $userCommittees = Auth::check() ? Auth::user()->committees : [];
+            $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
 
-            $mergedCommittees = $publicCommittees->merge($userCommittees)->sortBy('name');
+            if($showSociety) {
+                $userGroups = Auth::check() ? Auth::user()->societies : [];
+            } else {
+                $userGroups = Auth::check() ? Auth::user()->committees : [];
+            }
 
-            return view('committee.list', ['data' => $mergedCommittees]);
+            $mergedGroups = $publicGroups->merge($userGroups)->sortBy('name');
+
+            return view('committee.list', ['data' => $mergedGroups]);
         }
     }
 

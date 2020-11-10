@@ -347,13 +347,13 @@
                 Save settings
             </button>
 
-            @if($user->hasCompletedProfile() && !$user->member)
+            @if($user->completed_profile && !$user->member)
                 <a href="{{ route('user::memberprofile::clear') }}" class="btn btn-outline-danger btn-block mt-3">
                     Clear information required only for members
                 </a>
             @endif
 
-            @if(!$user->hasCompletedProfile())
+            @if(!$user->completed_profile)
                 <a href="{{ route('user::memberprofile::complete') }}" class="btn btn-outline-info btn-block mt-3">
                     Complete profile for membership
                 </a>
