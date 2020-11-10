@@ -28,7 +28,7 @@ class AddRedirectUrlToJoboffers extends Migration
     {
         Schema::table('joboffers', function (Blueprint $table) {
             $table->dropColumn('redirect_url');
-            $table->text('description')->nullable(false)->default('')->change();
+            $table->text('description')->nullable(false)->change();
         });
     }
 }
