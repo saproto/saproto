@@ -44,15 +44,15 @@
 
                         <div class="form-group">
                             <label>Offer information type</label>
-                            <select class="form-control information_type_selector">
-                                <option value="" @if(!$joboffer || ($joboffer->description == '' && $joboffer->redirect_url == '')) selected @endif disabled>Select a type...
+                            <select id="information_type_selector" class="form-control">
+                                <option value="" @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected @endif disabled>Select a type...
                                 </option>
-                                <option value="description" @if($joboffer && $joboffer->description != '') selected @endif>Description</option>
-                                <option value="url" @if($joboffer && $joboffer->redirect_url != '') selected @endif>Redirect URL</option>
+                                <option value="description" @if($joboffer && $joboffer->description != null) selected @endif>Description</option>
+                                <option value="url" @if($joboffer && $joboffer->redirect_url != null) selected @endif>Redirect URL</option>
                             </select>
                         </div>
 
-                        <div class="form-group information_type_description">
+                        <div id="information_type_description" class="form-group">
                             <label for="editor-description">Description</label>
                             @include('website.layouts.macros.markdownfield', [
                                 'name' => 'description',
@@ -61,7 +61,7 @@
                             ])
                         </div>
 
-                        <div class="form-group information_type_url">
+                        <div id="information_type_url" class="form-group">
                             <label for="title">Redirect URL</label>
                             <input type="text" class="form-control" id="redirect_url" name="redirect_url"
                                    placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url or '' }}">
@@ -100,20 +100,23 @@
 
     <script>
         $(document).ready(updateInformationDisplay);
-        $('.information_type_selector').change(updateInformationDisplay);
+        $('#information_type_selector').change(updateInformationDisplay);
 
         function updateInformationDisplay() {
-            $('.information_type_description, .information_type_url').removeClass('d-none');
-            switch($('.information_type_selector').val()) {
+            $('#information_type_description, #information_type_url').removeClass('d-none');
+            switch($('#information_type_selector').val()) {
                 case 'description':
-                    $('.information_type_url').addClass('d-none').find('input').val('');
+                    $('#information_type_url').addClass('d-none');
+                    $('#redirect_url').val('').removeAttr('required');
                     break;
                 case 'url':
-                    $('.information_type_description').addClass('d-none'); simplemde.value('');
+                    $('#information_type_description').addClass('d-none');
+                    $('#redirect_url').attr('required', 'true');
+                    simplemde.value('');
                     break;
                 default:
-                    $('.information_type_url, .information_type_description').addClass('d-none').find('input').val('');
-                    $('.information_type_description').find('textarea').html('');
+                    $('#information_type_url, #information_type_description').addClass('d-none').find('input').val('');
+                    $('#information_type_selector').attr('required', 'true');
                     simplemde.value('');
                     break;
             }
