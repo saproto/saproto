@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic-nonavandfooter')
 
 @section('page-title')
-    Is Alred There?
+    Is Alfred There?
 @endsection
 
 @section('head')
