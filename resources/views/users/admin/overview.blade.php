@@ -59,7 +59,8 @@
                         <tr class="bg-dark text-white">
                             <td class="pl-3">Controls</td>
                             <td></td>
-                            <td>Name</td>
+                            <td>Calling Name</td>
+                            <td>Full Name</td>
                             <td>Type</td>
                             <td>E-mail</td>
                             <td>Username</td>
@@ -95,14 +96,16 @@
                                                 <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            <a href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
+                                            {{-- Button removed because ProTube is not usable --}}
+                                            {{-- <a  href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
                                                data-toggle="tooltip" data-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
                                                 <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
-                                            </a>
+                                            </a>  --}}
                                         @endif
                                     @endif
                                 </td>
                                 <td class="text-right">#{{ $user->id }}</td>
+                                <td>{{ $user->calling_name }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>
                                     @if($user->deleted_at)
