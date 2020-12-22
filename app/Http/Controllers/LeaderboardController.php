@@ -84,7 +84,7 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::findOrFail($id);
 
-        Session::flash("flash_message", "The company '" . $leaderboard->name . "' has been deleted.");
+        Session::flash("flash_message", "The leaderboard '" . $leaderboard->name . "' has been deleted.");
         $leaderboard->delete();
         return Redirect::route('leaderboards::admin');
     }
