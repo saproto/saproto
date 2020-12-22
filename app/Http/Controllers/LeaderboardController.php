@@ -4,6 +4,7 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Proto\Models\Committee;
 use Proto\Models\Leaderboard;
 
 use Session;
@@ -36,6 +37,10 @@ class LeaderboardController extends Controller
     {
         $leaderboards = Leaderboard::get();
         if (count($leaderboards) > 0) {
+            foreach($leaderboards as $leaderboard) {
+                $committee = Committee::find($leaderboard->committee_id);
+                $leaderboard->committee_name = $committee->name;
+            }
             return view('leaderboards.adminlist', ['leaderboards' => $leaderboards]);
         } else {
             Session::flash("flash_message", "There is currently nothing to see on the leaderboards page, but please check back real soon!");
