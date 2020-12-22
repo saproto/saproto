@@ -86,6 +86,6 @@ class LeaderboardController extends Controller
 
         Session::flash("flash_message", "The company '" . $leaderboard->name . "' has been deleted.");
         $leaderboard->delete();
-        return Redirect::route('leaderboard::admin');
+        return Redirect::route('leaderboards::admin');
     }
 }
