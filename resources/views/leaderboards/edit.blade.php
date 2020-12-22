@@ -7,7 +7,7 @@
 @section('container')
 
     <form method="post"
-          action="{{ ($joboffer == null ? route("joboffers::add") : route("joboffers::edit", ['id' => $joboffer->id])) }}"
+          action="{{ ($joboffer == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $joboffer->id])) }}"
           enctype="multipart/form-data">
 
         {!! csrf_field() !!}
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <a class="btn btn-default" href="{{ route("joboffers::admin") }}">Cancel</a>
+                        <a class="btn btn-default" href="{{ route("leaderboards::admin") }}">Cancel</a>
                         <button type="submit" class="btn btn-success float-right">Save</button>
                     </div>
 
