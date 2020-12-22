@@ -79,4 +79,13 @@ class LeaderboardController extends Controller
         $leaderboard = Leaderboard::findOrFail($id);
         return view('leaderboards.edit', ['leaderboard' => $leaderboard]);
     }
+
+    public function destroy($id)
+    {
+        $leaderboard = Leaderboard::findOrFail($id);
+
+        Session::flash("flash_message", "The company '" . $leaderboard->name . "' has been deleted.");
+        $leaderboard->delete();
+        return Redirect::route('leaderboard::admin');
+    }
 }
