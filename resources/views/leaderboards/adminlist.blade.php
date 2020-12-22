@@ -41,10 +41,10 @@
                             <td>{{ $joboffer->title}}</td>
 
                             <td>
-                                <a href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}">
+                                <a href="{{ route('leaderboards::edit', ['id' => $joboffer->id]) }}">
                                     <i class="fas fa-edit mr-2 fa-fw"></i>
                                 </a>
-                                <a href="{{ route('joboffers::delete', ['id' => $joboffer->id]) }}">
+                                <a href="{{ route('leaderboards::delete', ['id' => $joboffer->id]) }}">
                                     <i class="fas fa-trash text-danger fa-fw"></i>
                                 </a>
                             </td>
