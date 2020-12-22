@@ -33,18 +33,18 @@
 
                     </thead>
 
-                    @foreach($joboffers as $joboffer)
+                    @foreach($leaderboards as $leaderboard)
 
                         <tr>
 
-                            <td>{{ $joboffer->company->name }}</td>
-                            <td>{{ $joboffer->title}}</td>
+                            <td>{{ $leaderboard->name }}</td>
+                            <td>{{ $leaderboard->committee_id}}</td>
 
                             <td>
-                                <a href="{{ route('leaderboards::edit', ['id' => $joboffer->id]) }}">
+                                <a href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-edit mr-2 fa-fw"></i>
                                 </a>
-                                <a href="{{ route('leaderboards::delete', ['id' => $joboffer->id]) }}">
+                                <a href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-trash text-danger fa-fw"></i>
                                 </a>
                             </td>

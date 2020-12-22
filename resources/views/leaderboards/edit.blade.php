@@ -1,13 +1,13 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    {{ ($joboffer == null ? "Create new leaderboard" : "Edit leaderboard" . $joboffer->title .".") }}
+    {{ ($leaderboard == null ? "Create new leaderboard" : "Edit leaderboard" . $leaderboard->title .".") }}
 @endsection
 
 @section('container')
 
     <form method="post"
-          action="{{ ($joboffer == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $joboffer->id])) }}"
+          action="{{ ($leaderboard == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $leaderboard->id])) }}"
           enctype="multipart/form-data">
 
         {!! csrf_field() !!}
@@ -27,11 +27,11 @@
                         <div class="form-group">
                             <label for="committee">Committee</label>
                             <select id="committee" name="committee_id" class="form-control" required>
-                                <option value="" @if($joboffer == null) selected @endif disabled>Select a committee...
+                                <option value="" @if($leaderboard == null) selected @endif disabled>Select a committee...
                                 </option>
-                                @foreach($companies as $company)
-                                    <option value="{{ $company->id }}"
-                                            @if($joboffer && $joboffer->company->id == $company->id) selected @endif>{{ $company->name }}</option>
+                                @foreach($leaderboards as $leaderboard)
+                                    <option value="{{ $leaderboard->id }}"
+                                            @if($leaderboard && $leaderboard->id == $leaderboard->id) selected @endif>{{ $leaderboard->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label for="title">Title</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Most drinks at a Proto Drink" value="{{ $joboffer->title or '' }}" required>
+                                   placeholder="Most drinks at a Proto Drink" value="{{ $leaderboard->title or '' }}" required>
                         </div>
 
 
@@ -47,8 +47,8 @@
                             <label for="editor-description">Description</label>
                             @include('website.layouts.macros.markdownfield', [
                                 'name' => 'description',
-                                'placeholder' => !$joboffer ? 'A text dedicated to describe your leaderboard' : null,
-                                'value' => !$joboffer ? null : $joboffer->description
+                                'placeholder' => !$leaderboard ? 'A text dedicated to describe your leaderboard' : null,
+                                'value' => !$leaderboard ? null : $leaderboards->description
                             ])
                         </div>
 
