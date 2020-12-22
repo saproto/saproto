@@ -310,6 +310,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+    /*
+     * Routes related to leaderboards.
+     */
+    Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
+        Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardController@adminIndex']);
+    });
+
     Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
