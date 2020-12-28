@@ -45,7 +45,7 @@ class LeaderboardController extends Controller
      */
     public function create()
     {
-        return view('leaderboardentries.edit', ['leaderboard' => null]);
+        return view('leaderboards.edit', ['leaderboard' => null]);
     }
 
     /**
