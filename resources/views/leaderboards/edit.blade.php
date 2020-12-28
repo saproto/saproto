@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    {{ ($leaderboard == null ? "Create new leaderboard" : "Edit leaderboard" . $leaderboard->title .".") }}
+    {{ ($leaderboard == null ? "Create new leaderboard." : "Edit leaderboard. " . $leaderboard->name .".") }}
 @endsection
 
 @section('container')
@@ -16,7 +16,7 @@
 
             <div class="col-md-4">
 
-                <div class="card mb-3">
+                <div class="card md-3">
 
                     <div class="card-header bg-dark text-white">
                         @yield('page-title')
@@ -25,38 +25,56 @@
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="committee">Committee</label>
-                            <select id="committee" name="committee_id" class="form-control" required>
-                                <option value="" @if($leaderboard == null) selected @endif disabled>Select a committee...
-                                </option>
-                                @foreach($leaderboards as $leaderboard)
-                                    <option value="{{ $leaderboard->id }}"
-                                            @if($leaderboard && $leaderboard->id == $leaderboard->id) selected @endif>{{ $leaderboard->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Most drinks at a Proto Drink" value="{{ $leaderboard->title or '' }}" required>
+                            <label for="organisation">Committee: {!! $leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : null !!}</label>
+                            <select class="form-control committee-search" id="organisation" name="committee"></select>
                         </div>
 
 
                         <div class="form-group">
-                            <label for="editor-description">Description</label>
-                            @include('website.layouts.macros.markdownfield', [
-                                'name' => 'description',
-                                'placeholder' => !$leaderboard ? 'A text dedicated to describe your leaderboard' : null,
-                                'value' => !$leaderboard ? null : $leaderboards->description
-                            ])
+                            <label for="name">Leaderboard name:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Proto drink beer scores" value="{{ $leaderboard->name or '' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Points name:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Beers" value="{{ $leaderboard->points_name or '' }}" required>
                         </div>
 
                     </div>
 
                     <div class="card-footer">
-                        <a class="btn btn-default" href="{{ route("leaderboards::admin") }}">Cancel</a>
-                        <button type="submit" class="btn btn-success float-right">Save</button>
+                        <button type="submit" class="btn btn-success float-right">
+                            Submit
+                        </button>
+
+                        <a href="{{ route("leaderboards::admin") }}" class="btn btn-default">Cancel</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8">
+
+                <div class="card md-3">
+
+                    <div class="card-header bg-dark text-white">
+                        Description
+                    </div>
+
+                    <div class="card-body row">
+
+                        <div class="col-6">
+                            <label for="editor">Leaderboard description:</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'excerpt',
+                                'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
+                                'value' => !$leaderboard ? null : $leaderboard->description
+                            ])
+                        </div>
+
                     </div>
 
                 </div>

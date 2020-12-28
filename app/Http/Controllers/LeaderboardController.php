@@ -56,8 +56,14 @@ class LeaderboardController extends Controller
      */
     public function store(Request $request)
     {
+        $committee = Committee::find($request->input('committee'));
+        $leaderboard->committee()->associate($committee);
+        $leaderboard->committee_id = $committee->id;
+
         $leaderboard = Leaderboard::create($request->all());
         $leaderboard->save();
+
+
 
         Session::flash("flash_message", "Your leaderboard '" . $leaderboard->name . "' has been added.");
         return Redirect::route('leaderboards::admin');
