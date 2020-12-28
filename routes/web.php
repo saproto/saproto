@@ -316,7 +316,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
         Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardController@adminIndex']);
-        Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@create']);
+
+        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardController@create']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardController@store']);
+
         Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@edit']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@destroy']);
     });
