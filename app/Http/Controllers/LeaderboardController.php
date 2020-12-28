@@ -56,11 +56,12 @@ class LeaderboardController extends Controller
      */
     public function store(Request $request)
     {
+
+
+        $leaderboard = Leaderboard::create($request->all());
         $committee = Committee::find($request->input('committee'));
         $leaderboard->committee()->associate($committee);
         $leaderboard->committee_id = $committee->id;
-
-        $leaderboard = Leaderboard::create($request->all());
         $leaderboard->save();
 
 

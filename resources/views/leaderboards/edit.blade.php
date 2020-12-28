@@ -38,8 +38,14 @@
 
                         <div class="form-group">
                             <label for="name">Points name:</label>
-                            <input type="text" class="form-control" id="name" name="name"
+                            <input type="text" class="form-control" id="points_name" name="points_name"
                                    placeholder="Beers" value="{{ $leaderboard->points_name or '' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">icon</label>
+                            <input type="text" class="form-control" id="icon" name="icon"
+                                   placeholder="Beers" value="{{ $leaderboard->icon or '' }}" required>
                         </div>
 
                     </div>
