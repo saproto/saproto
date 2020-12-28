@@ -56,14 +56,18 @@ class LeaderboardController extends Controller
      */
     public function store(Request $request)
     {
-
-
-        $leaderboard = Leaderboard::create($request->all());
-        $committee = Committee::find($request->input('committee'));
-        $leaderboard->committee()->associate($committee);
-        $leaderboard->committee_id = $committee->id;
+        if($request->committee_id == null) {
+            $committee = Committee::find($request->input('committee'));
+            $leaderboard = new Leaderboard();
+            $leaderboard->committee_id = $committee->id;
+            $leaderboard->name = $request->name;
+            $leaderboard->description = $request->description;
+            $leaderboard->icon = $request->icon;
+            $leaderboard->points_name = $request->points_name;
+        }else {
+            $leaderboard = Leaderboard::create($request->all());
+        }
         $leaderboard->save();
-
 
 
         Session::flash("flash_message", "Your leaderboard '" . $leaderboard->name . "' has been added.");

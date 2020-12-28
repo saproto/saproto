@@ -75,7 +75,7 @@
                         <div class="col-6">
                             <label for="editor">Leaderboard description:</label>
                             @include('website.layouts.macros.markdownfield', [
-                                'name' => 'excerpt',
+                                'name' => 'description',
                                 'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
                                 'value' => !$leaderboard ? null : $leaderboard->description
                             ])

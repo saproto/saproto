@@ -20,6 +20,7 @@ class CreateLeaderboardsTable extends Migration
             $table->string('description')->nullable(false);
             $table->string('icon')->nullable(false);
             $table->string('points_name')->nullable(false);
+            $table->timestamps();
         });
     }
 

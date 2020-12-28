@@ -18,6 +18,7 @@ class CreateLeaderboardsEntriesTable extends Migration
             $table->integer('leaderboard_id')->nullable(true)->default(null);
             $table->integer('member_id')->nullable(true)->default(null);
             $table->integer('points')->nullable(true)->default(null);
+            $table->timestamps();
         });
     }
 
