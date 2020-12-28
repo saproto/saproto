@@ -23,7 +23,7 @@ class LeaderboardController extends Controller
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
-            Session::flash("flash_message", "There is currently nothing to see on the leaderboards page, but please check back real soon!");
+            Session::flash("flash_message", "There are currently no leaderboards, but please check back real soon!");
             return Redirect::back();
         }
     }
@@ -45,7 +45,7 @@ class LeaderboardController extends Controller
      */
     public function create()
     {
-        return view('leaderboards.edit', ['leaderboard' => null]);
+        return view('leaderboardentries.edit', ['leaderboard' => null]);
     }
 
     /**

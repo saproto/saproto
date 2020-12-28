@@ -321,6 +321,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@destroy']);
     });
 
+    /*
+    * Routes related to leaderboard entries.
+    */
+    Route::group(['prefix' => 'leaderboards/entries', 'as' => 'leaderboards::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'LeaderboardEntryController@index']);
+        Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardEntryController@adminIndex']);
+        Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardEntryController@edit']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardEntryController@destroy']);
+    });
+
     Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
