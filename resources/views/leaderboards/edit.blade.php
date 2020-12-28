@@ -55,7 +55,7 @@
                             Submit
                         </button>
 
-                        <a href="{{ route("leaderboards::admin") }}" class="btn btn-default">Cancel</a>
+                        <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
                     </div>
 
                 </div>
