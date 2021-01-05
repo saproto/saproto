@@ -327,10 +327,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*
     * Routes related to leaderboard entries.
     */
-    Route::group(['prefix' => 'leaderboards/entries', 'as' => 'leaderboards::'], function () {
+    Route::group(['prefix' => 'leaderboards/entries', 'as' => 'leaderboards_entries::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'LeaderboardEntryController@index']);
         Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardEntryController@adminIndex']);
-        Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardEntryController@edit']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardEntryController@destroy']);
     });
 
