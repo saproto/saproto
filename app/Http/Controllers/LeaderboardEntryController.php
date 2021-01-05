@@ -4,7 +4,7 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Proto\Models\Committee;
+use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
 
 use Session;
@@ -21,11 +21,7 @@ class LeaderboardEntryController extends Controller
     public function index($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
-        if(count($leaderboard) == 0) {
-            Session::flash("flash_message", "Couldn't find that leaderboard!");
-            return Redirect::back();
-        }
-        $entries = LeaderboardEntry::where('leaderboard', $leaderboard);
+        $entries = $leaderboard->entries();
         return view('leaderboards.entries.list', ['entries' => $entries, 'leaderboard' => $leaderboard]);
     }
 
@@ -38,11 +34,7 @@ class LeaderboardEntryController extends Controller
     public function adminIndex($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
-        if(count($leaderboard) == 0) {
-            Session::flash("flash_message", "There is no leaderboard with that id.");
-            return Redirect::back();
-        }
-        $entries = LeaderboardEntry::where('leaderboard', $leaderboard);
+        $entries = $leaderboard->entries();
         return view('leaderboards.entries.adminlist', ['entries' => $entries, 'leaderboard' => $leaderboard]);
     }
 
@@ -66,10 +58,6 @@ class LeaderboardEntryController extends Controller
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
-        if(count($leaderboard) == 0) {
-            Session::flash("flash_message", "There is no leaderboard with that id.");
-            return Redirect::back();
-        }
         return view('leaderboards.entries.edit', ['leaderboard' => $leaderboard]);
     }
 

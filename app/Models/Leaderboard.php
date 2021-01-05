@@ -14,4 +14,8 @@ class Leaderboard extends Model
     public function committee() {
         return $this->belongsTo('Proto\Models\Committee', 'committee_id');
     }
+
+    public function entries() {
+        return $this->hasMany('Proto\Models\Committee');
+    }
 }
