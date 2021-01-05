@@ -12,55 +12,42 @@ use Redirect;
 
 class LeaderboardEntryController extends Controller
 {
-    /**
-     * Display a listing of the leaderboard's entries
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function index($id)
-    {
-        $leaderboard = Leaderboard::findOrFail($id);
-        $entries = $leaderboard->entries();
-        return view('leaderboards.entries.list', ['entries' => $entries, 'leaderboard' => $leaderboard]);
-    }
-
-    /**
-     * Display a listing of the leaderboard's entries
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function adminIndex($id)
-    {
-        $leaderboard = Leaderboard::findOrFail($id);
-        $entries = $leaderboard->entries();
-        return view('leaderboards.entries.adminlist', ['entries' => $entries, 'leaderboard' => $leaderboard]);
-    }
-
-    /**
-     * Display all leaderboard entries
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function adminIndexAll() {
-        return view('leaderboards.entries.adminlist', ['entries' => LeaderboardEntry::get(), 'leaderboard' => null]);
-    }
-
-    /**
-     * Show the form for editing a leaderboard's entries. Entries are added and edited in a
-     * table-style way and thus do not need a separate page for each entry.
-     *
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $leaderboard = Leaderboard::findOrFail($id);
-        return view('leaderboards.entries.edit', ['leaderboard' => $leaderboard]);
-    }
-
+//    /**
+//     * Display a listing of the leaderboard's entries
+//     *
+//     * @param $id
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function index($id)
+//    {
+//        $leaderboard = Leaderboard::findOrFail($id);
+//        $entries = $leaderboard->entries();
+//        return view('leaderboards.entries.list', ['entries' => $entries, 'leaderboard' => $leaderboard]);
+//    }
+//
+//    /**
+//     * Display a listing of the leaderboard's entries
+//     *
+//     * @param $id
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function adminIndex($id)
+//    {
+//        $leaderboard = Leaderboard::findOrFail($id);
+//        $entries = $leaderboard->entries();
+//        return view('leaderboards.entries.adminlist', ['entries' => $entries, 'leaderboard' => $leaderboard]);
+//    }
+//
+//    /**
+//     * Display all leaderboard entries
+//     *
+//     * @param $id
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function adminIndexAll() {
+//        return view('leaderboards.entries.adminlist', ['entries' => LeaderboardEntry::get(), 'leaderboard' => null]);
+//    }
+//
     /**
      * Store a newly created resource in storage.
      *
@@ -70,9 +57,26 @@ class LeaderboardEntryController extends Controller
     public function store(Request $request)
     {
         $entry = LeaderboardEntry::create($request->all());
+        $leaderboard = LeaderboardEntry::find($request->input('leaderboard_id'));
+        $entry->leaderboard()->associate($leaderboard);
         $entry->save();
-
         Session::flash("flash_message", "Added new entry successfully.");
+        return Redirect::back();
+    }
+
+    /**
+     * Update resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+        $entry = LeaderboardEntry::findOrFail($request->id);
+        $entry->member_id = $request->member_id;
+        $entry->points = $request->points;
+        $entry->save();
+        Session::flash("flash_message", "Updated entry successfully.");
         return Redirect::back();
     }
 
