@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    {{ ($leaderboard == null ? "Create new leaderboard." : "Edit leaderboard. " . $leaderboard->name .".") }}
+    {{ ($leaderboard == null ? "Create new leaderboard." : "Edit leaderboard: " . $leaderboard->name .".") }}
 @endsection
 
 @section('container')
@@ -12,9 +12,9 @@
 
         {!! csrf_field() !!}
 
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" style="margin-top: 90px;">
 
-            <div class="col-md-4">
+            <div class="col-md-5">
 
                 <div class="card md-3">
 
@@ -22,10 +22,12 @@
                         @yield('page-title')
                     </div>
 
+                    <input type="hidden" name="fa_icon" id="icon">
+
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="organisation">Committee: {!! $leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : null !!}</label>
+                            <label for="organisation">Committee: {!! $leaderboard && $leaderboard->committee_id ? $leaderboard->committee->name : null !!}</label>
                             <select class="form-control committee-search" id="organisation" name="committee"></select>
                         </div>
 
@@ -41,11 +43,20 @@
                             <input type="text" class="form-control" id="points_name" name="points_name"
                                    placeholder="Beers" value="{{ $leaderboard->points_name or '' }}" required>
                         </div>
+                        <input type="hidden" name="fa_icon" id="icon">
+                        <div class="form-group">
+                            <label for="name">Icon:</label>
+                                <label data-placement="inline" class="icp icp-auto"
+                                       data-selected=""></label>
+                        </div>
 
                         <div class="form-group">
-                            <label for="name">icon</label>
-                            <input type="text" class="form-control" id="icon" name="icon"
-                                   placeholder="Beers" value="{{ $leaderboard->icon or '' }}" required>
+                                <label for="editor">Description:</label>
+                                @include('website.layouts.macros.markdownfield', [
+                                    'name' => 'description',
+                                    'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
+                                    'value' => !$leaderboard ? null : $leaderboard->description
+                                ])
                         </div>
 
                     </div>
@@ -62,33 +73,19 @@
 
             </div>
 
-            <div class="col-md-8">
-
-                <div class="card md-3">
-
-                    <div class="card-header bg-dark text-white">
-                        Description
-                    </div>
-
-                    <div class="card-body row">
-
-                        <div class="col-6">
-                            <label for="editor">Leaderboard description:</label>
-                            @include('website.layouts.macros.markdownfield', [
-                                'name' => 'description',
-                                'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
-                                'value' => !$leaderboard ? null : $leaderboard->description
-                            ])
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
         </div>
 
     </form>
+
+@section('javascript')
+
+    @parent
+
+    <script>
+        $('.icp-auto').iconpicker();
+        $('.icp').on('iconpickerSelected', function (e) {
+            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
+        });
+    </script>
 
 @endsection
