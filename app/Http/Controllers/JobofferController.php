@@ -70,7 +70,7 @@ class JobofferController extends Controller
         }
 
         if($description == null && $redirect_url == null) {
-            Session::flash("flash_message", "Please enter a description.");
+            Session::flash("flash_message", "Please enter a description or redirect url.");
             return Redirect::back();
         }
 
