@@ -7,13 +7,10 @@
         <ul class="list-group mb-3">
 
             <li class="list-group-item list-group-item-dark">
-                Membership
+                Membership actions
             </li>
+
             @if($user->is_member)
-                <li class="list-group-item">
-                    Member since
-                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
-                </li>
                 <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMembership">
                     End membership
                 </a>
@@ -28,44 +25,15 @@
                 <a href="javascript:void();" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                     Print opener overlay
                 </a>
-                @if($user->hasSignedMembershipForm())
-                    <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
-                        Get signed membership form
-                    </a>
-                @endif
             @else
                 <li class="list-group-item">
                     Not a member
                 </li>
-                @if($user->address&&$user->hasCompletedProfile())
+                @if($user->address&&$user->completed_profile&&$user->signed_membership_form)
                     <li class="list-group-item">
                         <i class="fas fa-check-circle text-success"></i>
                         Has complete profile
                     </li>
-                    @if ($user->hasSignedMembershipForm())
-                        <li class="list-group-item">
-                            <i class="fas fa-check-circle text-success"></i>
-                            <b>Signed</b> membership form
-                        </li>
-                        <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
-                            Get signed membership form
-                        </a>
-                        <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMemberForm">
-                            Delete signed membership form
-                        </a>
-                    @else
-                        <li class="list-group-item">
-                            <i class="fas fa-times-circle text-danger"></i>
-                            <b>Has not signed</b> membership form
-                        </li>
-
-                        <a class="list-group-item" href="{{ route('memberform::download', ['id' => $user->id]) }}">
-                            Download membership form
-                        </a>
-                        <a class="list-group-item" href="{{ route('memberform::print', ['id' => $user->id]) }}">
-                            Print membership form
-                        </a>
-                    @endif
                     <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#addMembership">
                         Make member
                     </a>
@@ -78,6 +46,133 @@
             @endif
 
         </ul>
+
+        @if($user->is_member)
+            <ul class="list-group mb-3">
+                <li class="list-group-item list-group-item-dark">
+                    Current Membership
+                </li>
+                    <li class="table-responsiv list-group-item">
+                        <table class="w-100">
+                            <thead>
+                                <tr>
+                                    <td>Since</td>
+                                    <td>Type</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <td>
+                                    {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
+                                </td>
+                                <td>
+                                    @if($user->member->is_lifelong)
+                                        Lifelong <i class="fas fa-clock"></i>
+                                    @elseif($user->member->is_honorary)
+                                        Honorary <i class="fas fa-trophy"></i>
+                                    @elseif($user->member->is_donator)
+                                        Donator <i class="fas fa-hand-holding-usd"></i>
+                                    @else
+                                        Regular
+                                    @endif
+                                </td>
+                                <td>
+                                    <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </td>
+                            </tbody>
+                        </table>
+                    </li>
+
+            </ul>
+        @endif
+
+        @if($memberships['pending']->count() > 0)
+            <ul class="list-group mb-3">
+                <li class="list-group-item list-group-item-dark">
+                    Pending Membership(s)
+                </li>
+                <li class="table-responsive list-group-item">
+                    <table class="w-100">
+                        <thead>
+                            <tr>
+                                <td>
+                                    Since
+                                </td>
+                                <td>
+                                    Actions
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($memberships['pending'] as $membership)
+                                <tr>
+                                    <td>
+                                        {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                    </td>
+                                    @if($membership->membershipForm)
+                                        <td>
+                                            <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
+                                                <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                                <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        @endif
+
+        @if($memberships['previous']->count() > 0)
+            <ul class="list-group mb-3">
+                <li class="list-group-item list-group-item-dark">
+                    Previous Membership(s)
+                </li>
+                <li class="table-responsive list-group-item">
+                    <table class="w-100">
+                        <thead>
+                        <tr>
+                            <td>
+                                From
+                            </td>
+                            <td>
+                                Until
+                            </td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($memberships['previous'] as $membership)
+                            <tr>
+                                <td>
+                                    {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }}
+                                </td>
+                                <td>
+                                    {{ date('d-m-Y', strtotime($membership->deleted_at)) }}
+                                </td>
+                                @if($membership->membershipForm)
+                                    <td>
+                                        <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
+                                            <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                            <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                @endif
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </li>
+            </ul>
+        @endif
 
     </div>
 

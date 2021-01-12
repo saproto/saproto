@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         }
 
         echo "Starting database seeding." . PHP_EOL;
+        $time_start = microtime(true);
 
         Model::unguard();
 
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
 
         Model::reguard();
 
-        echo "Done!" . PHP_EOL;
+        $time_end = microtime(true);
+        echo "\e[32mSeeding:\e[0m Finished! (" . round(($time_end - $time_start), 2) . "s)" . PHP_EOL;
     }
 }

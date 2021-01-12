@@ -22,7 +22,7 @@
                             </li>
                         @endif
 
-                        @if (!$user->hasCompletedProfile())
+                        @if (!$user->completed_profile)
                             <li class="text-danger">
                                 <strong>
                                     {{ $user->calling_name }} has not yet completed their membership profile. Please ask
@@ -47,7 +47,7 @@
                                 </strong>
                             </li>
                         @endif
-                        @if(!$user->hasSignedMembershipForm())
+                        @if(!$user->signed_membership_form)
                                 <li class="text-danger">
                                     <strong>
                                         {{ $user->calling_name }} has not signed the membership form digitally,
@@ -62,9 +62,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    @if ($user->address && $user->bank && $user->hasCompletedProfile())
+                    @if ($user->address && $user->bank && $user->completed_profile)
                         <button type="submit" class="btn btn-success"
-                                @if(!$user->hasSignedMembershipForm())
+                                @if(!$user->signed_membership_form)
                                     onClick="return confirm('Did this user sign the membership form?')
                                 @endif
                         ">Make member
