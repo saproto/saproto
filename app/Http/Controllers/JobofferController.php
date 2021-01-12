@@ -59,15 +59,19 @@ class JobofferController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->description == null || '') {
-            if($request->redirect_url == null || '') {
-                Session::flash("flash_message", "Please enter a description.");
-                return Redirect::back();
-            }else{
-                $request->description = null;
-            }
-        }else if($request->redirect_url == ''){
-            $request->redirect_url = null;
+        $description = $request->description;
+        if($description == '') {
+            $description = null;
+        }
+
+        $redirect_url = $request->redirect_url;
+        if($redirect_url == '') {
+            $redirect_url = null;
+        }
+
+        if($description == null && $redirect_url == null) {
+            Session::flash("flash_message", "Please enter a description.");
+            return Redirect::back();
         }
 
         $joboffer = Joboffer::create($request->all());
