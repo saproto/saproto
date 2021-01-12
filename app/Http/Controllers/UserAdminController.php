@@ -54,7 +54,12 @@ class UserAdminController extends Controller
         }
 
         if ($search) {
-            $users = $users->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%');
+            $users = $users->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('calling_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', 'LIKE', '%' . $search . '%')
+                    ->orWhere('utwente_username', 'LIKE', '%' . $search . '%');
+            });
         }
 
         $users = $users->paginate(20);
@@ -312,12 +317,12 @@ class UserAdminController extends Controller
             abort(403);
         }
 
-        $user = User::findOrFail($id);
-        $member = $user->member;
+        $member = Member::where('membership_form_id', '=', $id)->first();
+        $user = $member->user;
 
         $member->forceDelete();
 
-        Session::flash("flash_message", "The signed membership form of " . $user->name . "has been deleted!");
+        Session::flash("flash_message", "The digital membership form of " . $user->name . " signed on " . $member->created_at . "has been deleted!");
         return Redirect::back();
     }
 

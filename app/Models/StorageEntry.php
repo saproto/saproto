@@ -36,13 +36,14 @@ class StorageEntry extends Model
     public function isOrphan()
     {
         $id = $this->id;
-        return NarrowcastingItem::where('image_id', $id)->count() == 0 &&
+        return
+            NarrowcastingItem::where('image_id', $id)->count() == 0 &&
             Page::where('featured_image_id', $id)->count() == 0 &&
             DB::table('pages_files')->where('file_id', $id)->count() == 0 &&
             Product::where('image_id', $id)->count() == 0 &&
             Company::where('image_id', $id)->count() == 0 &&
             User::where('image_id', $id)->count() == 0 &&
-            User::where('membership_contract_id', $id)->count() == 0 &&
+            Member::withTrashed()->where('membership_form_id', $id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
             Committee::where('image_id', $id)->count() == 0 &&
             Event::where('image_id', $id)->count() == 0 &&
