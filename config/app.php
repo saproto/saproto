@@ -178,7 +178,6 @@ return [
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
@@ -189,7 +188,8 @@ return [
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         ApiPostcode\ApiPostcodeServiceProvider::class,
-        Aacotroneo\Saml2\Saml2ServiceProvider::class
+        Aacotroneo\Saml2\Saml2ServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
 
     ],
 
@@ -249,8 +249,6 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
 
-        'Recaptcha' => Greggilbert\Recaptcha\Facades\Recaptcha::class,
-
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
 
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
@@ -259,6 +257,8 @@ return [
         'Carbon' => Carbon\Carbon::class,
 
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
 
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
