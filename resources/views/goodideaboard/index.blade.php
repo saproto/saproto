@@ -25,15 +25,29 @@
         $(function() {
             $('.gi_upvote').on('click', function(e) {
                 let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, 1, e.target);
+                if ($(e.target).hasClass('fas')) {
+                    if (id) sendVote(id, 0);
+                }
+                else {
+                    if (id) sendVote(id, 1);
+                }
             });
 
             $('.gi_downvote').on('click', function(e) {
                 let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, -1, e.target);
+                if ($(e.target).hasClass('fas')) {
+                    if (id) sendVote(id, 0);
+                }
+                else {
+                    if (id) sendVote(id, -1);
+                }
             });
 
-            function sendVote(id, voteValue, target) {
+            $('.gi_vote').on('hover', function(e) {
+
+            });
+
+            function sendVote(id, voteValue) {
                 let data = new FormData();
                 data.append('id', id);
                 data.append('voteValue', voteValue);
@@ -47,17 +61,20 @@
                     processData: false,
                     success: function(response) {
                         $(`span[data-id='${id}']`).html(response.voteScore);
+                        let upvote = $(`a[data-id='${id}'].gi_upvote`);
+                        let downvote = $(`a[data-id='${id}'].gi_downvote`);
                         switch(response.userVote) {
                             case 1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('fas').removeClass('far');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('far').removeClass('fas');
+                                upvote.addClass('fas').removeClass('far');
+                                downvote.addClass('far').removeClass('fas');
                                 break;
                             case -1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('far').removeClass('fas');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('fas').removeClass('far');
+                                upvote.addClass('far').removeClass('fas');
+                                downvote.addClass('fas').removeClass('far');
                                 break;
                             case 0:
-                                $(`a[data-id='${id}']`).addClass('far').removeClass('fas');
+                                upvote.addClass('far').removeClass('fas');
+                                downvote.addClass('far').removeClass('fas');
                         }
                     },
                     error: function() {

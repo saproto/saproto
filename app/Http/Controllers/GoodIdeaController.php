@@ -14,17 +14,26 @@ use Session;
 class GoodIdeaController extends Controller
 {
     public function index($page = 1) {
-        $goodIdeas = GoodIdea::where('updated_at', '>', Carbon::now()->subWeeks(4));
+        $goodIdeas = GoodIdea::orderBy('created_at', 'desc');
         $leastVoted = null;
         $leastVotes = INF;
-        foreach($goodIdeas->get() as $idea) {
+        foreach($goodIdeas as $idea) {
             $voteCount = $idea->votes()->count();
-            if($voteCount < $leastVotes) {
+            if ($voteCount < $leastVotes) {
                 $leastVotes = $voteCount;
                 $leastVoted = $idea;
             }
         }
-        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'leastVoted' => $leastVoted]);
+        return view('goodideaboard.index', ['data' => $goodIdeas->paginate(20), 'leastVoted' => $leastVoted]);
+    }
+
+    public function archived($page = 1) {
+        if(!Auth::user()->can('board')) {
+            Session::flash('flash_message', 'You are not allowed to view archived ideas.');
+            return Redirect::back();
+        }
+        $goodIdeas = GoodIdea::onlyTrashed()->orderBy('created_at', 'desc');
+        return view('goodideaboard.archive', ['data' => $goodIdeas->paginate(20)]);
     }
 
     public function add(Request $request) {
@@ -36,19 +45,43 @@ class GoodIdeaController extends Controller
         return Redirect::route('goodideas::index');
     }
 
-    public function delete($id) {
+    public function archive($id) {
         $idea = GoodIdea::findOrFail($id);
         if(!(Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
-            Session::flash('flash_message', 'You are not allowed to delete this idea.');
+            Session::flash('flash_message', 'You are not allowed to archive this idea.');
             return Redirect::back();
         }
         $idea->votes()->delete();
         $idea->delete();
-        Session::flash('flash_message', 'Good Idea deleted.');
-        return Redirect::route('goodideas::index');
+        Session::flash('flash_message', 'Good Idea archived.');
+        return Redirect::back();
     }
 
-    public function deleteAll() {
+    public function restore($id) {
+        $idea = GoodIdea::onlyTrashed()->findOrFail($id);
+        if(!(Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
+            Session::flash('flash_message', 'You are not allowed to restore this idea.');
+            return Redirect::back();
+        }
+        $idea->votes()->restore();
+        $idea->restore();
+        Session::flash('flash_message', 'Good Idea restored.');
+        return Redirect::back();
+    }
+
+    public function delete($id) {
+        $idea = GoodIdea::onlyTrashed()->findOrFail($id);
+        if(!(Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
+            Session::flash('flash_message', 'You are not allowed to delete this idea.');
+            return Redirect::back();
+        }
+        $idea->votes()->forceDelete();
+        $idea->forceDelete();
+        Session::flash('flash_message', 'Good Idea deleted.');
+        return Redirect::route('goodideas::archived');
+    }
+
+    public function archiveAll() {
         $ideas = GoodIdea::all();
         foreach($ideas as $idea) {
             $idea->delete();
@@ -58,7 +91,7 @@ class GoodIdeaController extends Controller
     public function vote(Request $request) {
         $idea = GoodIdea::findOrFail($request->input('id'));
         $vote = GoodIdeaVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
-        $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
+        $vote->vote = $request->input('voteValue');
         $vote->save();
         return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote(Auth::user())]);
     }

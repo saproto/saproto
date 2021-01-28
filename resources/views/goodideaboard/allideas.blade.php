@@ -1,11 +1,16 @@
 <div class="card mb-3 w-100">
 
     <div class="card-header bg-dark text-white">
-        Good Ideas
+        <span class="m-0 float-left">Good Ideas</span>
         @if (Auth::user()->can("board"))
-            <a href="{{ route('goodideas::deleteall') }}" class="float-right ml-3 btn btn-danger">
-                <i class="fas fa-trash-alt text-white"></i> Delete all
+            <a href="{{ route('goodideas::archived') }}" class="float-right ml-3 px-2 py-1 badge badge-info">
+                <i class="fas fa-file-archive text-white mr-1"></i> View Archived
             </a>
+            @if(count($data)>0)
+                <a href="{{ route('goodideas::archiveall') }}" class="float-right ml-3 px-2 py-1 badge badge-warning">
+                    <i class="fas fa-archive text-white mr-1"></i> Archive All
+                </a>
+            @endif
         @endif
     </div>
 
