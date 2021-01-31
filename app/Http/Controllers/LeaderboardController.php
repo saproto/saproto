@@ -83,6 +83,27 @@ class LeaderboardController extends Controller
         return view('leaderboards.edit', ['leaderboard' => $leaderboard]);
     }
 
+    public function update(Request $request, $id)
+    {
+        $leaderboard = Leaderboard::findOrFail($id);
+
+        $leaderboard->name = $request->name;
+        $leaderboard->description = $request->description;
+        $leaderboard->points_name = $request->points_name;
+        $leaderboard->icon = $request->icon;
+
+        $committee = Committee::find($request->input('committee'));
+        if($committee != $leaderboard->committee) {
+            $leaderboard->committee()->associate($committee);
+        }
+
+        $leaderboard->save();
+
+        Session::flash("flash_message", "Leaderboard has been updated.");
+
+        return redirect(route("leaderboards::admin"));
+    }
+
     public function destroy($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);

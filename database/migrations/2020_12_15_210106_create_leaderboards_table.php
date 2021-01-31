@@ -18,7 +18,7 @@ class CreateLeaderboardsTable extends Migration
             $table->integer('committee_id')->nullable(true)->default(null);
             $table->string('name')->nullable(false);
             $table->string('description')->nullable(false);
-            $table->string('icon')->nullable(false);
+            $table->string('icon')->nullable(true);
             $table->string('points_name')->nullable(false);
             $table->timestamps();
         });
