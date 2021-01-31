@@ -38,8 +38,7 @@
                         <tr>
 
                             <td>{{ $leaderboard->name }}</td>
-                            <td>{{ $leaderboard->committee_name}}</td>
-
+                            <td>{{ $leaderboard->committee->name}}</td>
                             <td>
                                 <a href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-edit mr-2 fa-fw"></i>
