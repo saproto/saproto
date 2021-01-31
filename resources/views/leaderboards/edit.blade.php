@@ -73,6 +73,28 @@
 
             </div>
 
+            <div class="col-md-5">
+
+                <div class="card md-3">
+
+                    <div class="card-header bg-dark text-white">
+                        {{ ($leaderboard == null ? "Add entries" : "Edit entries: " . $leaderboard->name)}}
+                    </div>
+
+                </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success float-right">
+                            Submit
+                        </button>
+
+                        <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </form>
