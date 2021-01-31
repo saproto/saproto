@@ -22,13 +22,13 @@
                         @yield('page-title')
                     </div>
 
-                    <input type="hidden" name="fa_icon" id="icon">
-
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="organisation">Committee: {!! $leaderboard && $leaderboard->committee_id ? $leaderboard->committee->name : null !!}</label>
-                            <select class="form-control committee-search" id="organisation" name="committee"></select>
+                            <label for="organisation">Committee: {{$leaderboard->committee->name or ''}}</label>
+                            <select class="form-control committee-search" id="organisation" name="committee">
+                                <option value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}"></option>
+                            </select>
                         </div>
 
 
@@ -43,11 +43,11 @@
                             <input type="text" class="form-control" id="points_name" name="points_name"
                                    placeholder="Beers" value="{{ $leaderboard->points_name or '' }}" required>
                         </div>
-                        <input type="hidden" name="fa_icon" id="icon">
+                        <input type="hidden" name="icon" id="icon" required>
                         <div class="form-group">
                             <label for="name">Icon:</label>
                                 <label data-placement="inline" class="icp icp-auto"
-                                       data-selected=""></label>
+                                       data-selected="{{$leaderboard ? substr($leaderboard->icon, 3) : ''}}"></label>
                         </div>
 
                         <div class="form-group">
