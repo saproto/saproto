@@ -321,6 +321,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'LeaderboardController@store']);
 
         Route::get('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'LeaderboardController@destroy']);
     });
 
