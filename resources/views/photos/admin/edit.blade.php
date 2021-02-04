@@ -261,9 +261,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script>
         var fileQueue = [];
@@ -372,4 +370,4 @@
         }
     </script>
 
-@endsection
+@endpush

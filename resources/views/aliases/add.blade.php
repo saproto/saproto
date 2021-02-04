@@ -60,10 +60,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script type="text/javascript">
 
         $("#user").on('change', function () {
@@ -77,4 +74,4 @@
 
     </script>
 
-@endsection
+@endpush

@@ -2,9 +2,7 @@
           {!! isset($placeholder) && $placeholder !== null ? sprintf('placeholder="%s"', $placeholder) : null !!}
 >{!! isset($value) && $value !== null ? $value : null !!}</textarea>
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script>
         var simplemde = new SimpleMDE({
@@ -14,4 +12,4 @@
         });
     </script>
 
-@endsection
+@endpush

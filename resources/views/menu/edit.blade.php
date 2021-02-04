@@ -116,10 +116,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script>
         $("#page_id").change(function () {
             if ($(this).val() == 0) {
@@ -136,4 +133,4 @@
         });
     </script>
 
-@endsection
+@endpush

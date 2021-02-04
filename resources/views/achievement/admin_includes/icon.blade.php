@@ -34,15 +34,11 @@
 
 
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script>
         $('.icp-auto').iconpicker();
         $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
     </script>
-
-@endsection
+@endpush

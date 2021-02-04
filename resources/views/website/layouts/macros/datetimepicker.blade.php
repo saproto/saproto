@@ -3,9 +3,7 @@
        {!! isset($not_required) && $not_required == true ? null : 'required' !!}
 />
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script type="text/javascript">
         $(function () {
@@ -27,4 +25,4 @@
         });
     </script>
 
-@endsection
+@endpush

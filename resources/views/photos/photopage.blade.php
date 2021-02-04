@@ -80,9 +80,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script>
 
@@ -133,4 +131,4 @@
         }(window, location));
     </script>
 
-@endsection
+@endpush

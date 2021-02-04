@@ -19,8 +19,7 @@
 
 @endsection
 
-@section('javascript')
-    @parent
+@push('javascript')
     <script>
         $(function() {
             $('.gi_upvote').on('click', function(e) {
@@ -67,4 +66,4 @@
             }
         });
     </script>
-@endsection
+@endpush

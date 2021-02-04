@@ -5,9 +5,7 @@
 @endsection
 
 
-@section('javascript')
-    @parent
-    <script>
+@push('javascript')
         let signatureAlert = $('#signature-alert');
         let signatureForm = $('#signature-form');
         let signatureField = $('#signature');
@@ -38,9 +36,7 @@
                 signatureAlert.show();
             }
         })
-
-    </script>
-@endsection
+@endpush
 
 @section('container')
 

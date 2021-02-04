@@ -351,9 +351,8 @@
 
 </div>
 
-@section('javascript')
-    @include('website.layouts.assets.javascripts')
-@show
+@include('website.layouts.assets.javascripts')
+@stack('javascript')
 
 <script type="text/javascript">
 

@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
-@section('javascript')
-    @parent
+@push('javascript')
+
     <script>
         let mySwiper = new Swiper ('.swiper-container', {
             @if( count($companies) > 1 )
@@ -33,7 +33,8 @@
             }
         })
     </script>
-@endsection
+
+@endpush
 
 @section('page-title')
     Homepage

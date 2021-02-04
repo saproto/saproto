@@ -53,10 +53,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script type="text/javascript">
         let alfredCountdownStarted = false;
 
@@ -101,4 +98,4 @@
         }
     </script>
 
-@endsection
+@endpush

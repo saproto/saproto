@@ -45,10 +45,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script type="text/javascript">
 
         $("#fishcam__activate").click(function () {
@@ -60,4 +57,4 @@
 
     </script>
 
-@endsection
+@endpush

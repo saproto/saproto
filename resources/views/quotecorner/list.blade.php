@@ -25,9 +25,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script>
 
@@ -62,4 +60,4 @@
 
     </script>
 
-@endsection
+@endpush

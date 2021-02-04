@@ -1,8 +1,8 @@
 @extends('auth.template')
 
-@section('javascript')
+@push('javascript')
     {!! htmlScriptTagJsApi() !!}
-@endsection
+@endpush
 
 @section('page-title')
     Register account

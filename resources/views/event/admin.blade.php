@@ -205,10 +205,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script>
 
         $(".events__scannedButton").click(function (event) {
@@ -233,4 +230,4 @@
 
     </script>
 
-@endsection
+@endpush

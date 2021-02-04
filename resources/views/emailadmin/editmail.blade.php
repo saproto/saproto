@@ -28,10 +28,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script type="text/javascript">
 
         $("#destinationEvent").click(function () {
@@ -56,4 +53,4 @@
         });
     </script>
 
-@endsection
+@endpush

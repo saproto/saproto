@@ -1,7 +1,4 @@
-@section('javascript')
-
-    @parent
-
+@push('javascript')
     <script>
         var server = "{!! config('herbert.server') !!}";
         var token = "{!! Auth::user()->getToken()->token !!}";
@@ -360,4 +357,4 @@
             return finalTime;
         }
     </script>
-@endsection
+@endpush

@@ -217,9 +217,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script>
         // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
@@ -247,4 +245,4 @@
         });
     </script>
 
-@endsection
+@endpush

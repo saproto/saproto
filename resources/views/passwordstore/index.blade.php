@@ -184,9 +184,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script type="text/javascript">
         $(".passwordmanager__copy").click(function () {
@@ -245,4 +243,4 @@
         }
     </script>
 
-@endsection
+@endpush
