@@ -22,7 +22,7 @@ class ExportController extends Controller
     public function export($table, $personal_key)
     {
         $user = User::where('personal_key', $personal_key)->first();
-        if (!$user || !$user->member || !$user->signed_nda) {
+        if (!$user || !$user->is_member || !$user->signed_nda) {
             abort(403, 'You do not have access to this data. You need a membership of a relevant committee to access it.');
         }
         $data = null;

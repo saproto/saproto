@@ -56,7 +56,7 @@ class TicketController extends Controller
     public function store(Request $request)
     {
 
-        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::can('sysadmin')) {
+        if (!$request->has('is_members_only') && !$request->has('is_prepaid') && !Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', "Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.");
             return Redirect::back();
         }
@@ -280,7 +280,7 @@ class TicketController extends Controller
                 Session::flash("flash_message", "Ticket ID#$ticket_id is not an existing ticket. Entire order cancelled.");
                 return Redirect::back();
             }
-            if ($ticket->members_only && !Auth::user()->member) {
+            if ($ticket->members_only && !Auth::user()->is_member) {
                 Session::flash("flash_message", "Ticket ID#$ticket_id is only available to members. You are not a member. Entire order cancelled.");
                 return Redirect::back();
             }

@@ -26,20 +26,45 @@ class UserAdminController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
 
         $search = $request->input('query');
+        $filter = $request->input('filter');
 
-        if ($search) {
-            $users = User::withTrashed()->where('name', 'LIKE', '%' . $search . '%')->orWhere('calling_name', 'LIKE', '%' . $search . '%')->orWhere('email', 'LIKE', '%' . $search . '%')->orWhere('utwente_username', 'LIKE', '%' . $search . '%')->paginate(20);
-        } else {
-            $users = User::withTrashed()->paginate(20);
+        switch ($filter) {
+            case 'pending':
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 1)->where('deleted_at', '=', null);
+                });
+                break;
+            case 'members':
+                $users = User::withTrashed()->whereHas('member', function($q) {
+                    $q->where('pending', '=', 0)->where('deleted_at', '=', null);
+                });
+                break;
+            case 'users':
+                $users = User::withTrashed()->doesntHave('member');
+                break;
+            default:
+                $users = User::withTrashed();
         }
 
-        return view('users.admin.overview', ['users' => $users, 'query' => $search]);
+        if ($search) {
+            $users = $users->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('calling_name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', 'LIKE', '%' . $search . '%')
+                    ->orWhere('utwente_username', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $users = $users->paginate(20);
+
+        return view('users.admin.overview', ['users' => $users, 'query' => $search, 'filter' => $filter]);
 
     }
 
@@ -54,7 +79,9 @@ class UserAdminController extends Controller
     public function details($id)
     {
         $user = User::findOrFail($id);
-        return view('users.admin.details', ['user' => $user]);
+        $memberships = $user->getMemberships();
+
+        return view('users.admin.details', ['user' => $user, 'memberships' => $memberships]);
     }
 
     public function update(Request $request, $id)
@@ -251,20 +278,30 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
-    public function showMemberForm($id)
+    public function getSignedMemberForm($id)
     {
-        if ((!Auth::check() || !Auth::user()->can('board'))) {
+        $user = Auth::user();
+        $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
+
+        if($user->id != $member->user_id && !$user->can('board')) {
             abort(403);
         }
 
-        $user = User::findOrFail($id);
+        $form = $member->membershipForm;
 
-        if ($user->hasSignedMembershipForm()) {
-            return Redirect::to($user->member->membershipForm->generatePath());
-        }
+        return Redirect::to($form->generatePath());
+    }
+
+    public function getNewMemberForm($id) {
+        $user = User::findOrFail($id);
 
         if ($user->address === null) {
             Session::flash("flash_message", "This user has no address!");
+            return Redirect::back();
+        }
+
+        if ($user->bank === null)  {
+            Session::flash("flash_message", "This user has no bank account!");
             return Redirect::back();
         }
 
@@ -272,7 +309,6 @@ class UserAdminController extends Controller
         $form = $form->setPaper('a4');
 
         return $form->download();
-
     }
 
     public function destroyMemberForm($id)
@@ -281,12 +317,12 @@ class UserAdminController extends Controller
             abort(403);
         }
 
-        $user = User::findOrFail($id);
-        $member = $user->member;
+        $member = Member::where('membership_form_id', '=', $id)->first();
+        $user = $member->user;
 
         $member->forceDelete();
 
-        Session::flash("flash_message", "The signed membership form of " . $user->name . "has been deleted!");
+        Session::flash("flash_message", "The digital membership form of " . $user->name . " signed on " . $member->created_at . "has been deleted!");
         return Redirect::back();
     }
 

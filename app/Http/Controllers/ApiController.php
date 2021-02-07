@@ -123,7 +123,7 @@ class ApiController extends Controller
 
         $data['user'] = $user->makeHidden(['id', 'member', 'photo', 'address', 'bank']);
 
-        $data['member'] = $user->member ? $user->member->makeHidden(['id', 'user_id']) : null;
+        $data['member'] = $user->is_member ? $user->member->makeHidden(['id', 'user_id']) : null;
 
         $data['address'] = $user->address ? $user->address->makeHidden(['user_id']) : null;
 

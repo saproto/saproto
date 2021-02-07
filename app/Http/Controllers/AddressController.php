@@ -38,7 +38,7 @@ class AddressController extends Controller
             Session::flash("flash_message", "We don't have an address for you?");
             return Redirect::back();
         }
-        if ($user->member != null) {
+        if ($user->is_member) {
             Session::flash("flash_message", "You are a member. You can't delete your address!");
             return Redirect::back();
         }

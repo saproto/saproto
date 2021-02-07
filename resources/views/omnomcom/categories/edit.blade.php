@@ -46,7 +46,7 @@
                     </div>
 
                 </div>
-
+                @if($category)
                 <div class="card mb-3">
 
                     <div class="card-header bg-dark text-white">
@@ -65,6 +65,7 @@
                     </ul>
 
                 </div>
+                @endif
 
             </form>
 

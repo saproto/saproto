@@ -35,7 +35,7 @@
             }, 500);
         });
 
-        @if (Auth::check() && Auth::user()->member)
+        @if (Auth::check() && Auth::user()->is_member)
             initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
         @endif
 

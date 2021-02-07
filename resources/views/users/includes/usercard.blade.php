@@ -1,6 +1,6 @@
 <div class="card mb-3 leftborder leftborder-info">
     <div class="card-body">
-        @if($user->member)
+        @if($user->is_member)
             <img width="50px" height="50px" class="rounded-circle float-right"
                  src="{!! $user->generatePhotoPath(50, 50) !!}">
             <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}">

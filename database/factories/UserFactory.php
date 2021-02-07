@@ -1,17 +1,19 @@
 <?php
 
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
 
 /** @var $factory Closure */
 $factory->define(Proto\Models\User::class, function (Faker $faker) {
     $gender = mt_rand(1, 2);
+
+
+
     return [
         'name' => $faker->name(($gender == 1 ? 'male' : 'female')),
         'calling_name' => $faker->firstName(($gender == 1 ? 'male' : 'female')),
-        'email' => $faker->email,
-        'password' => bcrypt(Str::random(16)),
-        'remember_token' => Str::random(10),
+        'email' => $faker->unique()->email,
+        'password' => bcrypt(str_random(16)),
+        'remember_token' => str_random(10),
         'birthdate' => $faker->date('Y-m-d', '-16 years'),
         'phone' => $faker->e164PhoneNumber,
         'diet' => $faker->sentence,

@@ -48,7 +48,7 @@ class OmNomController extends Controller
             }
 
             if ($store == 'tipcie') {
-                $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get();
+                $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get()->reject(function($user, $index) { return $user->member->pending == 1; });
             } else {
                 $minors = collect([]);
             }
@@ -114,7 +114,7 @@ class OmNomController extends Controller
                 break;
         }
 
-        if (!$user->member) {
+        if (!$user->is_member) {
             $result->message = "<span style='color: red;'>Only members can use the OmNomCom.</span>";
             return json_encode($result);
         }
