@@ -33,19 +33,13 @@ This is the environment configuration. In this file you will establish your own 
 
 You can skip all the other stuff (mailing API, Google API) until you need to work on the specific part of the website that uses them.
 
-To run grunt you need to first install `grunt-cli` globaly with the following command.
-
-```
-npm install -g grunt-cli
-```
-
 Now we can initialize the project.
 
 ```
 chmod +x update.sh
 composer install
 npm install
-grunt
+npm run dev
 php artisan key:generate
 ```
 
@@ -94,18 +88,9 @@ cp .env.docker.example .env
 After that open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'real' Proto site.
 
 ##### Client-side dependencies
-To run grunt you need to first install `grunt-cli` globaly with the following command.
+To compile the project assets run `npm run dev` to compile once or `npm run watch` to keep checking for changes to scripts or stylesheets.
 
-```
-npm install -g grunt-cli
-```
-
-After that you can setup the client-side dependencies
-
-```
-npm install
-grunt
-```
+When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`
 
 ##### Initial application setup
 ```
