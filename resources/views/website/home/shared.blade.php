@@ -3,7 +3,7 @@
 @push('javascript')
 
     <script>
-        let mySwiper = new Swiper ('.swiper-container', {
+        let mySwiper = new Swiper.default('.swiper-container', {
             @if( count($companies) > 1 )
             loop: true,
             slidesPerView: 2,

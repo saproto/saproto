@@ -1,0 +1,13 @@
+global.$ = global.jQuery = require('jquery');
+window.popper = require('popper.js')
+window.moment = require('moment')
+window.signaturePad = require('signature_pad')
+window.Swiper = require('swiper')
+require('bootstrap')
+require('tempusdominus-bootstrap-4')
+require('bootstrap-slider')
+require('js-cookie')
+require('simplemde')
+require('socket.io-client')
+require('select2')
+require('fontawesome-iconpicker')

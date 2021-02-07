@@ -65,7 +65,7 @@ $popover-bg: $grey-medium;
 $popover-header-bg: $grey-dark;
 
 //import bootstrap after setting variables
-@import '../../../../node_modules/bootstrap/scss/bootstrap';
+@import '~bootstrap';
 
 .text-dark {
   color: #f1f1f1 !important;

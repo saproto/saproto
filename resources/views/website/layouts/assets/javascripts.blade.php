@@ -1,11 +1,15 @@
-<script type="text/javascript" src="{{ asset('assets/application.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/manifest.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/vendor.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/application.js') }}"></script>
 
+<!-- Update locale -->
 <script type="text/javascript">
     moment.updateLocale('en', {
         week: {dow: 1}
     });
 </script>
 
+<!-- Document load -->
 <script type="text/javascript">
     $(function () {
 
@@ -16,20 +20,16 @@
         $('[data-toggle="popover"]').popover()
 
         // Enables the fancy scrolling effect
-        $(window).scroll(function () {
-            var scroll = $(window).scrollTop();
-
-            if (scroll >= 100) {
-                $("#nav").addClass("navbar-scroll");
-            } else {
-                $("#nav").removeClass("navbar-scroll");
-            }
+        $(window).on("scroll",function () {
+            let scroll = $(window).scrollTop();
+            if (scroll >= 100) $("#nav").addClass("navbar-scroll");
+            else $("#nav").removeClass("navbar-scroll");
         });
 
         // Scroll to top of collapse on click.
         // Code borrowed from: https://stackoverflow.com/a/44303674/7316014
         $('.collapse').on('shown.bs.collapse', function (e) {
-            var $card = $(this).closest('.card');
+            let $card = $(this).closest('.card');
             $('html,body').animate({
                 scrollTop: $card.offset().top - 50
             }, 500);
@@ -48,6 +48,7 @@
     });
 </script>
 
+<!-- Init social links -->
 <script type="text/javascript">
     function initSlack(countRoute, inviteRoute) {
 
@@ -75,15 +76,12 @@
         });
 
     }
-</script>
 
-<script type="text/javascript">
     function initDiscord() {
         $.ajax({
             'dataType': "json",
             'url': "https://discordapp.com/api/guilds/{{ config('proto.discord_server_id') }}/widget.json",
             'success': function (data) {
-                console.log(data);
                 $("#discord__online").html(data['presence_count'])
             },
             error: function () {
@@ -100,10 +98,10 @@
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function () {
-        var u = "//{{ config('proto.analytics_url') }}/";
+        let u = "//{{ config('proto.analytics_url') }}/";
         _paq.push(['setTrackerUrl', u + 'piwik.php']);
         _paq.push(['setSiteId', '1']);
-        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
         g.type = 'text/javascript';
         g.async = true;
         g.defer = true;
@@ -111,11 +109,9 @@
         s.parentNode.insertBefore(g, s);
     })();
 </script>
-<!-- End Matomo Code -->
 
 <!-- Search complete fields -->
 <script type="text/javascript">
-
     $.fn.select2.defaults.set("theme", "bootstrap4");
 
     $(".user-search").select2({
@@ -129,9 +125,7 @@
                 };
             },
             processResults: function (data) {
-                return {
-                    results: data
-                };
+                return { results: data };
             },
             cache: false
         },
@@ -151,11 +145,9 @@
             return "<span style='opacity: " + opacity + "'>" + item.name + " (#" + item.id + ")</span>";
         },
         templateSelection: function (item) {
-            if (item.id == "") {
-                return item.text;
-            } else {
-                return item.name + " (#" + item.id + ")";
-            }
+            if (item.id === "") return item.text;
+            else return item.name + " (#" + item.id + ")";
+
         }
     });
 
@@ -165,9 +157,7 @@
             dataType: 'json',
             delay: 50,
             data: function (params) {
-                return {
-                    q: params.term
-                };
+                return { q: params.term };
             },
             processResults: function (data) {
                 return {
@@ -182,31 +172,20 @@
         },
         minimumInputLength: 3,
         templateResult: function (item) {
-            if (item.loading) {
-                return item.text;
-            } else if (item.is_future) {
-                opacity = 1;
-            } else {
-                opacity = 0.3;
-            }
+            if (item.loading) return item.text;
+            else if (item.is_future) opacity = 1;
+            else opacity = 0.3;
             return "<span style='opacity: " + opacity + "'>" + item.title + " (" + item.formatted_date.simple + ")</span>";
         },
         templateSelection: function (item) {
-            if (item.id == "") {
-                return item.text;
-            } else {
-                return item.title + " (" + item.formatted_date.simple + ")";
-            }
+            if (item.id === "") return item.text;
+            else return item.title + " (" + item.formatted_date.simple + ")";
         },
         sorter: function (data) {
             return data.sort(function (a, b) {
-                if (a.start < b.start) {
-                    return 1;
-                } else if (a.start > b.start) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+                if (a.start < b.start) return 1;
+                else if (a.start > b.start) return -1;
+                else return 0;
             });
         }
     });
@@ -217,48 +196,31 @@
             dataType: 'json',
             delay: 50,
             data: function (params) {
-                return {
-                    q: params.term
-                };
+                return { q: params.term };
             },
             processResults: function (data) {
-                return {
-                    results: data
-                };
+                return { results: data };
             },
             cache: false
         },
         placeholder: 'Start typing a name...',
-        escapeMarkup: function (markup) {
-            return markup;
-        },
+        escapeMarkup: function (markup) { return markup; },
         minimumInputLength: 3,
         templateResult: function (item) {
-            if (item.loading) {
-                return item.text;
-            } else if (item.is_visible) {
-                opacity = 1;
-            } else {
-                opacity = 0.3;
-            }
+            if (item.loading) return item.text;
+            else if (item.is_visible) opacity = 1;
+            else opacity = 0.3;
             return "<span style='opacity: " + opacity + "'>" + item.name + " (€" + item.price.toFixed(2) + "; " + item.stock + " in stock)</div>";
         },
         templateSelection: function (item) {
-            if (item.id == "") {
-                return item.text;
-            } else {
-                return item.name;
-            }
+            if (item.id === "") return item.text;
+            else return item.name;
         },
         sorter: function (data) {
             return data.sort(function (a, b) {
-                if (a.is_visible == 0 && b.is_visible == 1) {
-                    return 1;
-                } else if (a.is_visible == 1 && b.is_visible == 0) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+                if (a.is_visible === 0 && b.is_visible === 1) return 1;
+                else if (a.is_visible === 1 && b.is_visible === 0) return -1;
+                else return 0;
             });
         }
     });
@@ -269,38 +231,28 @@
             dataType: 'json',
             delay: 50,
             data: function (params) {
-                return {
-                    q: params.term
-                };
+                return { q: params.term };
             },
             processResults: function (data) {
-                return {
-                    results: data
-                };
+                return { results: data };
             },
             cache: false
         },
         placeholder: 'Start typing a name...',
         minimumInputLength: 1,
         templateResult: function (item) {
-            if (item.loading) {
-                return item.text;
-            }
-            return item.name;
+            if (item.loading) return item.text;
+            else return item.name;
         },
         templateSelection: function (item) {
-            if (item.id == "") {
-                return item.text;
-            } else {
-                return item.name;
-            }
+            if (item.id === "") return item.text;
+            else return item.name;
         }
     });
-
 </script>
 
+<!-- Countdown timer -->
 <script type="text/javascript">
-
     function initializeCountdowns() {
         $(".proto-countdown").each(function (i, el) {
             setInterval(updateCountdown(el), 1000)
@@ -309,13 +261,11 @@
 
     function updateCountdown(e) {
         return function () {
-            if (!$(e).hasClass('proto-countdown')) {
-                return;
-            }
+            if (!$(e).hasClass('proto-countdown')) return;
             const start = new Date(e.getAttribute('data-countdown-start') * 1000);
             const countdown_text = e.getAttribute('data-countdown-text-counting');
             const finished_text = e.getAttribute('data-countdown-text-finished');
-            const delta = Date.parse(start) - Date.parse(new Date());
+            const delta = start.getTime() - (new Date()).getTime();
 
             let text;
             if (delta < 0) {
@@ -323,8 +273,8 @@
             } else {
                 const deltaText = updateCountdownGetTimestring(delta)
                 text = countdown_text.replace("{}", deltaText)
-
             }
+
             $(e).html(text);
         }
     }
@@ -337,23 +287,19 @@
 
         let timestring;
 
-        if (days > 1) {
+        if (days > 1)
             timestring = days + ' days';
-        } else if (days == 1) {
+        else if (days === 1)
             timestring = '1 day';
-        } else if (hours > 0 || minutes > 0) {
+        else if (hours > 0 || minutes > 0)
             timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-        } else {
+        else
             timestring = seconds + ' seconds';
-        }
 
         return timestring;
 
     }
 
-</script>
-
-<script type="text/javascript">
     function pad(n, width, z) {
         z = z || '0';
         n = n + '';

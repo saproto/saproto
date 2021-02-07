@@ -24,7 +24,8 @@ composer.phar
 
 # Generated files
 /public/assets
-/resources/assets/sass/components.scss
+/public/fonts
+/resources/assets/sass/partials/_components.scss
 
 # Dammit, Mac users
 .DS_Store

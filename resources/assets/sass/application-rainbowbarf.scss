@@ -2,10 +2,10 @@
 
 // Custom variables
 @import 'partials/variables';
-@import 'partials/rainbowbarf-theme';
+@import 'themes/rainbowbarf';
 
 // FontAwesome
-@import 'partials/fontawesome';
+@import 'partials/vendors';
 
 // concatenated SCSS from views
 @import 'partials/components';

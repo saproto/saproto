@@ -2,10 +2,10 @@
 
 // Custom variables
 @import 'partials/variables';
-@import 'partials/light-theme';
+@import 'themes/light';
 
 // FontAwesome
-@import 'partials/fontawesome';
+@import 'partials/vendors';
 
 // concatenated SCSS from views
-@import 'partials/_components';
+@import 'partials/components';

@@ -6,36 +6,62 @@
 
 
 @push('javascript')
+{{--    <script>--}}
+{{--        let signatureAlert = $('#signature-alert');--}}
+{{--        let signatureForm = $('#signature-form');--}}
+{{--        let signatureField = $('#signature');--}}
+{{--        let signatureDrawn = false--}}
+
+{{--        signatureAlert.hide();--}}
+
+{{--        signatureField.jqSignature({--}}
+{{--            width: 350,--}}
+{{--            height: 300,--}}
+{{--            lineWidth: 3--}}
+{{--        });--}}
+
+{{--        signatureField.on('jq.signature.changed', function() {--}}
+{{--            signatureDrawn = true;--}}
+{{--            signatureAlert.hide();--}}
+{{--            $("input[name='signature']").val(signatureField.jqSignature('getDataURL'));--}}
+{{--        });--}}
+
+{{--        function clearCanvas() {--}}
+{{--            signatureField.jqSignature('clearCanvas');--}}
+{{--            signatureDrawn = false;--}}
+{{--        }--}}
+
+{{--        signatureForm.submit(function(e) {--}}
+{{--            if (!signatureDrawn) {--}}
+{{--                e.preventDefault();--}}
+{{--                signatureAlert.show();--}}
+{{--            }--}}
+{{--        })--}}
+{{--    </script>--}}
+    <script>
         let signatureAlert = $('#signature-alert');
-        let signatureForm = $('#signature-form');
-        let signatureField = $('#signature');
-        let signatureDrawn = false
+        signatureAlert.hide()
 
-        signatureAlert.hide();
-
-        signatureField.jqSignature({
-            width: 350,
-            height: 300,
-            lineWidth: 3
+        let canvas = $('#signature')
+        let signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
         });
 
-        signatureField.on('jq.signature.changed', function() {
-            signatureDrawn = true;
-            signatureAlert.hide();
-            $("input[name='signature']").val(signatureField.jqSignature('getDataURL'));
-        });
-
-        function clearCanvas() {
-            signatureField.jqSignature('clearCanvas');
-            signatureDrawn = false;
-        }
-
-        signatureForm.submit(function(e) {
-            if (!signatureDrawn) {
-                e.preventDefault();
-                signatureAlert.show();
+        $('submit-png').addEventListener('click', function() {
+            if (signaturePad.isEmpty()) {
+                signatureAlert.show()
             }
-        })
+
+            let data = signaturePad.toDataURL('image/png');
+            console.log(data);
+            window.open(data);
+        });
+
+        document.getElementById('erase').addEventListener('click', function() {
+            var ctx = canvas.getContext('2d');
+            ctx.globalCompositeOperation = 'destination-out';
+        });
+    </script>
 @endpush
 
 @section('container')
@@ -98,9 +124,10 @@
                         </p>
 
                         <form id="signature-form" method="POST" action="{{ route('memberform::sign') }}">
-                            {!! csrf_field() !!}
-                            <input class="d-none" name="signature">
-                            <button class="btn btn-primary">Submit</button>
+                            <input type="hidden" id="signature" name="signature" value=""/>
+                            <div class="wrapper">
+                                <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
+                            </div>
                         </form>
                     </div>
 
