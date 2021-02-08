@@ -26,8 +26,6 @@
 
             @push('javascript')
 
-                @parent
-
                 <script type="text/javascript">
                     $(window).on('load', function () {
                         $('#{{ $announcement->modalId() }}').modal('show');

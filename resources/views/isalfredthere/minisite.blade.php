@@ -4,10 +4,9 @@
     Is Alfred There?
 @endsection
 
-@section('head')
-    @parent
+@push('head')
     <meta http-equiv="refresh" content="86400">
-@endsection
+@endpush
 
 @section('container')
 
@@ -35,9 +34,7 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
+@push('stylesheet')
 
     <style rel="stylesheet" type="text/css">
         body {
@@ -51,7 +48,7 @@
         }
     </style>
 
-@endsection
+@endpush
 
 @push('javascript')
     <script type="text/javascript">

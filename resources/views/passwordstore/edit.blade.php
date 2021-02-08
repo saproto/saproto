@@ -1,9 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
 
-@section('head')
-    @parent
+@push('head')
     <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}">
-@endsection
+@endpush
 
 @section('page-title')
     {{ ($password ? 'Edit' : 'Add') }} {{ ($type == 'password' ? 'Password' : 'Secure Note') }}

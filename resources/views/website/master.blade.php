@@ -16,14 +16,12 @@
     <title>@if(config('app.env') != 'production') [{{ strtoupper(config('app.env')) }}] @endif S.A. Proto
         | @yield('page-title','Default Page Title')</title>
 
-    @section('head')
-    @show
+    @stack('head')
 
     @include('website.layouts.assets.stylesheets')
 
-    @section('stylesheet')
-        @include('website.layouts.assets.customcss')
-    @show
+    @include('website.layouts.assets.customcss')
+    @stack('stylesheet')
 
     @section('opengraph')
         <meta property="og:url" content="{{ Request::url() }}"/>
@@ -45,6 +43,7 @@
 @if(!App::isDownForMaintenance())
 
 @include('website.layouts.assets.javascripts')
+<!-- Page scripts -->
 @stack('javascript')
 
 @include('website.layouts.macros.flashmessages')

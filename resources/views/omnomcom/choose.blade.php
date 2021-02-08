@@ -43,9 +43,7 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
+@push('stylesheet')
 
     <style>
 
@@ -55,4 +53,4 @@
 
     </style>
 
-@endsection
+@endpush

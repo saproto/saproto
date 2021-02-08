@@ -30,9 +30,7 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
+@push('stylesheet')
 
     <style type="text/css">
 
@@ -42,4 +40,4 @@
 
     </style>
 
-@endsection
+@endpush

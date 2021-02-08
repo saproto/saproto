@@ -49,8 +49,6 @@
 
 @push('javascript')
 
-    @parent
-
     <script type="text/javascript">
 
         $('body').delegate('#print-card', 'click', function () {
