@@ -28,10 +28,10 @@
 
         // Scroll to top of collapse on click.
         // Code borrowed from: https://stackoverflow.com/a/44303674/7316014
-        $('.collapse').on('shown.bs.collapse', function (e) {
-            let $card = $(this).closest('.card');
+        $('.collapse').not('#navbar').on('shown.bs.collapse', function (e) {
+            let card = $(this).closest('.card');
             $('html,body').animate({
-                scrollTop: $card.offset().top - 50
+                scrollTop: card.offset().top - 50
             }, 500);
         });
 
