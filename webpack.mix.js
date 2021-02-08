@@ -11,6 +11,17 @@ const paths = {
     public: 'public/assets/'
 }
 
+mix.options({
+    postCss: [
+        require('postcss-discard-comments')({
+            removeAll: true
+        })
+    ],
+    uglify: {
+        comments: false
+    }
+})
+
 // Concatenate component SCSS from views folders
 mix.before(() => {
     mix.styles('resources/views/**/*.scss', paths.styles.components)
@@ -27,3 +38,4 @@ glob.sync('*.scss', {cwd: paths.styles.src}).forEach((fileName,) => {
 mix
     .js(paths.scripts.src, paths.public)
     .extract()
+    .sourceMaps(false)
