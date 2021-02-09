@@ -1,7 +1,7 @@
 global.$ = global.jQuery = require('jquery');
 window.popper = require('popper.js')
 window.moment = require('moment')
-window.signaturePad = require('signature_pad')
+window.SignaturePad = require('signature_pad')
 window.Swiper = require('swiper')
 window.SimpleMDE = require('simplemde')
 window.io = require('socket.io-client')

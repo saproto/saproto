@@ -26,7 +26,7 @@
     <script type="text/javascript">
         $('#removeMemberForm').on('show.bs.modal', function(e) {
            let memberformId = $(e.relatedTarget).data('memberform-id');
-           $('#removeMemberForm').find('form').attr('action', "{{ route("memberform::delete", ['id' => null]) }}/"+memberformId);
+           $('#removeMemberForm').find('form').attr('action', "{{ route("memberform::delete", ['id' => ':id']) }}".replace(':id', memberformId));
         });
     </script>
 @endpush

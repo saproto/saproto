@@ -4,62 +4,59 @@
     Sign membership contract
 @endsection
 
+@push('stylesheet')
+    <style>
+        .wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .signature-pad {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width:100%;
+            height:300px;
+            background-color: white;
+        }
+    </style>
+@endpush
 
 @push('javascript')
-{{--    <script>--}}
-{{--        let signatureAlert = $('#signature-alert');--}}
-{{--        let signatureForm = $('#signature-form');--}}
-{{--        let signatureField = $('#signature');--}}
-{{--        let signatureDrawn = false--}}
-
-{{--        signatureAlert.hide();--}}
-
-{{--        signatureField.jqSignature({--}}
-{{--            width: 350,--}}
-{{--            height: 300,--}}
-{{--            lineWidth: 3--}}
-{{--        });--}}
-
-{{--        signatureField.on('jq.signature.changed', function() {--}}
-{{--            signatureDrawn = true;--}}
-{{--            signatureAlert.hide();--}}
-{{--            $("input[name='signature']").val(signatureField.jqSignature('getDataURL'));--}}
-{{--        });--}}
-
-{{--        function clearCanvas() {--}}
-{{--            signatureField.jqSignature('clearCanvas');--}}
-{{--            signatureDrawn = false;--}}
-{{--        }--}}
-
-{{--        signatureForm.submit(function(e) {--}}
-{{--            if (!signatureDrawn) {--}}
-{{--                e.preventDefault();--}}
-{{--                signatureAlert.show();--}}
-{{--            }--}}
-{{--        })--}}
-{{--    </script>--}}
     <script>
         let signatureAlert = $('#signature-alert');
-        signatureAlert.hide()
+        let canvas = document.getElementById('signature-pad');
+        window.onresize = resizeCanvas;
+        resizeCanvas();
 
-        let canvas = $('#signature')
-        let signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
+        let signaturePad = new SignaturePad.default(canvas);
+
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            let ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+        $('#clear').on('click', function() {
+            signaturePad.clear();
         });
 
-        $('submit-png').addEventListener('click', function() {
+        $('#signature-form').on('submit', function(e) {
             if (signaturePad.isEmpty()) {
-                signatureAlert.show()
+                e.preventDefault();
+                signatureAlert.removeClass('d-none');
+            } else {
+                $('#signature').val(signaturePad.toDataURL('image/png'));
             }
-
-            let data = signaturePad.toDataURL('image/png');
-            console.log(data);
-            window.open(data);
-        });
-
-        document.getElementById('erase').addEventListener('click', function() {
-            var ctx = canvas.getContext('2d');
-            ctx.globalCompositeOperation = 'destination-out';
         });
     </script>
 @endpush
@@ -109,13 +106,14 @@
                         </p>
 
                         <b>Signature:</b>
-                        <div id="signature-alert" class="alert alert-danger text-center" role="alert">
-                            We need your signature for the membership contract to be valid!
-                        </div>
-                        <div id='signature'>
-                            <button class="btn btn-danger round position-absolute m-2 px-2 py-1" onclick="clearCanvas();">
+                        <div class="wrapper">
+                            <canvas id="signature-pad" class="signature-pad"></canvas>
+                            <button id="clear" class="btn btn-danger position-absolute m-2 px-2 py-1">
                                 <i class="fas fa-times"></i>
                             </button>
+                        </div>
+                        <div id="signature-alert" class="alert alert-danger text-center d-none p-1 my-2 mx-4" role="alert">
+                            We need your signature for the membership contract to be valid!
                         </div>
 
                         <p>
@@ -124,10 +122,9 @@
                         </p>
 
                         <form id="signature-form" method="POST" action="{{ route('memberform::sign') }}">
-                            <input type="hidden" id="signature" name="signature" value=""/>
-                            <div class="wrapper">
-                                <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-                            </div>
+                            @csrf
+                            <input type="hidden" id="signature" name="signature"/>
+                            <input type="submit" class="btn btn-info">
                         </form>
                     </div>
 
