@@ -1,3 +1,8 @@
+@charset "UTF-8";
+
+// Custom variables
+@import 'partials/variables';
+
 //background colour
 $body-bg: #f1f1f1;
 
@@ -51,3 +56,9 @@ $link-hover-color: lighten($info, 10%);
   background: $warning;
   border-color: $warning;
 }
+
+// Vendors (S)CSS
+@import 'partials/vendors';
+
+// concatenated SCSS from views
+@import 'partials/components';

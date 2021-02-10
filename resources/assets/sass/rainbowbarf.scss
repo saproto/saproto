@@ -1,3 +1,8 @@
+@charset "UTF-8";
+
+// Custom variables
+@import 'partials/variables';
+
 //background colour
 $body-bg: #f1f1f1;
 
@@ -64,3 +69,9 @@ body, .card, .navbar {
   50%{background-position:100% 19%}
   100%{background-position:0% 82%}
 }
+
+// Vendors (S)CSS
+@import 'partials/vendors';
+
+// concatenated SCSS from views
+@import 'partials/components';

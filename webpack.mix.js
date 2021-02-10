@@ -28,9 +28,9 @@ mix.before(() => {
 });
 
 //Compile all theme SCSS to public folder
-glob.sync('*.scss', {cwd: paths.styles.src}).forEach((fileName,) => {
+glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
     let src = paths.styles.src+fileName
-    let dest = paths.public+fileName.replace('scss', 'css')
+    let dest = paths.public+'application-'+fileName.replace('scss', 'css')
     mix.sass(src, dest);
 })
 

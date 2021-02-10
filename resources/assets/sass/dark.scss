@@ -1,3 +1,8 @@
+@charset "UTF-8";
+
+// Custom variables
+@import 'partials/variables';
+
 //colors
 $grey-light: #424242;
 $grey-medium: #303030;
@@ -183,3 +188,9 @@ html {
 ::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
 ::-webkit-scrollbar-corner { background-color: $grey-dark; }
 ::-webkit-resizer { background-color: #666; }
+
+// Vendors (S)CSS
+@import 'partials/vendors';
+
+// concatenated SCSS from views
+@import 'partials/components';
