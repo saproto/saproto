@@ -286,8 +286,8 @@
                             Choose a theme
                         </p>
                         <select class="form-control" name="theme">
-                            @foreach(config('proto.themes') as $name => $file)
-                                <option value="{{ $file }}" {{ ($user->theme == $file) ? 'selected' : '' }}>{{ $name }}</option>
+                            @foreach(config('proto.themes') as $i => $name)
+                                <option value="{{ $i }}" {{ ($user->theme == $i) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
                         <small>
