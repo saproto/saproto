@@ -155,8 +155,17 @@ hr {
 .card-header.bg-white { background-color: $grey-dark !important; }
 
 //simplemde
-.editor-toolbar .fa {
-  color: #fff !important;
+.editor-toolbar a {
+  @extend .text-white;
+  &.active, &:hover{
+    @extend .bg-dark;
+  }
+}
+
+.editor-toolbar.disabled-for-preview {
+  .fa {
+    @extend .bg-dark
+  }
 }
 
 //datetimepicker

@@ -90,7 +90,7 @@
                         <div class="col-md-6 mb-3">
 
                             <div class="custom-file">
-                                <label class="custom-file-label" for="customFile">Update committee image.</label>
+                                <label class="custom-file-label" for="customFile">Set event image.</label>
                                 <input type="file" class="custom-file-input" name="image">
                             </div>
 

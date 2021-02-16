@@ -272,7 +272,7 @@
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
+                            <ul class="dropdown-menu dropdown-menu-right mt-2">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
                                 @if(Auth::check() && Auth::user()->is_member)
                                     <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>

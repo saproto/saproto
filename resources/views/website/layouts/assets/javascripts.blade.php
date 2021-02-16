@@ -19,6 +19,11 @@
         // Enable popover
         $('[data-toggle="popover"]').popover()
 
+        $(".custom-file-input").on("change", function() {
+            let fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
         // Enables the fancy scrolling effect
         $(window).on("scroll",function () {
             let scroll = $(window).scrollTop();
