@@ -37,6 +37,7 @@
     "@fortawesome/fontawesome-free": "~5.11.2",
     "bootstrap": "~4.3.1",
     "bootstrap-slider": "~10.6.2",
+    "easymde": "^2.14.0",
     "fontawesome-iconpicker": "~3.2.0",
     "jquery": "^3.5.1",
     "js-cookie": "~2.2.1",
@@ -47,7 +48,6 @@
     "select2": "^4.0.13",
     "select2-bootstrap4-theme": "~1.0.0",
     "signature_pad": "^3.0.0-beta.4",
-    "simplemde": "~1.11.2",
     "socket.io-client": "^2.3.1",
     "swiper": "^5.4.5",
     "tempusdominus-bootstrap-4": "~5.1.2",
@@ -56,8 +56,6 @@
     "webrtc-adapter": "^7.7.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.26.14",
-    "browser-sync-webpack-plugin": "^2.2.2",
     "glob": "^7.1.6",
     "laravel-mix": "^6.0.11",
     "postcss": "^8.2.5",
