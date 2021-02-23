@@ -189,7 +189,7 @@
                         <div class="card-body">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="file">
+                                <input type="file" class="custom-file-input" name="files[]" multiple>
                                 <label class="custom-file-label" for="customFile">Upload a file</label>
                             </div>
 
