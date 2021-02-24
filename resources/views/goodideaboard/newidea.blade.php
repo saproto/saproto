@@ -9,16 +9,11 @@
         </div>
 
         <div class="card-body">
-            <textarea class="form-control" rows="4" cols="30" name="idea" required
+            <textarea class="form-control mb-2" rows="4" cols="30" name="idea" required
                       placeholder="An online good idea board."></textarea>
-        </div>
-
-        <div class="card-footer">
-
             <button type="submit" class="btn btn-success btn-block">
                 Submit
             </button>
-
         </div>
 
     </div>

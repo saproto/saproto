@@ -9,7 +9,6 @@
     <div class="row">
         <div class="col-lg-3">
             @include('goodideaboard.newidea')
-            @include('goodideaboard.leastvoted')
         </div>
 
         <div class="col-lg-9">
@@ -21,7 +20,7 @@
 
 @section('javascript')
     @parent
-    <script>
+    <script type="text/javascript">
         $(function() {
             $('.gi_upvote').on('click', function(e) {
                 let id = $(e.target).attr('data-id');

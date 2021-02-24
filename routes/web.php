@@ -524,6 +524,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
         Route::get('archived', ['as' => 'archived', 'uses' => 'GoodIdeaController@archived']);
         Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
+        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'GoodIdeaController@reply']);
         Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'GoodIdeaController@archive']);
         Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'GoodIdeaController@restore']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);

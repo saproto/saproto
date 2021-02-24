@@ -26,7 +26,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
                             @include('goodideaboard.include.idea', [
-                            'idea' => $entry
+                                'idea' => $entry
                             ])
 
                         </div>
@@ -34,6 +34,10 @@
                     @endforeach
 
                 </div>
+
+            @else
+
+                <p class="text-center text-muted">There are currently no archived good ideas.</p>
 
             @endif
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSoftDeleteToGoodIdeas extends Migration
+class ExtendGoodIdeas extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,7 @@ class AddSoftDeleteToGoodIdeas extends Migration
     public function up()
     {
         Schema::table('good_ideas', function (Blueprint $table) {
-            $table->softDeletes();
-        });
-        Schema::table('good_idea_votes', function (Blueprint $table) {
+            $table->text('reply')->after('idea')->nullable();
             $table->softDeletes();
         });
     }
@@ -29,9 +27,7 @@ class AddSoftDeleteToGoodIdeas extends Migration
     public function down()
     {
         Schema::table('good_ideas', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
-        Schema::table('good_idea_votes', function (Blueprint $table) {
+            $table->dropColumn('reply');
             $table->dropSoftDeletes();
         });
     }
