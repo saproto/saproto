@@ -40,7 +40,6 @@ class UserProfileController extends Controller
         return CommitteeMembership::onlyTrashed()
             ->with('committee')
             ->where('user_id', $user->id)
-            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
             ->get()
             ->where('committee.is_society', $getsocieties);
     }
