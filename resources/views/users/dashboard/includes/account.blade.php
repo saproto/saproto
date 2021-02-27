@@ -246,7 +246,7 @@
 
 
                                 <input name="disable_omnomcom" type="checkbox" class="form-check-input"
-                                       id="dashboard__check__omnomcal" {{ ($user->disable_omnomcom == 1 ? 'checked disabled' : '') }}>
+                                       id="dashboard__check__omnomenabled" {{ ($user->disable_omnomcom == 1 ? 'checked disabled' : '') }}>
                                 <label class="form-check-label" for="disable_omnomcom">
                                     Don't let me use the OmNomCom. Only the board can allow you access to the OmNomCom
                                     again.<br>
@@ -290,10 +290,6 @@
                                 <option value="{{ $i }}" {{ ($user->theme == $i) ? 'selected' : '' }}>{{ $name }}</option>
                             @endforeach
                         </select>
-                        <small>
-                            <i class="fas fa-flask"></i>
-                            Experimental feature, might not always be accurate
-                        </small>
                         <small class="form-text text-muted">
                             This feature was requested by pretty much everyone.
                         </small>
