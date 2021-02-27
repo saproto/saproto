@@ -1,22 +1,23 @@
-<form method="post"
-      action="{{ ($event == null ? route("event::add") : route("event::edit", ['id' => $event->id])) }}"
-      enctype="multipart/form-data">
+<div class="card mb-3">
 
-    {!! csrf_field() !!}
+    <div class="card-header bg-dark text-white">
+        Event details
+    </div>
 
-    <div class="card mb-3">
-
-        <div class="card-header bg-dark text-white">
-            Event details
-        </div>
+    <form class="@if ($event != null) ajax-form @endif"
+          method="post"
+          action="{{ ($event == null ? route("event::add") : route("event::edit", ['id' => $event->id])) }}"
+          enctype="multipart/form-data">
 
         @include('event.edit_includes.buttonbar')
+
+        {!! csrf_field() !!}
 
         <div class="card-body">
 
             <div class="row">
 
-                <div class="col-md-7">
+                <div class="col-md-12">
 
                     <div class="row align-items-end mb-3">
 
@@ -169,7 +170,9 @@
 
                 </div>
 
-                <div class="col-md-5">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
 
                     <div class="form-group">
                         <label for="editor">Description</label>
@@ -179,7 +182,8 @@
                             'value' => $event == null ? null : $event->description
                         ])
                     </div>
-
+                </div>
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="editor-summary">Summary</label>
                         @include('website.layouts.macros.markdownfield', [
@@ -197,6 +201,6 @@
 
         @include('event.edit_includes.buttonbar')
 
-    </div>
+    </form>
 
-</form>
+</div>
