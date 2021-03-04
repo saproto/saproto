@@ -100,9 +100,6 @@ class Newsletter extends Model
 
     public static function send()
     {
-        if (!Newsletter::canBeSent()) {
-            return false;
-        }
         Artisan::call('proto:newslettercron');
         Newsletter::updateLastSent();
         return true;
