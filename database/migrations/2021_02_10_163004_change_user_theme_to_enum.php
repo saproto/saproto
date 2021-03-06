@@ -16,7 +16,7 @@ class ChangeUserThemeToEnum extends Migration
     {
         $i=0;
         foreach(config('proto.themes') as $theme){
-            DB::table('users')->where('theme', $theme)->update(['theme' => $i]);
+            DB::table('users')->where('theme', "assets/application-{$theme}.css")->update(['theme' => $i]);
             $i++;
         }
 

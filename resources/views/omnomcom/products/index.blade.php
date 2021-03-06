@@ -119,7 +119,7 @@
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
-                                <td>
+                                <td style="min-width: 60px">
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
                                         <i class="fas fa-edit mr-2"></i>
                                     </a>
