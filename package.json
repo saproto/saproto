@@ -34,12 +34,12 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "~5.11.2",
-    "bootstrap": "~4.3.1",
+    "@fortawesome/fontawesome-free": "^5.15.2",
+    "bootstrap": "^4.6.0",
     "bootstrap-slider": "~10.6.2",
     "easymde": "^2.14.0",
     "fontawesome-iconpicker": "~3.2.0",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "js-cookie": "~2.2.1",
     "moment": "~2.24.0",
     "moment-timezone": "^0.5.31",
@@ -48,7 +48,7 @@
     "select2": "^4.0.13",
     "select2-bootstrap4-theme": "~1.0.0",
     "signature_pad": "^3.0.0-beta.4",
-    "socket.io-client": "^2.3.1",
+    "socket.io-client": "^2.4.0",
     "swiper": "^5.4.5",
     "tempusdominus-bootstrap-4": "~5.1.2",
     "tempusdominus-core": "~5.0.3",
@@ -57,11 +57,11 @@
   },
   "devDependencies": {
     "glob": "^7.1.6",
-    "laravel-mix": "^6.0.11",
-    "postcss": "^8.2.5",
+    "laravel-mix": "^6.*",
+    "postcss": "^8.2.7",
     "postcss-discard-comments": "^4.0.2",
     "resolve-url-loader": "^3.1.2",
-    "sass": "^1.32.6",
+    "sass": "^1.32.8",
     "sass-loader": "^8.0.2"
   }
 }
