@@ -2,6 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\Request;
 use Proto\Http\Requests;
 
@@ -63,6 +64,40 @@ class AchievementController extends Controller
         $achievement->delete();
         Session::flash('flash_message', "Achievement '" . $achievement->name . "' has been removed.");
         return Redirect::route("achievement::list");
+    }
+
+    public function achieve($page_name)
+    {
+        $user = Auth::user();
+        if (!$user->is_member) {
+            Session::flash('flash_message', 'You need to be a member to receive this achievement');
+            Return Redirect::back();
+        }
+
+        $achievement = Achievement::where('has_page', '=', true)->where('page_name', '=', $page_name)->firstOrFail();
+        if ($achievement->is_archived) {
+            Session::flash('flash_message', 'You can no longer earn this achievement');
+            Return Redirect::back();
+        }
+
+        $achieved = $user->achieved();
+        $hasAchievement = false;
+        foreach ($achieved as $entry) {
+            if ($entry->id == $achievement->id) $hasAchievement = true;
+        }
+        if (!$hasAchievement) {
+            $new = array(
+                'user_id' => $user->id,
+                'achievement_id' => $achievement->id
+            );
+            $relation = new AchievementOwnership($new);
+            $relation->save();
+            Session::flash('flash_message', "You have earned the achievement: '$achievement->name'");
+        } else {
+            Session::flash('flash_message', "You have already earned this achievement");
+        }
+
+        return view('achievement.achieve', ['achievement' => $achievement, 'parsed_content' => Markdown::convertToHtml($achievement->page_content)]);
     }
 
     public function give($achievement_id, Request $request)
