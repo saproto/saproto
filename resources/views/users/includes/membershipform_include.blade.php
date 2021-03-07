@@ -1,33 +1,3 @@
-<html>
-<head>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-    <style type="text/css">
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            width: 100%;
-            height: 100%;
-            font-family: Arial;
-            padding: 60px 80px;
-        }
-
-        h2 {
-            margin-bottom: 60px;
-        }
-
-        p {
-            margin: 40px auto;
-            font-size: 16px;
-        }
-    </style>
-
-</head>
-<body>
-
 <h2>Becoming a member of Study Association Proto</h2>
 
 <p>
@@ -44,8 +14,8 @@
 </p>
 
 <p>
-    The undersigned is aware of the Bylaws (NL: Statuten) and Rules & Regulations (NL: Huishoudelijk Regelement) of the
-    association and promises to follow them.
+    The undersigned is aware of the Bylaws (NL: Statuten) and Rules & Regulations (NL: Huishoudelijk Regelement) of the association and promises to follow them.
+    More information on the before mentioned documents can be found on the <a href="https://wiki.proto.utwente.nl/proto/start" target="_blank">DokuWiki</a>.
 </p>
 
 <p>
@@ -54,7 +24,7 @@
 </p>
 
 <p>
-    Membership of the association is renewed anually, following a timely notice reminding the member membership is
+    Membership of the association is renewed annually, following a timely notice reminding the member membership is
     renewed. Membership may be terminated, without cost, before the start of the new academic year.
 </p>
 
@@ -77,15 +47,3 @@
     association always has a valid e-mail address and phone number on which the undersigned can be contacted, as well as
     at least one physical address of the undersigned.
 </p>
-
-<div style="height: 25mm;">
-    <p>Signature:</p>
-</div>
-
-<p>
-    <strong>{{ $user->name }}</strong><br>
-    Enschede, {{ date('F j, Y') }}
-</p>
-
-</body>
-</html>

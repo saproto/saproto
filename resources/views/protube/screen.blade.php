@@ -331,7 +331,8 @@
                     'controls': 0,
                     'showinfo': 0,
                     'modestbranding': 1,
-                    'iv_load_policy': 3
+                    'iv_load_policy': 3,
+                    'origin': window.location.origin
                 },
                 events: {
                     'onReady': onYouTubePlayerReady,
@@ -602,7 +603,7 @@
         _paq.push(['trackPageView']);
         _paq.push(['enableLinkTracking']);
         (function () {
-            var u = "//metis.proto.utwente.nl/analytics/";
+            var u = "//{{ config('proto.analytics_url') }}/";
             _paq.push(['setTrackerUrl', u + 'piwik.php']);
             _paq.push(['setSiteId', '3']);
             var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];

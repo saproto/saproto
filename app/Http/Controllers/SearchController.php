@@ -15,9 +15,6 @@ use View;
 use Auth;
 use Session;
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 class SearchController extends Controller
 {
 
@@ -82,10 +79,12 @@ class SearchController extends Controller
         $data = null;
         if ($request->has('query')) {
             $query = $request->input('query');
+            if (preg_match('/^[a-zA-Z0-9\s\-]+$/', $query) !== 1) {
+                abort(400, 'You cannot use special characters in your search query.');
+            }
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
                 $search = "&";
-                $data = [];
                 foreach ($terms as $term) {
                     if (Auth::user()->can('board')) {
                         $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";

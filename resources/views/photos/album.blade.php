@@ -29,8 +29,9 @@
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
                         @include('website.layouts.macros.card-bg-image', [
+                        'id' => sprintf('photo_%s', $photo->id),
                         'url' => route("photo::view", ["id"=> $photo->id]),
-                        'img' => $photo->thumb,
+                        'img' => $photo->thumb(),
                         'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
                             $photo->getLikes(), $photo->private ?
                             '<i class="fas fa-eye-slash ml-4 mr-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
@@ -46,6 +47,9 @@
             </div>
 
         </div>
+        <div class="card-footer">
+            {{ $photos->photos->links() }}
+        </div>
 
         <div class="card-footer text-center">
             <i class="fas fa-shield-alt fa-fw mr-3"></i>
@@ -58,27 +62,5 @@
     </div>
 
     &nbsp;
-
-@endsection
-
-@section('javascript')
-
-    @parent
-
-    <script>
-        (function (window, location) {
-            history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
-            history.pushState(null, document.title, location.pathname);
-
-            window.addEventListener("popstate", function () {
-                if (location.hash === "#!/stealingyourhistory") {
-                    history.replaceState(null, document.title, location.pathname);
-                    setTimeout(function () {
-                        location.replace("{{ route('photo::albums')}}");
-                    }, 0);
-                }
-            }, false);
-        }(window, location));
-    </script>
 
 @endsection

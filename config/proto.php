@@ -28,6 +28,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Additional Mailboxes
+    |--------------------------------------------------------------------------
+    |
+    | A lost of additional mailboxes to be created by the DirectAdmin sync.
+    | TODO: Should be moved to a database. :)
+    |
+    */
+
+    'additional_mailboxes' => [
+      'boardarchive'
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Roles that require Two-Factor Authentication
     |--------------------------------------------------------------------------
     |
@@ -52,6 +66,7 @@ return [
         'tipcie' => 3583,
         'drafters' => 3336,
         'ero' => 1364,
+        'protography' => 294,
     ],
 
     /*
@@ -87,6 +102,17 @@ return [
 
     'autoSubscribeUser' => [],
     'autoSubscribeMember' => [8, 12],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Discord Server ID
+    |--------------------------------------------------------------------------
+    |
+    | The Discord server ID used to get Discord widget data.
+    |
+    */
+
+    'discord_server_id' => '600338792766767289',
 
     /*
     |--------------------------------------------------------------------------
@@ -130,7 +156,7 @@ return [
     |
     */
 
-    'internal' => 'Renske Mulder',
+    'internal' => 'Sebastiaan van Loon',
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => ' Sanne Bouman',
+    'treasurer' => 'Jonathan Matarazzi',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,7 +178,18 @@ return [
     |
     */
 
-    'secretary' => 'Hannah Ottenschot',
+    'secretary' => 'Jesse Visser',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Board Number
+    |--------------------------------------------------------------------------
+    |
+    | Used when "Board x.0" is printed.
+    |
+    */
+
+    'boardnumber' => '10.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -220,6 +257,9 @@ return [
         'isalfredthere' => [
             'isalfredthere.nl',
             'www.isalfredthere.nl'
+        ],
+        'static' => [
+            'static.saproto.com'
         ]
     ],
 
@@ -234,7 +274,8 @@ return [
     */
 
     'soundboardSounds' => [
-        '1337' => 9
+        '1337' => 9,
+        'new-member' => 60,
     ],
 
     /*
@@ -254,17 +295,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | SEPA Withdrawal Info
-    |--------------------------------------------------------------------------
-    |
-    | Info needed to construct SEPA withdrawals.
-    |
-    */
-
-    'openiban_url' => env('OPENIBAN_URL', 'https://openiban.proto.utwente.nl'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Website Theme configuration
     |--------------------------------------------------------------------------
     |
@@ -276,5 +306,8 @@ return [
         'Light' => 'assets/application-light.css',
         'Dark' => 'assets/application-dark.css',
         'Rainbow Barf' => 'assets/application-rainbowbarf.css'
-    ]
+    ],
+
+    // Analytics URL
+    'analytics_url' => env('ANALYTICS_URL', '')
 ];

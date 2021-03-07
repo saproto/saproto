@@ -44,7 +44,7 @@ class Product extends Model
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null)
+    public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
     {
 
         $this->stock -= $amount;
@@ -63,7 +63,8 @@ class Product extends Model
             'total_price' => $total_price,
             'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null),
             'payed_with_bank_card' => ($withBankCard ? date('Y-m-d H:i:s') : null),
-            'description' => $description !== '' ? $description : null
+            'description' => $description !== '' ? $description : null,
+            'authenticated_by' => $auth_method
         ]);
 
         $orderline->save();

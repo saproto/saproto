@@ -17,6 +17,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
             Route::get('profile_picture', ['uses' => 'UserApiController@getUserProfilePicture']);
             Route::get('address', ['uses' => 'UserApiController@getAddress']);
             Route::get('committees', ['uses' => 'UserApiController@getCommittees']);
+            Route::get('societies', ['uses' => 'UserApiController@getSocieties']);
             Route::get('achievements', ['uses' => 'UserApiController@getAchievements']);
             Route::get('qr_auth_approve/{code}', ['uses' => 'QrAuthController@apiApprove']);
             Route::get('qr_auth_info/{code}', ['uses' => 'QrAuthController@apiInfo']);
@@ -45,12 +46,27 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], function () {
-        Route::group(['middleware' => ['auth:api']], function () {
-
-        });
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
+        });
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('photos_api', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
+            Route::get('photos_api/{id}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
+        });
+    });
+
+    Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api', 'member']], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'QuoteCornerController@overview']);
+        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
+    });
+
+    Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
+        Route::group(['middleware' => ['auth:api']], function () {
+            Route::get('', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
+        });
+        Route::group(['middleware' => ['web']], function () {
+            Route::get('unauthenticated', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
         });
     });
 

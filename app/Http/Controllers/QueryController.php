@@ -54,7 +54,7 @@ class QueryController extends Controller
 
         foreach ($ldap_students as $student) {
             $names[] = strtolower($student->givenname . ' ' . $student->sn);
-            $emails[] = strtolower($student->mail);
+            $emails[] = strtolower($student->userprincipalname);
             $usernames[] = $student->uid;
         }
 

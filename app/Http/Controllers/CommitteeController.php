@@ -22,18 +22,54 @@ use Mail;
 class CommitteeController extends Controller
 {
 
-    public function overview()
+    public function overview($showSociety = false)
     {
         if (Auth::check() && Auth::user()->can('board')) {
-            return view('committee.list', ['data' => Committee::orderby('name', 'asc')->get()]);
+            return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
         } else {
-            $publicCommittees = Committee::where('public', 1)->get();
+            $publicCommittees = Committee::where('public', 1)->where('is_society', $showSociety)->get();
             $userCommittees = Auth::check() ? Auth::user()->committees : [];
 
             $mergedCommittees = $publicCommittees->merge($userCommittees)->sortBy('name');
 
             return view('committee.list', ['data' => $mergedCommittees]);
         }
+    }
+
+    public function indexApi(Request $request)
+    {
+        $showSocieties = filter_var($request->get('show_societies', false), FILTER_VALIDATE_BOOLEAN);
+
+        $data = [];
+        foreach (Committee::where('public', 1)->where('is_society', $showSocieties)->orderBy('name', 'asc')->get() as $committee) {
+
+            if (Auth::user() && Auth::user()->member) {
+                $current_members = [];
+                foreach ($committee->users as $user) {
+                    $current_members[] = (object)[
+                        'name' => $user->name,
+                        'photo' => $user->photo_preview,
+                        'edition' => $user->pivot->edition,
+                        'role' => $user->pivot->role,
+                        'since' => strval($user->pivot->created_at)
+                    ];
+                }
+            } else {
+                $current_members = null;
+            }
+
+            $data[] = (object)[
+                'id' => $committee->id,
+                'name' => $committee->name,
+                'description' => $committee->description,
+                'email' => sprintf('%s@%s', $committee->slug, config('proto.emaildomain')),
+                'photo' => $committee->image->generateImagePath(null, null),
+                'current_members' => $current_members
+            ];
+
+        }
+
+        return $data;
     }
 
     public function show($id)

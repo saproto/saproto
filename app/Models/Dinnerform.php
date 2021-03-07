@@ -2,17 +2,17 @@
 
 namespace Proto\Models;
 
-use DateTime;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\URL;
-use Vinkla\Hashids\Facades\Hashids;
-
-use Auth;
 
 class Dinnerform extends Model
 {
+
     protected $hidden = ['created_at', 'updated_at'];
+
+    protected $dates = ['start', 'end'];
+
+    protected $guarded = ['id'];
 
     /**
      * The database table used by the model.
@@ -21,47 +21,32 @@ class Dinnerform extends Model
      */
     protected $table = 'dinnerforms';
 
-    public function getPublicId()
+    /**
+     * Generate a timespan string with format 'D H:i'.
+     *
+     * @return string
+     */
+    public function generateTimespanText()
     {
-        return Hashids::connection('dinnerform')->encode($this->id);
+        return $this->start->format('D H:i') . " - " . Carbon::parse($this->end)->format('D H:i');
     }
 
-    public static function fromPublicId($public_id)
-    {
-        $id = Hashids::connection('dinnerform')->decode($public_id);
-        return Dinnerform::findOrFail(count($id) > 0 ? $id[0] : 0);
-    }
-
-    public function generateTimespanText($long_format, $short_format, $combiner)
-    {
-        return date($long_format, $this->start) . " " . $combiner . " " . (
-            (($this->end - $this->start) < 3600 * 24)
-                ?
-                date($short_format, $this->end)
-                :
-                date($long_format, $this->end)
-            );
-    }
-
-    protected $guarded = ['id'];
-
-    public function hasExpired()
-    {
-        return date('U') - $this->end > 3600;
-    }
-
+    /**
+     * Check if a dinnerform is currently open.
+     *
+     * @return bool
+     */
     public function isCurrent() {
-        return $this->start < date('U') && $this->end > date('U');
+        return $this->start->isPast() && $this->end->isFuture();
     }
 
-    public function getFormattedDateAttribute()
-    {
-        return (object)[
-            'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start)
-        ];
+    /**
+     * Check if dinnerform is more than 1 hour past end time.
+     *
+     * @return bool
+     */
+    public function hasExpired() {
+        return $this->end->addHours(1)->isPast();
     }
 
     public function isBoardMember(User $user){

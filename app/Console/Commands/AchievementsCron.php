@@ -235,10 +235,13 @@ class AchievementsCron extends Command
         foreach (User::all() as $user) {
             $forever = False;
             foreach (Committee::all() as $committee) {
-                $memberships = CommitteeMembership::withTrashed()->where('user_id', $user->id)->where('committee_id', $committee->id)->get();
+                $memberships = CommitteeMembership::withTrashed()
+                    ->where('user_id', $user->id)
+                    ->where('committee_id', $committee->id)
+                    ->get();
                 $days = 0;
                 foreach ($memberships as $membership) {
-                    if ($membership->deleted_at != null) {
+                    if ($membership->deleted_at != null && !$committee->is_society) {
                         $diff = $membership->deleted_at->diff($membership->created_at);
                     } else {
                         $diff = Carbon::now()->diff($membership->created_at);
@@ -325,7 +328,10 @@ class AchievementsCron extends Command
         $users = User::all();
         $selected = array();
         foreach ($users as $user) {
-            $memberships = CommitteeMembership::withTrashed()->where('user_id', $user->id)->get();
+            $memberships = CommitteeMembership::withTrashed()
+                ->where('user_id', $user->id)
+                ->with('committee')
+                ->get();
             for ($i = 0; $i < count($memberships); $i++) {
                 for ($j = $i + 1; $j < count($memberships); $j++) {
                     if ($memberships[$i]->committee_id == $memberships[$j]->committee_id) {
@@ -336,10 +342,13 @@ class AchievementsCron extends Command
             }
             $count = 0;
             foreach ($memberships as $temp) {
-                if ($temp != NULL) $count++;
+                if ($temp != NULL && !$temp->committee->is_society) {
+                    $count++;
+                }
             }
             if ($count >= 10) $selected[] = $user;
         }
+
         return $selected;
     }
 
@@ -388,9 +397,9 @@ class AchievementsCron extends Command
     private function FristiMember()
     {
         $selected = array();
-        $fristies = OrderLine::where('product_id', 180)->get();
+        $fristies = OrderLine::where('product_id', 180)->whereNotNull('user_id')->get();
         foreach ($fristies as $fristi) {
-            if (!$fristi->user->did_study_create) {
+            if ($fristi->user && !$fristi->user->did_study_create) {
                 $selected[] = User::find($fristi->user_id);
             }
         }

@@ -5,9 +5,6 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use Auth;
 use Proto\Models\FailedWithdrawal;
 use Proto\Models\OrderLine;
@@ -105,7 +102,7 @@ class OrderLineController extends Controller
     /**
      * Bulk store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function bulkStore(Request $request)
@@ -118,7 +115,7 @@ class OrderLineController extends Controller
             $price = ($request->input('price')[$i] != "" ? floatval(str_replace(",", ".", $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
 
-            $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'));
+            $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'), sprintf('bulk_add_by_%u', Auth::user()->id));
 
         }
 
@@ -141,7 +138,7 @@ class OrderLineController extends Controller
                 $user = User::findOrFail($request->input('user')[$u]);
                 $product = Product::findOrFail($request->input('product')[$p]);
 
-                $product->buyForUser($user, 1);
+                $product->buyForUser($user, 1, null, null, null, null, sprintf('simple_add_by_%u', Auth::user()->id));
 
             }
         }
@@ -154,7 +151,7 @@ class OrderLineController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)

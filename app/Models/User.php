@@ -3,9 +3,6 @@
 namespace Proto\Models;
 
 
-use Adldap\Adldap;
-use Adldap\Connections\Provider;
-
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +15,8 @@ use Carbon\Carbon;
 use Hash;
 
 use Zizaco\Entrust\Traits\EntrustUserTrait;
-
+use DirectAdmin\DirectAdmin;
+use Proto\Console\Commands\DirectAdminSync;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -50,7 +48,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getPublicId()
     {
-        return ($this->member ? $this->member->proto_username : null);
+        return ($this->is_member ? $this->member->proto_username : null);
     }
 
     public static function fromPublicId($public_id)
@@ -92,97 +90,29 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         $this->password = Hash::make($password);
         $this->save();
 
-        if (config('app.env') == 'production') {
-            // Update Active Directory Password
-            $ad = new Adldap();
-            $provider = new Provider(config('adldap.proto'));
-            $ad->addProvider('proto', $provider);
-            $ad->connect('proto');
+        // Update DirectAdmin Password
+        if ($this->is_member) {
+            $da = new DirectAdmin;
+            $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
+            $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 
-            $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
-            if ($ldapuser !== null) {
-                $ldapuser->setPassword($password);
-                $ldapuser->save();
-            }
+            $da->set_method('post');
+            $q = DirectAdminSync::constructQuery('CMD_API_POP', [
+                'action' => 'modify',
+                'domain' => env('DA_DOMAIN'),
+                'user' => $this->member->proto_username,
+                'newuser' => $this->member->proto_username,
+                'passwd' => $password,
+                'passwd2' => $password,
+                'quota' => 0, # Unlimited
+                'limit' => 0 # Unlimited
+            ]);
+            $da->query($q);
         }
+
 
         // Remove breach notification flag
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
-    }
-
-    public function updateLdapUser()
-    {
-        if (!$this->member) {
-            return null;
-        }
-
-        $ad = new Adldap();
-        $provider = new Provider(config('adldap.proto'));
-        $ad->addProvider('proto', $provider);
-        $ad->connect('proto');
-
-        $ldapuser = $provider->search()->where('objectClass', 'user')->where('description', $this->id)->first();
-
-        if ($ldapuser == null) {
-            $ldapuser = $provider->make()->user();
-
-            $ldapuser->cn = $this->member->proto_username;
-            $ldapuser->description = $this->id;
-            $ldapuser->save();
-        }
-
-        $username = $this->member->proto_username;
-
-        // Put user in right OU
-        $ldapuser->move('cn=' . $username, 'OU=Members,OU=Proto,DC=ad,DC=saproto,DC=nl');
-
-        // Update user fields
-        $ldapuser->displayName = trim($this->name);
-        $ldapuser->givenName = trim($this->calling_name);
-
-        $lastnameGuess = explode(" ", $this->name);
-        array_shift($lastnameGuess);
-        $ldapuser->sn = trim(implode(" ", $lastnameGuess));
-
-        $ldapuser->mail = $this->email;
-        $ldapuser->wWWHomePage = $this->website;
-
-        if ($this->address && $this->address_visible) {
-
-            $ldapuser->l = $this->address->city;
-            $ldapuser->postalCode = $this->address->zipcode;
-            $ldapuser->streetAddress = $this->address->street . " " . $this->address->number;
-            $ldapuser->co = $this->address->country;
-
-        } else {
-
-            $ldapuser->l = null;
-            $ldapuser->postalCode = null;
-            $ldapuser->streetAddress = null;
-            $ldapuser->co = null;
-
-        }
-
-        if ($this->phone_visible) {
-            $ldapuser->telephoneNumber = $this->phone;
-        } else {
-            $ldapuser->telephoneNumber = null;
-        }
-
-        if ($this->photo) {
-            try {
-                $ldapuser->jpegPhoto = base64_decode($this->photo->getBase64(500, 500));
-            } catch (\Intervention\Image\Exception\NotReadableException $e) {
-                $ldapuser->jpegPhoto = null;
-            }
-        } else {
-            $ldapuser->jpegPhoto = null;
-        }
-
-        $ldapuser->setAttribute('sAMAccountName', $username);
-        $ldapuser->setUserPrincipalName($username . config('adldap.proto')['account_suffix']);
-
-        $ldapuser->save();
     }
 
     /**
@@ -270,15 +200,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function committees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
-            ->where(function ($query) {
-                $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
-            })
-            ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
-            ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
+        return $this->getGroups()->where('is_society', false);
+    }
+
+    /**
+     * @return mixed Returns all societies a user is currently a member of.
+     */
+    public function societies()
+    {
+        return $this->getGroups()->where('is_society', true);
     }
 
     /**
@@ -352,7 +282,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->where(function ($q) {
                     $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
-                })->get()
+                })
+                ->with('committee')
+                ->get()
+                ->where('committee.is_society', false)
             ) > 0;
     }
 
@@ -416,14 +349,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return (strlen(str_replace(["\r", "\n", " "], "", $this->diet)) > 0 ? true : false);
     }
 
-    public function renderDiet()
-    {
-        return nl2br($this->diet);
-    }
-
     public function getDisplayEmail()
     {
-        return ($this->member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
+        return ($this->is_member && $this->isActiveMember()) ? sprintf('%s@%s', $this->member->proto_username, config('proto.emaildomain')) : $this->email;
     }
 
     /**
@@ -433,7 +361,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function isFirstYear()
     {
-        return $this->member
+        return $this->is_member
             && Carbon::instance(new DateTime($this->member->created_at))->age < 1
             && $this->did_study_create;
     }
@@ -446,6 +374,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasCompletedProfile()
     {
         return $this->birthdate !== null && $this->phone !== null;
+    }
+
+    public function hasSignedMembershipForm() {
+        if ($this->member) {
+            return $this->member->membershipForm !== null;
+        }
     }
 
     public function clearMemberProfile()
@@ -517,7 +451,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getIsMemberAttribute()
     {
-        return $this->member !== null;
+        return $this->member !== null && !$this->member->pending;
     }
 
     public function getIsProtubeAdminAttribute()
@@ -543,6 +477,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             return null;
         }
+    }
+
+    private function getGroups() {
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
+            ->where(function ($query) {
+                $query->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
     }
 
 }

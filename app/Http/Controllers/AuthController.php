@@ -5,7 +5,6 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 
 use PragmaRX\Google2FA\Google2FA;
-
 use nickurt\PwnedPasswords\PwnedPasswords;
 
 use Proto\Mail\PasswordResetEmail;
@@ -248,6 +247,14 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
+        $password = $request->input('password');
+        $auth_check = AuthController::verifyCredentials($user->email, $password);
+
+        if ($auth_check == null || $auth_check->id != $user->id) {
+            $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
+            return Redirect::back();
+        }
+
         if ($user->member) {
             $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
@@ -473,7 +480,7 @@ class AuthController extends Controller
     public function startSurfConextAuth()
     {
         Session::reflash();
-        return redirect('saml2/login');
+        return redirect(route('saml2_login', ['idpName' => 'surfconext']));
     }
 
     /**
@@ -484,7 +491,6 @@ class AuthController extends Controller
      */
     public function surfConextAuthPost(Request $request)
     {
-
         if (!Session::has('surfconext_sso_user')) {
             return Redirect::route('login::show');
         }

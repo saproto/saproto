@@ -42,11 +42,6 @@ return [
         'event' => [
             'salt' => getenv('HASHIDS_SECRET_EVENTS'),
             'length' => '16',
-        ],
-
-        'dinnerform' => [
-            'salt' => getenv('HASHIDS_SECRET_DINNERFORM'),
-            'length' => '16',
         ]
 
     ],

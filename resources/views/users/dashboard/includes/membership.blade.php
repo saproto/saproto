@@ -44,9 +44,9 @@
                         </td>
                     @else
                         <td>
-                            Currently unknown
+                            Not yet determined
                             <br>
-                            <sup class="text-muted">Will be determined on October 1st.</sup>
+                            <sup class="text-muted">Will be determined when membership fee is charged for this year.</sup>
                         </td>
                     @endif
                 </tr>

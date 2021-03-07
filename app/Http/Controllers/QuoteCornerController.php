@@ -29,22 +29,65 @@ class QuoteCornerController extends Controller
                 $popularLikes = count($likes);
             }
         }
-        return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
+
+        if (request()->wantsJson()) {
+            $quotes = Quote::orderBy('created_at', 'desc')->paginate(20);
+            foreach ($quotes as $quote) {
+                $quote->quote = str_replace('<br />', "\n", strip_tags($quote->quote, 'br'));
+                $quote->user_info = (object)[
+                    'name' => $quote->user->name,
+                    'photo' => $quote->user->photo_preview
+                ];
+            }
+            $popular->quote = str_replace('<br />', "\n", strip_tags($popular->quote, 'br'));
+            $popular->user_info = (object)[
+                'name' => $popular->user->name,
+                'photo' => $popular->user->photo_preview
+            ];
+            return ['data' => $quotes, 'popular' => $popular];
+        } else {
+            return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
+        }
     }
 
     public function add(Request $request)
     {
         $temp = $request->input('quote');
         $temp = nl2br(trim($temp));
-        if (!(strlen($temp) > 0)) return Redirect::route('quotes::list');
+        if (!(strlen($temp) > 0)) {
+            if ($request->wantsJson()) {
+                abort(400, json_encode((object)[
+                    'success' => false,
+                    'message' => 'Quote too short',
+                ]));
+            } else {
+                return Redirect::route('quotes::list');
+            }
+        }
         $new = array(
             'quote' => $temp,
             'user_id' => Auth::id()
         );
         $quote = new Quote($new);
         $quote->save();
-        Session::flash("flash_message", "Quote added.");
-        return Redirect::route('quotes::list');
+
+        if ($request->wantsJson()) {
+            $data_quote = $quote;
+            $data_quote->quote = str_replace('<br />', "\n", strip_tags($data_quote->quote, 'br'));
+            $data_quote->user_info = (object)[
+                'name' => $data_quote->user->name,
+                'photo' => $data_quote->user->photo_preview
+            ];
+
+            return json_encode((object)[
+                'success' => true,
+                'message' => 'Quote saved',
+                'data' => $data_quote
+            ]);
+        } else {
+            Session::flash("flash_message", "Quote added.");
+            return Redirect::route('quotes::list');
+        }
     }
 
     public function delete($id)

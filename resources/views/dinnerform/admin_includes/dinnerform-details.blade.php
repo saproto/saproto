@@ -1,5 +1,5 @@
 <form method="post"
-      action="{{ ($dinnerformCurrent == null ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
+      action="{{ ( !isset($dinnerformCurrent) ? route("dinnerform::add") : route("dinnerform::edit", ['id' => $dinnerformCurrent->id])) }}"
       enctype="multipart/form-data">
 
     {!! csrf_field() !!}
@@ -24,7 +24,8 @@
                             <input type="text" class="form-control" id="restaurant" name="restaurant"
                                    placeholder="Elat Roma"
                                    value="{{ $dinnerformCurrent->restaurant or '' }}"
-                                   required>
+                                   required
+                            />
 
                         </div>
                     </div>
@@ -40,19 +41,6 @@
 
                         </div>
                     </div>
-                    <!--
-                    <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3">
-
-                            <label for="url">Url:</label>
-                            <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="https://forms.gle/t2hDEnkNCLXNpvYTA"
-                                   value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}"
-                                   required>
-
-                        </div>
-                    </div>
-                    -->
                 </div>
 
                 <div class="col-md-6">
@@ -65,7 +53,7 @@
                                 @include('website.layouts.macros.datetimepicker', [
                                     'name' => 'start',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->timestamp : null
                                 ])
                             </div>
 
@@ -78,7 +66,7 @@
                                 @include('website.layouts.macros.datetimepicker',[
                                     'name' => 'end',
                                     'format' => 'datetime',
-                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end : null
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->timestamp : null
                                 ])
                             </div>
 
@@ -91,8 +79,14 @@
             </div>
 
         </div>
+        <div class="card-footer border-bottom">
+            <button type="submit" class="btn btn-success">Submit</button>
 
-        @include('dinnerform.admin_includes.buttonbar')
+            @if($dinnerformCurrent)
+                <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
+                   class="btn btn-danger ml-4">Delete</a>
+            @endif
+        </div>
 
     </div>
 

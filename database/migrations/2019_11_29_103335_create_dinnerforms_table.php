@@ -31,6 +31,6 @@ class CreateDinnerformsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dinnerform');
+        Schema::dropIfExists('dinnerforms');
     }
 }

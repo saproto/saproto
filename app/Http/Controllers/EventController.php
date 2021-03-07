@@ -9,7 +9,7 @@ use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\Event;
-use Proto\Models\FlickrAlbum;
+use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
@@ -113,7 +113,7 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -159,7 +159,7 @@ class EventController extends Controller
     /**
      * Display the specified event.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -176,7 +176,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -188,8 +188,8 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -244,7 +244,7 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -320,7 +320,7 @@ class EventController extends Controller
         $product->save();
 
         foreach ($activity->users as $user) {
-            $product->buyForUser($user, 1);
+            $product->buyForUser($user, 1, null, null, null, null, sprintf('activity_closed_by_%u', Auth::user()->id));
         }
 
         $activity->closed = true;
@@ -335,7 +335,7 @@ class EventController extends Controller
     public function linkAlbum(Request $request, $event)
     {
         $event = Event::findOrFail($event);
-        $album = FlickrAlbum::findOrFail($request->album_id);
+        $album = PhotoAlbum::findOrFail($request->album_id);
         $album->event_id = $event->id;
         $album->save();
 
@@ -345,7 +345,7 @@ class EventController extends Controller
 
     public function unlinkAlbum($album)
     {
-        $album = FlickrAlbum::findOrFail($album);
+        $album = PhotoAlbum::findOrFail($album);
         $album->event_id = null;
         $album->save();
 
@@ -354,21 +354,53 @@ class EventController extends Controller
     }
 
 
-    public function apiUpcomingEvents($limit = 20)
+    public function apiUpcomingEvents($limit = 20, Request $request)
     {
 
         $user = (Auth::check() ? Auth::user() : null);
 
-        $events = Event::where('secret', 0)->where('end', '>', strtotime('today'))->where('start', '<', strtotime('+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
 
+        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {
+            if ($event->secret && ($user == null || $event->activity == null || (
+                        !$event->activity->isParticipating($user) &&
+                        !$event->activity->isHelping($user) &&
+                        !$event->activity->isOrganizing($user)
+                    ))) {
+                continue;
+            }
+
+            $participants = ($user && $user->member && $event->activity ? $event->activity->users->map(function ($item) {
+                return (object)[
+                    'name' => $item->name,
+                    'photo' => $item->photo_preview
+                ];
+            }) : null);
+            $backupParticipants = ($user && $user->member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+                return (object)[
+                    'name' => $item->name,
+                    'photo' => $item->photo_preview
+                ];
+            }) : null);
             $data[] = (object)[
                 'id' => $event->id,
                 'title' => $event->title,
+                'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
                 'description' => $event->description,
                 'start' => $event->start,
+                'organizing_committee' => ($event && $event->committee ? [
+                    'id' => $event->committee->id,
+                    'name' => $event->committee->name
+                ] : null),
+                'registration_start' => ($event && $event->activity ? $event->activity->registration_start : null),
+                'registration_end' => ($event && $event->activity ? $event->activity->registration_end : null),
+                'deregistration_end' => ($event && $event->activity ? $event->activity->deregistration_end : null),
+                'total_places' => ($event && $event->activity ? $event->activity->participants : null),
+                'available_places' => ($event && $event->activity ? $event->activity->freeSpots() : null),
+                'is_full' => ($event && $event->activity ? $event->activity->isFull() : null),
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
@@ -382,7 +414,11 @@ class EventController extends Controller
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
                 'can_signout' => ($user && $event->activity ? $event->activity->canUnsubscribe() : null),
-                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null)
+                'tickets' => ($user && $event->tickets->count() > 0 ? $event->getTicketPurchasesFor($user)->pluck('api_attributes') : null),
+                'participants' => $participants,
+                'is_helping' => ($user && $event->activity ? $event->activity->isHelping($user) : null),
+                'is_organizing' => ($user && $event->committee ? $event->committee->isMember($user) : null),
+                'backupParticipants' => $backupParticipants
             ];
         }
 
@@ -470,7 +506,15 @@ class EventController extends Controller
 
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
-        foreach (Event::where('secret', false)->where('start', '>', strtotime('-6 months'))->get() as $event) {
+        foreach (Event::where('start', '>', strtotime('-6 months'))->get() as $event) {
+
+            if ($event->secret && ($user == null || $event->activity == null || (
+                        !$event->activity->isParticipating($user) &&
+                        !$event->activity->isHelping($user) &&
+                        !$event->activity->isOrganizing($user)
+                    ))) {
+                continue;
+            }
 
             if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;

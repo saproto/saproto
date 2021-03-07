@@ -13,6 +13,9 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'webhook/*',
-        'saml2/*'
+        'saml2/*',
+        'api/*',
+        'image/*',
+        'file/*'
     ];
 }

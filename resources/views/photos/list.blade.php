@@ -12,13 +12,13 @@
 
             <div class="row">
 
-                @foreach(Flickr::getAlbums() as $key => $album)
+                @foreach($albums as $key => $album)
 
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
                         @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]) ,
-                        'img' => $album->thumb,
+                        'img' => $album->thumb(),
                         'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
                         $album->private ? '<i class="fas fa-eye-slash mr-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
                         $album->name),
@@ -32,6 +32,9 @@
 
             </div>
 
+        </div>
+        <div class="card-footer">
+            {{ $albums->links() }}
         </div>
 
         <div class="card-footer text-center">

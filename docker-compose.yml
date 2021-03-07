@@ -6,12 +6,6 @@ services:
     volumes:
       - .:/var/www
 
-  queue:
-    build: ./docker/build/php-queue
-    container_name: saproto-queue
-    volumes:
-      - .:/var/www
-
   mariadb:
     image: mariadb:latest
     container_name: saproto-mariadb
@@ -26,10 +20,10 @@ services:
       'mysqld --innodb-flush-method=fsync'
 
   nginx:
-    image: nginx:alpine
+    build: ./docker/build/nginx
     container_name: saproto-nginx
     ports:
-      - 127.0.0.1:${DOCKER_HTTP_PORT}:80
+      - 127.0.0.1:${DOCKER_HTTP_PORT}:443
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx-log:/var/log/nginx

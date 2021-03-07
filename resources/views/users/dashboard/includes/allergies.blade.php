@@ -9,7 +9,7 @@
         <p class="card-text">
             @if($user->hasDiet())
                 <em>Your allergies and/or diets are as follows:</em><br>
-                {!! $user->renderDiet() !!}
+                {!! Markdown::convertToHtml($user->diet) !!}
             @else
                 <i>No information provided.</i>
             @endif

@@ -2,19 +2,15 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
-use Proto\Http\Controllers\AuthController;
-use Proto\Http\Controllers\EmailListController;
-
 use Carbon\Carbon;
+use Illuminate\Contracts\Logging\Log;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
+use Illuminate\Support\Facades\Storage;
 use Proto\Mail\MembershipEnded;
 use Proto\Mail\MembershipStarted;
-use Proto\Mail\UserReactivated;
 use Proto\Models\Member;
-use Proto\Models\Tempadmin;
 use Proto\Models\User;
 use Proto\Models\HashMapItem;
 
@@ -133,8 +129,14 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        $member = Member::create();
-        $member->user()->associate($user);
+        if (!$user->member) {
+            $member = Member::create();
+            $member->user()->associate($user);
+        } else {
+            $member = $user->member;
+            $member->created_at = Carbon::now()->toDateTimeString();
+            $member->pending = false;
+        }
 
         /** Create member alias */
 
@@ -165,9 +167,7 @@ class UserAdminController extends Controller
         $member->proto_username = $alias;
 
         /** End create member alias */
-
-        $user->updateLdapUser();
-
+        
         $member->save();
 
         Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
@@ -179,6 +179,8 @@ class UserAdminController extends Controller
             'subkey' => $user->id,
             'value' => 1
         ]);
+
+        Artisan::call('proto:playsound', [ 'sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash("flash_message", "Congratulations! " . $user->name . " is now our newest member!");
 
@@ -249,36 +251,49 @@ class UserAdminController extends Controller
         return redirect()->back();
     }
 
-    public function showForm(Request $request, $id)
+    public function showMemberForm($id)
     {
-
-        if ((!Auth::check() || !Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
             abort(403);
         }
 
         $user = User::findOrFail($id);
+
+        if ($user->hasSignedMembershipForm()) {
+            return Redirect::to($user->member->membershipForm->generatePath());
+        }
 
         if ($user->address === null) {
             Session::flash("flash_message", "This user has no address!");
             return Redirect::back();
         }
 
-        $form = PDF::loadView('users.admin.membershipform', ['user' => $user]);
-
+        $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]);
         $form = $form->setPaper('a4');
 
-        if ($request->ip() != config('app-proto.printer-host')) {
-            return $form->stream();
-        } else {
-            return $form->download();
-        }
+        return $form->download();
 
     }
 
-    public function printForm(Request $request)
+    public function destroyMemberForm($id)
+    {
+        if ((!Auth::check() || !Auth::user()->can('board'))) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+        $member = $user->member;
+
+        $member->forceDelete();
+
+        Session::flash("flash_message", "The signed membership form of " . $user->name . "has been deleted!");
+        return Redirect::back();
+    }
+
+    public function printMemberForm($id)
     {
 
-        $user = User::find($request->input('id'));
+        $user = User::find($id);
 
         if (!$user) {
             return "This user could not be found!";

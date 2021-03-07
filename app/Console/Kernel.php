@@ -5,6 +5,7 @@ namespace Proto\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Proto\Console\Commands\MemberRenewCron;
+use Proto\Console\Commands\SyncWikiAccounts;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,11 +18,9 @@ class Kernel extends ConsoleKernel
         Commands\GenerateRoles::class,
         Commands\TestEmail::class,
         Commands\MailAliasSync::class,
-        Commands\ActiveDirectorySync::class,
         Commands\EmailCron::class,
         Commands\NewsletterCron::class,
         Commands\BirthdayCron::class,
-        Commands\FlickrSync::class,
         Commands\PlaySound::class,
         Commands\AchievementsCron::class,
         Commands\FileCleanup::class,
@@ -38,7 +37,9 @@ class Kernel extends ConsoleKernel
         Commands\PrintActiveMembers::class,
         Commands\MemberRenewCron::class,
         Commands\OmNomComCleanup::class,
-        Commands\MakeAdmin::class
+        Commands\MakeAdmin::class,
+        Commands\DirectAdminSync::class,
+        Commands\SyncWikiAccounts::class
     ];
 
     /**
@@ -49,15 +50,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('proto:aliassync')->everyMinute();
         $schedule->command('proto:emailcron')->everyMinute();
-
-        $schedule->command('proto:adsync')->everyTenMinutes();
+        $schedule->command('proto:dasync')->everyTenMinutes();
         $schedule->command('proto:spotifyupdate')->everyTenMinutes();
-
-        $schedule->command('proto:flickrsync')->hourly();
         $schedule->command('proto:usercleanup')->hourly();
-
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
@@ -68,12 +64,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
         $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
-
         $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
-
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
-
-        $schedule->command('proto:memberrenewcron')->cron('0 2 1 8 *');
     }
 }

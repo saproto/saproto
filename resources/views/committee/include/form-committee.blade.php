@@ -33,6 +33,19 @@
             </div>
 
             <div class="row">
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label for="public">Committee type</label>
+                        <select class="form-control" id="is_society" name="is_society">
+                            <option value="0" {{ (!$new && $committee->is_society ? '' : 'selected') }}>Committee
+                            </option>
+                            <option value="1" {{ (!$new && $committee->is_society ? 'selected' : '') }}>Society
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
 
                 <div class="col-md-6">
 
@@ -47,8 +60,11 @@
                     </div>
 
                 </div>
+            </div>
 
-                <div class="col-md-6">
+            <div class="row">
+
+                <div class="col-md-12">
 
                     <div class="form-group">
                         <label for="public">Enable anonymous e-mail</label>

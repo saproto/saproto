@@ -38,16 +38,17 @@
 
         <h5 class="card-title">@yield('page-title')</h5>
 
-        @if($event->committee)
-            <h6 class="card-subtitle mb-2 text-muted">
-                This activity is organised by the
-                <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">{{ $event->committee->name }}</a>.
-            </h6>
-        @endif
-
     </div>
 
     <ul class="list-group list-group-flush">
+
+        @if($event->committee)
+            <li class="list-group-item">
+                <i class="fas fa-fw fa-users" aria-hidden="true"></i>
+                Organised by the @if($event->committee->is_society) society @endif
+                <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">{{ $event->committee->name }}</a>
+            </li>
+        @endif
 
         <li class="list-group-item">
             <i class="fas fa-fw fa-clock" aria-hidden="true"></i>
@@ -117,7 +118,7 @@
 
                     @include('website.layouts.macros.card-bg-image', [
                         'url' => route('photo::album::list', ['id' => $album->id]),
-                        'img' => $album->thumb,
+                        'img' => $album->thumb(),
                         'html' => sprintf('<em>%s</em><br><strong><i class="fas fa-fw fa-images" aria-hidden="true"></i> %s</strong>', date("M j, Y", $album->date_taken), $album->name)
                     ])
 

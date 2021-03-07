@@ -55,6 +55,7 @@
 @endif
 
 @include('slack.modal')
+@include('discord.modal')
 
 </body>
 

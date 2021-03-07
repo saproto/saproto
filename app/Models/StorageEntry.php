@@ -18,6 +18,7 @@ use Proto\Models\NarrowcastingItem;
 use Proto\Models\Page;
 use Proto\Models\Product;
 use Proto\Models\SoundboardSound;
+use Proto\Models\Photo;
 
 class StorageEntry extends Model
 {
@@ -41,20 +42,26 @@ class StorageEntry extends Model
             Product::where('image_id', $id)->count() == 0 &&
             Company::where('image_id', $id)->count() == 0 &&
             User::where('image_id', $id)->count() == 0 &&
+            User::where('membership_contract_id', $id)->count() == 0 &&
             DB::table('emails_files')->where('file_id', $id)->count() == 0 &&
             Committee::where('image_id', $id)->count() == 0 &&
             Event::where('image_id', $id)->count() == 0 &&
             Newsitem::where('featured_image_id', $id)->count() == 0 &&
             SoundboardSound::where('file_id', $id)->count() == 0 &&
-            HeaderImage::where('image_id', $id)->count() == 0;
+            HeaderImage::where('image_id', $id)->count() == 0 &&
+            Photo::where('file_id', $id)->count() == 0;
     }
 
-    public function createFromFile($file)
+    public function createFromFile($file, $customPath = null)
     {
 
         $this->hash = $this->generateHash();
 
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        if($customPath) {
+            $this->filename = $customPath . $this->hash;
+        }
 
         Storage::disk('local')->put($this->filename, File::get($file));
 
@@ -65,12 +72,16 @@ class StorageEntry extends Model
 
     }
 
-    public function createFromData($data, $mime, $name)
+    public function createFromData($data, $mime, $name, $customPath = null)
     {
 
         $this->hash = $this->generateHash();
 
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+
+        if($customPath) {
+            $this->filename = $customPath . $this->hash;
+        }
 
         Storage::disk('local')->put($this->filename, $data);
 
@@ -136,5 +147,13 @@ class StorageEntry extends Model
     public function getFileHash($algo = 'md5')
     {
         return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+    }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($file) {
+            Storage::disk('local')->delete($file->filename);
+        });
     }
 }

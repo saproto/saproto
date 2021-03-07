@@ -35,7 +35,11 @@
         });
 
         @if (Auth::check() && Auth::user()->member)
-        initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
+            initSlack('{{ route('api::slack::count') }}', '{{ route('api::slack::invite') }}');
+        @endif
+
+        @if (Auth::check())
+            initDiscord();
         @endif
 
         initializeCountdowns();
@@ -52,7 +56,7 @@
                 $("#slack__online").html(data);
             },
             'error': function () {
-                $("#slack__online").html('0');
+                $("#slack__online").html('...');
             }
         });
 
@@ -72,6 +76,22 @@
     }
 </script>
 
+<script type="text/javascript">
+    function initDiscord() {
+        $.ajax({
+            'dataType': "json",
+            'url': "https://discordapp.com/api/guilds/{{ config('proto.discord_server_id') }}/widget.json",
+            'success': function (data) {
+                console.log(data);
+                $("#discord__online").html(data['presence_count'])
+            },
+            error: function () {
+                $("#discord__online").html('...');
+            },
+        })
+    }
+</script>
+
 <!-- Matomo -->
 <script type="text/javascript">
     var _paq = _paq || [];
@@ -79,7 +99,7 @@
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function () {
-        var u = "//metis.proto.utwente.nl/analytics/";
+        var u = "//{{ config('proto.analytics_url') }}/";
         _paq.push(['setTrackerUrl', u + 'piwik.php']);
         _paq.push(['setSiteId', '1']);
         var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];

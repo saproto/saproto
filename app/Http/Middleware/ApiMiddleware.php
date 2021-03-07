@@ -7,7 +7,9 @@ use Closure;
 class ApiMiddleware
 {
     protected $except = [
-        'api/*'
+        'api/*',
+        'image/*',
+        'file/*'
     ];
 
     /**

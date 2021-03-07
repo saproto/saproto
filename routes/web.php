@@ -48,30 +48,30 @@ Route::group(['middleware' => ['forcedomain']], function () {
      */
     Route::group(['as' => 'login::'], function () {
         Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
-        Route::post('login', ['as' => 'post', 'uses' => 'AuthController@postLogin']);
+        Route::post('login', ['as' => 'post', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postLogin']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getReset']);
-        Route::post('password/reset', ['as' => 'resetpass::submit', 'uses' => 'AuthController@postReset']);
+        Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postReset']);
 
         Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getEmail']);
-        Route::post('password/email', ['as' => 'resetpass::send', 'uses' => 'AuthController@postEmail']);
+        Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postEmail']);
 
         Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordSyncGet']);
-        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordSyncPost']);
+        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordSyncPost']);
 
         Route::get('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangeGet']);
-        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangePost']);
+        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordChangePost']);
 
         Route::get('register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
-        Route::post('register', ['as' => 'register', 'uses' => 'AuthController@postRegister']);
-        Route::post('register/surfconext', ['as' => 'register::surfconext', 'uses' => 'AuthController@postRegisterSurfConext']);
+        Route::post('register', ['as' => 'register', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegister']);
+        Route::post('register/surfconext', ['as' => 'register::surfconext', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegisterSurfConext']);
 
         Route::get('surfconext', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
         Route::get('surfconext/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
 
         Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
-        Route::post('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
+        Route::post('username', ['as' => 'requestusername', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@requestUsername']);
     });
 
     /*
@@ -108,11 +108,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::get('studied_create/{id}', ['as' => 'toggle_studied_create', 'uses' => 'UserAdminController@toggleStudiedCreate']);
             Route::get('studied_itech/{id}', ['as' => 'toggle_studied_itech', 'uses' => 'UserAdminController@toggleStudiedITech']);
-            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:sysadmin'], 'uses' => 'UserAdminController@toggleNda']);
+            Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:board'], 'uses' => 'UserAdminController@toggleNda']);
             Route::get('unblock_omnomcom/{id}', ['as' => 'unblock_omnomcom', 'uses' => 'UserAdminController@unblockOmnomcom']);
         });
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);
+
+        Route::post('change_email', ['as' => 'changemail', 'middleware' => ['throttle:3,1'], 'uses' => 'UserDashboardController@updateMail']);
+
 
         Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
         Route::post('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
@@ -185,19 +188,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    Route::post('memberform/print', ['as' => 'memberform::print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printForm']);
-    Route::get('memberform/{id}', ['as' => 'memberform::download', 'uses' => 'UserAdminController@showForm']);
-
-    /**
-     * Routes related to files.
-     */
-    Route::group(['prefix' => 'file', 'as' => 'file::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@get']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@get']);
-    });
-    Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
-        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
-        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
+    Route::group(['prefix' => 'memberform', 'as' => 'memberform::'], function() {
+        Route::get('sign', ['as' => 'sign', 'middleware' => ['auth'], 'uses' => 'UserDashboardController@getMemberForm']);
+        Route::post('sign', ['as' => 'sign', 'middleware' => ['auth'], 'uses' => 'UserDashboardController@postMemberForm']);
+        Route::get('{id}', ['as' => 'download', 'uses' => 'UserAdminController@showMemberForm']);
+        Route::post('print/{id}', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@printMemberForm']);
+        Route::post('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@destroyMemberForm']);
     });
 
     /*
@@ -229,6 +225,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
 
+    });
+
+    /*
+     * Routes related to societies
+     */
+
+    Route::group(['prefix' => 'society', 'as' => 'society::'], function () {
+        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
     });
 
     /*
@@ -309,8 +314,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@destroy']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
-        Route::post('{id}/order', ['as' => 'order', 'middleware' => ['member'], 'uses' => 'DinnerformController@addOrder']);
-        Route::get('{id}/orderlist', ['as'=> 'orderlist', 'middleware' => ['permission:board'], 'uses'=>'DinnerformController@returnOrders']);
     });
 
     /*
@@ -511,6 +514,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Routes related to the Good Idea Board.
+     */
+    Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
+        Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
+        Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
+        Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
+    });
+
+    /*
      * Routes related to the OmNomCom.
      */
     Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
@@ -611,6 +625,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+
     /*
      * Routes related to webhooks.
      */
@@ -650,7 +665,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
-     * Routes related to Flickr photos.
+     * Routes related to photos.
      */
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
@@ -662,10 +677,23 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/like/{id}', ['as' => 'likes', 'middleware' => ['auth'], 'uses' => 'PhotoController@likePhoto']);
         Route::get('/dislike/{id}', ['as' => 'dislikes', 'middleware' => ['auth'], 'uses' => 'PhotoController@dislikePhoto']);
         Route::get('/photo/{id}', ['as' => 'view', 'uses' => 'PhotoController@photo']);
-    });
 
-    Route::group(['prefix' => 'flickr', 'as' => 'flickr::'], function () {
-        Route::get('oauth', ['as' => 'oauth', 'middleware' => ['auth', 'permission:board'], 'uses' => 'FlickrController@oauthTool']);
+
+        /*
+         * Routes related to the photo admin
+         */
+        Route::group(['prefix' => 'admin', 'middleware' => ['permission:protography'], 'as' => 'admin::'], function () {
+            Route::get('index', ['as' => 'index', 'uses' => 'PhotoAdminController@index']);
+            Route::post('index', ['as' => 'index', 'uses' => 'PhotoAdminController@search']);
+            Route::post('add', ['as' => 'add', 'uses' => 'PhotoAdminController@create']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'PhotoAdminController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@update']);
+            Route::post('edit/{id}/action', ['as' => 'action', 'uses' => 'PhotoAdminController@action']);
+            Route::post('edit/{id}/upload', ['as' => 'upload', 'uses' => 'PhotoAdminController@upload']);
+            Route::get('edit/{id}/delete', ['as' => 'delete', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@delete']);
+            Route::get('publish/{id}', ['as' => 'publish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@publish']);
+            Route::get('unpublish/{id}', ['as' => 'unpublish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@unpublish']);
+        });
     });
 
     /*
@@ -863,8 +891,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
 
     });
-
-    Route::get('phototest/{id}', ['uses' => 'FlickrController@getPhoto']);
 
     Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
 

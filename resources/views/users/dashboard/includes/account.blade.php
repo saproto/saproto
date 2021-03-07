@@ -1,3 +1,58 @@
+<form class="form-horizontal" method="post" action="{{ route("user::changemail") }}">
+
+    {!! csrf_field() !!}
+
+    <div class="card mb-3">
+
+        <div class="card-header bg-dark text-white">
+            Your e-mail address
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                Here you can change your e-mail address. You'll receive an e-mail on both the old and new address for
+                confirmation. You need your password to change your e-mail address.
+            </p>
+
+            <table class="table table-borderless table-sm mb-0">
+
+                <tbody>
+
+                <tr>
+                    <th>E-mail</th>
+                    <td>
+                        <input type="email" class="form-control form-control-sm" id="email" name="email"
+                               value="{{ $user->email }}" required>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Current password</th>
+                    <td>
+                        <input type="password" class="form-control form-control-sm" id="password" name="password"
+                               required>
+                    </td>
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="card-footer">
+
+            <button type="submit" class="btn btn-outline-info btn-block">
+                Change your e-mail
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
 <form class="form-horizontal" method="post" action="{{ route("user::dashboard") }}">
 
     {!! csrf_field() !!}
@@ -5,7 +60,7 @@
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Your account
+            Your personal details
         </div>
 
         <div class="card-body">
@@ -17,14 +72,6 @@
                 <tr>
                     <th>Name</th>
                     <td>{{ $user->name }} ({{{ $user->calling_name }}})</td>
-                </tr>
-
-                <tr>
-                    <th>E-mail</th>
-                    <td>
-                        <input type="email" class="form-control form-control-sm" id="email" name="email"
-                               value="{{ $user->email }}" required>
-                    </td>
                 </tr>
 
                 @if($user->did_study_create || $user->did_study_itech)
@@ -269,6 +316,19 @@
                             <small class="form-text text-muted">
                                 Achievements you obtain may reveal some personal details.<br>
                                 Only members can see your achievements.
+                            </small>
+
+                            <br>
+
+                            <input name="profile_in_almanac" type="checkbox" class="form-check-input"
+                                   id="dashboard__profile_in_almanac"
+                                    {{ ($user->profile_in_almanac == 1 ? 'checked' : '') }}>
+                            <label class="form-check-label" for="dashboard__profile_in_almanac">
+                                Use my profile picture in the Lustrum Almanac.
+                            </label>
+                            <small class="form-text text-muted">
+                                With this you allow for the use of your profile picture in the Lustrum Alamanac<br>
+                                if one will be published during your Proto membership.
                             </small>
 
                         </td>
