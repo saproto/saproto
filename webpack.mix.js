@@ -22,20 +22,17 @@ mix.options({
     }
 })
 
-// Concatenate component SCSS from views folders
-mix.before(() => {
-    mix.styles('resources/views/**/*.scss', paths.styles.components)
-});
-
 //Compile all theme SCSS to public folder
 glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
     let src = paths.styles.src+fileName
     let dest = paths.public+'application-'+fileName.replace('scss', 'css')
-    mix.sass(src, dest);
+    mix.sass(src, dest)
 })
 
 // Compile all javascript
-mix
-    .js(paths.scripts.src, paths.public)
+mix .js(paths.scripts.src, paths.public)
     .extract()
-    .sourceMaps(false)
+
+// Enable sourcemap and versioning
+mix .sourceMaps(false)
+    .version()

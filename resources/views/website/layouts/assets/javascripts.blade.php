@@ -1,6 +1,6 @@
-<script type="text/javascript" src="{{ asset('assets/manifest.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/vendor.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/application.js') }}"></script>
+<script type="text/javascript" src="{{ mix('/assets/manifest.js') }}"></script>
+<script type="text/javascript" src="{{ mix('/assets/vendor.js') }}"></script>
+<script type="text/javascript" src="{{ mix('/assets/application.js') }}"></script>
 
 <!-- Update locale -->
 <script type="text/javascript">
