@@ -58,7 +58,7 @@
                                 <tr>
                                     <td>Since</td>
                                     <td>Type</td>
-                                    <td></td>
+                                    <td class="text-center">Form</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,10 +76,15 @@
                                         Regular
                                     @endif
                                 </td>
-                                <td>
-                                    <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
-                                        <i class="fas fa-download"></i>
-                                    </a>
+                                <td class="text-center">
+                                    @if($user->member->membershipForm)
+                                        <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    @else
+                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive.
+"></i>
+                                    @endif
                                 </td>
                             </tbody>
                         </table>
