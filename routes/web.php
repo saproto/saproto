@@ -717,6 +717,17 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /*
+     * Route related to front-end injections
+     */
+    Route::group(['prefix' => 'inject', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'inject::'], function () {
+        Route::get('', ['as' => 'admin', 'uses' => 'FrontEndInjectsController@index']);
+        Route::post('add', ['as' => 'add', 'uses' => 'FrontEndInjectsController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'FrontEndInjectsController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'FrontEndInjectsController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FrontEndInjectsController@destroy']);
+    });
+
+    /*
      * Routes related to the password manager.
      */
     Route::group(['prefix' => 'passwordstore', 'middleware' => ['auth'], 'as' => 'passwordstore::'], function () {

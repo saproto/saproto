@@ -9,6 +9,8 @@ services:
   mariadb:
     image: mariadb:latest
     container_name: saproto-mariadb
+    ports:
+      - 127.0.0.1:3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=thisisareallystrongpassword123
       - MYSQL_DATABASE=${DB_DATABASE}
@@ -16,6 +18,12 @@ services:
       - MYSQL_PASSWORD=${DB_PASSWORD}
     command:
       'mysqld --innodb-flush-method=fsync'
+
+  queue:
+    build: ./docker/build/php-queue
+    container_name: saproto-queue
+    volumes:
+      - .:/var/www
 
   nginx:
     build: ./docker/build/nginx

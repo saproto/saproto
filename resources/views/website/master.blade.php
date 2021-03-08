@@ -35,6 +35,10 @@
               content="@yield('og-image',asset('images/logo/og-image.png'))"/>
     @show
 
+    @foreach(\Proto\Models\FrontEndInjects::where('enabled', '=', true)->get() as $inject)
+        {!! html_entity_decode($inject->content) !!}
+    @endforeach
+
 </head>
 
 <body class="template-{{ $viewName }}"

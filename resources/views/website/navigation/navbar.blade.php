@@ -223,6 +223,7 @@
                             <li role="separator" class="dropdown-divider"></li>
 
                             <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                            <a class="dropdown-item" href="{{ route("inject::admin") }}">Front-end Injection</a>
 
                         </ul>
                     </li>
