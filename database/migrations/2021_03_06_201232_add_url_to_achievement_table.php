@@ -15,7 +15,7 @@ class AddUrlToAchievementTable extends Migration
     {
         Schema::table('achievement', function(Blueprint $table) {
             $table->boolean('has_page')->after('tier');
-            $table->string('page_name')->nullable()->after('has_page');
+            $table->string('page_name')->nullable()->unique()->after('has_page');
             $table->text('page_content')->nullable()->after('page_name');
         });
     }

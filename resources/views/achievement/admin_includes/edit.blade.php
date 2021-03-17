@@ -54,16 +54,14 @@
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="is_archived" value="0">
                 <input type="checkbox" id="is_archived" name="is_archived"
-                       value="1" {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
+                       {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
                 <label for="is_archived">Archive this achievement</label>
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="has_page" value="0">
                 <input type="checkbox" id="has_page" name="has_page"
-                       value="1" {{ ($achievement->has_page ? 'checked' : '') }}>
+                       {{ ($achievement->has_page ? 'checked' : '') }}>
                 <label for="has_url">Can be achieved by visiting url</label>
             </div>
 
