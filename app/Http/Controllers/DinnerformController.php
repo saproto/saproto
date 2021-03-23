@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Proto\Models\DinnerOrderLine;
-use Proto\Models\Account;
 use Proto\Models\Dinnerform;
-
 
 use Session;
 use Redirect;
@@ -63,13 +61,10 @@ class DinnerformController extends Controller
      */
     public function show($id)
     {
-        $dinnerform = Dinnerform::fromPublicId($id);
+        $dinnerform = Dinnerform::findOrFail($id);
 
         if ($dinnerform->isCurrent()) {
             return view('dinnerform.show', ['dinnerform' => $dinnerform]);
-        } elseif ($dinnerform->isBoardMember(Auth::user())) {
-            //SHOW ALL ORDERS OF A DINNERFORM
-            $dinnerform->returnAllOrders();
         }
         else {
             Session::flash("flash_message", "Sorry, you can't order anymore, because food is already on its way");
@@ -158,8 +153,7 @@ class DinnerformController extends Controller
         $dinnerOrderLine->user_id = Auth::user()->id;
         $dinnerOrderLine->dinnerform_id = $request->id;
         $dinnerOrderLine->dish = $request->dish;
-        $dinnerOrderLine->price = $request->price;
-
+        $dinnerOrderLine->price = str_replace(',', '.', $request->price);
         if($dinnerOrderLine->dish == null or $dinnerOrderLine->price == null)
         {
             Session::flash("flash_message", "Please fill in both the dish(es) you want to order and the price of your order.");
@@ -175,7 +169,21 @@ class DinnerformController extends Controller
         $dinnerform = Dinnerform::findorfail($id);
         $orders = $dinnerform->returnAllOrders();
 
-        return view ('dinnerform.admin-inlcudes.orderlist', ['Orders' => $orders]);
+        return view ('dinnerform.admin_includes.dinnerform-orderlist', ['orders' => $orders]);
 
+    }
+
+    /**
+     * Close the specified resource by changing the end time to the current time.
+     *
+     * @param $id
+     * @return \Illuminate\Http\Response
+     */
+    public function close($id)
+    {
+        $dinnerform = Dinnerform::findOrFail($id);
+        $dinnerform->end = Carbon::now();
+        $dinnerform->save();
+        return Redirect::route('dinnerform::add');
     }
 }

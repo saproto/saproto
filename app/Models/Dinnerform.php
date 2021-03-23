@@ -55,7 +55,7 @@ class Dinnerform extends Model
 
     public function returnAllOrders(){
         // SEE Event.getAllUsers -> Ticket.getUsers -> TicketPurchase
-        $orders = DinnerOrderLine::where('dinnerform_id', $this->id)->get()->pluck('user_id', 'price')->toArray();
+        $orders = DinnerOrderLine::where('dinnerform_id', $this->id)->get();
         //tweede query die user ids koppelt aan namen
 
         return $orders;

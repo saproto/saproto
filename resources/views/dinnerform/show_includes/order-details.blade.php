@@ -36,7 +36,6 @@
                                    placeholder="(€X,XX)"
                                    value="{{ $order->price or '' }}"
                                    required>
-
                         </div>
                     </div>
                 </div>

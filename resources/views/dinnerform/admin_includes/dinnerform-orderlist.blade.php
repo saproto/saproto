@@ -1,3 +1,10 @@
+@extends('website.layouts.redesign.generic')
+
+@section('page-title')
+    Dinnerform Orderlist
+@endsection
+
+@section('container')
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white mb-1">
@@ -9,7 +16,7 @@
         <thead>
 
         <tr class="bg-dark text-white">
-
+            <td>Member Name</td>
             <td>Member ID</td>
             <td>Price</td>
             <td></td>
@@ -21,13 +28,15 @@
         @if(count($orders) > 0)
             @foreach($orders as $order)
                 <tr>
-                    <td class="align-middle">{{ $order->id }} <span class="text-muted">(#{{ $order->id }})</span></td>
-                    <td class="align-middle">{{$order->price}}<span class="text-muted">(#{{$order->price}}</span></td>
+                    #order description toevoegen
+                    <td class="align-middle">{{$order->user->name}}</td>
+                    <td class="align-middle">{{$order->user_id}} <span class="text-muted"></span></td>
+                    <td class="align-middle">€{{$order->price}}<span class="text-muted"></span></td>
                 </tr>
             @endforeach
         @else
             <tr>
-                <td>There are no dinnerforms available.</td>
+                <td>There are no orders available.</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -40,3 +49,4 @@
 
     </table>
 </div>
+@endsection

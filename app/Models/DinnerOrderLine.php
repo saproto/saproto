@@ -13,6 +13,10 @@ class DinnerOrderLine extends Model
      */
     protected $table = 'dinnerOrders';
 
+    public function user()
+    {
+        return $this->belongsTo('Proto\Models\User','user_id');
+    }
     //order ophalen -> find or fail (parent class)
 
 }
