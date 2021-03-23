@@ -131,7 +131,7 @@ class AchievementController extends Controller
     {
         $achievement = Achievement::find($achievement_id);
         $user = User::find($request->get('user-id'));
-        if (!$user || !$achievement) abort(500, 'User or achievement not found.');
+        if (!$user || !$achievement) abort(404, 'User or achievement not found.');
         $achieved = $user->achieved();
         $hasAchievement = false;
         foreach ($achieved as $entry) {
@@ -155,7 +155,7 @@ class AchievementController extends Controller
     {
         $achievement = Achievement::find($achievement_id);
         $user = User::find($user_id);
-        if (!$user || !$achievement) abort(500, 'User or achievement not found.');
+        if (!$user || !$achievement) abort(404, 'User or achievement not found.');
         $achieved = AchievementOwnership::all();
         foreach ($achieved as $entry) {
             if ($entry->achievement_id == $achievement_id && $entry->user_id == $user_id) {
