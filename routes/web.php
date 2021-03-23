@@ -807,6 +807,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
         Route::get('gallery', ['as' => 'gallery', 'uses' => 'AchievementController@gallery']);
     });
+    Route::get('achieve/{achievement}', ['as' => 'achieve', 'middleware' => ['auth'], 'uses' => 'AchievementController@achieve']);
 
     /*
      * Routes related to the welcome message system.
