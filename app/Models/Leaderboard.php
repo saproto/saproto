@@ -16,6 +16,6 @@ class Leaderboard extends Model
     }
 
     public function entries() {
-        return $this->hasMany('Proto\Models\Committee');
+        return $this->hasMany('Proto\Models\LeaderboardEntry');
     }
 }

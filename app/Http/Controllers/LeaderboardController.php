@@ -35,7 +35,7 @@ class LeaderboardController extends Controller
      */
     public function adminIndex()
     {
-        return view('leaderboards.adminlist', ['leaderboards' => Leaderboard::get()]);
+        return view('leaderboards.adminlist', ['leaderboards' => Leaderboard::all()]);
     }
 
     /**
@@ -80,7 +80,8 @@ class LeaderboardController extends Controller
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
-        return view('leaderboards.edit', ['leaderboard' => $leaderboard]);
+        $entries = $leaderboard->entries;
+        return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
     public function update(Request $request, $id)

@@ -27,6 +27,7 @@
 
                         <td>Leaderboard</td>
                         <td>Committee</td>
+                        <td>Total entries</td>
                         <td></td>
 
                     </tr>
@@ -39,6 +40,7 @@
 
                             <td>{{ $leaderboard->name }}</td>
                             <td>{{ $leaderboard->committee->name}}</td>
+                            <td>{{ count($leaderboard->entries)}}</td>
                             <td>
                                 <a href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-edit mr-2 fa-fw"></i>
