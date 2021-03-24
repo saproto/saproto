@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Committee Leaderboards
+    Leaderboards
 @endsection
 
 @section('container')
@@ -38,7 +38,7 @@
 
                         <tr>
 
-                            <td>{{ $leaderboard->name }}</td>
+                            <td><i class="{{$leaderboard->icon}}"></i> {{ $leaderboard->name }}</td>
                             <td>{{ $leaderboard->committee->name}}</td>
                             <td>{{ count($leaderboard->entries)}}</td>
                             <td>

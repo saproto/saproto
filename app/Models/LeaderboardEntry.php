@@ -14,4 +14,8 @@ class LeaderboardEntry extends Model
     public function leaderboard() {
         return $this->belongsTo('Proto\Models\Leaderboard', 'leaderboard_id');
     }
+
+    public function member() {
+        return $this->hasOne('Proto\Models\Member', 'member_id');
+    }
 }
