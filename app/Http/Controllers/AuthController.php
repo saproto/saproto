@@ -551,10 +551,7 @@ class AuthController extends Controller
             }
         }
 
-        /*
-         * Commented out since name attribute misses surname prefixes
-         * $localUser->name = $remoteData['name'];
-         */
+        $localUser->name = $remoteData['name'];
         $localUser->save();
 
         return AuthController::continueLogin($localUser);
