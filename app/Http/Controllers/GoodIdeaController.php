@@ -22,8 +22,7 @@ class GoodIdeaController extends Controller
      */
     public function index(int $page = 1) {
         $goodIdeas = GoodIdea::orderBy('created_at', 'desc');
-        $leastVoted = null;
-        return view('goodideaboard.index', ['data' => $goodIdeas->paginate(20), 'leastVoted' => $leastVoted]);
+        return view('goodideaboard.index', ['data' => $goodIdeas->paginate(20)]);
     }
 
     /**
@@ -142,9 +141,9 @@ class GoodIdeaController extends Controller
      */
     public function vote(Request $request) {
         $idea = GoodIdea::findOrFail($request->input('id'));
-        $value = $request->input('voteValue');
         $vote = GoodIdeaVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
-        $vote->vote = round($value);
+        $value = $request->input('voteValue');
+        $vote->vote = in_array($value, [-1, 0, 1]) ? $value : 0;
         $vote->save();
         return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote(Auth::user())]);
     }
