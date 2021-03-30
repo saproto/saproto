@@ -81,6 +81,51 @@
                         {{ ($leaderboard == null ? "Add entries" : "Edit entries: " . $leaderboard->name)}}
                     </div>
 
+                    <div class="card-body">
+                        <table class="table table-sm table-hover">
+
+                            <tr class="bg-dark text-white">
+                                <td>Member ID</td>
+                                <td>Username</td>
+                                <td>Points</td>
+                                <td></td>
+                            </tr>
+
+                            @foreach($leaderboard->entries as $leaderboard_entry)
+
+                                <tr>
+                                    <td>{{ $leaderboard_entry->member_id}}</td>
+                                    <td>Username</td>
+                                    <td>{{ $leaderboard_entry->points}}</td>
+                                    <td>
+                                        <a href="{{ route('leaderboards_entries::delete', ['id' => $leaderboard_entry->id]) }}">
+                                            <i class="fas fa-trash text-danger fa-fw"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            @endforeach
+
+                        </table>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="name">Member</label>
+                                    <input type="text" class="form-control" id="entry-name" name="entry-name"
+                                           placeholder="" value="" required>
+                                </div>
+                                <div class="col-6">
+                                    <label for="name">Points</label>
+                                    <input type="text" class="form-control" id="entry-points" name="entry-points"
+                                           placeholder="69" value="" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <a href="{{ route('leaderboards_entries::add', ['id' => $leaderboard_entry->id]) }}" class="btn btn-default"><i class="fas fa-plus mr-2 fa-fw"></i>Add entry</a>
+                    </div>
+
                 </div>
 
                     <div class="card-footer">
