@@ -39,7 +39,7 @@
                             <p class="card-text mt-3">This company is currently looking to fill these positions:</p>
                             <ul class="list-group">
                                 @foreach($company->joboffers as $joboffer)
-                                    <a href="{{ route("joboffers::show", ['id' => $joboffer->id]) }}" class="list-group-item leftborder-info leftborder">
+                                    <a href="@if($joboffer->redirect_url) {{$joboffer->redirect_url}} @else {{ route("joboffers::show", ['id' => $joboffer->id]) }} @endif" class="list-group-item leftborder-info leftborder">
                                         {{ $joboffer->title }}
                                     </a>
                                 @endforeach

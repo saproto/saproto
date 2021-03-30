@@ -40,6 +40,7 @@
                             <td>{{ $joboffer->company->name }}</td>
                             <td>{{ $joboffer->title}}</td>
 
+
                             <td>
                                 <a href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}">
                                     <i class="fas fa-edit mr-2 fa-fw"></i>

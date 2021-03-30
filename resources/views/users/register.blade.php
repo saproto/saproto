@@ -1,5 +1,9 @@
 @extends('auth.template')
 
+@section('head')
+    {!! htmlScriptTagJsApi() !!}
+@endsection
+
 @section('page-title')
     Register account
 @endsection
@@ -76,7 +80,7 @@
 
         <hr>
 
-        {!! Recaptcha::render() !!}
+        {!! ReCaptcha::htmlFormSnippet() !!}
 
         <hr>
 

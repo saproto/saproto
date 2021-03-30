@@ -58,7 +58,7 @@
                                 <tr>
                                     <td>Since</td>
                                     <td>Type</td>
-                                    <td></td>
+                                    <td class="text-center">Form</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,10 +76,15 @@
                                         Regular
                                     @endif
                                 </td>
-                                <td>
-                                    <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
-                                        <i class="fas fa-download"></i>
-                                    </a>
+                                <td class="text-center">
+                                    @if($user->member->membershipForm)
+                                        <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    @else
+                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive.
+"></i>
+                                    @endif
                                 </td>
                             </tbody>
                         </table>
@@ -116,7 +121,7 @@
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                                 <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -161,7 +166,7 @@
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" class="text-decoration-none">
+                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                             <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
                                         </a>
                                     </td>
