@@ -22,9 +22,9 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::create($request->all());
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
-        $member = Member::findOrFail($request->input('member_id'));
+        $user = User::findOrFail($request->input('user_id'));
         $entry->leaderboard()->associate($leaderboard);
-        $entry->member()->associate($member);
+        $entry->user()->associate($user);
         $entry->save();
         Session::flash("flash_message", "Added new entry successfully.");
         return Redirect::back();
@@ -39,11 +39,11 @@ class LeaderboardEntryController extends Controller
     public function update(Request $request)
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
-        $entry->member_id = $request->member_id;
+        $entry->user_id = $request->user_id;
         $entry->points = $request->points;
-        $member = Member::findOrFail($request->input('member_id'));
-        if($member != $entry->member) {
-            $entry->member()->associate($member);
+        $user = User::findOrFail($request->input('user_id'));
+        if($user != $entry->user()) {
+            $entry->user()->associate($user);
         }
         $entry->save();
         Session::flash("flash_message", "Updated entry successfully.");

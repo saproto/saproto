@@ -16,7 +16,7 @@ class CreateLeaderboardsEntriesTable extends Migration
         Schema::create('leaderboards_entries', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('leaderboard_id')->nullable(true)->default(null);
-            $table->integer('member_id')->nullable(true)->default(null);
+            $table->integer('user_id')->nullable(true)->default(null);
             $table->integer('points')->nullable(true)->default(null);
             $table->timestamps();
         });
