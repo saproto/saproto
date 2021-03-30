@@ -6,15 +6,17 @@
 
 @section('container')
 
+    <div class="row justify-content-center" style="margin-top: 90px;">
+
+        <div class="col-md-5 mb-3">
+
     <form method="post"
           action="{{ ($leaderboard == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $leaderboard->id])) }}"
           enctype="multipart/form-data">
 
         {!! csrf_field() !!}
 
-        <div class="row justify-content-center" style="margin-top: 90px;">
 
-            <div class="col-md-5">
 
                 <div class="card md-3">
 
@@ -71,9 +73,23 @@
 
                 </div>
 
-            </div>
 
-            <div class="col-md-5">
+    </form>
+
+        </div>
+
+
+
+            @if ($leaderboard)
+
+            <div class="col-md-5 mb-3">
+
+                <form method="post"
+                      action="{{ route("leaderboards_entries::add")}}"
+                      enctype="multipart/form-data">
+
+
+                    {!! csrf_field() !!}
 
                 <div class="card md-3">
 
@@ -82,37 +98,40 @@
                     </div>
 
                     <div class="card-body">
+                        @if($entries != null)
+                            @if(count($entries) > 0)
                         <table class="table table-sm table-hover">
-
                             <tr class="bg-dark text-white">
-                                <td>Member ID</td>
-                                <td>Username</td>
+                                <td>User ID</td>
+                                <td><i class="fas fa-user"></i> Username</td>
                                 <td>Points</td>
                                 <td></td>
                             </tr>
+                            @else
+                               <p>No entries yet, add entries here.</p>
+                            @endif
 
-                            @foreach($leaderboard->entries as $leaderboard_entry)
+                                @foreach($leaderboard->entries as $leaderboard_entry)
 
-                                <tr>
-                                    <td>{{ $leaderboard_entry->member_id}}</td>
-                                    <td>Username</td>
-                                    <td>{{ $leaderboard_entry->points}}</td>
-                                    <td>
-                                        <a href="{{ route('leaderboards_entries::delete', ['id' => $leaderboard_entry->id]) }}">
-                                            <i class="fas fa-trash text-danger fa-fw"></i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ $leaderboard_entry->user_id}}</td>
+                                        <td>Username</td>
+                                        <td>{{ $leaderboard_entry->points}}</td>
+                                        <td>
+                                            <a href="{{ route('leaderboards_entries::delete', ['id' => $leaderboard_entry->id]) }}">
+                                                <i class="fas fa-trash text-danger fa-fw"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                            @endforeach
+                                @endforeach
 
                         </table>
+
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="name">Member</label>
-                                    <input type="text" class="form-control" id="entry-name" name="entry-name"
-                                           placeholder="" value="" required>
+                                    <select class="form-control user-search" name="user_id" required></select>
                                 </div>
                                 <div class="col-6">
                                     <label for="name">Points</label>
@@ -123,26 +142,27 @@
 
                         </div>
 
-                        <a href="{{ route('leaderboards_entries::add', ['id' => $leaderboard_entry->id]) }}" class="btn btn-default"><i class="fas fa-plus mr-2 fa-fw"></i>Add entry</a>
                     </div>
 
-                </div>
+                    @endif
 
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-right">
-                            Submit
-                        </button>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success float-right">
+                                Submit
+                            </button>
+                            <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
+                        </div>
 
-                        <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
                     </div>
+                @endif
 
                 </div>
 
             </div>
 
         </div>
-
     </form>
+    </div>
 
 @section('javascript')
 
