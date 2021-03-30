@@ -57,7 +57,7 @@ class LeaderboardController extends Controller
     public function store(Request $request)
     {
         $leaderboard = new Leaderboard();
-        $committee = Committee::find($request->input('committee'));
+        $committee = Committee::findOrFail($request->input('committee'));
         $leaderboard->committee()->associate($committee);
         $leaderboard->committee_id = $committee->id;
         $leaderboard->name = $request->name;
@@ -93,7 +93,7 @@ class LeaderboardController extends Controller
         $leaderboard->points_name = $request->points_name;
         $leaderboard->icon = $request->icon;
 
-        $committee = Committee::find($request->input('committee'));
+        $committee = Committee::findOrFail($request->input('committee'));
         if($committee != $leaderboard->committee) {
             $leaderboard->committee()->associate($committee);
         }
