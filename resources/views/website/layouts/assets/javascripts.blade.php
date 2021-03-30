@@ -353,6 +353,31 @@
 </script>
 
 <script type="text/javascript">
+    $(function() {
+        if (sameDay(new Date(), new Date('April, 1, 2021'))) {
+            $('img').each(function() {
+                if ($(this).hasClass('rounded-circle'))
+                    $(this).attr('src', 'https://pbs.twimg.com/profile_images/1092451626781163523/0YzJMi-8.jpg');
+                else if ($(this).attr('src').includes('images/logo/inverse.png'))
+                    $(this).attr('src',  '/images/logo/broto-inverse.png');
+                else if ($(this).attr('src').includes('images/logo/regular.png'))
+                    $(this).attr('src', '/images/logo/broto-regular.png');
+            });
+
+            $("body").children().each(function () {
+                $(this).html($(this).html().replace(/(Proto)(.?)\b/g, 'Broto$2'));
+            });
+        }
+    });
+
+    function sameDay(d1, d2) {
+        return  d1.getFullYear() === d2.getFullYear() &&
+                d1.getMonth() === d2.getMonth() &&
+                d1.getDate() === d2.getDate();
+    }
+</script>
+
+<script type="text/javascript">
     function pad(n, width, z) {
         z = z || '0';
         n = n + '';
