@@ -353,7 +353,6 @@
 </script>
 
 <script type="text/javascript">
-    const regex = new RegExp();
     $(function() {
         if (sameDay(new Date(), new Date('April, 1, 2021'))) {
             $('img').each(function() {
