@@ -355,18 +355,17 @@
 <script type="text/javascript">
     $(function() {
         if (sameDay(new Date(), new Date('April, 1, 2021'))) {
-            for (let img of document.getElementsByTagName('img')) {
-                if (img.src.includes('profile_images') || img.src.includes('default-avatar')) {
-                    img.src = 'https://pbs.twimg.com/profile_images/1092451626781163523/0YzJMi-8.jpg';
-                } else if (img.src.includes('images/logo/inverse.png')) {
-                    img.src = '/images/logo/broto-inverse.png'
-                } else if (img.src.includes('images/logo/regular.png')) {
-                    img.src = '/images/logo/broto-regular.png'
-                }
-            }
+            $('img').each(function() {
+                if ($(this).hasClass('rounded-circle'))
+                    $(this).attr('src', 'https://pbs.twimg.com/profile_images/1092451626781163523/0YzJMi-8.jpg');
+                else if ($(this).attr('src').includes('images/logo/inverse.png'))
+                    $(this).attr('src',  '/images/logo/broto-inverse.png');
+                else if ($(this).attr('src').includes('images/logo/regular.png'))
+                    $(this).attr('src', '/images/logo/broto-regular.png');
+            });
 
             $("body").children().each(function () {
-                $(this).html($(this).html().replace('Proto', ' Broto').replace('Proto.', ' Broto.'));
+                $(this).html($(this).html().replace(/([Pp]roto)(.?)\b/g, 'Broto$2'));
             });
         }
     });
