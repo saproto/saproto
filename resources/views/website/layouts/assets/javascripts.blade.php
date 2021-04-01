@@ -365,7 +365,7 @@
             });
 
             $("body").children().each(function () {
-                $(this).html($(this).html().replace(/([Pp]roto)(.?)\b/g, 'Broto$2'));
+                $(this).html($(this).html().replace(/(Proto)(.?)\b/g, 'Broto$2'));
             });
         }
     });
