@@ -1,6 +1,5 @@
+{{-- Blade variable can be accessed through this config object. --}}
 <script type="text/javascript">
-    // Any information you need to get through blade syntax
-    // can be communicated to JS using this config object.
     const config = {
         routes: {
             api_search_user: "{{ route('api::search::user') }}",
@@ -17,3 +16,14 @@
 <script type="text/javascript" src="{{ mix('/assets/manifest.js') }}"></script>
 <script type="text/javascript" src="{{ mix('/assets/vendor.js') }}"></script>
 <script type="text/javascript" src="{{ mix('/assets/application.js') }}"></script>
+
+@if(Auth::check() && Auth::user()->theme !== null)
+
+    <!-- Theme JavaScript -->
+    <script type="text/javascript">
+        try {
+            {{ config('proto.themes')[Auth::user()->theme] }}()
+        } catch { /* Intentionally left blank */ }
+    </script>
+
+@endif
