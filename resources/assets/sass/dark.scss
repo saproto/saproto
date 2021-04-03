@@ -72,6 +72,12 @@ $popover-header-bg: $grey-dark;
 //import bootstrap after setting variables
 @import '~bootstrap';
 
+// Vendors (S)CSS
+@import 'partials/vendors';
+
+// concatenated SCSS from views
+@import 'partials/components';
+
 .text-dark {
   color: #f1f1f1 !important;
 }
@@ -92,35 +98,8 @@ hr {
 
 //select2
 .select2-dropdown {
-  background-color: $grey-dark !important;
-  border: 1px solid rgba(0,0,0,.125) !important;
-}
-.select2-container {
-  width: 100% !important;
-}
-
-.select2-selection__rendered {
-  width: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.select2-search {
-  width: 100%;
-}
-
-.select2-search__field {
-  width: 100% !important;
-  height: calc(1.5em + .75rem + 2px) !important;
-  padding: .375rem .75rem !important;
-  border-radius: .25rem !important;
-  border: solid #aaa 1px !important;
-}
-
-.select2-selection__choice__remove {
-  margin-left: 10px;
-  margin-right: 2px;
-  color: $warning;
+  background-color: $grey-dark;
+  border: 1px solid rgba(0,0,0,.125);
 }
 
 //buttons
@@ -195,9 +174,3 @@ html {
 ::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
 ::-webkit-scrollbar-corner { background-color: $grey-dark; }
 ::-webkit-resizer { background-color: #666; }
-
-// Vendors (S)CSS
-@import 'partials/vendors';
-
-// concatenated SCSS from views
-@import 'partials/components';

@@ -6,7 +6,7 @@ const paths = {
         components: 'resources/assets/sass/partials/_components.scss'
     },
     scripts: {
-        src: 'resources/assets/js/application.js',
+        src: 'resources/assets/js/',
     },
     public: 'public/assets/'
 }
@@ -30,7 +30,7 @@ glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
 })
 
 // Compile all javascript
-mix .js(paths.scripts.src, paths.public)
+mix .js(paths.scripts.src+'*.js', paths.public)
     .extract()
 
 // Enable sourcemap and versioning
