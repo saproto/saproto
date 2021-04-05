@@ -21,7 +21,7 @@
                          class="table-responsive collapse {{ $loop->index == 0 ? 'show' : '' }}"
                          data-parent="#leaderboard-accordion">
                         @if($leaderboard->description)
-                            <p class="px-3 pt-3">{{ $leaderboard->description }}</p>
+                            <div class="px-3 pt-3">{!! Markdown::convertToHtml($leaderboard->description) !!}</div>
                         @endif
                         @if(count($leaderboard->entries) > 0)
                             <table class="table table-sm">
