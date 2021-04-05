@@ -6,17 +6,15 @@
 
 @section('container')
 
-    <div class="row justify-content-center" style="margin-top: 90px;">
+    <div class="row justify-content-center">
 
         <div class="col-md-5 mb-3">
 
-    <form method="post"
-          action="{{ ($leaderboard == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $leaderboard->id])) }}"
-          enctype="multipart/form-data">
+            <form method="post"
+                  action="{{ ($leaderboard == null ? route("leaderboards::add") : route("leaderboards::edit", ['id' => $leaderboard->id])) }}"
+                  enctype="multipart/form-data">
 
-        {!! csrf_field() !!}
-
-
+                {!! csrf_field() !!}
 
                 <div class="card md-3">
 
@@ -27,8 +25,8 @@
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="organisation">Committee: {{$leaderboard->committee->name or ''}}</label>
-                            <select class="form-control committee-search" id="organisation" name="committee">
+                            <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
+                            <select class="form-control committee-search" id="organisation" name="committee" required>
                                 <option value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}"></option>
                             </select>
                         </div>
@@ -37,19 +35,20 @@
                         <div class="form-group">
                             <label for="name">Leaderboard name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Proto drink beer scores" value="{{ $leaderboard->name or '' }}" required>
+                                   placeholder="Proto drink beer scores" value="{{ $leaderboard->name ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="name">Points name:</label>
                             <input type="text" class="form-control" id="points_name" name="points_name"
-                                   placeholder="Beers" value="{{ $leaderboard->points_name or '' }}" required>
+                                   placeholder="Beers" value="{{ $leaderboard->points_name ?? '' }}" required>
                         </div>
+
                         <input type="hidden" name="icon" id="icon" required>
                         <div class="form-group">
                             <label for="name">Icon:</label>
                                 <label data-placement="inline" class="icp icp-auto"
-                                       data-selected="{{$leaderboard ? substr($leaderboard->icon, 3) : ''}}"></label>
+                                       data-selected="{{$leaderboard ? $leaderboard->icon : ''}}"></label>
                         </div>
 
                         <div class="form-group">
@@ -64,105 +63,117 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-right ml-2">
                             Submit
                         </button>
-
-                        <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
+                        @if($leaderboard != null)
+                            <a class="btn btn-danger float-right" href="{{ route("leaderboards::delete", ['id'=>$leaderboard->id]) }}">Delete</a>
+                        @endif
                     </div>
 
                 </div>
 
-
-    </form>
+            </form>
 
         </div>
 
 
-
-            @if ($leaderboard)
+        @if ($leaderboard)
 
             <div class="col-md-5 mb-3">
 
                 <form method="post"
-                      action="{{ route("leaderboards_entries::add")}}"
+                      action="{{ route("leaderboards::entries::add")}}"
                       enctype="multipart/form-data">
-
 
                     {!! csrf_field() !!}
 
-                <div class="card md-3">
+                    <input type="hidden" name="leaderboard_id" value="{{ $leaderboard->id }}">
 
-                    <div class="card-header bg-dark text-white">
-                        {{ ($leaderboard == null ? "Add entries" : "Edit entries: " . $leaderboard->name)}}
-                    </div>
+                    <div class="card md-3">
 
-                    <div class="card-body">
-                        @if($entries != null)
+                        <div class="card-header bg-dark text-white">
+                            {{ ($leaderboard == null ? "Add entries" : "Edit entries for Leaderboard: " . $leaderboard->name)}}
+                        </div>
+
+                        <div class="card-body">
+
                             @if(count($entries) > 0)
-                        <table class="table table-sm table-hover">
-                            <tr class="bg-dark text-white">
-                                <td>User ID</td>
-                                <td><i class="fas fa-user"></i> Username</td>
-                                <td>Points</td>
-                                <td></td>
-                            </tr>
+                                <div class="table-responsive">
+
+                                    <table class="table table-sm table-hover mb-0">
+
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>
+                                                <th>{{ $leaderboard->points_name }}</th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach($entries as $entry)
+                                                <tr>
+                                                    <td>#{{ $loop->index+1 }}</td>
+                                                    <td>{{ $entry->user->name }}</td>
+                                                    <td style="max-width: 80px">
+                                                        <i class="{{ $leaderboard->icon }}"></i>
+                                                        <span data-id="{{ $entry->id }}" class="le_points" >
+                                                            {{ $entry->points}}
+                                                        </span>
+                                                    </td>
+                                                    <td style="min-width: 60px">
+                                                        <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ml-2 le_increase"></a>
+                                                        <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ml-1 le_decrease"></a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
+                                                            <i class="fas fa-trash text-danger fa-fw"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
                             @else
-                               <p>No entries yet, add entries here.</p>
+                                <p>No entries yet, add entries here.</p>
                             @endif
 
-                                @foreach($leaderboard->entries as $leaderboard_entry)
-
-                                    <tr>
-                                        <td>{{ $leaderboard_entry->user_id}}</td>
-                                        <td>Username</td>
-                                        <td>{{ $leaderboard_entry->points}}</td>
-                                        <td>
-                                            <a href="{{ route('leaderboards_entries::delete', ['id' => $leaderboard_entry->id]) }}">
-                                                <i class="fas fa-trash text-danger fa-fw"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                @endforeach
-
-                        </table>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-6">
-                                    <select class="form-control user-search" name="user_id" required></select>
-                                </div>
-                                <div class="col-6">
-                                    <label for="name">Points</label>
-                                    <input type="text" class="form-control" id="entry-points" name="entry-points"
-                                           placeholder="69" value="" required>
-                                </div>
-                            </div>
-
                         </div>
-
-                    </div>
-
-                    @endif
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-success float-right">
-                                Submit
-                            </button>
-                            <a href="{{ route("leaderboards::add") }}" class="btn btn-default">Cancel</a>
+                            <div class="form-group mb-0">
+
+                                <div class="row">
+                                    <div class="col-9">
+                                        <select class="form-control user-search" name="user_id" required></select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-outline-primary btn-block" type="submit">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
-                @endif
 
-                </div>
-
+                </form>
             </div>
 
-        </div>
-    </form>
+        @endif
+
     </div>
+
+@endsection
 
 @section('javascript')
 
@@ -173,6 +184,40 @@
         $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
+
+        $(function() {
+            $('.le_increase').on('click', function(e) {
+                console.log($(e.target).attr('data-id'))
+                let id = $(e.target).attr('data-id');
+                if(id) updatePoints(id, 1);
+            });
+
+            $('.le_decrease').on('click', function(e) {
+                let id = $(e.target).attr('data-id');
+                if(id) updatePoints(id, -1);
+            });
+        });
+
+        function updatePoints(id, points) {
+            let data = new FormData();
+            data.append('id', id);
+            data.append('points', points);
+            data.append('_token', '{{ csrf_token() }}');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('leaderboards::entries::update') }}',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $(`.le_points[data-id='${id}']`).html(response.points);
+                },
+                error: function() {
+                    window.alert('Something went wrong while updating the points. Please try again.');
+                }
+            })
+        }
     </script>
 
 @endsection

@@ -68,7 +68,7 @@ class LeaderboardController extends Controller
 
 
         Session::flash("flash_message", "Your leaderboard '" . $leaderboard->name . "' has been added.");
-        return Redirect::route('leaderboards::admin');
+        return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
     }
 
     /**
@@ -80,7 +80,7 @@ class LeaderboardController extends Controller
     public function edit($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);
-        $entries = $leaderboard->entries;
+        $entries = $leaderboard->entries->sortByDesc('points');
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
@@ -102,7 +102,7 @@ class LeaderboardController extends Controller
 
         Session::flash("flash_message", "Leaderboard has been updated.");
 
-        return redirect(route("leaderboards::admin"));
+        return Redirect::back();
     }
 
     public function destroy($id)

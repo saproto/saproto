@@ -6,6 +6,7 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\Request;
 use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
+use Proto\Models\User;
 
 use Session;
 use Redirect;
@@ -20,12 +21,18 @@ class LeaderboardEntryController extends Controller
      */
     public function store(Request $request)
     {
-        $entry = LeaderboardEntry::create($request->all());
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
-        $user = User::findOrFail($request->input('user_id'));
+        if($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
+            Session::flash("flash_message", "There is already a entry for this user");
+            return Redirect::back();
+        }
+
+        $entry = LeaderboardEntry::create($request->all());
+        $user = User::findOrFail($request->user_id);
         $entry->leaderboard()->associate($leaderboard);
         $entry->user()->associate($user);
         $entry->save();
+
         Session::flash("flash_message", "Added new entry successfully.");
         return Redirect::back();
     }
@@ -34,20 +41,13 @@ class LeaderboardEntryController extends Controller
      * Update resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
-        $entry->user_id = $request->user_id;
-        $entry->points = $request->points;
-        $user = User::findOrFail($request->input('user_id'));
-        if($user != $entry->user()) {
-            $entry->user()->associate($user);
-        }
+        $entry->points += $request->points > 0 ? 1 : -1;
         $entry->save();
-        Session::flash("flash_message", "Updated entry successfully.");
-        return Redirect::back();
+        return response()->json(['points' => $entry->points]);
     }
 
     /**
