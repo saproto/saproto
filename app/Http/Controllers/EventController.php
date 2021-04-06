@@ -197,7 +197,7 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
 
-        $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location ? true : false;
+        $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location;
 
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -232,12 +232,11 @@ class EventController extends Controller
         $event->save();
 
         if ($changed_important_details) {
-            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. You updated some important information. Don't forget to update your participants with this info!");
-            return Redirect::route('email::add');
+            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
         } else {
             Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
-            return Redirect::route('event::edit', ['id' => $event->id]);
         }
+        return Redirect::back();
 
     }
 
