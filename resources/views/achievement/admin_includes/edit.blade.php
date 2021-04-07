@@ -54,11 +54,45 @@
             </div>
 
             <div class="form-group">
-                <input type="hidden" name="is_archived" value="0">
                 <input type="checkbox" id="is_archived" name="is_archived"
-                       value="1" {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
+                       {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
                 <label for="is_archived">Archive this achievement</label>
             </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="has_page" name="has_page"
+                       {{ ($achievement->has_page ? 'checked' : '') }}>
+                <label for="has_url">Can be achieved by visiting url</label>
+            </div>
+
+            <div id="achieve_page_block" @if(!$achievement->has_page) style="display: none;" @endif>
+
+                <div class="form-group">
+                    <label for="page_name">Achieve URL</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">saproto.nl/achieve/</span>
+                        </div>
+                        <input type="text"
+                               class="form-control"
+                               id="page_name"
+                               name="page_name"
+                               value="{{ $achievement->page_name ?? str_replace(' ', '-', strtolower($achievement->name)) }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    @include('website.layouts.macros.markdownfield', [
+                        'name' => 'page_content',
+                        'placeholder' => 'Achievement page message.',
+                        'value' => $achievement->page_content ?? null
+                    ])
+                </div>
+
+            </div>
+
+
 
         </div>
 
@@ -73,3 +107,19 @@
     </div>
 
 </form>
+
+@section('javascript')
+    @parent
+    <script type="text/javascript">
+        let pageBlock = $('#achieve_page_block');
+        $('#has_page').on('click', function() {
+            if($(this).is(':checked')) {
+                pageBlock.show();
+                pageBlock.find('input').attr('required', true);
+            } else {
+                pageBlock.hide();
+                pageBlock.find('input').attr('required', false);
+            }
+        });
+    </script>
+@endsection

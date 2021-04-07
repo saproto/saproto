@@ -59,9 +59,23 @@ class JobofferController extends Controller
      */
     public function store(Request $request)
     {
+        $description = $request->description;
+        if($description == '') {
+            $description = null;
+        }
+
+        $redirect_url = $request->redirect_url;
+        if($redirect_url == '') {
+            $redirect_url = null;
+        }
+
+        if($description == null && $redirect_url == null) {
+            Session::flash("flash_message", "Please enter a description or redirect url.");
+            return Redirect::back();
+        }
+
         $joboffer = Joboffer::create($request->all());
         $joboffer->save();
-
         return redirect(route("joboffers::admin"));
     }
 
@@ -105,7 +119,7 @@ class JobofferController extends Controller
 
         $joboffer->title = $request->title;
         $joboffer->description = $request->description;
-
+        $joboffer->redirect_url = $request->redirect_url;
         $joboffer->save();
 
         Session::flash("flash_message", "Job offer has been updated.");

@@ -30,17 +30,16 @@ class UserProfileController extends Controller
             abort(404);
         }
 
-        $pastCommittees = $this->getGroups($user, false);
-        $pastSocieties = $this->getGroups($user, true);
+        $pastCommittees = $this->getPastMemberships($user, false);
+        $pastSocieties = $this->getPastMemberships($user, true);
 
         return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties]);
     }
 
-    private function getGroups($user, $getsocieties) {
-        return CommitteeMembership::withTrashed()
+    private function getPastMemberships($user, $getsocieties) {
+        return CommitteeMembership::onlyTrashed()
             ->with('committee')
             ->where('user_id', $user->id)
-            ->whereNotIn('id', $user->committees->pluck('pivot.id'))
             ->get()
             ->where('committee.is_society', $getsocieties);
     }

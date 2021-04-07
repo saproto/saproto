@@ -4,78 +4,76 @@
             Your membership
         </div>
         <div class="card-body">
-
             <table class="table table-borderless table-sm mb-0">
                 <tbody>
-                <tr>
-                    <th>Member since</th>
-                    <td>
-                        @if(date('U', strtotime($user->member->created_at)) > 0)
-                            {{ date('F j, Y', strtotime($user->member->created_at)) }}
-                        @else
-                            Before we kept track
-                        @endif
-                    </td>
-                </tr>
-                <tr>
-                    <th>Proto username</th>
-                    <td>{{ $user->member->proto_username }}</td>
-                </tr>
-                @if($user->isActiveMember())
-                    <tr>
-                        <th>Active in committee(s)</th>
-                        <td>Yes! <i class="far fa-thumbs-up"></i></td>
-                    </tr>
-                    <tr>
-                        <th>Member e-mail</th>
-                        <td>
-                            {{ $user->member->proto_username }}<span class="text-muted">@</span><span
-                                    class="text-muted">{{ config('proto.emaildomain') }}</span><br>
-                            <sup class="text-muted">Forwards to {{ $user->email }}</sup>
-                        </td>
-                    </tr>
-                @endif
-                <tr>
-                    <th>Membership type</th>
-                    @if($user->member->getMembertype())
-                        <td>{{ ucfirst($user->member->getMembertype()) }} member
-                            <br>
-                            <sup class="text-muted">{{ '&euro; '. $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) }}</sup>
-                        </td>
-                    @else
-                        <td>
-                            Not yet determined
-                            <br>
-                            <sup class="text-muted">Will be determined when membership fee is charged for this year.</sup>
-                        </td>
-                    @endif
-                </tr>
-                @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong)
-                    <tr>
-                        <th>Special status</th>
-                        <td>
-                            @if($user->member->is_honorary)
-                                <span class="badge badge-pill badge-primary">
-                                    Honorary member! <i class="fas fa-trophy ml-1"></i>
-                                </span>
-                            @endif
-
-                            @if($user->member->is_donator)
-                                <span class="badge badge-pill badge-primary">
-                                    Donator <i class="far fa-hand-holding-usd ml-1"></i>
-                                </span>
-                            @endif
-
-                            @if($user->member->is_lifelong)
-                                <span class="badge badge-pill badge-primary">
-                                    Lifelong member <i class="fas fa-clock ml-1"></i>
-                                </span>
-                            @endif
-                        </td>
-                    </tr>
-                @endif
-
                 @if($user->is_member)
+                    <tr>
+                        <th>Member since</th>
+                        <td>
+                            @if(date('U', strtotime($user->member->created_at)) > 0)
+                                {{ date('F j, Y', strtotime($user->member->created_at)) }}
+                            @else
+                                Before we kept track
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Proto username</th>
+                        <td>{{ $user->member->proto_username }}</td>
+                    </tr>
+                    @if($user->isActiveMember())
+                        <tr>
+                            <th>Active in committee(s)</th>
+                            <td>Yes! <i class="far fa-thumbs-up"></i></td>
+                        </tr>
+                        <tr>
+                            <th>Member e-mail</th>
+                            <td>
+                                {{ $user->member->proto_username }}<span class="text-muted">@</span><span
+                                        class="text-muted">{{ config('proto.emaildomain') }}</span><br>
+                                <sup class="text-muted">Forwards to {{ $user->email }}</sup>
+                            </td>
+                        </tr>
+                    @endif
+                    <tr>
+                        <th>Membership type</th>
+                        @if($user->member->getMembertype())
+                            <td>{{ ucfirst($user->member->getMembertype()) }} member
+                                <br>
+                                <sup class="text-muted">{{ '&euro; '. $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) }}</sup>
+                            </td>
+                        @else
+                            <td>
+                                Not yet determined
+                                <br>
+                                <sup class="text-muted">Will be determined when membership fee is charged for this year.</sup>
+                            </td>
+                        @endif
+                    </tr>
+                    @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong)
+                        <tr>
+                            <th>Special status</th>
+                            <td>
+                                @if($user->member->is_honorary)
+                                    <span class="badge badge-pill badge-primary">
+                                        Honorary member! <i class="fas fa-trophy ml-1"></i>
+                                    </span>
+                                @endif
+
+                                @if($user->member->is_donator)
+                                    <span class="badge badge-pill badge-primary">
+                                        Donator <i class="far fa-hand-holding-usd ml-1"></i>
+                                    </span>
+                                @endif
+
+                                @if($user->member->is_lifelong)
+                                    <span class="badge badge-pill badge-primary">
+                                        Lifelong member <i class="fas fa-clock ml-1"></i>
+                                    </span>
+                                @endif
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <th>Current Membership</th>
                             @if($user->member->membershipForm)
