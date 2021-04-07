@@ -1,12 +1,12 @@
 @push('javascript')
-    <script>
-        var server = "{!! config('herbert.server') !!}";
-        var token = "{!! Auth::user()->getToken()->token !!}";
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let server = "{!! config('herbert.server') !!}";
+        let token = "{!! Auth::user()->getToken()->token !!}";
 
-        $(document).ready(function () {
-            var errorElement = $("body");
+        $(function () {
+            let errorElement = $("body");
 
-            var admin = io(server + '/protube-admin');
+            let admin = io(server + '/protube-admin');
 
             admin.on("connect", function () {
                 admin.emit("authenticate", token);
@@ -43,7 +43,7 @@
 
 
             admin.on("queue", function (data) {
-                var queue = $("#queue");
+                let queue = $("#queue");
                 queue.html("");
 
                 if (data.length > 0) {
@@ -54,25 +54,25 @@
                     queue.hide();
                 }
 
-                for (var i in data) {
-                    var controls = ['veto'];
+                for (let i in data) {
+                    let controls = ['veto'];
                     if (i > 0) controls.push('up');
                     if (i < data.length - 1) controls.push('down');
 
                     queue.append(generateResult(data[i], {'type': 'queue', 'controls': controls, 'i': i}));
                 }
 
-                $(".up").click(function (e) {
+                $(".up").on("click", function (e) {
                     e.preventDefault();
                     moveQueueItem($(this).attr("data-index"), 'up');
                 });
 
-                $(".down").click(function (e) {
+                $(".down").on("click", function (e) {
                     e.preventDefault();
                     moveQueueItem($(this).attr("data-index"), 'down');
                 });
 
-                $(".veto").click(function (e) {
+                $(".veto").on("click", function (e) {
                     e.preventDefault();
                     admin.emit("veto", $(this).attr("data-index"));
                 });
@@ -80,7 +80,7 @@
 
             function moveQueueItem(index, direction) {
 
-                var data = {
+                let data = {
                     'index': index,
                     'direction': direction
                 };
@@ -161,24 +161,24 @@
             });
 
 
-            $('#searchForm').bind('submit', function (e) {
+            $('#searchForm').on('bind', 'submit', function (e) {
                 e.preventDefault();
                 admin.emit("search", $("#searchBox").val());
                 $("#searchResults > div").html("<p class='text-center card-text'><i class='fas fa-spinner fa-spin mr-2'></i> Searching...</p>");
             });
 
             admin.on("searchResults", function (data) {
-                var results = $("#searchResults > div");
+                let results = $("#searchResults > div");
 
                 $("#searchResultsDefault").hide();
                 results.html("");
 
-                for (var i in data) {
+                for (let i in data) {
                     results.append(generateResult(data[i], {'type': 'result'}));
                 }
 
                 $(".result").each(function (i) {
-                    var current = $(this);
+                    let current = $(this);
                     current.click(function (e) {
                         e.preventDefault();
                         admin.emit("add", {
@@ -195,8 +195,8 @@
                 $("#protubeScreens > li").not(":first").remove();
                 $("#protubeAdmins > li").not(":first").remove();
                 $("#protubeUsers > li").not(":first").remove();
-                for (var i in data) {
-                    var client = data[i];
+                for (let i in data) {
+                    let client = data[i];
                     switch (client.type) {
                         case'screen':
                             $("#protubeScreens > li:first-child").after("<li class='list-group-item'>Connection from <strong>" + client.network + "</strong></li>")
@@ -213,10 +213,10 @@
             });
 
             admin.on("radiostations", function (data) {
-                var stationsHtml = "";
+                let stationsHtml = "";
 
-                for (var i in data) {
-                    var station = data[i];
+                for (let i in data) {
+                    let station = data[i];
 
                     stationsHtml += "<a class='dropdown-item' href='javascript:void();' data-id=" + i + ">" + station.name + "</a>";
                 }
@@ -224,7 +224,7 @@
                 $("#radiostationDropdown").html(stationsHtml);
 
                 $("#radiostationDropdown a").each(function () {
-                    $(this).click(function (e) {
+                    $(this).on("click", function (e) {
                         e.preventDefault();
 
                         admin.emit("setRadio", $(this).attr('data-id'));
@@ -232,69 +232,69 @@
                 })
             });
 
-            $("#clearSearch").click(function (e) {
+            $("#clearSearch").on("click", function (e) {
                 e.preventDefault();
                 $("#searchResultsDefault").show();
                 $("#searchResults > div").html("");
                 $("#searchBox").val("");
             });
 
-            $("#playpause").click(function (e) {
+            $("#playpause").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("pause");
             });
 
-            $("#skip").click(function (e) {
+            $("#skip").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("skip");
             });
 
-            $("#reload").click(function (e) {
+            $("#reload").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("fullReload");
             });
 
-            $("#togglephotos").click(function (e) {
+            $("#togglephotos").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("togglePhotos");
             });
 
-            $("#protubeToggle").click(function (e) {
+            $("#protubeToggle").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("protubeToggle");
             });
 
-            $("#shuffleRadio").click(function (e) {
+            $("#shuffleRadio").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("shuffleRadio");
             });
 
-            $(".soundboard").click(function (e) {
+            $(".soundboard").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("soundboard", $(this).attr("rel"));
             });
 
-            $(".lampOn").click(function (e) {
+            $(".lampOn").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("lampOn", $(this).attr("rel"));
             });
 
-            $(".lampOff").click(function (e) {
+            $(".lampOff").on("click", function (e) {
                 e.preventDefault();
                 admin.emit("lampOff", $(this).attr("rel"));
             });
 
-            $("#omnomcomReboot").click(function (e) {
+            $("#omnomcomReboot").on("click", function (e) {
                 e.preventDefault();
                 if (confirm('Are you sure you want to restart the Omnomcom?')) admin.emit("omnomcomReboot");
             });
 
-            $("#protubeReboot").click(function (e) {
+            $("#protubeReboot").on("click", function (e) {
                 e.preventDefault();
                 if (confirm('Are you sure you want to restart the Protube system?')) admin.emit("protubeReboot");
             });
 
-            $("#showVideo").click(function () {
+            $("#showVideo").on("click", function () {
                 $("#showVideo > i").toggleClass('fab fa-youtube fas fa-images');
             });
 
@@ -307,13 +307,13 @@
 
         function generateResult(item, opts) {
 
-            var result = '<div class="row mb-1 p-2 video ' + (opts.type == 'result' ? 'result' : '') + '" ytId="' + item.id + '" style="cursor: pointer;">' +
+            let result = '<div class="row mb-1 p-2 video ' + (opts.type === 'result' ? 'result' : '') + '" ytId="' + item.id + '" style="cursor: pointer;">' +
                 '<div class="col-3">' +
                 '<img style="max-width: 100%;" src="//img.youtube.com/vi/' + item.id + '/0.jpg" />' +
                 '</div>' +
                 '<div class="col-9">';
 
-            if (opts.type == 'queue') {
+            if (opts.type === 'queue') {
                 result = result + '<div class="float-right" style="font-size: 1.15rem;">' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('down') >= 0 ? 'fa-caret-square-down down' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('veto') >= 0 ? 'fa-minus-square veto' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
@@ -345,14 +345,14 @@
                 return time;
             }
 
-            var minutes = Math.floor(time / 60);
-            var seconds = time - minutes * 60;
+            let minutes = Math.floor(time / 60);
+            let seconds = time - minutes * 60;
 
             function str_pad_left(string, pad, length) {
                 return (new Array(length + 1).join(pad) + string).slice(-length);
             }
 
-            var finalTime = str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
+            let finalTime = str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
 
             return finalTime;
         }

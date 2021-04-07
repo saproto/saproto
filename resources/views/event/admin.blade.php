@@ -206,7 +206,7 @@
 @endsection
 
 @push('javascript')
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         $(".events__scannedButton").click(function (event) {
             event.preventDefault();

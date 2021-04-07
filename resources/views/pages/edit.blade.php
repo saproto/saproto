@@ -219,14 +219,14 @@
 
 @push('javascript')
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
-            var cm = $('.CodeMirror')[0].CodeMirror;
-            var doc = cm.getDoc();
-            var cursor = doc.getCursor(); // gets the line number in the cursor position
-            var line = doc.getLine(cursor.line); // get the line contents
-            var pos = { // create a new object to avoid mutation of the original selection
+            let cm = $('.CodeMirror')[0].CodeMirror;
+            let doc = cm.getDoc();
+            let cursor = doc.getCursor(); // gets the line number in the cursor position
+            let line = doc.getLine(cursor.line); // get the line contents
+            let pos = { // create a new object to avoid mutation of the original selection
                 line: cursor.line, ch: line.length - 1 // set the character position to the end of the line
             };
             doc.replaceRange('\n' + data + '\n', pos); // adds a new line
@@ -234,13 +234,13 @@
 
         $(".pageEdit_insertLink").click(function (e) {
             e.preventDefault();
-            var linkUrl = $(this).attr('rel');
+            let linkUrl = $(this).attr('rel');
             insertLineAtCursor("[Link text](" + linkUrl + ")");
         });
 
         $(".pageEdit_insertImage").click(function (e) {
             e.preventDefault();
-            var linkUrl = $(this).attr('rel');
+            let linkUrl = $(this).attr('rel');
             insertLineAtCursor("![Alt text](" + linkUrl + ")");
         });
     </script>

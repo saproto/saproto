@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+
 require 'minisites.php';
 
 /* Pass viewname to body class */

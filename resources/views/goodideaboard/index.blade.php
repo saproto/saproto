@@ -20,7 +20,7 @@
 @endsection
 
 @push('javascript')
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $(function() {
             $('.gi_upvote').on('click', function(e) {
                 let id = $(e.target).attr('data-id');

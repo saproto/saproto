@@ -61,7 +61,7 @@
 @endsection
 
 @push('javascript')
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         $("#user").on('change', function () {
             $("#destination").val('');

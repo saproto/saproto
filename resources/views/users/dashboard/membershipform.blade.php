@@ -28,7 +28,7 @@
 @endpush
 
 @push('javascript')
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let signatureAlert = $('#signature-alert');
         let canvas = document.getElementById('signature-pad');
         window.onresize = resizeCanvas;

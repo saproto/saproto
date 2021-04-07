@@ -94,11 +94,9 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         $(document).ready(updateInformationDisplay);
         $('#information_type_selector').change(updateInformationDisplay);
 
@@ -123,4 +121,4 @@
         }
     </script>
 
-@endsection
+@endpush

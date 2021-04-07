@@ -117,9 +117,9 @@
 @endsection
 
 @push('javascript')
-    <script>
-        $("#page_id").change(function () {
-            if ($(this).val() == 0) {
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        $("#page_id").on('change', function () {
+            if ($(this).val() === 0) {
                 $("#menu__otherUrl").show(0);
                 $("#menu__otherUrlRoute").show(0);
             } else {
@@ -128,7 +128,7 @@
             }
         });
 
-        $("#route").change(function () {
+        $("#route").on('change', function () {
             $("#url").val("(route) " + $(this).val());
         });
     </script>

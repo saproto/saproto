@@ -162,9 +162,9 @@
 
     </form>
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        var total = 0;
+        let total = 0;
 
         function updateOrderTotal() {
             total = 0;

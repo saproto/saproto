@@ -107,7 +107,7 @@
     </style>
 
     <!-- Matomo -->
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         var _paq = _paq || [];
         /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
         _paq.push(['trackPageView']);

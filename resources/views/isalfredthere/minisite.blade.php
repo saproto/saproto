@@ -51,7 +51,7 @@
 @endpush
 
 @push('javascript')
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let alfredCountdownStarted = false;
 
         $(document).ready(function () {

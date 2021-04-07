@@ -5,7 +5,7 @@
 
 @push('javascript')
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $(function () {
             $('#datetimepicker-{{ $name }}').datetimepicker({
                 @if(isset($format) && $format == 'datetime')

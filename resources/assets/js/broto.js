@@ -1,5 +1,4 @@
 function broto() {
-    console.log('boi')
     $('img').each(function() {
         if ($(this).hasClass('rounded-circle'))
             $(this).attr('src', '/images/default-avatars/cookiemonster.jpg')

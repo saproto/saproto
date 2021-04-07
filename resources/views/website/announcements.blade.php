@@ -26,7 +26,7 @@
 
             @push('javascript')
 
-                <script type="text/javascript">
+                <script type="text/javascript" nonce="{{ csp_nonce() }}">
                     $(window).on('load', function () {
                         $('#{{ $announcement->modalId() }}').modal('show');
                     });

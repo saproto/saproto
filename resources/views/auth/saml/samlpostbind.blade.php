@@ -11,7 +11,7 @@
         <input type="submit" value="Continue Authentication" class="btn btn-default" style="width: 100%;">
     </form>
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.getElementById("samlform").submit();
     </script>
 

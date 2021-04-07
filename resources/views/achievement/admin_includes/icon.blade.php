@@ -35,7 +35,7 @@
 
 
 @push('javascript')
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $('.icp-auto').iconpicker();
         $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));

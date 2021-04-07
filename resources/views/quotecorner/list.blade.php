@@ -27,11 +27,11 @@
 
 @push('javascript')
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $(".qq_like i").click(function (event) {
+        $(".qq_like i").on('click', function (event) {
 
-            var id = $(event.target).parent().attr('data-id');
+            let id = $(event.target).parent().attr('data-id');
 
             if (id === undefined) { return; }
 

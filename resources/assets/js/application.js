@@ -13,7 +13,6 @@ require('bootstrap-slider')
 require('select2')
 require('fontawesome-iconpicker')
 
-
 // Update locale
 moment.updateLocale('en', {
     week: {dow: 1}
@@ -21,6 +20,10 @@ moment.updateLocale('en', {
 
 // On document loaded
 $(function() {
+    // Execute theme JavaScript
+    try { window[config.theme]() }
+    catch { /* Intentionally left blank */ }
+
     // Enables tooltips
     $('[data-toggle="tooltip"]').tooltip()
 
@@ -54,7 +57,7 @@ $(function() {
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function () {
-        let u = "//{{ config('proto.analytics_url') }}/";
+        let u = "//"+config.analytics_url+"/";
         _paq.push(['setTrackerUrl', u + 'piwik.php']);
         _paq.push(['setSiteId', '1']);
         let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];

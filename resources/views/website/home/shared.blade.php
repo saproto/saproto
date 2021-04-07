@@ -2,7 +2,7 @@
 
 @push('javascript')
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let mySwiper = new Swiper.default('.swiper-container', {
             @if( count($companies) > 1 )
             loop: true,

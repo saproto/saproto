@@ -76,7 +76,8 @@
     "swiftmailer/swiftmailer": "6.0.*",
     "sentry/sentry-laravel": "1.2.*",
     "vinkla/hashids": "7.*",
-    "willvincent/feeds": "2.*"
+    "willvincent/feeds": "2.*",
+    "spatie/laravel-csp": "^2.6"
   },
   "require-dev": {
     "symfony/css-selector": "~4.0",

@@ -11,6 +11,8 @@ const paths = {
     public: 'public/assets/'
 }
 
+mix.webpackConfig({ devtool: "inline-source-map" });
+
 mix.options({
     postCss: [
         require('postcss-discard-comments')({
@@ -34,5 +36,4 @@ mix .js(paths.scripts.src+'!(*.example).js', paths.public)
     .extract()
 
 // Enable sourcemap and versioning
-mix .sourceMaps(false)
-    .version()
+mix .version()

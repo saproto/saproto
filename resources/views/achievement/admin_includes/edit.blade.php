@@ -108,9 +108,8 @@
 
 </form>
 
-@section('javascript')
-    @parent
-    <script type="text/javascript">
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let pageBlock = $('#achieve_page_block');
         $('#has_page').on('click', function() {
             if($(this).is(':checked')) {
@@ -122,4 +121,4 @@
             }
         });
     </script>
-@endsection
+@endpush
