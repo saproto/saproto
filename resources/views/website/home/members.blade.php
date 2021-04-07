@@ -110,19 +110,4 @@
 
     </div>
 
-    <style>
-        #cookie-monster img {
-            transition: transform 500ms;
-            transform: translate(-10px, 7px) rotate(20deg);
-        }
-
-        #cookie-monster:hover img {
-            transform: rotate(20deg) scale(1.2);
-        }
-    </style>
-
-    <a id="cookie-monster" href="https://www.proto.utwente.nl/events/x24eBQbO8PmGWPky">
-        <img src="/images/omnomcom/cookiemonster_seasonal/pixels.png" alt="pixelated cookiemonster" class="fixed-bottom" width="80px">
-    </a>
-
 @endsection
