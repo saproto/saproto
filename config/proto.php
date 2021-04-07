@@ -305,7 +305,8 @@ return [
     'themes' => [
         0 => 'light',
         1 => 'dark',
-        2 => 'rainbowbarf'
+        2 => 'rainbowbarf',
+        3 => 'broto'
     ],
 
     // Analytics URL

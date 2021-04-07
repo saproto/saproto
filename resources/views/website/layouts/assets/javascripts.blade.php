@@ -23,7 +23,7 @@
     <script type="text/javascript">
         try {
             {{ config('proto.themes')[Auth::user()->theme] }}()
-        } catch { /* Intentionally left blank */ }
+        } catch { console.log("Can't execute theme javascript") }
     </script>
 
 @endif
