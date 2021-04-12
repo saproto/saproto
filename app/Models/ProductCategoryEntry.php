@@ -2,38 +2,50 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Product Category Entry Model
+ *
+ * @property int $id
+ * @property int $product_id
+ * @property int $category_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read ProductCategory $ProductCategory
+ * @property-read Product $product
+ * @method static Builder|ProductCategoryEntry whereCategoryId($value)
+ * @method static Builder|ProductCategoryEntry whereCreatedAt($value)
+ * @method static Builder|ProductCategoryEntry whereId($value)
+ * @method static Builder|ProductCategoryEntry whereProductId($value)
+ * @method static Builder|ProductCategoryEntry whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class ProductCategoryEntry extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'products_categories';
 
-    /**
-     * @return mixed Product in the catogory
-     */
+    protected $guarded = ['id'];
+
+    protected $rules = [
+        'user_id' => 'required|integer',
+        'achievement_id' => 'required|integer',
+        'rank' => 'required|integer'
+    ];
+
+    /** @return BelongsTo|Product */
     public function product()
     {
         return $this->belongsTo('Proto\Models\Product');
     }
 
-    /**
-     * @return mixed The achievement this association is for.
-     */
+    /** @return BelongsTo|ProductCategory */
     public function ProductCategory()
     {
         return $this->belongsTo('Proto\Models\ProductCategory');
     }
-
-    protected $fillable = ['product_id', 'category_id', 'rank'];
-
-    protected $rules = array(
-        'user_id' => 'required|integer',
-        'achievement_id' => 'required|integer',
-        'rank' => 'required|integer'
-    );
 }

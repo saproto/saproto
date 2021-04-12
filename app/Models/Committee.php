@@ -2,51 +2,127 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-use Vinkla\Hashids\Facades\Hashids;
-
-use Carbon\Carbon;
-
 use Auth;
 use DB;
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Committee Model
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property int $public
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int|null $image_id
+ * @property int $allow_anonymous_email
+ * @property int $is_society
+ * @property-read string $email_address
+ * @property-read Collection|User[] $helper_reminder_subscribers
+ * @property-read Collection|HelperReminder[] $helperReminderSubscribers
+ * @property-read StorageEntry|null $image
+ * @property-read Collection|Event[] $organizedEvents
+ * @property-read Collection|User[] $users
+ * @method static Builder|Committee whereAllowAnonymousEmail($value)
+ * @method static Builder|Committee whereCreatedAt($value)
+ * @method static Builder|Committee whereDescription($value)
+ * @method static Builder|Committee whereId($value)
+ * @method static Builder|Committee whereImageId($value)
+ * @method static Builder|Committee whereIsSociety($value)
+ * @method static Builder|Committee whereName($value)
+ * @method static Builder|Committee wherePublic($value)
+ * @method static Builder|Committee whereSlug($value)
+ * @method static Builder|Committee whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Committee extends Model
 {
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'committees';
+
+    protected $guarded = ['id'];
+
     protected $hidden = ['image_id'];
 
+    /** @return string */
     public function getPublicId()
     {
         return $this->slug;
     }
 
-    /**
-     * @param $public_id
-     * @return mixed
-     */
-    public static function fromPublicId($public_id)
+    /** @return Committee */
+    public static function fromPublicId(string $public_id)
     {
         return Committee::where('slug', $public_id)->firstOrFail();
     }
 
-    /**
-     * @return mixed All events organized by this committee.
-     */
+    /** @return BelongsToMany */
+    public function users()
+    {
+        return $this->belongsToMany('Proto\Models\User', 'committees_users')
+            ->where(function ($query) {
+                $query
+                    ->whereNull('committees_users.deleted_at')
+                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
+            })
+            ->where('committees_users.created_at', '<', Carbon::now())
+            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withTimestamps()
+            ->orderBy('pivot_created_at', 'desc');
+    }
+
+    /** @return BelongsTo|StorageEntry */
+    public function image()
+    {
+        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+    }
+
+    /** @return HasMany|Event[] */
     public function organizedEvents()
     {
         return $this->hasMany('Proto\Models\Event', 'committee_id');
     }
 
+    /** @return HasMany|HelperReminder[] */
+    public function helperReminderSubscribers()
+    {
+        return $this->hasMany('Proto\Models\HelperReminder');
+    }
+
+    /** @return string */
+    public function getEmailAddressAttribute()
+    {
+        return $this->slug . '@' . config('proto.emaildomain');
+    }
+
+    /** @return User[] */
+    public function getHelperReminderSubscribersAttribute()
+    {
+        $users = [];
+        foreach ($this->helperReminderSubscribers as $subscriber) {
+            $users[] = $subscriber->user;
+        }
+        return $users;
+    }
+
     /**
-     * @return mixed All events organized by this committee in the past.
+     * @param User $user
+     * @return bool Whether the user wants to receive helper reminders.
      */
+    public function wantsToReceiveHelperReminder($user)
+    {
+        return HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->count() > 0;
+    }
+
+    /** @return Collection|Event[] */
     public function pastEvents()
     {
         $events = $this->organizedEvents()->where('end', '<', time())->orderBy('start', 'desc');
@@ -58,9 +134,7 @@ class Committee extends Model
         }
     }
 
-    /**
-     * @return mixed All upcoming events organized by this committee.
-     */
+    /** @return Collection|Event[] */
     public function upcomingEvents()
     {
         $events = $this->organizedEvents()->where('end', '>', time());
@@ -73,77 +147,59 @@ class Committee extends Model
     }
 
     /**
-     * @param $includeSecret
-     * @return mixed All events at which this committee helped out.
+     * @param bool $includeSecret
+     * @return Event[]
      */
     public function helpedEvents($includeSecret = false)
     {
+        /** @var Activity[] $activities */
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+
         $events = array();
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && (!$event->secret || $includeSecret)) $events[] = $event;
+            if ($event && (!$event->secret || $includeSecret)) {
+                $events[] = $event;
+            }
         }
+
         return $events;
     }
 
-    /**
-     * @return mixed All events at which this committee helped out.
-     */
+    /** @return Event[] */
     public function pastHelpedEvents()
     {
+        /** @var Activity[] $activities */
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
+
         $events = array();
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && !$event->secret && $event->end < time()) $events[] = $event;
+            if ($event && !$event->secret && $event->end < time()) {
+                $events[] = $event;
+            }
         }
+
         return $events;
     }
 
-    /**
-     * @return mixed All users currently associated with this committee.
-     */
-    public function users()
+    /** @return Member[] */
+    public function allMembers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'committees_users')
-            ->where(function ($query) {
-                $query->whereNull('committees_users.deleted_at')
-                    ->orWhere('committees_users.deleted_at', '>', Carbon::now());
-            })
-            ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
-            ->withTimestamps()
-            ->orderBy('pivot_created_at', 'desc');
-    }
+        $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];
+        $memberships = CommitteeMembership::withTrashed()->where('committee_id', $this->id)
+                        ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
+                        ->orderBy('created_at', 'desc')
+                        ->orderBy('deleted_at', 'desc')
+                        ->get();
 
-    public function image()
-    {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
-    }
-
-    public function allmembers()
-    {
-
-        $members = array('editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]);
-
-        foreach (
-            CommitteeMembership::withTrashed()->where('committee_id', $this->id)
-                ->orderBy(DB::raw('deleted_at IS NULL'), 'desc')
-                ->orderBy('created_at', 'desc')
-                ->orderBy('deleted_at', 'desc')
-                ->get()
-            as $membership
-        ) {
+        foreach ($memberships as $membership) {
             if ($membership->edition) {
                 $members['editions'][$membership->edition][] = $membership;
             } else {
                 if (
                     strtotime($membership->created_at) < date('U') &&
-                    (
-                        !$membership->deleted_at ||
-                        strtotime($membership->deleted_at) > date('U')
-                    )
+                    (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
                 ) {
                     $members['members']['current'][] = $membership;
                 } elseif (strtotime($membership->created_at) > date('U')) {
@@ -155,41 +211,14 @@ class Committee extends Model
         }
 
         return $members;
-
     }
 
     /**
-     * @param User $user The user to check membership for.
-     * @return bool Whether the user is currently a member of this committee.
+     * @param User $user
+     * @return bool Whether the use is a member of the committee.
      */
     public function isMember(User $user)
     {
         return $user->isInCommittee($this);
     }
-
-    public function getEmailAddress()
-    {
-        return $this->slug . '@' . config('proto.emaildomain');
-    }
-
-    public function helperReminderSubscribers()
-    {
-        return $this->hasMany('Proto\Models\HelperReminder');
-    }
-
-    public function getHelperReminderSubscribers()
-    {
-        $users = [];
-        foreach ($this->helperReminderSubscribers as $subscriber) {
-            $users[] = $subscriber->user;
-        }
-        return $users;
-    }
-
-    public function wantsToReceiveHelperReminder(User $user)
-    {
-        return HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->count() > 0;
-    }
-
-    protected $guarded = [];
 }

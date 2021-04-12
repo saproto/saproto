@@ -368,7 +368,7 @@ class EventController extends Controller
             if ($event->secret && ($user == null || $event->activity == null || (
                         !$event->activity->isParticipating($user) &&
                         !$event->activity->isHelping($user) &&
-                        !$event->activity->isOrganizing($user)
+                        !$event->activity->isOrganising($user)
                     ))) {
                 continue;
             }
@@ -511,12 +511,12 @@ class EventController extends Controller
             if ($event->secret && ($user == null || $event->activity == null || (
                         !$event->activity->isParticipating($user) &&
                         !$event->activity->isHelping($user) &&
-                        !$event->activity->isOrganizing($user)
+                        !$event->activity->isOrganising($user)
                     ))) {
                 continue;
             }
 
-            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganizing($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
+            if (!$event->force_calendar_sync && $relevant_only && !($event->isOrganising($user) || $event->hasBoughtTickets($user) || ($event->activity && ($event->activity->isHelping($user) || $event->activity->isParticipating($user))))) {
                 continue;
             }
 
@@ -540,7 +540,7 @@ class EventController extends Controller
             }
 
             if ($user) {
-                if ($event->isOrganizing($user)) {
+                if ($event->isOrganising($user)) {
                     $status = 'Organizing';
                     $infotext .= ' You are organizing this activity.';
                 } elseif ($event->activity) {
@@ -564,7 +564,7 @@ class EventController extends Controller
                 sprintf("LOCATION:%s", $event->location) . "\r\n" .
                 sprintf("ORGANIZER;CN=%s:MAILTO:%s",
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
-                    ($event->committee ? $event->committee->getEmailAddress() : 'board@proto.utwente.nl')) . "\r\n";
+                    ($event->committee ? $event->committee->email_address : 'board@proto.utwente.nl')) . "\r\n";
 
             if ($reminder && $status) {
                 $calendar .= "BEGIN:VALARM" . "\r\n" .

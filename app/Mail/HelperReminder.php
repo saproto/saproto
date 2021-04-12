@@ -39,7 +39,7 @@ class HelperReminder extends Mailable
     {
 
         return $this
-            ->to($this->committee->getHelperReminderSubscribers())
+            ->to($this->committee->helper_reminder_subscribers)
             ->from('webmaster@proto.utwente.nl', 'S.A. Proto')
             ->subject(sprintf('Activity %s is in three days, but doesn\'t have enough helpers for the %s.', $this->event->title, $this->committee->name))
             ->view('emails.helperreminder');

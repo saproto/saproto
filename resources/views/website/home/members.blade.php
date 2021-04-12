@@ -68,7 +68,7 @@
                         @foreach($newsitems as $index => $newsitem)
 
                             @include('website.layouts.macros.card-bg-image', [
-                            'url' => $newsitem->url(),
+                            'url' => $newsitem->url,
                             'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
                             'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                             'leftborder' => 'info'

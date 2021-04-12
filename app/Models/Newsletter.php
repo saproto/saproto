@@ -2,13 +2,18 @@
 
 namespace Proto\Models;
 
+use Artisan;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
-use Artisan;
-
+/**
+ * Proto\Models\Newsletter
+ *
+ * @mixin Eloquent
+ */
 class Newsletter extends Model
 {
-
+    /** @return HashMapItem */
     public static function getLastSent()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_last_sent')->first();
@@ -21,6 +26,7 @@ class Newsletter extends Model
         return $lastSent;
     }
 
+    /** @return HashMapItem */
     public static function getText()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_text')->first();
@@ -33,7 +39,9 @@ class Newsletter extends Model
         return $lastSent;
     }
 
-    public static function getTextLastUpdated() {
+    /** @return HashMapItem */
+    public static function getTextLastUpdated()
+    {
         $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
         if ($lastUpdated == null) {
             $lastUpdated = HashMapItem::create([
@@ -44,21 +52,25 @@ class Newsletter extends Model
         return $lastUpdated;
     }
 
+    /** @return string */
     public static function lastSent()
     {
         return Newsletter::getLastSent()->value;
     }
 
+    /** @return string */
     public static function text()
     {
         return Newsletter::getText()->value;
     }
 
+    /** @return string */
     public static function textUpdated()
     {
         return Newsletter::getTextLastUpdated()->value;
     }
 
+    /** @return string */
     public static function updateLastSent()
     {
         $lastSent = Newsletter::getLastSent();
@@ -69,6 +81,7 @@ class Newsletter extends Model
         return $lastSent->value;
     }
 
+    /** @return string */
     public static function updateText($text)
     {
         $newsletterText = Newsletter::getText();
@@ -83,6 +96,7 @@ class Newsletter extends Model
         return $newsletterText->value;
     }
 
+    /** @return bool */
     public static function canBeSent()
     {
         $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
@@ -91,13 +105,19 @@ class Newsletter extends Model
         return $current > $lastSent && $events->count() > 0;
     }
 
+    /** @return bool */
     public static function showTextOnHomepage()
     {
-        if (Newsletter::text() == "") return false;
-        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) return false;
+        if (Newsletter::text() == "") {
+            return false;
+        }
+        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) {
+            return false;
+        }
         return true;
     }
 
+    /** @return bool */
     public static function send()
     {
         if (!Newsletter::canBeSent()) {
@@ -107,5 +127,4 @@ class Newsletter extends Model
         Newsletter::updateLastSent();
         return true;
     }
-
 }

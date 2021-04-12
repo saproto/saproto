@@ -2,13 +2,39 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Proto\Models\GoodIdeaVote
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $good_idea_id
+ * @property int $vote
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read GoodIdea $goodIdea
+ * @method static Builder|GoodIdeaVote whereCreatedAt($value)
+ * @method static Builder|GoodIdeaVote whereGoodIdeaId($value)
+ * @method static Builder|GoodIdeaVote whereId($value)
+ * @method static Builder|GoodIdeaVote whereUpdatedAt($value)
+ * @method static Builder|GoodIdeaVote whereUserId($value)
+ * @method static Builder|GoodIdeaVote whereVote($value)
+ * @mixin Eloquent
+ */
 class GoodIdeaVote extends Model
 {
-    protected $fillable = ['user_id', 'good_idea_id'];
+    protected $table = 'good_idea_votes';
 
-    public function goodIdea() {
+    protected $guarded = ['id'];
+
+    /** @return HasOne|GoodIdea */
+    public function goodIdea()
+    {
         return $this->hasOne('Proto\Models\GoodIdea');
     }
 }

@@ -97,6 +97,7 @@ class AliasController extends Controller
                 'alias' => $request->input('alias'),
                 'destination' => $request->input('destination')
             ]);
+            $alias->created_at;
             $alias->save();
 
             $request->session()->flash('flash_message', 'Destination added to alias.');

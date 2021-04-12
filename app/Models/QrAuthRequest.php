@@ -2,41 +2,57 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-use User;
+use Exception;
 
+/**
+ * QrAuth Request Model
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $auth_token
+ * @property string $qr_token
+ * @property string $description
+ * @property string|null $approved_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|QrAuthRequest whereApprovedAt($value)
+ * @method static Builder|QrAuthRequest whereAuthToken($value)
+ * @method static Builder|QrAuthRequest whereCreatedAt($value)
+ * @method static Builder|QrAuthRequest whereDescription($value)
+ * @method static Builder|QrAuthRequest whereId($value)
+ * @method static Builder|QrAuthRequest whereQrToken($value)
+ * @method static Builder|QrAuthRequest whereUpdatedAt($value)
+ * @method static Builder|QrAuthRequest whereUserId($value)
+ * @mixin Eloquent
+ */
 class QrAuthRequest extends Model
 {
     protected $table = 'qrauth_requests';
 
     protected $guarded = ['id'];
 
-    /**
-     * Returns true is QrAuthRequest has been approved
-     * @return bool
-     */
     public function isApproved()
     {
-        if ($this->approved_at) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->approved_at !== null;
     }
 
     /**
-     * Returns the user is request has been approved.
-     * @return mixed
+     * @return false|User
+     * @throws Exception
      */
     public function authUser()
     {
         if ($this->approved_at) {
-            $returnUser = User::findOrFail($this->user_id);
+            /** @var User $user */
+            $user = User::findOrFail($this->user_id);
             $this->delete();
-            return $returnUser;
+            return $user;
         }
-
         return false;
     }
 }

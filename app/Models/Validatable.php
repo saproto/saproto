@@ -3,19 +3,24 @@
 namespace Proto\Models;
 
 use Eloquent;
+use Illuminate\Support\MessageBag;
 use Validator;
 
 
 /**
- * Proto\Models\Validatable
+ * Validatable Model
  *
+ * @mixin Eloquent
  */
 class Validatable extends Eloquent
 {
-    protected $rules = array();
+    protected $rules = [];
+
     protected $errors;
 
-    public function validate($data) {
+    /** @return bool */
+    public function validate($data)
+    {
         $v = Validator::make($data, $this->rules);
         if ($v->fails()) {
             $this->errors = $v->errors();
@@ -24,7 +29,9 @@ class Validatable extends Eloquent
         return true;
     }
 
-    public function errors() {
+    /** @return MessageBag */
+    public function errors()
+    {
         return $this->errors;
     }
 }

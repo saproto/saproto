@@ -2,82 +2,117 @@
 
 namespace Proto\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
+/**
+ * DmxOverride Model
+ *
+ * @property int $id
+ * @property string $fixtures
+ * @property string $color
+ * @property string $start
+ * @property string $end
+ * @property-read bool $is_active
+ * @property-read string $window_size
+ * @method static Builder|DmxOverride whereColor($value)
+ * @method static Builder|DmxOverride whereEnd($value)
+ * @method static Builder|DmxOverride whereFixtures($value)
+ * @method static Builder|DmxOverride whereId($value)
+ * @method static Builder|DmxOverride whereStart($value)
+ * @mixin Eloquent
+ */
 class DmxOverride extends Model
 {
     protected $table = 'dmx_overrides';
-    protected $fillable = ['fixtures', 'color', 'start', 'end'];
+
+    protected $guarded = ['id'];
+
+    protected $dates = ['start', 'end'];
+
     public $timestamps = false;
 
+    /** @return Collection|DmxOverride[] */
     public static function getActiveSorted()
     {
         return DmxOverride::where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
-
     }
 
+    /** @return Collection|DmxOverride[] */
     public static function getUpcomingSorted()
     {
         return DmxOverride::where('start', '>', date('U'))->get()->sortByDesc('start');
-
     }
 
+    /** @return Collection|DmxOverride[] */
     public static function getPastSorted()
     {
         return DmxOverride::where('end', '<', date('U'))->get()->sortByDesc('start');
-
     }
 
+    /** @return string[] */
     public function colorArray()
     {
         return array_map('intval', explode(',', $this->color));
     }
 
+    /** @return string */
     public function red()
     {
         return $this->colorArray()[0];
     }
 
+    /** @return string */
     public function green()
     {
         return $this->colorArray()[1];
     }
 
+    /** @return string */
     public function blue()
     {
         return $this->colorArray()[2];
     }
 
+    /** @return string */
     public function brightness()
     {
         return $this->colorArray()[3];
     }
 
+    /** @return bool */
     public function active()
     {
         return $this->start < date('U') && date('U') < $this->end;
     }
 
+    /** @return bool */
     public function justOver()
     {
-        return date('U') > $this->end && date('U') < $this->end + 600;
+        return date('U') > $this->end && date('U') < $this->end . 600;
     }
 
+    /** @return string */
     public function getFixtureIds()
     {
         return explode(',', $this->fixtures);
     }
 
+    /** @return Collection|DmxFixture[] */
     public function getFixtures()
     {
         return DmxFixture::whereIn('id', $this->getFixtureIds())->get();
     }
 
+    /** @return bool */
     public function getIsActiveAttribute()
     {
         return $this->active();
     }
 
+    /** @return string */
     public function getWindowSizeAttribute()
     {
         return $this->end - $this->start;

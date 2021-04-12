@@ -85,7 +85,7 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        return view('committee.show', ['committee' => $committee, 'members' => $committee->allmembers(),
+        return view('committee.show', ['committee' => $committee, 'members' => $committee->allMembers(),
             'subscribed_to_helper_notification' => Auth::check() && $committee->wantsToReceiveHelperReminder(Auth::user())
         ]);
     }
@@ -161,7 +161,7 @@ class CommitteeController extends Controller
             abort(404);
         }
 
-        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allmembers()]);
+        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
     /**
@@ -277,7 +277,7 @@ class CommitteeController extends Controller
             return Redirect::back();
         }
 
-        $email = $committee->getEmailAddress();
+        $email = $committee->email_address;
         $name = $committee->name;
 
         $message_content = strip_tags($request->get('message'));
@@ -287,7 +287,7 @@ class CommitteeController extends Controller
 
         Mail::to((object)[
             'name' => $committee->name,
-            'email' => $committee->getEmailAddress()
+            'email' => $committee->email_address
         ])->queue((new AnonymousEmail($committee, $message_content, $message_hash))->onQueue('low'));
 
         Session::flash("flash_message", sprintf("Thanks for submitting your anonymous e-mail! The e-mail will be sent to the %s straightaway. Please remember that they cannot reply to your e-mail, so you will not receive any further confirmation other than this notification.",

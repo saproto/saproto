@@ -2,31 +2,67 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
-
 use Mollie;
-use Proto\Http\Controllers\MollieController;
 
+/**
+ * Proto\Models\MollieTransaction
+ *
+ * @property int $id
+ * @property string $user_id
+ * @property string $mollie_id
+ * @property string $status
+ * @property float $amount
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $payment_url
+ * @property-read Collection|OrderLine[] $orderlines
+ * @property-read User $user
+ * @method static Builder|MollieTransaction whereAmount($value)
+ * @method static Builder|MollieTransaction whereCreatedAt($value)
+ * @method static Builder|MollieTransaction whereId($value)
+ * @method static Builder|MollieTransaction whereMollieId($value)
+ * @method static Builder|MollieTransaction wherePaymentUrl($value)
+ * @method static Builder|MollieTransaction whereStatus($value)
+ * @method static Builder|MollieTransaction whereUpdatedAt($value)
+ * @method static Builder|MollieTransaction whereUserId($value)
+ * @mixin Eloquent
+ */
 class MollieTransaction extends Model
 {
     protected $table = 'mollie_transactions';
+
     protected $guarded = ['id'];
 
-    public function orderlines()
-    {
-        return $this->hasMany('Proto\Models\OrderLine', 'payed_with_mollie');
-    }
-
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
+    /** @return HasMany|Orderline[] */
+    public function orderlines()
+    {
+        return $this->hasMany('Proto\Models\OrderLine', 'payed_with_mollie');
+    }
+
+    /** @return MollieTransaction */
     public function transaction()
     {
         return Mollie::api()->payments()->get($this->mollie_id);
     }
 
+    /**
+     * @param string $status
+     * @return string
+     */
     public static function translateStatus($status)
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
@@ -40,27 +76,29 @@ class MollieTransaction extends Model
         }
     }
 
+    /** @return string */
     public function translatedStatus()
     {
         return MollieTransaction::translateStatus($this->status);
     }
 
+    /**
+     * @return MollieTransaction
+     * @throws Exception
+     */
     public function updateFromWebhook()
     {
-
         $mollie = Mollie::api()->payments()->get($this->mollie_id);
 
-        $oldstatus = $this->status;
-        $newstatus = MollieTransaction::translateStatus($mollie->status);
+        $new_status = MollieTransaction::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
         $this->payment_url = $mollie->getPaymentUrl();
 
         $this->save();
 
-        if ($newstatus == "failed") {
+        if ($new_status == "failed") {
             foreach ($this->orderlines as $orderline) {
-
                 if ($orderline->product_id == config('omnomcom.mollie')['fee_id']) {
                     $orderline->delete();
                     continue;
@@ -85,11 +123,10 @@ class MollieTransaction extends Model
 
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
-
             }
         }
 
-        if ($newstatus == "paid") {
+        if ($new_status == "paid") {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
                     $orderline->ticketPurchase->payment_complete = true;
@@ -99,6 +136,5 @@ class MollieTransaction extends Model
         }
 
         return $this;
-
     }
 }
