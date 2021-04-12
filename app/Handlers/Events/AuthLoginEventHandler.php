@@ -4,8 +4,6 @@ namespace Proto\Handlers\Events;
 
 use Proto\Models\Committee;
 use Proto\Models\Role;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AuthLoginEventHandler
 {
@@ -31,14 +29,14 @@ class AuthLoginEventHandler
         $user->generateNewToken();
 
         // We will grant the user all roles to which he is entitled!
-        $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
-        $boardcommittee = Committee::find(config('proto.committee')['board']);
+        $rootCommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
+        $boardCommittee = Committee::find(config('proto.committee')['board']);
         $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
         $tipcie = Committee::find(config('proto.committee')['tipcie']);
         $drafters = Committee::find(config('proto.committee')['drafters']);
         $protography = Committee::find(config('proto.committee')['protography']);
 
-        if ($user->isInCommittee($rootcommittee) && $user->signed_nda) {
+        if ($user->isInCommittee($rootCommittee) && $user->signed_nda) {
             if (!$user->hasRole('protube')) {
                 $user->attachRole(Role::where('name', '=', 'protube')->first());
             }
@@ -48,7 +46,7 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($boardcommittee) && $user->signed_nda) {
+        if ($user->isInCommittee($boardCommittee) && $user->signed_nda) {
             if (!$user->hasRole('board')) {
                 $user->attachRole(Role::where('name', '=', 'board')->first());
             }

@@ -4,6 +4,8 @@ namespace Proto\Http\Middleware;
 
 use Auth;
 use Closure;
+use Exception;
+use Illuminate\Http\Request;
 use Proto\Models\HashMapItem;
 use Redirect;
 
@@ -11,12 +13,12 @@ class EnforceWizard
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
+     * @throws Exception
      */
-    public function handle($request, Closure $next)
+    public function handle($request, $next)
     {
         if (Auth::check() && HashMapItem::key('wizard')->subkey(Auth::user()->id)->first() && !$request->is('api/*')) {
             if (!$request->is('becomeamember')) {

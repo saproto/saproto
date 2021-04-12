@@ -2,21 +2,22 @@
 
 namespace Proto\Http\Middleware;
 
-use Closure;
-use Auth;
-use Redirect;
 use App;
+use Auth;
+use Closure;
+use Illuminate\Http\Request;
+use Redirect;
 
 class EnforceTFA
 {
     /**
      * This middleware forces power users to use TFA before they can do anything else.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, $next)
     {
         if (App::environment('production') && Auth::check() && Auth::user()->hasRole(config('proto.tfaroles')) && (!Auth::user()->hasTFAEnabled())) {
             if (!$request->is('user/dashboard') && !$request->is('auth/logout') && !$request->is('user/quit_impersonating') && !$request->is('user/*/2fa/*') && !$request->is('user/2fa/*') && !$request->is('api/*')) {
@@ -24,7 +25,6 @@ class EnforceTFA
                 return Redirect::route('user::dashboard', array('#2fa'));
             }
         }
-
         return $next($request);
     }
 }

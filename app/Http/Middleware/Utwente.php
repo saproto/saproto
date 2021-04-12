@@ -4,17 +4,17 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Auth;
+use Illuminate\Http\Request;
 
 class Utwente
 {
     /**
      * This middleware only allows access if the visiting user is authenticated and is a member.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param Request $request
+     * @param  Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, $next)
     {
         if (Auth::check() && Auth::user()->utwente_username != null) {
             return $next($request);

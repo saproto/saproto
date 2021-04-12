@@ -4,17 +4,18 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Auth;
+use Illuminate\Http\Request;
 
 class Member
 {
     /**
      * This middleware only allows access if the visiting user is authenticated and is a member.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, $next)
     {
         if (Auth::check() && Auth::user()->is_member) {
             return $next($request);
