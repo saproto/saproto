@@ -4,37 +4,14 @@
     Sign membership contract
 @endsection
 
-@push('stylesheet')
-    <style>
-        .wrapper {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            -moz-user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        .signature-pad {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width:100%;
-            height:300px;
-            background-color: white;
-        }
-    </style>
-@endpush
-
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let signatureAlert = $('#signature-alert');
         let canvas = document.getElementById('signature-pad');
+        let signaturePad = new SignaturePad.default(canvas);
+
         window.onresize = resizeCanvas;
         resizeCanvas();
-
-        let signaturePad = new SignaturePad.default(canvas);
 
         function resizeCanvas() {
             // When zoomed out to less than 100%, for some very strange reason,
@@ -44,6 +21,7 @@
             canvas.width = canvas.offsetWidth * ratio;
             canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
         }
 
         $('#clear').on('click', function() {
@@ -107,7 +85,7 @@
 
                         <b>Signature:</b>
                         <div class="wrapper">
-                            <canvas id="signature-pad" class="signature-pad"></canvas>
+                            <canvas id="signature-pad"></canvas>
                             <button id="clear" class="btn btn-danger position-absolute m-2 px-2 py-1">
                                 <i class="fas fa-times"></i>
                             </button>
