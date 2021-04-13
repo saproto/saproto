@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class Droputwentes extends Migration
@@ -22,7 +21,6 @@ class Droputwentes extends Migration
      */
     public function down()
     {
-
         Schema::create('utwentes', function ($table) {
             $table->increments('id');
             $table->integer('user_id');
@@ -35,6 +33,5 @@ class Droputwentes extends Migration
 
             $table->timestamps();
         });
-
     }
 }

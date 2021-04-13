@@ -5,12 +5,12 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\User;
 
 class MembershipRenew extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
 
@@ -32,7 +32,7 @@ class MembershipRenew extends Mailable
     public function build()
     {
         return $this
-            ->from('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)')
+            ->from('secretary@proto.utwente.nl', config('proto.secretary').' (Secretary)')
             ->subject('Your membership of Proto is about to be renewed.')
             ->view('emails.membershiprenew');
     }

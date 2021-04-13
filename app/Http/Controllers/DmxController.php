@@ -3,22 +3,18 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Proto\Models\DmxChannel;
 use Proto\Models\DmxFixture;
-
-use Proto\Http\Controllers\CalendarController;
-
 use Proto\Models\DmxOverride;
-use Session;
 use Redirect;
+use Session;
 
 class DmxController extends Controller
 {
     public function valueApi()
     {
         // Get the events.
-        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime("last week")), date('c', strtotime("next week")));
+        $events = CalendarController::returnGoogleCalendarEvents(config('proto.smartxp-google-timetable-id'), date('c', strtotime('last week')), date('c', strtotime('next week')));
 
         // Determine if any event is currently going on.
         $current_event = null;
@@ -101,9 +97,9 @@ class DmxController extends Controller
     public function overrideIndex()
     {
         return view('dmx.override.index', [
-            'overrides' => DmxOverride::getActiveSorted(),
+            'overrides'          => DmxOverride::getActiveSorted(),
             'upcoming_overrides' => DmxOverride::getUpcomingSorted(),
-            'past_overrides' => DmxOverride::getPastSorted()
+            'past_overrides'     => DmxOverride::getPastSorted(),
         ]);
     }
 
@@ -130,6 +126,7 @@ class DmxController extends Controller
         }
 
         Session::flash('flash_message', sprintf('The new fixture %s has been stored.', $fixture->name));
+
         return Redirect::route('dmx::edit', ['id' => $fixture->id]);
     }
 
@@ -142,13 +139,14 @@ class DmxController extends Controller
 
         $override = DmxOverride::create([
             'fixtures' => $fixtures,
-            'color' => $color,
-            'start' => $start,
-            'end' => $end
+            'color'    => $color,
+            'start'    => $start,
+            'end'      => $end,
         ]);
         $override->save();
 
         Session::flash('flash_message', 'Override created.');
+
         return Redirect::route('dmx::override::edit', ['id' => $override->id]);
     }
 
@@ -160,7 +158,7 @@ class DmxController extends Controller
     public function overrideEdit($id)
     {
         return view('dmx.override.edit', ['override' => DmxOverride::findOrFail($id),
-            'fixtures' => DmxFixture::orderBy('name', 'asc')->get()]);
+            'fixtures'                               => DmxFixture::orderBy('name', 'asc')->get(), ]);
     }
 
     public function update(Request $request, $id)
@@ -182,6 +180,7 @@ class DmxController extends Controller
         }
 
         Session::flash('flash_message', sprintf('The fixture %s has been updated.', $fixture->name));
+
         return Redirect::back();
     }
 
@@ -196,13 +195,14 @@ class DmxController extends Controller
 
         $override->update([
             'fixtures' => $fixtures,
-            'color' => $color,
-            'start' => $start,
-            'end' => $end
+            'color'    => $color,
+            'start'    => $start,
+            'end'      => $end,
         ]);
         $override->save();
 
         Session::flash('flash_message', 'Override updated.');
+
         return Redirect::route('dmx::override::edit', ['id' => $override->id]);
     }
 

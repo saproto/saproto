@@ -13,7 +13,7 @@ return [
     */
 
     'rootcommittee' => 'haveyoutriedturningitoffandonagain',
-    'rootrole' => 12,
+    'rootrole'      => 12,
 
     /*
     |--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return [
     */
 
     'additional_mailboxes' => [
-      'boardarchive'
+        'boardarchive',
     ],
 
     /*
@@ -61,11 +61,11 @@ return [
     */
 
     'committee' => [
-        'board' => 2108,
-        'omnomcom' => 26,
-        'tipcie' => 3583,
-        'drafters' => 3336,
-        'ero' => 1364,
+        'board'       => 2108,
+        'omnomcom'    => 26,
+        'tipcie'      => 3583,
+        'drafters'    => 3336,
+        'ero'         => 1364,
         'protography' => 294,
     ],
 
@@ -100,7 +100,7 @@ return [
     |
     */
 
-    'autoSubscribeUser' => [],
+    'autoSubscribeUser'   => [],
     'autoSubscribeMember' => [8, 12],
 
     /*
@@ -238,29 +238,29 @@ return [
             'protu.be',
             'www.protu.be',
             'protube.nl',
-            'www.protube.nl'
+            'www.protube.nl',
         ],
         'omnomcom' => [
             'omnomcom.nl',
-            'www.omnomcom.nl'
+            'www.omnomcom.nl',
         ],
         'smartxp' => [
             'smartxp.nl',
             'www.smartxp.nl',
             'caniworkinthesmartxp.nl',
-            'www.caniworkinthesmartxp.nl'
+            'www.caniworkinthesmartxp.nl',
         ],
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
-            'www.haveyoutriedturningitoffandonagain.nl'
+            'www.haveyoutriedturningitoffandonagain.nl',
         ],
         'isalfredthere' => [
             'isalfredthere.nl',
-            'www.isalfredthere.nl'
+            'www.isalfredthere.nl',
         ],
         'static' => [
-            'static.saproto.com'
-        ]
+            'static.saproto.com',
+        ],
     ],
 
     /*
@@ -274,7 +274,7 @@ return [
     */
 
     'soundboardSounds' => [
-        '1337' => 9,
+        '1337'       => 9,
         'new-member' => 60,
     ],
 
@@ -287,10 +287,10 @@ return [
     |
     */
 
-    'sepa_info' => (object)[
-        'iban' => env('SEPA_IBAN'),
-        'bic' => env('SEPA_BIC'),
-        'creditor_id' => env('SEPA_CI')
+    'sepa_info' => (object) [
+        'iban'        => env('SEPA_IBAN'),
+        'bic'         => env('SEPA_BIC'),
+        'creditor_id' => env('SEPA_CI'),
     ],
 
     /*
@@ -303,11 +303,11 @@ return [
     */
 
     'themes' => [
-        'Light' => 'assets/application-light.css',
-        'Dark' => 'assets/application-dark.css',
-        'Rainbow Barf' => 'assets/application-rainbowbarf.css'
+        'Light'        => 'assets/application-light.css',
+        'Dark'         => 'assets/application-dark.css',
+        'Rainbow Barf' => 'assets/application-rainbowbarf.css',
     ],
 
     // Analytics URL
-    'analytics_url' => env('ANALYTICS_URL', '')
+    'analytics_url' => env('ANALYTICS_URL', ''),
 ];

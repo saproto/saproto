@@ -5,12 +5,12 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\User;
 
 class Newsletter extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $list;
@@ -26,8 +26,8 @@ class Newsletter extends Mailable
     public function build()
     {
         return $this
-            ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
-            ->subject('S.A. Proto Weekly Newsletter (Week ' . date("W") . ')')
+            ->from('internal@'.config('proto.emaildomain'), config('proto.internal'))
+            ->subject('S.A. Proto Weekly Newsletter (Week '.date('W').')')
             ->view('emails.newsletter');
     }
 }

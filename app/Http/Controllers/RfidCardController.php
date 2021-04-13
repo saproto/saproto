@@ -2,15 +2,11 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\RfidCard;
-use Proto\Models\QrAuthRequest;
-
-use Redirect;
 use Auth;
+use Illuminate\Http\Request;
+use Proto\Models\QrAuthRequest;
+use Proto\Models\RfidCard;
+use Redirect;
 
 class RfidCardController extends Controller
 {
@@ -18,12 +14,12 @@ class RfidCardController extends Controller
      * Store a newly created resource in storage.
      * This method returns raw HTML and is intended to be used via AJAX!
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
         switch ($request->input('credentialtype')) {
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
@@ -63,18 +59,19 @@ class RfidCardController extends Controller
         } else {
             $card = RfidCard::create([
                 'user_id' => $user->id,
-                'card_id' => $uid
+                'card_id' => $uid,
             ]);
             $card->save();
-            return "<span style='color: green;'>This card has been successfully registered to " . $user->name . ".</span>";
-        }
 
+            return "<span style='color: green;'>This card has been successfully registered to ".$user->name.'.</span>';
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -83,14 +80,16 @@ class RfidCardController extends Controller
         if (($rfid->user->id != Auth::id()) && (!Auth::user()->can('board'))) {
             abort(403);
         }
+
         return view('users.rfid.edit', ['card' => $rfid]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -104,24 +103,27 @@ class RfidCardController extends Controller
         $rfid->save();
 
         $request->session()->flash('flash_message', 'Your RFID card has been updated.');
+
         return Redirect::route('user::dashboard');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
         $rfid = RfidCard::findOrFail($id);
         if ($rfid->user->id != Auth::id()) {
-        abort(403);
-    }
+            abort(403);
+        }
         $rfid->delete();
 
         $request->session()->flash('flash_message', 'Your RFID card has been deleted.');
+
         return Redirect::back();
     }
 }

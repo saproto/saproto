@@ -2,30 +2,30 @@
 
 namespace Proto\Models;
 
-
+use Carbon\Carbon;
+use DateTime;
+use DirectAdmin\DirectAdmin;
+use Hash;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
-use DateTime;
-use Carbon\Carbon;
-use Hash;
-
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-use DirectAdmin\DirectAdmin;
-use Proto\Console\Commands\DirectAdminSync;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
+use Proto\Console\Commands\DirectAdminSync;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
- * Class User
- * @package Proto\Models
+ * Class User.
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes, HasApiTokens;
+    use Authenticatable;
+    use CanResetPassword;
+    use EntrustUserTrait;
+    use SoftDeletes;
+    use HasApiTokens;
     protected $dates = ['deleted_at'];
 
     /**
@@ -48,34 +48,63 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getPublicId()
     {
-        return ($this->is_member ? $this->member->proto_username : null);
+        return $this->is_member ? $this->member->proto_username : null;
     }
 
     public static function fromPublicId($public_id)
     {
         $member = Member::where('proto_username', $public_id)->first();
-        return ($member ? $member->user : null);
+
+        return $member ? $member->user : null;
     }
 
     /**
-     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
+     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
+     *
      * @return bool whether or not the user is stale (not in use, can be *really* deleted safely)
      */
     public function isStale()
     {
-        if ($this->password) return false;
-        if ($this->edu_username) return false;
-        if (strtotime($this->created_at) > strtotime('-1 hour')) return false;
-        if (Member::withTrashed()->where('user_id', $this->id)->first()) return false;
-        if (Bank::where('user_id', $this->id)->first()) return false;
-        if (Address::where('user_id', $this->id)->first()) return false;
-        if (OrderLine::where('user_id', $this->id)->count() > 0) return false;
-        if (CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0) return false;
-        if (Quote::where('user_id', $this->id)->count() > 0) return false;
-        if (EmailListSubscription::where('user_id', $this->id)->count() > 0) return false;
-        if (RfidCard::where('user_id', $this->id)->count() > 0) return false;
-        if (PlayedVideo::where('user_id', $this->id)->count() > 0) return false;
-        if (AchievementOwnership::where('user_id', $this->id)->count() > 0) return false;
+        if ($this->password) {
+            return false;
+        }
+        if ($this->edu_username) {
+            return false;
+        }
+        if (strtotime($this->created_at) > strtotime('-1 hour')) {
+            return false;
+        }
+        if (Member::withTrashed()->where('user_id', $this->id)->first()) {
+            return false;
+        }
+        if (Bank::where('user_id', $this->id)->first()) {
+            return false;
+        }
+        if (Address::where('user_id', $this->id)->first()) {
+            return false;
+        }
+        if (OrderLine::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (Quote::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (EmailListSubscription::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (RfidCard::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (PlayedVideo::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+        if (AchievementOwnership::where('user_id', $this->id)->count() > 0) {
+            return false;
+        }
+
         return true;
     }
 
@@ -92,24 +121,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         // Update DirectAdmin Password
         if ($this->is_member) {
-            $da = new DirectAdmin;
+            $da = new DirectAdmin();
             $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
             $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 
             $da->set_method('post');
             $q = DirectAdminSync::constructQuery('CMD_API_POP', [
-                'action' => 'modify',
-                'domain' => env('DA_DOMAIN'),
-                'user' => $this->member->proto_username,
+                'action'  => 'modify',
+                'domain'  => env('DA_DOMAIN'),
+                'user'    => $this->member->proto_username,
                 'newuser' => $this->member->proto_username,
-                'passwd' => $password,
+                'passwd'  => $password,
                 'passwd2' => $password,
-                'quota' => 0, # Unlimited
-                'limit' => 0 # Unlimited
+                'quota'   => 0, // Unlimited
+                'limit'   => 0, // Unlimited
             ]);
             $da->query($q);
         }
-
 
         // Remove breach notification flag
         HashMapItem::where('key', 'pwned-pass')->where('subkey', $this->id)->delete();
@@ -131,9 +159,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasUnpaidOrderlines()
     {
         foreach ($this->orderlines as $orderline) {
-            if (!$orderline->isPayed()) return true;
-            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) return true;
+            if (!$orderline->isPayed()) {
+                return true;
+            }
+            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -145,7 +178,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function isTempadmin()
     {
         foreach ($this->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return true;
+            }
         }
 
         return false;
@@ -174,8 +209,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     /**
      * Returns a sized version of someone's profile photo, use this instead of $user->photo->generate to bypass the no profile problem.
+     *
      * @param int $x
      * @param int $y
+     *
      * @return mixed
      */
     public function generatePhotoPath($x = 100, $y = 100)
@@ -258,6 +295,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     /**
      * @param User $user
+     *
      * @return bool Whether the user is currently in the specified committee.
      */
     public function isInCommittee(Committee $committee)
@@ -268,6 +306,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function isInCommitteeBySlug($slug)
     {
         $committee = Committee::where('slug', $slug)->first();
+
         return $committee && $this->isInCommittee($committee);
     }
 
@@ -276,7 +315,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     public function isActiveMember()
     {
-        return count(CommitteeMembership::withTrashed()
+        return count(
+            CommitteeMembership::withTrashed()
                 ->where('user_id', $this->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
                 ->where(function ($q) {
@@ -286,7 +326,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->with('committee')
                 ->get()
                 ->where('committee.is_society', false)
-            ) > 0;
+        ) > 0;
     }
 
     /**
@@ -295,10 +335,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function achieved()
     {
         $achievements = $this->achievements;
-        $r = array();
+        $r = [];
         foreach ($achievements as $achievement) {
             $r[] = $achievement;
         }
+
         return $r;
     }
 
@@ -313,6 +354,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 }
             }
         }
+
         return $withdrawals;
     }
 
@@ -323,7 +365,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function achievements()
     {
-        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(['id'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     public function websiteUrl()
@@ -331,7 +373,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (preg_match("/(?:http|https):\/\/(?:.*)/i", $this->website) === 1) {
             return $this->website;
         } else {
-            return "http://" . $this->website;
+            return 'http://'.$this->website;
         }
     }
 
@@ -346,7 +388,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasDiet()
     {
-        return (strlen(str_replace(["\r", "\n", " "], "", $this->diet)) > 0 ? true : false);
+        return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0 ? true : false;
     }
 
     public function getDisplayEmail()
@@ -357,6 +399,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /**
      * This function returns a guess of the system for whether or not they are a first year student.
      * Note that this is a GUESS. There is no way for us to know sure without manually setting a flag on each user.
+     *
      * @return bool Whether or not the system thinks this is a first year.
      */
     public function isFirstYear()
@@ -386,10 +429,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $token = $this->generateNewToken();
         }
         $token->touch();
+
         return $token;
     }
 
-    public function getMemberships() {
+    public function getMemberships()
+    {
         $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('pending', '=', true)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
 
@@ -400,6 +445,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         $token = new Token();
         $token->generate($this);
+
         return $token;
     }
 
@@ -414,6 +460,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if ($this->personal_key == null) {
             $this->generateNewPersonalKey();
         }
+
         return $this->personal_key;
     }
 
@@ -455,7 +502,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->member && !$this->member->pending;
     }
 
-    public function getSignedMembershipFormAttribute() {
+    public function getSignedMembershipFormAttribute()
+    {
         if ($this->member) {
             return $this->member->membershipForm !== null;
         }
@@ -473,7 +521,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getIcalUrl()
     {
-        return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
+        return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
 
     public function getWelcomeMessageAttribute()
@@ -486,16 +534,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    private function getGroups() {
+    private function getGroups()
+    {
         return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
             ->where(function ($query) {
                 $query->whereNull('committees_users.deleted_at')
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
             ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderBy('pivot_created_at', 'desc');
     }
-
 }

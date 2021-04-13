@@ -2,26 +2,20 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
-use Proto\Models\User;
-use Proto\Models\StorageEntry;
-
-use Session;
-use Redirect;
-
 use Auth;
+use Illuminate\Http\Request;
+use Proto\Models\StorageEntry;
+use Redirect;
+use Session;
 
 class ProfilePictureController extends Controller
 {
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -37,21 +31,25 @@ class ProfilePictureController extends Controller
                 $user->photo()->associate($file);
                 $user->save();
             } else {
-                Session::flash("flash_message", "This is not an image file!");
+                Session::flash('flash_message', 'This is not an image file!');
+
                 return Redirect::back();
             }
         } else {
-            Session::flash("flash_message", "You forget an image to upload, silly!");
+            Session::flash('flash_message', 'You forget an image to upload, silly!');
+
             return Redirect::back();
         }
-        Session::flash("flash_message", "Your profile picture has been updated!");
+        Session::flash('flash_message', 'Your profile picture has been updated!');
+
         return Redirect::back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy()
@@ -61,7 +59,8 @@ class ProfilePictureController extends Controller
         $user->photo()->dissociate();
         $user->save();
 
-        Session::flash("flash_message", "Your profile picture has been cleared!");
+        Session::flash('flash_message', 'Your profile picture has been cleared!');
+
         return Redirect::back();
     }
 }

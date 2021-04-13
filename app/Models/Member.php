@@ -19,7 +19,8 @@ class Member extends Model
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    public function membershipForm() {
+    public function membershipForm()
+    {
         return $this->belongsTo('Proto\Models\StorageEntry', 'membership_form_id');
     }
 
@@ -29,6 +30,7 @@ class Member extends Model
         foreach (Committee::all() as $committee) {
             $userids = array_merge($userids, $committee->users->pluck('id')->toArray());
         }
+
         return User::whereIn('id', $userids)->orderBy('name', 'asc')->count();
     }
 
@@ -41,7 +43,7 @@ class Member extends Model
         }
 
         $orderline = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $yearstart . '-09-01 00:00:01')->where('user_id', '=', $this->user->id)->first();
+            ->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->where('user_id', '=', $this->user->id)->first();
 
         return $orderline;
     }

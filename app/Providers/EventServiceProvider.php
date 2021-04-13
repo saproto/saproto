@@ -17,13 +17,14 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Aacotroneo\Saml2\Events\Saml2LoginEvent' => [
             'Proto\Handlers\Events\SamlLoginEventHandler',
-        ]
+        ],
     ];
 
     /**
      * Register any other events for your application.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher $events
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
+     *
      * @return void
      */
     public function boot()

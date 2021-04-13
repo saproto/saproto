@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailDbAlias extends Model
 {
-
     protected $connection = 'mysql-mail';
 
     public $timestamps = false;
@@ -14,5 +13,4 @@ class EmailDbAlias extends Model
     protected $table = 'virtual_aliases';
 
     protected $guarded = ['id'];
-
 }

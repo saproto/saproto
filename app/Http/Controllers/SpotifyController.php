@@ -3,14 +3,8 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use Proto\Models\HashMapItem;
-
 use Redirect;
-
 
 class SpotifyController extends Controller
 {
@@ -22,24 +16,21 @@ class SpotifyController extends Controller
         $session = new \SpotifyWebAPI\Session(
             config('app-proto.spotify-clientkey'),
             config('app-proto.spotify-secretkey'),
-            route("spotify::oauth")
+            route('spotify::oauth')
         );
 
         $api = new \SpotifyWebAPI\SpotifyWebAPI();
 
         if (!$request->has('code')) {
-
             $options = [
                 'scope' => [
                     'playlist-modify-public',
                     'playlist-modify-private',
-                ]
+                ],
             ];
 
             return Redirect::to($session->getAuthorizeUrl($options));
-
         } else {
-
             $session->requestAccessToken($request->get('code'));
             $api->setAccessToken($session->getAccessToken());
 
@@ -53,8 +44,8 @@ class SpotifyController extends Controller
             SpotifyController::setApi($api);
 
             $request->session()->flash('flash_message', 'Successfully saved Spotify credentials.');
-            return Redirect::route('homepage');
 
+            return Redirect::route('homepage');
         }
     }
 
@@ -63,8 +54,8 @@ class SpotifyController extends Controller
         $dbSession = HashMapItem::where('key', 'spotify')->where('subkey', 'session')->first();
         if ($dbSession == null) {
             $dbSession = HashMapItem::create([
-                'key' => 'spotify',
-                'subkey' => 'session'
+                'key'    => 'spotify',
+                'subkey' => 'session',
             ]);
         }
         $dbSession->value = serialize($session);
@@ -76,8 +67,8 @@ class SpotifyController extends Controller
         $dbApi = HashMapItem::where('key', 'spotify')->where('subkey', 'api')->first();
         if ($dbApi == null) {
             $dbApi = HashMapItem::create([
-                'key' => 'spotify',
-                'subkey' => 'api'
+                'key'    => 'spotify',
+                'subkey' => 'api',
             ]);
         }
         $dbApi->value = serialize($api);

@@ -3,9 +3,7 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Mollie;
-use Proto\Http\Controllers\MollieController;
 
 class MollieTransaction extends Model
 {
@@ -30,13 +28,13 @@ class MollieTransaction extends Model
     public static function translateStatus($status)
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
-            return "open";
+            return 'open';
         } elseif ($status == 'expired' || $status == 'cancelled' || $status == 'failed' || $status == 'charged_back' || $status == 'refunded') {
-            return "failed";
-        } elseif ($status == "paid" || $status == "paidout") {
-            return "paid";
+            return 'failed';
+        } elseif ($status == 'paid' || $status == 'paidout') {
+            return 'paid';
         } else {
-            return "unknown";
+            return 'unknown';
         }
     }
 
@@ -47,7 +45,6 @@ class MollieTransaction extends Model
 
     public function updateFromWebhook()
     {
-
         $mollie = Mollie::api()->payments()->get($this->mollie_id);
 
         $oldstatus = $this->status;
@@ -58,9 +55,8 @@ class MollieTransaction extends Model
 
         $this->save();
 
-        if ($newstatus == "failed") {
+        if ($newstatus == 'failed') {
             foreach ($this->orderlines as $orderline) {
-
                 if ($orderline->product_id == config('omnomcom.mollie')['fee_id']) {
                     $orderline->delete();
                     continue;
@@ -85,11 +81,10 @@ class MollieTransaction extends Model
 
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
-
             }
         }
 
-        if ($newstatus == "paid") {
+        if ($newstatus == 'paid') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
                     $orderline->ticketPurchase->payment_complete = true;
@@ -99,6 +94,5 @@ class MollieTransaction extends Model
         }
 
         return $this;
-
     }
 }

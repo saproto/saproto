@@ -23,8 +23,8 @@ class WelcomeMessage extends Model
 
     protected $fillable = ['user_id', 'message'];
 
-    protected $rules = array(
+    protected $rules = [
         'user_id' => 'required|integer',
         'message' => 'required|string',
-    );
+    ];
 }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-
     protected $table = 'tickets';
     public $timestamps = false;
 
@@ -30,6 +29,7 @@ class Ticket extends Model
     public function getUsers()
     {
         $uids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+
         return User::whereIn('id', array_unique($uids))->get();
     }
 
@@ -64,7 +64,7 @@ class Ticket extends Model
         foreach ($this->purchases as $purchase) {
             $total += $purchase->orderline->total_price;
         }
+
         return $total;
     }
-
 }

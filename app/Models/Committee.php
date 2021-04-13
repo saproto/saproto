@@ -2,18 +2,13 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-use Vinkla\Hashids\Facades\Hashids;
-
-use Carbon\Carbon;
-
 use Auth;
+use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Model;
 
 class Committee extends Model
 {
-
     /**
      * The database table used by the model.
      *
@@ -29,6 +24,7 @@ class Committee extends Model
 
     /**
      * @param $public_id
+     *
      * @return mixed
      */
     public static function fromPublicId($public_id)
@@ -74,16 +70,20 @@ class Committee extends Model
 
     /**
      * @param $includeSecret
+     *
      * @return mixed All events at which this committee helped out.
      */
     public function helpedEvents($includeSecret = false)
     {
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
-        $events = array();
+        $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && (!$event->secret || $includeSecret)) $events[] = $event;
+            if ($event && (!$event->secret || $includeSecret)) {
+                $events[] = $event;
+            }
         }
+
         return $events;
     }
 
@@ -93,11 +93,14 @@ class Committee extends Model
     public function pastHelpedEvents()
     {
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
-        $events = array();
+        $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && !$event->secret && $event->end < time()) $events[] = $event;
+            if ($event && !$event->secret && $event->end < time()) {
+                $events[] = $event;
+            }
         }
+
         return $events;
     }
 
@@ -112,7 +115,7 @@ class Committee extends Model
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
             ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderBy('pivot_created_at', 'desc');
     }
@@ -124,8 +127,7 @@ class Committee extends Model
 
     public function allmembers()
     {
-
-        $members = array('editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]);
+        $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];
 
         foreach (
             CommitteeMembership::withTrashed()->where('committee_id', $this->id)
@@ -155,11 +157,11 @@ class Committee extends Model
         }
 
         return $members;
-
     }
 
     /**
      * @param User $user The user to check membership for.
+     *
      * @return bool Whether the user is currently a member of this committee.
      */
     public function isMember(User $user)
@@ -169,7 +171,7 @@ class Committee extends Model
 
     public function getEmailAddress()
     {
-        return $this->slug . '@' . config('proto.emaildomain');
+        return $this->slug.'@'.config('proto.emaildomain');
     }
 
     public function helperReminderSubscribers()
@@ -183,6 +185,7 @@ class Committee extends Model
         foreach ($this->helperReminderSubscribers as $subscriber) {
             $users[] = $subscriber->user;
         }
+
         return $users;
     }
 

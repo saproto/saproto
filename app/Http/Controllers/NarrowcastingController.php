@@ -3,16 +3,11 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Session;
-use Redirect;
-
-use Youtube;
-
-use DateInterval;
-
 use Proto\Models\NarrowcastingItem;
 use Proto\Models\StorageEntry;
+use Redirect;
+use Session;
+use Youtube;
 
 class NarrowcastingController extends Controller
 {
@@ -39,15 +34,16 @@ class NarrowcastingController extends Controller
             if ($item->youtube_id) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
-                    'video' => $item->youtube_id
+                    'video'          => $item->youtube_id,
                 ];
             } elseif ($item->image) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
-                    'image' => $item->image->generateImagePath(2000, 1200)
+                    'image'          => $item->image->generateImagePath(2000, 1200),
                 ];
             }
         }
+
         return $data;
     }
 
@@ -65,13 +61,14 @@ class NarrowcastingController extends Controller
      * Store a newly created campaign.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
         if (!$request->file('image') && !$request->has('youtube_id')) {
-            Session::flash("flash_message", "Every campaign needs either an image or a video!");
+            Session::flash('flash_message', 'Every campaign needs either an image or a video!');
+
             return Redirect::back();
         }
 
@@ -82,47 +79,46 @@ class NarrowcastingController extends Controller
         $narrowcasting->slide_duration = $request->slide_duration;
 
         if ($request->file('image')) {
-
             $file = new StorageEntry();
             $file->createFromFile($request->file('image'));
 
             $narrowcasting->image()->associate($file);
-
         }
 
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-
             $video = Youtube::getVideoInfo($youtube_id);
 
             if (!$video) {
-                Session::flash("flash_message", "This is an invalid video ID!");
+                Session::flash('flash_message', 'This is an invalid video ID!');
+
                 return Redirect::back();
             }
 
             if (!$video->status->embeddable) {
-                Session::flash("flash_message", "This video is not embeddable and therefore cannot be used on the site!");
+                Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
+
                 return Redirect::back();
             }
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
             $narrowcasting->slide_duration = $narrowcasting->videoDuration();
-
         }
 
         $narrowcasting->save();
 
-        Session::flash("flash_message", "Your campaign '" . $narrowcasting->name . "' has been added.");
-        return Redirect::route('narrowcasting::list');
+        Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been added.");
 
+        return Redirect::route('narrowcasting::list');
     }
 
     /**
      * Show the form for editing the specified campaign.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -140,12 +136,12 @@ class NarrowcastingController extends Controller
      * Update the specified campaign.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
         $narrowcasting = NarrowcastingItem::find($id);
 
         if (!$narrowcasting) {
@@ -167,60 +163,57 @@ class NarrowcastingController extends Controller
         $youtube_id = $request->get('youtube_id');
 
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
-
             $video = Youtube::getVideoInfo($youtube_id);
 
             if (!$video) {
-                Session::flash("flash_message", "This is an invalid video ID!");
+                Session::flash('flash_message', 'This is an invalid video ID!');
+
                 return Redirect::back();
             }
 
             $narrowcasting->youtube_id = $youtube_id;
             $narrowcasting->save();
             $narrowcasting->slide_duration = $narrowcasting->videoDuration();
-
         } else {
-
             $narrowcasting->youtube_id = null;
-
         }
 
         $narrowcasting->save();
 
-        Session::flash("flash_message", "Your campaign '" . $narrowcasting->name . "' has been saved.");
-        return Redirect::route('narrowcasting::list');
+        Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been saved.");
 
+        return Redirect::route('narrowcasting::list');
     }
 
     /**
      * Remove the specified campaign.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-
         $narrowcasting = NarrowcastingItem::find($id);
 
         if (!$narrowcasting) {
             abort(404);
         }
 
-        Session::flash("flash_message", "Your campaign '" . $narrowcasting->name . "' has been deleted.");
+        Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been deleted.");
         $narrowcasting->delete();
-        return Redirect::route('narrowcasting::list');
 
+        return Redirect::route('narrowcasting::list');
     }
 
     public function clear()
     {
-
         foreach (NarrowcastingItem::where('campaign_end', '<', date('U'))->get() as $item) {
             $item->delete();
         }
 
-        Session::flash("flash_message", "All finished campaigns have been deleted.");
+        Session::flash('flash_message', 'All finished campaigns have been deleted.');
+
         return Redirect::route('narrowcasting::list');
     }
 

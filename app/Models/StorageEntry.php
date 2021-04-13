@@ -2,23 +2,11 @@
 
 namespace Proto\Models;
 
-use Hash;
 use DB;
-
 use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Storage;
 use Proto\Http\Controllers\FileController;
-
-use Proto\Models\Company;
-use Proto\Models\NarrowcastingItem;
-use Proto\Models\Page;
-use Proto\Models\Product;
-use Proto\Models\SoundboardSound;
-use Proto\Models\Photo;
 
 class StorageEntry extends Model
 {
@@ -30,12 +18,14 @@ class StorageEntry extends Model
     protected $table = 'files';
 
     /**
-     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
+     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
+     *
      * @return bool whether or not the file is orphaned (not in use, can be *really* deleted safely)
      */
     public function isOrphan()
     {
         $id = $this->id;
+
         return
             NarrowcastingItem::where('image_id', $id)->count() == 0 &&
             Page::where('featured_image_id', $id)->count() == 0 &&
@@ -55,13 +45,12 @@ class StorageEntry extends Model
 
     public function createFromFile($file, $customPath = null)
     {
-
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
 
-        if($customPath) {
-            $this->filename = $customPath . $this->hash;
+        if ($customPath) {
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, File::get($file));
@@ -70,18 +59,16 @@ class StorageEntry extends Model
         $this->original_filename = $file->getClientOriginalName();
 
         $this->save();
-
     }
 
     public function createFromData($data, $mime, $name, $customPath = null)
     {
-
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
 
-        if($customPath) {
-            $this->filename = $customPath . $this->hash;
+        if ($customPath) {
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, $data);
@@ -90,12 +77,11 @@ class StorageEntry extends Model
         $this->original_filename = $name;
 
         $this->save();
-
     }
 
     private function generateHash()
     {
-        return sha1(date('U') . mt_rand(1, intval(99999999999)));
+        return sha1(date('U').mt_rand(1, intval(99999999999)));
     }
 
     public function generatePath()
@@ -104,6 +90,7 @@ class StorageEntry extends Model
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
+
         return $url;
     }
 
@@ -113,8 +100,8 @@ class StorageEntry extends Model
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
-        return $url;
 
+        return $url;
     }
 
     public function getBase64($w = null, $h = null)
@@ -127,13 +114,13 @@ class StorageEntry extends Model
         $size = File::size($this->generateLocalPath());
         if ($human) {
             if ($size < 1024) {
-                return $size . ' bytes';
+                return $size.' bytes';
             } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1) . ' kilobytes';
+                return round($size / pow(1024, 1), 1).' kilobytes';
             } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1) . ' megabytes';
+                return round($size / pow(1024, 2), 1).' megabytes';
             } else {
-                return round($size / pow(1024, 3), 1) . ' gigabytes';
+                return round($size / pow(1024, 3), 1).' gigabytes';
             }
         } else {
             return $size;
@@ -142,18 +129,19 @@ class StorageEntry extends Model
 
     public function generateLocalPath()
     {
-        return storage_path('app/' . $this->filename);
+        return storage_path('app/'.$this->filename);
     }
 
     public function getFileHash($algo = 'md5')
     {
-        return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+        return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
 
-        static::deleting(function($file) {
+        static::deleting(function ($file) {
             Storage::disk('local')->delete($file->filename);
         });
     }

@@ -3,7 +3,6 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bank extends Model
 {
@@ -15,5 +14,4 @@ class Bank extends Model
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
-
 }

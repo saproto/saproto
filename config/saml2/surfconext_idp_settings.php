@@ -1,6 +1,6 @@
 <?php
 
-return $settings = array(
+return $settings = [
 
     /*****
      * One Login Settings
@@ -16,7 +16,7 @@ return $settings = array(
     'debug' => env('DEBUG', false),
 
     // Service Provider Data that we are deploying
-    'sp' => array(
+    'sp' => [
 
         // Specifies constraints on the name identifier to be used to
         // represent the requested subject.
@@ -25,7 +25,7 @@ return $settings = array(
 
         // Usually x509cert and privateKey of the SP are provided by files placed at
         // the certs folder. But we can also provide them with the following parameters
-        'x509cert' => env('SAML2_SP_CERT'),
+        'x509cert'   => env('SAML2_SP_CERT'),
         'privateKey' => env('SAML2_SP_KEY'),
 
         // Identifier (URI) of the SP entity.
@@ -34,39 +34,39 @@ return $settings = array(
 
         // Specifies info about where and how the <AuthnResponse> message MUST be
         // returned to the requester, in this case our SP.
-        'assertionConsumerService' => array(
+        'assertionConsumerService' => [
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-POST binding.
             // Leave blank to use the '{idpName}_acs' route, e.g. 'test_acs'
-            'url' => env('APP_URL') . '/saml2/surfconext/acs',
-        ),
+            'url' => env('APP_URL').'/saml2/surfconext/acs',
+        ],
         // Specifies info about where and how the <Logout Response> message MUST be
         // returned to the requester, in this case our SP.
         // Remove this part to not include any URL Location in the metadata.
-        'singleLogoutService' => array(
+        'singleLogoutService' => [
             // URL Location where the <Response> from the IdP will be returned,
             // using HTTP-Redirect binding.
             // Leave blank to use the '{idpName}_sls' route, e.g. 'test_sls'
-            'url' => env('APP_URL') . '/saml2/surfconext/logout',
-        ),
-    ),
+            'url' => env('APP_URL').'/saml2/surfconext/logout',
+        ],
+    ],
 
     // Identity Provider Data that we want connect with our SP
-    'idp' => array(
+    'idp' => [
         // Identifier of the IdP entity  (must be a URI)
         'entityId' => env('SAML2_SP_REMOTE_ENTITY_ID'),
         // SSO endpoint info of the IdP. (Authentication Request protocol)
-        'singleSignOnService' => array(
+        'singleSignOnService' => [
             // URL Target of the IdP where the SP will send the Authentication Request Message,
             // using HTTP-Redirect binding.
             'url' => env('SAML2_SP_REMOTE_SOS'),
-        ),
+        ],
         // SLO endpoint info of the IdP.
-        'singleLogoutService' => array(
+        'singleLogoutService' => [
             // URL Location of the IdP where the SP will send the SLO Request,
             // using HTTP-Redirect binding.
             'url' => env('SAML2_SP_REMOTE_SLS'),
-        ),
+        ],
         // Public x509 certificate of the IdP
         'x509cert' => env('SAML2_SP_REMOTE_CERT'),
         /*
@@ -75,10 +75,8 @@ return $settings = array(
          */
 
         'validate.authnrequest' => true,
-        'saml20.sign.assertion' => true
-    ),
-
-
+        'saml20.sign.assertion' => true,
+    ],
 
     /***
      *
@@ -87,7 +85,7 @@ return $settings = array(
      *
      */
     // Security settings
-    'security' => array(
+    'security' => [
 
         /** signatures and encryptions offered */
 
@@ -115,7 +113,6 @@ return $settings = array(
         */
         'signMetadata' => true,
 
-
         /** signatures and encryptions required **/
 
         // Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and
@@ -135,27 +132,27 @@ return $settings = array(
         // Set true or don't present thi parameter and you will get an AuthContext 'exact' 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
         // Set an array with the possible auth context values: array ('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509'),
         'requestedAuthnContext' => true,
-    ),
+    ],
 
     // Contact information template, it is recommended to suply a technical and support contacts
-    'contactPerson' => array(
-        'technical' => array(
-            'givenName' => 'Have You Tried Turning It Off And On Again committee',
-            'emailAddress' => 'sysadmin@proto.utwente.nl'
-        ),
-        'support' => array(
-            'givenName' => 'Have You Tried Turning It Off And On Again committee',
-            'emailAddress' => 'sysadmin@proto.utwente.nl'
-        ),
-    ),
+    'contactPerson' => [
+        'technical' => [
+            'givenName'    => 'Have You Tried Turning It Off And On Again committee',
+            'emailAddress' => 'sysadmin@proto.utwente.nl',
+        ],
+        'support' => [
+            'givenName'    => 'Have You Tried Turning It Off And On Again committee',
+            'emailAddress' => 'sysadmin@proto.utwente.nl',
+        ],
+    ],
 
     // Organization information template, the info in en_US lang is recomended, add more if required
-    'organization' => array(
-        'en-US' => array(
-            'name' => 'S.A. Proto SAML 2.0 Service Provider / UTwente SSO',
+    'organization' => [
+        'en-US' => [
+            'name'        => 'S.A. Proto SAML 2.0 Service Provider / UTwente SSO',
             'displayname' => 'S.A. Proto SAML 2.0 SP',
-            'url' => env('APP_URL')
-        ),
-    )
+            'url'         => env('APP_URL'),
+        ],
+    ],
 
-);
+];

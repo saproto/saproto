@@ -2,14 +2,12 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Database\Eloquent\Model;
 
 class PasswordEntry extends Model
 {
-
     protected $table = 'passwordstore';
 
     protected $guarded = ['id'];
@@ -17,6 +15,7 @@ class PasswordEntry extends Model
     public function canAccess(User $user)
     {
         $permission = $this->permission;
+
         return $permission && $user->can($permission->name);
     }
 
@@ -29,5 +28,4 @@ class PasswordEntry extends Model
     {
         return Carbon::instance(new DateTime($this->updated_at))->diffInMonths(Carbon::now());
     }
-
 }

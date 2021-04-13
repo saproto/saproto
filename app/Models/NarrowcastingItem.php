@@ -2,11 +2,10 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use DateInterval;
-
-use Youtube;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Youtube;
 
 class NarrowcastingItem extends Model
 {
@@ -29,6 +28,7 @@ class NarrowcastingItem extends Model
                 return null;
             }
         }
+
         return null;
     }
 

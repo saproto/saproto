@@ -27,10 +27,11 @@ class Quote extends Model
 
     public function likes()
     {
-        $users = array();
+        $users = [];
         foreach ($this->QuoteLike as $like) {
             $users[] = $like;
         }
+
         return $users;
     }
 
@@ -41,6 +42,7 @@ class Quote extends Model
                 return true;
             }
         }
+
         return false;
     }
 }

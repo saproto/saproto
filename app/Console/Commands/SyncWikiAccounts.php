@@ -3,17 +3,11 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
-use Proto\Http\Controllers\LdapController;
-use Proto\Mail\UtwenteCleanup;
 use Proto\Models\Committee;
 use Proto\Models\User;
 
-use Mail;
-
 class SyncWikiAccounts extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -43,29 +37,26 @@ class SyncWikiAccounts extends Command
      */
     public function handle()
     {
-
         $users = User::get();
 
         $configlines = [];
 
         foreach ($users as $user) {
-
             if (!$user->is_member) {
                 continue;
             }
 
-            $configlines[] = sprintf('%s:%s:%s:%s:%s',
+            $configlines[] = sprintf(
+                '%s:%s:%s:%s:%s',
                 $user->member->proto_username,
                 $user->password,
                 $user->name,
                 $user->email,
                 $this->constructWikiGroups($user)
             );
-
         }
 
-        print(implode("\n", $configlines));
-
+        echo implode("\n", $configlines);
     }
 
     private function convertCommitteeNameToGroup($name)
@@ -79,19 +70,21 @@ class SyncWikiAccounts extends Command
         foreach ($committees as $committee) {
             $groups[] = $this->convertCommitteeNameToGroup($committee->name);
         }
+
         return $groups;
     }
 
     private function constructWikiGroups($user)
     {
         $rootCommittee = $this->convertCommitteeNameToGroup(
-            Committee::whereSlug(config('proto.rootcommittee'))->firstOrFail()->name);
+            Committee::whereSlug(config('proto.rootcommittee'))->firstOrFail()->name
+        );
         $groups = ['user'];
         $groups = array_merge($groups, $this->convertCommitteesToGroups($user->committees));
         if (in_array($rootCommittee, $groups)) {
             $groups[] = 'admin';
         }
+
         return implode(',', $groups);
     }
-
 }

@@ -2,38 +2,26 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Input;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\OrderLine;
 use Proto\Models\PhotoLikes;
+use Proto\Models\PlayedVideo;
 use Proto\Models\Quote;
 use Proto\Models\QuoteLike;
 use Proto\Models\RfidCard;
-use Proto\Models\User;
-use Proto\Models\Event;
-use Proto\Models\Activity;
 use Proto\Models\Token;
-use Proto\Models\PlayedVideo;
-
-use Auth;
-use Session;
-use Input;
 
 class ApiController extends Controller
 {
-
     public function train(Request $request)
     {
-
-        return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=" . $_GET['station']));
-
+        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
     }
 
     public function protubeAdmin($token)
@@ -56,13 +44,14 @@ class ApiController extends Controller
             }
         }
 
-        return (json_encode($adminInfo));
-
+        return json_encode($adminInfo);
     }
 
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('herbert.secret')) abort(403);
+        if ($request->secret != config('herbert.secret')) {
+            abort(403);
+        }
 
         $playedVideo = new PlayedVideo();
 
@@ -104,10 +93,10 @@ class ApiController extends Controller
 
     public function fishcamStream()
     {
-        header("Content-Transfer-Encoding: binary");
-        header("Content-Type: multipart/x-mixed-replace; boundary=video-boundary--");
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Type: multipart/x-mixed-replace; boundary=video-boundary--');
         header('Cache-Control: no-cache');
-        $handle = fopen(env("FISHCAM_URL"), "r");
+        $handle = fopen(env('FISHCAM_URL'), 'r');
         while ($data = fread($handle, 8192)) {
             echo $data;
             ob_flush();
@@ -131,22 +120,22 @@ class ApiController extends Controller
 
         foreach (RfidCard::where('user_id', $user->id)->get() as $rfid_card) {
             $data['rfid_cards'][] = [
-                'card_id' => $rfid_card->card_id,
-                'name' => $rfid_card->name,
-                'added_at' => $rfid_card->created_at
+                'card_id'  => $rfid_card->card_id,
+                'name'     => $rfid_card->name,
+                'added_at' => $rfid_card->created_at,
             ];
         }
 
         foreach (ActivityParticipation::where('user_id', $user->id)->get() as $activity_participation) {
             $data['activities'][] = [
-                'name' => $activity_participation->activity && $activity_participation->activity->event ? $activity_participation->activity->event->title : null,
-                'date' => $activity_participation->activity && $activity_participation->activity->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
+                'name'        => $activity_participation->activity && $activity_participation->activity->event ? $activity_participation->activity->event->title : null,
+                'date'        => $activity_participation->activity && $activity_participation->activity->event ? date('Y-m-d', $activity_participation->activity->event->start) : null,
                 'was_present' => $activity_participation->is_present,
-                'helped_as' => $activity_participation->help ? $activity_participation->help->committee->name : null,
-                'backup' => $activity_participation->backup,
-                'created_at' => $activity_participation->created_at,
-                'updated_at' => $activity_participation->updated_at,
-                'deleted_at' => $activity_participation->deleted_at
+                'helped_as'   => $activity_participation->help ? $activity_participation->help->committee->name : null,
+                'backup'      => $activity_participation->backup,
+                'created_at'  => $activity_participation->created_at,
+                'updated_at'  => $activity_participation->updated_at,
+                'deleted_at'  => $activity_participation->deleted_at,
 
             ];
         }
@@ -163,21 +152,21 @@ class ApiController extends Controller
                 $payment_method = sprintf('withdrawal_%s', $orderline->withdrawal->id);
             }
             $data['orders'][] = [
-                'product' => $orderline->product->name,
-                'units' => $orderline->units,
+                'product'     => $orderline->product->name,
+                'units'       => $orderline->units,
                 'total_price' => $orderline->total_price,
-                'payed_with' => $payment_method,
-                'order_date' => $orderline->created_at
+                'payed_with'  => $payment_method,
+                'order_date'  => $orderline->created_at,
             ];
         }
 
         foreach (PlayedVideo::where('user_id', $user->id)->get() as $playedvideo) {
             $data['played_videos'][] = [
-                'youtube_id' => $playedvideo->video_id,
+                'youtube_id'   => $playedvideo->video_id,
                 'youtube_name' => $playedvideo->video_title,
-                'spotify_id' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_id : null,
-                'spotify_name' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_name : null,
-                'played_at' => $playedvideo->created_at
+                'spotify_id'   => $playedvideo->spotify_id != '' ? $playedvideo->spotify_id : null,
+                'spotify_name' => $playedvideo->spotify_id != '' ? $playedvideo->spotify_name : null,
+                'played_at'    => $playedvideo->created_at,
             ];
         }
 
@@ -187,9 +176,9 @@ class ApiController extends Controller
 
         foreach (AchievementOwnership::where('user_id', $user->id)->get() as $achievement_granted) {
             $data['achievements'][] = [
-                'name' => $achievement_granted->achievement->name,
+                'name'        => $achievement_granted->achievement->name,
                 'description' => $achievement_granted->achievement->desc,
-                'granted_on' => $achievement_granted->created_at
+                'granted_on'  => $achievement_granted->created_at,
             ];
         }
 
@@ -199,19 +188,18 @@ class ApiController extends Controller
 
         foreach (Quote::where('user_id', $user->id)->get() as $quote) {
             $data['placed_quotes'][] = [
-                'quote' => $quote->quote,
-                'created_at' => $quote->created_at
+                'quote'      => $quote->quote,
+                'created_at' => $quote->created_at,
             ];
         }
 
         foreach (QuoteLike::where('user_id', $user->id)->get() as $quote) {
             $data['liked_quotes'][] = [
-                'quote' => $quote->quote->quote,
-                'liked_at' => $quote->created_at
+                'quote'    => $quote->quote->quote,
+                'liked_at' => $quote->created_at,
             ];
         }
 
         return $data;
     }
-
 }

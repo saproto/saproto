@@ -2,8 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Auth;
 use Carbon;
 use Proto\Models\AchievementOwnership;
@@ -12,7 +10,6 @@ use Proto\Models\OrderLine;
 
 class UserApiController extends Controller
 {
-
     public function getUser()
     {
         return Auth::user();
@@ -20,7 +17,7 @@ class UserApiController extends Controller
 
     public function getUserProfilePicture()
     {
-        return json_encode((object)[
+        return json_encode((object) [
             's' => Auth::user()->generatePhotoPath(100, 100),
             'm' => Auth::user()->generatePhotoPath(512, 512),
             'l' => Auth::user()->generatePhotoPath(1024, 1024),
@@ -75,5 +72,4 @@ class UserApiController extends Controller
 
         return $total;
     }
-
 }

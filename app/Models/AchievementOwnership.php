@@ -32,8 +32,8 @@ class AchievementOwnership extends Model
 
     protected $fillable = ['user_id', 'achievement_id'];
 
-    protected $rules = array(
-        'user_id' => 'required|integer',
+    protected $rules = [
+        'user_id'        => 'required|integer',
         'achievement_id' => 'required|integer',
-    );
+    ];
 }

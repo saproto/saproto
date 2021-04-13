@@ -2,12 +2,12 @@
 
 namespace Proto\Http\Controllers;
 
-use Proto\Models\EmailList;
-use Proto\Models\Event;
 use Proto\Models\Account;
 use Proto\Models\Achievement;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
+use Proto\Models\EmailList;
+use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\Permission;
 use Proto\Models\Product;
@@ -87,6 +87,7 @@ class ExportController extends Controller
                 $data = Ticket::all();
                 break;
         }
+
         return $data;
     }
 }

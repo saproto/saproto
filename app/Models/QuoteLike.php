@@ -31,8 +31,8 @@ class QuoteLike extends Model
 
     protected $fillable = ['user_id', 'quote_id'];
 
-    protected $rules = array(
-        'user_id' => 'required|integer',
+    protected $rules = [
+        'user_id'  => 'required|integer',
         'quote_id' => 'required|integer',
-    );
+    ];
 }

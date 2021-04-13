@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailListSubscription extends Model
 {
-
     protected $table = 'users_mailinglists';
 
     protected $guarded = ['id'];
@@ -20,5 +19,4 @@ class EmailListSubscription extends Model
     {
         return $this->belongsTo('Proto\Models\EmailList', 'list_id');
     }
-
 }

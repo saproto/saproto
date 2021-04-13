@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class MakeLinkingTableForFilesToPages extends Migration
 {
@@ -22,7 +22,6 @@ class MakeLinkingTableForFilesToPages extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('file_id')->references('id')->on('files');
         });
-
     }
 
     /**

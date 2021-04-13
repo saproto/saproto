@@ -2,14 +2,12 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Auth;
-
-use Exception;
+use Illuminate\Database\Eloquent\Model;
 
 class PhotoManager extends Model
 {
-    public static function getAlbums($max = null, $query=null, $unpublished=false, $no_thumb=true)
+    public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
@@ -33,10 +31,9 @@ class PhotoManager extends Model
         } else {
             $albums = $base->get();
         }
+
         return $albums;
     }
-
-
 
     public static function getPhotos($albumID, $max = null)
     {
@@ -54,12 +51,11 @@ class PhotoManager extends Model
 
         $items = Photo::where('album_id', $albumID);
 
-
         if (!$include_private) {
             $items = $items->where('private', '=', false);
         }
         $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc');
-        if($max != 0) {
+        if ($max != 0) {
             $items = $items->paginate($max);
         } else {
             $items = $items->get();
@@ -90,7 +86,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photoID)->where('user_id', Auth::user()->id)->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;
@@ -114,11 +110,9 @@ class PhotoManager extends Model
         $album = PhotoAlbum::where('id', $albumID)->get()->first();
         $photos = Photo::where('album_id', $albumID)->get();
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $photo->delete();
         }
         $album->delete();
     }
-
-
 }

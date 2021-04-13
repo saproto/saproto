@@ -3,15 +3,10 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Session;
-use Redirect;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use Proto\Models\Company;
 use Proto\Models\StorageEntry;
+use Redirect;
+use Session;
 
 class CompanyController extends Controller
 {
@@ -22,11 +17,12 @@ class CompanyController extends Controller
      */
     public function index()
     {
-     $companies = Company::where('on_carreer_page', true)->inRandomOrder()->get();
+        $companies = Company::where('on_carreer_page', true)->inRandomOrder()->get();
         if (count($companies) > 0) {
             return view('companies.list', ['companies' => $companies]);
         } else {
-            Session::flash("flash_message", "There is currently nothing to see on the companies page, but please check back real soon!");
+            Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -42,7 +38,8 @@ class CompanyController extends Controller
         if (count($companies) > 0) {
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
-            Session::flash("flash_message", "There are currently no promotions for Proto members, please check back real soon!");
+            Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -70,12 +67,12 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-
         $company = new Company();
         $company->name = $request->name;
         $company->url = $request->url;
@@ -88,7 +85,6 @@ class CompanyController extends Controller
         $company->on_membercard = $request->has('on_membercard');
         $company->sort = Company::with('sort')->max('sort') + 1;
 
-
         if ($request->file('image')) {
             $file = new StorageEntry();
             $file->createFromFile($request->file('image'));
@@ -97,15 +93,16 @@ class CompanyController extends Controller
 
         $company->save();
 
-        Session::flash("flash_message", "Your company '" . $company->name . "' has been added.");
-        return Redirect::route('companies::admin');
+        Session::flash('flash_message', "Your company '".$company->name."' has been added.");
 
+        return Redirect::route('companies::admin');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -116,7 +113,8 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function showMembercard($id)
@@ -127,25 +125,27 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $company = Company::findOrFail($id);
+
         return view('companies.edit', ['company' => $company]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
         $company = Company::findOrFail($id);
         $company->name = $request->name;
         $company->url = $request->url;
@@ -165,14 +165,18 @@ class CompanyController extends Controller
 
         $company->save();
 
-        Session::flash("flash_message", "Your company '" . $company->name . "' has been edited.");
+        Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
+
         return Redirect::route('companies::admin');
     }
 
-    public function orderUp($id) {
+    public function orderUp($id)
+    {
         $company = Company::findOrFail($id);
 
-        if($company->sort <= 0) abort(500);
+        if ($company->sort <= 0) {
+            abort(500);
+        }
 
         $companyAbove = Company::where('sort', $company->sort - 1)->first();
 
@@ -182,13 +186,16 @@ class CompanyController extends Controller
         $company->sort--;
         $company->save();
 
-        return Redirect::route("companies::admin");
+        return Redirect::route('companies::admin');
     }
 
-    public function orderDown($id) {
+    public function orderDown($id)
+    {
         $company = Company::findOrFail($id);
 
-        if($company->sort >= Company::all()->count() - 1) abort(500);
+        if ($company->sort >= Company::all()->count() - 1) {
+            abort(500);
+        }
 
         $companyAbove = Company::where('sort', $company->sort + 1)->first();
 
@@ -198,21 +205,23 @@ class CompanyController extends Controller
         $company->sort++;
         $company->save();
 
-        return Redirect::route("companies::admin");
+        return Redirect::route('companies::admin');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $company = Company::findOrFail($id);
 
-        Session::flash("flash_message", "The company '" . $company->name . "' has been deleted.");
+        Session::flash('flash_message', "The company '".$company->name."' has been deleted.");
         $company->delete();
+
         return Redirect::route('companies::admin');
     }
 }

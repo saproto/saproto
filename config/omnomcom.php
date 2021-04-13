@@ -13,25 +13,25 @@ return [
     */
 
     'stores' => [
-        'protopolis' => (object)[
-            'name' => 'Protopolis',
-            'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26],
-            'addresses' => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
-            'roles' => ['board', 'omnomcom'],
-            'cash_allowed' => false,
-            'bank_card_allowed' => false,
+        'protopolis' => (object) [
+            'name'                    => 'Protopolis',
+            'categories'              => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26],
+            'addresses'               => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
+            'roles'                   => ['board', 'omnomcom'],
+            'cash_allowed'            => false,
+            'bank_card_allowed'       => false,
             'alcohol_time_constraint' => true,
         ],
-        'tipcie' => (object)[
-            'name' => 'TIPCie',
-            'categories' => [15, 18, 25],
-            'addresses' => [],
-            'roles' => ['board', 'tipcie', 'drafters'],
-            'cash_allowed' => false,
-            'bank_card_allowed' => true,
-            'col_override' => 3,
+        'tipcie' => (object) [
+            'name'                    => 'TIPCie',
+            'categories'              => [15, 18, 25],
+            'addresses'               => [],
+            'roles'                   => ['board', 'tipcie', 'drafters'],
+            'cash_allowed'            => false,
+            'bank_card_allowed'       => true,
+            'col_override'            => 3,
             'alcohol_time_constraint' => false,
-        ]
+        ],
     ],
 
     /*
@@ -77,9 +77,9 @@ return [
     */
 
     'mollie' => [
-        'fixed_fee' => .3,
+        'fixed_fee'    => .3,
         'variable_fee' => .02,
-        'fee_id' => 887
+        'fee_id'       => 887,
     ],
 
     /*
@@ -92,8 +92,8 @@ return [
     */
 
     'fee' => [
-        'regular' => 292,
-        'reduced' => 293,
+        'regular'  => 292,
+        'reduced'  => 293,
         'remitted' => 889,
     ],
 
@@ -118,8 +118,8 @@ return [
     |
     */
 
-    'alcohol-start' => "15:30",
-    'alcohol-end' => "08:00",
+    'alcohol-start' => '15:30',
+    'alcohol-end'   => '08:00',
 
     /*
     |--------------------------------------------------------------------------

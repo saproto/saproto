@@ -2,16 +2,14 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Auth;
+use Carbon\CarbonInterval;
 use DB;
-use Session;
-use Redirect;
-
+use Illuminate\Http\Request;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
-use Carbon\CarbonInterval;
+use Redirect;
+use Session;
 
 class ProtubeController extends Controller
 {
@@ -19,6 +17,7 @@ class ProtubeController extends Controller
     {
         if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
             $sounds = SoundboardSound::where('hidden', '=', false)->get();
+
             return view('protube.admin', ['sounds' => $sounds]);
         } else {
             abort(403);
@@ -38,33 +37,36 @@ class ProtubeController extends Controller
     public function remote()
     {
         error_reporting(0);
-        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server') . "/maxDuration?secret=" . config('herbert.secret')))->cascade()->forHumans();
+        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server').'/maxDuration?secret='.config('herbert.secret')))->cascade()->forHumans();
+
         return view('protube.remote', ['max_duration' => $max_duration]);
     }
 
     public function loginRedirect()
     {
-        return redirect(route("protube::remote"));
+        return redirect(route('protube::remote'));
     }
 
     public function topVideos()
     {
-        $data = (object)[
+        $data = (object) [
             'alltime' => $this->getTopVideos(10),
-            'month' => $this->getTopVideos(10, '-1 month'),
-            'week' => $this->getTopVideos(10, '-1 week'),
+            'month'   => $this->getTopVideos(10, '-1 month'),
+            'week'    => $this->getTopVideos(10, '-1 week'),
         ];
+
         return view('protube.topvideos', ['data' => $data]);
     }
 
     public function dashboard()
     {
         $usercount = PlayedVideo::where('user_id', Auth::user()->id)->count();
+
         return view('protube.dashboard', [
-            'history' => $this->getHistory(),
+            'history'   => $this->getHistory(),
             'usercount' => $usercount,
-            'user' => Auth::user(),
-            'usertop' => $this->getTopVideos(15, null, Auth::user())
+            'user'      => Auth::user(),
+            'usertop'   => $this->getTopVideos(15, null, Auth::user()),
         ]);
     }
 
@@ -104,6 +106,7 @@ class ProtubeController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
+
         return Redirect::back();
     }
 
@@ -113,6 +116,7 @@ class ProtubeController extends Controller
         PlayedVideo::where('user_id', $user->id)->update(['user_id' => null]);
 
         Session::flash('flash_message', 'History cleared.');
+
         return Redirect::back();
     }
 }

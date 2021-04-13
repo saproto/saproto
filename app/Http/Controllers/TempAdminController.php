@@ -2,27 +2,20 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Models\User;
-use Proto\Models\Tempadmin;
-
 use Auth;
 use Carbon;
 use DB;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Proto\Models\Tempadmin;
+use Proto\Models\User;
 
 class TempAdminController extends Controller
 {
-
-
     public function make($id)
     {
         $user = User::findOrFail($id);
 
-        $tempAdmin = new Tempadmin;
+        $tempAdmin = new Tempadmin();
 
         $tempAdmin->created_by = Auth::user()->id;
         $tempAdmin->start_at = Carbon::today();
@@ -47,7 +40,7 @@ class TempAdminController extends Controller
 
         // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
         // temporary adminpowers were removed.
-        file_get_contents(config('herbert.server') . "/adminCheck");
+        file_get_contents(config('herbert.server').'/adminCheck');
 
         return redirect()->back();
     }
@@ -56,15 +49,15 @@ class TempAdminController extends Controller
     {
         $tempadmin = Tempadmin::findOrFail($id);
 
-        if(Carbon::parse($tempadmin->start_at)->isFuture()) {
+        if (Carbon::parse($tempadmin->start_at)->isFuture()) {
             $tempadmin->delete();
-        }else{
+        } else {
             $tempadmin->end_at = Carbon::now()->subSeconds(1);
             $tempadmin->save();
 
             // Call Herbert webhook to run check through all connected admins. Will result in kick for users whose
             // temporary adminpowers were removed.
-            file_get_contents(config('herbert.server') . "/adminCheck");
+            file_get_contents(config('herbert.server').'/adminCheck');
         }
 
         return redirect()->back();
@@ -72,15 +65,15 @@ class TempAdminController extends Controller
 
     public function index()
     {
-        $tempadmins = Tempadmin::where('end_at', '>', DB::raw("NOW()"))->orderBy('end_at', 'desc')->get();
-        $pastTempadmins = Tempadmin::where('end_at', '<=', DB::raw("NOW()"))->orderBy('end_at', 'desc')->take(10)->get();
+        $tempadmins = Tempadmin::where('end_at', '>', DB::raw('NOW()'))->orderBy('end_at', 'desc')->get();
+        $pastTempadmins = Tempadmin::where('end_at', '<=', DB::raw('NOW()'))->orderBy('end_at', 'desc')->take(10)->get();
 
-        return view("tempadmin.list", ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
+        return view('tempadmin.list', ['tempadmins' => $tempadmins, 'pastTempadmins' => $pastTempadmins]);
     }
 
     public function create()
     {
-        return view("tempadmin.edit", ['tempadmin' => null, 'new' => true]);
+        return view('tempadmin.edit', ['tempadmin' => null, 'new' => true]);
     }
 
     public function store(Request $request)
@@ -94,14 +87,14 @@ class TempAdminController extends Controller
 
         $tempadmin->save();
 
-        return redirect(route("tempadmin::index"));
+        return redirect(route('tempadmin::index'));
     }
 
     public function edit($id)
     {
         $tempadmin = Tempadmin::findOrFail($id);
 
-        return view("tempadmin.edit", ['item' => $tempadmin, 'new' => false]);
+        return view('tempadmin.edit', ['item' => $tempadmin, 'new' => false]);
     }
 
     public function update($id, Request $request)
@@ -113,7 +106,6 @@ class TempAdminController extends Controller
 
         $tempadmin->save();
 
-        return redirect(route("tempadmin::index"));
+        return redirect(route('tempadmin::index'));
     }
-
 }

@@ -17,7 +17,8 @@ class IsAlfredThereController extends Controller
 
     public function getApi()
     {
-        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Origin: *');
+
         return json_encode(IsAlfredThereController::getAlfredsStatusObject());
     }
 
@@ -48,10 +49,11 @@ class IsAlfredThereController extends Controller
         $status = HashMapItem::where('key', IsAlfredThereController::$HashMapItemKey)->first();
         if ($status == null) {
             $status = HashMapItem::create([
-                'key' => IsAlfredThereController::$HashMapItemKey,
-                'value' => 'unknown'
+                'key'   => IsAlfredThereController::$HashMapItemKey,
+                'value' => 'unknown',
             ]);
         }
+
         return $status;
     }
 
@@ -61,16 +63,17 @@ class IsAlfredThereController extends Controller
         $result = new \stdClass();
         if ($status->value == 'there' or $status->value == 'unknown') {
             $result->status = $status->value;
+
             return $result;
         } elseif (preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{4}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = $status->value;
             $result->backunix = strtotime($status->value);
+
             return $result;
         }
         $result->status = 'unknown';
+
         return $result;
-
     }
-
 }

@@ -3,7 +3,8 @@
 use Faker\Generator as Faker;
 
 /** @var $factory Closure */
-$factory->define(Proto\Models\OrderLine::class,
+$factory->define(
+    Proto\Models\OrderLine::class,
     function (Faker $faker, $attr) {
         $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('now'));
@@ -15,13 +16,14 @@ $factory->define(Proto\Models\OrderLine::class,
         $paidCash = mt_rand(1, 100);
 
         return [
-            'product_id' => $product->id,
-            'original_unit_price' => $product->price,
-            'units' => $nbUnits,
-            'total_price' => $nbUnits * $product->price,
-            'created_at' => $date,
-            'cashier_id' => $paidCash == 1 ? $attr['user_id'] : null,
-            'payed_with_bank_card' => $paidCash == 1 ? $date: null,
-            'description' => $faker->sentences(3, true),
+            'product_id'           => $product->id,
+            'original_unit_price'  => $product->price,
+            'units'                => $nbUnits,
+            'total_price'          => $nbUnits * $product->price,
+            'created_at'           => $date,
+            'cashier_id'           => $paidCash == 1 ? $attr['user_id'] : null,
+            'payed_with_bank_card' => $paidCash == 1 ? $date : null,
+            'description'          => $faker->sentences(3, true),
         ];
-});
+    }
+);

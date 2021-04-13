@@ -16,7 +16,7 @@ return [
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_API_KEY')
-    ]
+        'secret' => env('MAILGUN_API_KEY'),
+    ],
 
 ];

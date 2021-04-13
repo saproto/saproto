@@ -2,12 +2,10 @@
 
 namespace Proto\Models;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Vinkla\Hashids\Facades\Hashids;
-
-use Auth;
 
 class Event extends Model
 {
@@ -32,6 +30,7 @@ class Event extends Model
     public static function fromPublicId($public_id)
     {
         $id = Hashids::connection('event')->decode($public_id);
+
         return Event::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
@@ -92,23 +91,23 @@ class Event extends Model
 
     public function current()
     {
-        return ($this->start < date('U') && $this->end > date('U'));
+        return $this->start < date('U') && $this->end > date('U');
     }
 
     public function over()
     {
-        return ($this->end < date('U'));
+        return $this->end < date('U');
     }
 
     public function generateTimespanText($long_format, $short_format, $combiner)
     {
-        return date($long_format, $this->start) . " " . $combiner . " " . (
+        return date($long_format, $this->start).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-            );
+        );
     }
 
     public function isEventAdmin(User $user)
@@ -152,6 +151,7 @@ class Event extends Model
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers);
         }
+
         return $users->sort(function ($a, $b) {
             return strcmp($a->name, $b->name);
         });
@@ -176,11 +176,11 @@ class Event extends Model
 
     public function getFormattedDateAttribute()
     {
-        return (object)[
+        return (object) [
             'simple' => date('M d, Y', $this->start),
-            'year' => date('Y', $this->start),
-            'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start)
+            'year'   => date('Y', $this->start),
+            'month'  => date('M Y', $this->start),
+            'time'   => date('H:i', $this->start),
         ];
     }
 
@@ -191,13 +191,13 @@ class Event extends Model
 
     public static function countEventsPerYear($year)
     {
-        $yearStart = strtotime('January 1, ' . $year);
-        $yearEnd = strtotime('January 1, ' . ($year + 1));
+        $yearStart = strtotime('January 1, '.$year);
+        $yearEnd = strtotime('January 1, '.($year + 1));
         $events = Event::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
         if (!Auth::check() || !Auth::user()->can('board')) {
             $events = $events->where('secret', 0);
         }
+
         return $events->count();
     }
-
 }

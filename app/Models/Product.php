@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-
     protected $table = 'products';
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at'];
@@ -33,8 +32,12 @@ class Product extends Model
 
     public function isVisible()
     {
-        if (!$this->is_visible) return false;
-        if ($this->stock <= 0 && !$this->is_visible_when_no_stock) return false;
+        if (!$this->is_visible) {
+            return false;
+        }
+        if ($this->stock <= 0 && !$this->is_visible_when_no_stock) {
+            return false;
+        }
 
         return true;
     }
@@ -46,7 +49,6 @@ class Product extends Model
 
     public function buyForUser(User $user, $amount, $total_price = null, $withCash = false, $withBankCard = false, $description = null, $auth_method = 'none')
     {
-
         $this->stock -= $amount;
         $this->save();
 
@@ -55,21 +57,20 @@ class Product extends Model
         $has_cashier = $withCash || $withBankCard;
 
         $orderline = OrderLine::create([
-            'user_id' => ($has_cashier ? null : $user->id),
-            'cashier_id' => ($has_cashier || $total_price == 0 ? $user->id : null),
-            'product_id' => $this->id,
-            'original_unit_price' => $this->price,
-            'units' => $amount,
-            'total_price' => $total_price,
-            'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null),
+            'user_id'              => ($has_cashier ? null : $user->id),
+            'cashier_id'           => ($has_cashier || $total_price == 0 ? $user->id : null),
+            'product_id'           => $this->id,
+            'original_unit_price'  => $this->price,
+            'units'                => $amount,
+            'total_price'          => $total_price,
+            'payed_with_cash'      => ($withCash ? date('Y-m-d H:i:s') : null),
             'payed_with_bank_card' => ($withBankCard ? date('Y-m-d H:i:s') : null),
-            'description' => $description !== '' ? $description : null,
-            'authenticated_by' => $auth_method
+            'description'          => $description !== '' ? $description : null,
+            'authenticated_by'     => $auth_method,
         ]);
 
         $orderline->save();
+
         return $orderline->id;
-
     }
-
 }

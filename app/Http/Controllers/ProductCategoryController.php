@@ -3,12 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\Product;
 use Proto\Models\ProductCategory;
-
 use Redirect;
 
 class ProductCategoryController extends Controller
@@ -30,13 +25,14 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        return view("omnomcom.categories.edit", ['category' => null]);
+        return view('omnomcom.categories.edit', ['category' => null]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -44,7 +40,7 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::create($request->all());
         $category->save();
 
-        $request->session()->flash('flash_message', 'Category ' . $category->name . ' created.');
+        $request->session()->flash('flash_message', 'Category '.$category->name.' created.');
 
         return Redirect::route('omnomcom::categories::list');
     }
@@ -52,20 +48,23 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $category = ProductCategory::findOrFail($id);
+
         return view('omnomcom.categories.edit', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -74,7 +73,7 @@ class ProductCategoryController extends Controller
         $category->fill($request->all());
         $category->save();
 
-        $request->session()->flash('flash_message', 'Category ' . $category->name . ' saved.');
+        $request->session()->flash('flash_message', 'Category '.$category->name.' saved.');
 
         return Redirect::route('omnomcom::categories::list');
     }
@@ -82,14 +81,15 @@ class ProductCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
         $category = ProductCategory::findOrFail($id);
 
-        $request->session()->flash('flash_message', 'Category ' . $category->name . ' deleted.');
+        $request->session()->flash('flash_message', 'Category '.$category->name.' deleted.');
         $category->delete();
 
         return Redirect::route('omnomcom::categories::list');

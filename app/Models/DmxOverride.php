@@ -13,19 +13,16 @@ class DmxOverride extends Model
     public static function getActiveSorted()
     {
         return DmxOverride::where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
-
     }
 
     public static function getUpcomingSorted()
     {
         return DmxOverride::where('start', '>', date('U'))->get()->sortByDesc('start');
-
     }
 
     public static function getPastSorted()
     {
         return DmxOverride::where('end', '<', date('U'))->get()->sortByDesc('start');
-
     }
 
     public function colorArray()

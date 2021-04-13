@@ -3,26 +3,33 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class GoodIdea extends Model
 {
     protected $fillable = ['user_id', 'idea'];
-    public function user() {
+
+    public function user()
+    {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    public function votes() {
+    public function votes()
+    {
         return $this->hasMany('Proto\Models\GoodIdeaVote');
     }
 
-    public function voteScore() {
+    public function voteScore()
+    {
         return $this->votes()->sum('vote');
     }
 
-    public function userVote(User $user) {
+    public function userVote(User $user)
+    {
         $vote = $this->votes()->where('user_id', $user->id)->first();
-        if($vote) return $vote->vote;
+        if ($vote) {
+            return $vote->vote;
+        }
+
         return 0;
     }
 }

@@ -2,10 +2,6 @@
 
 namespace Proto\Handlers\Events;
 
-use Proto\Models\User;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
 use Session;
 
 class SamlLoginEventHandler
@@ -23,7 +19,8 @@ class SamlLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param  Events $event
+     * @param Events $event
+     *
      * @return void
      */
     public function handle($event)

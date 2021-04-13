@@ -31,29 +31,29 @@ return [
 
     'connections' => [
         'database' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
+            'driver'      => 'database',
+            'table'       => 'jobs',
+            'queue'       => 'default',
             'retry_after' => 30,
         ],
         'high' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'high',
+            'driver'      => 'database',
+            'table'       => 'jobs',
+            'queue'       => 'high',
             'retry_after' => 30,
         ],
         'medium' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'medium',
+            'driver'      => 'database',
+            'table'       => 'jobs',
+            'queue'       => 'medium',
             'retry_after' => 60,
         ],
         'low' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'low',
+            'driver'      => 'database',
+            'table'       => 'jobs',
+            'queue'       => 'low',
             'retry_after' => 120,
-        ]
+        ],
     ],
 
     /*
@@ -69,7 +69,7 @@ return [
 
     'failed' => [
         'database' => env('DB_CONNECTION'),
-        'table' => 'failed_jobs',
+        'table'    => 'failed_jobs',
     ],
 
 ];

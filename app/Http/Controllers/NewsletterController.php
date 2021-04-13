@@ -2,46 +2,39 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
-
+use Proto\Models\EmailList;
 use Proto\Models\Event;
 use Proto\Models\Newsletter;
-use Proto\Models\EmailList;
-
 use Redirect;
-use Auth;
 
 class NewsletterController extends Controller
 {
-
     public function getInNewsletter()
     {
-
         $events = Event::where('start', '>', date('U'))->where('secret', false)->orderBy('start', 'asc')->get();
 
         return view('event.innewsletter', ['events' => $events]);
-
     }
 
     public function toggleInNewsletter($id)
     {
-
         $event = Event::findOrFail($id);
 
         $event->include_in_newsletter = !$event->include_in_newsletter;
         $event->save();
 
         return Redirect::back();
-
     }
 
     public function newsletterPreview()
     {
         return view('emails.newsletter', [
-            'user' => Auth::user(),
-            'list' => EmailList::find(config('proto.weeklynewsletter')),
+            'user'   => Auth::user(),
+            'list'   => EmailList::find(config('proto.weeklynewsletter')),
             'events' => Event::getEventsForNewsletter(),
-            'text' => Newsletter::getText()->value
+            'text'   => Newsletter::getText()->value,
         ]);
     }
 
@@ -54,6 +47,7 @@ class NewsletterController extends Controller
         Newsletter::send();
 
         $request->session()->flash('flash_message', 'The weekly newsletter has been sent.');
+
         return Redirect::back();
     }
 
@@ -62,7 +56,7 @@ class NewsletterController extends Controller
         Newsletter::updateText($request->text);
 
         $request->session()->flash('flash_message', 'The newsletter text has been set.');
+
         return Redirect::back();
     }
-
 }

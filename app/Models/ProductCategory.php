@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductCategory extends Model
 {
-
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
@@ -18,7 +17,7 @@ class ProductCategory extends Model
     {
         $products = $this->belongsToMany('Proto\Models\Product', 'products_categories', 'category_id', 'product_id')->get();
         $products = $products->sortBy('name');
+
         return $products;
     }
-
 }

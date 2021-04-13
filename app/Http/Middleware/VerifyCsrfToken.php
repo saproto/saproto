@@ -16,6 +16,6 @@ class VerifyCsrfToken extends BaseVerifier
         'saml2/*',
         'api/*',
         'image/*',
-        'file/*'
+        'file/*',
     ];
 }

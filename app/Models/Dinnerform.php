@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dinnerform extends Model
 {
-
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $dates = ['start', 'end'];
@@ -28,7 +27,7 @@ class Dinnerform extends Model
      */
     public function generateTimespanText()
     {
-        return $this->start->format('D H:i') . " - " . Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /**
@@ -36,7 +35,8 @@ class Dinnerform extends Model
      *
      * @return bool
      */
-    public function isCurrent() {
+    public function isCurrent()
+    {
         return $this->start->isPast() && $this->end->isFuture();
     }
 
@@ -45,8 +45,8 @@ class Dinnerform extends Model
      *
      * @return bool
      */
-    public function hasExpired() {
+    public function hasExpired()
+    {
         return $this->end->addHours(1)->isPast();
     }
-
 }

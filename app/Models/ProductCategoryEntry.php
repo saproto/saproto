@@ -31,9 +31,9 @@ class ProductCategoryEntry extends Model
 
     protected $fillable = ['product_id', 'category_id', 'rank'];
 
-    protected $rules = array(
-        'user_id' => 'required|integer',
+    protected $rules = [
+        'user_id'        => 'required|integer',
         'achievement_id' => 'required|integer',
-        'rank' => 'required|integer'
-    );
+        'rank'           => 'required|integer',
+    ];
 }

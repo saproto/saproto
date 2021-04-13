@@ -3,14 +3,9 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Proto\Http\Requests;
-
-use Proto\Models\User;
 use Proto\Models\WelcomeMessage;
-
-use Session;
-use Auth;
 use Redirect;
+use Session;
 
 class WelcomeController extends Controller
 {
@@ -27,7 +22,8 @@ class WelcomeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,30 +37,34 @@ class WelcomeController extends Controller
 
             $message->save();
 
-            Session::flash('flash_message', "Welcome Message set");
+            Session::flash('flash_message', 'Welcome Message set');
         } else {
             $message->message = $request->message;
 
             $message->save();
 
-            Session::flash('flash_message', "Welcome Message updated");
+            Session::flash('flash_message', 'Welcome Message updated');
         }
-        return Redirect::route("welcomeMessages::list");
+
+        return Redirect::route('welcomeMessages::list');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $message = WelcomeMessage::find($id);
-        if (!$message) abort(404);
+        if (!$message) {
+            abort(404);
+        }
         $message->delete();
-        Session::flash('flash_message', "Welcome Message removed");
-        return Redirect::route("welcomeMessages::list");
-    }
+        Session::flash('flash_message', 'Welcome Message removed');
 
+        return Redirect::route('welcomeMessages::list');
+    }
 }

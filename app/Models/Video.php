@@ -2,9 +2,8 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use DateInterval;
+use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model
 {
@@ -14,34 +13,34 @@ class Video extends Model
 
     public function getYouTubeUrl()
     {
-        return sprintf("https://www.youtube.com/watch?v=%s", $this->youtube_id);
+        return sprintf('https://www.youtube.com/watch?v=%s', $this->youtube_id);
     }
 
     public function getYouTubeChannelUrl()
     {
-        return sprintf("https://www.youtube.com/channel/%s", $this->youtube_user_id);
+        return sprintf('https://www.youtube.com/channel/%s', $this->youtube_user_id);
     }
 
     public function getYouTubeEmbedUrl()
     {
-        return sprintf("https://www.youtube.com/embed/%s?rel=0", $this->youtube_id);
+        return sprintf('https://www.youtube.com/embed/%s?rel=0', $this->youtube_id);
     }
 
     public function getHumanDuration()
     {
         $interval = new DateInterval($this->youtube_length);
         if ($interval->y > 0) {
-            return sprintf("%s years", $interval->y);
+            return sprintf('%s years', $interval->y);
         } elseif ($interval->m > 0) {
-            return sprintf("%s months", $interval->m);
+            return sprintf('%s months', $interval->m);
         } elseif ($interval->d > 0) {
-            return sprintf("%s days", $interval->d);
+            return sprintf('%s days', $interval->d);
         } elseif ($interval->h > 0) {
-            return sprintf("%s:%s:%s ", $interval->h, str_pad($interval->i, 2, "0", STR_PAD_LEFT), str_pad($interval->s, 2, "0", STR_PAD_LEFT));
+            return sprintf('%s:%s:%s ', $interval->h, str_pad($interval->i, 2, '0', STR_PAD_LEFT), str_pad($interval->s, 2, '0', STR_PAD_LEFT));
         } elseif ($interval->i > 0) {
-            return sprintf("%s:%s ", $interval->i, str_pad($interval->s, 2, "0", STR_PAD_LEFT));
+            return sprintf('%s:%s ', $interval->i, str_pad($interval->s, 2, '0', STR_PAD_LEFT));
         } else {
-            return sprintf("%s seconds", $interval->s);
+            return sprintf('%s seconds', $interval->s);
         }
     }
 

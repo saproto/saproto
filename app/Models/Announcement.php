@@ -3,21 +3,17 @@
 namespace Proto\Models;
 
 use Cookie;
-use Illuminate\Support\Facades\Route;
-
-use Proto\Models\User;
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 
 class Announcement extends Model
 {
-
     protected $table = 'announcements';
     protected $guarded = ['id'];
 
     public function showByTime()
     {
-        return (strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U'));
+        return strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U');
     }
 
     public function showForUser(User $user = null)
@@ -60,9 +56,10 @@ class Announcement extends Model
         // Check if not already dismissed.
         if ($this->is_dismissable && Cookie::get($this->hashMapId())) {
             return false;
-        } else if ($user != null && $this->is_dismissable && HashMapItem::where('key', $this->hashMapId())->where('subkey', $user->id)->count() > 0) {
+        } elseif ($user != null && $this->is_dismissable && HashMapItem::where('key', $this->hashMapId())->where('subkey', $user->id)->count() > 0) {
             return false;
         }
+
         return true;
     }
 
@@ -128,7 +125,6 @@ class Announcement extends Model
         $flags[] = sprintf('Style: %s', $this->bootstrap_style());
 
         return implode(', ', $flags);
-
     }
 
     public function dismissForUser(User $user = null)
@@ -142,12 +138,11 @@ class Announcement extends Model
 
     public function hashMapId()
     {
-        return sprintf("dismiss-announcement-%s", $this->id);
+        return sprintf('dismiss-announcement-%s', $this->id);
     }
 
     public function modalId()
     {
-        return sprintf("modal-announcement-%s", $this->id);
+        return sprintf('modal-announcement-%s', $this->id);
     }
-
 }

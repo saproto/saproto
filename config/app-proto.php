@@ -7,8 +7,8 @@ return [
      */
 
     'primary-domain' => env('PRIMARY_DOMAIN'),
-    'app-url' => config('app.url'),
-    'assets-domain' => env('REDIRECT_ASSETS_DOMAIN', null),
+    'app-url'        => config('app.url'),
+    'assets-domain'  => env('REDIRECT_ASSETS_DOMAIN', null),
 
     /*
      * Whitelist for debug environment
@@ -23,14 +23,14 @@ return [
     /*
      * Printer server settings
      */
-    'printer-host' => env('PRINTER_HOST'),
-    'printer-port' => env('PRINTER_PORT'),
+    'printer-host'   => env('PRINTER_HOST'),
+    'printer-port'   => env('PRINTER_PORT'),
     'printer-secret' => env('PRINTER_SECRET'),
 
     /*
      * Google API keys
      */
-    'google-key-public' => env('GOOGLE_KEY_PUBLIC'),
+    'google-key-public'  => env('GOOGLE_KEY_PUBLIC'),
     'google-key-private' => env('GOOGLE_KEY_PRIVATE'),
 
     /*
@@ -38,12 +38,12 @@ return [
      */
     'spotify-clientkey' => env('SPOTIFY_CLIENT', null),
     'spotify-secretkey' => env('SPOTIFY_SECRET', null),
-    'spotify-user' => env('SPOTIFY_USER', null),
-    'spotify-playlist' => env('SPOTIFY_PLAYLIST', null),
+    'spotify-user'      => env('SPOTIFY_USER', null),
+    'spotify-playlist'  => env('SPOTIFY_PLAYLIST', null),
 
     /*
      * Sentry config
      */
-    'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null)
+    'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null),
 
 ];

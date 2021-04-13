@@ -4,18 +4,15 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Auth;
-
 class Activity extends Validatable
 {
-
-    protected $rules = array(
+    protected $rules = [
         'registration_start' => 'required|integer',
-        'registration_end' => 'required|integer',
+        'registration_end'   => 'required|integer',
         'deregistration_end' => 'required|integer',
-        'participants' => 'integer',
-        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/'
-    );
+        'participants'       => 'integer',
+        'price'              => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
+    ];
 
     protected $guarded = [];
 
@@ -86,11 +83,12 @@ class Activity extends Validatable
      */
     public function helpingCommittees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(array('amount', 'id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
     /**
      * @param User|null $user
+     *
      * @return bool True or false depending on whether the activity still needs help. If a user is specified, true will only be returned if the user can actually help.
      */
     public function inNeedOfHelp(User $user = null)
@@ -118,6 +116,7 @@ class Activity extends Validatable
 
     /**
      * @param $helpid The committee-activity link for which helping users should be returned.
+     *
      * @return $this All associated ActivityParticipations.
      */
     public function helpingUsers($helpid)
@@ -127,21 +126,26 @@ class Activity extends Validatable
 
     /**
      * @param Committee $committee The committee for which the user should be helping.
-     * @param User $user The user to check helping status for.
+     * @param User      $user      The user to check helping status for.
+     *
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
      */
     public function getHelpingParticipation(Committee $committee, User $user)
     {
         $h = HelpingCommittee::where('activity_id', $this->id)->where('committee_id', $committee->id)->first();
-        if ($h === null) return null;
+        if ($h === null) {
+            return null;
+        }
 
         $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)->first();
+
         return $p;
     }
 
     /**
      * @param User $user The user to check participation status for.
+     *
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
     public function getParticipation(User $user, HelpingCommittee $h = null)
@@ -157,6 +161,7 @@ class Activity extends Validatable
 
     /**
      * @param User $user
+     *
      * @return bool Return whether the user is participating in the activity.
      */
     public function isParticipating(User $user)
@@ -165,8 +170,9 @@ class Activity extends Validatable
     }
 
     /**
-     * @param User $user
+     * @param User                  $user
      * @param HelpingCommittee|null $h
+     *
      * @return bool Return whether the user is helping at the activity, optionally constraining whether it is for a committee.
      */
     public function isHelping(User $user, HelpingCommittee $h = null)
@@ -211,6 +217,7 @@ class Activity extends Validatable
         if ($this->closed || $this->isFull() || $this->participants == 0) {
             return false;
         }
+
         return date('U') > $this->registration_start && date('U') < $this->registration_end;
     }
 
@@ -225,6 +232,7 @@ class Activity extends Validatable
         if ($this->closed || $this->participants == 0 || date('U') < $this->registration_start) {
             return false;
         }
+
         return true;
     }
 
@@ -236,6 +244,7 @@ class Activity extends Validatable
         if ($this->closed) {
             return false;
         }
+
         return date('U') < $this->deregistration_end;
     }
 

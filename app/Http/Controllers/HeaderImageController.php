@@ -3,10 +3,8 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-
 use Proto\Models\HeaderImage;
 use Proto\Models\StorageEntry;
 
@@ -25,8 +23,8 @@ class HeaderImageController extends Controller
     public function store(Request $request)
     {
         $header = HeaderImage::create([
-            'title' => $request->get('title'),
-            'credit_id' => $request->get('user')
+            'title'     => $request->get('title'),
+            'credit_id' => $request->get('user'),
         ]);
 
         $image = $request->file('image');
@@ -47,6 +45,7 @@ class HeaderImageController extends Controller
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
+
         return Redirect::route('headerimage::index');
     }
 }

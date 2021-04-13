@@ -9,7 +9,6 @@ use Proto\Models\User;
 
 class OmNomComCleanup extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -39,7 +38,6 @@ class OmNomComCleanup extends Command
      */
     public function handle()
     {
-
         $this->info('Starting clean-up.');
 
         $users = User::where('keep_omnomcom_history', false)->pluck('id')->toArray();
@@ -51,7 +49,5 @@ class OmNomComCleanup extends Command
             ->update(['user_id' => null]);
 
         $this->info("Found and anonymised $affected orderlines.");
-
     }
-
 }

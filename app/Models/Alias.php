@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alias extends Model
 {
-
     protected $table = 'alias';
 
     protected $guarded = ['id'];
@@ -15,5 +14,4 @@ class Alias extends Model
     {
         return $this->belongsTo('Proto\Models\User');
     }
-
 }

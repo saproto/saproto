@@ -30,7 +30,7 @@ class Kernel extends HttpKernel
         ],
         'api' => [
             'throttle:60,1',
-        ]
+        ],
     ];
 
     /**
@@ -39,11 +39,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'member' => \Proto\Http\Middleware\Member::class,
-        'utwente' => \Proto\Http\Middleware\Utwente::class,
+        'auth'        => \Illuminate\Auth\Middleware\Authenticate::class,
+        'member'      => \Proto\Http\Middleware\Member::class,
+        'utwente'     => \Proto\Http\Middleware\Utwente::class,
         'forcedomain' => \Proto\Http\Middleware\ForceDomain::class,
-        'saml' => \Proto\Http\Middleware\Saml::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'saml'        => \Proto\Http\Middleware\Saml::class,
+        'throttle'    => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
 }

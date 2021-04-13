@@ -2,9 +2,9 @@
 
 namespace Proto\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Carbon\Carbon;
 
 class Newsitem extends Model
 {
@@ -21,7 +21,7 @@ class Newsitem extends Model
 
     public function isPublished()
     {
-        if(Carbon::parse($this->published_at)->isPast()) {
+        if (Carbon::parse($this->published_at)->isPast()) {
             return true;
         }
 
@@ -33,7 +33,8 @@ class Newsitem extends Model
         return $this->belongsTo('Proto\Models\User', 'user_id');
     }
 
-    public function url() {
+    public function url()
+    {
         return route('news::show', ['id' => $this->id]);
     }
 }

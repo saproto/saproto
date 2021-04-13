@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailDbDomain extends Model
 {
-
     protected $connection = 'mysql-mail';
 
     public $timestamps = false;
@@ -14,5 +13,4 @@ class EmailDbDomain extends Model
     protected $table = 'virtual_domains';
 
     protected $guarded = ['id'];
-
 }

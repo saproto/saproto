@@ -2,21 +2,16 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Models\QuoteLike;
-use Proto\Models\Quote;
-
-use Carbon\Carbon;
-
 use Auth;
-use Session;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Proto\Models\Quote;
+use Proto\Models\QuoteLike;
 use Redirect;
-
+use Session;
 
 class QuoteCornerController extends Controller
 {
-
     public function overview()
     {
         $quotes = Quote::where('updated_at', '>', Carbon::now()->subWeeks(4))->get();
@@ -34,16 +29,17 @@ class QuoteCornerController extends Controller
             $quotes = Quote::orderBy('created_at', 'desc')->paginate(20);
             foreach ($quotes as $quote) {
                 $quote->quote = str_replace('<br />', "\n", strip_tags($quote->quote, 'br'));
-                $quote->user_info = (object)[
-                    'name' => $quote->user->name,
-                    'photo' => $quote->user->photo_preview
+                $quote->user_info = (object) [
+                    'name'  => $quote->user->name,
+                    'photo' => $quote->user->photo_preview,
                 ];
             }
             $popular->quote = str_replace('<br />', "\n", strip_tags($popular->quote, 'br'));
-            $popular->user_info = (object)[
-                'name' => $popular->user->name,
-                'photo' => $popular->user->photo_preview
+            $popular->user_info = (object) [
+                'name'  => $popular->user->name,
+                'photo' => $popular->user->photo_preview,
             ];
+
             return ['data' => $quotes, 'popular' => $popular];
         } else {
             return view('quotecorner.list', ['data' => Quote::orderBy('created_at', 'desc')->paginate(20), 'popular' => $popular]);
@@ -56,7 +52,7 @@ class QuoteCornerController extends Controller
         $temp = nl2br(trim($temp));
         if (!(strlen($temp) > 0)) {
             if ($request->wantsJson()) {
-                abort(400, json_encode((object)[
+                abort(400, json_encode((object) [
                     'success' => false,
                     'message' => 'Quote too short',
                 ]));
@@ -64,28 +60,29 @@ class QuoteCornerController extends Controller
                 return Redirect::route('quotes::list');
             }
         }
-        $new = array(
-            'quote' => $temp,
-            'user_id' => Auth::id()
-        );
+        $new = [
+            'quote'   => $temp,
+            'user_id' => Auth::id(),
+        ];
         $quote = new Quote($new);
         $quote->save();
 
         if ($request->wantsJson()) {
             $data_quote = $quote;
             $data_quote->quote = str_replace('<br />', "\n", strip_tags($data_quote->quote, 'br'));
-            $data_quote->user_info = (object)[
-                'name' => $data_quote->user->name,
-                'photo' => $data_quote->user->photo_preview
+            $data_quote->user_info = (object) [
+                'name'  => $data_quote->user->name,
+                'photo' => $data_quote->user->photo_preview,
             ];
 
-            return json_encode((object)[
+            return json_encode((object) [
                 'success' => true,
                 'message' => 'Quote saved',
-                'data' => $data_quote
+                'data'    => $data_quote,
             ]);
         } else {
-            Session::flash("flash_message", "Quote added.");
+            Session::flash('flash_message', 'Quote added.');
+
             return Redirect::route('quotes::list');
         }
     }
@@ -98,7 +95,8 @@ class QuoteCornerController extends Controller
         }
         QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
-        Session::flash("flash_message", "Quote deleted.");
+        Session::flash('flash_message', 'Quote deleted.');
+
         return Redirect::route('quotes::list');
     }
 
@@ -108,13 +106,14 @@ class QuoteCornerController extends Controller
         if (count($quote) != 0) {
             $quote[0]->delete();
         } else {
-            $new = array(
-                'user_id' => Auth::user()->id,
-                'quote_id' => $id
-            );
+            $new = [
+                'user_id'  => Auth::user()->id,
+                'quote_id' => $id,
+            ];
             $relation = new QuoteLike($new);
             $relation->save();
         }
+
         return Redirect::back();
     }
 }

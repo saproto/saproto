@@ -40,9 +40,9 @@ return [
     'connections' => [
 
         'event' => [
-            'salt' => getenv('HASHIDS_SECRET_EVENTS'),
+            'salt'   => getenv('HASHIDS_SECRET_EVENTS'),
             'length' => '16',
-        ]
+        ],
 
     ],
 

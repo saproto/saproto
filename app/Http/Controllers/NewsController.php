@@ -2,17 +2,13 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
+use GrahamCampbell\Markdown\Facades\Markdown;
 use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\Newsitem;
 use Proto\Models\StorageEntry;
-
-use Auth;
 use Redirect;
 use Session;
-use GrahamCampbell\Markdown\Facades\Markdown;
 
 class NewsController extends Controller
 {
@@ -39,8 +35,10 @@ class NewsController extends Controller
 
         $return = [];
 
-        foreach($newsitems as $newsitem) {
-            if($newsitem->isPublished()) $return[] = $newsitem;
+        foreach ($newsitems as $newsitem) {
+            if ($newsitem->isPublished()) {
+                $return[] = $newsitem;
+            }
         }
 
         return view('news.list', ['newsitems' => $return]);
@@ -53,13 +51,14 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view("news.edit", ['item' => null, 'new' => true]);
+        return view('news.edit', ['item' => null, 'new' => true]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -67,19 +66,19 @@ class NewsController extends Controller
         $newsitem = new Newsitem();
 
         $newsitem->fill($request->all());
-        $newsitem->published_at = date("Y-m-d H:i:s", strtotime($request->published_at));
+        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         $newsitem->user_id = Auth::user()->id;
 
         $newsitem->save();
 
         return redirect(route('news::admin'));
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -88,10 +87,10 @@ class NewsController extends Controller
 
         $newsitem = Newsitem::findOrFail($id);
 
-        if(!$newsitem->isPublished()) {
-            if(Auth::check() && Auth::user()->can('board')) {
+        if (!$newsitem->isPublished()) {
+            if (Auth::check() && Auth::user()->can('board')) {
                 $preview = true;
-            }else{
+            } else {
                 abort(404);
             }
         }
@@ -102,21 +101,23 @@ class NewsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         $newsitem = Newsitem::findOrFail($id);
 
-        return view("news.edit", ['item' => $newsitem, 'new' => false]);
+        return view('news.edit', ['item' => $newsitem, 'new' => false]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -124,7 +125,7 @@ class NewsController extends Controller
         $newsitem = Newsitem::findOrFail($id);
 
         $newsitem->fill($request->all());
-        $newsitem->published_at = date("Y-m-d H:i:s", strtotime($request->published_at));
+        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
 
         $newsitem->save();
 
@@ -134,14 +135,15 @@ class NewsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $newsitem = Newsitem::findOrFail($id);
 
-        Session::flash('flash_message', 'Newsitem ' . $newsitem->title . ' has been removed.');
+        Session::flash('flash_message', 'Newsitem '.$newsitem->title.' has been removed.');
 
         $newsitem->delete();
 
@@ -153,9 +155,11 @@ class NewsController extends Controller
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
-    public function featuredImage(Request $request, $id) {
+    public function featuredImage(Request $request, $id)
+    {
         $newsitem = Newsitem::findOrFail($id);
 
         $image = $request->file('image');
@@ -173,13 +177,14 @@ class NewsController extends Controller
         return Redirect::route('news::edit', ['id' => $id]);
     }
 
-    public function apiIndex() {
+    public function apiIndex()
+    {
         $newsitems = Newsitem::all()->sortByDesc('published_at');
 
         $return = [];
 
-        foreach($newsitems as $newsitem) {
-            if($newsitem->isPublished()) {
+        foreach ($newsitems as $newsitem) {
+            if ($newsitem->isPublished()) {
                 $returnItem = new \stdClass();
                 $returnItem->id = $newsitem->id;
                 $returnItem->title = $newsitem->title;
@@ -194,4 +199,3 @@ class NewsController extends Controller
         return $return;
     }
 }
-

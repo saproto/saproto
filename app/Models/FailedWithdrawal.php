@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FailedWithdrawal extends Model
 {
-
     protected $table = 'withdrawals_failed';
     protected $guarded = ['id'];
     public $timestamps = false;
@@ -25,5 +24,4 @@ class FailedWithdrawal extends Model
     {
         return $this->hasOne('Proto\Models\User', 'user_id');
     }
-
 }

@@ -2,16 +2,17 @@
 
 namespace Proto\Http\Middleware;
 
-use Closure;
 use Auth;
+use Closure;
 
 class Utwente
 {
     /**
      * This middleware only allows access if the visiting user is authenticated and is a member.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -19,6 +20,6 @@ class Utwente
         if (Auth::check() && Auth::user()->utwente_username != null) {
             return $next($request);
         }
-        abort(403, "You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.");
+        abort(403, 'You need to have an active University of Twente account to continue. If you have one, please link it on your dashboard.');
     }
 }

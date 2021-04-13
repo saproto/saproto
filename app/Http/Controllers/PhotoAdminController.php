@@ -2,19 +2,14 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\Photo;
-use Proto\Models\PhotoManager;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoLikes;
 use Auth;
-use Session;
-
+use Illuminate\Http\Request;
+use Proto\Models\Photo;
+use Proto\Models\PhotoAlbum;
+use Proto\Models\PhotoManager;
 use Proto\Models\StorageEntry;
 use Redirect;
+use Session;
 
 class PhotoAdminController extends Controller
 {
@@ -43,10 +38,11 @@ class PhotoAdminController extends Controller
 
     public function edit($id)
     {
-
         $photos = PhotoManager::getPhotos($id);
 
-        if ($photos) return view('photos.admin.edit', ['photos' => $photos]);
+        if ($photos) {
+            return view('photos.admin.edit', ['photos' => $photos]);
+        }
 
         abort(404);
     }
@@ -62,13 +58,14 @@ class PhotoAdminController extends Controller
             $album->private = false;
         }
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::find($id);
-        $response = "ERROR";
+        $response = 'ERROR';
         if ($request->has('file') && !$album->published) {
             $uploadFile = $request->file('file');
 
@@ -76,6 +73,7 @@ class PhotoAdminController extends Controller
 
             $response = view('website.layouts.macros.selectablephoto', ['photo' => $photo]);
         }
+
         return $response;
     }
 
@@ -84,31 +82,31 @@ class PhotoAdminController extends Controller
         $action = $request->input('submit');
         $photos = $request->input('photo');
 
-        if($photos)
-        {
+        if ($photos) {
             $album = PhotoAlbum::where('id', $id)->get()->first();
 
             if ($album->published && !Auth::user()->can('publishalbums')) {
                 abort(403, 'Unauthorized action.');
             }
 
-
             switch ($action) {
-                case "remove":
+                case 'remove':
                     foreach ($photos as $photoId => $photo) {
                         Photo::find($photoId)->delete();
                     }
                     break;
 
-                case "thumbnail":
+                case 'thumbnail':
                     reset($photos);
                     $album->thumb_id = key($photos);
                     break;
 
-                case "private":
+                case 'private':
                     foreach ($photos as $photoId => $photo) {
                         $photo = Photo::find($photoId);
-                        if ($album->published && $photo->private) continue;
+                        if ($album->published && $photo->private) {
+                            continue;
+                        }
                         $photo->private = !$photo->private;
                         $photo->save();
                     }
@@ -116,12 +114,14 @@ class PhotoAdminController extends Controller
             }
             $album->save();
         }
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     public function delete($id)
     {
         PhotoManager::deleteAlbum($id);
+
         return redirect(route('photo::admin::index'));
     }
 
@@ -129,13 +129,15 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::where('id', '=', $id)->first();
 
-        if(!count($album->items)>0 || $album->thumb_id == null) {
+        if (!count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+
             return Redirect::back();
         }
 
         $album->published = true;
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
@@ -144,12 +146,13 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::where('id', '=', $id)->first();
         $album->published = false;
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     private function createPhotoFromUpload($uploadedPhoto, $albumID)
     {
-        $path = "photos/" . $albumID . "/";
+        $path = 'photos/'.$albumID.'/';
 
         $file = new StorageEntry();
         $file->createFromFile($uploadedPhoto, $path);

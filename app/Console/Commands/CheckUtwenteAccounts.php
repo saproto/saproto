@@ -3,16 +3,13 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use Mail;
 use Proto\Http\Controllers\LdapController;
 use Proto\Mail\UtwenteCleanup;
 use Proto\Models\User;
 
-use Mail;
-
 class CheckUtwenteAccounts extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -42,9 +39,8 @@ class CheckUtwenteAccounts extends Command
      */
     public function handle()
     {
-
         $users = User::whereNotNull('utwente_username')->get();
-        $this->info("Checking " . $users->count() . " UTwente accounts.");
+        $this->info('Checking '.$users->count().' UTwente accounts.');
 
         $unlinked = [];
 
@@ -57,12 +53,12 @@ class CheckUtwenteAccounts extends Command
             // See if user is active
             $active = true;
             if (count($remoteusers) < 1) {
-                $msg = "Not found: $utwente_username (" . $user->name . ")";
+                $msg = "Not found: $utwente_username (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;
-            } else if (!$remoteusers[0]->active) {
-                $msg = "Inactive: $utwente_username (" . $user->name . ")";
+            } elseif (!$remoteusers[0]->active) {
+                $msg = "Inactive: $utwente_username (".$user->name.')';
                 $this->info($msg);
                 $unlinked[] = $msg;
                 $active = false;
@@ -70,11 +66,11 @@ class CheckUtwenteAccounts extends Command
 
             if ($active && property_exists($remoteusers[0], 'department')) {
                 // See if user studies CreaTe
-                if (strpos($remoteusers[0]->department, "CREA") > 0) {
+                if (strpos($remoteusers[0]->department, 'CREA') > 0) {
                     $user->did_study_create = true;
                 }
                 // See if user studies ITech
-                if (strpos($remoteusers[0]->department, "ITECH") > 0) {
+                if (strpos($remoteusers[0]->department, 'ITECH') > 0) {
                     $user->did_study_itech = true;
                 }
                 $user->utwente_department = $remoteusers[0]->department;
@@ -93,8 +89,6 @@ class CheckUtwenteAccounts extends Command
 
         Mail::queue((new UtwenteCleanup($unlinked))->onQueue('high'));
 
-        $this->info("Done");
-
+        $this->info('Done');
     }
-
 }

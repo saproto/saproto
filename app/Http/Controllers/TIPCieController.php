@@ -2,13 +2,8 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Carbon;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
 use Proto\Models\Account;
 use Proto\Models\OrderLine;
 
@@ -41,8 +36,7 @@ class TIPCieController extends Controller
 
         foreach ($orders as $order) {
             if (in_array($order->product_id, $tipcieProductIds)) {
-
-                $pid = (string)$order->product_id;
+                $pid = (string) $order->product_id;
 
                 if (!array_key_exists($pid, $tipcieOrders)) {
                     $productInfo = new \stdClass();
@@ -58,14 +52,13 @@ class TIPCieController extends Controller
                 $dailyTotal += $order->total_price;
 
                 if ($order->payed_with_bank_card) {
-                    $time = (string)$order->created_at;
+                    $time = (string) $order->created_at;
                     if (!array_key_exists($time, $pinOrders)) {
                         $pinOrders[$time] = 0;
                     }
                     $pinOrders[$time] += $order->total_price;
                     $pinTotal += $order->total_price;
                 }
-
             }
         }
 

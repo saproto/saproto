@@ -2,20 +2,17 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Proto\Models\CommitteeMembership;
-
-use Proto\Models\User;
-
 use Auth;
+use Proto\Models\CommitteeMembership;
+use Proto\Models\User;
 
 class UserProfileController extends Controller
 {
-
     /**
      * Display the profile for a specific user.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\View\View
      */
     public function show($id = null)
@@ -36,12 +33,12 @@ class UserProfileController extends Controller
         return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties]);
     }
 
-    private function getPastMemberships($user, $getsocieties) {
+    private function getPastMemberships($user, $getsocieties)
+    {
         return CommitteeMembership::onlyTrashed()
             ->with('committee')
             ->where('user_id', $user->id)
             ->get()
             ->where('committee.is_society', $getsocieties);
     }
-
 }

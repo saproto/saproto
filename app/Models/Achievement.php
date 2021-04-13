@@ -20,25 +20,28 @@ class Achievement extends Model
         return $this->hasMany('Proto\Models\AchievementOwnership');
     }
 
-    public function numberOfStars() {
+    public function numberOfStars()
+    {
         $map = [
-            'COMMON' => 1,
-            'UNCOMMON' => 2,
-            'RARE' => 3,
-            'EPIC' => 4,
-            'LEGENDARY' => 5
+            'COMMON'    => 1,
+            'UNCOMMON'  => 2,
+            'RARE'      => 3,
+            'EPIC'      => 4,
+            'LEGENDARY' => 5,
         ];
+
         return $map[$this->tier];
     }
 
     public function currentOwners($ismember = true)
     {
-        $users = array();
+        $users = [];
         foreach ($this->users as $user) {
             if ((!$ismember || $user->is_member)) {
                 $users[] = $user;
             }
         }
+
         return $users;
     }
 }

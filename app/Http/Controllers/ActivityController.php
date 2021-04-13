@@ -2,28 +2,22 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
-
-use Proto\Mail\CommitteeHelpNeeded;
-use Proto\Mail\CommitteeHelpNotNeeded;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\Event;
-
 use Proto\Models\HelpingCommittee;
 use Redirect;
 
-use Auth;
-use Mail;
-
 class ActivityController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function save(Request $request, $id)
@@ -38,24 +32,27 @@ class ActivityController extends Controller
 
         if ($newnoshow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
+
             return Redirect::route('event::edit', ['id' => $event->id]);
         } elseif ($newnoshow < 0) {
             $request->session()->flash('flash_message', 'The no show fee should be a positive amount.');
+
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
         if ($newprice > floatval($activity->price) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
+
             return Redirect::route('event::edit', ['id' => $event->id]);
         }
 
         $data = [
             'registration_start' => strtotime($request->registration_start),
-            'registration_end' => strtotime($request->registration_end),
+            'registration_end'   => strtotime($request->registration_end),
             'deregistration_end' => strtotime($request->deregistration_end),
-            'participants' => $request->participants,
-            'price' => $newprice,
-            'no_show_fee' => $newnoshow
+            'participants'       => $request->participants,
+            'price'              => $newprice,
+            'no_show_fee'        => $newnoshow,
         ];
 
         if (!$activity->validate($data)) {
@@ -76,13 +73,13 @@ class ActivityController extends Controller
         $request->session()->flash('flash_message', 'Your changes have been saved.');
 
         return Redirect::route('event::edit', ['id' => $event->id]);
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function delete(Request $request, $id)
@@ -90,10 +87,12 @@ class ActivityController extends Controller
         $event = Event::findOrFail($id);
 
         if (!$event->activity) {
-            $request->session()->flash('flash_message', "There is no participation data to delete.");
+            $request->session()->flash('flash_message', 'There is no participation data to delete.');
+
             return Redirect::back();
         } elseif (count($event->activity->users) > 0) {
-            $request->session()->flash('flash_message', "You cannot delete participation data because there are still participants to this activity.");
+            $request->session()->flash('flash_message', 'You cannot delete participation data because there are still participants to this activity.');
+
             return Redirect::back();
         }
 
@@ -115,6 +114,7 @@ class ActivityController extends Controller
         if (!$event->activity) {
             abort(404, 'This event has no activity.');
         }
+
         return view('event.checklist', ['event' => $event]);
     }
 
@@ -123,25 +123,28 @@ class ActivityController extends Controller
         $event = Event::findOrFail($id);
         if (!$event->activity) {
             $request->session()->flash('flash_message', 'This event has no activity data.');
+
             return Redirect::back();
         }
 
         $amount = $request->input('amount');
         if ($amount < 1) {
             $request->session()->flash('flash_message', 'The amount of helpers should be positive.');
+
             return Redirect::back();
         }
 
         $committee = Committee::findOrFail($request->input('committee'));
 
         $help = HelpingCommittee::create([
-            'activity_id' => $event->activity->id,
-            'committee_id' => $committee->id,
-            'amount' => $amount,
-            'notification_sent' => false
+            'activity_id'       => $event->activity->id,
+            'committee_id'      => $committee->id,
+            'amount'            => $amount,
+            'notification_sent' => false,
         ]);
 
-        $request->session()->flash('flash_message', 'Added ' . $committee->name . ' as helping committee.');
+        $request->session()->flash('flash_message', 'Added '.$committee->name.' as helping committee.');
+
         return Redirect::back();
     }
 
@@ -155,7 +158,8 @@ class ActivityController extends Controller
         $help->notification_sent = false;
         $help->save();
 
-        $request->session()->flash('flash_message', 'Updated ' . $help->committee->name . ' as helping committee.');
+        $request->session()->flash('flash_message', 'Updated '.$help->committee->name.' as helping committee.');
+
         return Redirect::back();
     }
 
@@ -168,8 +172,8 @@ class ActivityController extends Controller
         }
 
         $help->delete();
-        $request->session()->flash('flash_message', 'Removed ' . $help->committee->name . ' as helping committee.');
+        $request->session()->flash('flash_message', 'Removed '.$help->committee->name.' as helping committee.');
+
         return Redirect::back();
     }
-
 }

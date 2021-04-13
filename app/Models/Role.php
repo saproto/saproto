@@ -8,11 +8,13 @@ class Role extends EntrustRole
 {
     protected $fillable = ['name', 'display_name', 'description'];
 
-    public function permissions() {
+    public function permissions()
+    {
         return $this->belongsToMany('Proto\Models\Permission', 'permission_role');
     }
 
-    public function users() {
+    public function users()
+    {
         return $this->belongsToMany('Proto\Models\User', 'role_user');
     }
 }

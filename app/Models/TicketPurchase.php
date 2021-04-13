@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TicketPurchase extends Model
 {
-
     protected $table = 'ticket_purchases';
 
     protected $guarded = ['id'];
@@ -35,16 +34,16 @@ class TicketPurchase extends Model
         } elseif ($this->orderline->molliePayment && $this->orderline->molliePayment->translatedStatus() == 'paid') {
             return true;
         }
+
         return false;
     }
 
     public function getApiAttributesAttribute()
     {
-        return array(
-            'id' => $this->id,
+        return [
+            'id'      => $this->id,
             'barcode' => $this->canBeDownloaded() ? $this->barcode : null,
-            'scanned' => $this->scanned
-        );
+            'scanned' => $this->scanned,
+        ];
     }
-
 }

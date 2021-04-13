@@ -3,7 +3,6 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 use User;
 
 class QrAuthRequest extends Model
@@ -13,7 +12,8 @@ class QrAuthRequest extends Model
     protected $guarded = ['id'];
 
     /**
-     * Returns true is QrAuthRequest has been approved
+     * Returns true is QrAuthRequest has been approved.
+     *
      * @return bool
      */
     public function isApproved()
@@ -27,6 +27,7 @@ class QrAuthRequest extends Model
 
     /**
      * Returns the user is request has been approved.
+     *
      * @return mixed
      */
     public function authUser()
@@ -34,6 +35,7 @@ class QrAuthRequest extends Model
         if ($this->approved_at) {
             $returnUser = User::findOrFail($this->user_id);
             $this->delete();
+
             return $returnUser;
         }
 

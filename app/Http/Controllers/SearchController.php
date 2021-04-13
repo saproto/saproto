@@ -2,42 +2,43 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
-
-use Proto\Models\Product;
-use Proto\Models\User;
+use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\Page;
-use Proto\Models\Committee;
-
+use Proto\Models\Product;
+use Proto\Models\User;
 use Response;
-use View;
-use Auth;
 use Session;
+use View;
 
 class SearchController extends Controller
 {
-
     public function search(Request $request)
     {
-
         $term = $request->input('query');
 
         $users = [];
         if (Auth::check() && Auth::user()->is_member) {
-            $presearch_users = $this->getGenericSearch(User::class, $term,
-                Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']);
+            $presearch_users = $this->getGenericSearch(
+                User::class,
+                $term,
+                Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
+            );
             foreach ($presearch_users as $user) {
                 if ($user->is_member) {
                     $users[] = $user;
                 }
-
             }
         }
 
         $pages = [];
-        $presearch_pages = $this->getGenericSearch(Page::class, $term,
-            ['slug', 'title', 'content']);
+        $presearch_pages = $this->getGenericSearch(
+            Page::class,
+            $term,
+            ['slug', 'title', 'content']
+        );
         foreach ($presearch_pages as $page) {
             if (!$page->is_member_only || (Auth::check() && Auth::user()->is_member)) {
                 $pages[] = $page;
@@ -45,8 +46,11 @@ class SearchController extends Controller
         }
 
         $committees = [];
-        $presearch_committees = $this->getGenericSearch(Committee::class, $term,
-            ['id', 'name', 'slug']);
+        $presearch_committees = $this->getGenericSearch(
+            Committee::class,
+            $term,
+            ['id', 'name', 'slug']
+        );
         foreach ($presearch_committees as $committee) {
             if ($committee->public || (Auth::check() && Auth::user()->can('board'))) {
                 $committees[] = $committee;
@@ -54,8 +58,11 @@ class SearchController extends Controller
         }
 
         $events = [];
-        $presearch_events = $this->getGenericSearch(Event::class, $term,
-            ['id', 'title']);
+        $presearch_events = $this->getGenericSearch(
+            Event::class,
+            $term,
+            ['id', 'title']
+        );
         foreach ($presearch_events as $event) {
             if (!$event->secret || (Auth::check() && Auth::user()->can('board'))) {
                 $events[] = $event;
@@ -63,18 +70,16 @@ class SearchController extends Controller
         }
 
         return view('website.search', [
-            'term' => $term,
-            'users' => $users,
-            'pages' => $pages,
+            'term'       => $term,
+            'users'      => $users,
+            'pages'      => $pages,
             'committees' => $committees,
-            'events' => array_reverse($events)
+            'events'     => array_reverse($events),
         ]);
-
     }
 
     public function ldapSearch(Request $request)
     {
-
         $query = null;
         $data = null;
         if ($request->has('query')) {
@@ -84,7 +89,7 @@ class SearchController extends Controller
             }
             if (strlen($query) >= 3) {
                 $terms = explode(' ', $query);
-                $search = "&";
+                $search = '&';
                 foreach ($terms as $term) {
                     if (Auth::user()->can('board')) {
                         $search .= "(|(sn=*$term*)(middlename=*$term*)(givenName=*$term*)(userPrincipalName=$term@utwente.nl)(telephoneNumber=*$term*)(otherTelephone=*$term*)(physicalDeliveryOfficeName=*$term*))";
@@ -97,11 +102,11 @@ class SearchController extends Controller
                 Session::flash('flash_message', 'Please make your search term more than three characters.');
             }
         }
+
         return view('website.ldapsearch', [
             'term' => $query,
-            'data' => (array)$data
+            'data' => (array) $data,
         ]);
-
     }
 
     public function openSearch()
@@ -114,42 +119,45 @@ class SearchController extends Controller
         $search_attributes = ['id', 'name', 'calling_name', 'utwente_username', 'email'];
         $result = [];
         foreach ($this->getGenericSearch(User::class, $request->get('q'), $search_attributes) as $user) {
-            $result[] = (object)[
-                'id' => $user->id,
-                'name' => $user->name,
-                'is_member' => $user->is_member
+            $result[] = (object) [
+                'id'        => $user->id,
+                'name'      => $user->name,
+                'is_member' => $user->is_member,
             ];
         }
+
         return $result;
     }
 
     public function getEventSearch(Request $request)
     {
         $search_attributes = ['id', 'title'];
+
         return $this->getGenericSearch(Event::class, $request->get('q'), $search_attributes);
     }
 
     public function getCommitteeSearch(Request $request)
     {
         $search_attributes = ['id', 'name', 'slug'];
+
         return $this->getGenericSearch(Committee::class, $request->get('q'), $search_attributes);
     }
 
     public function getProductSearch(Request $request)
     {
         $search_attributes = ['id', 'name'];
+
         return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
     }
 
     private function getGenericSearch($model, $query, $attributes)
     {
-
-        $terms = explode(' ', str_replace("*", "%", $query));
+        $terms = explode(' ', str_replace('*', '%', $query));
         $query = $model::query();
 
         $check_at_least_one_valid_term = false;
         foreach ($terms as $term) {
-            if (strlen(str_replace("%", "", $term)) < 3) {
+            if (strlen(str_replace('%', '', $term)) < 3) {
                 continue;
             }
             $check_at_least_one_valid_term = true;
@@ -161,7 +169,7 @@ class SearchController extends Controller
         foreach ($attributes as $attr) {
             $query = $query->orWhere(function ($query) use ($terms, $attr) {
                 foreach ($terms as $term) {
-                    if (strlen(str_replace("%", "", $term)) < 3) {
+                    if (strlen(str_replace('%', '', $term)) < 3) {
                         continue;
                     }
                     $query = $query->where($attr, 'LIKE', sprintf('%%%s%%', $term));
@@ -171,5 +179,4 @@ class SearchController extends Controller
 
         return $query->get();
     }
-
 }

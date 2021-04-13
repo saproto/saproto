@@ -5,11 +5,11 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ManualEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $from;
     public $subject;
@@ -49,11 +49,12 @@ class ManualEmail extends Mailable
             ->subject($this->subject);
         foreach ($this->submitted_attachments as $attachment) {
             $options = [
-                'as' => $attachment->original_filename,
-                'mime' => $attachment->mime
+                'as'   => $attachment->original_filename,
+                'mime' => $attachment->mime,
             ];
             $mail->attach($attachment->generateLocalPath(), $options);
         }
+
         return $mail;
     }
 }

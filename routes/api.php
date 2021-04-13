@@ -1,7 +1,6 @@
 <?php
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
-
     Route::group(['middleware' => ['web']], function () {
         Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
@@ -98,5 +97,4 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
-
 });

@@ -2,22 +2,21 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Artisan;
+use Illuminate\Database\Eloquent\Model;
 
 class Newsletter extends Model
 {
-
     public static function getLastSent()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_last_sent')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
-                'key' => 'newsletter_last_sent',
-                'value' => 0
+                'key'   => 'newsletter_last_sent',
+                'value' => 0,
             ]);
         }
+
         return $lastSent;
     }
 
@@ -26,21 +25,24 @@ class Newsletter extends Model
         $lastSent = HashMapItem::where('key', 'newsletter_text')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
-                'key' => 'newsletter_text',
-                'value' => null
+                'key'   => 'newsletter_text',
+                'value' => null,
             ]);
         }
+
         return $lastSent;
     }
 
-    public static function getTextLastUpdated() {
+    public static function getTextLastUpdated()
+    {
         $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
         if ($lastUpdated == null) {
             $lastUpdated = HashMapItem::create([
-                'key' => 'newsletter_text_updated',
-                'value' => 0
+                'key'   => 'newsletter_text_updated',
+                'value' => 0,
             ]);
         }
+
         return $lastUpdated;
     }
 
@@ -88,13 +90,19 @@ class Newsletter extends Model
         $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
         $current = date('Y') * 52 + date('W');
         $events = Event::getEventsForNewsletter();
+
         return $current > $lastSent && $events->count() > 0;
     }
 
     public static function showTextOnHomepage()
     {
-        if (Newsletter::text() == "") return false;
-        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) return false;
+        if (Newsletter::text() == '') {
+            return false;
+        }
+        if ((date('U') - Newsletter::textUpdated()) / (3600 * 24) > 10) {
+            return false;
+        }
+
         return true;
     }
 
@@ -105,7 +113,7 @@ class Newsletter extends Model
         }
         Artisan::call('proto:newslettercron');
         Newsletter::updateLastSent();
+
         return true;
     }
-
 }

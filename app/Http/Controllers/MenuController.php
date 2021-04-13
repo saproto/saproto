@@ -4,13 +4,9 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-
 use Illuminate\Support\Facades\Redirect;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
 use Proto\Models\MenuItem;
 use Proto\Models\Page;
-
 use Session;
 
 class MenuController extends Controller
@@ -24,7 +20,7 @@ class MenuController extends Controller
     {
         $menuItems = MenuItem::where('parent', null)->with('children', 'page')->orderBy('order')->get();
 
-        return view("menu.list", ['menuItems' => $menuItems]);
+        return view('menu.list', ['menuItems' => $menuItems]);
     }
 
     /**
@@ -37,13 +33,14 @@ class MenuController extends Controller
         $pages = Page::all();
         $topMenuItems = MenuItem::where('parent', null)->orderBy('order')->get();
 
-        return view("menu.edit", ['item' => null, 'pages' => $pages, 'new' => true, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
+        return view('menu.edit', ['item' => null, 'pages' => $pages, 'new' => true, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -56,8 +53,12 @@ class MenuController extends Controller
             $menuItem->is_member_only = false;
         }
 
-        if ($request->page_id == 0) $menuItem->page_id = null;
-        if ($request->parent == 0) $menuItem->parent = null;
+        if ($request->page_id == 0) {
+            $menuItem->page_id = null;
+        }
+        if ($request->parent == 0) {
+            $menuItem->parent = null;
+        }
 
         if ($menuItem->page_id) {
             $menuItem->url = Page::find($menuItem->page_id)->getUrl();
@@ -74,13 +75,14 @@ class MenuController extends Controller
         $menuItem->save();
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
-        return Redirect::route("menu::list");
+        return Redirect::route('menu::list');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Router $router, $id)
@@ -89,14 +91,15 @@ class MenuController extends Controller
         $pages = Page::all();
         $topMenuItems = MenuItem::where('parent', null)->orderBy('order')->get();
 
-        return view("menu.edit", ['item' => $menuItem, 'pages' => $pages, 'new' => false, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
+        return view('menu.edit', ['item' => $menuItem, 'pages' => $pages, 'new' => false, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -112,8 +115,12 @@ class MenuController extends Controller
         $menuItem->page_id = $request->page_id;
         $menuItem->parent = $request->parent;
 
-        if ($request->page_id == 0) $menuItem->page_id = null;
-        if ($request->parent == 0) $menuItem->parent = null;
+        if ($request->page_id == 0) {
+            $menuItem->page_id = null;
+        }
+        if ($request->parent == 0) {
+            $menuItem->parent = null;
+        }
 
         $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
 
@@ -138,7 +145,7 @@ class MenuController extends Controller
         $this->fixDuplicateMenuItemsOrder($oldparent);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
-        return Redirect::route("menu::list");
+        return Redirect::route('menu::list');
     }
 
     public function orderUp($id)
@@ -147,12 +154,14 @@ class MenuController extends Controller
 
         $menuItemAbove = MenuItem::where('parent', $menuItem->parent)->where('order', '<', $menuItem->order)->orderBy('order', 'desc')->first();
 
-        if (!$menuItemAbove) abort(400, 'Item is already top item.');
+        if (!$menuItemAbove) {
+            abort(400, 'Item is already top item.');
+        }
 
         $this->switchMenuItems($menuItem, $menuItemAbove);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
-        return Redirect::route("menu::list");
+        return Redirect::route('menu::list');
     }
 
     public function orderDown($id)
@@ -161,12 +170,14 @@ class MenuController extends Controller
 
         $menuItemBelow = MenuItem::where('parent', $menuItem->parent)->where('order', '>', $menuItem->order)->orderBy('order', 'asc')->first();
 
-        if (!$menuItemBelow) abort(400, 'Item is already bottom item.');
+        if (!$menuItemBelow) {
+            abort(400, 'Item is already bottom item.');
+        }
 
         $this->switchMenuItems($menuItem, $menuItemBelow);
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
-        return Redirect::route("menu::list");
+        return Redirect::route('menu::list');
     }
 
     private function switchMenuItems($item1, $item2)
@@ -195,7 +206,8 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -204,6 +216,7 @@ class MenuController extends Controller
 
         if ($menuItem->children->count() > 0) {
             Session::flash('flash_message', 'A menu item with children can\'t be removed.');
+
             return Redirect::route('menu::list');
         }
 

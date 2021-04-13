@@ -10,6 +10,7 @@ class Saml
     public function handle($request, Closure $next)
     {
         Session::reflash();
+
         return $next($request);
     }
 }

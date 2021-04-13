@@ -23,7 +23,8 @@ class Page extends Model
         return $this->belongsToMany('Proto\Models\StorageEntry', 'pages_files', 'page_id', 'file_id');
     }
 
-    public function getUrl() {
-        return route("page::show", $this->slug);
+    public function getUrl()
+    {
+        return route('page::show', $this->slug);
     }
 }

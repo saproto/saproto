@@ -2,22 +2,20 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Address extends Validatable
 {
     protected $table = 'addresses';
 
     protected $hidden = ['id'];
 
-    protected $rules = array(
+    protected $rules = [
         'user_id' => 'required|integer',
-        'street' => 'required|string',
-        'number' => 'required|string',
+        'street'  => 'required|string',
+        'number'  => 'required|string',
         'zipcode' => 'required|string',
-        'city' => 'required|string',
-        'country' => 'required|string'
-    );
+        'city'    => 'required|string',
+        'country' => 'required|string',
+    ];
 
     public function user()
     {

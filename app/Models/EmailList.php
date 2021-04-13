@@ -2,13 +2,11 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Crypt;
+use Illuminate\Database\Eloquent\Model;
 
 class EmailList extends Model
 {
-
     protected $table = 'mailinglists';
 
     public $timestamps = false;
@@ -30,8 +28,9 @@ class EmailList extends Model
         if (!$this->isSubscribed($user)) {
             EmailListSubscription::create([
                 'user_id' => $user->id,
-                'list_id' => $this->id
+                'list_id' => $this->id,
             ]);
+
             return true;
         } else {
             return false;
@@ -41,8 +40,11 @@ class EmailList extends Model
     public function unsubscribe(User $user)
     {
         $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
-        if (!$s) return false;
+        if (!$s) {
+            return false;
+        }
         $s->delete();
+
         return true;
     }
 
@@ -55,5 +57,4 @@ class EmailList extends Model
     {
         return json_decode(Crypt::decrypt(base64_decode($hash)));
     }
-
 }

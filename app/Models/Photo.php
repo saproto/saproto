@@ -3,14 +3,13 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use DB;
 
 class Photo extends Model
 {
-
     protected $appends = ['url'];
 
-    public function album() {
+    public function album()
+    {
         return $this->belongsTo('Proto\Models\PhotoAlbum', 'album_id');
     }
 
@@ -28,6 +27,7 @@ class Photo extends Model
         if ($result->count() > 1) {
             return $result->where('id', $comp, $this->id)->first();
         }
+
         return $result->first();
     }
 
@@ -46,30 +46,36 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    public function likes() {
+    public function likes()
+    {
         return $this->hasMany('Proto\Models\PhotoLikes');
     }
 
-    private function file() {
+    private function file()
+    {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
-    public function thumb() {
-        return $this->file()->first()->generateImagePath(400,400);
+    public function thumb()
+    {
+        return $this->file()->first()->generateImagePath(400, 400);
     }
 
-    public function url() {
+    public function url()
+    {
         return $this->file()->first()->generatePath();
     }
 
-    public function getUrlAttribute() {
+    public function getUrlAttribute()
+    {
         return $this->url();
     }
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
 
-        static::deleting(function($photo) {
+        static::deleting(function ($photo) {
             $photo->file()->delete();
             if ($photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;

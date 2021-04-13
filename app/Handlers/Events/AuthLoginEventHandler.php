@@ -4,8 +4,6 @@ namespace Proto\Handlers\Events;
 
 use Proto\Models\Committee;
 use Proto\Models\Role;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AuthLoginEventHandler
 {
@@ -22,7 +20,8 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param  Events $event
+     * @param Events $event
+     *
      * @return void
      */
     public function handle($event)
@@ -97,6 +96,5 @@ class AuthLoginEventHandler
                 $user->detachRole(Role::where('name', '=', 'protography')->first());
             }
         }
-
     }
 }

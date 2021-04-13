@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinancialAccount extends Model
 {
-
     protected $table = 'accounts';
     protected $guarded = [/*'id'*/];
 
@@ -14,5 +13,4 @@ class FinancialAccount extends Model
     {
         return $this->hasMany('Proto\Models\Product', 'account_id');
     }
-
 }

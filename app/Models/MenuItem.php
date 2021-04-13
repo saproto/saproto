@@ -3,9 +3,7 @@
 namespace Proto\Models;
 
 use Exception;
-
 use Illuminate\Database\Eloquent\Model;
-use Proto\Models\Page;
 
 class MenuItem extends Model
 {
@@ -25,18 +23,21 @@ class MenuItem extends Model
 
     public function getUrl()
     {
-        if (substr($this->url, 0, 8) == "(route) ") {
+        if (substr($this->url, 0, 8) == '(route) ') {
             try {
                 return route(substr($this->url, 8));
             } catch (Exception $e) {
-                return "#";
+                return '#';
             }
         } elseif ($this->page_id == null) {
             return $this->url;
         } else {
             $page = Page::find($this->page_id);
-            if ($page) return $page->getUrl();
-            return "#";
+            if ($page) {
+                return $page->getUrl();
+            }
+
+            return '#';
         }
     }
 

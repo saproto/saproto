@@ -10,16 +10,17 @@ class HashMapItem extends Model
     public $timestamps = false;
     protected $guarded = [];
 
-    public function scopeKey($query, $key) {
+    public function scopeKey($query, $key)
+    {
         return $query->where('key', '=', $key);
     }
 
-    public function scopeSubkey($query, $subkey) {
+    public function scopeSubkey($query, $subkey)
+    {
         return $query->where('subkey', '=', $subkey);
     }
 
-    public function setItem($key, $subkey) {
-
+    public function setItem($key, $subkey)
+    {
     }
-
 }

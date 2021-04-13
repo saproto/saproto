@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddStudyType extends Migration
 {
@@ -13,7 +13,7 @@ class AddStudyType extends Migration
     public function up()
     {
         Schema::table('studies', function (Blueprint $table) {
-            $table->enum('type',['BSc','MSc','Minor','Other'])->default('BSc');
+            $table->enum('type', ['BSc', 'MSc', 'Minor', 'Other'])->default('BSc');
             $table->boolean('utwente')->default(true);
         });
     }

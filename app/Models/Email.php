@@ -2,12 +2,11 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\Eloquent\Model;
 
 class Email extends Model
 {
-
     protected $table = 'emails';
 
     protected $guarded = ['id'];
@@ -46,25 +45,24 @@ class Email extends Model
     {
         if ($this->to_user) {
             return User::orderBy('name', 'asc')->get();
-
         } elseif ($this->to_member) {
-            $members = User::has('member')->orderBy('name', 'asc')->get()->reject(function($user, $index) { return $user->member->pending == 1; });
-            return $members;
+            $members = User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) { return $user->member->pending == 1; });
 
+            return $members;
         } elseif ($this->to_active) {
             $userids = [];
             foreach (Committee::all() as $committee) {
                 $userids = array_merge($userids, $committee->users->pluck('id')->toArray());
             }
-            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
 
+            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_list) {
             $userids = [];
             foreach ($this->lists as $list) {
                 $userids = array_merge($userids, $list->users->pluck('id')->toArray());
             }
-            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
 
+            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_event != false) {
             $userids = [];
             foreach ($this->events as $event) {
@@ -72,6 +70,7 @@ class Email extends Model
                     $userids = array_merge($userids, $event->returnAllUsers()->pluck('id')->toArray());
                 }
             }
+
             return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
         } else {
             return collect([]);
@@ -87,6 +86,7 @@ class Email extends Model
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
+
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
@@ -104,6 +104,7 @@ class Email extends Model
                 }
             }
         }
+
         return implode(', ', $events);
     }
 
@@ -117,8 +118,8 @@ class Email extends Model
                 $lists[] = $list->name;
             }
         }
-        return implode(', ', $lists);
 
+        return implode(', ', $lists);
     }
 
     public static function getListUnsubscribeFooter($user_id, $email_id)
@@ -128,7 +129,7 @@ class Email extends Model
         foreach ($lists as $list) {
             $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }
+
         return implode(', ', $footer);
     }
-
 }

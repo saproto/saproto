@@ -45,9 +45,9 @@ class HelpingCommittee extends Validatable
 
     protected $guarded = ['id'];
 
-    protected $rules = array(
-        'activity_id' => 'required|integer',
+    protected $rules = [
+        'activity_id'  => 'required|integer',
         'committee_id' => 'required|integer',
-        'amount' => 'required|integer'
-    );
+        'amount'       => 'required|integer',
+    ];
 }

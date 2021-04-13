@@ -2,27 +2,22 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Redirect;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Auth;
 use GrahamCampbell\Markdown\Facades\Markdown;
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Proto\Models\Page;
 use Proto\Models\StorageEntry;
-
-use Auth;
 use Session;
 
 class PageController extends Controller
 {
     /**
      * These slugs can't be used for pages, as they are used by the app.
+     *
      * @var array
      */
-    protected $reservedSlugs = array('add', 'edit', 'delete');
+    protected $reservedSlugs = ['add', 'edit', 'delete'];
 
     /**
      * Display a listing of the resource.
@@ -32,7 +27,8 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::orderBy('created_at', 'desc')->paginate(20);
-        return view("pages.list", ['pages' => $pages]);
+
+        return view('pages.list', ['pages' => $pages]);
     }
 
     /**
@@ -42,13 +38,14 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view("pages.edit", ['item' => null, 'new' => true]);
+        return view('pages.edit', ['item' => null, 'new' => true]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -81,14 +78,16 @@ class PageController extends Controller
 
         $page->save();
 
-        Session::flash('flash_message', 'Page ' . $page->title . ' has been created.');
+        Session::flash('flash_message', 'Page '.$page->title.' has been created.');
+
         return Redirect::route('page::list');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  string $slug
+     * @param string $slug
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($slug)
@@ -96,11 +95,11 @@ class PageController extends Controller
         $page = Page::where('slug', '=', $slug)->first();
 
         if ($page == null) {
-            abort(404, "Page not found.");
+            abort(404, 'Page not found.');
         }
 
         if ($page->is_member_only && !(Auth::check() && Auth::user()->is_member)) {
-            abort(403, "You need to be a member of S.A. Proto to see this page.");
+            abort(403, 'You need to be a member of S.A. Proto to see this page.');
         }
 
         return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convertToHtml($page->content)]);
@@ -111,6 +110,7 @@ class PageController extends Controller
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
     public function featuredImage(Request $request, $id)
@@ -137,13 +137,14 @@ class PageController extends Controller
      *
      * @param Request $request
      * @param $id
+     *
      * @return mixed
      */
     public function addFile(Request $request, $id)
     {
-
         if (!$request->file('file')) {
             Session::flash('flash_message', 'You forgot a file.');
+
             return Redirect::back();
         }
 
@@ -160,8 +161,10 @@ class PageController extends Controller
 
     /**
      * Deletes file from page.
+     *
      * @param $id
      * @param $file_id
+     *
      * @return mixed
      */
     public function deleteFile($id, $file_id)
@@ -177,7 +180,8 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -190,8 +194,9 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -226,21 +231,23 @@ class PageController extends Controller
 
         $page->save();
 
-        Session::flash('flash_message', 'Page ' . $page->title . ' has been saved.');
+        Session::flash('flash_message', 'Page '.$page->title.' has been saved.');
+
         return Redirect::route('page::list');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         $page = Page::findOrfail($id);
 
-        Session::flash('flash_message', 'Page ' . $page->title . ' has been removed.');
+        Session::flash('flash_message', 'Page '.$page->title.' has been removed.');
 
         $page->delete();
 

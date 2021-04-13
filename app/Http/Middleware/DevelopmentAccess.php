@@ -2,7 +2,7 @@
 
 /**
  * Kindly copied from
- * http://stackoverflow.com/questions/33791494/laravel-restricting-access-for-development-site
+ * http://stackoverflow.com/questions/33791494/laravel-restricting-access-for-development-site.
  */
 
 namespace Proto\Http\Middleware;
@@ -12,7 +12,7 @@ use Closure;
 class DevelopmentAccess
 {
     protected $except = [
-        'webhook/*'
+        'webhook/*',
     ];
 
     /**
@@ -21,13 +21,14 @@ class DevelopmentAccess
      *
      * @var array
      */
-    protected $ipWhitelist = array();
+    protected $ipWhitelist = [];
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -40,6 +41,7 @@ class DevelopmentAccess
 
         if ($this->clientNotAllowed()) {
             config(['app.debug' => false]);
+
             return abort(403);
         }
 
@@ -49,7 +51,7 @@ class DevelopmentAccess
     /**
      * Checks if current request client is allowed to access the app.
      *
-     * @return boolean
+     * @return bool
      */
     protected function clientNotAllowed()
     {

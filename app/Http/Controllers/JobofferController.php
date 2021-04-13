@@ -3,15 +3,10 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
 use Proto\Models\Company;
 use Proto\Models\Joboffer;
-
-use Session;
 use Redirect;
+use Session;
 
 class JobofferController extends Controller
 {
@@ -24,7 +19,7 @@ class JobofferController extends Controller
     {
         $companies = Company::has('joboffers')->get();
 
-        return view("companies.joboffers.list", ['companies' => $companies]);
+        return view('companies.joboffers.list', ['companies' => $companies]);
     }
 
     /**
@@ -36,7 +31,7 @@ class JobofferController extends Controller
     {
         $joboffers = Joboffer::all();
 
-        return view("companies.joboffers.adminlist", ['joboffers' => $joboffers]);
+        return view('companies.joboffers.adminlist', ['joboffers' => $joboffers]);
     }
 
     /**
@@ -48,54 +43,59 @@ class JobofferController extends Controller
     {
         $companies = Company::all();
 
-        return view("companies.joboffers.edit", ['joboffer' => null, 'companies' => $companies]);
+        return view('companies.joboffers.edit', ['joboffer' => null, 'companies' => $companies]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $description = $request->description;
-        if($description == '') {
+        if ($description == '') {
             $description = null;
         }
 
         $redirect_url = $request->redirect_url;
-        if($redirect_url == '') {
+        if ($redirect_url == '') {
             $redirect_url = null;
         }
 
-        if($description == null && $redirect_url == null) {
-            Session::flash("flash_message", "Please enter a description or redirect url.");
+        if ($description == null && $redirect_url == null) {
+            Session::flash('flash_message', 'Please enter a description or redirect url.');
+
             return Redirect::back();
         }
 
         $joboffer = Joboffer::create($request->all());
         $joboffer->save();
-        return redirect(route("joboffers::admin"));
+
+        return redirect(route('joboffers::admin'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $joboffer = Joboffer::findOrFail($id);
 
-        return view("companies.joboffers.show", ['joboffer' => $joboffer]);
+        return view('companies.joboffers.show', ['joboffer' => $joboffer]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -103,14 +103,15 @@ class JobofferController extends Controller
         $joboffer = Joboffer::findOrFail($id);
         $companies = Company::all();
 
-        return view("companies.joboffers.edit", ['joboffer' => $joboffer, 'companies' => $companies]);
+        return view('companies.joboffers.edit', ['joboffer' => $joboffer, 'companies' => $companies]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -122,15 +123,16 @@ class JobofferController extends Controller
         $joboffer->redirect_url = $request->redirect_url;
         $joboffer->save();
 
-        Session::flash("flash_message", "Job offer has been updated.");
+        Session::flash('flash_message', 'Job offer has been updated.');
 
-        return redirect(route("joboffers::admin"));
+        return redirect(route('joboffers::admin'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -139,6 +141,7 @@ class JobofferController extends Controller
         $joboffer->delete();
 
         Session::flash('flash_message', 'The job offer has been deleted.');
+
         return Redirect::back();
     }
 }
