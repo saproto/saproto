@@ -27,7 +27,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword, SoftDeletes, HasApiTokens;
-    use EntrustUserTrait { restore as private entrustRestore; }
+    use EntrustUserTrait { EntrustUserTrait::restore as private entrustRestore; }
     protected $dates = ['deleted_at'];
 
     /**
