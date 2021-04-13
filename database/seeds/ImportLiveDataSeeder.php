@@ -37,7 +37,7 @@ class ImportLiveDataSeeder extends Seeder
         $newUser = User::create($userData);
         $newUser->save();
 
-        $newPassword = Str::random(16);
+        $newPassword = str_random(16);
         $newUser->setPassword($newPassword);
 
         if ($memberData) {

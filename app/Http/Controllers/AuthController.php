@@ -728,7 +728,7 @@ class AuthController extends Controller
 
         $reset = PasswordReset::create([
             'email' => $user->email,
-            'token' => Str::random(128),
+            'token' => str_random(128),
             'valid_to' => strtotime('+1 hour')
         ]);
 

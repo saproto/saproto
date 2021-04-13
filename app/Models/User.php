@@ -411,7 +411,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function generateNewPersonalKey()
     {
-        $this->personal_key = Str::random(64);
+        $this->personal_key = str_random(64);
         $this->save();
     }
 
