@@ -8,19 +8,14 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $(function () {
             $('#datetimepicker-{{ $name }}').datetimepicker({
-                @if(isset($format) && $format == 'datetime')
-                    format: 'DD-MM-YYYY HH:mm',
-                @else
-                    format: 'DD-MM-YYYY',
-                @endif
-
-                @if(isset($placeholder) && $placeholder !== null)
+                format: '{{ isset($format) && $format == 'datetime' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY' }}',
+                @isset($placeholder)
                     @if(isset($format) && $format == 'datetime')
-                        defaultDate: '{{ date('n/j/Y H:i', $placeholder) }}',
+                        defaultDate: moment('{{  date('n/j/Y H:i', $placeholder)}}', 'n/j/Y H:i'),
                     @else
-                        defaultDate: '{{ date('n/j/Y', $placeholder) }}',
+                        defaultDate: moment('{{ date('n/j/Y', $placeholder) }}', 'n/j/Y')
                     @endif
-                @endif
+                @endisset
             });
         });
     </script>

@@ -23,6 +23,8 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::SCRIPT, [
                     Keyword::SELF,
                     'https://discordapp.com/api/guilds/600338792766767289/widget.json',
+                    'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
+                    'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://analytics.saproto.nl/piwik.js',
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com'
@@ -61,16 +63,14 @@ class ProtoPolicy extends Policy
                     'https://metis.proto.utwente.nl:3001',
                     'wss://metis.proto.utwente.nl:3001',
                     'ws://localhost:3000',
-                    'https://discordapp.com/api/guilds/600338792766767289/widget.json'
+                    'https://discordapp.com/api/guilds/600338792766767289/widget.json',
+                    'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
+                    'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic'
                 ]);
         } catch (InvalidDirective $e) {
             captureException($e);
         } catch (InvalidValueSet $e) {
             captureException($e);
-        }
-
-        if(config('DEBUG')) {
-            $this->addDirective(Directive::SCRIPT, Keyword::UNSAFE_EVAL);
         }
     }
 }
