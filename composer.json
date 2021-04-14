@@ -68,7 +68,8 @@
   "require-dev": {
     "fzaninotto/faker": "~1.4",
     "symfony/dom-crawler": "~3.1",
-    "symfony/css-selector": "~3.1"
+    "symfony/css-selector": "~3.1",
+    "friendsofphp/php-cs-fixer": "^2.18"
   },
   "autoload": {
     "classmap": [
@@ -79,6 +80,9 @@
     }
   },
   "scripts": {
+    "php-cs-fixer": [
+      "php-cs-fixer fix"
+    ],
     "post-install-cmd": [
       "php artisan clear-compiled",
       "php artisan optimize"
