@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * Email List Model
+ * Email List Model.
  *
  * @property int $id
  * @property string $name
@@ -53,10 +53,10 @@ class EmailList extends Model
      */
     public function subscribe($user)
     {
-        if (!$this->isSubscribed($user)) {
+        if (! $this->isSubscribed($user)) {
             EmailListSubscription::create([
                 'user_id' => $user->id,
-                'list_id' => $this->id
+                'list_id' => $this->id,
             ]);
             return true;
         } else {
@@ -72,7 +72,7 @@ class EmailList extends Model
     public function unsubscribe($user)
     {
         $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
-        if (!$s) {
+        if (! $s) {
             return false;
         }
         $s->delete();

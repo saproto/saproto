@@ -3,10 +3,11 @@
 namespace Proto\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * HashMap Item Model
+ * HashMap Item Model.
  *
  * @property int $id
  * @property string $key
@@ -47,5 +48,4 @@ class HashMapItem extends Model
     {
         return $query->where('subkey', '=', $subkey);
     }
-
 }

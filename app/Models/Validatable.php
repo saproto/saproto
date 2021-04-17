@@ -6,9 +6,8 @@ use Eloquent;
 use Illuminate\Support\MessageBag;
 use Validator;
 
-
 /**
- * Validatable Model
+ * Validatable Model.
  *
  * @mixin Eloquent
  */

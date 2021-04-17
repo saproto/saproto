@@ -5,7 +5,6 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\Committee;
 
 class AnonymousEmail extends Mailable
@@ -37,7 +36,7 @@ class AnonymousEmail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Anonymous e-mail for the ' . $this->committee->name . '.')
+            ->subject('Anonymous e-mail for the '.$this->committee->name.'.')
             ->view('emails.anonymous');
     }
 }

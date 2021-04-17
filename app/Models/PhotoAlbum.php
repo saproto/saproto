@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\PhotoAlbum
+ * Proto\Models\PhotoAlbum.
  *
  * @property int $id
  * @property Carbon|null $created_at
@@ -62,7 +62,7 @@ class PhotoAlbum extends Model
     {
         return $this->hasMany('Proto\Models\Photo', 'album_id');
     }
-    
+
     /** @return Photo|null */
     public function thumb()
     {

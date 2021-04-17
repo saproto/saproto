@@ -4,11 +4,14 @@ namespace Proto\Models;
 
 use Carbon;
 use DateTime;
+use DirectAdmin\DirectAdmin;
 use Eloquent;
 use Exception;
 use Hash;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -18,18 +21,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Laravel\Passport\Client;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-use DirectAdmin\DirectAdmin;
-use Proto\Console\Commands\DirectAdminSync;
 use Laravel\Passport\HasApiTokens;
+use Proto\Console\Commands\DirectAdminSync;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
- * User Model
+ * User Model.
  *
- * @package Proto\Models
  * @property int $id
  * @property string $name
  * @property string $calling_name
@@ -37,8 +36,8 @@ use Laravel\Passport\HasApiTokens;
  * @property string|null $password
  * @property string|null $remember_token
  * @property int|null $image_id
- * @property Carbon\Carbon|null $created_at
- * @property Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $birthdate
  * @property string|null $phone
  * @property string|null $diet
@@ -148,7 +147,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return string|null */
     public function getPublicId()
     {
-        return ($this->is_member ? $this->member->proto_username : null);
+        return $this->is_member ? $this->member->proto_username : null;
     }
 
     /**
@@ -158,7 +157,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public static function fromPublicId($public_id)
     {
         $member = Member::where('proto_username', $public_id)->first();
-        return ($member ? $member->user : null);
+        return $member ? $member->user : null;
     }
 
     /**
@@ -210,7 +209,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
             ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderBy('pivot_created_at', 'desc');
     }
@@ -224,7 +223,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return BelongsToMany|Achievement[] */
     public function achievements()
     {
-        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(array('id'))->withTimestamps()->orderBy('pivot_created_at', 'desc');
+        return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(['id'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
     /** @return BelongsToMany|Committee[] */
@@ -338,8 +337,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'newuser' => $this->member->proto_username,
                 'passwd' => $password,
                 'passwd2' => $password,
-                'quota' => 0, # Unlimited
-                'limit' => 0 # Unlimited
+                'quota' => 0, // Unlimited
+                'limit' => 0, // Unlimited
             ]);
             $da->query($q);
         }
@@ -352,8 +351,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function hasUnpaidOrderlines()
     {
         foreach ($this->orderlines as $orderline) {
-            if (!$orderline->isPayed()) return true;
-            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && !$orderline->withdrawal->closed) return true;
+            if (! $orderline->isPayed()) {
+                return true;
+            }
+            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
+                return true;
+            }
         }
         return false;
     }
@@ -362,7 +365,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function isTempadmin()
     {
         foreach ($this->tempadmin as $tempadmin) {
-            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) return true;
+            if (Carbon::now()->between(Carbon::parse($tempadmin->start_at), Carbon::parse($tempadmin->end_at))) {
+                return true;
+            }
         }
         return false;
     }
@@ -375,7 +380,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return Carbon::instance(new DateTime($this->birthdate))->age;
     }
-
 
     /**
      * @param Committee $committee
@@ -403,7 +407,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->where('user_id', $this->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
                 ->where(function ($q) {
-                    $q  ->whereNull('deleted_at')
+                    $q->whereNull('deleted_at')
                         ->orWhere('deleted_at', '>', date('Y-m-d H:i:s'));
                 })
                 ->with('committee')
@@ -447,7 +451,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (preg_match("/(?:http|https):\/\/.*/i", $this->website) === 1) {
             return $this->website;
         } else {
-            return "https://" . $this->website;
+            return 'https://'.$this->website;
         }
     }
 
@@ -464,7 +468,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return bool */
     public function hasDiet()
     {
-        return strlen(str_replace(["\r", "\n", " "], "", $this->diet)) > 0;
+        return strlen(str_replace(["\r", "\n", ' '], '', $this->diet)) > 0;
     }
 
     /** @return string*/
@@ -565,7 +569,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function toggleCalendarRelevantSetting()
     {
-        $this->pref_calendar_relevant_only = !$this->pref_calendar_relevant_only;
+        $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;
         $this->save();
     }
 
@@ -578,7 +582,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute()
     {
-        return $this->member && !$this->member->pending;
+        return $this->member && ! $this->member->pending;
     }
 
     /** @return bool */
@@ -602,7 +606,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return string */
     public function getIcalUrl()
     {
-        return route("ical::calendar", ["personal_key" => $this->getPersonalKey()]);
+        return route('ical::calendar', ['personal_key' => $this->getPersonalKey()]);
     }
 
     /** @return string|null */

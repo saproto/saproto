@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * Helping Committee Model
+ * Helping Committee Model.
  *
  * @property int $id
  * @property int $activity_id
@@ -40,7 +40,7 @@ class HelpingCommittee extends Validatable
     protected $rules = [
         'activity_id' => 'required|integer',
         'committee_id' => 'required|integer',
-        'amount' => 'required|integer'
+        'amount' => 'required|integer',
     ];
 
     /** @return BelongsTo|Activity */

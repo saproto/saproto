@@ -2,16 +2,15 @@
 
 namespace Proto\Models;
 
-use Cookie;
 use Carbon;
+use Cookie;
 use Eloquent;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Announcement Model
+ * Announcement Model.
  *
  * @property int $id
  * @property string $description
@@ -68,7 +67,7 @@ class Announcement extends Model
             'info',
             'warning',
             'danger',
-            'default'
+            'default',
         ];
 
         return $map[$this->show_style];
@@ -126,13 +125,13 @@ class Announcement extends Model
     /** @return string */
     public function getHashMapIdAttribute()
     {
-        return sprintf("dismiss-announcement-%s", $this->id);
+        return sprintf('dismiss-announcement-%s', $this->id);
     }
 
     /** @return string */
     public function getModalIdAttribute()
     {
-        return sprintf("modal-announcement-%s", $this->id);
+        return sprintf('modal-announcement-%s', $this->id);
     }
 
     /** @return bool */
@@ -152,15 +151,15 @@ class Announcement extends Model
         }
 
         // Not within the scheduled timeframe.
-        if (!$this->show_by_time) {
+        if (! $this->show_by_time) {
             return false;
         }
 
         // Verify user type requirement.
         if (
-            !($this->show_guests && $user == null) &&
-            !($this->show_users && $user != null && !$user->is_member) &&
-            !($this->show_members && $user != null && $user->is_member)
+            ! ($this->show_guests && $user == null) &&
+            ! ($this->show_users && $user != null && ! $user->is_member) &&
+            ! ($this->show_members && $user != null && $user->is_member)
         ) {
             return false;
         }
@@ -171,12 +170,12 @@ class Announcement extends Model
         }
 
         // Check for first years.
-        if ($this->show_only_firstyear && $user != null && $user->is_member && !$user->isFirstYear()) {
+        if ($this->show_only_firstyear && $user != null && $user->is_member && ! $user->isFirstYear()) {
             return false;
         }
 
         // Check for first years.
-        if ($this->show_only_active && $user != null && $user->is_member && !$user->isActiveMember()) {
+        if ($this->show_only_active && $user != null && $user->is_member && ! $user->isActiveMember()) {
             return false;
         }
 

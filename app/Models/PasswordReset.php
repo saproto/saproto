@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Password Reset Model
+ * Password Reset Model.
  *
  * @property string $email
  * @property string $token

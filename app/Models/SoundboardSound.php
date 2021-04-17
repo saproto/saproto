@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Soundboard Sound Model
+ * Soundboard Sound Model.
  *
  * @property int $id
  * @property int $file_id

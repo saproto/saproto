@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Proto\Models\Page
+ * Proto\Models\Page.
  *
  * @property int $id
  * @property string $title
@@ -66,6 +66,6 @@ class Page extends Model
     /** @return string */
     public function getUrl()
     {
-        return route("page::show", $this->slug);
+        return route('page::show', $this->slug);
     }
 }

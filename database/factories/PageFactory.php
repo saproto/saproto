@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-/** @var $factory Closure */
+/* @var $factory Closure */
 $factory->define(Proto\Models\Page::class,
     function (Faker $faker) {
         return [
@@ -11,6 +11,6 @@ $factory->define(Proto\Models\Page::class,
             'content' => $faker->paragraphs(10, true),
             'is_member_only' => mt_rand(0, 1),
             'featured_image_id' => null,
-            'show_attachments' => false
+            'show_attachments' => false,
         ];
     });

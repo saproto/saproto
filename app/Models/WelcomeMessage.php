@@ -4,10 +4,12 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\{Builder, Model, Relations\BelongsTo};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Welcome Message Model
+ * Welcome Message Model.
  *
  * @property int $id
  * @property int $user_id

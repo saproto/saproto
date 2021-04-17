@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Financial Account Model
+ * Financial Account Model.
  *
  * @property int $id
  * @property int $account_number

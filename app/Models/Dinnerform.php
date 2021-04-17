@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Dinnerform Model
+ * Dinnerform Model.
  *
  * @property int $id
  * @property string $restaurant
@@ -38,13 +38,12 @@ class Dinnerform extends Model
 
     protected $dates = ['start', 'end'];
 
-
     /**
      * @return string A timespan string with format 'D H:i'.
      */
     public function generateTimespanText()
     {
-        return $this->start->format('D H:i') . " - " . Carbon::parse($this->end)->format('D H:i');
+        return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
     /** @return bool Whether the dinnerform is currently open */

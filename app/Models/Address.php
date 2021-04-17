@@ -4,10 +4,11 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\{Builder, Relations\BelongsTo};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Proto\Models\Address
+ * Proto\Models\Address.
  *
  * @property int $id
  * @property int $user_id
@@ -44,7 +45,7 @@ class Address extends Validatable
         'number' => 'required|string',
         'zipcode' => 'required|string',
         'city' => 'required|string',
-        'country' => 'required|string'
+        'country' => 'required|string',
     ];
 
     /** @return BelongsTo|User */

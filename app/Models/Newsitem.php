@@ -3,15 +3,15 @@
 namespace Proto\Models;
 
 use Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Eloquent;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
- * News Item Model
+ * News Item Model.
  *
  * @property int $id
  * @property int $user_id

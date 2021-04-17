@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Display Model
+ * Display Model.
  *
  * @property int $id
  * @property string $url

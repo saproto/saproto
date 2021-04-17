@@ -4,17 +4,14 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\
-{
-    Builder,
-    Collection,
-    Model,
-    Relations\BelongsTo,
-    Relations\HasMany
-};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Good Idea Model
+ * Good Idea Model.
  *
  * @property int $id
  * @property int $user_id
@@ -54,7 +51,6 @@ class GoodIdea extends Model
         return $this->votes()->sum('vote');
     }
 
-
     /**
      * @param User $user
      * @return int
@@ -63,7 +59,9 @@ class GoodIdea extends Model
     {
         /** @var GoodIdeaVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();
-        if($vote) return $vote->vote;
+        if ($vote) {
+            return $vote->vote;
+        }
         return 0;
     }
 }

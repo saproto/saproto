@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Temporary Admin Model
+ * Temporary Admin Model.
  *
  * @property int $id
  * @property int $user_id

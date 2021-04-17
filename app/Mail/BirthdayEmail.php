@@ -5,7 +5,6 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\User;
 
 class BirthdayEmail extends Mailable
@@ -32,7 +31,7 @@ class BirthdayEmail extends Mailable
     public function build()
     {
         return $this
-            ->from('internal@' . config('proto.emaildomain'), config('proto.internal'))
+            ->from('internal@'.config('proto.emaildomain'), config('proto.internal'))
             ->subject('Happy birthday!')
             ->view('emails.users.birthdayemail');
     }

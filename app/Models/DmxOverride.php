@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
- * DmxOverride Model
+ * DmxOverride Model.
  *
  * @property int $id
  * @property string $fixtures
@@ -37,19 +37,19 @@ class DmxOverride extends Model
     /** @return Collection|DmxOverride[] */
     public static function getActiveSorted()
     {
-        return DmxOverride::where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
+        return self::where('start', '<', date('U'))->where('end', '>', date('U'))->get()->sortBy('window_size');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getUpcomingSorted()
     {
-        return DmxOverride::where('start', '>', date('U'))->get()->sortByDesc('start');
+        return self::where('start', '>', date('U'))->get()->sortByDesc('start');
     }
 
     /** @return Collection|DmxOverride[] */
     public static function getPastSorted()
     {
-        return DmxOverride::where('end', '<', date('U'))->get()->sortByDesc('start');
+        return self::where('end', '<', date('U'))->get()->sortByDesc('start');
     }
 
     /** @return string[] */
@@ -91,7 +91,7 @@ class DmxOverride extends Model
     /** @return bool */
     public function justOver()
     {
-        return date('U') > $this->end && date('U') < $this->end . 600;
+        return date('U') > $this->end && date('U') < $this->end. 600;
     }
 
     /** @return string */

@@ -4,15 +4,12 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\
-{
-    Builder,
-    Model,
-    Relations\BelongsTo
-};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Header Image Model
+ * Header Image Model.
  *
  * @property int $id
  * @property string $title
@@ -32,7 +29,6 @@ use Illuminate\Database\Eloquent\
  */
 class HeaderImage extends Model
 {
-
     protected $table = 'headerimages';
 
     protected $guarded = ['id'];

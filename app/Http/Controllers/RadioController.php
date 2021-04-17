@@ -2,22 +2,18 @@
 
 namespace Proto\Http\Controllers;
 
+use Exception;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Illuminate\View\View;
 use Proto\Models\RadioStation;
 
 class RadioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function index()
     {
         $stations = RadioStation::all();
@@ -25,10 +21,8 @@ class RadioController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
@@ -38,28 +32,24 @@ class RadioController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy($id)
     {
         $radio = RadioStation::findOrFail($id);
-        Session::flash('flash_message', 'Radio station ' . $radio->name . ' added.');
+        Session::flash('flash_message', 'Radio station '.$radio->name.' added.');
         $radio->delete();
+
         return Redirect::back();
     }
 
     /**
-     * Return a public list of radio stations for Herbert.
-     *
-     * @return mixed
+     * @return Collection|RadioStation[]
      */
     public function api()
     {
         return RadioStation::all();
     }
-
-
 }

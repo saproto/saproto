@@ -10,7 +10,7 @@ class ApiMiddleware
     protected $except = [
         'api/*',
         'image/*',
-        'file/*'
+        'file/*',
     ];
 
     /**

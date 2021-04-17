@@ -189,7 +189,7 @@ return [
         nickurt\PwnedPasswords\ServiceProvider::class,
         ApiPostcode\ApiPostcodeServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
 
     ],
 

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
- * Committee Membership Model
+ * Committee Membership Model.
  *
  * @property int $id
  * @property int $user_id
@@ -46,7 +46,7 @@ class CommitteeMembership extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['id', 'committee_id','user_id'];
+    protected $hidden = ['id', 'committee_id', 'user_id'];
 
     protected $dates = ['deleted_at'];
 

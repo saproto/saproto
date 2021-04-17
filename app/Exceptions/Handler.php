@@ -4,15 +4,20 @@ namespace Proto\Exceptions;
 
 use App;
 use Exception;
-use Illuminate\Auth\{Access\AuthorizationException, AuthenticationException};
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\{JsonResponse, RedirectResponse, Request, Response};
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\Exception\NotReadableException;
-use Symfony\Component\HttpKernel\Exception\{NotFoundHttpException, HttpException};
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +34,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         NotReadableException::class,
         ValidationException::class,
-        AuthorizationException::class
+        AuthorizationException::class,
     ];
 
     private $sentryID;
@@ -88,11 +93,9 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpException(HttpException $e)
     {
-        if (!view()->exists("errors.{$e->getStatusCode()}")) {
+        if (! view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());
         }
         return parent::renderHttpException($e);
     }
-
-
 }

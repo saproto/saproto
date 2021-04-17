@@ -1,4 +1,5 @@
 <?php
+
 namespace Proto\Models;
 
 use Carbon;
@@ -8,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Photo Likes Model
+ * Photo Likes Model.
  *
  * @property int $id
  * @property Carbon|null $created_at

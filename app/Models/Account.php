@@ -2,16 +2,16 @@
 
 namespace Proto\Models;
 
-use DB;
 use Carbon;
+use DB;
 use Eloquent;
-use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
- * Account Model
+ * Account Model.
  *
  * @property int $id
  * @property int $account_number
@@ -54,11 +54,11 @@ class Account extends Model
             $nr = $orderline->account_number;
 
             // Add account to dataset if not existing yet.
-            if (!isset($accounts[$nr])) {
-                $accounts[$nr] = (object)[
+            if (! isset($accounts[$nr])) {
+                $accounts[$nr] = (object) [
                     'byDate' => [],
                     'name' => $orderline->name,
-                    'total' => 0
+                    'total' => 0,
                 ];
             }
 
@@ -66,7 +66,7 @@ class Account extends Model
             $accounts[$nr]->total += $orderline->total_price;
 
             // Add date to account data if not existing yet.
-            if (!isset($accounts[$nr]->byDate[$sortDate])) {
+            if (! isset($accounts[$nr]->byDate[$sortDate])) {
                 $accounts[$nr]->byDate[$sortDate] = 0;
             }
 

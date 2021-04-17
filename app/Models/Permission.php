@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Zizaco\Entrust\EntrustPermission;
 
 /**
- * Proto\Models\Permission
+ * Proto\Models\Permission.
  *
  * @property int $id
  * @property string $name

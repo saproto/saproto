@@ -2,7 +2,7 @@
 
 /**
  * Kindly copied from
- * http://stackoverflow.com/questions/33791494/laravel-restricting-access-for-development-site
+ * http://stackoverflow.com/questions/33791494/laravel-restricting-access-for-development-site.
  */
 
 namespace Proto\Http\Middleware;
@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class DevelopmentAccess
 {
     protected $except = [
-        'webhook/*'
+        'webhook/*',
     ];
 
     /** @var array Client IPs allowed to access the app. Defaults are loopback IPv4 and IPv6 for use in local development. */
@@ -47,8 +47,12 @@ class DevelopmentAccess
     {
         $isAllowedIP = in_array(request()->ip(), $this->ipWhitelist);
 
-        if (!auth()->guest()) return false;
-        elseif (auth()->guest() && $isAllowedIP) return false;
-        else return true;
+        if (! auth()->guest()) {
+            return false;
+        } elseif (auth()->guest() && $isAllowedIP) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

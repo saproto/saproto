@@ -2,13 +2,13 @@
 
 namespace Proto\Models;
 
-use Carbon\Carbon;
+use Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Eloquent;
 
 /**
- * Short Url Model
+ * Short Url Model.
  *
  * @property int $id
  * @property string $description

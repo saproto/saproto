@@ -37,7 +37,7 @@ class AuthLoginEventHandler
         $protography = Committee::find(config('proto.committee')['protography']);
 
         if ($user->isInCommittee($rootCommittee) && $user->signed_nda) {
-            if (!$user->hasRole('protube')) {
+            if (! $user->hasRole('protube')) {
                 $user->attachRole(Role::where('name', '=', 'protube')->first());
             }
         } else {
@@ -47,7 +47,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($boardCommittee) && $user->signed_nda) {
-            if (!$user->hasRole('board')) {
+            if (! $user->hasRole('board')) {
                 $user->attachRole(Role::where('name', '=', 'board')->first());
             }
         } else {
@@ -57,7 +57,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
-            if (!$user->hasRole('omnomcom')) {
+            if (! $user->hasRole('omnomcom')) {
                 $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
             }
         } else {
@@ -67,7 +67,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($tipcie) && $user->signed_nda) {
-            if (!$user->hasRole('tipcie')) {
+            if (! $user->hasRole('tipcie')) {
                 $user->attachRole(Role::where('name', '=', 'tipcie')->first());
             }
         } else {
@@ -77,7 +77,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($drafters)) {
-            if (!$user->hasRole('drafters')) {
+            if (! $user->hasRole('drafters')) {
                 $user->attachRole(Role::where('name', '=', 'drafters')->first());
             }
         } else {
@@ -87,7 +87,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($protography)) {
-            if (!$user->hasRole('protography')) {
+            if (! $user->hasRole('protography')) {
                 $user->attachRole(Role::where('name', '=', 'protography')->first());
             }
         } else {
@@ -95,6 +95,5 @@ class AuthLoginEventHandler
                 $user->detachRole(Role::where('name', '=', 'protography')->first());
             }
         }
-
     }
 }

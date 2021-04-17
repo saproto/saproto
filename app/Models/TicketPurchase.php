@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Ticket Purchase Model
+ * Ticket Purchase Model.
  *
  * @property int $id
  * @property int $ticket_id
@@ -37,7 +37,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TicketPurchase extends Model
 {
-
     protected $table = 'ticket_purchases';
 
     protected $guarded = ['id'];
@@ -64,7 +63,7 @@ class TicketPurchase extends Model
     public function canBeDownloaded()
     {
         return
-            (!$this->ticket->is_prepaid) ||
+            (! $this->ticket->is_prepaid) ||
             ($this->orderline->isPayed() && $this->orderline->payed_with_mollie === null) ||
             ($this->orderline->molliePayment && $this->orderline->molliePayment->translatedStatus() == 'paid');
     }
@@ -75,8 +74,7 @@ class TicketPurchase extends Model
         return [
             'id' => $this->id,
             'barcode' => $this->canBeDownloaded() ? $this->barcode : null,
-            'scanned' => $this->scanned
+            'scanned' => $this->scanned,
         ];
     }
-
 }

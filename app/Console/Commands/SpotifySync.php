@@ -2,12 +2,10 @@
 
 namespace Proto\Console\Commands;
 
-use Illuminate\Console\Command;
-
-use Proto\Http\Controllers\SpotifyController;
-use Proto\Http\Controllers\SlackController;
-
 use DB;
+use Illuminate\Console\Command;
+use Proto\Http\Controllers\SlackController;
+use Proto\Http\Controllers\SpotifyController;
 
 class SpotifySync extends Command
 {
@@ -42,10 +40,8 @@ class SpotifySync extends Command
      */
     public function handle()
     {
-
         $spotify = SpotifyController::getApi();
         $session = SpotifyController::getSession();
-
 
         $this->info('Testing if API key still works.');
 
@@ -56,8 +52,7 @@ class SpotifySync extends Command
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-            if ($e->getMessage() == "The access token expired") {
-
+            if ($e->getMessage() == 'The access token expired') {
                 $this->info('Access token expired. Trying to renew.');
 
                 $refreshToken = $session->getRefreshToken();
@@ -67,7 +62,6 @@ class SpotifySync extends Command
 
                 SpotifyController::setSession($session);
                 SpotifyController::setApi($spotify);
-
             } else {
                 $this->error('Error using API key.');
                 SlackController::sendNotification('[console *proto:spotify*] Error using API key, please investigate.');
@@ -82,20 +76,20 @@ class SpotifySync extends Command
         // All-time
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
+            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
         // Last month
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
+            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 month')))
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
         // Last week
         $videos = array_merge($videos, DB::table('playedvideos')
             ->select(DB::raw('spotify_id, count(*) as count'))
-            ->whereNotNull('spotify_id')->where("spotify_id", "!=", "")
+            ->whereNotNull('spotify_id')->where('spotify_id', '!=', '')
             ->where('created_at', '>', date('Y-m-d', strtotime('-1 week')))
             ->groupBy('video_title')->orderBy('count', 'desc')->limit(40)->get()->all());
 
@@ -107,12 +101,11 @@ class SpotifySync extends Command
 
         $uris = array_values(array_unique($uris));
 
-        $this->info("---");
+        $this->info('---');
 
-        $this->info("Updating playlist with " . count($uris) . " songs.");
+        $this->info('Updating playlist with '.count($uris).' songs.');
 
         try {
-
             $spotify->replaceUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), []);
 
             $slice = 0;
@@ -122,15 +115,11 @@ class SpotifySync extends Command
                 $slice += $batch_size;
                 $spotify->addUserPlaylistTracks(config('app-proto.spotify-user'), config('app-proto.spotify-playlist'), $add);
             }
-
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
-
             $this->error('Error during playlist update.');
             SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update. Please investigate.');
-
         }
 
-        $this->info("Done!");
-
+        $this->info('Done!');
     }
 }

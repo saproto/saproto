@@ -4,13 +4,12 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-use Exception;
-
 /**
- * QrAuth Request Model
+ * QrAuth Request Model.
  *
  * @property int $id
  * @property int $user_id

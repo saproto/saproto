@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Rfid Card Model
+ * Rfid Card Model.
  *
  * @property int $id
  * @property int $user_id

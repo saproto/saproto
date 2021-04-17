@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-/** @var $factory Closure */
+/* @var $factory Closure */
 $factory->define(Proto\Models\Member::class,
     function (Faker $faker) {
         $picktime = $faker->dateTimeInInterval('April 20, 2011', 'now');

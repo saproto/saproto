@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Radio Station Model
+ * Radio Station Model.
  *
  * @property int $id
  * @property string $url

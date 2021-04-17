@@ -5,12 +5,11 @@ namespace Proto\Models;
 use Auth;
 use Eloquent;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
 /**
- * Photo Manager Model
+ * Photo Manager Model.
  *
  * @mixin Eloquent
  */
@@ -23,12 +22,12 @@ class PhotoManager extends Model
      * @param bool $no_thumb
      * @return PhotoAlbum[]
      */
-    public static function getAlbums($max = null, $query=null, $unpublished=false, $no_thumb=true)
+    public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
         $base = PhotoAlbum::orderBy('date_taken', 'desc');
 
-        if (!$include_private) {
+        if (! $include_private) {
             $base = $base->where('private', '=', false);
         }
         if ($query) {
@@ -39,7 +38,7 @@ class PhotoManager extends Model
         } else {
             $base = $base->where('published', '=', true);
         }
-        if (!$no_thumb) {
+        if (! $no_thumb) {
             $base = $base->where('thumb_id', '!=', 'null');
         }
         if ($max != 0) {
@@ -50,7 +49,7 @@ class PhotoManager extends Model
 
         return $albums;
     }
-    
+
     /**
      * @param int $albumId
      * @param int|null $max
@@ -61,7 +60,7 @@ class PhotoManager extends Model
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
         $album = PhotoAlbum::where('id', $albumId);
-        if (!$include_private) {
+        if (! $include_private) {
             $album->where('private', '=', false);
         }
         $album = $album->get();
@@ -72,7 +71,7 @@ class PhotoManager extends Model
 
         $items = Photo::where('album_id', $albumId);
 
-        if (!$include_private) {
+        if (! $include_private) {
             $items = $items->where('private', '=', false);
         }
         $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc');
@@ -111,7 +110,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photoId)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photoId)->where('user_id', Auth::user()->id)->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;

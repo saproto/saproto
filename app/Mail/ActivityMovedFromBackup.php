@@ -5,7 +5,6 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\ActivityParticipation;
 
 class ActivityMovedFromBackup extends Mailable
@@ -36,9 +35,9 @@ class ActivityMovedFromBackup extends Mailable
     public function build()
     {
         return $this
-            ->from('board@' . config('proto.emaildomain'), 'S.A. Proto')
-            ->bcc('board@' . config('proto.emaildomain'))
-            ->subject('Moved from back-up list to participants for ' . $this->event_title . '.')
+            ->from('board@'.config('proto.emaildomain'), 'S.A. Proto')
+            ->bcc('board@'.config('proto.emaildomain'))
+            ->subject('Moved from back-up list to participants for '.$this->event_title.'.')
             ->view('emails.takenfrombackup');
     }
 }

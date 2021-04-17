@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Proto\Models\MenuItem
+ * Proto\Models\MenuItem.
  *
  * @property int $id
  * @property int|null $parent
@@ -56,11 +56,11 @@ class MenuItem extends Model
     /** @return string|null */
     public function getUrl()
     {
-        if (substr($this->url, 0, 8) == "(route) ") {
+        if (substr($this->url, 0, 8) == '(route) ') {
             try {
                 return route(substr($this->url, 8));
             } catch (Exception $e) {
-                return "#";
+                return '#';
             }
         } elseif ($this->page_id == null) {
             return $this->url;
@@ -69,21 +69,21 @@ class MenuItem extends Model
             if ($page) {
                 return $page->getUrl();
             }
-            return "#";
+            return '#';
         }
     }
 
     /** @return bool */
     public function isFirst()
     {
-        $lowest = MenuItem::where('parent', '=', $this->parent)->orderBy('order')->first();
+        $lowest = self::where('parent', '=', $this->parent)->orderBy('order')->first();
         return $this->id == $lowest->id;
     }
 
     /** @return bool */
     public function isLast()
     {
-        $highest = MenuItem::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
+        $highest = self::where('parent', '=', $this->parent)->orderBy('order', 'desc')->first();
         return $this->id == $highest->id;
     }
 }

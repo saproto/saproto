@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Played Video Model
+ * Played Video Model.
  *
  * @property int $id
  * @property int|null $user_id
@@ -57,7 +57,7 @@ class PlayedVideo extends Model
      */
     public static function generateSpotifyUri(string $spotify_id)
     {
-        $spotify_id = str_replace("spotify:track:", "", $spotify_id);
+        $spotify_id = str_replace('spotify:track:', '', $spotify_id);
         return "https://open.spotify.com/track/$spotify_id";
     }
 

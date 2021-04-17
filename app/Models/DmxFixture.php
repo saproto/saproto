@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * DmxFixture Model
+ * DmxFixture Model.
  *
  * @property int $id
  * @property string $name
@@ -29,7 +29,7 @@ class DmxFixture extends Model
     protected $guarded = ['id'];
 
     public $timestamps = false;
-    
+
     /**
      * @param string|null $special_func
      * @return Collection|DmxChannel[]

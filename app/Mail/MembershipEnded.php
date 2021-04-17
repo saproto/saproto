@@ -5,9 +5,8 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Proto\Models\User;
 use Proto\Models\EmailList;
+use Proto\Models\User;
 
 class MembershipEnded extends Mailable
 {
@@ -35,7 +34,7 @@ class MembershipEnded extends Mailable
     public function build()
     {
         return $this
-            ->from('secretary@proto.utwente.nl', config('proto.secretary') . ' (Secretary)')
+            ->from('secretary@proto.utwente.nl', config('proto.secretary').' (Secretary)')
             ->subject('Termination of your membership of Study Association Proto')
             ->view('emails.membershipend');
     }

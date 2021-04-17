@@ -5,7 +5,6 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\ActivityParticipation;
 
 class ActivityUnsubscribedFrom extends Mailable
@@ -24,7 +23,7 @@ class ActivityUnsubscribedFrom extends Mailable
         $this->activity = [
             'id' => $participation->activity->event->getPublicId(),
             'title' => $participation->activity->event->title,
-            'name' => $participation->user->calling_name
+            'name' => $participation->user->calling_name,
         ];
     }
 
@@ -37,7 +36,7 @@ class ActivityUnsubscribedFrom extends Mailable
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')
-            ->subject('You have been signed out for ' . $this->activity['title'] . '.')
+            ->subject('You have been signed out for '.$this->activity['title'].'.')
             ->view('emails.unsubscribeactivity');
     }
 }

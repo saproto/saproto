@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Product Model
+ * Product Model.
  *
  * @property int $id
  * @property int $account_id
@@ -73,7 +73,7 @@ class Product extends Model
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
-    
+
     /** @return BelongsToMany|ProductCategory */
     public function categories()
     {
@@ -95,7 +95,7 @@ class Product extends Model
     /** @return bool */
     public function isVisible()
     {
-        return !(!$this->is_visible || $this->stock <= 0 && !$this->is_visible_when_no_stock);
+        return ! (! $this->is_visible || $this->stock <= 0 && ! $this->is_visible_when_no_stock);
     }
 
     /**
@@ -127,7 +127,7 @@ class Product extends Model
             'payed_with_cash' => ($withCash ? date('Y-m-d H:i:s') : null),
             'payed_with_bank_card' => ($withBankCard ? date('Y-m-d H:i:s') : null),
             'description' => $description == '' ? null : $description,
-            'authenticated_by' => $auth_method
+            'authenticated_by' => $auth_method,
         ]);
 
         $orderline->save();

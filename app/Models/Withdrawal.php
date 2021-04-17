@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * Proto\Models\Withdrawal
+ * Proto\Models\Withdrawal.
  *
  * @property int $id
  * @property string $date
@@ -28,7 +28,6 @@ use Illuminate\Support\Collection;
  */
 class Withdrawal extends Model
 {
-
     protected $table = 'withdrawals';
 
     protected $guarded = ['id'];
@@ -51,10 +50,10 @@ class Withdrawal extends Model
         $response = [];
 
         foreach ($data as $entry) {
-            $response[$entry->user_id] = (object)[
+            $response[$entry->user_id] = (object) [
                 'user' => User::withTrashed()->findOrFail($entry->user_id),
                 'count' => $entry->orderline_count,
-                'sum' => $entry->total_price
+                'sum' => $entry->total_price,
             ];
         }
 
@@ -115,7 +114,6 @@ class Withdrawal extends Model
     /** @return string */
     public function withdrawalId()
     {
-        return 'PROTO-' . $this->id . '-' . date('dmY', strtotime($this->date));
+        return 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date));
     }
-
 }

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Ticket Model
+ * Ticket Model.
  *
  * @property int $id
  * @property int $event_id
@@ -81,7 +81,7 @@ class Ticket extends Model
      */
     public function canBeSoldTo(User $user)
     {
-        return $user->is_member || !$this->members_only;
+        return $user->is_member || ! $this->members_only;
     }
 
     /** @return bool */
@@ -98,7 +98,6 @@ class Ticket extends Model
     {
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
     }
-
 
     /** @return float|int*/
     public function turnover()

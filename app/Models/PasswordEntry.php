@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Password Entry Model
+ * Password Entry Model.
  *
  * @property int $id
  * @property int $permission_id
@@ -45,7 +45,7 @@ class PasswordEntry extends Model
     {
         return $this->belongsTo('Proto\Models\Permission', 'permission_id');
     }
-    
+
     /** @return bool */
     public function canAccess(User $user)
     {

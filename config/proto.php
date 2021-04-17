@@ -37,7 +37,7 @@ return [
     */
 
     'additional_mailboxes' => [
-      'boardarchive'
+      'boardarchive',
     ],
 
     /*
@@ -238,29 +238,29 @@ return [
             'protu.be',
             'www.protu.be',
             'protube.nl',
-            'www.protube.nl'
+            'www.protube.nl',
         ],
         'omnomcom' => [
             'omnomcom.nl',
-            'www.omnomcom.nl'
+            'www.omnomcom.nl',
         ],
         'smartxp' => [
             'smartxp.nl',
             'www.smartxp.nl',
             'caniworkinthesmartxp.nl',
-            'www.caniworkinthesmartxp.nl'
+            'www.caniworkinthesmartxp.nl',
         ],
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
-            'www.haveyoutriedturningitoffandonagain.nl'
+            'www.haveyoutriedturningitoffandonagain.nl',
         ],
         'isalfredthere' => [
             'isalfredthere.nl',
-            'www.isalfredthere.nl'
+            'www.isalfredthere.nl',
         ],
         'static' => [
-            'static.saproto.com'
-        ]
+            'static.saproto.com',
+        ],
     ],
 
     /*
@@ -287,10 +287,10 @@ return [
     |
     */
 
-    'sepa_info' => (object)[
+    'sepa_info' => (object) [
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
-        'creditor_id' => env('SEPA_CI')
+        'creditor_id' => env('SEPA_CI'),
     ],
 
     /*
@@ -305,9 +305,9 @@ return [
     'themes' => [
         'Light' => 'assets/application-light.css',
         'Dark' => 'assets/application-dark.css',
-        'Rainbow Barf' => 'assets/application-rainbowbarf.css'
+        'Rainbow Barf' => 'assets/application-rainbowbarf.css',
     ],
 
     // Analytics URL
-    'analytics_url' => env('ANALYTICS_URL', '')
+    'analytics_url' => env('ANALYTICS_URL', ''),
 ];

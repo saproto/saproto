@@ -3,8 +3,8 @@
 namespace Proto\Models;
 
 use Auth;
-use DB;
 use Carbon;
+use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Committee Model
+ * Committee Model.
  *
  * @property int $id
  * @property string $name
@@ -61,7 +61,7 @@ class Committee extends Model
     /** @return Committee */
     public static function fromPublicId(string $public_id)
     {
-        return Committee::where('slug', $public_id)->firstOrFail();
+        return self::where('slug', $public_id)->firstOrFail();
     }
 
     /** @return BelongsToMany */
@@ -74,7 +74,7 @@ class Committee extends Model
                     ->orWhere('committees_users.deleted_at', '>', Carbon::now());
             })
             ->where('committees_users.created_at', '<', Carbon::now())
-            ->withPivot(array('id', 'role', 'edition', 'created_at', 'deleted_at'))
+            ->withPivot(['id', 'role', 'edition', 'created_at', 'deleted_at'])
             ->withTimestamps()
             ->orderBy('pivot_created_at', 'desc');
     }
@@ -100,7 +100,7 @@ class Committee extends Model
     /** @return string */
     public function getEmailAddressAttribute()
     {
-        return $this->slug . '@' . config('proto.emaildomain');
+        return $this->slug.'@'.config('proto.emaildomain');
     }
 
     /** @return User[] */
@@ -155,10 +155,10 @@ class Committee extends Model
         /** @var Activity[] $activities */
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
 
-        $events = array();
+        $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && (!$event->secret || $includeSecret)) {
+            if ($event && (! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
@@ -172,10 +172,10 @@ class Committee extends Model
         /** @var Activity[] $activities */
         $activities = $this->belongsToMany('Proto\Models\Activity', 'committees_activities')->orderBy('created_at', 'desc')->get();
 
-        $events = array();
+        $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && !$event->secret && $event->end < time()) {
+            if ($event && ! $event->secret && $event->end < time()) {
                 $events[] = $event;
             }
         }
@@ -199,7 +199,7 @@ class Committee extends Model
             } else {
                 if (
                     strtotime($membership->created_at) < date('U') &&
-                    (!$membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
+                    (! $membership->deleted_at || strtotime($membership->deleted_at) > date('U'))
                 ) {
                     $members['members']['current'][] = $membership;
                 } elseif (strtotime($membership->created_at) > date('U')) {

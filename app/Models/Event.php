@@ -17,7 +17,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection as SupportCollection;
 
 /**
- * Event Model
+ * Event Model.
  *
  * @property int $id
  * @property string $title
@@ -99,7 +99,7 @@ class Event extends Model
     public static function fromPublicId($public_id)
     {
         $id = Hashids::connection('event')->decode($public_id);
-        return Event::findOrFail(count($id) > 0 ? $id[0] : 0);
+        return self::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
     /** @return BelongsTo|Committee */
@@ -119,7 +119,7 @@ class Event extends Model
     {
         return $this->hasOne('Proto\Models\Activity');
     }
-    
+
     /** @return HasMany|Video[] */
     public function videos()
     {
@@ -156,21 +156,21 @@ class Event extends Model
     /** @return Collection|Event[] */
     public static function getEventsForNewsletter()
     {
-        return Event::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
+        return self::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
     }
 
     /** @return bool */
     public function current()
     {
-        return ($this->start < date('U') && $this->end > date('U'));
+        return $this->start < date('U') && $this->end > date('U');
     }
 
     /** @return bool */
     public function over()
     {
-        return ($this->end < date('U'));
+        return $this->end < date('U');
     }
-    
+
     /**
      * @param string $long_format Format when timespan is larger than 24 hours.
      * @param string $short_format Format when timespan is smaller than 24 hours.
@@ -179,7 +179,7 @@ class Event extends Model
      */
     public function generateTimespanText($long_format, $short_format, $combiner)
     {
-        return date($long_format, $this->start) . " " . $combiner . " " . (
+        return date($long_format, $this->start).' '.$combiner.' '.(
             (($this->end - $this->start) < 3600 * 24)
                 ?
                 date($short_format, $this->end)
@@ -209,7 +209,7 @@ class Event extends Model
         if (date('U') > $this->end) {
             return false;
         }
-        if (!$this->activity) {
+        if (! $this->activity) {
             return false;
         }
         $eroHelping = HelpingCommittee::where('activity_id', $this->activity->id)
@@ -268,20 +268,20 @@ class Event extends Model
     /** @return object */
     public function getFormattedDateAttribute()
     {
-        return (object)[
+        return (object) [
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
-            'time' => date('H:i', $this->start)
+            'time' => date('H:i', $this->start),
         ];
     }
 
     public static function countEventsPerYear(int $year): int
     {
-        $yearStart = strtotime('January 1, ' . $year);
-        $yearEnd = strtotime('January 1, ' . ($year + 1));
-        $events = Event::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (!Auth::check() || !Auth::user()->can('board')) {
+        $yearStart = strtotime('January 1, '.$year);
+        $yearEnd = strtotime('January 1, '.($year + 1));
+        $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
+        if (! Auth::check() || ! Auth::user()->can('board')) {
             $events = $events->where('secret', 0);
         }
 

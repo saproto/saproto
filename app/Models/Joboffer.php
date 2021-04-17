@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Job Offer Model
+ * Job Offer Model.
  *
  * @property int $id
  * @property int $company_id

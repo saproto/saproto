@@ -2,8 +2,8 @@
 
 namespace Proto\Models;
 
-use DB;
 use Carbon;
+use DB;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection as SupportCollection;
 
 /**
- * Email Model
+ * Email Model.
  *
  * @property int $id
  * @property string $description
@@ -180,7 +180,7 @@ class Email extends Model
     public static function getListUnsubscribeFooter($user_id, $email_id)
     {
         $footer = [];
-        $lists = Email::whereId($email_id)->firstOrFail()->lists;
+        $lists = self::whereId($email_id)->firstOrFail()->lists;
         foreach ($lists as $list) {
             $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }

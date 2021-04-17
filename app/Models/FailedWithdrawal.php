@@ -3,16 +3,13 @@
 namespace Proto\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\
-{
-    Builder,
-    Model,
-    Relations\BelongsTo,
-    Relations\HasOne
-};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Failed Withdrawal Model
+ * Failed Withdrawal Model.
  *
  * @property int $id
  * @property int $withdrawal_id
@@ -29,11 +26,10 @@ use Illuminate\Database\Eloquent\
  */
 class FailedWithdrawal extends Model
 {
-
     protected $table = 'withdrawals_failed';
-    
+
     protected $guarded = ['id'];
-    
+
     public $timestamps = false;
 
     /** @return BelongsTo|OrderLine */
@@ -53,5 +49,4 @@ class FailedWithdrawal extends Model
     {
         return $this->hasOne('Proto\Models\User', 'user_id');
     }
-
 }

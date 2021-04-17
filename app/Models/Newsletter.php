@@ -7,7 +7,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Proto\Models\Newsletter
+ * Proto\Models\Newsletter.
  *
  * @mixin Eloquent
  */
@@ -20,7 +20,7 @@ class Newsletter extends Model
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
                 'key' => 'newsletter_last_sent',
-                'value' => 0
+                'value' => 0,
             ]);
         }
         return $lastSent;
@@ -33,7 +33,7 @@ class Newsletter extends Model
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
                 'key' => 'newsletter_text',
-                'value' => null
+                'value' => null,
             ]);
         }
         return $lastSent;
@@ -46,7 +46,7 @@ class Newsletter extends Model
         if ($lastUpdated == null) {
             $lastUpdated = HashMapItem::create([
                 'key' => 'newsletter_text_updated',
-                'value' => 0
+                'value' => 0,
             ]);
         }
         return $lastUpdated;
@@ -55,25 +55,25 @@ class Newsletter extends Model
     /** @return string */
     public static function lastSent()
     {
-        return Newsletter::getLastSent()->value;
+        return self::getLastSent()->value;
     }
 
     /** @return string */
     public static function text()
     {
-        return Newsletter::getText()->value;
+        return self::getText()->value;
     }
 
     /** @return string */
     public static function textUpdated()
     {
-        return Newsletter::getTextLastUpdated()->value;
+        return self::getTextLastUpdated()->value;
     }
 
     /** @return string */
     public static function updateLastSent()
     {
-        $lastSent = Newsletter::getLastSent();
+        $lastSent = self::getLastSent();
 
         $lastSent->value = date('U');
         $lastSent->save();
@@ -84,8 +84,8 @@ class Newsletter extends Model
     /** @return string */
     public static function updateText($text)
     {
-        $newsletterText = Newsletter::getText();
-        $textUpdated = Newsletter::getTextLastUpdated();
+        $newsletterText = self::getText();
+        $textUpdated = self::getTextLastUpdated();
 
         $newsletterText->value = $text;
         $newsletterText->save();
@@ -99,7 +99,7 @@ class Newsletter extends Model
     /** @return bool */
     public static function canBeSent()
     {
-        $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
+        $lastSent = date('Y', self::lastSent()) * 52 + date('W', self::lastSent());
         $current = date('Y') * 52 + date('W');
         $events = Event::getEventsForNewsletter();
         return $current > $lastSent && $events->count() > 0;
@@ -108,10 +108,10 @@ class Newsletter extends Model
     /** @return bool */
     public static function showTextOnHomepage()
     {
-        if (Newsletter::text() == "") {
+        if (self::text() == '') {
             return false;
         }
-        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) {
+        if ((date('U') - self::textUpdated()) / (3600 * 24) > 10) {
             return false;
         }
         return true;
@@ -120,11 +120,11 @@ class Newsletter extends Model
     /** @return bool */
     public static function send()
     {
-        if (!Newsletter::canBeSent()) {
+        if (! self::canBeSent()) {
             return false;
         }
         Artisan::call('proto:newslettercron');
-        Newsletter::updateLastSent();
+        self::updateLastSent();
         return true;
     }
 }

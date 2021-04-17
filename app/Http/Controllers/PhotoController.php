@@ -2,81 +2,87 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\PhotoManager;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoLikes;
 use Auth;
-
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Proto\Models\PhotoLikes;
+use Proto\Models\PhotoManager;
 use Redirect;
 
 class PhotoController extends Controller
 {
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function index()
     {
         $albums = PhotoManager::getAlbums(24);
-
         return view('photos.list', ['albums' => $albums]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View
      */
     public function show($id)
     {
         $photos = PhotoManager::getPhotos($id, 24);
 
-        if ($photos) return view('photos.album', ['photos' => $photos]);
+        if ($photos) {
+            return view('photos.album', ['photos' => $photos]);
+        }
 
         abort(404, 'Album not found.');
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
     public function photo($id)
     {
         $photo = PhotoManager::getPhoto($id);
-        if ($photo) return view('photos.photopage', ['photo' => $photo]);
+        if ($photo) {
+            return view('photos.photopage', ['photo' => $photo]);
+        }
+        abort(404, 'Photo not found.');
     }
 
-    public function likePhoto($photoID)
+    /** @return View */
+    public function slideshow()
     {
+        return view('photos.slideshow');
+    }
 
-        $exist = PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photoID)->count();
+    /**
+     * @param int $photo_id
+     * @return RedirectResponse
+     */
+    public function likePhoto($photo_id)
+    {
+        $exist = PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
 
         if ($exist == null) {
-
             PhotoLikes::create([
-                'photo_id' => $photoID,
+                'photo_id' => $photo_id,
                 'user_id' => Auth::user()->id,
             ]);
         }
 
-        return Redirect::route("photo::view", ["id" => $photoID]);
-    }
-
-    public function dislikePhoto($photoID)
-    {
-            PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photoID)->delete();
-
-        return Redirect::route("photo::view", ["id" => $photoID]);
+        return Redirect::route('photo::view', ['id' => $photo_id]);
     }
 
     /**
-     * Return JSON for a listing of the resource.
-     *
-     * @return string
+     * @param int $photo_id
+     * @return RedirectResponse
+     * @throws Exception
      */
+    public function dislikePhoto($photo_id)
+    {
+        PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
+        return Redirect::route('photo::view', ['id' => $photo_id]);
+    }
+
+    /** @return string JSON */
     public function apiIndex()
     {
         $albums = PhotoManager::getAlbums();
@@ -84,21 +90,12 @@ class PhotoController extends Controller
     }
 
     /**
-     * Return JSON for the specified resource.
-     *
      * @param $id
-     * @return string
+     * @return string JSON
      */
     public function apiShow($id)
     {
         $photos = PhotoManager::getPhotos($id);
         return json_encode($photos);
     }
-
-    public function slideshow()
-    {
-        return view('photos.slideshow');
-    }
-
-
 }

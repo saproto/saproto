@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\GoodIdeaVote
+ * Proto\Models\GoodIdeaVote.
  *
  * @property int $id
  * @property int $user_id

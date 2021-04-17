@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Activity Model
+ * Activity Model.
  *
  * @property int $id
  * @property int|null $event_id
@@ -60,7 +60,7 @@ class Activity extends Validatable
         'registration_end' => 'required|integer',
         'deregistration_end' => 'required|integer',
         'participants' => 'integer',
-        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/'
+        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
     ];
 
     /** @return BelongsTo|Event */
@@ -110,7 +110,7 @@ class Activity extends Validatable
     /** @return BelongsToMany|Committee[] */
     public function helpingCommittees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(array('amount', 'id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
     /** @return HasMany|HelpingCommittee[] */
@@ -128,7 +128,7 @@ class Activity extends Validatable
         foreach ($this->helpingCommittees as $committee) {
             $needed = $committee->pivot->amount;
             $available = $this->helpingUsers($committee->pivot->id)->count();
-            return $available < $needed && ($user == null || ($committee->isMember($user) && !$this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())));
+            return $available < $needed && ($user == null || ($committee->isMember($user) && ! $this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())));
         }
         return false;
     }

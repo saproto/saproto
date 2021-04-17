@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Middleware;
 
-use Closure;
 use Session;
 
 class Saml

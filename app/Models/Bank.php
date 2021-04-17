@@ -4,15 +4,12 @@ namespace Proto\Models;
 
 use Carbon;
 use Eloquent;
-use Illuminate\Database\Eloquent\
-{
-    Builder,
-    Model,
-    Relations\BelongsTo
-};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Bank Account Model
+ * Bank Account Model.
  *
  * @property int $id
  * @property int $user_id
@@ -44,5 +41,4 @@ class Bank extends Model
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
-
 }

@@ -3,16 +3,12 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-
+use Mail;
 use Proto\Mail\ManualEmail;
 use Proto\Models\Email;
 
-use Mail;
-
 class EmailCron extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -45,11 +41,10 @@ class EmailCron extends Command
 
         // Send admin created e-mails.
         $emails = Email::where('sent', false)->where('ready', true)->where('time', '<', date('U'))->get();
-        $this->info('There are ' . $emails->count() . ' queued e-mails.');
+        $this->info('There are '.$emails->count().' queued e-mails.');
 
         foreach ($emails as $email) {
-
-            $this->info('Sending e-mail <' . $email->subject . '>');
+            $this->info('Sending e-mail <'.$email->subject.'>');
 
             $email->ready = false;
             $email->sent = true;
@@ -57,10 +52,9 @@ class EmailCron extends Command
             $email->save();
 
             foreach ($email->recipients() as $recipient) {
-
                 Mail::to($recipient)
                     ->queue((new ManualEmail(
-                        ['email' => $email->sender_address . '@' . config('proto.emaildomain'), 'name' => $email->sender_name],
+                        ['email' => $email->sender_address.'@'.config('proto.emaildomain'), 'name' => $email->sender_name],
                         $email->subject,
                         $email->parseBodyFor($recipient),
                         $email->attachments,
@@ -69,15 +63,11 @@ class EmailCron extends Command
                         $email->getEventName(),
                         $email->id)
                     )->onQueue('medium'));
-
             }
 
-            $this->info('Sent to ' . $email->recipients()->count() . ' people.');
-
+            $this->info('Sent to '.$email->recipients()->count().' people.');
         }
 
         $this->info(($emails->count() > 0 ? 'All e-mails sent.' : 'No e-mails to be sent.'));
-
     }
-
 }

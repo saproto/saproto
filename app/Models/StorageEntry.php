@@ -9,12 +9,12 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Proto\Http\Controllers\FileController;
 
 /**
- * Storage Entry Model
+ * Storage Entry Model.
  *
  * @property int $id
  * @property string $filename
@@ -39,7 +39,7 @@ class StorageEntry extends Model
     protected $guarded = ['id'];
 
     /**
-     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS
+     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
      * @return bool whether or not the file is orphaned (not in use, can be *really* deleted safely)
      */
     public function isOrphan()
@@ -71,10 +71,10 @@ class StorageEntry extends Model
     {
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
 
         if ($customPath) {
-            $this->filename = $customPath . $this->hash;
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, File::get($file));
@@ -94,12 +94,12 @@ class StorageEntry extends Model
     public function createFromData($data, $mime, $name, $customPath = null)
     {
         $this->hash = $this->generateHash();
-        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        $this->filename = date('Y\/F\/d').'/'.$this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
         if ($customPath) {
-            $this->filename = $customPath . $this->hash;
+            $this->filename = $customPath.$this->hash;
         }
 
         Storage::disk('local')->put($this->filename, $data);
@@ -110,7 +110,7 @@ class StorageEntry extends Model
     /** @return string */
     private function generateHash()
     {
-        return sha1(date('U') . mt_rand(1, intval(99999999999)));
+        return sha1(date('U').mt_rand(1, intval(99999999999)));
     }
 
     /** @return string */
@@ -156,13 +156,13 @@ class StorageEntry extends Model
         $size = File::size($this->generateLocalPath());
         if ($human) {
             if ($size < 1024) {
-                return $size . ' bytes';
+                return $size.' bytes';
             } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1) . ' kilobytes';
+                return round($size / pow(1024, 1), 1).' kilobytes';
             } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1) . ' megabytes';
+                return round($size / pow(1024, 2), 1).' megabytes';
             } else {
-                return round($size / pow(1024, 3), 1) . ' gigabytes';
+                return round($size / pow(1024, 3), 1).' gigabytes';
             }
         } else {
             return $size;
@@ -172,7 +172,7 @@ class StorageEntry extends Model
     /** @return string */
     public function generateLocalPath()
     {
-        return storage_path('app/' . $this->filename);
+        return storage_path('app/'.$this->filename);
     }
 
     /**
@@ -181,7 +181,7 @@ class StorageEntry extends Model
      */
     public function getFileHash($algo = 'md5')
     {
-        return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
+        return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
     public static function boot()

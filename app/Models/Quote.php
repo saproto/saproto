@@ -2,7 +2,7 @@
 
 namespace Proto\Models;
 
-use Carbon\Carbon;
+use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Quote Model
+ * Quote Model.
  *
  * @property int $id
  * @property int $user_id

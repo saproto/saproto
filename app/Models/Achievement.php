@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Achievement Model
+ * Achievement Model.
  *
  * @property int $id
  * @property string $name
@@ -65,7 +65,7 @@ class Achievement extends Model
             'UNCOMMON' => 2,
             'RARE' => 3,
             'EPIC' => 4,
-            'LEGENDARY' => 5
+            'LEGENDARY' => 5,
         ];
 
         return $map[$this->tier];
@@ -79,7 +79,7 @@ class Achievement extends Model
     {
         $users = [];
         foreach ($this->users as $user) {
-            if ((!$isMember || $user->is_member)) {
+            if ((! $isMember || $user->is_member)) {
                 $users[] = $user;
             }
         }

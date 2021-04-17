@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
- * Member Model
+ * Member Model.
  *
  * @property int $id
  * @property int $user_id
@@ -89,7 +89,7 @@ class Member extends Model
         }
 
         return OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))
-            ->where('created_at', '>=', $year_start . '-09-01 00:00:01')
+            ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();
     }

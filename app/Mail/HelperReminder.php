@@ -5,7 +5,6 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\HelpingCommittee;
 
 class HelperReminder extends Mailable
@@ -37,7 +36,6 @@ class HelperReminder extends Mailable
      */
     public function build()
     {
-
         return $this
             ->to($this->committee->helper_reminder_subscribers)
             ->from('webmaster@proto.utwente.nl', 'S.A. Proto')

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Email List Subscription Model
+ * Email List Subscription Model.
  *
  * @property int $id
  * @property int $list_id

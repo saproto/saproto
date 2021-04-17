@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * DmxChannel Model
+ * DmxChannel Model.
  *
  * @property int $id
  * @property string $name

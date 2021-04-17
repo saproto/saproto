@@ -3,17 +3,11 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
-use Proto\Http\Controllers\LdapController;
-use Proto\Mail\UtwenteCleanup;
 use Proto\Models\Committee;
 use Proto\Models\User;
 
-use Mail;
-
 class SyncWikiAccounts extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -43,14 +37,12 @@ class SyncWikiAccounts extends Command
      */
     public function handle()
     {
-
         $users = User::get();
 
         $configlines = [];
 
         foreach ($users as $user) {
-
-            if (!$user->is_member) {
+            if (! $user->is_member) {
                 continue;
             }
 
@@ -61,11 +53,9 @@ class SyncWikiAccounts extends Command
                 $user->email,
                 $this->constructWikiGroups($user)
             );
-
         }
 
-        print(implode("\n", $configlines));
-
+        echo implode("\n", $configlines);
     }
 
     private function convertCommitteeNameToGroup($name)
@@ -93,5 +83,4 @@ class SyncWikiAccounts extends Command
         }
         return implode(',', $groups);
     }
-
 }

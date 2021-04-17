@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 /**
- * Product Category Model
+ * Product Category Model.
  *
  * @property int $id
  * @property string $name

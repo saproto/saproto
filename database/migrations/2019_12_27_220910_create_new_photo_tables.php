@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateNewPhotoTables extends Migration
 {
@@ -33,9 +33,8 @@ class CreateNewPhotoTables extends Migration
             $table->integer('thumb_id');
             $table->integer('event_id')->nullable()->default(null);
             $table->boolean('private');
-            $table->boolean('published')->default(False);
+            $table->boolean('published')->default(false);
         });
-
 
         Schema::create('photo_likes', function (Blueprint $table) {
             $table->increments('id');
@@ -45,15 +44,15 @@ class CreateNewPhotoTables extends Migration
         });
 
         Schema::table('flickr_albums', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
+            $table->boolean('migrated')->default(false);
         });
 
         Schema::table('flickr_items', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
+            $table->boolean('migrated')->default(false);
         });
 
         Schema::table('flickr_likes', function (Blueprint $table) {
-            $table->boolean('migrated')->default(False);
+            $table->boolean('migrated')->default(false);
         });
     }
 
@@ -64,7 +63,6 @@ class CreateNewPhotoTables extends Migration
      */
     public function down()
     {
-
         Schema::table('flickr_albums', function (Blueprint $table) {
             $table->dropColumn('migrated');
         });

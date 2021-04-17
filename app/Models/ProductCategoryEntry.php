@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Product Category Entry Model
+ * Product Category Entry Model.
  *
  * @property int $id
  * @property int $product_id
@@ -34,7 +34,7 @@ class ProductCategoryEntry extends Model
     protected $rules = [
         'user_id' => 'required|integer',
         'achievement_id' => 'required|integer',
-        'rank' => 'required|integer'
+        'rank' => 'required|integer',
     ];
 
     /** @return BelongsTo|Product */

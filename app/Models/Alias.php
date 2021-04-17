@@ -3,15 +3,12 @@
 namespace Proto\Models;
 
 use Carbon;
-use Illuminate\Database\Eloquent\
-{
-    Builder,
-    Model,
-    Relations\BelongsTo
-};
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Alias Model
+ * Alias Model.
  *
  * @mixin Model
  * @property int $id
@@ -30,7 +27,6 @@ use Illuminate\Database\Eloquent\
  */
 class Alias extends Model
 {
-
     protected $table = 'alias';
 
     protected $guarded = ['id'];
@@ -40,5 +36,4 @@ class Alias extends Model
     {
         return $this->belongsTo('Proto\Models\User');
     }
-
 }

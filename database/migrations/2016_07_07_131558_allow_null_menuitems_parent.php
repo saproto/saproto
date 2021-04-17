@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AllowNullMenuitemsParent extends Migration
 {
@@ -12,7 +12,7 @@ class AllowNullMenuitemsParent extends Migration
      */
     public function up()
     {
-        Schema::table('menuitems', function(Blueprint $table) {
+        Schema::table('menuitems', function (Blueprint $table) {
             $table->integer('parent')->nullable()->default(null)->change();
         });
     }

@@ -7,13 +7,13 @@ use DateInterval;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use stdClass;
 use Youtube;
 
 /**
- * Narrowcasting Item Model
+ * Narrowcasting Item Model.
  *
  * @property int $id
  * @property string $name
