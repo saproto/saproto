@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Proto\Models\MenuItem.
+ * Menu Item Model.
  *
  * @property int $id
  * @property int|null $parent

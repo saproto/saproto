@@ -162,24 +162,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS METHOD.
-     * @return bool whether or not the user is stale (not in use, can be really deleted safely).
+     * @return bool whether or not the user is stale (not in use, can really be deleted safely).
      */
     public function isStale()
     {
-        return
-            $this->password &&
-            $this->edu_username &&
-            strtotime($this->created_at) > strtotime('-1 hour') &&
-            Member::withTrashed()->where('user_id', $this->id)->first() &&
-            Bank::where('user_id', $this->id)->first() &&
-            Address::where('user_id', $this->id)->first() &&
-            OrderLine::where('user_id', $this->id)->count() > 0 &&
-            CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0 &&
-            Quote::where('user_id', $this->id)->count() > 0 &&
-            EmailListSubscription::where('user_id', $this->id)->count() > 0 &&
-            RfidCard::where('user_id', $this->id)->count() > 0 &&
-            PlayedVideo::where('user_id', $this->id)->count() > 0 &&
-            AchievementOwnership::where('user_id', $this->id)->count() > 0;
+        return ! (
+            $this->password ||
+            $this->edu_username ||
+            strtotime($this->created_at) > strtotime('-1 hour') ||
+            Member::withTrashed()->where('user_id', $this->id)->first() ||
+            Bank::where('user_id', $this->id)->first() ||
+            Address::where('user_id', $this->id)->first() ||
+            OrderLine::where('user_id', $this->id)->count() > 0 ||
+            CommitteeMembership::withTrashed()->where('user_id', $this->id)->count() > 0 ||
+            Quote::where('user_id', $this->id)->count() > 0 ||
+            EmailListSubscription::where('user_id', $this->id)->count() > 0 ||
+            RfidCard::where('user_id', $this->id)->count() > 0 ||
+            PlayedVideo::where('user_id', $this->id)->count() > 0 ||
+            AchievementOwnership::where('user_id', $this->id)->count() > 0
+        );
     }
 
     /** @return BelongsTo|StorageEntry User's profile picture */
@@ -403,7 +404,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return bool */
     public function isActiveMember()
     {
-        return count(CommitteeMembership::withTrashed()
+        return count(
+            CommitteeMembership::withTrashed()
                 ->where('user_id', $this->id)
                 ->where('created_at', '<', date('Y-m-d H:i:s'))
                 ->where(function ($q) {
@@ -413,7 +415,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 ->with('committee')
                 ->get()
                 ->where('committee.is_society', false)
-            ) > 0;
+        ) > 0;
     }
 
     /** @return Achievement[] */

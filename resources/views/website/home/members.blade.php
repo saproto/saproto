@@ -91,7 +91,7 @@
 
         </div>
 
-        @if(Newsletter::showTextOnHomepage())
+        @if(Proto\Models\Newsletter::showTextOnHomepage())
 
             <div class="col-xl-4 col-md-12">
 
@@ -100,7 +100,7 @@
                         <i class="fas fa-bullhorn fa-fw mr-2"></i> Weekly update
                     </div>
                     <div class="card-body">
-                        {!! Markdown::convertToHtml(Newsletter::text()) !!}
+                        {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
                     </div>
                 </div>
 

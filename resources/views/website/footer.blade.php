@@ -66,7 +66,7 @@
                 <br>
                 This website has been created with ♥ by the folks of the
                 <a href="{{ route('developers') }}" class="text-white">
-                    {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                    {{ Proto\Models\Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                 </a>.
             </sub>
         </p>

@@ -140,10 +140,11 @@ class Announcement extends Model
         return strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U');
     }
 
-    /** @return bool
-     * @throws Exception
+    /**
+     * @param null $user
+     * @return bool
      */
-    public function showForUser(User $user = null)
+    public function showForUser($user = null)
     {
         // Check for homepage.
         if ($this->show_only_homepage && Route::current()->getName() != 'homepage') {

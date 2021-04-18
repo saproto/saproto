@@ -25,13 +25,13 @@
 
                         <p class="card-text text-center">
                             The newsletter was last sent
-                            <strong>{{ Carbon::createFromFormat('U', Newsletter::lastSent())->diffForHumans() }}</strong>
+                            <strong>{{ Carbon::createFromFormat('U', Proto\Models\Newsletter::lastSent())->diffForHumans() }}</strong>
                         </p>
 
                         <input type="button" class="btn btn-success btn-block" data-toggle="modal"
                                data-target="#sendnewsletter"
-                               value="{{ (Newsletter::canBeSent() ? 'Send the weekly newsletter!' : 'Weekly newsletter can not be sent right now.') }}"
-                                {{ (!Newsletter::canBeSent() ? 'disabled' : '') }}>
+                               value="{{ (Proto\Models\Newsletter::canBeSent() ? 'Send the weekly newsletter!' : 'Weekly newsletter can not be sent right now.') }}"
+                                {{ (!Proto\Models\Newsletter::canBeSent() ? 'disabled' : '') }}>
 
                         <hr>
 
@@ -40,7 +40,7 @@
                             @include('website.layouts.macros.markdownfield', [
                                 'name' => 'text',
                                 'placeholder' => 'Text goes here.',
-                                'value' => Newsletter::getText()->value
+                                'value' => Proto\Models\Newsletter::getText()->value
                             ])
                         </div>
 
@@ -123,7 +123,7 @@
 
     </div>
 
-    @if(Newsletter::canBeSent())
+    @if(Proto\Models\Newsletter::canBeSent())
         <div id="sendnewsletter" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-sm " role="document">
                 <div class="modal-content">

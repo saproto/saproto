@@ -39,8 +39,8 @@ class StorageEntry extends Model
     protected $guarded = ['id'];
 
     /**
-     * IMPORTANT!!! IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
-     * @return bool whether or not the file is orphaned (not in use, can be *really* deleted safely)
+     * **IMPORTANT!** IF YOU ADD ANY RELATION TO A FILE IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS.
+     * @return bool whether or not the file is orphaned (not in use, can really be deleted safely)
      */
     public function isOrphan()
     {

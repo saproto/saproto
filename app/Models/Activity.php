@@ -134,12 +134,12 @@ class Activity extends Validatable
     }
 
     /**
-     * @param int $helpId
+     * @param int $help_id
      * @return Collection|ActivityParticipation[] The ActivityParticipations for the helping users.
      */
-    public function helpingUsers($helpId)
+    public function helpingUsers($help_id)
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpId)->get();
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
     }
 
     /**

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * Proto\Models\Withdrawal.
+ * Withdrawal Model.
  *
  * @property int $id
  * @property string $date

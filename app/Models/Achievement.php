@@ -72,14 +72,14 @@ class Achievement extends Model
     }
 
     /**
-     * @param bool $isMember
+     * @param bool $is_member
      * @return User[]
      */
-    public function currentOwners($isMember = true)
+    public function currentOwners($is_member = true)
     {
         $users = [];
         foreach ($this->users as $user) {
-            if ((! $isMember || $user->is_member)) {
+            if ((! $is_member || $user->is_member)) {
                 $users[] = $user;
             }
         }

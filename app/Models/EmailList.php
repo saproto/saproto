@@ -84,12 +84,12 @@ class EmailList extends Model
      * @param int $list_id
      * @return string
      */
-    public static function generateUnsubscribeHash($user_id, $list_id): string
+    public static function generateUnsubscribeHash($user_id, $list_id)
     {
         return base64_encode(Crypt::encrypt(json_encode(['user' => $user_id, 'list' => $list_id])));
     }
 
-    public static function parseUnsubscribeHash(string $hash): string
+    public static function parseUnsubscribeHash(string $hash)
     {
         return json_decode(Crypt::decrypt(base64_decode($hash)));
     }

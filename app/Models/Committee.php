@@ -59,7 +59,7 @@ class Committee extends Model
     }
 
     /** @return Committee */
-    public static function fromPublicId(string $public_id)
+    public static function fromPublicId($public_id)
     {
         return self::where('slug', $public_id)->firstOrFail();
     }
@@ -217,7 +217,7 @@ class Committee extends Model
      * @param User $user
      * @return bool Whether the use is a member of the committee.
      */
-    public function isMember(User $user)
+    public function isMember($user)
     {
         return $user->isInCommittee($this);
     }

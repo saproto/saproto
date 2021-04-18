@@ -21,7 +21,7 @@ class DmxChannel extends Model
 {
     protected $table = 'dmx_channels';
 
-    protected $guarded = ['id'];
+    protected $fillable = ['id', 'name'];
 
     public $timestamps = false;
 }

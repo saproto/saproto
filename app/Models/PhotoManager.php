@@ -51,15 +51,15 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param int $albumId
+     * @param int $album_id
      * @param int|null $max
      * @return stdClass|null
      */
-    public static function getPhotos($albumId, $max = null)
+    public static function getPhotos($album_id, $max = null)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
-        $album = PhotoAlbum::where('id', $albumId);
+        $album = PhotoAlbum::where('id', $album_id);
         if (! $include_private) {
             $album->where('private', '=', false);
         }
@@ -69,7 +69,7 @@ class PhotoManager extends Model
             return null;
         }
 
-        $items = Photo::where('album_id', $albumId);
+        $items = Photo::where('album_id', $album_id);
 
         if (! $include_private) {
             $items = $items->where('private', '=', false);
@@ -82,7 +82,7 @@ class PhotoManager extends Model
         }
 
         $data = new stdClass();
-        $data->album_id = $albumId;
+        $data->album_id = $album_id;
 
         $album = $album->first();
         $data->album_title = $album->name;
@@ -97,12 +97,12 @@ class PhotoManager extends Model
     }
 
     /**
-     * @param int $photoId
+     * @param int $photo_id
      * @return stdClass
      */
-    public static function getPhoto($photoId)
+    public static function getPhoto($photo_id)
     {
-        $photo = Photo::where('id', $photoId)->first();
+        $photo = Photo::where('id', $photo_id)->first();
 
         $data = new stdClass();
         $data->photo_url = $photo->url;
@@ -110,7 +110,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photoId)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::user()->id)->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;
@@ -124,19 +124,19 @@ class PhotoManager extends Model
             $data->previous = null;
         }
 
-        $data->id = $photoId;
+        $data->id = $photo_id;
 
         return $data;
     }
 
     /**
-     * @param int $albumId
+     * @param int $album_id
      * @throws Exception
      */
-    public static function deleteAlbum($albumId)
+    public static function deleteAlbum($album_id)
     {
-        $album = PhotoAlbum::where('id', $albumId)->get()->first();
-        $photos = Photo::where('album_id', $albumId)->get();
+        $album = PhotoAlbum::where('id', $album_id)->get()->first();
+        $photos = Photo::where('album_id', $album_id)->get();
 
         foreach ($photos as $photo) {
             $photo->delete();

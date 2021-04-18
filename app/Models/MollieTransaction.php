@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mollie;
 
 /**
- * Proto\Models\MollieTransaction.
+ * Mollie Transaction Model.
  *
  * @property int $id
  * @property string $user_id

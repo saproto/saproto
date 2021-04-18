@@ -276,7 +276,7 @@ class Event extends Model
         ];
     }
 
-    public static function countEventsPerYear(int $year): int
+    public static function countEventsPerYear(int $year)
     {
         $yearStart = strtotime('January 1, '.$year);
         $yearEnd = strtotime('January 1, '.($year + 1));
