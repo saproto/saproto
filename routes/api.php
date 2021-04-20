@@ -70,11 +70,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
-    Route::group(['prefix' => 'slack', 'as' => 'slack::', 'middleware' => ['web']], function () {
-        Route::get('count', ['as' => 'count', 'uses' => 'SlackController@getOnlineCount']);
-        Route::get('invite', ['as' => 'invite', 'middleware' => ['member'], 'uses' => 'SlackController@inviteUser']);
-    });
-
     Route::group(['prefix' => 'screen', 'as' => 'screen::'], function () {
         Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
