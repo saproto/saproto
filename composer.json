@@ -46,7 +46,7 @@
     "milon/barcode": "5.3.*",
     "graham-campbell/markdown": "8.*",
     "directadmin/directadmin": "1.0.*",
-    "sentry/sentry-laravel": "0.8.*",
+    "sentry/sentry-laravel": "1.*",
     "alaouy/youtube": "2.1.*",
     "webuni/commonmark-table-extension": "0.6.*",
     "mollie/laravel-mollie": "1.5.*",
