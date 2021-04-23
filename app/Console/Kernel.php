@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
         $schedule->command('proto:feecron')->daily()->at('02:00');
-        $schedule->command('proto:adsync --full')->daily()->at('03:00');
+        $schedule->command('proto:dasync --full')->daily()->at('03:00');
         $schedule->command('proto:filecleanup')->daily()->at('04:00');
         $schedule->command('proto:spotifysync')->daily()->at('05:00');
         $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
