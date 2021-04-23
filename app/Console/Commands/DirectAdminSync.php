@@ -23,7 +23,7 @@ class DirectAdminSync extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:dasync';
+    protected $signature = 'proto:adsync';
 
     /**
      * The console command description.
