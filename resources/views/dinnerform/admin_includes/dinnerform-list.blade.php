@@ -50,6 +50,9 @@
                            href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}">
                             <i class="fas fa-trash text-danger"></i>
                         </a>
+                        <a href="{{route('dinnerform::orderlist', ['id'=>$dinnerform->id])}}">
+                            <i class="fa fa-eye"></i>
+                        </a>
                     </td>
 
                 </tr>
@@ -69,4 +72,3 @@
 
     </table>
 </div>
-

@@ -49,4 +49,15 @@ class Dinnerform extends Model
         return $this->end->addHours(1)->isPast();
     }
 
+    public function isBoardMember(User $user){
+        return $user->can('board');
+    }
+
+    public function returnAllOrders(){
+        // SEE Event.getAllUsers -> Ticket.getUsers -> TicketPurchase
+        $orders = DinnerOrderLine::where('dinnerform_id', $this->id)->get();
+        //tweede query die user ids koppelt aan namen
+
+        return $orders;
+    }
 }

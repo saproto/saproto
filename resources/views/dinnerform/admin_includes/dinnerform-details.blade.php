@@ -35,16 +35,9 @@
 
                             <label for="description">Description:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Order with us at Elat Roma" value="{{ $dinnerformCurrent->description or '' }}" required>
-
-                        </div>
-                    </div>
-                    <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3">
-
-                            <label for="url">Url:</label>
-                            <input type="text" class="form-control" id="url" name="url"
-                                   value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
+                                   placeholder="Order with us at Elat Roma"
+                                   value="{{ $dinnerformCurrent->description or '' }}"
+                                   required>
 
                         </div>
                     </div>
