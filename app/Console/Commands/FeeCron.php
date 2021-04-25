@@ -81,14 +81,14 @@ class FeeCron extends Command
 
         foreach (Member::all() as $member) {
 
-            if (in_array($member->user->id, $already_paid) || $member->pending) {
+            if (in_array($member->user->id, $already_paid) || $member->is_pending) {
                 continue;
             }
 
             $email_remmitance_reason = null;
             $email_fee = null;
 
-            if ($member->is_lifelong || $member->is_honorary || $member->is_donator) {
+            if ($member->is_lifelong || $member->is_honorary || $member->is_donor) {
                 $fee = config('omnomcom.fee')['remitted'];
                 $email_fee = 'remitted';
                 if ($member->is_honorary) {
@@ -98,8 +98,8 @@ class FeeCron extends Command
                     $reason = "Lifelong Member";
                     $email_remmitance_reason = 'you signed up for life-long membership when you became a member';
                 } else {
-                    $reason = "Donator";
-                    $email_remmitance_reason = 'you are a donator of the association, and your donation is not handled via the membership fee system';
+                    $reason = "Donor";
+                    $email_remmitance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
                 }
                 $charged->remitted[] = $member->user->name . " (#" . $member->user->id . ") - $reason";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {

@@ -87,7 +87,7 @@ class OtherDataSeeder extends Seeder
         echo PHP_EOL;
 
         // Create arrays of member user ids
-        $users = User::whereHas('member', function($q){ $q->where('pending', '=', 0); })->pluck('id')->toArray();
+        $users = User::whereHas('member', function($q){ $q->where('is_pending', '=', 0); })->pluck('id')->toArray();
 
         // Create orderlines
         $n = 1000;

@@ -390,7 +390,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     public function getMemberships() {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('pending', '=', true)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
 
         return $memberships;
@@ -452,7 +452,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getIsMemberAttribute()
     {
-        return $this->member && !$this->member->pending;
+        return $this->member && !$this->member->is_pending;
     }
 
     public function getSignedMembershipFormAttribute() {

@@ -65,7 +65,7 @@ class QueryController extends Controller
         $count_active = 0;
         $count_lifelong = 0;
         $count_honorary = 0;
-        $count_donator = 0;
+        $count_donor = 0;
 
         $export_subsidies = [];
         $export_active = [];
@@ -97,8 +97,8 @@ class QueryController extends Controller
             if ($member->is_honorary) {
                 $count_honorary++;
             }
-            if ($member->is_donator) {
-                $count_donator++;
+            if ($member->is_donor) {
+                $count_donor++;
             }
 
             if ($is_primary_student) {
@@ -154,7 +154,7 @@ class QueryController extends Controller
                 'active' => $count_active,
                 'lifelong' => $count_lifelong,
                 'honorary' => $count_honorary,
-                'donator' => $count_donator
+                'donator' => $count_donor
             ]);
 
         }

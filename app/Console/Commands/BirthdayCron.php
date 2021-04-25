@@ -43,7 +43,7 @@ class BirthdayCron extends Command
     public function handle()
     {
 
-        $users = User::where('birthdate', 'LIKE', '%-' . date('m-d'))->has('member')->get()->reject(function($user, $index) { return $user->member->pending == 1; });
+        $users = User::where('birthdate', 'LIKE', '%-' . date('m-d'))->has('member')->get()->reject(function($user, $index) { return $user->member->is_pending == true; });
 
         if ($users->count() > 0) {
 

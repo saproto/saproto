@@ -55,10 +55,10 @@
 
                     <tr>
                         <td>
-                            <strong>Total number of donators</strong><br>
-                            <sup>For this overview donators are also considered members.</sup>
+                            <strong>Total number of donors</strong><br>
+                            <sup>For this overview donors are also considered members.</sup>
                         </td>
-                        <td>{{ $donator }}</td>
+                        <td>{{ $donor }}</td>
                     </tr>
 
                 </table>

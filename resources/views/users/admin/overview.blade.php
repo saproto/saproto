@@ -111,7 +111,7 @@
                                     @if($user->deleted_at)
                                         Deleted
                                     @elseif($user->member)
-                                        @if($user->member->pending)
+                                        @if($user->member->is_pending)
                                             <strong class="text-warning">Pending</strong>
                                         @else
                                             <strong>Member</strong>
