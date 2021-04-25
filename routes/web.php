@@ -92,6 +92,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
             Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+            Route::post('settype', ['as' => 'settype', 'uses' => 'UserAdminController@setMembershipType']);
         });
 
         Route::group(['prefix' => 'memberprofile', 'as' => 'memberprofile::', 'middleware' => ['auth']], function () {

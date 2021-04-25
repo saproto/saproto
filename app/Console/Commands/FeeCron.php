@@ -86,9 +86,8 @@ class FeeCron extends Command
             }
 
             $email_remmitance_reason = null;
-            $email_fee = null;
 
-            if ($member->is_lifelong || $member->is_honorary || $member->is_donator) {
+            if ($member->is_lifelong || $member->is_honorary || $member->is_donator || $member->is_pet) {
                 $fee = config('omnomcom.fee')['remitted'];
                 $email_fee = 'remitted';
                 if ($member->is_honorary) {
@@ -97,7 +96,10 @@ class FeeCron extends Command
                 } elseif ($member->is_lifelong) {
                     $reason = "Lifelong Member";
                     $email_remmitance_reason = 'you signed up for life-long membership when you became a member';
-                } else {
+                } elseif ($member->is_pet) {
+                    $reason = "Pet member";
+                    $email_remmitance_reason = 'you are a pet and therefore do not posses any money';
+                } elseif ($member->is_donator) {
                     $reason = "Donator";
                     $email_remmitance_reason = 'you are a donator of the association, and your donation is not handled via the membership fee system';
                 }
