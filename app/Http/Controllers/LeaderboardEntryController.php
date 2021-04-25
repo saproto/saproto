@@ -45,7 +45,7 @@ class LeaderboardEntryController extends Controller
     public function update(Request $request)
     {
         $entry = LeaderboardEntry::findOrFail($request->id);
-        $entry->points += $request->points > 0 ? 1 : -1;
+        $entry->points = $request->points;
         $entry->save();
         return response()->json(['points' => $entry->points]);
     }

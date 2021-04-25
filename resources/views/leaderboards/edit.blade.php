@@ -99,47 +99,46 @@
                         <div class="card-body">
 
                             @if(count($entries) > 0)
-                                <div class="table-responsive">
+                                <form action="">
+                                    <div class="table-responsive">
 
-                                    <table class="table table-sm table-hover mb-0">
+                                        <table class="table table-sm table-hover mb-0">
 
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Name</th>
-                                                <th>{{ $leaderboard->points_name }}</th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @foreach($entries as $entry)
+                                            <thead>
                                                 <tr>
-                                                    <td>#{{ $loop->index+1 }}</td>
-                                                    <td>{{ $entry->user->name }}</td>
-                                                    <td style="max-width: 80px">
-                                                        <i class="{{ $leaderboard->icon }}"></i>
-                                                        <span data-id="{{ $entry->id }}" class="le_points" >
-                                                            {{ $entry->points}}
-                                                        </span>
-                                                    </td>
-                                                    <td style="min-width: 60px">
-                                                        <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ml-2 le_increase"></a>
-                                                        <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ml-1 le_decrease"></a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
-                                                            <i class="fas fa-trash text-danger fa-fw"></i>
-                                                        </a>
-                                                    </td>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>{{ $leaderboard->points_name }} <i class="ml-1 {{ $leaderboard->icon }}"></i></th>
+                                                    <th></th>
+                                                    <th></th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
+                                            </thead>
 
-                                    </table>
+                                            <tbody>
+                                                @foreach($entries as $entry)
+                                                    <tr>
+                                                        <td>#{{ $loop->index+1 }}</td>
+                                                        <td>{{ $entry->user->name }}</td>
+                                                        <td style="width: 80px">
+                                                            <input id="le_{{ $entry->id }}" data-id="{{ $entry->id }}" value="{{ $entry->points}}" class="le_points" >
+                                                        </td>
+                                                        <td style="min-width: 60px">
+                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ml-2 le_increase"></a>
+                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ml-1 le_decrease"></a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
+                                                                <i class="fas fa-trash text-danger fa-fw"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
 
-                                </div>
+                                        </table>
+
+                                    </div>
+                                </form>
 
                             @else
                                 <p>No entries yet, add entries here.</p>
@@ -179,22 +178,33 @@
 
     @parent
 
-    <script>
+    <script type="text/javascript">
+
+    </script>
+
+    <script type="text/javascript">
         $('.icp-auto').iconpicker();
         $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
 
         $(function() {
-            $('.le_increase').on('click', function(e) {
-                console.log($(e.target).attr('data-id'))
+            $('.le_points').on('change', function(e) {
                 let id = $(e.target).attr('data-id');
-                if(id) updatePoints(id, 1);
+                let points = parseInt($(`.le_points[data-id='${id}']`).val())
+                updatePoints(id, points);
+            });
+
+            $('.le_increase').on('click', function(e) {
+                let id = $(e.target).attr('data-id');
+                let points = parseInt($(`.le_points[data-id='${id}']`).val())+1;
+                updatePoints(id, points);
             });
 
             $('.le_decrease').on('click', function(e) {
                 let id = $(e.target).attr('data-id');
-                if(id) updatePoints(id, -1);
+                let points = parseInt($(`.le_points[data-id='${id}']`).val())-1;
+                updatePoints(id, points);
             });
         });
 
@@ -211,7 +221,7 @@
                 contentType: false,
                 processData: false,
                 success: function(response) {
-                    $(`.le_points[data-id='${id}']`).html(response.points);
+                    $(`.le_points[data-id='${id}']`).val(response.points);
                 },
                 error: function() {
                     window.alert('Something went wrong while updating the points. Please try again.');

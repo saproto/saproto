@@ -19,7 +19,7 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::get();
+        $leaderboards = Leaderboard::all();
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
@@ -59,7 +59,6 @@ class LeaderboardController extends Controller
         $leaderboard = new Leaderboard();
         $committee = Committee::findOrFail($request->input('committee'));
         $leaderboard->committee()->associate($committee);
-        $leaderboard->committee_id = $committee->id;
         $leaderboard->name = $request->name;
         $leaderboard->description = $request->description;
         $leaderboard->icon = $request->icon;
