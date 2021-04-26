@@ -19,7 +19,7 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::all();
+        $leaderboards = Leaderboard::all()->reverse();
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
@@ -59,12 +59,12 @@ class LeaderboardController extends Controller
         $leaderboard = new Leaderboard();
         $committee = Committee::findOrFail($request->input('committee'));
         $leaderboard->committee()->associate($committee);
-        $leaderboard->name = $request->name;
-        $leaderboard->description = $request->description;
-        $leaderboard->icon = $request->icon;
-        $leaderboard->points_name = $request->points_name;
+        $leaderboard->name = $request->input('name');
+        $leaderboard->featured = $request->has('featured');
+        $leaderboard->description = $request->input('description');
+        $leaderboard->icon = $request->input('icon');
+        $leaderboard->points_name = $request->input('points_name');
         $leaderboard->save();
-
 
         Session::flash("flash_message", "Your leaderboard '" . $leaderboard->name . "' has been added.");
         return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
@@ -85,22 +85,25 @@ class LeaderboardController extends Controller
 
     public function update(Request $request, $id)
     {
+        if($request->featured && Leaderboard::where('featured', true)->first() != null) {
+            Leaderboard::where('featured', true)->update(['featured' => false]);
+        }
+
         $leaderboard = Leaderboard::findOrFail($id);
-
-        $leaderboard->name = $request->name;
-        $leaderboard->description = $request->description;
-        $leaderboard->points_name = $request->points_name;
-        $leaderboard->icon = $request->icon;
-
+        $leaderboard->name = $request->input('name');
+        $leaderboard->featured = $request->has('featured');
+        $leaderboard->description = $request->input('description');
+        $leaderboard->points_name = $request->input('points_name');
+        if($request->input('icon') != null) {
+            $leaderboard->icon = $request->input('icon');
+        }
         $committee = Committee::findOrFail($request->input('committee'));
         if($committee != $leaderboard->committee) {
             $leaderboard->committee()->associate($committee);
         }
-
         $leaderboard->save();
 
         Session::flash("flash_message", "Leaderboard has been updated.");
-
         return Redirect::back();
     }
 
