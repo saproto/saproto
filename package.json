@@ -132,7 +132,7 @@
         "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
         "./node_modules/simplemde/dist/simplemde.min.css",
         "./node_modules/select2/dist/css/select2.min.css",
-        "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.scss",
+        "./node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css",
         "./node_modules/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.css",
         "./node_modules/swiper/css/swiper.min.css"
       ],

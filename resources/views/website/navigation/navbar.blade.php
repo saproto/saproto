@@ -123,6 +123,7 @@
                                 <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
                                 <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
                                 <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
+                                <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -192,6 +193,7 @@
                                 <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                                <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                 <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>

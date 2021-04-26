@@ -133,6 +133,11 @@ $card-collapse-bg: #fff;
 //datetimepicker
 .bootstrap-datetimepicker-widget.dropdown-menu { background-color: $grey-dark !important; }
 
+//iconpicker
+.iconpicker .iconpicker-items {
+  background-color: $grey-medium !important;
+}
+
 //pagination
 $pagination-bg: $grey-light;
 $pagination-border-color: $grey-dark;

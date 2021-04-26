@@ -310,6 +310,28 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     });
 
+    /*
+     * Routes related to leaderboards.
+     */
+    Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::', 'middleware' => ['auth', 'member']], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
+
+        Route::group(['middleware' => ['permission:board']], function () {
+            Route::get('list', ['as' => 'admin', 'uses' => 'LeaderboardController@adminIndex']);
+            Route::get('add', ['as' => 'add', 'uses' => 'LeaderboardController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardController@destroy']);
+        });
+
+        Route::group(['prefix' => 'entries', 'as' => 'entries::', 'middleware' => ['permission:board']], function () {
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardEntryController@store']);
+            Route::post('update', ['as' => 'update', 'uses' => 'LeaderboardEntryController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardEntryController@destroy']);
+        });
+    });
+
     Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
