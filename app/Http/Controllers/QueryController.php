@@ -79,7 +79,9 @@ class QueryController extends Controller
             $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
             $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
-            $count++;
+            if (!$member->is_pet) {
+                $count++;
+            }
 
             if ($member->user->isActiveMember()) {
                 $count_active++;
