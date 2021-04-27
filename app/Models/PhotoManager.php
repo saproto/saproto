@@ -38,11 +38,11 @@ class PhotoManager extends Model
 
 
 
-    public static function getPhotos($albumID, $max = null)
+    public static function getPhotos($album_id, $max = null)
     {
         $include_private = (Auth::check() && Auth::user()->member() !== null);
 
-        $album = PhotoAlbum::where('id', $albumID);
+        $album = PhotoAlbum::where('id', $album_id);
         if (!$include_private) {
             $album->where('private', '=', false);
         }
@@ -52,7 +52,7 @@ class PhotoManager extends Model
             return null;
         }
 
-        $items = Photo::where('album_id', $albumID);
+        $items = Photo::where('album_id', $album_id);
 
 
         if (!$include_private) {
@@ -65,7 +65,7 @@ class PhotoManager extends Model
             $items = $items->get();
         }
         $data = new \stdClass();
-        $data->album_id = $albumID;
+        $data->album_id = $album_id;
 
         $album = $album->first();
 
@@ -80,9 +80,9 @@ class PhotoManager extends Model
         return $data;
     }
 
-    public static function getPhoto($photoID)
+    public static function getPhoto($photo_id)
     {
-        $photo = Photo::where('id', $photoID)->first();
+        $photo = Photo::findOrFail($photo_id);
 
         $data = new \stdClass();
         $data->photo_url = $photo->url();
@@ -90,7 +90,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photoID)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where("photo_id", "=", $photo_id)->where('user_id', Auth::user()->id)->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;
@@ -104,15 +104,15 @@ class PhotoManager extends Model
             $data->previous = null;
         }
 
-        $data->id = $photoID;
+        $data->id = $photo_id;
 
         return $data;
     }
 
-    public static function deleteAlbum($albumID)
+    public static function deleteAlbum($album_id)
     {
-        $album = PhotoAlbum::where('id', $albumID)->get()->first();
-        $photos = Photo::where('album_id', $albumID)->get();
+        $album = PhotoAlbum::where('id', $album_id)->get()->first();
+        $photos = Photo::where('album_id', $album_id)->get();
 
         foreach($photos as $photo) {
             $photo->delete();
