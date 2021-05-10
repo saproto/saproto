@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => 'Jonathan Matarazzi',
+    'treasurer' => 'Sebastiaan van Loon',
 
     /*
     |--------------------------------------------------------------------------
