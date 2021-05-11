@@ -469,7 +469,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
-        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
+        Route::get('unscan/{barcode?}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
     });

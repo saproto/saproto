@@ -224,8 +224,9 @@ class TicketController extends Controller
         }
     }
 
-    public function unscan($barcode)
+    public function unscan($barcode = null)
     {
+        if(!$barcode) abort(404);
         $ticket = TicketPurchase::where('barcode', $barcode)->first();
         if ($ticket && !$ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash("flash_message", "You are not allowed to scan for this event.");

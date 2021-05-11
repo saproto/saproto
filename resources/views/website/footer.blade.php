@@ -1,4 +1,4 @@
-<footer class="main-footer bg-dark text-white py-3">
+<footer class="main-footer bg-dark text-white py-3" style="bottom: 0">
 
     <div class="container">
 
@@ -7,8 +7,8 @@
             <div class="col-md-3 col-sm-6 col-5">
                 <strong>
                     <span class="fas fa-home"></span>&nbsp;&nbsp;
-                    <span class="org url" href="https://www.saproto.nl/"><span
-                                class="green">S.A. Proto</span></span>
+                    <a class="org url text-white" href="https://www.saproto.nl/"><span
+                                class="green">S.A. Proto</span></a>
                 </strong>
                 <br>
                 <span class="adr">

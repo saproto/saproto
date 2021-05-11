@@ -208,7 +208,7 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $(".events__scannedButton").click(function (event) {
+        $(".events__scannedButton").on('click', function (event) {
             event.preventDefault();
             var barcode = $(this).attr('data-id');
             var parent = $(this).parent();
@@ -220,7 +220,7 @@
                 data: {'barcode': barcode},
                 success: function () {
                     console.log('Scanned barcode ' + barcode);
-                    parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan', ['barcode' => '']) }}/" + barcode + "'>Unscan</a>");
+                    parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan') }}/" + barcode + "'>Unscan</a>");
                 },
                 error: function () {
                     window.alert('Couldn\'t register scan.');
