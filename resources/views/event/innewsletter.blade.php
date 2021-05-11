@@ -28,9 +28,10 @@
                             <strong>{{ Carbon::createFromFormat('U', Newsletter::lastSent())->diffForHumans() }}</strong>
                         </p>
 
-                        <input type="button" class="btn {{ Newsletter::canBeSent() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
+                        <input type="button" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() && NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
                                data-target="#sendnewsletter"
-                               value="{{ (Newsletter::canBeSent() ? 'Send the weekly newsletter!' : 'Weekly newsletter was already sent this week!') }}">
+                               value="{{ (Newsletter::lastSentMoreThanWeekAgo() ? Newsletter::hasEvents() ? 'Send the weekly newsletter!' : 'No events selected!' : 'Newsletter already sent this week!') }}"
+                               {{ Newsletter::hasEvents() ? '' : 'disabled' }} />
 
                         <hr>
 
@@ -146,7 +147,7 @@
                     <form method="post" action="{{ route('newsletter::send') }}">
                         {!! csrf_field() !!}
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn {{ Newsletter::canBeSent() ? "btn-success" : "btn-danger" }}">Send</button>
+                        <button type="submit" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }}">Send</button>
                     </form>
                 </div>
 

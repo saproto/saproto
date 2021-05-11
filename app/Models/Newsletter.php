@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use Artisan;
@@ -83,12 +84,18 @@ class Newsletter extends Model
         return $newsletterText->value;
     }
 
-    public static function canBeSent()
+    public static function lastSentMoreThanWeekAgo()
     {
-        $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
-        $current = date('Y') * 52 + date('W');
+        $lastSent = Carbon::createFromFormat('U', Newsletter::lastSent());
+        $current = Carbon::now();
+        $diff = $lastSent->diffInWeeks($current);
+        return $diff >= 1;
+    }
+
+    public static function hasEvents()
+    {
         $events = Event::getEventsForNewsletter();
-        return $current > $lastSent && $events->count() > 0;
+        return $events->count() > 0;
     }
 
     public static function showTextOnHomepage()
