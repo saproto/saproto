@@ -10,8 +10,20 @@
     $(document).ready(function () {
 
         // Enables tooltips
+<<<<<<< Updated upstream
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({ boundary: 'window'})
+=======
+        $('[data-toggle="tooltip"]').tooltip()
+
+        // Enable popover
+        $('[data-toggle="popover"]').popover()
+
+        // Show file name in file input
+        $(".custom-file-input").on("change", function() {
+            let fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+>>>>>>> Stashed changes
         });
 
         // Enables the fancy scrolling effect
@@ -357,5 +369,46 @@
         z = z || '0';
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        let forms = $('.ajax-form')
+        let alert = "<div class='alert my-2 mx-3' role='alert' style='display: none'>" +
+                        "<span class='alert-body'></span>" +
+                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
+                            "<span aria-hidden='true'>&times;</span>" +
+                        "</button>" +
+                    "</div>"
+        forms.each(function() {
+            $(this).prepend(alert);
+        });
+
+        forms.on('submit', function(e) {
+            e.preventDefault()
+            $.ajax({
+                type: $(this).attr('method').toUpperCase(),
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                context: $(this),
+                success: function(response) {
+                    if (response.message)
+                        flashAlert(this, response, 'success');
+                    if (response.redirect)
+                        window.location.replace(response.redirect);
+                },
+                error: function(response) {
+                    if (response.responseJSON.message != null)
+                        flashAlert(this, response.responseJSON, 'danger');
+                }
+            });
+        });
+    });
+
+    function flashAlert(form, response, type) {
+        let alert = form.find('.alert');
+        alert.find('.alert-body').html(response.message);
+        alert.addClass('alert-'+type).slideDown(500).fadeTo(2000, 750).slideUp(500, function() {$(this).removeClass('.alert-'+type)});
     }
 </script>

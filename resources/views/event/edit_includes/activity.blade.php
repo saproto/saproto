@@ -6,7 +6,7 @@
 
     @if ($event != null)
 
-        <form method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}">
+        <form class="ajax-form" method="post" action="{{ route('event::addsignup', ['id'=>$event->id]) }}">
 
             {!! csrf_field() !!}
 

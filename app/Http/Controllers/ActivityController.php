@@ -24,7 +24,7 @@ class ActivityController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function save(Request $request, $id)
     {
@@ -37,16 +37,13 @@ class ActivityController extends Controller
         $newnoshow = floatval(str_replace(',', '.', $request->no_show_fee));
 
         if ($newnoshow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
-            $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return response()->json(["message" => 'You cannot make the no show fee higher since this activity already has participants.'], 400);
         } elseif ($newnoshow < 0) {
-            $request->session()->flash('flash_message', 'The no show fee should be a positive amount.');
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return response()->json(['message' => 'The no show fee should be a positive amount.'], 400);
         }
 
         if ($newprice > floatval($activity->price) && $activity->users->count() > 0) {
-            $request->session()->flash('flash_message', 'You cannot make the price of this activity higher since this activity already has participants.');
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return response()->json(['message' => 'You cannot make the price of this activity higher since this activity already has participants.'], 400);
         }
 
         $data = [
@@ -59,7 +56,8 @@ class ActivityController extends Controller
         ];
 
         if (!$activity->validate($data)) {
-            return Redirect::route('event::edit', ['id' => $event->id])->withErrors($activity->errors());
+            return response()->json(['message' => $activity->errors()], 400);
+//            return Redirect::route('event::edit', ['id' => $event->id])->withErrors($activity->errors());
         }
 
         $activity->fill($data);
@@ -73,9 +71,7 @@ class ActivityController extends Controller
 
         ParticipationController::processBackupQueue($activity);
 
-        $request->session()->flash('flash_message', 'Your changes have been saved.');
-
-        return Redirect::route('event::edit', ['id' => $event->id]);
+        return response()->json(["message" => "Your changes to this event's sign-up have been saved"]);
 
     }
 

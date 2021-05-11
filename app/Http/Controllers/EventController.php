@@ -118,8 +118,6 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $event = new Event();
         $event->title = $request->title;
         $event->start = strtotime($request->start);
@@ -153,7 +151,6 @@ class EventController extends Controller
 
         Session::flash("flash_message", "Your event '" . $event->title . "' has been added.");
         return Redirect::route('event::show', ['id' => $event->getPublicId()]);
-
     }
 
     /**
@@ -190,9 +187,9 @@ class EventController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
 
         $event = Event::findOrFail($id);
@@ -213,8 +210,7 @@ class EventController extends Controller
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
-            Session::flash("flash_message", "You cannot let the event end before it starts.");
-            return Redirect::back();
+            return response()->json(["message" => "You cannot let the event end before it starts."], 400);
         }
 
         if ($request->file('image')) {
@@ -233,10 +229,9 @@ class EventController extends Controller
 
         if ($changed_important_details) {
             Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. You updated some important information. Don't forget to update your participants with this info!");
-            return Redirect::route('email::add');
+            return response()->json(["redirect" => route('email::add')]);
         } else {
-            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved.");
-            return Redirect::route('event::edit', ['id' => $event->id]);
+            return response()->json(["message" => "Your event '" . $event->title . "' has been saved."]);
         }
 
     }
