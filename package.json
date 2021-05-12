@@ -39,7 +39,7 @@
     "select2-bootstrap4-theme": "~1.0.0",
     "simplemde": "~1.11.2",
     "socket.io-client": "^2.3.1",
-    "swiper": "^5.4.5",
+    "swiper": "^6.5.1",
     "tempusdominus-bootstrap-4": "~5.1.2",
     "tempusdominus-core": "~5.0.3",
     "util.promisify": "^1.0.1",
