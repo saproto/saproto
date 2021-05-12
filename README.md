@@ -1,4 +1,26 @@
-# S.A. Proto
+<h1 align="center">
+    <a href="https://proto.utwetne.nl">
+        <img alt="Proto logo" src="https://www.proto.utwente.nl/images/logo/regular.png" width="50%">
+    </a>
+    <br>
+    S.A. Proto
+</h1>
+
+<p align="center"> 
+    <b>The website of S.A. Proto</b>.<br> 
+    The study association of BSc. Creative Technology and MSc. Interaction Technology.<br>
+    <a href="https://github.com/saproto/saproto/issues">
+        <img alt="issues badge" src="https://img.shields.io/github/issues/saproto/saproto?color=%2503b71a">
+    </a>
+    <a href="https://github.com/saproto/saproto/graphs/contributors">
+        <img alt="contributors badge" src="https://img.shields.io/github/contributors/saproto/saproto?color=%2503b71a">
+    </a>
+    <img alt="open source badge" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103">
+</p>
+
+## Contributors
+
+[Here](https://github.com/saproto/saproto/graphs/contributors) you can find the people that have contributed to the code to this project. But, let's not forget the other members of the [HYTTIOAOAc](https://www.proto.utwente.nl/committee/haveyoutriedturningitoffandonagain)!
 
 ## Prerequisites
 
@@ -20,7 +42,7 @@ If you want to run a development environment in Docker **(you most likely do)** 
 
 This repository can be run through Docker by using `docker-compose`. This is still a work in progress, but for now the website can be run locally using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
 
-For more information on installing and using Docker check out their documentation at https://docs.docker.com
+For more information on installing and using Docker check out their documentation at [docs.docker.com](https://docs.docker.com).
 
 After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
 
@@ -40,7 +62,7 @@ First you'll need to run `npm install` to install all client-side dependencies.
 
 To compile the project assets (JS/CSS) run `npm run dev` to compile once or `npm run watch` to keep checking for changes to scripts or stylesheets.
 
-When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`
+When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`.
 
 ##### Initial application setup
 ```
@@ -91,7 +113,7 @@ This is the environment configuration. In this file you will establish your own 
 * `DEBUG` should be set to `true` so you can see in detail what goes wrong if an error occurs.
 * All the `DB_*` settings should be set to reflect your database set-up.
 * `DEV_ALLOWED` is a comma separated list of IP addresses (IPv4 or IPv6) that may access your application. As long as `APP_ENV` is `local`, only whitelisted IPs are allowed to connect.
-* `PERSONAL_PROTO_KEY` should be set to your personal Proto key, which can be found/generated on the bottom of your dashboard on the 'live' Proto site.
+* `PERSONAL_PROTO_KEY` should be set to your personal Proto key, which can be found/generated on the bottom of your dashboard on the *live* Proto site.
 
 You can skip all the other stuff (mailing API, Google API) until you need to work on the specific part of the website that uses them.
 
