@@ -125,10 +125,6 @@
                                 <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
                                 <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
 
-                                <li role="separator" class="dropdown-divider"></li>
-
-                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Edit Newsletter</a>
-
                             @endif
 
                             @if (Auth::user()->can("board") && Auth::user()->can("finadmin"))
@@ -195,6 +191,7 @@
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
                                 <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                 <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
                                 <li role="separator" class="dropdown-divider"></li>
