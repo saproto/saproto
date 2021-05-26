@@ -183,7 +183,6 @@ return [
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
-        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
@@ -281,8 +280,6 @@ return [
         'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
-
-        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
 

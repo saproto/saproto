@@ -289,15 +289,6 @@
                                     </span>
                                 </a>
 
-                                @if (Auth::check() && Auth::user()->is_member)
-                                    <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
-                                        Slack
-                                        <span class="badge badge-secondary" style="transform: translateY(-1px)">
-                                            <i class="fas fa-user mr-1"></i> <span id="slack__online">...</span>
-                                        </span>
-                                    </a>
-                                @endif
-
                                 <a class="dropdown-item" href="{{ route('protube::dashboard') }}">
                                     ProTube Dashboard
                                 </a>
