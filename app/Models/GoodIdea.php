@@ -3,10 +3,12 @@
 namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class GoodIdea extends Model
 {
+    use SoftDeletes;
     protected $fillable = ['user_id', 'idea'];
     public function user() {
         return $this->belongsTo('Proto\Models\User');
