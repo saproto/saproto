@@ -158,6 +158,11 @@ hr {
   background-color: $grey-dark !important;
 }
 
+//font-awesome icon picker
+.iconpicker .iconpicker-items {
+  background-color: $grey-medium !important;
+}
+
 //scrollbar (webkit only)
 html {
   scrollbar-face-color: $grey-dark;

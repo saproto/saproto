@@ -33,21 +33,21 @@
                 <label for="tier">Tier:</label>
                 <select class="form-control {{ $achievement->tier ?? '' }}" name="tier">
                     <option value="COMMON"
-                            {{ (!$new && $achievement->tier == "COMMON" ? 'selected' : '') }}>
+                            {{ ($achievement && $achievement->tier == "COMMON" ? 'selected' : '') }}>
                         Common
                     </option>
                     <option value="UNCOMMON"
-                            {{ (!$new && $achievement->tier == "UNCOMMON" ? 'selected' : '') }}>
+                            {{ ($achievement && $achievement->tier == "UNCOMMON" ? 'selected' : '') }}>
                         Uncommon
                     </option>
                     <option value="RARE"
-                            {{ (!$new && $achievement->tier == "RARE" ? 'selected' : '') }}>Rare
+                            {{ ($achievement && $achievement->tier == "RARE" ? 'selected' : '') }}>Rare
                     </option>
                     <option value="EPIC"
-                            {{ (!$new && $achievement->tier == "EPIC" ? 'selected' : '') }}>Epic
+                            {{ ($achievement && $achievement->tier == "EPIC" ? 'selected' : '') }}>Epic
                     </option>
                     <option value="LEGENDARY"
-                            {{ (!$new && $achievement->tier == "LEGENDARY" ? 'selected' : '') }}>
+                            {{ ($achievement && $achievement->tier == "LEGENDARY" ? 'selected' : '') }}>
                         Legendary
                     </option>
                 </select>
@@ -55,17 +55,17 @@
 
             <div class="form-group">
                 <input type="checkbox" id="is_archived" name="is_archived"
-                       {{ (!$new && $achievement->is_archived ? 'checked' : '') }}>
+                       {{ ($achievement && $achievement->is_archived ? 'checked' : '') }}>
                 <label for="is_archived">Archive this achievement</label>
             </div>
 
             <div class="form-group">
                 <input type="checkbox" id="has_page" name="has_page"
-                       {{ ($achievement->has_page ? 'checked' : '') }}>
-                <label for="has_url">Can be achieved by visiting url</label>
+                       {{ ($achievement && $achievement->has_page ? 'checked' : '') }}>
+                <label for="has_page">Can be achieved by visiting url</label>
             </div>
 
-            <div id="achieve_page_block" @if(!$achievement->has_page) style="display: none;" @endif>
+            <div id="achieve_page_block" @if(!$achievement || !$achievement->has_page) style="display: none;" @endif>
 
                 <div class="form-group">
                     <label for="page_name">Achieve URL</label>
@@ -77,7 +77,7 @@
                                class="form-control"
                                id="page_name"
                                name="page_name"
-                               value="{{ $achievement->page_name ?? str_replace(' ', '-', strtolower($achievement->name)) }}">
+                               value="{{ $achievement ? $achievement->page_name ?? str_replace(' ', '-', trim(strtolower($achievement->name))) : null }}">
                     </div>
                 </div>
 
