@@ -225,6 +225,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('Proto\Models\Quote');
     }
 
+    public function leaderboardEntries() {
+        return $this->hasMany('Proto\Models\LeaderboardEntry');
+    }
+
     public function lists()
     {
         return $this->belongsToMany('Proto\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
