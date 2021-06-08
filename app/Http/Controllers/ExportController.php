@@ -9,11 +9,11 @@ use Proto\Models\Achievement;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\HelpingCommittee;
-use Proto\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
-use Proto\Models\Role;
+use Spatie\Permission\Models\Role;
 use Proto\Models\Ticket;
 use Proto\Models\User;
 

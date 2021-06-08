@@ -7,7 +7,7 @@
 @section('container')
 
     @if($photos->published == True)
-        @if(Auth::check() && Auth::user()->can('publishalbums'))
+        @can('publishalbums')
             <a class="btn btn-warning text-white btn-block mb-3"
                href="{{ route('photo::admin::unpublish', ['id'=>$photos->album_id]) }}">
                 This album is published so editing is limited
@@ -18,9 +18,9 @@
             This album is published so editing is limited
             , ask a Protography admin to unpublish it if you wish to make changed.
             </span>
-        @endif
+        @endcan
     @else
-        @if(Auth::check() && Auth::user()->can('publishalbums'))
+        @can('publishalbums')
             <a class="btn btn-warning text-white btn-block mb-3"
                href="{{ route('photo::admin::publish', ['id'=>$photos->album_id]) }}">
                 This album is not yet published
@@ -31,7 +31,7 @@
             This album is not yet published
             , ask a Protography admin to publish it.
             </span>
-        @endif
+        @endcan
     @endif
 
     @if($photos->event !== null)

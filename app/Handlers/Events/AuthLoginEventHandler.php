@@ -3,9 +3,6 @@
 namespace Proto\Handlers\Events;
 
 use Proto\Models\Committee;
-use Proto\Models\Role;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AuthLoginEventHandler
 {
@@ -40,61 +37,61 @@ class AuthLoginEventHandler
 
         if ($user->isInCommittee($rootcommittee) && $user->signed_nda) {
             if (!$user->hasRole('protube')) {
-                $user->attachRole(Role::where('name', '=', 'protube')->first());
+                $user->assignRole('protube');
             }
         } else {
             if ($user->hasRole('protube')) {
-                $user->detachRole(Role::where('name', '=', 'protube')->first());
+                $user->removeRole('protube');
             }
         }
 
         if ($user->isInCommittee($boardcommittee) && $user->signed_nda) {
             if (!$user->hasRole('board')) {
-                $user->attachRole(Role::where('name', '=', 'board')->first());
+                $user->assignRole('board');
             }
         } else {
             if ($user->hasRole('board')) {
-                $user->detachRole(Role::where('name', '=', 'board')->first());
+                $user->removeRole('board');
             }
         }
 
         if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
             if (!$user->hasRole('omnomcom')) {
-                $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
+                $user->assignRole('omnomcom');
             }
         } else {
             if ($user->hasRole('omnomcom')) {
-                $user->detachRole(Role::where('name', '=', 'omnomcom')->first());
+                $user->removeRole('omnomcom');
             }
         }
 
         if ($user->isInCommittee($tipcie) && $user->signed_nda) {
             if (!$user->hasRole('tipcie')) {
-                $user->attachRole(Role::where('name', '=', 'tipcie')->first());
+                $user->assignRole('tipcie');
             }
         } else {
             if ($user->hasRole('tipcie')) {
-                $user->detachRole(Role::where('name', '=', 'tipcie')->first());
+                $user->removeRole('tipcie');
             }
         }
 
         if ($user->isInCommittee($drafters)) {
             if (!$user->hasRole('drafters')) {
-                $user->attachRole(Role::where('name', '=', 'drafters')->first());
+                $user->assignRole('drafters');
             }
         } else {
             if ($user->hasRole('drafters')) {
-                $user->detachRole(Role::where('name', '=', 'drafters')->first());
+                $user->removeRole('drafters');
             }
         }
 
         if ($user->isInCommittee($protography)) {
             if (!$user->hasRole('protography')) {
-                $user->attachRole(Role::where('name', '=', 'protography')->first());
+                $user->assignRole('protography');
             }
         } else {
             if ($user->hasRole('protography')) {
-                $user->detachRole(Role::where('name', '=', 'protography')->first());
+                $user->removeRole('protography');
             }
         }
 

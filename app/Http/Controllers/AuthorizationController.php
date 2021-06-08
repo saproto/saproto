@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
-use Proto\Models\Permission;
-use Proto\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Proto\Models\User;
 
 use Redirect;

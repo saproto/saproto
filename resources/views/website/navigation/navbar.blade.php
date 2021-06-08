@@ -53,7 +53,7 @@
 
                 @endforeach
 
-                @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie"]))
+                @canany(["omnomcom","tipcie"])
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
@@ -69,7 +69,7 @@
                                 @endif
                             @endforeach
 
-                            @if (Auth::check() && Auth::user()->can("omnomcom"))
+                            @can("omnomcom")
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("omnomcom::orders::adminlist") }}">Orders</a>
                                 <a class="dropdown-item" href="{{ route("omnomcom::products::list") }}">Products</a>
@@ -80,7 +80,7 @@
                                 <a class="dropdown-item" href="{{ route("omnomcom::products::statistics") }}">
                                     Sales statistics
                                 </a>
-                            @endif
+                            @endcan
 
                             <li role="separator" class="dropdown-divider"></li>
 
@@ -90,26 +90,26 @@
                             <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
                         </ul>
                     </li>
-                @endif
+                @endcan
 
-                @if (Auth::check() && (Auth::user()->can(["board","finadmin","alfred"])))
+                @canany(["board","finadmin","alfred"])
                     <li id="admin-nav-item" class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            @if (Auth::user()->can("board"))
+                            @can("board")
 
                                 <a class="dropdown-item" href="{{ route("user::admin::list") }}">Users</a>
                                 <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
                                 <a class="dropdown-item" href="{{ route("protube::admin") }}">ProTube Admin</a>
                                 <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
-                                @if(Auth::user()->can('protography'))
+                                @can('protography')
                                     <li class="nav-item">
                                         <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
                                     </li>
-                                @endif
+                                @endcan
                                 <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
@@ -129,15 +129,15 @@
 
                                 <a class="dropdown-item" href="{{ route("newsletter::show") }}">Edit Newsletter</a>
 
-                            @endif
+                            @endcan
 
-                            @if (Auth::user()->can("board") && Auth::user()->can("finadmin"))
+                            @if (Auth::user()->hasAllPermissions(["board", "finadmin"]))
 
                                 <li role="separator" class="dropdown-divider"></li>
 
                             @endif
 
-                            @if (Auth::user()->can("finadmin"))
+                            @can("finadmin")
 
                                 <a class="dropdown-item" href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
                                 <a class="dropdown-item" href="{{ route("event::financial::list") }}">Activities</a>
@@ -154,18 +154,18 @@
                                     Cash & Card Payments
                                 </a>
 
-                            @endif
+                            @endcan
 
-                            @if(Auth::user()->can(["alfred","board"]))
+                            @canany(["alfred","board"])
 
                                 <li role="separator" class="dropdown-divider"></li>
 
                                 <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
                                 <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
 
-                            @endif
+                            @endcanany
 
-                            @if(Auth::user()->can(["alfred","sysadmin"]))
+                            @canany(["alfred","sysadmin"])
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -173,20 +173,20 @@
                                     Is Alfred There?
                                 </a>
 
-                            @endif
+                            @endcanany
 
                         </ul>
                     </li>
-                @endif
+                @endcanany
 
-                @if (Auth::check() && Auth::user()->can(["board", "header-image"]))
+                @canany(["board", "header-image"])
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Site <span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
-                            @if(Auth::user()->can('board'))
+                            @can('board')
                                 <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
                                 <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
                                 <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
@@ -198,15 +198,15 @@
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
                                 <li role="separator" class="dropdown-divider"></li>
-                            @endif
+                            @endcan
 
-                            @if(Auth::user()->can('header-image'))
+                            @can('header-image')
                                 <a class="dropdown-item" href="{{ route("headerimage::index") }}">
                                     Header Images
                                 </a>
-                            @endif
+                            @endcan
 
-                            @if(Auth::user()->can('sysadmin'))
+                            @can('sysadmin')
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("protube::radio::index") }}">
                                     ProTube Radio Stations
@@ -220,7 +220,7 @@
                                 <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
                                 <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
                                 <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
-                            @endif
+                            @endcan
 
                             <li role="separator" class="dropdown-divider"></li>
 
@@ -228,7 +228,7 @@
 
                         </ul>
                     </li>
-                @endif
+                @endcanany
 
                 @if(Auth::check() && (Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board'))))
                     <li class="nav-item">

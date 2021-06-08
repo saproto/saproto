@@ -19,9 +19,9 @@
         <div class="card-header">
             <h3 class="card-title m-0">
                 @yield('page-title')
-                @if(Auth::user()->can('board'))
+                @can('board')
                     <a href="{{ route('page::edit', ['id'=>$page->id]) }}" class="btn btn-info py-1 float-right">edit <i class="fa fa-edit"></i></a>
-                @endif
+                @endcan
             </h3>
         </div>
 

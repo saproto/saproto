@@ -2,9 +2,7 @@
 
 namespace Proto\Models;
 
-
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -14,8 +12,7 @@ use DateTime;
 use Carbon\Carbon;
 use Hash;
 
-use Illuminate\Support\Str;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Spatie\Permission\Traits\HasRoles;
 use DirectAdmin\DirectAdmin;
 use Proto\Console\Commands\DirectAdminSync;
 use Laravel\Passport\HasApiTokens;
@@ -24,10 +21,9 @@ use Laravel\Passport\HasApiTokens;
  * Class User
  * @package Proto\Models
  */
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, SoftDeletes, HasApiTokens;
-    use EntrustUserTrait { EntrustUserTrait::restore as private entrustRestore; }
+    use CanResetPassword, SoftDeletes, HasApiTokens, HasRoles;
     protected $dates = ['deleted_at'];
 
     /**
@@ -83,11 +79,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function restore() {
         $this->entrustRestore();
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany('Proto\Models\Role', 'role_user');
     }
 
     public function setPassword($password)

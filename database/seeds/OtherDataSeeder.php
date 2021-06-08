@@ -9,7 +9,6 @@ use Proto\Models\User;
 use Proto\Models\Committee;
 use Proto\Models\Address;
 use Proto\Models\Bank;
-use Proto\Models\Product;
 use Proto\Models\Member;
 use Proto\Models\Activity;
 use Proto\Models\OrderLine;

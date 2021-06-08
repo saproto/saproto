@@ -30,9 +30,9 @@
         <div class="text-muted text-right mt-2">
             <em>
                 <sub>
-                    @if(Auth::user()->can('board'))
+                    @can('board')
                         By {{ $idea->user->name }}
-                    @endif
+                    @endcan
                      -- {{ $idea->created_at->format("j M Y, H:i") }}
                 </sub>
             </em>

@@ -18,3 +18,11 @@
 <script type="text/javascript" src="{{ mix('/assets/manifest.js') }}"></script>
 <script type="text/javascript" src="{{ mix('/assets/vendor.js') }}"></script>
 <script type="text/javascript" src="{{ mix('/assets/application.js') }}"></script>
+
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>

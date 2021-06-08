@@ -16,13 +16,13 @@
             </div>
         @endif
 
-        @if(Auth::user()->can('board'))
+        @can('board')
             <div class="col-6">
                 <a href="{{ route("event::edit", ['id'=>$event->id]) }}" class="btn btn-info btn-block">
                     Edit
                 </a>
             </div>
-        @endif
+        @endcan
 
     </div>
 

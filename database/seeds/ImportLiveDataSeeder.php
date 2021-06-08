@@ -50,49 +50,17 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's import all data we can from the live environment.
         $tables = [
-            [
-                'tableName' => 'accounts',
-            ],
-            [
-                'tableName' => 'achievement',
-            ],
-            [
-                'tableName' => 'activities',
-            ],
-            [
-                'tableName' => 'committees',
-            ],
-            [
-                'tableName' => 'committees_activities',
-            ],
-            [
-                'tableName' => 'events',
-                'exclude' => ['formatted_date', 'is_future']
-            ],
-            [
-                'tableName' => 'mailinglists',
-            ],
-            [
-                'tableName' => 'permissions',
-            ],
-            [
-                'tableName' => 'permission_role',
-            ],
-            [
-                'tableName' => 'products',
-            ],
-            [
-                'tableName' => 'products_categories',
-            ],
-            [
-                'tableName' => 'product_categories',
-            ],
-            [
-                'tableName' => 'roles',
-            ],
-            [
-                'tableName' => 'tickets',
-            ],
+            ['tableName' => 'accounts'],
+            ['tableName' => 'achievement'],
+            ['tableName' => 'activities'],
+            ['tableName' => 'committees'],
+            ['tableName' => 'committees_activities'],
+            ['tableName' => 'events', 'exclude' => ['formatted_date', 'is_future']],
+            ['tableName' => 'mailinglists'],
+            ['tableName' => 'products'],
+            ['tableName' => 'products_categories'],
+            ['tableName' => 'product_categories'],
+            ['tableName' => 'tickets'],
         ];
 
         foreach ($tables as $table) {
@@ -122,7 +90,7 @@ class ImportLiveDataSeeder extends Seeder
             'committee_id' => $rootcommittee->id,
             'role' => 'Automatically Added'
         ]);
-        $newUser->attachRole(Role::where('name', '=', 'sysadmin')->first());
+        $newUser->assignRole('sysadmin');
 
         echo 'Your new user now has admin rights.' . PHP_EOL;
 

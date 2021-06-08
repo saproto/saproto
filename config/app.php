@@ -159,7 +159,6 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class,
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -223,13 +222,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-
-        'role' => Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission' => Zizaco\Entrust\Middleware\EntrustPermission::class,
-        'ability' => Zizaco\Entrust\Middleware\EntrustAbility::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
 
@@ -246,10 +240,11 @@ return [
 
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
+        'Role' => Spatie\Permission\Models\Role::class,
+        'Permission' => Spatie\Permission\Models\Role::class,
+
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
-        'Role' => Proto\Models\Role::class,
-        'Permission' => Proto\Models\Permission::class,
         'Member' => Proto\Models\Member::class,
         'EmailList' => \Proto\Models\EmailList::class,
         'Email' => \Proto\Models\Email::class,

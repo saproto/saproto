@@ -4,12 +4,12 @@
 
     <div class="card-body">
 
-        @if(Auth::user()->can('board'))
+        @can('board')
             <a class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
                href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
                 User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
             </a>
-        @endif
+        @endcan
 
         <ul class="list-group mb-3">
 

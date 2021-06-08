@@ -30,14 +30,14 @@
             </p>
         @endif
 
-        @if(Auth::user()->can('board'))
+        @can('board')
             <p class="card-text ellipsis">
                 <i class="fas fa-user-cog fa-fw mr-3 text-info" aria-hidden="true"></i>
                 <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
                     View this user in the user administration.
                 </a>
             </p>
-        @endif
+        @endcan
 
         <p class="card-text ellipsis">
             <i class="fas fa-envelope fa-fw mr-3"></i>

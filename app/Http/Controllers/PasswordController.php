@@ -9,7 +9,7 @@ use Proto\Models\PasswordEntry;
 use Proto\Http\Requests;
 use Proto\Http\Controllers\Controller;
 
-use Proto\Models\Permission;
+use Spatie\Permission\Models\Permission;
 
 use Redirect;
 use Crypt;
