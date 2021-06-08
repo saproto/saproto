@@ -41,6 +41,7 @@
   },
   "type": "project",
   "require": {
+    "php": "^7.3",
     "aacotroneo/laravel-saml2": "2.1.*",
     "abcaeffchen/sephpa": "~2.0.0-beta1",
     "alaouy/youtube": "2.1.*",
@@ -59,14 +60,14 @@
     "intervention/imagecache": "2.*",
     "jwilsson/spotify-web-api-php": "1.12.*",
     "knplabs/knp-snappy": "^1.0.0",
-    "laravel/framework": "^7.0",
+    "laravel/framework": "^8.0",
     "laravel/helpers": "1.*",
     "laravelcollective/html": "6.*",
-    "laravel/passport": "9.3.*",
+    "laravel/passport": "^10.0.0",
     "league/commonmark": "1.5.*",
     "league/oauth1-client": "1.7.*",
     "lisennk/laravel-slack-web-api": "0.1.*",
-    "milon/barcode": "^7.0",
+    "milon/barcode": "^8.0",
     "mollie/laravel-mollie": "2.*",
     "nesbot/carbon": "2.*",
     "nickurt/laravel-pwned-passwords": "1.*",
@@ -74,7 +75,7 @@
     "pragmarx/google2fa": "0.7.*",
     "swiftmailer/swiftmailer": "6.0.*",
     "sentry/sentry-laravel": "^1.9.0",
-    "vinkla/hashids": "^8.0",
+    "vinkla/hashids": "^9.1.0",
     "willvincent/feeds": "2.*",
     "spatie/laravel-csp": "^2.6",
     "spatie/laravel-permission": "^4.2.0",
@@ -90,7 +91,9 @@
       "database"
     ],
     "psr-4": {
-      "Proto\\": "app/"
+      "Proto\\": "app/",
+      "Database\\Factories\\": "database/factories/",
+      "Database\\Seeders\\": "database/seeders/"
     }
   },
   "scripts": {

@@ -2,10 +2,12 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Validatable
 {
+    use HasFactory;
+
     protected $table = 'addresses';
 
     protected $hidden = ['id'];

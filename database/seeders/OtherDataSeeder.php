@@ -1,5 +1,8 @@
 <?php
 
+namespace Database\Seeders;
+
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 
 use Proto\Models\HashMapItem;
@@ -24,9 +27,6 @@ class OtherDataSeeder extends Seeder
      */
     public function run()
     {
-
-        $faker = Faker\Factory::create();
-
         // Create parent menu items
         MenuItem::create([
             'menuname' => "public pages",
@@ -44,7 +44,7 @@ class OtherDataSeeder extends Seeder
         $n = 10;
         echo "Creating $n pages" . PHP_EOL;
         foreach(range(1, $n) as $index) {
-            $page = factory(Page::class)->create();
+            $page = Page::factory()->create();
 
             MenuItem::create([
                 'parent' => $page->is_member_only + 1,
@@ -60,23 +60,23 @@ class OtherDataSeeder extends Seeder
 
         foreach(range(1, $n) as $index) {
             /** @var $user User */
-            $user = factory(User::class)->create();
+            $user = User::factory()->create();
 
                 // user is a member
                 if (mt_rand(1, 5) > 1) {
-                    $user->bank()->save(factory(Bank::class)->make());
-                    $user->address()->save(factory(Address::class)->make());
-                    $user->member()->save(factory(Member::class)->make());
+                    $user->bank()->save(Bank::factory()->create());
+                    $user->address()->save(Address::factory()->create());
+                    $user->member()->save(Member::factory()->create());
                 }
 
                 // user is not a member
                 else {
                     if (mt_rand(1, 20) > 15) {
-                        $user->address()->save(factory(Address::class)->make());
+                        $user->address()->save(Address::factory()->create());
                     }
 
                     if (mt_rand(1, 20) > 15) {
-                        $user->bank()->save(factory(Bank::class)->make());
+                        $user->bank()->save(Bank::factory()->create());
                     }
                 }
 
@@ -92,7 +92,7 @@ class OtherDataSeeder extends Seeder
         $n = 1000;
 
         foreach(range(1, $n) as $index) {
-            factory(Orderline::class)->create([
+            Orderline::factory()->create([
                 'user_id' => array_random($users),
             ]);
             echo "Creating " . $index . "/" . $n . " orderlines\r";
@@ -105,7 +105,7 @@ class OtherDataSeeder extends Seeder
         $committees = Committee::all()->pluck('id')->toArray();
 
         foreach(range(1, $n) as $index) {
-            factory(CommitteeMembership::class, $n)->create([
+            CommitteeMembership::factory()->create([
                 'user_id' => array_random($users),
                 'committee_id' => array_random($committees),
             ]);
@@ -144,6 +144,8 @@ class OtherDataSeeder extends Seeder
                 $j++;
             }
         }
+
+        $faker = Factory::create();
 
         // Create newsletter text
         echo "Creating newsletter text" . PHP_EOL;

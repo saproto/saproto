@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -23,7 +24,7 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
-    use CanResetPassword, SoftDeletes, HasApiTokens, HasRoles;
+    use CanResetPassword, SoftDeletes, HasApiTokens, HasRoles, HasFactory;
     protected $dates = ['deleted_at'];
 
     /**

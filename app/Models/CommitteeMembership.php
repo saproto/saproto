@@ -2,12 +2,13 @@
 
 namespace Proto\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CommitteeMembership extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, hasFactory;
 
     protected $hidden = ['id', 'committee_id','user_id'];
     protected $dates = ['deleted_at'];
