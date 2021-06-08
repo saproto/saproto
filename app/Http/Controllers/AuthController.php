@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Str;
 use PragmaRX\Google2FA\Google2FA;
 use nickurt\PwnedPasswords\PwnedPasswords;
 

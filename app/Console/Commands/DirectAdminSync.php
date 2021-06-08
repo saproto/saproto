@@ -323,7 +323,7 @@ class DirectAdminSync extends Command
         $queries = [];
 
         foreach ($patch['add'] as $account) {
-            $password = Str::random(32);
+            $password = str_random(32);
             $queries[] = $this->constructQuery('CMD_API_POP', [
                 'domain' => getenv('DA_DOMAIN'),
                 'action' => 'create',

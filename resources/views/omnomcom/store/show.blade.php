@@ -818,28 +818,28 @@
 
 </div>
 
-@section('javascript')
-    @include('website.layouts.assets.javascripts')
-@show
 
-<script type="text/javascript">
+@include('website.layouts.assets.javascripts')
+@stack('javascript')
 
-    var modal_status = null;
-    var purchase_processing = null;
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    var rfid_link_card = null;
+    let modal_status = null;
+    let purchase_processing = null;
 
-    var cash = false;
-    var bank_card = false;
+    let rfid_link_card = null;
+
+    let cash = false;
+    let bank_card = false;
 
     /*
      Loading the necessary data.
      */
 
-    var images = [];
-    var cart = [];
-    var stock = [];
-    var price = [];
+    let images = [];
+    let cart = [];
+    let stock = [];
+    let price = [];
 
     //--formatter:off
     @foreach($categories as $category)
@@ -879,9 +879,9 @@
 
         if ($(this).hasClass('random')) {
             if ($(this).attr('data-stock') > 0) {
-                var list = $(this).attr('data-list');
-                var data = list.split(",");
-                var selected = Math.floor(Math.random() * data.length);
+                let list = $(this).attr('data-list');
+                let data = list.split(",");
+                let selected = Math.floor(Math.random() * data.length);
 
                 if (stock[data[selected]] < 1) {
                     $(this).click();
@@ -906,7 +906,7 @@
                 cart[$(this).attr('data-id')]++;
                 stock[$(this).attr('data-id')]--;
 
-                var s = stock[$(this).attr('data-id')];
+                let s = stock[$(this).attr('data-id')];
                 $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
                 update();
@@ -917,19 +917,19 @@
 
     })
 
-    $('#cart').delegate('.cart-product', 'click', function () {
+    $('#cart').on('delegate', '.cart-product', 'click', function () {
 
         cart[$(this).attr('data-id')]--;
         stock[$(this).attr('data-id')]++;
 
-        var s = stock[$(this).attr('data-id')];
+        let s = stock[$(this).attr('data-id')];
         $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
 
         update();
 
     });
 
-    $("#purchase-button").on("click", function () {
+    $("#purchase-button").on('click', function () {
 
         $("#rfid-modal .modal-status").html("<span style='color: orange;'>Working on your purchase...<span>");
         purchase(null, 'account');
@@ -966,7 +966,7 @@
             success: function (data) {
                 data = JSON.parse(data);
 
-                if (data.status == "OK") {
+                if (data.status === "OK") {
                     if (!data.hasOwnProperty('message')) {
                         finishPurchase();
                     } else {
@@ -979,7 +979,7 @@
             },
             error: function (xhr, status) {
                 purchase_processing = null;
-                if (xhr.status == 503) {
+                if (xhr.status === 503) {
                     $("#purchase-modal .modal-status").html("The website is currently in maintenance. Please try again in 30 seconds.");
                 } else {
                     $("#purchase-modal .modal-status").html("There is something wrong with the website, call someone to help!");
@@ -1013,9 +1013,9 @@
 
     function update() {
         $("#cart").html("");
-        var anythingincart = false;
-        var ordertotal = 0;
-        for (id in cart) {
+        let anythingincart = false;
+        let ordertotal = 0;
+        for (let id in cart) {
             if (cart[id] > 0) {
                 ordertotal += price[id] * cart[id];
                 anythingincart = true;
@@ -1034,11 +1034,11 @@
         $("#total").html(ordertotal.toFixed(2));
 
 
-        var lists = $('.random');
-        for (var i = 0; i < lists.length; i++) {
-            var count = 0;
-            var products = $(lists[i]).siblings();
-            for (var j = 0; j < products.length; j++) {
+        let lists = $('.random');
+        for (let i = 0; i < lists.length; i++) {
+            let count = 0;
+            let products = $(lists[i]).siblings();
+            for (let j = 0; j < products.length; j++) {
                 if (stock[$(products[j]).attr('data-id')] > 0) count++;
             }
             $(lists[i]).attr('data-stock', count);
@@ -1049,7 +1049,7 @@
      RFID scanner integration
      */
 
-    var server;
+    let server;
 
     establishNfcConnection();
 
@@ -1076,14 +1076,14 @@
         };
 
         server.onmessage = function (raw) {
-            data = JSON.parse(raw.data).uid;
+            let data = JSON.parse(raw.data).uid;
             console.log('Received card input: ' + data);
 
-            if (modal_status == "badcard") {
+            if (modal_status === "badcard") {
                 return;
             }
 
-            if (data == "") {
+            if (data === "") {
                 $("#modal-overlay").show();
                 $(".modal").addClass('inactive');
                 $("#badcard-modal").removeClass('inactive');
@@ -1092,7 +1092,7 @@
             }
             $("#badcard-modal").addClass('inactive');
 
-            if (modal_status == 'rfid') {
+            if (modal_status === 'rfid') {
 
                 if (rfid_link_card == null) {
                     rfid_link_card = data;
@@ -1121,15 +1121,15 @@
                     });
                 }
 
-            } else if (modal_status == 'purchase') {
+            } else if (modal_status === 'purchase') {
 
                 purchase(data, 'card');
 
             } else {
 
-                var anythingincart = false;
+                let anythingincart = false;
 
-                for (id in cart) {
+                for (let id in cart) {
                     if (cart[id] > 0) {
                         anythingincart = true;
                     }
@@ -1149,7 +1149,7 @@
     }
 
     function doQrAuth(element, description, onComplete) {
-        var auth_token = null;
+        let auth_token = null;
 
         $.ajax({
             url: '{{ route('qr::generate') }}',
@@ -1163,7 +1163,7 @@
                 element.html('Scan this QR code<br><br><img src="{{ route('qr::code', '') }}/' + data.qr_token + '" width="200px" height="200px"><br><br>or go to<br><strong>{{ route('qr::dialog', '') }}/' + data.qr_token + "</strong>");
                 auth_token = data.auth_token;
 
-                var qrAuthInterval = setInterval(function () {
+                let qrAuthInterval = setInterval(function () {
                     // Stop checking if the modal has been dismissed.
                     if (modal_status == null) {
                         clearInterval(qrAuthInterval);
@@ -1258,12 +1258,12 @@
      Handle idle timeout
      */
 
-    var idleTime = 0;
-    var idleWarning = false;
+    let idleTime = 0;
+    let idleWarning = false;
 
     $(document).ready(function () {
         //Increment the idle time counter every minute.
-        var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+        let idleInterval = setInterval(timerIncrement, 1000); // 1 second
 
         //Zero the idle timer on mouse movement.
         $(this).mousemove(function (e) {
@@ -1280,9 +1280,9 @@
         idleTime = idleTime + 1;
 
         if (idleTime > 60 && !idleWarning) { // 1 minutes
-            var anythingincart = false;
+            let anythingincart = false;
 
-            for (id in cart) {
+            for (let id in cart) {
                 if (cart[id] > 0) {
                     anythingincart = true;
                 }
@@ -1302,9 +1302,9 @@
 
     function cart_to_object(cart) {
 
-        object_cart = {};
+        let object_cart = {};
 
-        for (product_id in cart) {
+        for (let product_id in cart) {
 
             if (cart[product_id] > 0) {
                 object_cart[product_id] = cart[product_id]

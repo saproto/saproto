@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+
 require 'minisites.php';
 
 /* Pass viewname to body class */
@@ -488,7 +491,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
-        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
+        Route::get('unscan/{barcode?}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
 
     });
@@ -881,7 +884,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
 
     });
-    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+    Route::get('go/{short?}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
 
     /*
      * DMX Management

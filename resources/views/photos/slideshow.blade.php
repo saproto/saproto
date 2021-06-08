@@ -106,14 +106,14 @@
 
     @include('website.layouts.assets.javascripts')
 
-    <script type="text/javascript">
-        var slideInterval;
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let slideInterval;
 
         const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
 
-        $(document).ready(function () {
+        $(function () {
             startSlideshow();
         });
 
@@ -124,7 +124,7 @@
                 success: function (data) {
                     $('#albums').html('');
                     $(data).each(function () {
-                        album_date = new Date(this.date_taken * 1000);
+                        let album_date = new Date(this.date_taken * 1000);
                         $('#albums').append('<option value="' + this.id + '">' + this.name + ' (' + MONTH_NAMES[album_date.getMonth()] + ' ' + album_date.getFullYear() + ')</option>')
                     });
 
@@ -137,13 +137,13 @@
                 }
             });
 
-            $('#albums').bind('change', function () {
+            $('#albums').on('bind', 'change', function () {
                 displayAlbum($(this).val());
             });
         }
 
         function displayRandomAlbum() {
-            var random = $('#albums > option:nth-child(' + Math.round(Math.random() * $('#albums > option').length) + ')').val();
+            let random = $('#albums > option:nth-child(' + Math.round(Math.random() * $('#albums > option').length) + ')').val();
             displayAlbum(random);
         }
 
@@ -179,7 +179,7 @@
         function prepareSlideshow() {
             $('#slideshow > div:first-child').addClass('active');
 
-            var z = 1;
+            let z = 1;
             $('#slideshow > div').each(function () {
                 $(this).css({
                     zIndex: z
@@ -190,7 +190,7 @@
         }
 
         function slide() {
-            var next = $('#slideshow > div.active').next();
+            let next = $('#slideshow > div.active').next();
             $('#slideshow > div.active').removeClass('active');
 
             if (next.length > 0) {

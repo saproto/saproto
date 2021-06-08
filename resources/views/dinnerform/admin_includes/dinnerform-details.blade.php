@@ -23,7 +23,7 @@
                             <label for="restaurant">Dinner form restaurant:</label>
                             <input type="text" class="form-control" id="restaurant" name="restaurant"
                                    placeholder="Elat Roma"
-                                   value="{{ $dinnerformCurrent->restaurant or '' }}"
+                                   value="{{ $dinnerformCurrent->restaurant ?? '' }}"
                                    required
                             />
 
@@ -35,7 +35,7 @@
 
                             <label for="description">Description:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Order with us at Elat Roma" value="{{ $dinnerformCurrent->description or '' }}" required>
+                                   placeholder="Order with us at Elat Roma" value="{{ $dinnerformCurrent->description ?? '' }}" required>
 
                         </div>
                     </div>
@@ -44,7 +44,7 @@
 
                             <label for="url">Url:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   value="{{ $dinnerformCurrent->url or 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
+                                   value="{{ $dinnerformCurrent->url ?? 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
 
                         </div>
                     </div>

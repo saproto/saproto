@@ -31,11 +31,12 @@
 
                     </div>
 
+                    <div class="table-responsive">
                     <table class="table table-hover table-borderless table-sm">
 
                         <thead>
 
-                        <tr>
+                        <tr class="text-nowrap">
 
                             <th></th>
                             <th>Product Name</th>
@@ -82,6 +83,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                 </div>
 

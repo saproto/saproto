@@ -80,11 +80,9 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         document.onkeydown = checkKey;
 
@@ -94,20 +92,20 @@
 
             e = e || window.event;
 
-            if (e.keyCode == '37') {
+            if (e.keyCode === '37') {
                 @if ($photo->previous != null)
                     window.location.href = '{{route("photo::view", ["id"=> $photo->previous])}}';
                 @endif
             }
-            else if (e.keyCode == '39') {
+            else if (e.keyCode === '39') {
                 @if ($photo->next != null)
                     window.location.href = '{{route("photo::view", ["id"=> $photo->next])}}';
                 @endif
-            } else if (e.keyCode == '38') {
+            } else if (e.keyCode === '38') {
                 @if (Auth::check())
                     window.location.href = '{{route("photo::likes", ["id"=> $photo->id])}}';
                 @endif
-            } else if (e.keyCode == '40') {
+            } else if (e.keyCode === '40') {
                 @if (Auth::check())
                     window.location.href = '{{route("photo::dislikes", ["id"=> $photo->id])}}';
                 @endif
@@ -117,7 +115,7 @@
 
     </script>
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         (function (window, location) {
             history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
             history.pushState(null, document.title, location.pathname);
@@ -133,4 +131,4 @@
         }(window, location));
     </script>
 
-@endsection
+@endpush

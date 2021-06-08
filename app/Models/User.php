@@ -14,6 +14,7 @@ use DateTime;
 use Carbon\Carbon;
 use Hash;
 
+use Illuminate\Support\Str;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use DirectAdmin\DirectAdmin;
 use Proto\Console\Commands\DirectAdminSync;
@@ -25,7 +26,8 @@ use Laravel\Passport\HasApiTokens;
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes, HasApiTokens;
+    use Authenticatable, CanResetPassword, SoftDeletes, HasApiTokens;
+    use EntrustUserTrait { EntrustUserTrait::restore as private entrustRestore; }
     protected $dates = ['deleted_at'];
 
     /**
@@ -77,6 +79,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (PlayedVideo::where('user_id', $this->id)->count() > 0) return false;
         if (AchievementOwnership::where('user_id', $this->id)->count() > 0) return false;
         return true;
+    }
+
+    public function restore() {
+        $this->entrustRestore();
     }
 
     public function roles()

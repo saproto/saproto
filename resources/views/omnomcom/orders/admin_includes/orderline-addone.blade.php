@@ -29,7 +29,7 @@
 
     </div>
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $('.form-control').select2({width: 'resolve'});
     </script>
 

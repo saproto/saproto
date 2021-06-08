@@ -20,58 +20,62 @@
                         Delete all past campaigns.</a>
                 </div>
 
-                <table class="table table-hover table-sm">
+                <div class="table-responsive">
 
-                    <thead>
+                    <table class="table table-hover table-sm">
 
-                    <tr class="bg-dark text-white">
+                        <thead>
 
-                        <td></td>
-                        <td>Campaign name</td>
-                        <td>Start</td>
-                        <td>End</td>
-                        <td>Slide duration</td>
-                        <td>Controls</td>
+                        <tr class="bg-dark text-white">
 
-                    </tr>
-
-                    </thead>
-
-                    @foreach($messages as $message)
-
-                        <tr {!! ($message->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
-
-                            <td>
-                                @if($message->youtube_id)
-                                    <i class="fab fa-youtube" aria-hidden="true"></i>
-                                @elseif($message->image)
-                                    <i class="fas fa-picture-o" aria-hidden="true"></i>
-                                @endif
-                            </td>
-                            <td>{{ $message->name }}</td>
-                            <td>{{ date('l F j Y, H:i', $message->campaign_start) }}</td>
-                            <td>{{ date('l F j Y, H:i', $message->campaign_end) }}</td>
-                            <td>
-                                @if($message->image || $message->youtube_id)
-                                    {{ $message->slide_duration }} seconds
-                                @else
-                                    <p style="color: red;">no content</p>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}">
-                                    <i class="fas fa-edit mr-2" aria-hidden="true"></i>
-                                </a>
-                                <a href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}">
-                                    <i class="fas fa-trash text-danger" aria-hidden="true"></i>
-                                </a>
-                            </td>
+                            <td></td>
+                            <td>Campaign name</td>
+                            <td>Start</td>
+                            <td>End</td>
+                            <td>Slide duration</td>
+                            <td>Controls</td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        @foreach($messages as $message)
+
+                            <tr {!! ($message->campaign_end < date('U') ? 'style="opacity: 0.5;"': '') !!}>
+
+                                <td>
+                                    @if($message->youtube_id)
+                                        <i class="fab fa-youtube" aria-hidden="true"></i>
+                                    @elseif($message->image)
+                                        <i class="fas fa-picture-o" aria-hidden="true"></i>
+                                    @endif
+                                </td>
+                                <td style="overflow-wrap: break-word; max-width: 160px">{{ $message->name }}</td>
+                                <td>{{ date('l F j Y, H:i', $message->campaign_start) }}</td>
+                                <td>{{ date('l F j Y, H:i', $message->campaign_end) }}</td>
+                                <td>
+                                    @if($message->image || $message->youtube_id)
+                                        {{ $message->slide_duration }} seconds
+                                    @else
+                                        <p class="text-danger">no content!</p>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}">
+                                        <i class="fas fa-edit mr-2" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}">
+                                        <i class="fas fa-trash text-danger" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                </div>
 
                 <div class="card-footer pb-0">
                     {{ $messages->links() }}

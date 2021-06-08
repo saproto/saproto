@@ -22,12 +22,11 @@
     </div>
 </div>
 
-@section('javascript')
-    @parent
-    <script type="text/javascript">
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $('#removeMemberForm').on('show.bs.modal', function(e) {
            let memberformId = $(e.relatedTarget).data('memberform-id');
-           $('#removeMemberForm').find('form').attr('action', "{{ route("memberform::delete", ['id' => null]) }}/"+memberformId);
+           $('#removeMemberForm').find('form').attr('action', "{{ route("memberform::delete", ['id' => ':id']) }}".replace(':id', memberformId));
         });
     </script>
-@endsection
+@endpush

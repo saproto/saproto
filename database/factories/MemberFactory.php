@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 /** @var $factory Closure */
 $factory->define(Proto\Models\Member::class,

@@ -25,7 +25,7 @@ class AchievementController extends Controller
 
     public function create()
     {
-        return view('achievement.manage', ['new' => true, 'achievement' => null]);
+        return view('achievement.manage', ['achievement' => null]);
     }
 
     public function store(Request $request)

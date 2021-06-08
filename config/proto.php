@@ -141,7 +141,7 @@ return [
     | Protopeners Calendar
     |--------------------------------------------------------------------------
     |
-    | The Google calendar ID for the Protopeners.
+    | The Google calendar ID for the ProtOpeners.
     |
     */
 
@@ -258,7 +258,7 @@ return [
     | Soundboard Configuration
     |--------------------------------------------------------------------------
     |
-    | Some Soundboard sounds are played automatially. Here, the corresponding
+    | Some Soundboard sounds are played automatically. Here, the corresponding
     | IDs are being set.
     |
     */
@@ -288,14 +288,15 @@ return [
     | Website Theme configuration
     |--------------------------------------------------------------------------
     |
-    | The different css themes.
+    | The different css themes. Must match name of theme SCSS file!
     |
     */
 
     'themes' => [
-        'Light' => 'assets/application-light.css',
-        'Dark' => 'assets/application-dark.css',
-        'Rainbow Barf' => 'assets/application-rainbowbarf.css'
+        0 => 'light',
+        1 => 'dark',
+        2 => 'rainbowbarf',
+        3 => 'broto'
     ],
 
     // Analytics URL

@@ -19,9 +19,8 @@
 
 @endsection
 
-@section('javascript')
-    @parent
-    <script>
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $(function() {
             $('.gi_upvote').on('click', function(e) {
                 let id = $(e.target).attr('data-id');
@@ -67,4 +66,4 @@
             }
         });
     </script>
-@endsection
+@endpush

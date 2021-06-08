@@ -59,7 +59,7 @@ class IsAlfredThereController extends Controller
     {
         $status = IsAlfredThereController::getAlfredsStatus();
         $result = new \stdClass();
-        if ($status->value == 'there' or $status->value == 'unknown') {
+        if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
         } elseif (preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{4}/', $status->value) === 1) {

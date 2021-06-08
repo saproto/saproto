@@ -261,24 +261,22 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script>
-        var fileQueue = [];
-        var nextId = 1;
-        var uploadRunning = false;
-        var droparea = document.getElementById('photoadmin__droparea');
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let fileQueue = [];
+        let nextId = 1;
+        let uploadRunning = false;
+        let droparea = document.getElementById('photoadmin__droparea');
 
         (function () {
             $('#publishedModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget);
-                var value = button.attr('value');
-                var text = button.html();
-                var classes = button.attr('class');
-                var modal = $(this);
-                var newButton = modal.find('#confirmButton');
+                let button = $(event.relatedTarget);
+                let value = button.attr('value');
+                let text = button.html();
+                let classes = button.attr('class');
+                let modal = $(this);
+                let newButton = modal.find('#confirmButton');
                 newButton.html(text);
                 newButton.attr('value', value);
                 newButton.attr('class', classes);
@@ -372,4 +370,4 @@
         }
     </script>
 
-@endsection
+@endpush

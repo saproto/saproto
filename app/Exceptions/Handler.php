@@ -5,9 +5,10 @@ namespace Proto\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Intervention\Image\Exception\NotReadableException;
 use Illuminate\Session\TokenMismatchException;
 
@@ -27,11 +28,11 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotFoundHttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotReadableException::class,
         ValidationException::class,
         AuthorizationException::class
@@ -44,8 +45,9 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      * @return void
+     * @throws Exception
      */
     public function report(Exception $e)
     {
@@ -99,7 +101,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Illuminate\Auth\AuthenticationException $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse| \Illuminate\Http\RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
@@ -113,10 +115,10 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpException.
      *
-     * @param  \Symfony\Component\HttpKernel\Exception\HttpException $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param HttpExceptionInterface $e
+     * @return Response
      */
-    protected function renderHttpException(HttpException $e)
+    protected function renderHttpException(HttpExceptionInterface $e)
     {
         if (!view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());

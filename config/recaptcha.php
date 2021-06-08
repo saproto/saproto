@@ -45,7 +45,7 @@ return [
      * @since v3.5.0
      *
      */
-    'curl_timeout'                 => 10,
+    'curl_timeout'                 => 1,
 
     /**
      *
@@ -78,7 +78,7 @@ return [
      * @since v3.6.0
      *
      */
-    'default_language'             => 'en-GB',
+    'default_language'             => null,
 
     /**
      *
@@ -98,17 +98,6 @@ return [
      *
      */
     'explicit'                     => false,
-
-    /**
-     *
-     * Set API domain. You can use "www.recaptcha.net" in case "www.google.com" is not accessible.
-     * (no check will be made on the entered value)
-     * @see   https://developers.google.com/recaptcha/docs/faq#can-i-use-recaptcha-globally
-     * @since v4.3.0
-     * Default 'www.google.com' (ReCaptchaBuilder::DEFAULT_RECAPTCHA_API_DOMAIN)
-     *
-     */
-    'api_domain'                   => 'www.google.com',
 
     /**
      *

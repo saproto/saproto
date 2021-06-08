@@ -35,7 +35,7 @@
                     <label for="name">Product name:</label>
                     <input type="text" class="form-control" id="name" name="name"
                            placeholder="Bertie Bott's Every Flavour Beans"
-                           value="{{ $product->name or '' }}"
+                           value="{{ $product->name ?? '' }}"
                            required>
 
                 </div>
@@ -48,7 +48,7 @@
                             <span class="input-group-text">&euro;</span>
                         </div>
                         <input type="text" class="form-control" id="price" name="price"
-                               placeholder="0" value="{{ $product->price or '' }}" required>
+                               placeholder="0" value="{{ $product->price ?? '' }}" required>
                     </div>
 
                 </div>
@@ -61,7 +61,7 @@
 
                     <label for="name">Supplier ID:</label>
                     <input type="text" class="form-control" id="supplier_id" name="supplier_id"
-                           placeholder="12345678" value="{{ $product->supplier_id or '' }}">
+                           placeholder="12345678" value="{{ $product->supplier_id ?? '' }}">
 
                 </div>
 
@@ -74,7 +74,7 @@
                         :
                     </label>
                     <input type="number" class="form-control" id="supplier_collo" name="supplier_collo"
-                           placeholder="0" value="{{ $product->supplier_collo or '' }}">
+                           placeholder="0" value="{{ $product->supplier_collo ?? '' }}">
 
                 </div>
 
@@ -86,7 +86,7 @@
 
                     <label for="stock">Current stock:</label>
                     <input type="number" class="form-control" id="stock" name="stock"
-                           placeholder="0" value="{{ $product->stock or '' }}">
+                           placeholder="0" value="{{ $product->stock ?? '' }}">
 
                 </div>
 
@@ -94,7 +94,7 @@
 
                     <label for="preferred_stock">Preferred stock:</label>
                     <input type="number" class="form-control" id="preferred_stock" name="preferred_stock"
-                           placeholder="0" value="{{ $product->preferred_stock or '' }}">
+                           placeholder="0" value="{{ $product->preferred_stock ?? '' }}">
 
                 </div>
 
@@ -102,7 +102,7 @@
 
                     <label for="max_stock">Maximum stock:</label>
                     <input type="number" class="form-control" id="max_stock" name="max_stock"
-                           placeholder="0" value="{{ $product->max_stock or '' }}">
+                           placeholder="0" value="{{ $product->max_stock ?? '' }}">
 
                 </div>
 
@@ -113,7 +113,7 @@
               <div class="col-md-4">
                 <label for="price">Calories:</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories or '' }}">
+                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories ?? '' }}">
                 </div>
               </div>
 

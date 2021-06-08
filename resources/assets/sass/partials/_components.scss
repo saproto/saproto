@@ -1,0 +1,458 @@
+// Achievements
+.achievement- {
+  &common {
+    border-color: #d86100 !important;
+    background: #fd9744;
+    color: #d86100;
+  }
+  &uncommon {
+    border-color: #808080 !important;
+    background: #cccccc;
+    color: #808080;
+  }
+  &rare {
+    border-color: #a77d00 !important;
+    background: #ffd02a;
+    color: #a77d00;
+  }
+  &epic {
+    border-color: #638080 !important;
+    background: #b9cccc;
+    color: #638080;
+  }
+  &legendary {
+    border-color: #99c5dc !important;
+    background: #d8ebf5;
+    color: #99c5dc;
+  }
+}
+
+select {
+  &.COMMON {
+    color: #de843b;
+  }
+  &.UNCOMMON {
+    color: #de843b;
+  }
+  &.RARE {
+    color: #c09c21;
+  }
+  &.EPIC {
+    color: #9db3b3;
+  }
+  &.LEGENDARY {
+    color: #b7d8e8;
+  }
+}
+
+.achievement-preview {
+  margin-left: -100px !important;
+  width: 683px;
+  @media screen and (max-width: 768px) {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+
+  .achievement {
+    margin: 0;
+  }
+}
+
+// FontAwesome icon picker
+.iconpicker-container, .iconpicker-popover.popover, .popover-title {
+  border: none !important;
+  background: transparent !important;
+  width: 100% !important;
+}
+
+.iconpicker-items {
+  min-height: 0 !important;
+  max-height: none !important;
+  height: 260px;
+}
+
+.iconpicker .iconpicker-item {
+  margin: 0 11px 11px 0 !important;
+}
+
+// Card collapse
+$card-collapse-bg: #fff !default;
+.card-body.collapse {
+  background: $card-collapse-bg;
+}
+
+// Auth
+#auth {
+  &__container {
+    margin-top: 50px;
+    clear: both;
+    text-align: center;
+    .form-control {
+      background-color: #fafafa;
+      border-color: #fafafa;
+      color: #000;
+    }
+    .btn-default {
+      background-color: #222;
+      border-color: #222;
+      color: #fff;
+    }
+  }
+  &__header, &__container {
+    color: #fff;
+  }
+  &__logo {
+    margin-bottom: 25px;
+    width: 50%;
+  }
+}
+
+// Company logos
+.rotating-logo {
+  animation: rotate 3s infinite linear;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.company-athom {
+  @extend .rotating-logo;
+}
+
+// Errors
+#error {
+  &__header {
+    margin-top: 100px;
+    text-align: center;
+  }
+  &__container {
+    margin-top: 25px;
+    clear: both;
+    text-align: center;
+    .form-control {
+      background-color: #fafafa;
+      border-color: #fafafa;
+      color: #000;
+    }
+    .btn-default {
+      background-color: #222;
+      border-color: #222;
+      color: #fff;
+    }
+  }
+  &__header, &__container {
+    color: #fff;
+  }
+  &__logo {
+    margin-top: 100px;
+    margin-bottom: 25px;
+    width: 50%;
+  }
+
+}
+
+// Events
+$event-gradient: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8)) !default;
+$event-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)) !default;
+$event-bg: #eee !default;
+$event-hover-bg: #aaa !default;
+
+.event {
+  * { position: relative; z-index: 2; }
+  p { margin: 0; }
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: $event-gradient;
+    content: '';
+    z-index: 1;
+  }
+  &:hover.event::after {
+    background-image: $event-hover-gradient;
+  }
+  &.no-img {
+    background: $event-bg;
+    &:hover { background: $event-hover-bg; }
+  }
+}
+
+// Product images
+.product-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > img {
+    max-width: 70%;
+    max-height: 70%;
+  }
+
+}
+
+// Password Manager
+.passwordmanager {
+  &__shownote {
+    cursor: pointer;
+  }
+  &__hidden {
+    position: absolute;
+    top: 0;
+    left: -9999px;
+  }
+}
+
+// Photo admin
+#photoadmin {
+  &__droparea {
+    display: none;
+    z-index: 99999;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left: 0;
+    background: rgba(200,200,200,0.5);
+    color: white;
+    * { pointer-events: none; }
+    &__content {
+      font-size: 5rem;
+      position: fixed;
+      top: 50%;
+      left:50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.photo-select {
+  input{ display: none; }
+  .photo-select .card {
+    cursor: pointer;
+    transition: .2s;
+  }
+  .card {
+    label {
+      margin-bottom: 0;
+      cursor: pointer;
+      transition: .2s;
+    }
+    &:before {
+      background-color: white;
+      color: white;
+      content: " ";
+      display: block;
+      border-radius: 50%;
+      border: 1px solid $blue;
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+      line-height: 28px;
+      transition-duration: 0.2s;
+      transform: scale(0);
+      z-index: 10;
+    }
+  }
+  input:checked + .card:before {
+    content: "✓";
+    background-color: $blue;
+    transform: scale(1);
+  }
+  input:checked + .card{
+    transform: scale(0.9);
+  }
+}
+
+// Card Background Photos
+$photo_pop-color: #fff !default;
+$photo-color: #222 !default;
+$photo-hover-color: #222 !default;
+$photo-gradient: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.7)) !default;
+$photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6)) !default;
+
+.photo_pop {
+  color: $photo_pop-color;
+  background-size: cover;
+  background-position: center center;
+  height: 100px;
+  &:hover {
+    color: $photo_pop-color;
+    strong { text-decoration: underline; }
+  }
+}
+
+.photo {
+  color: $photo-color;
+  background-size: cover;
+  background-position: center center;
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: $photo-gradient;
+    content: '';
+    z-index: 0;
+  }
+  &:hover {
+    color: $photo-color;
+    &.photo::after { background-image: $photo-hover-gradient; }
+  }
+  * { z-index: 1; }
+}
+
+// Global
+.underline-on-hover:hover {
+  text-decoration: underline !important;
+}
+
+.card > .table {
+  th {
+    &:first-child {
+      padding-left: 20px !important;
+    }
+    &:last-child {
+      padding-right: 20px !important;
+    }
+  }
+  td {
+    &:first-child {
+      padding-left: 20px !important;
+    }
+
+    &:last-child {
+      padding-right: 20px !important;
+    }
+  }
+}
+
+header > nav.navbar {
+  @media (max-width: 1200px) {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+#admin-nav-item .dropdown-menu {
+  @media (min-width: 1200px) {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+.alert > p {
+  margin: 0 !important;
+}
+
+img {
+  max-width: 100%;
+}
+
+a.card {
+  color: #222;
+}
+
+.fa-pulse {
+  display: inline-block;
+  -moz-animation: pulse 2s infinite linear;
+  -o-animation: pulse 2s infinite linear;
+  -webkit-animation: pulse 2s infinite linear;
+  animation: pulse 2s infinite linear;
+}
+
+@-webkit-keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-ms-keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+// Helpers
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leftborder {
+  border-left-width: 5px !important;
+  border-left-style: solid !important;
+  &-primary {
+    border-left-color: $primary;
+  }
+  &-success {
+    border-left-color: $success;
+  }
+  &-info {
+    border-left-color: $info;
+  }
+  &-warning {
+    border-left-color: $warning;
+  }
+  &-danger {
+    border-left-color: $danger;
+  }
+}
+
+//Select2
+.select2-dropdown {
+  border: 1px solid rgba(0,0,0,.125) !important;
+}
+
+.select2-container {
+  width: 100% !important;
+}
+
+//Signature pad
+#signature-pad {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width:100%;
+  height:300px;
+  background-color: white;
+  border: 2px solid $dark;
+  @extend .rounded;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

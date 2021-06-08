@@ -108,21 +108,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'daily'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -178,6 +163,7 @@ return [
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
@@ -186,9 +172,8 @@ return [
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-        ApiPostcode\ApiPostcodeServiceProvider::class,
-        Aacotroneo\Saml2\Saml2ServiceProvider::class,
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
+        nickurt\PostcodeApi\ServiceProvider::class,
+        Aacotroneo\Saml2\Saml2ServiceProvider::class
 
     ],
 
@@ -237,7 +222,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
         'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
@@ -248,7 +232,11 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
 
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+
+        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
@@ -256,8 +244,6 @@ return [
         'Carbon' => Carbon\Carbon::class,
 
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
-
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
 
         'Committee' => Proto\Models\Committee::class,
         'User' => Proto\Models\User::class,
@@ -286,10 +272,6 @@ return [
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
-
-        'NumberFormatter' => NumberFormatter::class,
-
-        'Postcode' => ApiPostcode\Facade\Postcode::class,
 
     ],
 

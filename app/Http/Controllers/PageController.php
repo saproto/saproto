@@ -142,18 +142,20 @@ class PageController extends Controller
     public function addFile(Request $request, $id)
     {
 
-        if (!$request->file('file')) {
-            Session::flash('flash_message', 'You forgot a file.');
+        if (!$request->file('files')) {
+            Session::flash('flash_message', 'You forgot to add a file.');
             return Redirect::back();
         }
 
         $page = Page::find($id);
 
-        $file = new StorageEntry();
-        $file->createFromFile($request->file('file'));
+        foreach($request->file('files') as $file ) {
+            $newFile = new StorageEntry();
+            $newFile->createFromFile($file);
 
-        $page->files()->attach($file);
-        $page->save();
+            $page->files()->attach($newFile);
+            $page->save();
+        }
 
         return Redirect::route('page::edit', ['id' => $id]);
     }

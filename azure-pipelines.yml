@@ -25,7 +25,7 @@ steps:
     displayName: 'Use PHP version $(phpVersion)'
 
   - script: composer install --no-interaction --prefer-dist
-    displayName: 'Run composer install'
+    displayName: 'Install server side dependencies'
 
   - script: |
       curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
@@ -33,10 +33,10 @@ steps:
     displayName: 'Install NodeJS'
 
   - script: npm install
-    displayName: 'Run npm install'
+    displayName: 'Install client-side dependencies'
 
-  - script: grunt
-    displayName: 'Run grunt'
+  - script: npm run prod
+    displayName: 'Compile client-side dependencies'
 
   - script: rm -rf storage
     displayName: 'Remove storage directory'

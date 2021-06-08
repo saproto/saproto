@@ -39,8 +39,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="form-group">
                             <label for="target">Target</label>
                             <div class="input-group">

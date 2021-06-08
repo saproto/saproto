@@ -21,6 +21,7 @@
 
                 @if ($withdrawals->count() > 0)
 
+                    <div class="table-responsive">
                     <table class="table table-hover">
 
                         <thead>
@@ -72,6 +73,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                     <div class="card-footer pb-0">{{ $withdrawals->links() }}</div>
 

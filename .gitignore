@@ -24,7 +24,8 @@ composer.phar
 
 # Generated files
 /public/assets
-/resources/assets/sass/components.scss
+/public/fonts
+/public/mix-manifest.json
 
 # Dammit, Mac users
 .DS_Store

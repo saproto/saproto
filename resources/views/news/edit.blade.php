@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Revolutionary new activity!" value="{{ $item->title or '' }}" required>
+                                   placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
