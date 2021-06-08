@@ -5,7 +5,6 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 
 use Proto\Http\Controllers\SpotifyController;
-use Proto\Http\Controllers\SlackController;
 
 use DB;
 
@@ -52,7 +51,6 @@ class SpotifySync extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
-                SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -70,7 +68,6 @@ class SpotifySync extends Command
 
             } else {
                 $this->error('Error using API key.');
-                SlackController::sendNotification('[console *proto:spotify*] Error using API key, please investigate.');
                 return;
             }
         }
@@ -126,8 +123,6 @@ class SpotifySync extends Command
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
 
             $this->error('Error during playlist update.');
-            SlackController::sendNotification('[console *proto:spotify*] Exception during playlist update. Please investigate.');
-
         }
 
         $this->info("Done!");

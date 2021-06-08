@@ -3,7 +3,6 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Milon\Barcode\DNS2D;
 
 use Auth;

@@ -3,7 +3,6 @@
 use Illuminate\Database\Seeder;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Proto\Models\User;
 use Proto\Models\Member;
 use Proto\Models\Committee;
