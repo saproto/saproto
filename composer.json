@@ -73,7 +73,7 @@
     "nickurt/laravel-postcodeapi": "1.15.*",
     "pragmarx/google2fa": "0.7.*",
     "swiftmailer/swiftmailer": "6.0.*",
-    "sentry/sentry-laravel": "^1.9.0",
+    "sentry/sentry-laravel": "^2.6",
     "vinkla/hashids": "^8.0",
     "willvincent/feeds": "2.*",
     "spatie/laravel-csp": "^2.6",

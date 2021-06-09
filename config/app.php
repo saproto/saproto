@@ -172,7 +172,8 @@ return [
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         nickurt\PostcodeApi\ServiceProvider::class,
-        Aacotroneo\Saml2\Saml2ServiceProvider::class
+        Aacotroneo\Saml2\Saml2ServiceProvider::class,
+        Sentry\Laravel\ServiceProvider::class,
 
     ],
 
@@ -254,7 +255,6 @@ return [
         'PlayedVideo' => \Proto\Models\PlayedVideo::class,
         'Announcement' => \Proto\Models\Announcement::class,
 
-        'SlackController' => \Proto\Http\Controllers\SlackController::class,
         'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
         'MollieController' => \Proto\Http\Controllers\MollieController::class,
 
@@ -267,6 +267,8 @@ return [
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
+
+        'Sentry' => Sentry\Laravel\Facade::class,
 
     ],
 

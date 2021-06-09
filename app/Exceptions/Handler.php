@@ -52,35 +52,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e)
     {
-
-        if (app()->bound('sentry') && $this->shouldReport($e) && App::environment('production')) {
-
-            $sentry = app('sentry');
-
-            if (Auth::check()) {
-
-                $user = Auth::user();
-
-                $committees = [];
-                foreach ($user->committees as $committee) {
-                    $committees[] = $committee->slug;
-                }
-
-                $roles = [];
-                foreach ($user->roles as $role) {
-                    $roles[] = $role->name;
-                }
-
-            }
-
-            $this->sentryID = $sentry->captureException($e);
-
-        } else {
-            return parent::report($e);
+        if ($this->shouldReport($e) && app()->bound('sentry') &&  App::environment('production')) {
+            app('sentry')->captureException($e);
         }
 
         parent::report($e);
-
     }
 
     /**
@@ -93,9 +69,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-
         return parent::render($request, $e);
-
     }
 
     /**
