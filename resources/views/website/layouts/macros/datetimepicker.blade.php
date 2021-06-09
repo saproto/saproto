@@ -11,9 +11,9 @@
                 format: '{{ isset($format) && $format == 'datetime' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY' }}',
                 @isset($placeholder)
                     @if(isset($format) && $format == 'datetime')
-                        defaultDate: moment('{{  date('n/j/Y H:i', $placeholder)}}', 'n/j/Y H:i'),
+                        defaultDate: moment('{{  date('n/j/Y H:i', $placeholder)}}'),
                     @else
-                        defaultDate: moment('{{ date('n/j/Y', $placeholder) }}', 'n/j/Y')
+                        defaultDate: moment('{{ date('n/j/Y', $placeholder) }}')
                     @endif
                 @endisset
             });
