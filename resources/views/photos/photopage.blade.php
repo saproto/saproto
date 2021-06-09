@@ -84,34 +84,33 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        document.onkeydown = checkKey;
+        $('main').on('keydown', (e) => {
+            if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
+                e.preventDefault();
 
-        function checkKey(e) {
-
-            e.preventDefault();
-
-            e = e || window.event;
-
-            if (e.keyCode === '37') {
+            switch(e.key) {
                 @if ($photo->previous != null)
+                case 'ArrowLeft':
                     window.location.href = '{{route("photo::view", ["id"=> $photo->previous])}}';
+                    break;
                 @endif
-            }
-            else if (e.keyCode === '39') {
                 @if ($photo->next != null)
+                case 'ArrowRight':
                     window.location.href = '{{route("photo::view", ["id"=> $photo->next])}}';
+                    break;
                 @endif
-            } else if (e.keyCode === '38') {
                 @if (Auth::check())
+                case 'ArrowUp':
                     window.location.href = '{{route("photo::likes", ["id"=> $photo->id])}}';
+                    break;
                 @endif
-            } else if (e.keyCode === '40') {
                 @if (Auth::check())
+                case 'ArrowDown':
                     window.location.href = '{{route("photo::dislikes", ["id"=> $photo->id])}}';
+                    break;
                 @endif
             }
-        }
-
+        })
 
     </script>
 
