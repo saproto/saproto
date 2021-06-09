@@ -1,4 +1,4 @@
-<footer class="main-footer bg-dark text-white py-3">
+<footer class="main-footer bg-dark text-white py-3 mt-3">
 
     <div class="container">
 
