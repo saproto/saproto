@@ -1,4 +1,4 @@
-<footer class="main-footer bg-dark text-white py-3" style="bottom: 0">
+<footer class="main-footer bg-dark text-white py-3 mt-3">
 
     <div class="container">
 
@@ -52,19 +52,21 @@
 
         <p class="text-center mt-3 mb-0">
             <sub>
-                &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our
-                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank"
-                   class="text-white">
-                    privacy policy
-                </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
-                    responsible disclosure policy
-                </a>.
-                The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank"
-                                                      class="text-white">
+                &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
+                <span class="d-sm-none">
+                    Please familiarize yourself with our
+                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
+                        privacy policy
+                    </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
+                        responsible disclosure policy
+                    </a>.
+                    </span>
+                The website source is available on
+                <a href="https://github.com/saproto/saproto" target="_blank" class="text-white">
                     GitHub
                 </a>.
                 <br>
-                This website has been created with ♥ by the folks of the
+                This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
                 <a href="{{ route('developers') }}" class="text-white">
                     {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                 </a>.

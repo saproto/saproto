@@ -37,7 +37,7 @@
     @if($photos->event !== null)
 
         <a class="btn btn-info btn-block mb-3"
-           href="{{ route('event::show', ['event_id'=>$photos->event->getPublicId()]) }}">
+           href="{{ route('event::show', ['id'=>$photos->event->getPublicId()]) }}">
             This album is linked to the event {{ $photos->event->title }}, click here to go to the event.
         </a>
 

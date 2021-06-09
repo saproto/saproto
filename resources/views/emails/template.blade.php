@@ -5,6 +5,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style> img { width: 100% } </style>
 </head>
 
 <body style="background-color: #f3f3f3; margin: 0; padding: 0; font-family: Arial, sans-serif;">
@@ -13,7 +14,7 @@
 
 <table style="background-color: #fff; width: 500px; margin: 0 auto; padding: 0; border: 1px solid #ddd; border-top: 5px solid #83b716; border-bottom: none;">
     <tr style="padding: 0; margin: 0;">
-        <td style="padding: 20px 40px; text-align: justify;">
+        <td style="padding: 20px 40px; text-align: justify; width:500px">
             @yield('body')
         </td>
     </tr>

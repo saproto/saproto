@@ -64,7 +64,7 @@
                         <div id="information_type_url" class="form-group">
                             <label for="title">Redirect URL</label>
                             <input type="text" class="form-control" id="redirect_url" name="redirect_url"
-                                   placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url or '' }}">
+                                   placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url ?? '' }}">
                         </div>
 
                         @if ($errors->any())

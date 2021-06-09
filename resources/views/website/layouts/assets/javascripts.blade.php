@@ -6,8 +6,6 @@
             api_search_event: "{{ route('api::search::event') }}",
             api_search_product: "{{ route('api::search::product') }}",
             api_search_committee: "{{ route('api::search::committee') }}",
-            api_slack_count: "{{ route('api::slack::count') }}",
-            api_slack_invite: "{{ route('api::slack::invite') }}"
         },
         analytics_url: "{{ config('proto.analytics_url') }}",
         discord_server_id: "{{ config('proto.discord_server_id') }}",

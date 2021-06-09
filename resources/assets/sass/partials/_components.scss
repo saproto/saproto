@@ -456,3 +456,21 @@ a.card {
   -ms-user-select: none;
   user-select: none;
 }
+
+//Pagination
+ul.pagination {
+  justify-content: center;
+}
+
+@media (max-width: 520px){
+  ul.pagination {
+    margin-left: auto;
+    margin-right: auto;
+    li.page-item {
+      display: none;
+      &:first-child, &:last-child, &:nth-child(2), &:nth-last-child(2), &.active, &.disabled {
+        display: block;
+      }
+    }
+  }
+}

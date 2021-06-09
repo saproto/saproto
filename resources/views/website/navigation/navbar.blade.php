@@ -131,7 +131,7 @@
 
                             @endcan
 
-                            @if (Auth::user()->hasAllPermissions(["board", "finadmin"]))
+                            @if(Auth::user()->hasAllPermissions(["board", "finadmin"]))
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -195,6 +195,7 @@
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
                                 <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                 <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
                                 <li role="separator" class="dropdown-divider"></li>
@@ -288,15 +289,6 @@
                                         <i class="fas fa-user mr-1"></i> <span id="discord__online">...</span>
                                     </span>
                                 </a>
-
-                                @if (Auth::check() && Auth::user()->is_member)
-                                    <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
-                                        Slack
-                                        <span class="badge badge-secondary" style="transform: translateY(-1px)">
-                                            <i class="fas fa-user mr-1"></i> <span id="slack__online">...</span>
-                                        </span>
-                                    </a>
-                                @endif
 
                                 <a class="dropdown-item" href="{{ route('protube::dashboard') }}">
                                     ProTube Dashboard
