@@ -9,7 +9,8 @@ use Proto\Models\User;
 
 class UsernameReminderEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $name;
     public $username;

@@ -7,16 +7,10 @@
     </p>
 
     @if($text != '')
-        <p>
-
-            {!! Markdown::convertToHtml($text) !!}
-
-        </p>
+        {!! Markdown::convertToHtml($text) !!}
     @endif
 
-    <p>
-        &nbsp;
-    </p>
+    <br>
 
     @if(Proto\Models\Event::getEventsForNewsletter()->count() > 0)
 

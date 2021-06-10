@@ -88,7 +88,6 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read Collection|Tempadmin[] $tempadmin
  * @property-read Collection|Token[] $tokens
  * @method static bool|null forceDelete()
- * @method static bool|null restore()
  * @method static QueryBuilder|User onlyTrashed()
  * @method static QueryBuilder|User withTrashed()
  * @method static QueryBuilder|User withoutTrashed()
@@ -132,7 +131,11 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, EntrustUserTrait, SoftDeletes, HasApiTokens;
+    use Authenticatable;
+    use CanResetPassword;
+    use SoftDeletes;
+    use HasApiTokens;
+    use EntrustUserTrait { EntrustUserTrait::restore as private entrustRestore; }
 
     protected $table = 'users';
 
@@ -193,6 +196,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function helperReminderSubscriptions()
     {
         return $this->belongsTo('Proto\Models\HelperReminder');
+    }
+
+    public function restore()
+    {
+        $this->entrustRestore();
     }
 
     /** @return BelongsToMany|Role[] */
@@ -326,7 +334,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         // Update DirectAdmin Password
         if ($this->is_member) {
-            $da = new DirectAdmin;
+            $da = new DirectAdmin();
             $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
             $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 

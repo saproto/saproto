@@ -108,21 +108,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'daily'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -178,18 +163,17 @@ return [
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
-        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-        ApiPostcode\ApiPostcodeServiceProvider::class,
+        nickurt\PostcodeApi\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
 
     ],
 
@@ -264,15 +248,13 @@ return [
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
 
-        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
-
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
 
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
 
-        'Postcode' => ApiPostcode\Facade\Postcode::class,
+        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
     ],
 

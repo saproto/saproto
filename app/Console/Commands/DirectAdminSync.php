@@ -4,7 +4,6 @@ namespace Proto\Console\Commands;
 
 use DirectAdmin\DirectAdmin;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
@@ -47,7 +46,7 @@ class DirectAdminSync extends Command
      */
     public function handle()
     {
-        $da = new DirectAdmin;
+        $da = new DirectAdmin();
         $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
         $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 
@@ -311,7 +310,7 @@ class DirectAdminSync extends Command
         $queries = [];
 
         foreach ($patch['add'] as $account) {
-            $password = Str::random(32);
+            $password = str_random(32);
             $queries[] = $this->constructQuery('CMD_API_POP', [
                 'domain' => getenv('DA_DOMAIN'),
                 'action' => 'create',

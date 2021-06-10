@@ -67,7 +67,7 @@ class PageController extends Controller
 
         $page->save();
 
-        Session::flash('flash_message', 'Page '.$page->title.' has been created.');
+        Session::flash('flash_message', "Page $page->title has been created.");
         return Redirect::route('page::list');
     }
 
@@ -188,19 +188,20 @@ class PageController extends Controller
      */
     public function addFile(Request $request, $id)
     {
-        if (! $request->file('file')) {
-            Session::flash('flash_message', 'You forgot a file.');
-
+        if (! $request->file('files')) {
+            Session::flash('flash_message', 'You forgot to add any files.');
             return Redirect::back();
         }
 
         $page = Page::find($id);
 
-        $file = new StorageEntry();
-        $file->createFromFile($request->file('file'));
+        foreach ($request->file('files') as $file) {
+            $newFile = new StorageEntry();
+            $newFile->createFromFile($file);
 
-        $page->files()->attach($file);
-        $page->save();
+            $page->files()->attach($newFile);
+            $page->save();
+        }
 
         return Redirect::route('page::edit', ['id' => $id]);
     }

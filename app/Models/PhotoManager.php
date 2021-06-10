@@ -102,7 +102,7 @@ class PhotoManager extends Model
      */
     public static function getPhoto($photo_id)
     {
-        $photo = Photo::where('id', $photo_id)->first();
+        $photo = Photo::findOrFail($photo_id);
 
         $data = new stdClass();
         $data->photo_url = $photo->url;

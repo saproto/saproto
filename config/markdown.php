@@ -40,7 +40,7 @@ return [
     */
 
     'extensions' => [
-        'Webuni\CommonMark\TableExtension\TableExtension',
+        'League\CommonMark\Extension\Table\TableExtension',
     ],
 
     /*

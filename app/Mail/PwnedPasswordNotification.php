@@ -9,7 +9,8 @@ use Proto\Models\User;
 
 class PwnedPasswordNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $name;
 

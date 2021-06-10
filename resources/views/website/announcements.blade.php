@@ -24,17 +24,15 @@
                 </div>
             </div>
 
-            @section('javascript')
+            @push('javascript')
 
-                @parent
-
-                <script type="text/javascript">
+                <script type="text/javascript" nonce="{{ csp_nonce() }}">
                     $(window).on('load', function () {
                         $('#{{ $announcement->modal_id}}').modal('show');
                     });
                 </script>
 
-            @endsection
+            @endpush
 
         @else
 

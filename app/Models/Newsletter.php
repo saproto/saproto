@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Artisan;
+use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
@@ -97,12 +98,19 @@ class Newsletter extends Model
     }
 
     /** @return bool */
-    public static function canBeSent()
+    public static function lastSentMoreThanWeekAgo()
     {
-        $lastSent = date('Y', self::lastSent()) * 52 + date('W', self::lastSent());
-        $current = date('Y') * 52 + date('W');
+        $lastSent = Carbon::createFromFormat('U', self::lastSent());
+        $current = Carbon::now();
+        $diff = $lastSent->diffInWeeks($current);
+        return $diff >= 1;
+    }
+
+    /** @return bool */
+    public static function hasEvents()
+    {
         $events = Event::getEventsForNewsletter();
-        return $current > $lastSent && $events->count() > 0;
+        return $events->count() > 0;
     }
 
     /** @return bool */
@@ -120,9 +128,6 @@ class Newsletter extends Model
     /** @return bool */
     public static function send()
     {
-        if (! self::canBeSent()) {
-            return false;
-        }
         Artisan::call('proto:newslettercron');
         self::updateLastSent();
         return true;

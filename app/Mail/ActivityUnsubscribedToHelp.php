@@ -9,7 +9,8 @@ use Proto\Models\ActivityParticipation;
 
 class ActivityUnsubscribedToHelp extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $calling_name;
     public $committee_name;

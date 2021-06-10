@@ -21,6 +21,7 @@
 
                 @if (count($fixtures) > 0)
 
+                    <div class="table-responsive">
                     <table class="table table-sm table-hover">
 
                         <thead>
@@ -95,6 +96,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                 @else
                     <div class="card-body">

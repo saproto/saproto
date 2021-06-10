@@ -1,7 +1,7 @@
 <div id="{{ isset($id) ? $id : null  }}" class="card mb-3 {{ isset($classes) ? implode(' ', $classes) : null }}
 {{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}"
    style="text-decoration: none !important;">
-    <a href="{{ $url or '#' }}" class="card-body
+    <a href="{{ $url ?? '#' }}" class="card-body
     @if(isset($photo_pop) && $photo_pop)
             photo_pop
     @else

@@ -9,7 +9,8 @@ use Proto\Models\ActivityParticipation;
 
 class ActivitySubscribedTo extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $activity;
 

@@ -13,35 +13,38 @@
     <div class="card mb-3">
 
         @if($page->featuredImage)
-            <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}"
-                 style="width: 100%;">
+            <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}" style="width: 100%;">
         @endif
 
+        <div class="card-header">
+            <h3 class="card-title m-0">
+                @yield('page-title')
+                @if(Auth::check() && Auth::user()->can('board'))
+                    <a href="{{ route('page::edit', ['id'=>$page->id]) }}" class="btn btn-info py-1 float-right">edit <i class="fa fa-edit"></i></a>
+                @endif
+            </h3>
+        </div>
+
         <div class="card-body">
-            <h5 class="card-title">@yield('page-title')</h5>
-            <p class="card-text">
+                {!! $parsedContent !!}
 
-            {!! $parsedContent !!}
+                @if($page->files->count() > 0 && $page->show_attachments)
 
-            @if($page->files->count() > 0 && $page->show_attachments)
+                    <hr>
 
-                <hr>
+                    <p>
+                        <strong>Attachments</strong>
+                    </p>
 
-                <p>
-                    <strong>Attachments</strong>
-                </p>
+                    @foreach($page->files as $file)
 
-                @foreach($page->files as $file)
+                        <a href="{{ $file->generatePath() }}"                       target="_blank" class="card-link">
+                            <i class="fas fa-paperclip" aria-hidden="true"></i> {{ $file->original_filename }}
+                        </a>
 
-                    <a href="{{ $file->generatePath() }}"                       target="_blank" class="card-link">
-                        <i class="fas fa-paperclip" aria-hidden="true"></i> {{ $file->original_filename }}
-                    </a>
+                    @endforeach
 
-                @endforeach
-
-            @endif
-
-            </p>
+                @endif
         </div>
     </div>
 

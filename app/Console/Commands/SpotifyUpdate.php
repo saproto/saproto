@@ -4,7 +4,6 @@ namespace Proto\Console\Commands;
 
 use DB;
 use Illuminate\Console\Command;
-use Proto\Http\Controllers\SlackController;
 use Proto\Http\Controllers\SpotifyController;
 use Proto\Models\PlayedVideo;
 
@@ -49,7 +48,6 @@ class SpotifyUpdate extends Command
         try {
             if ($spotify->me()->id != config('app-proto.spotify-user')) {
                 $this->error('API key is for the wrong user!');
-                SlackController::sendNotification('[console *proto:spotify*] API key is for the wrong user.');
                 return;
             }
         } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
@@ -65,7 +63,6 @@ class SpotifyUpdate extends Command
                 SpotifyController::setApi($spotify);
             } else {
                 $this->error('Error using API key.');
-                SlackController::sendNotification('[console *proto:spotify*] Error using API key, please investigate.');
                 return;
             }
         }
@@ -94,7 +91,9 @@ class SpotifyUpdate extends Command
                     'title' => $video->video_title,
                     'video_id' => $video->video_id,
                     'spotify_id' => $video->spotify_id,
-                    'title_formatted' => preg_replace('/(\(.*|[^\S{2,}\s])/', '',
+                    'title_formatted' => preg_replace(
+                        '/(\(.*|[^\S{2,}\s])/',
+                        '',
                         str_replace($strip, ' ', strtolower($video->video_title))
                     ),
                     'count' => $video->count,
@@ -127,7 +126,6 @@ class SpotifyUpdate extends Command
                 } catch (\SpotifyWebAPI\SpotifyWebAPIException $e) {
                     $err = $e->getCode().' error during search ('.$video->title_formatted.') for track ('.$video->title.').';
                     $this->error($err);
-                    SlackController::sendNotification('[console *proto:spotify*] '.$err);
                 }
             }
         }

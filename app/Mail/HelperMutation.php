@@ -10,7 +10,8 @@ use Proto\Models\User;
 
 class HelperMutation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $helper_name;
     public $committee;

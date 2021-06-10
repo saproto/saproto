@@ -17,14 +17,15 @@
 # Helper files
 .phpstorm.meta.php
 _ide_helper.php
-.php_cs.cache
+.php-cs-fixer.cache
 
 # Meta files
 composer.phar
 
 # Generated files
 /public/assets
-/resources/assets/sass/components.scss
+/public/fonts
+/public/mix-manifest.json
 
 # Dammit, Mac users
 .DS_Store

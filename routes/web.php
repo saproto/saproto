@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+
 require 'minisites.php';
 
 /* Pass view name to body class */
@@ -257,6 +260,26 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'JobofferController@show']);
     });
 
+    /* Routes related to leaderboards. */
+    Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::', 'middleware' => ['auth', 'member']], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
+
+        Route::group(['middleware' => ['permission:board']], function () {
+            Route::get('list', ['as' => 'admin', 'uses' => 'LeaderboardController@adminIndex']);
+            Route::get('add', ['as' => 'add', 'uses' => 'LeaderboardController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardController@destroy']);
+        });
+
+        Route::group(['prefix' => 'entries', 'as' => 'entries::', 'middleware' => ['permission:board']], function () {
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardEntryController@store']);
+            Route::post('update', ['as' => 'update', 'uses' => 'LeaderboardEntryController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardEntryController@destroy']);
+        });
+    });
+
     /* Routes related to dinnerforms. */
     Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
@@ -399,7 +422,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
-        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
+        Route::get('unscan/{barcode?}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
     });
 
@@ -749,7 +772,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
     });
-    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+    Route::get('go/{short?}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
 
     /* Routes related to the DMX Management. */
     Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:board|alfred']], function () {

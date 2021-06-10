@@ -46,7 +46,8 @@ class SyncWikiAccounts extends Command
                 continue;
             }
 
-            $configlines[] = sprintf('%s:%s:%s:%s:%s',
+            $configlines[] = sprintf(
+                '%s:%s:%s:%s:%s',
                 $user->member->proto_username,
                 $user->password,
                 $user->name,
@@ -75,7 +76,8 @@ class SyncWikiAccounts extends Command
     private function constructWikiGroups($user)
     {
         $rootCommittee = $this->convertCommitteeNameToGroup(
-            Committee::whereSlug(config('proto.rootcommittee'))->firstOrFail()->name);
+            Committee::whereSlug(config('proto.rootcommittee'))->firstOrFail()->name
+        );
         $groups = ['user'];
         $groups = array_merge($groups, $this->convertCommitteesToGroups($user->committees));
         if (in_array($rootCommittee, $groups)) {

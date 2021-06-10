@@ -9,7 +9,8 @@ use Proto\Models\User;
 
 class Newsletter extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $list;

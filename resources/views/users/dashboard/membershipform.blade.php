@@ -4,43 +4,40 @@
     Sign membership contract
 @endsection
 
-
-@section('javascript')
-    @parent
-    <script>
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let signatureAlert = $('#signature-alert');
-        let signatureForm = $('#signature-form');
-        let signatureField = $('#signature');
-        let signatureDrawn = false
+        let canvas = document.getElementById('signature-pad');
+        let signaturePad = new SignaturePad.default(canvas);
 
-        signatureAlert.hide();
+        window.onresize = resizeCanvas;
+        resizeCanvas();
 
-        signatureField.jqSignature({
-            width: 350,
-            height: 300,
-            lineWidth: 3
-        });
-
-        signatureField.on('jq.signature.changed', function() {
-            signatureDrawn = true;
-            signatureAlert.hide();
-            $("input[name='signature']").val(signatureField.jqSignature('getDataURL'));
-        });
-
-        function clearCanvas() {
-            signatureField.jqSignature('clearCanvas');
-            signatureDrawn = false;
+        function resizeCanvas() {
+            // When zoomed out to less than 100%, for some very strange reason,
+            // some browsers report devicePixelRatio as less than 1
+            // and only part of the canvas is cleared then.
+            let ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
         }
 
-        signatureForm.submit(function(e) {
-            if (!signatureDrawn) {
-                e.preventDefault();
-                signatureAlert.show();
-            }
-        })
+        $('#clear').on('click', function() {
+            signaturePad.clear();
+        });
 
+        $('#signature-form').on('submit', function(e) {
+            if (signaturePad.isEmpty()) {
+                e.preventDefault();
+                signatureAlert.removeClass('d-none');
+            } else {
+                $('#signature').val(signaturePad.toDataURL('image/png'));
+            }
+        });
     </script>
-@endsection
+@endpush
 
 @section('container')
 
@@ -87,13 +84,14 @@
                         </p>
 
                         <b>Signature:</b>
-                        <div id="signature-alert" class="alert alert-danger text-center" role="alert">
-                            We need your signature for the membership contract to be valid!
-                        </div>
-                        <div id='signature'>
-                            <button class="btn btn-danger round position-absolute m-2 px-2 py-1" onclick="clearCanvas();">
+                        <div class="wrapper">
+                            <canvas id="signature-pad"></canvas>
+                            <button id="clear" class="btn btn-danger position-absolute m-2 px-2 py-1">
                                 <i class="fas fa-times"></i>
                             </button>
+                        </div>
+                        <div id="signature-alert" class="alert alert-danger text-center d-none p-1 my-2 mx-4" role="alert">
+                            We need your signature for the membership contract to be valid!
                         </div>
 
                         <p>
@@ -102,9 +100,9 @@
                         </p>
 
                         <form id="signature-form" method="POST" action="{{ route('memberform::sign') }}">
-                            {!! csrf_field() !!}
-                            <input class="d-none" name="signature">
-                            <button class="btn btn-primary">Submit</button>
+                            @csrf
+                            <input type="hidden" id="signature" name="signature"/>
+                            <input type="submit" class="btn btn-info">
                         </form>
                     </div>
 

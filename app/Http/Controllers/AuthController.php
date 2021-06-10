@@ -7,6 +7,7 @@ use Exception;
 use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Mail;
 use nickurt\PwnedPasswords\PwnedPasswords;
@@ -67,15 +68,15 @@ class AuthController extends Controller
 
         // User is already logged in
         if (Auth::check()) {
-            self::postLoginRedirect();
+            selft::postLoginRedirect($request);
         // User is not yet logged in.
         } else {
             // Catch a login form submission for two factor authentication.
             if ($request->session()->has('2fa_user')) {
-                return self::handleTwoFactorSubmit($request, $google2fa);
+                return selft::handleTwofactorSubmit($request, $google2fa);
             }
             // Otherwise this is a regular login.
-            return self::handleRegularLogin($request);
+            return selft::handleRegularLogin($request);
         }
     }
 
@@ -134,6 +135,7 @@ class AuthController extends Controller
     /**
      * @param Request $request
      * @return RedirectResponse
+     * @throws ValidationException
      */
     public function postRegisterSurfConext(Request $request)
     {
@@ -226,13 +228,11 @@ class AuthController extends Controller
 
         if ($auth_check == null || $auth_check->id != $user->id) {
             $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
-
             return Redirect::back();
         }
 
         if ($user->member) {
             $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
-
             return Redirect::back();
         }
 
@@ -324,17 +324,13 @@ class AuthController extends Controller
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
                 $request->session()->flash('flash_message', 'Your passwords don\'t match.');
-
                 return Redirect::back();
             } elseif (strlen($request->password) < 10) {
                 $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
                 return Redirect::back();
             }
-
             $reset->user->setPassword($request->password);
-
             PasswordReset::where('token', $request->token)->delete();
-
             $request->session()->flash('flash_message', 'Your password has been changed.');
             return Redirect::route('login::show');
         } else {
@@ -351,10 +347,8 @@ class AuthController extends Controller
     {
         if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
-
             return Redirect::route('login::show');
         }
-
         return view('auth.passchange');
     }
 
@@ -367,7 +361,6 @@ class AuthController extends Controller
     {
         if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
-
             return Redirect::route('login::show');
         }
 
@@ -382,26 +375,21 @@ class AuthController extends Controller
         if ($user_verify && $user_verify->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
                 $request->session()->flash('flash_message', 'The new passwords do not match.');
-
                 return view('auth.passchange');
             } elseif (strlen($pass_new1) < 10) {
                 $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
-
                 return view('auth.passchange');
             } elseif ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
                 $request->session()->flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
-
                 return view('auth.passchange');
             } else {
                 $user->setPassword($pass_new1);
                 $request->session()->flash('flash_message', 'Your password has been changed.');
-
                 return Redirect::route('user::dashboard');
             }
         }
 
         $request->session()->flash('flash_message', 'Old password incorrect.');
-
         return view('auth.passchange');
     }
 
@@ -410,10 +398,8 @@ class AuthController extends Controller
     {
         if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
-
             return Redirect::route('login::show');
         }
-
         return view('auth.sync');
     }
 
@@ -431,7 +417,6 @@ class AuthController extends Controller
 
         $pass = $request->get('password');
         $user = Auth::user();
-
         $user_verify = self::verifyCredentials($user->email, $pass);
 
         if ($user_verify && $user_verify->id === $user->id) {
@@ -493,7 +478,7 @@ class AuthController extends Controller
             $user->utwente_username = ($remoteData['org'] == 'utwente.nl' ? $remoteData['uid'] : null);
             $user->edu_username = $remoteEduUsername;
             $user->save();
-            Session::flash('flash_message', 'We linked your institution account '.$remoteEduUsername.' to your Proto account.');
+            Session::flash('flash_message', "We linked your institution account $remoteEduUsername to your Proto account.");
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
             } else {
@@ -541,7 +526,6 @@ class AuthController extends Controller
                 self::dispatchUsernameEmailFor($user);
             }
             Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
-
             return Redirect::route('login::show');
         } else {
             return view('auth.username');
@@ -710,7 +694,6 @@ class AuthController extends Controller
     {
         if (! $user->member) {
             Session::flash('flash_message', 'Only members can use the Proto SSO. You only have a user account.');
-
             return Redirect::route('becomeamember');
         }
 
@@ -726,7 +709,6 @@ class AuthController extends Controller
 
         if (! array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
             Session::flash('flash_message', 'You are using an unknown Service Provider. Please contact the System Administrators to get your Service Provider whitelisted for Proto SSO.');
-
             return Redirect::route('login::show');
         }
 

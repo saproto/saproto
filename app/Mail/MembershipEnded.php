@@ -10,7 +10,8 @@ use Proto\Models\User;
 
 class MembershipEnded extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $lists;

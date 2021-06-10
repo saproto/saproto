@@ -1,9 +1,8 @@
 @extends('website.layouts.redesign.dashboard')
 
-@section('head')
-    @parent
+@push('head')
     <meta http-equiv="refresh" content="{{ Session::get('passwordstore-verify') - time() }}">
-@endsection
+@endpush
 
 @section('page-title')
     Password Store
@@ -13,7 +12,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-2 mb-3">
+        <div class="col-12 col-sm-2 mb-3">
 
             <a href="{{ route('passwordstore::add', ['type' => 'password']) }}" class="btn btn-success btn-block mb-3">
                 Add Password
@@ -24,7 +23,7 @@
 
         </div>
 
-        <div class="col-8">
+        <div class="col-12 col-sm-8">
 
             <div class="card mb-3">
 
@@ -35,7 +34,8 @@
 
                 @if (count($passwords) > 0)
 
-                    <table class="table table-hover table-borderless table-sm">
+                    <div class="table-responsive">
+                    <table class="table table-hover table-sm">
 
                         <thead>
 
@@ -137,6 +137,7 @@
                         @endforeach
 
                     </table>
+                    </div>
 
                 @else
 
@@ -182,21 +183,20 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script type="text/javascript">
-        $(".passwordmanager__copy").click(function () {
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        $(".passwordmanager__copy").on('click', function () {
             //copyToClipboard($("#" + $(this).attr("copyTarget")));
             copyToClipboard(document.getElementById($(this).attr("copyTarget")));
         });
 
         function copyToClipboard(elem) {
             // create hidden text element, if it doesn't already exist
-            var targetId = "_hiddenCopyText_";
-            var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
-            var origSelectionStart, origSelectionEnd;
+            let targetId = "_hiddenCopyText_";
+            let isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+            let origSelectionStart, origSelectionEnd;
+            let target;
             if (isInput) {
                 // can just use the original source element for the selection and copy
                 target = elem;
@@ -206,7 +206,7 @@
                 // must use a temporary form element for the selection and copy
                 target = document.getElementById(targetId);
                 if (!target) {
-                    var target = document.createElement("textarea");
+                    target = document.createElement("textarea");
                     target.style.position = "absolute";
                     target.style.left = "-9999px";
                     target.style.top = "0";
@@ -216,12 +216,12 @@
                 target.textContent = elem.textContent;
             }
             // select the content
-            var currentFocus = document.activeElement;
+            let currentFocus = document.activeElement;
             target.focus();
             target.setSelectionRange(0, target.value.length);
 
             // copy the selection
-            var succeed;
+            let succeed;
             try {
                 succeed = document.execCommand("copy");
             } catch (e) {
@@ -243,4 +243,4 @@
         }
     </script>
 
-@endsection
+@endpush

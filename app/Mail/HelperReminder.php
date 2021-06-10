@@ -9,7 +9,8 @@ use Proto\Models\HelpingCommittee;
 
 class HelperReminder extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $committee;
     public $event;

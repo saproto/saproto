@@ -9,7 +9,8 @@ use Proto\Models\ActivityParticipation;
 
 class ActivityMovedFromBackup extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $calling_name;
     public $event_id;

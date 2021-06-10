@@ -59,7 +59,7 @@ class AchievementController extends Controller
     /** @return View */
     public function create()
     {
-        return view('achievement.manage', ['new' => true]);
+        return view('achievement.manage', ['achievement' => null]);
     }
 
     /**
@@ -81,7 +81,7 @@ class AchievementController extends Controller
             $achievement->save();
             Session::flash('flash_message', 'saproto.nl/achieve/'.$achievement->page_name.' is not a unique url.');
         } else {
-            $achievement->page_name = $request->page_name;
+            $achievement->page_name = $request->page_name != '' ? $request->page_name : null;
             $achievement->save();
             Session::flash('flash_message', "Achievement '".$achievement->name."' has been created.");
         }
@@ -110,7 +110,7 @@ class AchievementController extends Controller
             $achievement->save();
             Session::flash('flash_message', 'saproto.nl/achieve/'.$request->page_name.' is not a unique url.');
         } else {
-            $achievement->page_name = str_slug($request->page_name);
+            $achievement->page_name = $request->page_name != '' ? $request->page_name : null;
             $achievement->save();
             Session::flash('flash_message', "Achievement '".$achievement->name."' has been updated.");
         }

@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class FeeEmailForBoard extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $charged_fees;
 

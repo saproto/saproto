@@ -116,16 +116,14 @@
     </div>
 </div>
 
-@section('javascript')
+@push('javascript')
 
-    @parent
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    <script type="text/javascript">
-
-        $('#orderlineaddrow').click(function (e) {
+        $('#orderlineaddrow').on('click', function (e) {
             e.preventDefault();
 
-            var oldrow = $('.orderlinerow').last();
+            let oldrow = $('.orderlinerow').last();
 
             $('#orderlinemodal .modal-body').append(oldrow.wrap('<p/>').parent().html());
             oldrow.unwrap();
@@ -138,7 +136,7 @@
             calculateTotalPrice();
         });
 
-        $('div').delegate('.orderlinedeleterow', 'click', function () {
+        $('div').on('delegate', '.orderlinedeleterow', 'click', function () {
             if ($('.orderlinerow').length <= 1) {
                 return;
             }
@@ -147,10 +145,10 @@
         });
 
         function calculateTotalPrice() {
-            var totalPrice = 0;
+            let totalPrice = 0;
 
             $(".orderlinerow").each(function() {
-                var currentPrice = 0;
+                let currentPrice;
 
                 if($(this).find(".orderlineprice").val() === '') {
                     currentPrice = $(this).find(".orderlineproduct").find(":selected").data('price');
@@ -172,4 +170,4 @@
 
     </script>
 
-@endsection
+@endpush

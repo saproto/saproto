@@ -214,13 +214,19 @@ class TicketController extends Controller
      * @param string $barcode
      * @return RedirectResponse
      */
-    public function unscan($barcode)
+    public function unscan($barcode = null)
     {
+        if ($barcode == null) {
+            Session::flash('flash_message', 'No valid barcode presented!');
+            return Redirect::back();
+        }
+
         $ticket = TicketPurchase::where('barcode', $barcode)->first();
         if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not allowed to scan for this event.');
             return Redirect::back();
         }
+
         if ($ticket) {
             $ticket->scanned = null;
             $ticket->save();

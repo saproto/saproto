@@ -3,7 +3,8 @@
 use Faker\Generator as Faker;
 
 /* @var $factory Closure */
-$factory->define(Proto\Models\OrderLine::class,
+$factory->define(
+    Proto\Models\OrderLine::class,
     function (Faker $faker, $attr) {
         $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('now'));
@@ -24,4 +25,5 @@ $factory->define(Proto\Models\OrderLine::class,
             'payed_with_bank_card' => $paidCash == 1 ? $date : null,
             'description' => $faker->sentences(3, true),
         ];
-    });
+    }
+);

@@ -10,7 +10,8 @@ use Proto\Models\Withdrawal;
 
 class OmnomcomFailedWithdrawalNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $withdrawal;

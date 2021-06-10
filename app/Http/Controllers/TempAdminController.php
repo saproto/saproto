@@ -22,7 +22,7 @@ class TempAdminController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $tempAdmin = new Tempadmin;
+        $tempAdmin = new Tempadmin();
         $tempAdmin->created_by = Auth::user()->id;
         $tempAdmin->start_at = Carbon::today();
         $tempAdmin->end_at = Carbon::tomorrow();

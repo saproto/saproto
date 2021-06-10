@@ -16,7 +16,7 @@ use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\Exception\NotReadableException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -27,11 +27,11 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotFoundHttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotReadableException::class,
         ValidationException::class,
         AuthorizationException::class,
@@ -41,9 +41,10 @@ class Handler extends ExceptionHandler
 
     /**
      * Report or log an exception.
+     *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Exception $e
+     * @param  Exception $e
      * @return void
      * @throws Exception
      */
@@ -63,6 +64,7 @@ class Handler extends ExceptionHandler
      * @param  Request $request
      * @param  Exception $e
      * @return Response
+     * @throws Exception
      */
     public function render($request, Exception $e)
     {
@@ -88,10 +90,10 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpException.
      *
-     * @param  HttpException $e
+     * @param HttpExceptionInterface $e
      * @return SymfonyResponse
      */
-    protected function renderHttpException(HttpException $e)
+    protected function renderHttpException(HttpExceptionInterface $e)
     {
         if (! view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());

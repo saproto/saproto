@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class DailyHelperMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $events;

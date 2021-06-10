@@ -51,10 +51,13 @@ class UserAdminController extends Controller
 
         if ($search) {
             $users = $users->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', '%'.$search.'%')
-                    ->orWhere('calling_name', 'LIKE', '%'.$search.'%')
-                    ->orWhere('email', 'LIKE', '%'.$search.'%')
-                    ->orWhere('utwente_username', 'LIKE', '%'.$search.'%');
+                $q->where('name', 'LIKE', "%$search%")
+                    ->orWhere('calling_name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%")
+                    ->orWhere('utwente_username', 'LIKE', "%$search%")
+                    ->orWhereHas('member', function ($q) use ($search) {
+                        $q->where('proto_username', 'LIKE', "%$search%");
+                    });
             });
         }
 
@@ -318,13 +321,11 @@ class UserAdminController extends Controller
 
         if ($user->address === null) {
             Session::flash('flash_message', 'This user has no address!');
-
             return Redirect::back();
         }
 
         if ($user->bank === null) {
             Session::flash('flash_message', 'This user has no bank account!');
-
             return Redirect::back();
         }
 
@@ -371,7 +372,7 @@ class UserAdminController extends Controller
 
         $result = FileController::requestPrint('document', route('memberform::download', ['id' => $user->id]));
 
-        return 'The printer service responded: '.$result;
+        return "The printer service responded: $result";
     }
 
     /**
