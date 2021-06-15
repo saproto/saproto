@@ -28,7 +28,7 @@
                         <label for="name">List name:</label>
                         <input type="text" class="form-control" id="name" name="name"
                                placeholder="Members will see this name, make it descriptive."
-                               value="{{ $list->name or '' }}" required>
+                               value="{{ $list->name ?? '' }}" required>
                     </div>
 
                     <div class="form-group">

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddRfidCards extends Migration
 {
@@ -12,8 +12,7 @@ class AddRfidCards extends Migration
      */
     public function up()
     {
-        Schema::create('rfid', function(Blueprint $table)
-        {
+        Schema::create('rfid', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->string('card_id');

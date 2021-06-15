@@ -2,76 +2,49 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\EmailList;
-
-use Proto\Models\EmailListSubscription;
-use Proto\Models\User;
-
-use Redirect;
 use Auth;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Proto\Models\EmailList;
+use Proto\Models\User;
+use Redirect;
 
 class EmailListController extends Controller
 {
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function create()
     {
         return view('emailadmin.editlist', ['list' => null]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         EmailList::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'is_member_only' => $request->has('is_member_only')
+            'is_member_only' => $request->has('is_member_only'),
         ]);
+
         $request->session()->flash('flash_message', 'Your list has been created!');
         return Redirect::route('email::admin');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function edit($id)
     {
         return view('emailadmin.editlist', ['list' => EmailList::findOrFail($id)]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -79,7 +52,7 @@ class EmailListController extends Controller
         $list->fill([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'is_member_only' => $request->has('is_member_only')
+            'is_member_only' => $request->has('is_member_only'),
         ]);
         $list->save();
 
@@ -88,45 +61,9 @@ class EmailListController extends Controller
     }
 
     /**
-     * Toggle subscription states for a user.
-     *
-     * @param Request $request
-     * @param $id
-     * @param $user_id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function toggleSubscription(Request $request, $id)
-    {
-
-        $user = Auth::user();
-        $list = EmailList::findOrFail($id);
-
-        if ($list->isSubscribed($user)) {
-            if ($list->unsubscribe($user)) {
-                $request->session()->flash('flash_message', 'You have been unsubscribed to the list ' . $list->name . '.');
-                return Redirect::route('user::dashboard');
-            }
-        } else {
-            if ($list->is_member_only && !$user->is_member) {
-                $request->session()->flash('flash_message', 'This list is only for members.');
-                return Redirect::route('user::dashboard');
-            }
-            if ($list->subscribe($user)) {
-                $request->session()->flash('flash_message', 'You have been subscribed to the list ' . $list->name . '.');
-                return Redirect::route('user::dashboard');
-            }
-        }
-
-        $request->session()->flash('flash_message', 'Something went wrong toggling your subscription for ' . $list->name . '.');
-        return Redirect::route('user::dashboard');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy(Request $request, $id)
     {
@@ -134,13 +71,18 @@ class EmailListController extends Controller
         $list->delete();
 
         $request->session()->flash('flash_message', 'The list has been deleted!');
+
         return Redirect::route('email::admin');
     }
 
+    /**
+     * @param array $type
+     * @param User $user
+     */
     public static function autoSubscribeToLists($type, $user)
     {
-        $lists = config('proto.' . $type);
-        foreach($lists as $list) {
+        $lists = config('proto.'.$type);
+        foreach ($lists as $list) {
             $list = EmailList::find($list);
             if ($list) {
                 $list->subscribe($user);
@@ -148,4 +90,39 @@ class EmailListController extends Controller
         }
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function toggleSubscription(Request $request, $id)
+    {
+        $user = Auth::user();
+        /** @var EmailList $list */
+        $list = EmailList::findOrFail($id);
+
+        if ($list->isSubscribed($user)) {
+            if ($list->unsubscribe($user)) {
+                $request->session()->flash('flash_message', 'You have been unsubscribed to the list '.$list->name.'.');
+
+                return Redirect::route('user::dashboard');
+            }
+        } else {
+            if ($list->is_member_only && ! $user->is_member) {
+                $request->session()->flash('flash_message', 'This list is only for members.');
+
+                return Redirect::route('user::dashboard');
+            }
+            if ($list->subscribe($user)) {
+                $request->session()->flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
+
+                return Redirect::route('user::dashboard');
+            }
+        }
+
+        $request->session()->flash('flash_message', 'Something went wrong toggling your subscription for '.$list->name.'.');
+
+        return Redirect::route('user::dashboard');
+    }
 }

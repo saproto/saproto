@@ -4,13 +4,17 @@ namespace Proto\Http\Controllers;
 
 class LdapController extends Controller
 {
-
-    public static function searchUtwente($query, $onlyactive = false)
+    /**
+     * @param $query
+     * @param false $only_active
+     * @return array
+     */
+    public static function searchUtwente($query, $only_active = false)
     {
         $response = file_get_contents(sprintf('%s?key=%s&filter=(%s)', config('ldap.proxy.utwente.url'), config('ldap.proxy.utwente.key'), urlencode($query)));
         $result = json_decode($response)->result;
 
-        if ($onlyactive) {
+        if ($only_active) {
             $result = array_filter($result, function ($row) {
                 if ($row->active) {
                     return true;
@@ -22,5 +26,4 @@ class LdapController extends Controller
 
         return $result;
     }
-
 }

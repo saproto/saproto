@@ -82,8 +82,7 @@
                                             <i class="fas fa-download"></i>
                                         </a>
                                     @else
-                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive.
-"></i>
+                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive."></i>
                                     @endif
                                 </td>
                             </tbody>

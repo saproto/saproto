@@ -39,10 +39,10 @@ class PlaySound extends Command
     public function handle()
     {
         try {
-            file_get_contents(config('herbert.server') . '/soundboard?secret=' . config('herbert.secret') . '&sound=' . $this->argument('sound'));
-            $this->info("Playing sound.");
+            file_get_contents(config('herbert.server').'/soundboard?secret='.config('herbert.secret').'&sound='.$this->argument('sound'));
+            $this->info('Playing sound.');
         } catch (Exception $e) {
-            $this->error("Could not find herbert:", $e->getMessage());
+            $this->error('Could not find herbert:', $e->getMessage());
         }
     }
 }

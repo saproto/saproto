@@ -20,7 +20,7 @@
 
                                 <p class="card-text">
 
-                                    {{ $rfid->name or 'Nameless card' }}<br>
+                                    {{ $rfid->name ?? 'Nameless card' }}<br>
                                     <sup class="texttext-muted">Last used: {{ $rfid->updated_at }}</sup><br>
 
                                     <a class="btn btn-sm btn-outline-danger"

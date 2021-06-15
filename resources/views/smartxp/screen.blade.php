@@ -351,14 +351,13 @@
 
 </div>
 
-@section('javascript')
-    @include('website.layouts.assets.javascripts')
-@show
+@include('website.layouts.assets.javascripts')
+@stack('javascript')
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
 
     function updateClock() {
-        var now = moment();
+        let now = moment();
         $("#clock").html('<i class="fas fa-clock fa-fw mr-2"></i>' + now.format('HH:mm:ss'));
         $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
@@ -372,14 +371,14 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#timetable").html('');
-                    var count = 0;
+                    let count = 0;
                     for (i in data) {
                         if (!data[i].over) {
-                            var start = moment.unix(data[i].start);
-                            var end = moment.unix(data[i].end);
-                            var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                            var title = data[i].title;
-                            var displayTime = '<i class="fas fa-clock fa-fw mr-1"></i>' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i>' + data[i].place + '</span>';
+                            let start = moment.unix(data[i].start);
+                            let end = moment.unix(data[i].end);
+                            let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+                            let title = data[i].title;
+                            let displayTime = '<i class="fas fa-clock fa-fw mr-1"></i>' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i>' + data[i].place + '</span>';
                             $("#timetable").append('<div class="activity">' +
                                 (data[i].studyShort ? '<span class="float-right ml-2">' + '<i class="fas fa-graduation-cap fa-fw mr-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
                                 '<strong>' + data[i].type + '</strong><br>' +
@@ -391,7 +390,7 @@
                             count++;
                         }
                     }
-                    if (count == 0) {
+                    if (count === 0) {
                         $("#timetable").html('<div class="notice">No more lectures today!</div>');
                     }
                 } else {
@@ -415,13 +414,14 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#activities").html('');
-                    for (i in data) {
-                        var start = moment.unix(data[i].start);
-                        var end = moment.unix(data[i].end);
-                        if (start.format('DD-MM') == end.format('DD-MM')) {
-                            var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
+                    for (let i in data) {
+                        let start = moment.unix(data[i].start);
+                        let end = moment.unix(data[i].end);
+                        let time;
+                        if (start.format('DD-MM') === end.format('DD-MM')) {
+                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
                         } else {
-                            var time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                         }
                         $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
                     }
@@ -474,9 +474,9 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#protopeners-timetable").html('');
-                    var open = false;
-                    var count = 0;
-                    for (i in data) {
+                    let open = false;
+                    let count = 0;
+                    for (let i in data) {
                         if (data[i].over) {
                             continue;
                         } else if (data[i].current) {
@@ -484,9 +484,9 @@
                         }
                         count++;
 
-                        var start = moment.unix(data[i].start);
-                        var end = moment.unix(data[i].end);
-                        var time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+                        let start = moment.unix(data[i].start);
+                        let end = moment.unix(data[i].end);
+                        let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
 
                         $("#protopeners-timetable").append('' +
                             '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
@@ -499,7 +499,7 @@
                     } else {
                         $("#protopolis-fa").removeClass('fa-door-open green').addClass('fa-door-closed');
                     }
-                    if (count == 0) {
+                    if (count === 0) {
                         $("#protopeners-timetable").html('<div class="notice">Protopolis closed for today!</div>');
                     }
                 } else {
@@ -517,8 +517,8 @@
     updateProtopeners();
 
     // ProTube
-    var screen = io('{!! config('herbert.server') !!}/protube-screen');
-    var nowplaying;
+    let screen = io('{!! config('herbert.server') !!}/protube-screen');
+    let nowplaying;
 
     screen.on("connect", function () {
 
@@ -532,7 +532,7 @@
 
     screen.on("progress", function (data) {
 
-        var progress = parseInt(data);
+        let progress = parseInt(data);
         $("#protube-ticker").css("width", (data.duration / progress) + "%");
 
     });
@@ -545,7 +545,7 @@
             $("#protube-ticker").css("width", "100%");
             $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
-            var url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
+            let url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
             $("#protube-ticker").css("width", "0%");
             $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ' + data.title);
             $("#protube").removeClass('inactive').css("background-image", url);

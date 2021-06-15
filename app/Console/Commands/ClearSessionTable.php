@@ -2,11 +2,10 @@
 
 namespace Proto\Console\Commands;
 
-use Illuminate\Console\Command;
-
 use DB;
-use Proto\Models\Token;
+use Illuminate\Console\Command;
 use Proto\Models\QrAuthRequest;
+use Proto\Models\Token;
 
 class ClearSessionTable extends Command
 {

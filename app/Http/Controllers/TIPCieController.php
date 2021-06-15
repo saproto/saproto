@@ -2,22 +2,17 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Carbon;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Proto\Models\Account;
 use Proto\Models\OrderLine;
 
 class TIPCieController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return View
      */
     public function orderIndex(Request $request)
     {
@@ -41,10 +36,9 @@ class TIPCieController extends Controller
 
         foreach ($orders as $order) {
             if (in_array($order->product_id, $tipcieProductIds)) {
+                $pid = (string) $order->product_id;
 
-                $pid = (string)$order->product_id;
-
-                if (!array_key_exists($pid, $tipcieOrders)) {
+                if (! array_key_exists($pid, $tipcieOrders)) {
                     $productInfo = new \stdClass();
                     $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
                     $productInfo->amount = 0;
@@ -58,14 +52,13 @@ class TIPCieController extends Controller
                 $dailyTotal += $order->total_price;
 
                 if ($order->payed_with_bank_card) {
-                    $time = (string)$order->created_at;
-                    if (!array_key_exists($time, $pinOrders)) {
+                    $time = (string) $order->created_at;
+                    if (! array_key_exists($time, $pinOrders)) {
                         $pinOrders[$time] = 0;
                     }
                     $pinOrders[$time] += $order->total_price;
                     $pinTotal += $order->total_price;
                 }
-
             }
         }
 

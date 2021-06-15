@@ -44,6 +44,6 @@ return [
     /*
      * Sentry config
      */
-    'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null)
+    'sentry-dsn' => env('SENTRY_PUBLIC_DSN', null),
 
 ];

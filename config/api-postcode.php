@@ -15,6 +15,6 @@ return [
     |
     | Enter here your api token recieved by email from https://api-postcode.nl
     */
-    
+
     'token' => env('API_POSTCODE_TOKEN'),
 ];

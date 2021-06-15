@@ -38,13 +38,13 @@
                         <div class="form-group">
                             <label for="name">Company name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Aperture Science" value="{{ $company->name or '' }}" required>
+                                   placeholder="Aperture Science" value="{{ $company->name ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="url">Company website:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="http://www.aperturescience.com/" value="{{ $company->url or '' }}"
+                                   placeholder="http://www.aperturescience.com/" value="{{ $company->url ?? '' }}"
                                    required>
                         </div>
 

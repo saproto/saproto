@@ -1,9 +1,9 @@
 @extends('website.layouts.redesign.generic')
 
-@section('javascript')
-    @parent
-    <script type="text/javascript">
-        let mySwiper = new Swiper ('.swiper-container', {
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let mySwiper = new Swiper.default('.swiper-container', {
             @if( count($companies) > 1 )
             loop: true,
             slidesPerView: 2,
@@ -33,7 +33,8 @@
             }
         })
     </script>
-@endsection
+
+@endpush
 
 @section('page-title')
     Homepage

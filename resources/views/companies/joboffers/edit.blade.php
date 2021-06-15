@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label for="title">Title</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="Chief Executive Officer" value="{{ $joboffer->title or '' }}" required>
+                                   placeholder="Chief Executive Officer" value="{{ $joboffer->title ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
@@ -64,7 +64,7 @@
                         <div id="information_type_url" class="form-group">
                             <label for="title">Redirect URL</label>
                             <input type="text" class="form-control" id="redirect_url" name="redirect_url"
-                                   placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url or '' }}">
+                                   placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url ?? '' }}">
                         </div>
 
                         @if ($errors->any())
@@ -94,11 +94,9 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script>
+    <script nonce="{{ csp_nonce() }}">
         $(document).ready(updateInformationDisplay);
         $('#information_type_selector').change(updateInformationDisplay);
 
@@ -123,4 +121,4 @@
         }
     </script>
 
-@endsection
+@endpush

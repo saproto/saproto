@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateFilesTable extends Migration
 {
@@ -12,8 +12,7 @@ class CreateFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('files', function(Blueprint $table)
-        {
+        Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
             $table->string('filename');
             $table->string('mime');

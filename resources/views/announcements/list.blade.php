@@ -42,12 +42,12 @@
 
                         @foreach($announcements as $announcement)
 
-                            <tr {!! (!$announcement->showByTime() ? 'style="opacity: 0.5;"': '') !!}>
+                            <tr {!! (!$announcement->show_by_time ? 'style="opacity: 0.5;"': '') !!}>
 
                                 <td>{{ $announcement->description }}</td>
                                 <td>{{ $announcement->display_from }}</td>
                                 <td>{{ $announcement->display_till }}</td>
-                                <td>{{ $announcement->textualVisibility() }}</td>
+                                <td>{{ $announcement->is_visible }}</td>
                                 <td>
                                     <a href="{{ route('announcement::edit', ['id' => $announcement->id]) }}">
                                         <i class="fas fa-edit mr-2"></i>

@@ -1,12 +1,11 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
 use Illuminate\Support\Facades\DB;
-use Proto\Models\User;
-use Proto\Models\Member;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
+use Proto\Models\Member;
+use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
 {
@@ -19,8 +18,8 @@ class ImportLiveDataSeeder extends Seeder
     {
 
         // First let's create our user.
-        $userData = (array)ImportLiveDataSeeder::getDataFromExportApi('user');
-        $memberData = (array)(array_key_exists('member', $userData) ? $userData['member'] : null);
+        $userData = (array) self::getDataFromExportApi('user');
+        $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
         unset($userData['member']);
         unset($userData['photo']);
         unset($userData['roles']);
@@ -45,7 +44,7 @@ class ImportLiveDataSeeder extends Seeder
             $newMember->save();
         }
 
-        echo 'Your new user has been created with your own log-in details password: ' . $newPassword . PHP_EOL;
+        echo 'Your new user has been created with your own log-in details password: '.$newPassword.PHP_EOL;
 
         // Now let's import all data we can from the live environment.
         $tables = [
@@ -66,7 +65,7 @@ class ImportLiveDataSeeder extends Seeder
             ],
             [
                 'tableName' => 'events',
-                'exclude' => ['formatted_date', 'is_future']
+                'exclude' => ['formatted_date', 'is_future'],
             ],
             [
                 'tableName' => 'mailinglists',
@@ -95,10 +94,10 @@ class ImportLiveDataSeeder extends Seeder
         ];
 
         foreach ($tables as $table) {
-            echo "Importing table " . $table['tableName'] . PHP_EOL;
-            $data = (array)ImportLiveDataSeeder::getDataFromExportApi($table['tableName']);
+            echo 'Importing table '.$table['tableName'].PHP_EOL;
+            $data = (array) self::getDataFromExportApi($table['tableName']);
             foreach ($data as $entry) {
-                $entry = (array)$entry;
+                $entry = (array) $entry;
 
                 if (isset($table['exclude'])) {
                     foreach ($table['exclude'] as $exclude) {
@@ -108,10 +107,9 @@ class ImportLiveDataSeeder extends Seeder
 
                 DB::table($table['tableName'])->insert($entry);
             }
-
         }
 
-        echo "All data has been imported." . PHP_EOL;
+        echo 'All data has been imported.'.PHP_EOL;
 
         // Now let's add our user account so that they can access everything.
 
@@ -119,12 +117,11 @@ class ImportLiveDataSeeder extends Seeder
         CommitteeMembership::create([
             'user_id' => $newUser->id,
             'committee_id' => $rootcommittee->id,
-            'role' => 'Automatically Added'
+            'role' => 'Automatically Added',
         ]);
         $newUser->attachRole(Role::where('name', '=', 'sysadmin')->first());
 
-        echo 'Your new user now has admin rights.' . PHP_EOL;
-
+        echo 'Your new user now has admin rights.'.PHP_EOL;
     }
 
     public static function getDataFromExportApi($table)

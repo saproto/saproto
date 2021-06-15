@@ -37,7 +37,7 @@ return [
     */
 
     'additional_mailboxes' => [
-      'boardarchive'
+      'boardarchive',
     ],
 
     /*
@@ -141,7 +141,7 @@ return [
     | Protopeners Calendar
     |--------------------------------------------------------------------------
     |
-    | The Google calendar ID for the Protopeners.
+    | The Google calendar ID for the ProtOpeners.
     |
     */
 
@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => 'Jonathan Matarazzi',
+    'treasurer' => 'Sebastiaan van Loon',
 
     /*
     |--------------------------------------------------------------------------
@@ -215,17 +215,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Slack channel
-    |--------------------------------------------------------------------------
-    |
-    | The default Slack channel for messages.
-    |
-    */
-
-    'slackchannel' => '#hyttioaoac-logs',
-
-    /*
-    |--------------------------------------------------------------------------
     | Domain Configuration
     |--------------------------------------------------------------------------
     |
@@ -238,29 +227,29 @@ return [
             'protu.be',
             'www.protu.be',
             'protube.nl',
-            'www.protube.nl'
+            'www.protube.nl',
         ],
         'omnomcom' => [
             'omnomcom.nl',
-            'www.omnomcom.nl'
+            'www.omnomcom.nl',
         ],
         'smartxp' => [
             'smartxp.nl',
             'www.smartxp.nl',
             'caniworkinthesmartxp.nl',
-            'www.caniworkinthesmartxp.nl'
+            'www.caniworkinthesmartxp.nl',
         ],
         'developers' => [
             'haveyoutriedturningitoffandonagain.nl',
-            'www.haveyoutriedturningitoffandonagain.nl'
+            'www.haveyoutriedturningitoffandonagain.nl',
         ],
         'isalfredthere' => [
             'isalfredthere.nl',
-            'www.isalfredthere.nl'
+            'www.isalfredthere.nl',
         ],
         'static' => [
-            'static.saproto.com'
-        ]
+            'static.saproto.com',
+        ],
     ],
 
     /*
@@ -268,7 +257,7 @@ return [
     | Soundboard Configuration
     |--------------------------------------------------------------------------
     |
-    | Some Soundboard sounds are played automatially. Here, the corresponding
+    | Some Soundboard sounds are played automatically. Here, the corresponding
     | IDs are being set.
     |
     */
@@ -287,10 +276,10 @@ return [
     |
     */
 
-    'sepa_info' => (object)[
+    'sepa_info' => (object) [
         'iban' => env('SEPA_IBAN'),
         'bic' => env('SEPA_BIC'),
-        'creditor_id' => env('SEPA_CI')
+        'creditor_id' => env('SEPA_CI'),
     ],
 
     /*
@@ -298,16 +287,17 @@ return [
     | Website Theme configuration
     |--------------------------------------------------------------------------
     |
-    | The different css themes.
+    | The different css themes. Must match name of theme SCSS file!
     |
     */
 
     'themes' => [
-        'Light' => 'assets/application-light.css',
-        'Dark' => 'assets/application-dark.css',
-        'Rainbow Barf' => 'assets/application-rainbowbarf.css'
+        0 => 'light',
+        1 => 'dark',
+        2 => 'rainbowbarf',
+        3 => 'broto',
     ],
 
     // Analytics URL
-    'analytics_url' => env('ANALYTICS_URL', '')
+    'analytics_url' => env('ANALYTICS_URL', ''),
 ];

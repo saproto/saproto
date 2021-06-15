@@ -20,7 +20,7 @@
                         <label for="description">Internal description:</label>
                         <input type="text" class="form-control" id="description" name="description"
                                placeholder="A short descritpion that only the board can see."
-                               value="{{ $email->description or '' }}" required>
+                               value="{{ $email->description ?? '' }}" required>
                     </div>
 
                 </div>
@@ -31,7 +31,7 @@
                         <label for="subject">E-mail subject:</label>
                         <input type="text" class="form-control" id="subject" name="subject"
                                placeholder="The e-mail subject."
-                               value="{{ $email->subject or '' }}" required>
+                               value="{{ $email->subject ?? '' }}" required>
                     </div>
 
                 </div>
@@ -46,7 +46,7 @@
                         <label for="sender_name">Sender name:</label>
                         <input type="text" class="form-control" id="sender_name" name="sender_name"
                                placeholder="{{ Auth::user()->name }}"
-                               value="{{ $email->sender_name or Auth::user()->name }}" required>
+                               value="{{ $email->sender_name ?? Auth::user()->name }}" required>
                     </div>
 
                 </div>
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label for="sender_address">Sender e-mail:</label>
                         <div class="input-group mb-3">
-                            <input name="sender_address" type="text" class="form-control" placeholder="board" value="{{ $email->sender_address or '' }}" required>
+                            <input name="sender_address" type="text" class="form-control" placeholder="board" value="{{ $email->sender_address ?? '' }}" required>
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
                             </div>
@@ -143,7 +143,7 @@
                         <select multiple name="listSelect[]" id="listSelect" class="form-control"
                                 {{ ($email && $email->to_list ? '' : 'disabled="disabled"') }}>
 
-                            @foreach(EmailList::all() as $list)
+                            @foreach(Proto\Models\EmailList::all() as $list)
 
                                 <option value="{{ $list->id }}" {{ ($email && $email->hasRecipientList($list) ? 'selected' : '' ) }}>
                                     {{ $list->name }}

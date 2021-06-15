@@ -2,22 +2,22 @@
 
 namespace Proto\Exceptions;
 
-use Exception;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Intervention\Image\Exception\NotReadableException;
-use Illuminate\Session\TokenMismatchException;
-
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Validation\ValidationException;
-
-use Illuminate\Auth\AuthenticationException;
-
 use App;
-use Auth;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Intervention\Image\Exception\NotReadableException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,14 +27,14 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotFoundHttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
-        HttpException::class,
+        HttpExceptionInterface::class,
         NotReadableException::class,
         ValidationException::class,
-        AuthorizationException::class
+        AuthorizationException::class,
     ];
 
     private $sentryID;
@@ -44,62 +44,39 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $e
+     * @param  Exception $e
      * @return void
+     * @throws Exception
      */
     public function report(Exception $e)
     {
-
         if (app()->bound('sentry') && $this->shouldReport($e) && App::environment('production')) {
-
             $sentry = app('sentry');
-
-            if (Auth::check()) {
-
-                $user = Auth::user();
-
-                $committees = [];
-                foreach ($user->committees as $committee) {
-                    $committees[] = $committee->slug;
-                }
-
-                $roles = [];
-                foreach ($user->roles as $role) {
-                    $roles[] = $role->name;
-                }
-
-            }
-
             $this->sentryID = $sentry->captureException($e);
-
-        } else {
-            return parent::report($e);
         }
 
         parent::report($e);
-
     }
 
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $e
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  Exception $e
+     * @return Response
+     * @throws Exception
      */
     public function render($request, Exception $e)
     {
-
         return parent::render($request, $e);
-
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Auth\AuthenticationException $exception
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @param  AuthenticationException $exception
+     * @return JsonResponse|RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
@@ -113,16 +90,14 @@ class Handler extends ExceptionHandler
     /**
      * Render the given HttpException.
      *
-     * @param  \Symfony\Component\HttpKernel\Exception\HttpException $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param HttpExceptionInterface $e
+     * @return SymfonyResponse
      */
-    protected function renderHttpException(HttpException $e)
+    protected function renderHttpException(HttpExceptionInterface $e)
     {
-        if (!view()->exists("errors.{$e->getStatusCode()}")) {
+        if (! view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());
         }
         return parent::renderHttpException($e);
     }
-
-
 }

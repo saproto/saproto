@@ -6,6 +6,7 @@
 
     @if(count($orderlines) > 0)
 
+        <div class="table-responsive">
         <table class="table table-hover table-sm">
 
             <tbody>
@@ -21,11 +22,13 @@
                             </a>
                         @endif
                     </td>
-                    <td class="text-right">
+                    <td class="text-right" style="min-width:70px">
                         &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
                         <span class="text-muted mr-2">{{ $orderline->units }}x</span>
+                    </td>
+                    <td style="min-width:150px">
                         {{ $orderline->product->name }}
                     </td>
                     <td>
@@ -57,6 +60,7 @@
             </tbody>
 
         </table>
+        </div>
 
         @if(method_exists($orderlines, 'links'))
             <div class="card-footer pb-0">

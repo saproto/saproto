@@ -1,14 +1,14 @@
-<footer class="main-footer bg-dark text-white pt-3" style="position: absolute; bottom: 0; width: 100%;">
+<footer class="main-footer bg-dark text-white py-3 mt-3">
 
     <div class="container">
 
-        <div class="row vcard ellipsis">
+        <div class="row vcard">
 
-            <div class="col-md-3 col-sm-6 col-6">
+            <div class="col-md-3 col-sm-6 col-5">
                 <strong>
                     <span class="fas fa-home"></span>&nbsp;&nbsp;
-                    <span class="org url" href="https://www.saproto.nl/"><span
-                                class="green">S.A. Proto</span></span>
+                    <a class="org url text-white" href="https://www.saproto.nl/"><span
+                                class="green">S.A. Proto</span></a>
                 </strong>
                 <br>
                 <span class="adr">
@@ -19,7 +19,7 @@
                 </span>
             </div>
 
-            <div class="col-md-3 col-sm-6 col-6">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-7">
                 <br>
                 <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
                 <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">
@@ -44,29 +44,31 @@
                 </a>
             </div>
 
-            <div class="col-lg-3 col-md-6 d-none d-md-block" style="text-align: right;">
+            <div class="col-lg-3 col-md-5 d-none d-md-block" style="text-align: right;">
                 <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
             </div>
 
         </div>
 
-        <p class="text-center mt-3 ellipsis">
+        <p class="text-center mt-3 mb-0">
             <sub>
-                &copy; {{ date('Y') }} S.A. Proto. All rights reserved. Please familiarize yourself with our
-                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank"
-                   class="text-white">
-                    privacy policy
-                </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
-                    responsible disclosure policy
-                </a>.
-                The website source is available on <a href="https://github.com/saproto/saproto" arget="_blank"
-                                                      class="text-white">
+                &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
+                <span class="d-sm-none">
+                    Please familiarize yourself with our
+                    <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf" target="_blank" class="text-white">
+                        privacy policy
+                    </a> and <a href="https://wiki.proto.utwente.nl/ict/responsible-disclosure" class="text-white">
+                        responsible disclosure policy
+                    </a>.
+                    </span>
+                The website source is available on
+                <a href="https://github.com/saproto/saproto" target="_blank" class="text-white">
                     GitHub
                 </a>.
                 <br>
-                This website has been created with ♥ by the folks of the
+                This website has been created with <i class="fas fa-heart text-primary"></i> by the folks of the
                 <a href="{{ route('developers') }}" class="text-white">
-                    {{ Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
+                    {{ Proto\Models\Committee::where('slug', '=', config('proto.rootcommittee'))->first()->name }}
                 </a>.
             </sub>
         </p>

@@ -2,66 +2,79 @@
 
 namespace Proto\Models;
 
+use Artisan;
+use Carbon\Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 
-use Artisan;
-
+/**
+ * Proto\Models\Newsletter.
+ *
+ * @mixin Eloquent
+ */
 class Newsletter extends Model
 {
-
+    /** @return HashMapItem */
     public static function getLastSent()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_last_sent')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
                 'key' => 'newsletter_last_sent',
-                'value' => 0
+                'value' => 0,
             ]);
         }
         return $lastSent;
     }
 
+    /** @return HashMapItem */
     public static function getText()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_text')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
                 'key' => 'newsletter_text',
-                'value' => null
+                'value' => null,
             ]);
         }
         return $lastSent;
     }
 
-    public static function getTextLastUpdated() {
+    /** @return HashMapItem */
+    public static function getTextLastUpdated()
+    {
         $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
         if ($lastUpdated == null) {
             $lastUpdated = HashMapItem::create([
                 'key' => 'newsletter_text_updated',
-                'value' => 0
+                'value' => 0,
             ]);
         }
         return $lastUpdated;
     }
 
+    /** @return string */
     public static function lastSent()
     {
-        return Newsletter::getLastSent()->value;
+        return self::getLastSent()->value;
     }
 
+    /** @return string */
     public static function text()
     {
-        return Newsletter::getText()->value;
+        return self::getText()->value;
     }
 
+    /** @return string */
     public static function textUpdated()
     {
-        return Newsletter::getTextLastUpdated()->value;
+        return self::getTextLastUpdated()->value;
     }
 
+    /** @return string */
     public static function updateLastSent()
     {
-        $lastSent = Newsletter::getLastSent();
+        $lastSent = self::getLastSent();
 
         $lastSent->value = date('U');
         $lastSent->save();
@@ -69,10 +82,11 @@ class Newsletter extends Model
         return $lastSent->value;
     }
 
+    /** @return string */
     public static function updateText($text)
     {
-        $newsletterText = Newsletter::getText();
-        $textUpdated = Newsletter::getTextLastUpdated();
+        $newsletterText = self::getText();
+        $textUpdated = self::getTextLastUpdated();
 
         $newsletterText->value = $text;
         $newsletterText->save();
@@ -83,29 +97,39 @@ class Newsletter extends Model
         return $newsletterText->value;
     }
 
-    public static function canBeSent()
+    /** @return bool */
+    public static function lastSentMoreThanWeekAgo()
     {
-        $lastSent = date('Y', Newsletter::lastSent()) * 52 + date('W', Newsletter::lastSent());
-        $current = date('Y') * 52 + date('W');
-        $events = Event::getEventsForNewsletter();
-        return $current > $lastSent && $events->count() > 0;
+        $lastSent = Carbon::createFromFormat('U', self::lastSent());
+        $current = Carbon::now();
+        $diff = $lastSent->diffInWeeks($current);
+        return $diff >= 1;
     }
 
+    /** @return bool */
+    public static function hasEvents()
+    {
+        $events = Event::getEventsForNewsletter();
+        return $events->count() > 0;
+    }
+
+    /** @return bool */
     public static function showTextOnHomepage()
     {
-        if (Newsletter::text() == "") return false;
-        if ((date('U') - Newsletter::textUpdated())/(3600*24) > 10) return false;
-        return true;
-    }
-
-    public static function send()
-    {
-        if (!Newsletter::canBeSent()) {
+        if (self::text() == '') {
             return false;
         }
-        Artisan::call('proto:newslettercron');
-        Newsletter::updateLastSent();
+        if ((date('U') - self::textUpdated()) / (3600 * 24) > 10) {
+            return false;
+        }
         return true;
     }
 
+    /** @return bool */
+    public static function send()
+    {
+        Artisan::call('proto:newslettercron');
+        self::updateLastSent();
+        return true;
+    }
 }

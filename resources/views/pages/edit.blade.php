@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" class="form-control" id="title" name="title"
-                                   placeholder="About Proto" value="{{ $item->title or '' }}" required>
+                                   placeholder="About Proto" value="{{ $item->title ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
@@ -36,7 +36,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ route('page::show', '') }}/</span>
                                 </div>
-                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug or '' }}" required>
+                                <input type="text" class="form-control" name="slug" placeholder="about-proto" value="{{ $item->slug ?? '' }}" required>
                             </div>
                         </div>
 
@@ -189,7 +189,7 @@
                         <div class="card-body">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="file">
+                                <input type="file" class="custom-file-input" name="files[]" multiple>
                                 <label class="custom-file-label" for="customFile">Upload a file</label>
                             </div>
 
@@ -217,18 +217,16 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
-
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
-            var cm = $('.CodeMirror')[0].CodeMirror;
-            var doc = cm.getDoc();
-            var cursor = doc.getCursor(); // gets the line number in the cursor position
-            var line = doc.getLine(cursor.line); // get the line contents
-            var pos = { // create a new object to avoid mutation of the original selection
+            let cm = $('.CodeMirror')[0].CodeMirror;
+            let doc = cm.getDoc();
+            let cursor = doc.getCursor(); // gets the line number in the cursor position
+            let line = doc.getLine(cursor.line); // get the line contents
+            let pos = { // create a new object to avoid mutation of the original selection
                 line: cursor.line, ch: line.length - 1 // set the character position to the end of the line
             };
             doc.replaceRange('\n' + data + '\n', pos); // adds a new line
@@ -236,15 +234,15 @@
 
         $(".pageEdit_insertLink").click(function (e) {
             e.preventDefault();
-            var linkUrl = $(this).attr('rel');
+            let linkUrl = $(this).attr('rel');
             insertLineAtCursor("[Link text](" + linkUrl + ")");
         });
 
         $(".pageEdit_insertImage").click(function (e) {
             e.preventDefault();
-            var linkUrl = $(this).attr('rel');
+            let linkUrl = $(this).attr('rel');
             insertLineAtCursor("![Alt text](" + linkUrl + ")");
         });
     </script>
 
-@endsection
+@endpush

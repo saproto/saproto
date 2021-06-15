@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <script type="text/javascript">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $('#flashModal').modal('show');
     </script>
 

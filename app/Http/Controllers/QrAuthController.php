@@ -2,28 +2,41 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Milon\Barcode\DNS2D;
-
 use Auth;
-
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Milon\Barcode\DNS2D;
 use Proto\Models\QrAuthRequest;
+use Proto\Models\User;
 
 class QrAuthController extends Controller
 {
+    /**
+     * @param $code
+     * @return mixed
+     */
     public function showCode($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if (!$qrAuthRequest) abort(404);
+        if (! $qrAuthRequest) {
+            abort(404);
+        }
 
-
-        return response(DNS2D::getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), "QRCODE"))->header('Content-Type', 'image/svg+xml');
+        return response(DNS2D::getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
+    /**
+     * @param Request $request
+     * @return QrAuthRequest
+     */
     public function generateRequest(Request $request)
     {
-        if (!$request->has('description')) abort(500, 'No description was provided.');
+        if (! $request->has('description')) {
+            abort(500, 'No description was provided.');
+        }
 
         $qrAuthRequest = new QrAuthRequest();
         $qrAuthRequest->description = $request->description;
@@ -34,20 +47,32 @@ class QrAuthController extends Controller
         return $qrAuthRequest;
     }
 
+    /**
+     * @param $code
+     * @return View
+     */
     public function showDialog($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if (!$qrAuthRequest) abort(404);
+        if (! $qrAuthRequest) {
+            abort(404);
+        }
 
         return view('auth.qr.dialog', ['description' => $qrAuthRequest->description, 'code' => $qrAuthRequest->qr_token]);
     }
 
+    /**
+     * @param $code
+     * @return View
+     */
     public function approve($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if (!$qrAuthRequest) abort(404);
+        if (! $qrAuthRequest) {
+            abort(404);
+        }
 
         $qrAuthRequest->approved_at = \Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
@@ -57,47 +82,72 @@ class QrAuthController extends Controller
         return view('auth.qr.done');
     }
 
+    /**
+     * @param $code
+     * @return JsonResponse
+     */
     public function apiApprove($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if (!$qrAuthRequest) abort(403);
+        if (! $qrAuthRequest) {
+            abort(403);
+        }
 
         $qrAuthRequest->approved_at = \Carbon::now();
         $qrAuthRequest->user_id = Auth::id();
 
         $qrAuthRequest->save();
 
-        return response()->json([ "status" => "ok" ], 200);
+        return response()->json(['status' => 'ok'], 200);
     }
 
+    /**
+     * @param $code
+     * @return JsonResponse
+     */
     public function apiInfo($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if (!$qrAuthRequest) abort(404);
+        if (! $qrAuthRequest) {
+            abort(404);
+        }
 
-        return response()->json(["description" => $qrAuthRequest->description], 200);
+        return response()->json(['description' => $qrAuthRequest->description], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     public function isApproved(Request $request)
     {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $request->code)->first();
 
-        if (!$qrAuthRequest) abort(404);
+        if (! $qrAuthRequest) {
+            abort(404);
+        }
 
         if ($qrAuthRequest->isApproved()) {
-            return "true";
+            return 'true';
         } else {
-            return "false";
+            return 'false';
         }
     }
 
+    /**
+     * @param $authToken
+     * @return false|User
+     * @throws Exception
+     */
     public function getAuthUser($authToken)
     {
         $qrAuthRequest = QrAuthRequest::where('auth_token', '=', $authToken)->first();
 
-        if (!$qrAuthRequest) return false;
+        if (! $qrAuthRequest) {
+            return false;
+        }
 
         return $qrAuthRequest->authUser();
     }

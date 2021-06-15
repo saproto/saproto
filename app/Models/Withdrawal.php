@@ -2,21 +2,43 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
+use Carbon;
 use DB;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
+/**
+ * Withdrawal Model.
+ *
+ * @property int $id
+ * @property string $date
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $closed
+ * @property-read Collection|OrderLine[] $orderlines
+ * @method static Builder|Withdrawal whereClosed($value)
+ * @method static Builder|Withdrawal whereCreatedAt($value)
+ * @method static Builder|Withdrawal whereDate($value)
+ * @method static Builder|Withdrawal whereId($value)
+ * @method static Builder|Withdrawal whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Withdrawal extends Model
 {
-
     protected $table = 'withdrawals';
+
     protected $guarded = ['id'];
 
+    /** @return HasMany|OrderLine[] */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine', 'payed_with_withdrawal');
     }
 
+    /** @return array */
     public function totalsPerUser()
     {
         $data = DB::table('orderlines')
@@ -28,31 +50,44 @@ class Withdrawal extends Model
         $response = [];
 
         foreach ($data as $entry) {
-            $response[$entry->user_id] = (object)[
+            $response[$entry->user_id] = (object) [
                 'user' => User::withTrashed()->findOrFail($entry->user_id),
                 'count' => $entry->orderline_count,
-                'sum' => $entry->total_price
+                'sum' => $entry->total_price,
             ];
         }
 
         return $response;
     }
 
-    public function orderlinesForUser(User $user)
+    /**
+     * @param User $user
+     * @return OrderLine[]
+     */
+    public function orderlinesForUser($user)
     {
         return OrderLine::where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->get();
     }
 
-    public function totalForUser(User $user)
+    /**
+     * @param User $user
+     * @return int
+     */
+    public function totalForUser($user)
     {
         return OrderLine::where('user_id', $user->id)->where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
-    public function getFailedWithdrawal(User $user)
+    /**
+     * @param User $user
+     * @return FailedWithdrawal
+     */
+    public function getFailedWithdrawal($user)
     {
         return FailedWithdrawal::where('user_id', $user->id)->where('withdrawal_id', $this->id)->first();
     }
 
+    /** @return int */
     public function userCount()
     {
         $data = DB::table('orderlines')
@@ -63,20 +98,22 @@ class Withdrawal extends Model
         return count($data);
     }
 
+    /** @return User[] */
     public function users()
     {
         $users = array_unique(OrderLine::where('payed_with_withdrawal', $this->id)->get()->pluck('user_id')->toArray());
         return User::withTrashed()->whereIn('id', $users)->orderBy('id', 'asc')->get();
     }
 
+    /** @return int */
     public function total()
     {
         return OrderLine::where('payed_with_withdrawal', $this->id)->sum('total_price');
     }
 
+    /** @return string */
     public function withdrawalId()
     {
-        return 'PROTO-' . $this->id . '-' . date('dmY', strtotime($this->date));
+        return 'PROTO-'.$this->id.'-'.date('dmY', strtotime($this->date));
     }
-
 }

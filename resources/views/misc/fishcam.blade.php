@@ -45,13 +45,10 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    @parent
-
-    <script type="text/javascript">
-
-        $("#fishcam__activate").click(function () {
+        $("#fishcam__activate").on('click', function () {
 
             $("#fishcam").attr('src', '{{ route("api::fishcam") }}').show();
             $(".fishcam-warning").hide();
@@ -60,4 +57,4 @@
 
     </script>
 
-@endsection
+@endpush

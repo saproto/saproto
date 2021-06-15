@@ -1,6 +1,6 @@
 <form method="get" action="{{ route('omnomcom::orders::adminlist') }}">
 
-    <div class="card">
+    <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
             Orderlines from specific day
