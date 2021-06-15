@@ -17,60 +17,65 @@
                     <a href="{{ route('tickets::add') }}" class="badge badge-info float-right">Create a new ticket.</a>
                 </div>
 
-                <table class="table table-sm table-borderless table-hover">
+                <div class="table-responsive">
 
-                    <thead>
+                    <table class="table table-sm table-hover">
 
-                    <tr class="bg-dark text-white">
+                        <thead>
 
-                        <td>Event</td>
-                        <td>Ticket Name</td>
-                        <td>Availability</td>
-                        <td>Who</td>
-                        <td>Sold</td>
-                        <td>Controls</td>
+                        <tr class="bg-dark text-white">
 
-                    </tr>
-
-                    </thead>
-
-                    @foreach($tickets as $ticket)
-
-                        <tr>
-
-                            <td>
-                                <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
-                                    {{ $ticket->event->title }}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{{ route('omnomcom::products::edit', ['id'=>$ticket->product->id]) }}">
-                                    {{ $ticket->product->name }}
-                                </a>
-                            </td>
-                            <td>
-                                {{ date('d-m-Y H:i', $ticket->available_from) }}
-                                -
-                                {{ date('d-m-Y H:i', $ticket->available_to) }}
-                            </td>
-                            <td>
-                                {{ $ticket->members_only ? 'Members' : 'Everyone' }}
-                            </td>
-                            <td>{{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}</td>
-                            <td>
-                                <a href="{{ route('tickets::edit', ['id' => $ticket->id]) }}">
-                                    <i class="fas fa-edit" aria-hidden="true"></i>
-                                </a>
-                                <a class="text-danger ml-2" href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
-                                    <i class="fas fa-trash" aria-hidden="true"></i>
-                                </a>
-                            </td>
+                            <td>Event</td>
+                            <td>Ticket Name</td>
+                            <td>Availability</td>
+                            <td>Who</td>
+                            <td>Sold</td>
+                            <td>Controls</td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        @foreach($tickets as $ticket)
+
+                            <tr>
+                                <td style="max-width: 200px">
+                                    @if($ticket->event)
+                                    <a href="{{ route('event::show', ['id'=>$ticket->event->getPublicId()]) }}">
+                                        {{ $ticket->event->title }}
+                                    </a>
+                                    @endif
+                                </td>
+                                <td style="max-width: 200px">
+                                    <a href="{{ route('omnomcom::products::edit', ['id'=>$ticket->product->id]) }}">
+                                        {{ $ticket->product->name }}
+                                    </a>
+                                </td>
+                                <td style="min-width: 200px">
+                                    from <i>{{ date('d-m-Y H:i', $ticket->available_from) }}</i>
+                                    <br>
+                                    till <i>{{ date('d-m-Y H:i', $ticket->available_to) }}</i>
+                                </td>
+                                <td>
+                                    {{ $ticket->members_only ? 'Members' : 'Everyone' }}
+                                </td>
+                                <td>{{ $ticket->sold() }} / {{ $ticket->totalAvailable() }}</td>
+                                <td>
+                                    <a href="{{ route('tickets::edit', ['id' => $ticket->id]) }}">
+                                        <i class="fas fa-edit" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="text-danger ml-2" href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
+                                        <i class="fas fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                </div>
 
                 <div class="card-footer pb-0">
                     {{ $tickets->links() }}

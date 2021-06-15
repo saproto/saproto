@@ -2,38 +2,51 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Achievement Ownership Model.
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $achievement_id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Achievement $achievement
+ * @property-read User $user
+ * @method static Builder|AchievementOwnership whereAchievementId($value)
+ * @method static Builder|AchievementOwnership whereCreatedAt($value)
+ * @method static Builder|AchievementOwnership whereId($value)
+ * @method static Builder|AchievementOwnership whereUpdatedAt($value)
+ * @method static Builder|AchievementOwnership whereUserId($value)
+ * @mixin Eloquent
+ */
 class AchievementOwnership extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'achievements_users';
+
+    protected $guarded = ['id'];
+
     protected $hidden = ['user_id'];
 
-    /**
-     * @return mixed The user owning the achievement.
-     */
+    protected $rules = [
+        'user_id' => 'required|integer',
+        'achievement_id' => 'required|integer',
+    ];
+
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /**
-     * @return mixed The achievement this association is for.
-     */
+    /** @return BelongsTo|Achievement */
     public function achievement()
     {
         return $this->belongsTo('Proto\Models\Achievement');
     }
-
-    protected $fillable = ['user_id', 'achievement_id'];
-
-    protected $rules = array(
-        'user_id' => 'required|integer',
-        'achievement_id' => 'required|integer',
-    );
 }

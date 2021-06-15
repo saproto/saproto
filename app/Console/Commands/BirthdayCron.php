@@ -3,16 +3,13 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use Mail;
 use Proto\Mail\BirthdayEmail;
 use Proto\Mail\BirthdayEmailForBoard;
-
-use Mail;
 use Proto\Models\User;
 
 class BirthdayCron extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -42,37 +39,30 @@ class BirthdayCron extends Command
      */
     public function handle()
     {
-
-        $users = User::where('birthdate', 'LIKE', '%-' . date('m-d'))->has('member')->get()->reject(function($user, $index) { return $user->member->is_pending == true; });
+        $users = User::where('birthdate', 'LIKE', '%-'.date('m-d'))->has('member')->get()->reject(function ($user, $index) {
+            return $user->member->is_pending == true;
+        });
 
         if ($users->count() > 0) {
-
-            $this->info('Sending birthday notification to ' . $users->count() . ' people.');
+            $this->info('Sending birthday notification to '.$users->count().' people.');
 
             $adminoverview = [];
 
             foreach ($users as $user) {
-
                 $adminoverview[] = [
                     'id' => $user->getPublicId(),
                     'name' => $user->name,
-                    'age' => $user->age()
+                    'age' => $user->age(),
                 ];
 
                 Mail::to($user)->queue((new BirthdayEmail($user))->onQueue('medium'));
-
             }
 
-            Mail::to('board@' . config('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
+            Mail::to('board@'.config('proto.emaildomain'))->queue((new BirthdayEmailForBoard($adminoverview))->onQueue('low'));
 
-            $this->info("Done!");
-
+            $this->info('Done!');
         } else {
-
-            $this->info("There are no jarige joppen today.");
-
+            $this->info('There are no jarige joppen today.');
         }
-
     }
-
 }

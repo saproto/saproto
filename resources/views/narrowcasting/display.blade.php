@@ -79,14 +79,14 @@
 
 @include('website.layouts.assets.javascripts')
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    var campaigns = [];
-    var currentcampaign = 0;
+    let campaigns = [];
+    let currentcampaign = 0;
 
-    var previousWasVideo = false;
+    let previousWasVideo = false;
 
-    var player;
+    let player;
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('yt-player', {
@@ -122,7 +122,7 @@
 
     function updateSlide() {
 
-        if (campaigns.length == 0) {
+        if (campaigns.length === 0) {
 
             $("#fullpagetext").html("There are no messages to display. :)").css("opacity", 1);
             $("#slideshow").css("opacity", 0);
@@ -135,7 +135,7 @@
 
             $(".slide").addClass('old');
 
-            var campaign;
+            let campaign;
             if (currentcampaign >= campaigns.length) {
                 currentcampaign = 0;
             }
@@ -187,7 +187,7 @@
         $(".slide.old").remove();
     }
 
-    $(document).ready(function () {
+    $(function () {
 
         updateCampaigns();
         setInterval(updateCampaigns, 10 * 1000);
@@ -198,7 +198,7 @@
 
 </script>
 
-<script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+<script type="text/javascript" src="https://www.youtube.com/iframe_api" nonce="{{ csp_nonce() }}"></script>
 
 </body>
 

@@ -2,33 +2,42 @@
 
 namespace Proto\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\View\View;
 use Proto\Models\Event;
 use Proto\Models\Member;
-
-use Response;
+use Redirect;
+use Session;
 
 class QueryController extends Controller
 {
+    /** @return View */
     public function index()
     {
         return view('queries.index');
     }
 
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function activityOverview(Request $request)
     {
-        if (!$request->has('start') || !$request->has('start')) {
-
+        if (! $request->has('start') || ! $request->has('start')) {
             if (intval(date('n')) >= 9) {
-                $yearstart = intval(date('Y'));
+                $year_start = intval(date('Y'));
             } else {
-                $yearstart = intval(date('Y')) - 1;
+                $year_start = intval(date('Y')) - 1;
             }
-            $start = strtotime("$yearstart-09-01 00:00:01");
+            $start = strtotime("$year_start-09-01 00:00:01");
             $end = date('U');
         } else {
             $start = strtotime($request->start);
-            $end = strtotime($request->end) + 86400; # Add one day to make it inclusive.
+            $end = strtotime($request->end) + 86400; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])
@@ -38,13 +47,16 @@ class QueryController extends Controller
         return view('queries.activity_overview', [
             'start' => $start,
             'end' => $end,
-            'events' => $events
+            'events' => $events,
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return Application|Factory|\Illuminate\Http\Response|RedirectResponse|View
+     */
     public function membershipTotals(Request $request)
     {
-
         // Get a list of all CreaTe students.
 //        $ldap_students = LdapController::searchUtwente("|(department=*B-CREA*)(department=*M-ITECH*)");
 //
@@ -79,15 +91,17 @@ class QueryController extends Controller
 //            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
 //            $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
-            $count_total++;
+            if (! $member->is_pet) {
+                $count_total++;
+            }
 
             if ($member->user->isActiveMember()) {
                 $count_active++;
 
                 if ($request->has('export_active')) {
-                    $export_active[] = (object)[
+                    $export_active[] = (object) [
                         'name' => $member->user->name,
-                        'committees' => $member->user->committees->pluck('name')
+                        'committees' => $member->user->committees->pluck('name'),
                     ];
                 }
             }
@@ -121,7 +135,6 @@ class QueryController extends Controller
 //                    ];
 //                }
 //            }
-
         }
 
         if ($request->has('export_subsidies')) {
@@ -134,21 +147,17 @@ class QueryController extends Controller
 //
 //            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
 
-            Session::flash('flash_message', 'Cannot currently export subsidies');
+            Session::flash('flash_message', 'Cannot currently export subsidies for more info contact the HYTTIOAOAc.');
             return Redirect::back();
-
         } elseif ($request->has('export_active')) {
-
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', date('d_m_Y'))
+                'Content-Disposition' => sprintf('attachment; filename="active_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
-
         } else {
-
             return view('queries.membership_totals', [
                 'total' => $count_total,
                 'primary' => $count_primary,
@@ -157,9 +166,8 @@ class QueryController extends Controller
                 'active' => $count_active,
                 'lifelong' => $count_lifelong,
                 'honorary' => $count_honorary,
-                'donor' => $count_donor
+                'donor' => $count_donor,
             ]);
-
         }
     }
 }

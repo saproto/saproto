@@ -14,13 +14,20 @@
                 <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMembership">
                     End membership
                 </a>
+                <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#setMembershipType">
+                    Change membership type
+                </a>
                 <a href="{{ route('membercard::download', ['id' => $user->id]) }}" target="_blank"
                    class="list-group-item">
                     Preview membership card
                 </a>
                 <a href="javascript:void();" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
                     Print membership card<br>
-                    (Last printed: {{ $user->member->card_printed_on }})
+                    @if($user->member->card_printed_on)
+                        (Last printed: {{ $user->member->card_printed_on }})
+                    @else
+                        (Never printed before)
+                    @endif
                 </a>
                 <a href="javascript:void();" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                     Print opener overlay
@@ -49,19 +56,21 @@
 
         @if($user->is_member)
             <ul class="list-group mb-3">
+
                 <li class="list-group-item list-group-item-dark">
                     Current Membership
                 </li>
-                    <li class="table-responsiv list-group-item">
-                        <table class="w-100">
-                            <thead>
-                                <tr>
-                                    <td>Since</td>
-                                    <td>Type</td>
-                                    <td class="text-center">Form</td>
-                                </tr>
-                            </thead>
-                            <tbody>
+                <li class="table-responsiv list-group-item">
+                    <table class="w-100">
+                        <thead>
+                            <tr>
+                                <td>Since</td>
+                                <td>Type</td>
+                                <td class="text-center">Form</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
                                 <td>
                                     {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }}
                                 </td>
@@ -72,6 +81,8 @@
                                         Honorary <i class="fas fa-trophy"></i>
                                     @elseif($user->member->is_donor)
                                         Donor <i class="fas fa-hand-holding-usd"></i>
+                                    @elseif($user->member->is_pet)
+                                        Pet <i class="fas fa-paw"></i>
                                     @else
                                         Regular
                                     @endif
@@ -82,13 +93,13 @@
                                             <i class="fas fa-download"></i>
                                         </a>
                                     @else
-                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive.
-"></i>
+                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive."></i>
                                     @endif
                                 </td>
-                            </tbody>
-                        </table>
-                    </li>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
 
             </ul>
         @endif

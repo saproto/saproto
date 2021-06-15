@@ -40,7 +40,7 @@
                         <div class="col-md-4 col-sm-6">
 
                             @include('website.layouts.macros.card-bg-image', [
-                                        'url' => $newsitem->url(),
+                                        'url' => $newsitem->url,
                                         'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(500,300) : null,
                                         'html' => sprintf('<strong>%s</strong><br>Published %s', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                                         'height' => '180',

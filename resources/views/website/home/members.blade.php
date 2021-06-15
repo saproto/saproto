@@ -68,7 +68,7 @@
                         @foreach($newsitems as $index => $newsitem)
 
                             @include('website.layouts.macros.card-bg-image', [
-                            'url' => $newsitem->url(),
+                            'url' => $newsitem->url,
                             'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
                             'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                             'leftborder' => 'info'
@@ -91,7 +91,7 @@
 
         </div>
 
-        @if(Newsletter::showTextOnHomepage())
+        @if(Proto\Models\Newsletter::showTextOnHomepage())
 
             <div class="col-xl-4 col-md-12">
 
@@ -100,7 +100,7 @@
                         <i class="fas fa-bullhorn fa-fw mr-2"></i> Weekly update
                     </div>
                     <div class="card-body">
-                        {!! Markdown::convertToHtml(Newsletter::text()) !!}
+                        {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
                     </div>
                 </div>
 
@@ -110,4 +110,45 @@
 
     </div>
 
+@endsection
+
+@section('right-column')
+
+    @php($leaderboard = Proto\Models\Leaderboard::where('featured', true)->first())
+
+    @if($leaderboard)
+
+        <div class="card mb-3">
+
+            <div class="card-header bg-dark" data-toggle="collapse"
+                 data-target="#collapse-leaderboard-{{ $leaderboard->id }}">
+                <i class="fa {{ $leaderboard->icon }}"></i> {{ $leaderboard->name }} Leaderboard
+            </div>
+
+            @if(count($leaderboard->entries) > 0)
+                <table class="table table-sm mb-0">
+                    @foreach($leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get() as $entry)
+                        <tr>
+                            <td class="pl-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
+                                <i class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"></i>
+                                {{ $loop->index+1 }}
+                            </td>
+                            <td>{{ $entry->user->name }}</td>
+                            <td class="pr-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            @else
+                <hr>
+                <p class="text-muted text-center pt-3">There are no entries yet.</p>
+            @endif
+
+            <div class="p-3">
+                <a href="{{ route('leaderboards::index') }}" class="btn btn-info btn-block">Go to leaderboards</a>
+            </div>
+
+        </div>
+    @endif
+
+    @parent
 @endsection

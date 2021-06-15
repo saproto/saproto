@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateAliasTable extends Migration
 {
@@ -12,7 +12,7 @@ class CreateAliasTable extends Migration
      */
     public function up()
     {
-        Schema::create('alias', function(Blueprint $table) {
+        Schema::create('alias', function (Blueprint $table) {
             $table->increments('id');
             $table->string('alias');
             $table->integer('user_id')->nullable()->default(null);

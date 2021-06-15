@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddRedirectUrlToJoboffers extends Migration
 {
@@ -13,7 +13,7 @@ class AddRedirectUrlToJoboffers extends Migration
      */
     public function up()
     {
-        Schema::table('joboffers', function(Blueprint $table) {
+        Schema::table('joboffers', function (Blueprint $table) {
             $table->string('redirect_url')->nullable()->default(null);
             $table->text('description')->nullable()->default(null)->change();
         });

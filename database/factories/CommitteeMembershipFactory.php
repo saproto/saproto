@@ -2,8 +2,9 @@
 
 use Faker\Generator as Faker;
 
-/** @var $factory Closure */
-$factory->define(Proto\Models\CommitteeMembership::class,
+/* @var $factory Closure */
+$factory->define(
+    Proto\Models\CommitteeMembership::class,
     function (Faker $faker, $attr) {
         $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('+1 year'));
@@ -21,6 +22,7 @@ $factory->define(Proto\Models\CommitteeMembership::class,
             'role' => 'Automatically Added',
             'edition' => (mt_rand(1, 2) == 1 ? mt_rand(1, 5) : null),
             'created_at' => $startDate,
-            'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null)
+            'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
         ];
-});
+    }
+);

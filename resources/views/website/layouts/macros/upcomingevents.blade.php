@@ -1,4 +1,4 @@
-@php($featuredevents = Event::where('secret', false)->where('is_featured', true)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
+@php($featuredevents = Proto\Models\Event::where('secret', false)->where('is_featured', true)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
 
 @if(count($featuredevents) > 0)
 
@@ -13,7 +13,7 @@
 
             @include('event.display_includes.event_block', ['event'=> $event, 'countdown' => true])
 
-            <?php $week = date('W', $event->start); ?>
+            @php($week = date('W', $event->start))
 
         @endforeach
 
@@ -28,7 +28,7 @@
     </div>
     <div class="card-body">
 
-        @php($events = Event::where('secret', false)->where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
+        @php($events = Proto\Models\Event::where('secret', false)->where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
 
         @if(count($events) > 0)
 

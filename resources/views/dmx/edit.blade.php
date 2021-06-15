@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="name">Fixture name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Ground Lights Section 1" value="{{ $fixture->name or '' }}" required>
+                                   placeholder="Ground Lights Section 1" value="{{ $fixture->name ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
@@ -43,13 +43,13 @@
                         <div class="form-group">
                             <label for="channel_start">First channel:</label>
                             <input type="number" class="form-control" id="channel_start" name="channel_start"
-                                   value="{{ $fixture->channel_start or '' }}" required>
+                                   value="{{ $fixture->channel_start ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="channel_end">Last channel:</label>
                             <input type="number" class="form-control" id="channel_end" name="channel_end"
-                                   value="{{ $fixture->channel_end or '' }}" required>
+                                   value="{{ $fixture->channel_end ?? '' }}" required>
                         </div>
 
                         @if ($fixture != null)

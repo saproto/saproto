@@ -3,13 +3,11 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Proto\Models\Role;
 use Proto\Models\User;
 
 class MakeAdmin extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -39,20 +37,17 @@ class MakeAdmin extends Command
      */
     public function handle()
     {
-
         if (getenv('APP_ENV') == 'production') {
             $this->error('Cannot do this on production.');
         }
 
         $user = User::where('email', $this->argument('email'))->firstOrFail();
 
-        if (!$user->hasRole('sysadmin')) {
+        if (! $user->hasRole('sysadmin')) {
             $user->attachRole(Role::where('name', '=', 'sysadmin')->first());
-            $this->info('User ' . $user->name . ' now has sysadmin role.');
+            $this->info('User '.$user->name.' now has sysadmin role.');
         } else {
-            $this->info('User ' . $user->name . ' already had sysadmin role.');
+            $this->info('User '.$user->name.' already had sysadmin role.');
         }
-
     }
-
 }

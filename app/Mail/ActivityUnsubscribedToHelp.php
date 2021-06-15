@@ -5,12 +5,12 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\ActivityParticipation;
 
 class ActivityUnsubscribedToHelp extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $calling_name;
     public $committee_name;
@@ -39,7 +39,7 @@ class ActivityUnsubscribedToHelp extends Mailable
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')
-            ->subject('You don\'t help with ' . $this->event_title . ' anymore.')
+            ->subject('You don\'t help with '.$this->event_title.' anymore.')
             ->view('emails.unsubscribehelpactivity');
     }
 }

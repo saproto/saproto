@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDinnerformsTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateDinnerformsTable extends Migration
             $table->string('restaurant');
             $table->string('description');
             $table->string('url');
-            $table->dateTime("start");
+            $table->dateTime('start');
             $table->dateTime('end');
             $table->timestamps();
         });

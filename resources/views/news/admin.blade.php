@@ -19,45 +19,49 @@
                     </a>
                 </div>
 
-                <table class="table table-sm table-hover">
+                <div class="table-responsive">
 
-                    <thead>
+                    <table class="table table-sm table-hover">
 
-                    <tr class="bg-dark text-white">
+                        <thead>
 
-                        <td>Title</td>
-                        <td>Published</td>
-                        <td>Controls</td>
+                        <tr class="bg-dark text-white">
 
-                    </tr>
-
-                    </thead>
-
-                    @foreach($newsitems as $newsitem)
-
-                        <tr>
-
-                            <td>{{ $newsitem->title }}</td>
-                            <td>@if($newsitem->isPublished()) <span class="text-primary">{{ $newsitem->published_at }}</span> @else <span class="text-muted">{{ $newsitem->published_at }}</span> @endif</td>
-                            <td>
-                                <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
-                                    <i class="fas fa-link mr-2"></i>
-                                </a>
-
-                                <a href="{{ route('news::edit', ['id' => $newsitem->id]) }}">
-                                    <i class="fas fa-edit mr-2"></i>
-                                </a>
-
-                                <a href="{{ route('news::delete', ['id' => $newsitem->id]) }}" onclick="return confirm('Are you sure?')">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
-                            </td>
+                            <td>Title</td>
+                            <td>Published</td>
+                            <td>Controls</td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        @foreach($newsitems as $newsitem)
+
+                            <tr>
+
+                                <td style="overflow-wrap: break-word; max-width: 160px">{{ $newsitem->title }}</td>
+                                <td>@if($newsitem->isPublished()) <span class="text-primary">{{ $newsitem->published_at }}</span> @else <span class="text-muted">{{ $newsitem->published_at }}</span> @endif</td>
+                                <td>
+                                    <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
+                                        <i class="fas fa-link mr-2"></i>
+                                    </a>
+
+                                    <a href="{{ route('news::edit', ['id' => $newsitem->id]) }}">
+                                        <i class="fas fa-edit mr-2"></i>
+                                    </a>
+
+                                    <a href="{{ route('news::delete', ['id' => $newsitem->id]) }}" onclick="return confirm('Are you sure?')">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+
+                </div>
 
                 <div class="card-footer pb-0">
                     {!! $newsitems->links() !!}

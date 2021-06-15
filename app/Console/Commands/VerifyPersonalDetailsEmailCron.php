@@ -3,15 +3,12 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
+use Mail;
 use Proto\Mail\VerifyPersonalDetails;
 use Proto\Models\User;
 
-use Mail;
-
 class VerifyPersonalDetailsEmailCron extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -41,7 +38,6 @@ class VerifyPersonalDetailsEmailCron extends Command
      */
     public function handle()
     {
-
         $month = date('m', strtotime('+1 month'));
 
         $users = User::where('created_at', 'like', sprintf('____-%s-__ __:__:__', $month))->get();
@@ -50,8 +46,6 @@ class VerifyPersonalDetailsEmailCron extends Command
             Mail::to($user)->queue((new VerifyPersonalDetails($user))->onQueue('low'));
         }
 
-        $this->info(sprintf("Sent reminder e-mail to %d members.", $users->count()));
-
+        $this->info(sprintf('Sent reminder e-mail to %d members.', $users->count()));
     }
-
 }

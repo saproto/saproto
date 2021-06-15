@@ -2,19 +2,20 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Auth;
+use Carbon\CarbonInterval;
 use DB;
-use Session;
-use Redirect;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
-use Carbon\CarbonInterval;
+use Redirect;
+use Session;
 
 class ProtubeController extends Controller
 {
+    /** @return View */
     public function admin()
     {
         if (Auth::user()->can('protube') || Auth::user()->isTempadmin()) {
@@ -25,49 +26,64 @@ class ProtubeController extends Controller
         }
     }
 
+    /** @return View */
     public function screen(Request $request)
     {
         return view('protube.screen', ['showPin' => $request->has('showPin')]);
     }
 
+    /** @return View */
     public function offline()
     {
         return view('protube.offline');
     }
 
+    /** @return View */
     public function remote()
     {
         error_reporting(0);
-        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server') . "/maxDuration?secret=" . config('herbert.secret')))->cascade()->forHumans();
+        $max_duration = CarbonInterval::seconds(file_get_contents(config('herbert.server').'/maxDuration?secret='.config('herbert.secret')))->cascade()->forHumans();
+
         return view('protube.remote', ['max_duration' => $max_duration]);
     }
 
+    /** @return RedirectResponse */
     public function loginRedirect()
     {
-        return redirect(route("protube::remote"));
+        return redirect(route('protube::remote'));
     }
 
+    /** @return View */
     public function topVideos()
     {
-        $data = (object)[
+        $data = (object) [
             'alltime' => $this->getTopVideos(10),
             'month' => $this->getTopVideos(10, '-1 month'),
             'week' => $this->getTopVideos(10, '-1 week'),
         ];
+
         return view('protube.topvideos', ['data' => $data]);
     }
 
+    /** @return View */
     public function dashboard()
     {
-        $usercount = PlayedVideo::where('user_id', Auth::user()->id)->count();
+        $user_count = PlayedVideo::where('user_id', Auth::user()->id)->count();
+
         return view('protube.dashboard', [
             'history' => $this->getHistory(),
-            'usercount' => $usercount,
+            'usercount' => $user_count,
             'user' => Auth::user(),
-            'usertop' => $this->getTopVideos(15, null, Auth::user())
+            'usertop' => $this->getTopVideos(15, null, Auth::user()),
         ]);
     }
 
+    /**
+     * @param string $since
+     * @param null $user
+     * @param int $max
+     * @return array
+     */
     private function getHistory($since = '-1 week', $user = null, $max = 50)
     {
         $query = DB::table('playedvideos')
@@ -81,6 +97,12 @@ class ProtubeController extends Controller
         return $query->orderBy('created_at', 'desc')->limit($max)->get()->all();
     }
 
+    /**
+     * @param int $limit
+     * @param string $since
+     * @param null $user
+     * @return array
+     */
     private function getTopVideos($limit = 10, $since = '2011-04-20', $user = null)
     {
         $query = DB::table('playedvideos')
@@ -97,16 +119,18 @@ class ProtubeController extends Controller
             ->limit($limit)->get()->all();
     }
 
+    /** @return RedirectResponse */
     public function toggleHistory()
     {
         $user = Auth::user();
-        $user->keep_protube_history = !$user->keep_protube_history;
+        $user->keep_protube_history = ! $user->keep_protube_history;
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
         return Redirect::back();
     }
 
+    /** @return RedirectResponse */
     public function clearHistory()
     {
         $user = Auth::user();

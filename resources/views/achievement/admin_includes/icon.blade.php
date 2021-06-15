@@ -34,15 +34,11 @@
 
 
 
-@section('javascript')
-
-    @parent
-
-    <script>
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         $('.icp-auto').iconpicker();
         $('.icp').on('iconpickerSelected', function (e) {
             $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
         });
     </script>
-
-@endsection
+@endpush

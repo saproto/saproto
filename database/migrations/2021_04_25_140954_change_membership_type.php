@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class ChangeMembershipType extends Migration
 {
@@ -30,11 +30,11 @@ class ChangeMembershipType extends Migration
      */
     public function down()
     {
-        Schema::table('members', function(Blueprint $table) {
+        Schema::table('members', function (Blueprint $table) {
             $table->string('is_pending')->nullable(true)->default(null)->change();
         });
 
-        Schema::table('members', function(Blueprint $table) {
+        Schema::table('members', function (Blueprint $table) {
             $table->renameColumn('is_pending', 'pending');
             $table->renameColumn('is_donor', 'is_donator');
         });

@@ -2,41 +2,33 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
+use Carbon;
+use DateTime;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Mail;
+use PDF;
 use PragmaRX\Google2FA\Google2FA;
-
 use Proto\Mail\UserMailChange;
 use Proto\Models\Member;
 use Proto\Models\StorageEntry;
 use Redirect;
-
-use Proto\Models\User;
-
-use Carbon\Carbon;
-
-use DateTime;
-use PDF;
-use Auth;
 use Session;
 use Validator;
-use Mail;
 
 class UserDashboardController extends Controller
 {
-
-    /**
-     * Display the dashboard for a specific user.
-     *
-     * @param int $id
-     * @return \Illuminate\View\View
-     */
+    /** @return View */
     public function show()
     {
         $user = Auth::user();
 
         $qrcode = null;
         $tfakey = null;
-        if (!$user->tfa_totp_key) {
+        if (! $user->tfa_totp_key) {
             $google2fa = new Google2FA();
             $tfakey = $google2fa->generateSecretKey(32);
             $qrcode = $google2fa->getQRCodeGoogleUrl('S.A.%20Proto', str_replace(' ', '%20', $user->name), $tfakey);
@@ -47,6 +39,10 @@ class UserDashboardController extends Controller
         return view('users.dashboard.dashboard', ['user' => $user, 'memberships' => $memberships, 'tfa_qrcode' => $qrcode, 'tfa_key' => $tfakey]);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function updateMail(Request $request)
     {
         $user = Auth::user();
@@ -57,11 +53,11 @@ class UserDashboardController extends Controller
 
         if ($auth_check == null || $auth_check->id != $user->id) {
             $request->session()->flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
+
             return Redirect::back();
         }
 
         if ($new_email !== $user->email) {
-
             $validator = Validator::make($request->only(['email']), [
                 'email' => 'required|email|unique:users',
             ]);
@@ -71,37 +67,40 @@ class UserDashboardController extends Controller
 
             $email = [
                 'old' => $user->email,
-                'new' => $new_email
+                'new' => $new_email,
             ];
 
             $to = [
-                (object)[
+                (object) [
                     'email' => $email['old'],
-                    'name' => $user->name
+                    'name' => $user->name,
                 ],
-                (object)[
+                (object) [
                     'email' => $email['new'],
-                    'name' => $user->name
-                ]
+                    'name' => $user->name,
+                ],
             ];
 
             $changer = [
                 'name' => Auth::user()->name,
-                'ip' => $request->ip()
+                'ip' => $request->ip(),
             ];
 
             Mail::to($to)->queue((new UserMailChange($user, $changer, $email))->onQueue('high'));
-
         }
 
         $user->email = $new_email;
         $user->save();
 
-        Session::flash("flash_message", "E-mail address changed.");
-        return Redirect::route('user::dashboard');
+        Session::flash('flash_message', 'E-mail address changed.');
 
+        return Redirect::route('user::dashboard');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function update(Request $request)
     {
         $user = Auth::user();
@@ -113,7 +112,7 @@ class UserDashboardController extends Controller
             $userdata['phone_visible'] = $request->has('phone_visible');
             $userdata['receive_sms'] = $request->has('receive_sms');
             $validator = Validator::make($userdata, [
-                'phone' => 'required|regex:(\+[0-9]{8,16})'
+                'phone' => 'required|regex:(\+[0-9]{8,16})',
             ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
             if ($validator->fails()) {
                 return Redirect::route('user::dashboard')->withErrors($validator);
@@ -138,24 +137,26 @@ class UserDashboardController extends Controller
         $user->fill($userdata);
         $user->save();
 
-        Session::flash("flash_message", "Changes saved.");
-        return Redirect::route('user::dashboard');
+        Session::flash('flash_message', 'Changes saved.');
 
+        return Redirect::route('user::dashboard');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function editDiet(Request $request)
     {
-
         $user = Auth::user();
-
         $user->diet = htmlspecialchars($request->input('diet'));
         $user->save();
 
-        Session::flash("flash_message", "Your diet and allergy information has been updated.");
+        Session::flash('flash_message', 'Your diet and allergy information has been updated.');
         return Redirect::route('user::dashboard');
-
     }
 
+    /** @return View */
     public function becomeAMemberOf()
     {
         if (Auth::check()) {
@@ -166,98 +167,109 @@ class UserDashboardController extends Controller
 
         $steps = [
             [
-                'url' => route("login::register", ['wizard' => 1]),
+                'url' => route('login::register', ['wizard' => 1]),
                 'unlocked' => true,
                 'done' => Auth::check(),
-                'heading' => "Create an account",
-                'icon' => "fas fa-user-plus",
-                'text' => "In order to become a member of Study Association Proto, you need a Proto account. You can create that here. After creating your account, activate it by using the link mailed to you."
+                'heading' => 'Create an account',
+                'icon' => 'fas fa-user-plus',
+                'text' => 'In order to become a member of Study Association Proto, you need a Proto account. You can create that here. After creating your account, activate it by using the link mailed to you.',
             ],
             [
                 'url' => Auth::check() ? route('user::edu::add', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->edu_username,
-                'heading' => "Link your UTwente account",
-                'icon' => "fas fa-university",
-                'text' => "If you are a student at the University of Twente, we would appreciate it if you would add your student account to your Proto account. If you don't study at the University of Twente, you can skip this step."
+                'heading' => 'Link your UTwente account',
+                'icon' => 'fas fa-university',
+                'text' => "If you are a student at the University of Twente, we would appreciate it if you would add your student account to your Proto account. If you don't study at the University of Twente, you can skip this step.",
             ],
             [
                 'url' => Auth::check() ? route('user::memberprofile::complete', ['wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->completed_profile,
-                'heading' => "Provide some personal details",
-                'icon' => "fas fa-id-card",
-                'text' => "To enter your in our member administration, you need to provide is with some extra information."
+                'heading' => 'Provide some personal details',
+                'icon' => 'fas fa-id-card',
+                'text' => 'To enter your in our member administration, you need to provide is with some extra information.',
             ],
             [
-                'url' => Auth::check() ? route("user::bank::add", ["id" => $user->id, 'wizard' => 1]) : null,
+                'url' => Auth::check() ? route('user::bank::add', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->bank,
-                'heading' => "Provide payment details",
-                'icon' => "fas fa-euro-sign",
-                'text' => "We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend."
+                'heading' => 'Provide payment details',
+                'icon' => 'fas fa-euro-sign',
+                'text' => 'We need your bank authorisation to withdraw your membership fee, but also your purchases within the Omnomcom and fees of activities you attend.',
             ],
             [
                 'url' => Auth::check() ? route('user::address::add', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check(),
                 'done' => Auth::check() && Auth::user()->address,
-                'heading' => "Provide contact details",
-                'icon' => "fas fa-home",
-                'text' => "To make you a member of our association, we need your postal address. Please add it to your account here."
+                'heading' => 'Provide contact details',
+                'icon' => 'fas fa-home',
+                'text' => 'To make you a member of our association, we need your postal address. Please add it to your account here.',
             ],
             [
                 'url' => Auth::check() ? route('memberform::sign', ['id' => $user->id, 'wizard' => 1]) : null,
                 'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address,
                 'done' => Auth::check() && ((Auth::user()->completed_profile && Auth::user()->signed_membership_form) || Auth::user()->is_member),
-                'heading' => "Sign the membership form",
-                'icon' => "fas fa-signature",
-                'text' => "To complete your membership request we need you to sign the membership form."
+                'heading' => 'Sign the membership form',
+                'icon' => 'fas fa-signature',
+                'text' => 'To complete your membership request we need you to sign the membership form.',
             ],
             [
                 'url' => route('page::show', ['slug' => 'board', 'wizard' => 1]),
                 'unlocked' => Auth::check() && Auth::user()->completed_profile && Auth::user()->bank && Auth::user()->address && Auth::user()->signed_membership_form,
                 'done' => Auth::check() && Auth::user()->is_member,
-                'heading' => "Become a member!",
-                'icon' => "fas fa-trophy",
-                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server (invite.gg/proto)."
+                'heading' => 'Become a member!',
+                'icon' => 'fas fa-trophy',
+                'text' => "You're almost a full-fledged Proto member! You'll need to find one of the board-members to finalize your registration. They can usually be found in the Protopolis (Zilverling A230) or on our discord server (invite.gg/proto).",
             ],
             [
                 'url' => route('user::dashboard', ['wizard' => 1]),
                 'unlocked' => Auth::check() && Auth::user()->is_member,
                 'done' => false,
-                'heading' => "Add some additional info on your dashboard",
-                'icon' => "fas fa-tachometer-alt",
-                'text' => "Congratulations, you're now a member of Study Association Proto! As a next step, we would like to guide you to your dashboard, where you can sign up for (educational) mailing lists, some of which provide you regular information about your study, as well as some that provide you with Proto-related information. On your dashboard you can also add a profile picture and indicate any allergies or dietary restrictions you may have so Proto can take those into account when you're visiting an activity."
-            ]
+                'heading' => 'Add some additional info on your dashboard',
+                'icon' => 'fas fa-tachometer-alt',
+                'text' => "Congratulations, you're now a member of Study Association Proto! As a next step, we would like to guide you to your dashboard, where you can sign up for (educational) mailing lists, some of which provide you regular information about your study, as well as some that provide you with Proto-related information. On your dashboard you can also add a profile picture and indicate any allergies or dietary restrictions you may have so Proto can take those into account when you're visiting an activity.",
+            ],
         ];
 
         $todo = [];
         $done = [];
 
         foreach ($steps as $step) {
-            if ($step['done']) array_push($done, $step);
-            else array_push($todo, $step);
+            if ($step['done']) {
+                array_push($done, $step);
+            } else {
+                array_push($todo, $step);
+            }
         }
 
-        return view("users.becomeamember", ['user' => $user, 'todo' => $todo, 'done' => $done]);
+        return view('users.becomeamember', ['user' => $user, 'todo' => $todo, 'done' => $done]);
     }
 
+    /** @return View|RedirectResponse */
     public function getCompleteProfile()
     {
         $user = Auth::user();
         if ($user->completed_profile) {
-            Session::flash("flash_message", "Your membership profile is already complete.");
+            Session::flash('flash_message', 'Your membership profile is already complete.');
+
             return Redirect::route('becomeamember');
         }
 
-        return view("users.dashboard.completeprofile");
+        return view('users.dashboard.completeprofile');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse|View
+     * @throws Exception
+     */
     public function postCompleteProfile(Request $request)
     {
         $user = Auth::user();
         if ($user->completed_profile) {
-            Session::flash("flash_message", "Your membership profile is already complete.");
+            Session::flash('flash_message', 'Your membership profile is already complete.');
+
             return Redirect::route('becomeamember');
         }
 
@@ -266,7 +278,7 @@ class UserDashboardController extends Controller
 
         $validator = Validator::make($userdata, [
             'birthdate' => 'required|date',
-            'phone' => 'required|regex:(\+[0-9]{8,16})'
+            'phone' => 'required|regex:(\+[0-9]{8,16})',
         ], ['phone.regex' => 'Please enter your phone number in international format, with a plus (+) and country code: +123456789012']);
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator);
@@ -277,31 +289,44 @@ class UserDashboardController extends Controller
             $user->fill($userdata);
             $user->save();
 
-            Session::flash("flash_message", "Completed profile.");
+            Session::flash('flash_message', 'Completed profile.');
+
             return Redirect::route('becomeamember');
         } else {
             Session::flash('flash_userdata', $userdata);
-            return view("users.dashboard.completeprofile_verify",
-                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]);
+
+            return view(
+                'users.dashboard.completeprofile_verify',
+                ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
+            );
         }
     }
 
+    /**
+     * @return RedirectResponse|View
+     */
     public function getMemberForm()
     {
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
-            Session::flash("flash_message", "You have already signed the membership form");
+            Session::flash('flash_message', 'You have already signed the membership form');
+
             return Redirect::route('becomeamember');
         }
 
-        return view("users.dashboard.membershipform", ['user' => $user]);
+        return view('users.dashboard.membershipform', ['user' => $user]);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function postMemberForm(Request $request)
     {
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
-            Session::flash("flash_message", "You have already signed the membership form");
+            Session::flash('flash_message', 'You have already signed the membership form');
+
             return Redirect::route('becomeamember');
         }
 
@@ -313,53 +338,54 @@ class UserDashboardController extends Controller
         $form = $form->setPaper('a4');
 
         $file = new StorageEntry();
-        $file->createFromData($form->output(), 'application/pdf', 'membership_form_user_' . $user->id . '.pdf');
+        $file->createFromData($form->output(), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
 
         $member->membershipForm()->associate($file);
         $member->save();
 
-        Session::flash("flash_message", "Thanks for signing the membership form!");
+        Session::flash('flash_message', 'Thanks for signing the membership form!');
         return Redirect::route('becomeamember');
     }
 
+    /** @return View */
     public function getClearProfile()
     {
         $user = Auth::user();
-        if (!$user->completed_profile) {
-            abort(403, "You have not yet completed your membership profile.");
+        if (! $user->completed_profile) {
+            abort(403, 'You have not yet completed your membership profile.');
         }
         if ($user->is_member) {
-            abort(403, "You cannot clear your membership profile while your membership is active.");
+            abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
 
-        return view("users.dashboard.clearprofile", ['user' => $user]);
+        return view('users.dashboard.clearprofile', ['user' => $user]);
     }
 
+    /** @return RedirectResponse */
     public function postClearProfile()
     {
         $user = Auth::user();
-        if (!$user->completed_profile) {
-            abort(403, "You have not yet completed your membership profile.");
+        if (! $user->completed_profile) {
+            abort(403, 'You have not yet completed your membership profile.');
         }
         if ($user->is_member) {
-            abort(403, "You cannot clear your membership profile while your membership is active.");
+            abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
 
         $user = Auth::user();
         $user->clearMemberProfile();
 
-        Session::flash("flash_message", "Profile cleared.");
+        Session::flash('flash_message', 'Profile cleared.');
         return Redirect::route('user::dashboard');
     }
 
+    /** @return RedirectResponse */
     public function generateKey()
     {
         $user = Auth::user();
-
         $user->generateNewPersonalKey();
 
-        Session::flash("flash_message", "New personal key generated.");
+        Session::flash('flash_message', 'New personal key generated.');
         return Redirect::route('user::dashboard');
     }
-
 }

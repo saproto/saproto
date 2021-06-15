@@ -2,51 +2,49 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Input;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\OrderLine;
 use Proto\Models\PhotoLikes;
+use Proto\Models\PlayedVideo;
 use Proto\Models\Quote;
 use Proto\Models\QuoteLike;
 use Proto\Models\RfidCard;
-use Proto\Models\User;
-use Proto\Models\Event;
-use Proto\Models\Activity;
 use Proto\Models\Token;
-use Proto\Models\PlayedVideo;
-
-use Auth;
-use Session;
-use Input;
+use Proto\Models\User;
+use stdClass;
 
 class ApiController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return string
+     */
     public function train(Request $request)
     {
-
-        return stripslashes(file_get_contents("http://@ews-rpx.ns.nl/mobile-api-avt?station=" . $_GET['station']));
-
+        return stripslashes(file_get_contents('http://@ews-rpx.ns.nl/mobile-api-avt?station='.$_GET['station']));
     }
 
+    /**
+     * @param $token
+     * @return false|string
+     */
     public function protubeAdmin($token)
     {
         $token = Token::where('token', $token)->first();
 
-        $adminInfo = new \stdClass();
+        $adminInfo = new stdClass();
 
-        if (!$token) {
+        if (! $token) {
             $adminInfo->is_admin = false;
         } else {
             $user = $token->user;
-            if (!$user) {
+            if (! $user) {
                 $adminInfo->is_admin = false;
             } else {
                 $adminInfo->user_id = $user->id;
@@ -56,19 +54,22 @@ class ApiController extends Controller
             }
         }
 
-        return (json_encode($adminInfo));
-
+        return json_encode($adminInfo);
     }
 
+    /** @param Request $request */
     public function protubePlayed(Request $request)
     {
-        if ($request->secret != config('herbert.secret')) abort(403);
+        if ($request->secret != config('herbert.secret')) {
+            abort(403);
+        }
 
         $playedVideo = new PlayedVideo();
 
         $token = Token::where('token', $request->token)->first();
 
         if ($token) {
+            /** @var User $user */
             $user = $token->user()->first();
             if ($user->keep_protube_history) {
                 $playedVideo->user()->associate($user);
@@ -83,9 +84,13 @@ class ApiController extends Controller
         PlayedVideo::where('video_id', $playedVideo->video_id)->update(['video_title' => $playedVideo->video_title]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function getToken(Request $request)
     {
-        $response = new \stdClass();
+        $response = new stdClass();
 
         if (Auth::check()) {
             $response->name = Auth::user()->name;
@@ -104,10 +109,10 @@ class ApiController extends Controller
 
     public function fishcamStream()
     {
-        header("Content-Transfer-Encoding: binary");
-        header("Content-Type: multipart/x-mixed-replace; boundary=video-boundary--");
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Type: multipart/x-mixed-replace; boundary=video-boundary--');
         header('Cache-Control: no-cache');
-        $handle = fopen(env("FISHCAM_URL"), "r");
+        $handle = fopen(env('FISHCAM_URL'), 'r');
         while ($data = fread($handle, 8192)) {
             echo $data;
             ob_flush();
@@ -116,6 +121,7 @@ class ApiController extends Controller
         }
     }
 
+    /** @return array */
     public function gdprExport()
     {
         $user = Auth::user();
@@ -133,7 +139,7 @@ class ApiController extends Controller
             $data['rfid_cards'][] = [
                 'card_id' => $rfid_card->card_id,
                 'name' => $rfid_card->name,
-                'added_at' => $rfid_card->created_at
+                'added_at' => $rfid_card->created_at,
             ];
         }
 
@@ -146,7 +152,7 @@ class ApiController extends Controller
                 'backup' => $activity_participation->backup,
                 'created_at' => $activity_participation->created_at,
                 'updated_at' => $activity_participation->updated_at,
-                'deleted_at' => $activity_participation->deleted_at
+                'deleted_at' => $activity_participation->deleted_at,
 
             ];
         }
@@ -167,7 +173,7 @@ class ApiController extends Controller
                 'units' => $orderline->units,
                 'total_price' => $orderline->total_price,
                 'payed_with' => $payment_method,
-                'order_date' => $orderline->created_at
+                'order_date' => $orderline->created_at,
             ];
         }
 
@@ -175,9 +181,9 @@ class ApiController extends Controller
             $data['played_videos'][] = [
                 'youtube_id' => $playedvideo->video_id,
                 'youtube_name' => $playedvideo->video_title,
-                'spotify_id' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_id : null,
-                'spotify_name' => $playedvideo->spotify_id != "" ? $playedvideo->spotify_name : null,
-                'played_at' => $playedvideo->created_at
+                'spotify_id' => $playedvideo->spotify_id != '' ? $playedvideo->spotify_id : null,
+                'spotify_name' => $playedvideo->spotify_id != '' ? $playedvideo->spotify_name : null,
+                'played_at' => $playedvideo->created_at,
             ];
         }
 
@@ -189,7 +195,7 @@ class ApiController extends Controller
             $data['achievements'][] = [
                 'name' => $achievement_granted->achievement->name,
                 'description' => $achievement_granted->achievement->desc,
-                'granted_on' => $achievement_granted->created_at
+                'granted_on' => $achievement_granted->created_at,
             ];
         }
 
@@ -200,18 +206,17 @@ class ApiController extends Controller
         foreach (Quote::where('user_id', $user->id)->get() as $quote) {
             $data['placed_quotes'][] = [
                 'quote' => $quote->quote,
-                'created_at' => $quote->created_at
+                'created_at' => $quote->created_at,
             ];
         }
 
         foreach (QuoteLike::where('user_id', $user->id)->get() as $quote) {
             $data['liked_quotes'][] = [
-                'quote' => $quote->quote->quote,
-                'liked_at' => $quote->created_at
+                'quote' => $quote->quote,
+                'liked_at' => $quote->created_at,
             ];
         }
 
         return $data;
     }
-
 }

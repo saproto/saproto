@@ -7,7 +7,6 @@ use Proto\Models\User;
 
 class UserCleanup extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -37,19 +36,18 @@ class UserCleanup extends Command
      */
     public function handle()
     {
-
         $this->info('Starting clean-up.');
 
         $count = 0;
 
         foreach (User::withTrashed()->get() as $user) {
-            if (!$user->isStale()) continue;
+            if (! $user->isStale()) {
+                continue;
+            }
             $count++;
             $user->forceDelete();
         }
 
         $this->info("Found and deleted $count stale users.");
-
     }
-
 }

@@ -3,7 +3,6 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Proto\Models\Member;
 
 class PrintActiveMembers extends Command
@@ -40,10 +39,10 @@ class PrintActiveMembers extends Command
     public function handle()
     {
         foreach (Member::all() as $member) {
-            if (!$member->user->isActiveMember()) {
+            if (! $member->user->isActiveMember()) {
                 continue;
             }
-            $this->info(sprintf("%s: %s", $member->user->name, implode(", ", $member->user->committees->pluck("name")->toArray())));
+            $this->info(sprintf('%s: %s', $member->user->name, implode(', ', $member->user->committees->pluck('name')->toArray())));
         }
     }
 }

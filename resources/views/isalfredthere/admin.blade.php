@@ -88,19 +88,16 @@
 
     </div>
 
-    <script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         function toggleAlfredSelectDiv() {
             let status = $('.where_is_alfred input[type="radio"]:checked').val();
-            if (status == 'away') {
+            if (status === 'away') {
                 $("#alfred_date_select").show();
                 $("#datetimepicker-back").prop('required', true);
             } else {
                 $("#alfred_date_select").hide();
                 $("#datetimepicker-back").prop('required', false);
             }
-
-
-
         }
     </script>
 

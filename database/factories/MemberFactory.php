@@ -2,8 +2,9 @@
 
 use Faker\Generator as Faker;
 
-/** @var $factory Closure */
-$factory->define(Proto\Models\Member::class,
+/* @var $factory Closure */
+$factory->define(
+    Proto\Models\Member::class,
     function (Faker $faker) {
         $picktime = $faker->dateTimeInInterval('April 20, 2011', 'now');
         return [
@@ -13,6 +14,8 @@ $factory->define(Proto\Models\Member::class,
             'is_lifelong' => mt_rand(0, 100) > 94 ? 1 : 0,
             'is_honorary' => mt_rand(0, 100) > 98 ? 1 : 0,
             'is_donor' => mt_rand(0, 100) > 98 ? 1 : 0,
-            'is_pending' => mt_rand(0, 100) > 85 ? 1 : 0,
+            'is_pet' => mt_rand(0, 100) > 98 ? 1 : 0,
+            'pending' => mt_rand(0, 100) > 85 ? 1 : 0,
         ];
-    });
+    }
+);
