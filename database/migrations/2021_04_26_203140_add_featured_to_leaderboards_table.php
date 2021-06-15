@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddFeaturedToLeaderboardsTable extends Migration
 {
@@ -13,7 +13,7 @@ class AddFeaturedToLeaderboardsTable extends Migration
      */
     public function up()
     {
-        Schema::table('leaderboards', function(Blueprint $table) {
+        Schema::table('leaderboards', function (Blueprint $table) {
             $table->boolean('featured')->after('name');
         });
     }
@@ -25,7 +25,7 @@ class AddFeaturedToLeaderboardsTable extends Migration
      */
     public function down()
     {
-        Schema::table('leaderboards', function(Blueprint $table) {
+        Schema::table('leaderboards', function (Blueprint $table) {
             $table->dropColumn('featured');
         });
     }
