@@ -25,7 +25,7 @@ $(function() {
     catch { /* Intentionally left blank */ }
 
     // Enables tooltips
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip({ boundary: 'window'})
 
     // Enable popover
     $('[data-toggle="popover"]').popover()
