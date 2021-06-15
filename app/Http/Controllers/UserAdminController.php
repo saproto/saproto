@@ -229,6 +229,31 @@ class UserAdminController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function setMembershipType(Request $request, $id)
+    {
+        if (! Auth::user()->can('board')) {
+            abort(403, 'Only board members can do this.');
+        }
+
+        $user = User::findOrFail($id);
+        $member = $user->member;
+        $type = $request->input('type');
+
+        $member->is_honorary = $type == 'honorary';
+        $member->is_lifelong = $type == 'lifelong';
+        $member->is_donator = $type == 'donator';
+        $member->is_pet = $type == 'pet';
+        $member->save();
+
+        Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
+        return redirect()->back();
+    }
+
+    /**
      * @param int $id
      * @return RedirectResponse
      */

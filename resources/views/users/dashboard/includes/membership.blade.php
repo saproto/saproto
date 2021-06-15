@@ -50,7 +50,7 @@
                             </td>
                         @endif
                     </tr>
-                    @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong)
+                    @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong || $user->member->is_pet)
                         <tr>
                             <th>Special status</th>
                             <td>
@@ -71,6 +71,12 @@
                                         Lifelong member <i class="fas fa-clock ml-1"></i>
                                     </span>
                                 @endif
+
+                                    @if($user->member->is_pet)
+                                        <span class="badge badge-pill badge-primary">
+                                        Pet member <i class="fas fa-cat ml-1"></i>
+                                    </span>
+                                    @endif
                             </td>
                         </tr>
                     @endif
