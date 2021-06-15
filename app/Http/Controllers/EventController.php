@@ -173,7 +173,7 @@ class EventController extends Controller
         $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location;
 
         if ($changed_important_details) {
-            Session::flash("flash_message", "Your event '" . $event->title . "' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
+            Session::flash('flash_message', "Your event '".$event->title."' has been saved. <br><b class='text-warning'>You updated some important information. Don't forget to update your participants with this info!</b>");
         } else {
             Session::flash('flash_message', "Your event '".$event->title."' has been saved.");
         }

@@ -63,7 +63,7 @@ class LeaderboardController extends Controller
         $leaderboard->icon = $request->input('icon');
         $leaderboard->points_name = $request->input('points_name');
         $leaderboard->save();
-      
+
         Session::flash('flash_message', "Your leaderboard '".$leaderboard->name."' has been added.");
         return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
     }
@@ -83,7 +83,7 @@ class LeaderboardController extends Controller
 
     public function update(Request $request, $id)
     {
-        if($request->featured && Leaderboard::where('featured', true)->first() != null) {
+        if ($request->featured && Leaderboard::where('featured', true)->first() != null) {
             Leaderboard::where('featured', true)->update(['featured' => false]);
         }
 
@@ -92,7 +92,7 @@ class LeaderboardController extends Controller
         $leaderboard->featured = $request->has('featured');
         $leaderboard->description = $request->input('description');
         $leaderboard->points_name = $request->input('points_name');
-        if($request->input('icon') != null) {
+        if ($request->input('icon') != null) {
             $leaderboard->icon = $request->input('icon');
         }
         $committee = Committee::findOrFail($request->input('committee'));
