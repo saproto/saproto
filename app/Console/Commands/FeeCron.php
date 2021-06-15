@@ -75,13 +75,13 @@ class FeeCron extends Command
         ];
 
         foreach (Member::all() as $member) {
-            if (in_array($member->user->id, $already_paid) || $member->pending) {
+            if (in_array($member->user->id, $already_paid) || $member->is_pending) {
                 continue;
             }
 
             $email_remmitance_reason = null;
 
-            if ($member->is_lifelong || $member->is_honorary || $member->is_donator || $member->is_pet) {
+            if ($member->is_lifelong || $member->is_honorary || $member->is_donor || $member->is_pet) {
                 $fee = config('omnomcom.fee')['remitted'];
                 $email_fee = 'remitted';
                 if ($member->is_honorary) {
@@ -93,9 +93,9 @@ class FeeCron extends Command
                 } elseif ($member->is_pet) {
                     $reason = 'Pet member';
                     $email_remmitance_reason = 'you are a pet and therefore do not posses any money';
-                } elseif ($member->is_donator) {
-                    $reason = 'Donator';
-                    $email_remmitance_reason = 'you are a donator of the association, and your donation is not handled via the membership fee system';
+                } elseif ($member->is_donor) {
+                    $reason = 'Donor';
+                    $email_remmitance_reason = 'you are a donor of the association, and your donation is not handled via the membership fee system';
                 }
                 $charged->remitted[] = $member->user->name.' (#'.$member->user->id.") - $reason";
             } elseif (in_array(strtolower($member->user->email), $emails) || in_array($member->user->utwente_username, $usernames) || in_array(strtolower($member->user->name), $names)) {

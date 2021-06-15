@@ -16,7 +16,7 @@
                         <option>Regular member</option>
                         <option {{ $user->member->is_honorary ? 'selected' : '' }} value="honorary">Honorary member</option>
                         <option {{ $user->member->is_lifelong ? 'selected' : '' }} value="lifelong">Lifelong member</option>
-                        <option {{ $user->member->is_donator ? 'selected' : '' }} value="donator">Donator</option>
+                        <option {{ $user->member->is_donor ? 'selected' : '' }} value="donor">Donor</option>
                         <option {{ $user->member->is_pet ? 'selected' : '' }} value="pet">Pet member</option>
                     </select>
                 </div>

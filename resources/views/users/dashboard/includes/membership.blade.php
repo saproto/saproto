@@ -50,7 +50,7 @@
                             </td>
                         @endif
                     </tr>
-                    @if($user->member->is_honorary || $user->member->is_donator || $user->member->is_lifelong || $user->member->is_pet)
+                    @if($user->member->is_honorary || $user->member->is_donor || $user->member->is_lifelong || $user->member->is_pet)
                         <tr>
                             <th>Special status</th>
                             <td>
@@ -60,9 +60,9 @@
                                     </span>
                                 @endif
 
-                                @if($user->member->is_donator)
+                                @if($user->member->is_donor)
                                     <span class="badge badge-pill badge-primary">
-                                        Donator <i class="far fa-hand-holding-usd ml-1"></i>
+                                        Donor <i class="far fa-hand-holding-usd ml-1"></i>
                                     </span>
                                 @endif
 

@@ -552,7 +552,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return Member[] */
     public function getMemberships()
     {
-        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('pending', '=', true)->get();
+        $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
         $memberships['previous'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '!=', null)->get();
         return $memberships;
     }
@@ -592,7 +592,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     /** @return bool Whether user has a current membership that is not pending. */
     public function getIsMemberAttribute()
     {
-        return $this->member && ! $this->member->pending;
+        return $this->member && ! $this->member->is_pending;
     }
 
     /** @return bool */

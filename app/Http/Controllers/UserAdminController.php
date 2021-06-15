@@ -34,12 +34,12 @@ class UserAdminController extends Controller
         switch ($filter) {
             case 'pending':
                 $users = User::withTrashed()->whereHas('member', function ($q) {
-                    $q->where('pending', '=', 1)->where('deleted_at', '=', null);
+                    $q->where('is_pending', '=', true)->where('deleted_at', '=', null);
                 });
                 break;
             case 'members':
                 $users = User::withTrashed()->whereHas('member', function ($q) {
-                    $q->where('pending', '=', 0)->where('deleted_at', '=', null);
+                    $q->where('is_pending', '=', false)->where('deleted_at', '=', null);
                 });
                 break;
             case 'users':
@@ -161,7 +161,7 @@ class UserAdminController extends Controller
         } else {
             $member = $user->member;
             $member->created_at = Carbon::now()->toDateTimeString();
-            $member->pending = false;
+            $member->is_pending = false;
         }
 
         $name = explode(' ', $user->name);
@@ -245,7 +245,7 @@ class UserAdminController extends Controller
 
         $member->is_honorary = $type == 'honorary';
         $member->is_lifelong = $type == 'lifelong';
-        $member->is_donator = $type == 'donator';
+        $member->is_donor = $type == 'donor';
         $member->is_pet = $type == 'pet';
         $member->save();
 

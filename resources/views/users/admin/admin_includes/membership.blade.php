@@ -79,8 +79,8 @@
                                         Lifelong <i class="fas fa-clock"></i>
                                     @elseif($user->member->is_honorary)
                                         Honorary <i class="fas fa-trophy"></i>
-                                    @elseif($user->member->is_donator)
-                                        Donator <i class="fas fa-hand-holding-usd"></i>
+                                    @elseif($user->member->is_donor)
+                                        Donor <i class="fas fa-hand-holding-usd"></i>
                                     @elseif($user->member->is_pet)
                                         Pet <i class="fas fa-paw"></i>
                                     @else

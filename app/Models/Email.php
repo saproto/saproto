@@ -100,7 +100,7 @@ class Email extends Model
             return User::orderBy('name', 'asc')->get();
         } elseif ($this->to_member) {
             return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
-                return $user->member->pending == 1;
+                return $user->member->is_pending == true;
             });
         } elseif ($this->to_active) {
             $user_ids = [];

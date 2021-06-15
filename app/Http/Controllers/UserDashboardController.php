@@ -332,7 +332,7 @@ class UserDashboardController extends Controller
 
         $member = Member::create();
         $member->user()->associate($user);
-        $member->pending = true;
+        $member->is_pending = true;
 
         $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]);
         $form = $form->setPaper('a4');

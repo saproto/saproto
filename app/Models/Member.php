@@ -21,7 +21,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $updated_at
  * @property int $is_lifelong
  * @property int $is_honorary
- * @property int $is_donator
+ * @property int $is_donor
  * @property string $pending
  * @property Carbon|null $deleted_at
  * @property string|null $card_printed_on
@@ -36,7 +36,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Member whereCreatedAt($value)
  * @method static Builder|Member whereDeletedAt($value)
  * @method static Builder|Member whereId($value)
- * @method static Builder|Member whereIsDonator($value)
+ * @method static Builder|Member whereIsDonor($value)
  * @method static Builder|Member whereIsHonorary($value)
  * @method static Builder|Member whereIsLifelong($value)
  * @method static Builder|Member whereMembershipFormId($value)
