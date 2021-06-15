@@ -31,6 +31,14 @@
                             </select>
                         </div>
 
+                        @if($leaderboard)
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="featured" name="featured" {{ $leaderboard->featured ? 'checked' : '' }}>
+                                <label class="form-check-label" for="featured">
+                                    Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>
+                                </label>
+                            </div>
+                        @endif
 
                         <div class="form-group">
                             <label for="name">Leaderboard name:</label>
@@ -39,7 +47,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="name">Points name:</label>
+                            <label for="points_name">Points name:</label>
                             <input type="text" class="form-control" id="points_name" name="points_name"
                                    placeholder="Beers" value="{{ $leaderboard->points_name ?? '' }}" required>
                         </div>
@@ -120,7 +128,7 @@
                                                         <td>#{{ $loop->index+1 }}</td>
                                                         <td>{{ $entry->user->name }}</td>
                                                         <td style="width: 80px">
-                                                            <input id="le_{{ $entry->id }}" data-id="{{ $entry->id }}" value="{{ $entry->points}}" class="le_points" >
+                                                            <input id="le_{{ $entry->id }}" data-id="{{ $entry->id }}" value="{{ $entry->points}}" class="le_points">
                                                         </td>
                                                         <td style="min-width: 60px">
                                                             <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ml-2 le_increase"></a>
