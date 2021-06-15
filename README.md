@@ -40,7 +40,7 @@ If you want to run a development environment in Docker **(you most likely do)** 
 
 ## Running with Docker
 
-This repository can be run through Docker by using `docker-compose`. This is still a work in progress, but for now the website can be run locally using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
+This repository can be run through Docker by using `docker compose`. This is still a work in progress, but for now the website can be run locally using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
 
 For more information on installing and using Docker check out their documentation at [docs.docker.com](https://docs.docker.com).
 
@@ -66,14 +66,14 @@ When adding a new library or client-side dependency through npm don't forget to 
 
 ##### Initial application setup
 ```
-docker-compose up -d
-docker-compose exec app /bin/bash
+docker compose up -d
+docker compose exec app /bin/bash
 composer install
 php artisan key:generate
 php artisan migrate --seed
 ```
 
-When you have finished the setup and Docker the following port will be exposed on localhost: 
+When you have finished the setup and Docker the following port will be exposed on localhost:
 
 - `8080` = Website
 - `8081` = PhpMyAdmin
@@ -85,17 +85,17 @@ You can sign in with the same Proto username you use on the *live* website and t
 
 ##### Running
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
 ##### Stopping
 ```
-docker-compose stop
+docker compose stop
 ```
 
 ##### Access to PHP container
 ```
-docker-compose exec app /bin/bash
+docker compose exec app /bin/bash
 ```
 
 ## Running without Docker
