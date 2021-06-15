@@ -2,73 +2,74 @@
 
 namespace Proto\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
+use Illuminate\View\View;
 use Proto\Models\Display;
 
 class DisplayController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function index()
     {
         $displays = Display::all();
+
         return view('protube.display.index', ['displays' => $displays]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         Display::create($request->all());
         Session::flash('flash_message', 'Display added.');
+
         return Redirect::back();
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function update(Request $request, $id)
     {
+        /** @var Display $display */
         $display = Display::findOrFail($id);
-        Session::flash('flash_message', 'Display ' . $display->name . ' added.');
-        $display->delete();
+        Session::flash('flash_message', 'Display '.$display->name.' updated.');
+        $display->fill($request->all());
+        $display->save();
+
         return Redirect::back();
     }
 
-    public function update(Request $request, $id)
+    /**
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function destroy($id)
     {
+        /** @var Display $display */
         $display = Display::findOrFail($id);
-        Session::flash('flash_message', 'Display ' . $display->name . ' updated.');
-        $display->fill($request->all());
-        $display->save();
+        Session::flash('flash_message', 'Display '.$display->name.' added.');
+        $display->delete();
+
         return Redirect::back();
     }
 
     /**
      * Return a public list of radio stations for Herbert.
      *
-     * @return mixed
+     * @return Display[]
      */
     public function api()
     {
         return Display::all();
     }
-
-
 }

@@ -2,31 +2,82 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Carbon;
 use DB;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection as SupportCollection;
 
+/**
+ * Email Model.
+ *
+ * @property int $id
+ * @property string $description
+ * @property string $subject
+ * @property string $sender_name
+ * @property string $sender_address
+ * @property string $body
+ * @property int $to_user
+ * @property int $to_member
+ * @property int $to_list
+ * @property int $to_event
+ * @property int $to_active
+ * @property int|null $sent_to
+ * @property int $sent
+ * @property int $ready
+ * @property int $time
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|StorageEntry[] $attachments
+ * @property-read Collection|Event[] $events
+ * @property-read Collection|EmailList[] $lists
+ * @method static Builder|Email whereBody($value)
+ * @method static Builder|Email whereCreatedAt($value)
+ * @method static Builder|Email whereDescription($value)
+ * @method static Builder|Email whereId($value)
+ * @method static Builder|Email whereReady($value)
+ * @method static Builder|Email whereSenderAddress($value)
+ * @method static Builder|Email whereSenderName($value)
+ * @method static Builder|Email whereSent($value)
+ * @method static Builder|Email whereSentTo($value)
+ * @method static Builder|Email whereSubject($value)
+ * @method static Builder|Email whereTime($value)
+ * @method static Builder|Email whereToActive($value)
+ * @method static Builder|Email whereToEvent($value)
+ * @method static Builder|Email whereToList($value)
+ * @method static Builder|Email whereToMember($value)
+ * @method static Builder|Email whereToUser($value)
+ * @method static Builder|Email whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Email extends Model
 {
-
     protected $table = 'emails';
 
     protected $guarded = ['id'];
 
+    /** @return BelongsToMany|EmailList[] */
     public function lists()
     {
         return $this->belongsToMany('Proto\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
     }
 
+    /** @return BelongsToMany|Event[] */
     public function events()
     {
         return $this->belongsToMany('Proto\Models\Event', 'emails_events', 'email_id', 'event_id');
     }
 
+    /** @return BelongsToMany|StorageEntry[] */
     public function attachments()
     {
         return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
     }
 
+    /** @return string */
     public function destinationForBody()
     {
         if ($this->to_user) {
@@ -42,54 +93,58 @@ class Email extends Model
         }
     }
 
+    /** @return SupportCollection|User[] */
     public function recipients()
     {
         if ($this->to_user) {
             return User::orderBy('name', 'asc')->get();
-
         } elseif ($this->to_member) {
-            $members = User::has('member')->orderBy('name', 'asc')->get()->reject(function($user, $index) { return $user->member->pending == 1; });
-            return $members;
-
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
+                return $user->member->pending == 1;
+            });
         } elseif ($this->to_active) {
-            $userids = [];
+            $user_ids = [];
             foreach (Committee::all() as $committee) {
-                $userids = array_merge($userids, $committee->users->pluck('id')->toArray());
+                $user_ids = array_merge($user_ids, $committee->users->pluck('id')->toArray());
             }
-            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
-
+            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_list) {
-            $userids = [];
+            $user_ids = [];
             foreach ($this->lists as $list) {
-                $userids = array_merge($userids, $list->users->pluck('id')->toArray());
+                $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
             }
-            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
-
+            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } elseif ($this->to_event != false) {
-            $userids = [];
+            $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event) {
-                    $userids = array_merge($userids, $event->returnAllUsers()->pluck('id')->toArray());
+                    $user_ids = array_merge($user_ids, $event->returnAllUsers()->pluck('id')->toArray());
                 }
             }
-            return User::whereIn('id', $userids)->orderBy('name', 'asc')->get();
+            return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
             return collect([]);
         }
     }
 
+    /** @return bool */
     public function hasRecipientList(EmailList $list)
     {
         return DB::table('emails_lists')->where('email_id', $this->id)->where('list_id', $list->id)->count() > 0;
     }
 
-    public function parseBodyFor(User $user)
+    /**
+     * @param User $user
+     * @return string Email body with variables parsed.
+     */
+    public function parseBodyFor($user)
     {
         $variable_from = ['$calling_name', '$name'];
         $variable_to = [$user->calling_name, $user->name];
         return str_replace($variable_from, $variable_to, $this->body);
     }
 
+    /** @return string */
     public function getEventName()
     {
         $events = [];
@@ -107,6 +162,7 @@ class Email extends Model
         return implode(', ', $events);
     }
 
+    /** @return string */
     public function getListName()
     {
         $lists = [];
@@ -118,17 +174,16 @@ class Email extends Model
             }
         }
         return implode(', ', $lists);
-
     }
 
+    /** @return string */
     public static function getListUnsubscribeFooter($user_id, $email_id)
     {
         $footer = [];
-        $lists = Email::whereId($email_id)->firstOrFail()->lists;
+        $lists = self::whereId($email_id)->firstOrFail()->lists;
         foreach ($lists as $list) {
             $footer[] = sprintf('%s (<a href="%s" style="color: #00aac0;">unsubscribe</a>)', $list->name, route('unsubscribefromlist', ['hash' => EmailList::generateUnsubscribeHash($user_id, $list->id)]));
         }
         return implode(', ', $footer);
     }
-
 }

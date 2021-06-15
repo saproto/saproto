@@ -3,15 +3,11 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\EmailDbAlias;
-use Proto\Models\User;
-
 use Proto\Models\EmailDbDomain;
-
-use App;
+use Proto\Models\User;
 
 /**
  * TODO
@@ -50,9 +46,8 @@ class MailAliasSync extends Command
      */
     public function handle()
     {
-
         $domain = EmailDbDomain::where('name', config('proto.emaildomain'))->first();
-        if (!$domain) {
+        if (! $domain) {
             $this->error('The e-mail domain does not exist, please create it!');
             return;
         }
@@ -61,13 +56,12 @@ class MailAliasSync extends Command
 
         $this->applyForwarderList($target, $domain);
 
-        $this->info("Done!");
-
+        $this->info('Done!');
     }
 
     private function makeFullAlias($source)
     {
-        return strtolower(sprintf("%s@%s", $source, config('proto.emaildomain')));
+        return strtolower(sprintf('%s@%s', $source, config('proto.emaildomain')));
     }
 
     private function applyForwarderList($target, $domain)
@@ -76,13 +70,13 @@ class MailAliasSync extends Command
         // Clean-up old
         $aliases = EmailDbAlias::where('domain_id', $domain->id)->get();
         foreach ($aliases as $alias) {
-            if (!in_array($alias->source, array_keys($target))) {
-                $this->info(sprintf("Deleting forward: %s -> %s", $alias->source, $alias->destination));
+            if (! in_array($alias->source, array_keys($target))) {
+                $this->info(sprintf('Deleting forward: %s -> %s', $alias->source, $alias->destination));
                 $alias->delete();
                 continue;
             }
-            if (!in_array($alias->destination, $target[$alias->source])) {
-                $this->info(sprintf("Deleting forward: %s -> %s", $alias->source, $alias->destination));
+            if (! in_array($alias->destination, $target[$alias->source])) {
+                $this->info(sprintf('Deleting forward: %s -> %s', $alias->source, $alias->destination));
                 $alias->delete();
                 continue;
             }
@@ -92,17 +86,16 @@ class MailAliasSync extends Command
         foreach ($target as $source => $destinations) {
             foreach ($destinations as $destination) {
                 $alias = EmailDbAlias::where('domain_id', $domain->id)->where('source', $source)->where('destination', $destination)->first();
-                if (!$alias) {
+                if (! $alias) {
                     $alias = EmailDbAlias::create([
                         'domain_id' => $domain->id,
                         'source' => $source,
-                        'destination' => $destination
+                        'destination' => $destination,
                     ]);
-                    $this->info(sprintf("Creating forward: %s -> %s", $source, $destination));
+                    $this->info(sprintf('Creating forward: %s -> %s', $source, $destination));
                 }
             }
         }
-
     }
 
     private function constructForwarderList()
@@ -114,7 +107,7 @@ class MailAliasSync extends Command
         foreach ($users as $user) {
             if ($user->is_member && $user->isActiveMember()) {
                 $data[$this->makeFullAlias($user->member->proto_username)] = [
-                    $user->email
+                    $user->email,
                 ];
             }
         }
@@ -122,7 +115,6 @@ class MailAliasSync extends Command
         // Constructing committee forwarders.
         $committees = Committee::all();
         foreach ($committees as $committee) {
-
             $destinations = [];
 
             foreach ($committee->users as $user) {
@@ -132,7 +124,6 @@ class MailAliasSync extends Command
             if (count($destinations) > 0) {
                 $data[$this->makeFullAlias($committee->slug)] = $destinations;
             }
-
         }
 
         // Constructing manual aliases.

@@ -3,13 +3,10 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-
-use Proto\Mail\DailyHelperMail;
-
-use Proto\Models\User;
-use Proto\Models\HelpingCommittee;
-
 use Mail;
+use Proto\Mail\DailyHelperMail;
+use Proto\Models\HelpingCommittee;
+use Proto\Models\User;
 
 class HelperNotificationsCron extends Command
 {
@@ -49,8 +46,7 @@ class HelperNotificationsCron extends Command
         $handledHelpIds = [];
 
         foreach ($users as $user) {
-
-            if (!$user->isActiveMember()) {
+            if (! $user->isActiveMember()) {
                 continue;
             }
 
@@ -62,9 +58,8 @@ class HelperNotificationsCron extends Command
 
                 foreach ($helps as $help) {
                     if ($help->activity && $help->activity->event && $help->amount > $help->getHelpingCount() && $help->activity->event->start > time()) {
-
                         if (isset($help->activity->event->id)) {
-                            if (!isset($events[$help->activity->event->id])) {
+                            if (! isset($events[$help->activity->event->id])) {
                                 $events[$help->activity->event->id] = new \stdClass();
                                 $events[$help->activity->event->id]->help = [];
                             }
@@ -76,7 +71,9 @@ class HelperNotificationsCron extends Command
                             $events[$help->activity->event->id]->help[] = $helpInfo;
                         }
 
-                        if(!in_array($help->id, $handledHelpIds)) $handledHelpIds[] = $help->id;
+                        if (! in_array($help->id, $handledHelpIds)) {
+                            $handledHelpIds[] = $help->id;
+                        }
                     }
                 }
 
@@ -85,7 +82,7 @@ class HelperNotificationsCron extends Command
             }
 
             if (count($events) > 0) {
-                $this->info('Sending notification mail to ' . $user->name . ' with ' . count($events) . ' events.');
+                $this->info('Sending notification mail to '.$user->name.' with '.count($events).' events.');
                 Mail::to($user)->queue((new DailyHelperMail($user, $events))->onQueue('low'));
             }
 

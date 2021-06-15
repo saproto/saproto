@@ -1,9 +1,9 @@
 @extends('website.layouts.redesign.generic')
 
-@section('javascript')
-    @parent
-    <script type="text/javascript">
-        let mySwiper = new Swiper ('.swiper-container', {
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let mySwiper = new Swiper.default('.swiper-container', {
             @if( count($companies) > 1 )
             loop: true,
             slidesPerView: 2,
@@ -33,7 +33,8 @@
             }
         })
     </script>
-@endsection
+
+@endpush
 
 @section('page-title')
     Homepage
@@ -102,30 +103,33 @@
         </div>
 
         <div class="col-xl-3 col-md-6 col-sm-12">
+            @section('right-column')
 
-            @if(isset($videos) && count($videos) > 0)
+                @if(isset($videos) && count($videos) > 0)
 
-                <div class="card mb-3">
-                    <div class="card-header bg-dark text-white">
-                        <i class="fab fa-youtube fa-fw mr-2"></i> Recent videos
+                    <div class="card mb-3">
+                        <div class="card-header bg-dark text-white">
+                            <i class="fab fa-youtube fa-fw mr-2"></i> Recent videos
+                        </div>
+                        <div class="card-body">
+
+                            @foreach($videos as $video)
+
+                                @include('videos.includes.video_block', [
+                                    'video' => $video,
+                                    'photo_pop' => false
+                                ])
+
+                            @endforeach
+
+                        </div>
                     </div>
-                    <div class="card-body">
 
-                        @foreach($videos as $video)
+                @endif
 
-                            @include('videos.includes.video_block', [
-                                'video' => $video,
-                                'photo_pop' => false
-                            ])
+                @include('website.layouts.macros.recentalbums', ['n' => 4])
 
-                        @endforeach
-
-                    </div>
-                </div>
-
-            @endif
-
-            @include('website.layouts.macros.recentalbums', ['n' => 4])
+            @show
 
         </div>
 

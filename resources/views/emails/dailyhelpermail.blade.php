@@ -18,7 +18,7 @@
         @php
 
             // This is done in this template in order to prevent the jobs table from containing large amounts of event data.
-            $event->event = Event::withTrashed()->find($eventId);
+            $event->event = Proto\Models\Event::withTrashed()->find($eventId);
 
         @endphp
 

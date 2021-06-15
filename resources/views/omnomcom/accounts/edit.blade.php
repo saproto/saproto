@@ -27,13 +27,13 @@
                         <div class="form-group">
                             <label for="name">Account name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Magical Accessories" value="{{ $account->name or '' }}" required>
+                                   placeholder="Magical Accessories" value="{{ $account->name ?? '' }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="account_number">Account number:</label>
                             <input type="number" class="form-control" id="account_number" name="account_number"
-                                   placeholder="1234" value="{{ $account->account_number or '' }}" required>
+                                   placeholder="1234" value="{{ $account->account_number ?? '' }}" required>
                         </div>
 
                     </div>

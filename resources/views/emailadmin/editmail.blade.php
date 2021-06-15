@@ -28,32 +28,29 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    @parent
-
-    <script type="text/javascript">
-
-        $("#destinationEvent").click(function () {
+        $("#destinationEvent").on('click', function () {
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', false);
         });
-        $("#destinationLists").click(function () {
+        $("#destinationLists").on('click', function () {
             $("#listSelect").prop('disabled', false);
             $("#eventSelect").prop('disabled', true);
         });
-        $("#destinationMembers").click(function () {
+        $("#destinationMembers").on('click', function () {
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', true);
         });
-        $("#destinationUsers").click(function () {
+        $("#destinationUsers").on('click', function () {
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', true);
         });
-        $("#destinationActiveMembers").click(function () {
+        $("#destinationActiveMembers").on('click', function () {
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', true);
         });
     </script>
 
-@endsection
+@endpush

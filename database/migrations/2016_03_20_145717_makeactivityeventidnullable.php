@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class Makeactivityeventidnullable extends Migration
 {
@@ -12,7 +12,7 @@ class Makeactivityeventidnullable extends Migration
      */
     public function up()
     {
-        Schema::table('activities', function(Blueprint $table) {
+        Schema::table('activities', function (Blueprint $table) {
             $table->integer('event_id')->nullable()->default(null)->change();
         });
     }

@@ -5,12 +5,12 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\User;
 
 class ProductBulkUpdateNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $log;
     public $user;
@@ -34,8 +34,8 @@ class ProductBulkUpdateNotification extends Mailable
     public function build()
     {
         return $this
-            ->to('omnomcom@' . config('proto.emaildomain'), 'OmNomCom Committee')
-            ->to('treasurer@' . config('proto.emaildomain'), config('proto.treasurer'))
+            ->to('omnomcom@'.config('proto.emaildomain'), 'OmNomCom Committee')
+            ->to('treasurer@'.config('proto.emaildomain'), config('proto.treasurer'))
             ->subject('OmNomCom bulk product stock update.')
             ->view('emails.omnomcom.bulkproductupdate');
     }

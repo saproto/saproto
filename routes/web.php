@@ -1,26 +1,25 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+
 require 'minisites.php';
 
-/* Pass viewname to body class */
+/* Pass view name to body class */
 View::composer('*', function ($view) {
     View::share('viewName', $view->getName());
 });
 
 Route::group(['middleware' => ['forcedomain']], function () {
 
-    /*
-     * The main route for the frontpage.
-     */
+    /* The main route for the frontpage. */
     Route::get('', ['as' => 'homepage', 'uses' => 'HomeController@show']);
     Route::get('developers', ['uses' => 'HomeController@developers']);
     Route::get('becomeamember', ['as' => 'becomeamember', 'uses' => 'UserDashboardController@becomeAMemberOf']);
 
     Route::get('fishcam', ['as' => 'fishcam', 'middleware' => ['member'], 'uses' => 'HomeController@fishcam']);
 
-    /*
-     * Routes related to the header images.
-     */
+    /* Routes related to the header images. */
     Route::group(['prefix' => 'headerimage', 'middleware' => ['auth', 'permission:header-image'], 'as' => 'headerimage::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'HeaderImageController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'HeaderImageController@create']);
@@ -28,65 +27,54 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'HeaderImageController@destroy']);
     });
 
-    /*
-     * Routes for the search function.
-     */
+    /* Routes for the search function. */
     Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
     Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
     Route::get('opensearch', ['as' => 'search::opensearch', 'uses' => 'SearchController@openSearch']);
 
-    /*
-     * Routes for the UTwente addressbook.
-     */
+    /* Routes for the UTwente address book. */
     Route::group(['prefix' => 'ldap', 'as' => 'ldap::', 'middleware' => ['utwente']], function () {
         Route::get('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
         Route::post('search', ['as' => 'search', 'uses' => 'SearchController@ldapSearch']);
     });
 
-    /*
-     * Routes related to authentication.
-     */
+    /* Routes related to authentication. */
     Route::group(['as' => 'login::'], function () {
         Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
         Route::post('login', ['as' => 'post', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postLogin']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
 
-        Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getReset']);
-        Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postReset']);
+        Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getPasswordReset']);
+        Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordReset']);
 
-        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getEmail']);
-        Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postEmail']);
+        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getPasswordReset']);
+        Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordResetEmail']);
 
-        Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordSyncGet']);
-        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordSyncPost']);
+        Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@getPasswordSync']);
+        Route::post('password/sync', ['as' => 'password::sync', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@postPasswordSync']);
 
-        Route::get('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@passwordChangeGet']);
-        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@passwordChangePost']);
+        Route::get('password/change', ['as' => 'password::change', 'middleware' => ['auth'], 'uses' => 'AuthController@getPasswordChange']);
+        Route::post('password/change', ['as' => 'password::change', 'middleware' => ['throttle:5,1', 'auth'], 'uses' => 'AuthController@postPasswordChange']);
 
         Route::get('register', ['as' => 'register', 'uses' => 'AuthController@getRegister']);
         Route::post('register', ['as' => 'register', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegister']);
         Route::post('register/surfconext', ['as' => 'register::surfconext', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postRegisterSurfConext']);
 
         Route::get('surfconext', ['as' => 'edu', 'uses' => 'AuthController@startSurfConextAuth']);
-        Route::get('surfconext/post', ['as' => 'edupost', 'uses' => 'AuthController@surfConextAuthPost']);
+        Route::get('surfconext/post', ['as' => 'edupost', 'uses' => 'AuthController@postSurfConextAuth']);
 
         Route::get('username', ['as' => 'requestusername', 'uses' => 'AuthController@requestUsername']);
         Route::post('username', ['as' => 'requestusername', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@requestUsername']);
     });
 
-    /*
-     * Routes related to user profiles.
-     */
+    /* Routes related to user profiles. */
     Route::group(['prefix' => 'user', 'as' => 'user::', 'middleware' => ['auth']], function () {
-
         Route::post('delete', ['as' => 'delete', 'uses' => 'AuthController@deleteUser']);
         Route::post('password', ['as' => 'changepassword', 'uses' => 'AuthController@updatePassword']);
 
         Route::get('personal_key', ['as' => 'personal_key::generate', 'uses' => 'UserDashboardController@generateKey']);
 
-        /*
-         * Routes related to members.
-         */
+        /* Routes related to members. */
         Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@impersonate']);
 
@@ -117,82 +105,67 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::post('change_email', ['as' => 'changemail', 'middleware' => ['throttle:3,1'], 'uses' => 'UserDashboardController@updateMail']);
 
-
         Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@show']);
         Route::post('dashboard', ['as' => 'dashboard', 'uses' => 'UserDashboardController@update']);
 
         Route::get('{id?}', ['as' => 'profile', 'middleware' => ['member'], 'uses' => 'UserProfileController@show']);
 
-        /*
-         * Routes related to addresses.
-         */
+        /* Routes related to addresses. */
         Route::group(['prefix' => 'address', 'as' => 'address::'], function () {
-            Route::get('add', ['as' => 'add', 'uses' => 'AddressController@addForm']);
-            Route::post('add', ['as' => 'add', 'uses' => 'AddressController@add']);
-            Route::get('delete', ['as' => 'delete', 'uses' => 'AddressController@delete']);
-            Route::get('edit', ['as' => 'edit', 'uses' => 'AddressController@editForm']);
-            Route::post('edit', ['as' => 'edit', 'uses' => 'AddressController@edit']);
+            Route::get('add', ['as' => 'add', 'uses' => 'AddressController@add']);
+            Route::post('add', ['as' => 'add', 'uses' => 'AddressController@store']);
+            Route::get('delete', ['as' => 'delete', 'uses' => 'AddressController@destroy']);
+            Route::get('edit', ['as' => 'edit', 'uses' => 'AddressController@edit']);
+            Route::post('edit', ['as' => 'edit', 'uses' => 'AddressController@update']);
             Route::get('togglehidden', ['as' => 'togglehidden', 'uses' => 'AddressController@toggleHidden']);
         });
 
-        /*
-         * Routes related to diet.
-         */
+        /* Routes related to diet. */
         Route::group(['prefix' => 'diet', 'as' => 'diet::'], function () {
             Route::post('edit', ['as' => 'edit', 'uses' => 'UserDashboardController@editDiet']);
         });
 
-        /*
-         * Routes related to bank accounts
-         */
+        /* Routes related to bank accounts. */
         Route::group(['prefix' => 'bank', 'as' => 'bank::'], function () {
-            Route::get('add', ['as' => 'add', 'uses' => 'BankController@addForm']);
-            Route::post('add', ['as' => 'add', 'uses' => 'BankController@add']);
-            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@delete']);
-            Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@editForm']);
-            Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
+            Route::get('add', ['as' => 'add', 'uses' => 'BankController@add']);
+            Route::post('add', ['as' => 'add', 'uses' => 'BankController@store']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@destory']);
+            Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
+            Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@update']);
         });
 
-        /*
-         * Routes related to RFID cards
-         */
+        /* Routes related to RFID cards. */
         Route::group(['prefix' => 'rfidcard/{id}', 'as' => 'rfid::'], function () {
             Route::get('delete', ['as' => 'delete', 'uses' => 'RfidCardController@destroy']);
             Route::get('edit', ['as' => 'edit', 'uses' => 'RfidCardController@edit']);
             Route::post('edit', ['as' => 'edit', 'uses' => 'RfidCardController@update']);
         });
 
-        /*
-         * Routes related to profile pictures
-         */
+        /* Routes related to profile pictures. */
         Route::group(['prefix' => 'profilepic', 'as' => 'pic::'], function () {
             Route::post('update', ['as' => 'update', 'uses' => 'ProfilePictureController@update']);
             Route::get('delete', ['as' => 'delete', 'uses' => 'ProfilePictureController@destroy']);
         });
 
-
-        /*
-         * Routes related to UT accounts
-         */
+        /* Routes related to UT accounts. */
         Route::group(['prefix' => 'edu', 'as' => 'edu::'], function () {
             Route::get('delete', ['as' => 'delete', 'uses' => 'SurfConextController@destroy']);
             Route::get('add', ['as' => 'add', 'uses' => 'SurfConextController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'SurfConextController@store']);
         });
 
-        /*
-         * Routes related to 2FA
-         */
+        /* Routes related to 2FA. */
         Route::group(['prefix' => '2fa', 'as' => '2fa::'], function () {
             Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
             Route::post('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
         });
     });
 
-    Route::group(['prefix' => 'memberform', 'as' => 'memberform::', 'middleware' => ['auth']], function() {
+    /* Routes related to the Membership Forms */
+    Route::group(['prefix' => 'memberform', 'as' => 'memberform::', 'middleware' => ['auth']], function () {
         Route::get('sign', ['as' => 'sign', 'uses' => 'UserDashboardController@getMemberForm']);
         Route::post('sign', ['as' => 'sign', 'uses' => 'UserDashboardController@postMemberForm']);
-        Route::group(['prefix' => 'download', 'as' => 'download::'], function() {
+        Route::group(['prefix' => 'download', 'as' => 'download::'], function () {
             Route::get('new/{id}', ['as' => 'new', 'uses' => 'UserAdminController@getNewMemberForm']);
             Route::get('signed/{id}', ['as' => 'signed', 'uses' => 'UserAdminController@getSignedMemberForm']);
         });
@@ -200,11 +173,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'UserAdminController@destroyMemberForm']);
     });
 
-    /*
-     * Routes related to committees.
-     */
+    /* Routes related to committees. */
     Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
-
         Route::group(['prefix' => 'membership', 'as' => 'membership::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'CommitteeController@addMembership']);
             Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
@@ -228,23 +198,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
 
         Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
-
     });
 
-    /*
-     * Routes related to societies
-     */
-
+    /* Routes related to societies. */
     Route::group(['prefix' => 'society', 'as' => 'society::'], function () {
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview'])->defaults('showSociety', true);
         Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
     });
 
-    /*
-     * Routes related to narrowcasting.
-     */
+    /* Routes related to narrowcasting. */
     Route::group(['prefix' => 'narrowcasting', 'as' => 'narrowcasting::'], function () {
-
         Route::get('', ['as' => 'display', 'uses' => 'NarrowcastingController@display']);
         Route::get('list', ['as' => 'list', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@create']);
@@ -253,14 +216,10 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('edit/{id}', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@destroy']);
         Route::get('clear', ['as' => 'clear', 'middleware' => ['auth', 'permission:board'], 'uses' => 'NarrowcastingController@clear']);
-
     });
 
-    /*
-     * Routes related to companies.
-     */
+    /* Routes related to companies. */
     Route::group(['prefix' => 'companies', 'as' => 'companies::'], function () {
-
         Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@adminIndex']);
         Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CompanyController@store']);
@@ -273,29 +232,21 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('', ['as' => 'index', 'uses' => 'CompanyController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@show']);
-
     });
 
-    /*
-     * Routes related to membercard.
-     */
+    /* Routes related to membercard. */
     Route::group(['prefix' => 'membercard', 'as' => 'membercard::'], function () {
-
         Route::get('', ['as' => 'index', 'uses' => 'CompanyController@indexmembercard']);
 
-        Route::post('print', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startprint']);
-        Route::post('printoverlay', ['as' => 'printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startoverlayprint']);
+        Route::post('print', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startPrint']);
+        Route::post('printoverlay', ['as' => 'printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startOverlayPrint']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'MemberCardController@download']);
 
         Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@showmembercard']);
-
     });
 
-    /*
-     * Routes related to joboffers.
-     */
+    /* Routes related to joboffers. */
     Route::group(['prefix' => 'joboffers', 'as' => 'joboffers::'], function () {
-
         Route::get('', ['as' => 'index', 'uses' => 'JobofferController@index']);
         Route::get('list', ['as' => 'admin', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@adminIndex']);
 
@@ -308,9 +259,29 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['auth', 'permission:board'], 'uses' => 'JobofferController@destroy']);
 
         Route::get('{id}', ['as' => 'show', 'uses' => 'JobofferController@show']);
-
     });
 
+    /* Routes related to leaderboards. */
+    Route::group(['prefix' => 'leaderboards', 'as' => 'leaderboards::', 'middleware' => ['auth', 'member']], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'LeaderboardController@index']);
+
+        Route::group(['middleware' => ['permission:board']], function () {
+            Route::get('list', ['as' => 'admin', 'uses' => 'LeaderboardController@adminIndex']);
+            Route::get('add', ['as' => 'add', 'uses' => 'LeaderboardController@create']);
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardController@store']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@edit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'LeaderboardController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardController@destroy']);
+        });
+
+        Route::group(['prefix' => 'entries', 'as' => 'entries::', 'middleware' => ['permission:board']], function () {
+            Route::post('add', ['as' => 'add', 'uses' => 'LeaderboardEntryController@store']);
+            Route::post('update', ['as' => 'update', 'uses' => 'LeaderboardEntryController@update']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'LeaderboardEntryController@destroy']);
+        });
+    });
+
+    /* Routes related to dinnerforms. */
     Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'DinnerformController@store']);
@@ -323,10 +294,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /*
      * Routes related to events.
-     * Important: routes in this block always use event_id or a relevent other ID. activity_id is in principle never used.
+     * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.
      */
     Route::group(['prefix' => 'events', 'as' => 'event::'], function () {
-
         Route::group(['prefix' => 'financial', 'as' => 'financial::', 'middleware' => ['permission:finadmin']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'EventController@finindex']);
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
@@ -362,8 +332,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('participatefor/{id}', ['as' => 'addparticipationfor', 'middleware' => ['permission:board'], 'uses' => 'ParticipationController@createFor']);
 
         // Related to activities
-        Route::post('signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@save']);
-        Route::get('signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@delete']);
+        Route::post('signup/{id}', ['as' => 'addsignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@store']);
+        Route::get('signup/{id}/delete', ['as' => 'deletesignup', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@destroy']);
 
         // Related to helping committees
         Route::post('addhelp/{id}', ['as' => 'addhelp', 'middleware' => ['permission:board'], 'uses' => 'ActivityController@addHelp']);
@@ -378,9 +348,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         // Force login for event
         Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
-
     });
 
+    /* Routes related to the newsletter */
     Route::group(['prefix' => 'newsletter', 'as' => 'newsletter::'], function () {
         Route::get('', ['as' => 'preview', 'middleware' => ['auth'], 'uses' => 'NewsletterController@newsletterPreview']);
         Route::group(['middleware' => ['permission:board']], function () {
@@ -391,11 +361,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    /*
-     * Routes related to pages.
-     */
+    /* Routes related to pages. */
     Route::group(['prefix' => 'page', 'as' => 'page::'], function () {
-
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PageController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'PageController@create']);
@@ -409,18 +376,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
                 Route::post('add', ['as' => 'add', 'uses' => 'PageController@addFile']);
                 Route::get('{file_id}/delete', ['as' => 'delete', 'uses' => 'PageController@deleteFile']);
             });
-
         });
 
         Route::get('{slug}', ['as' => 'show', 'uses' => 'PageController@show']);
-
     });
 
-    /*
-     * Routes related to pages.
-     */
+    /* Routes related to pages. */
     Route::group(['prefix' => 'news', 'as' => 'news::'], function () {
-
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('admin', ['as' => 'admin', 'uses' => 'NewsController@admin']);
             Route::get('add', ['as' => 'add', 'uses' => 'NewsController@create']);
@@ -433,12 +395,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('', ['as' => 'list', 'uses' => 'NewsController@index']);
         Route::get('{id}', ['as' => 'show', 'uses' => 'NewsController@show']);
-
     });
 
-    /*
-     * Routes related to menu.
-     */
+    /* Routes related to menu. */
     Route::group(['prefix' => 'menu', 'as' => 'menu::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('', ['as' => 'list', 'uses' => 'MenuController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'MenuController@create']);
@@ -452,11 +411,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'MenuController@destroy']);
     });
 
-    /*
-     * Routes related to tickets.
-     */
+    /* Routes related to tickets. */
     Route::group(['prefix' => 'tickets', 'middleware' => ['auth'], 'as' => 'tickets::'], function () {
-
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'TicketController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'TicketController@create']);
@@ -467,30 +423,24 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         Route::get('scan/{barcode}', ['as' => 'scan', 'uses' => 'TicketController@scan']);
-        Route::get('unscan/{barcode}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
+        Route::get('unscan/{barcode?}', ['as' => 'unscan', 'uses' => 'TicketController@unscan']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'TicketController@download']);
-
     });
 
-    /*
-     * Routes related to e-mail.
-     */
+    /* Routes related to e-mail. */
     Route::get('togglelist/{id}', ['as' => 'togglelist', 'middleware' => ['auth'], 'uses' => 'EmailListController@toggleSubscription']);
 
     Route::get('unsubscribe/{hash}', ['as' => 'unsubscribefromlist', 'uses' => 'EmailController@unsubscribeLink']);
 
     Route::group(['prefix' => 'email', 'middleware' => ['auth', 'permission:board'], 'as' => 'email::'], function () {
-
         Route::get('', ['as' => 'admin', 'uses' => 'EmailController@index']);
 
         Route::group(['prefix' => 'list', 'as' => 'list::'], function () {
-
             Route::get('add', ['as' => 'add', 'uses' => 'EmailListController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'EmailListController@store']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'EmailListController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'EmailListController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'EmailListController@destroy']);
-
         });
 
         Route::get('add', ['as' => 'add', 'uses' => 'EmailController@create']);
@@ -505,23 +455,18 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'EmailController@addAttachment']);
             Route::get('delete/{file_id}', ['as' => 'delete', 'uses' => 'EmailController@deleteAttachment']);
         });
-
     });
 
-    /*
-     * Routes related to the Quote Corner.
-     */
+    /* Routes related to the Quote Corner. */
     Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
         Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
-        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@delete']);
+        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@destroy']);
         Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
     });
 
-    /*
-     * Routes related to the Good Idea Board.
-     */
-    Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
+    /* Routes related to the Good Idea Board. */
+    Route::group(['prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
         Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
@@ -529,13 +474,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
     });
 
-    /*
-     * Routes related to the OmNomCom.
-     */
+    /* Routes related to the OmNomCom. */
     Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::'], function () {
-
         Route::get('minisite', ['uses' => 'OmNomController@miniSite']);
 
+        /* Routes related to OmNomCom stores. */
         Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
             Route::get('', ['as' => 'show', 'uses' => 'OmNomController@choose']);
             Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
@@ -543,6 +486,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('{store}/buy', ['as' => 'buy', 'uses' => 'OmNomController@buy']);
         });
 
+        /* Routes related to OmNomCom orders. */
         Route::group(['prefix' => 'orders', 'middleware' => ['auth'], 'as' => 'orders::'], function () {
             Route::post('add/bulk', ['as' => 'addbulk', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@bulkStore']);
             Route::post('add/single', ['as' => 'add', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@store']);
@@ -552,10 +496,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{date?}', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
         });
 
+        /* Routes related to the TIPCie OmNomCom store. */
         Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie|omnomcom'], 'as' => 'tipcie::'], function () {
             Route::get('', ['as' => 'orderhistory', 'uses' => 'TIPCieController@orderIndex']);
         });
 
+        /* Routes related to Financial Accounts. */
         Route::group(['prefix' => 'accounts', 'middleware' => ['permission:finadmin'], 'as' => 'accounts::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'AccountController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'AccountController@create']);
@@ -567,11 +513,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('aggregate/{account}', ['as' => 'aggregate', 'uses' => 'AccountController@showAggregation']);
         });
 
+        /* Routes related to Payment Statistics. */
         Route::group(['prefix' => 'payments', 'middleware' => ['permission:finadmin'], 'as' => 'payments::'], function () {
             Route::get('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
             Route::post('statistics', ['as' => 'statistics', 'uses' => 'OrderLineController@showPaymentStatistics']);
         });
 
+        /* Routes related to Products. */
         Route::group(['prefix' => 'products', 'middleware' => ['permission:omnomcom'], 'as' => 'products::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'ProductController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'ProductController@create']);
@@ -588,6 +536,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('update/bulk', ['as' => 'bulkupdate', 'middleware' => ['permission:omnomcom'], 'uses' => 'ProductController@bulkUpdate']);
         });
 
+        /* Routes related to OmNomCom Categories. */
         Route::group(['prefix' => 'categories', 'middleware' => ['permission:omnomcom'], 'as' => 'categories::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'ProductCategoryController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'ProductCategoryController@create']);
@@ -597,6 +546,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}', ['as' => 'show', 'uses' => 'ProductCategoryController@show']);
         });
 
+        /* Routes related to Withdrawals. */
         Route::group(['prefix' => 'withdrawals', 'middleware' => ['permission:finadmin'], 'as' => 'withdrawal::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'WithdrawalController@index']);
             Route::get('add', ['as' => 'add', 'uses' => 'WithdrawalController@create']);
@@ -616,6 +566,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('unwithdrawable', ['middleware' => ['permission:finadmin'], 'as' => 'unwithdrawable', 'uses' => 'WithdrawalController@unwithdrawable']);
 
+        /* Routes related to Mollie. */
         Route::group(['prefix' => 'mollie', 'middleware' => ['auth'], 'as' => 'mollie::'], function () {
             Route::post('pay', ['as' => 'pay', 'uses' => 'MollieController@pay']);
             Route::get('status/{id}', ['as' => 'status', 'uses' => 'MollieController@status']);
@@ -627,20 +578,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('mywithdrawal/{id}', ['as' => 'mywithdrawal', 'middleware' => ['auth'], 'uses' => 'WithdrawalController@showForUser']);
 
         Route::get('supplier', ['as' => 'generateorder', 'middleware' => ['permission:omnomcom'], 'uses' => 'OmNomController@generateOrder']);
-
     });
 
-
-    /*
-     * Routes related to webhooks.
-     */
+    /* Routes related to webhooks. */
     Route::group(['prefix' => 'webhook', 'as' => 'webhook::'], function () {
         Route::any('mollie/{id}', ['as' => 'mollie', 'uses' => 'MollieController@webhook']);
     });
 
-    /**
-     * Routes related to YouTube videos.
-     */
+    /* Routes related to YouTube videos. */
     Route::group(['prefix' => 'video', 'as' => 'video::'], function () {
         Route::group(['prefix' => 'admin', 'middleware' => ['permission:board'], 'as' => 'admin::'], function () {
             Route::get('', ['as' => 'index', 'uses' => 'VideoController@index']);
@@ -653,9 +598,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'VideoController@publicIndex']);
     });
 
-    /**
-     * Routes related to announcements.
-     */
+    /* Routes related to announcements. */
     Route::group(['prefix' => 'announcement', 'as' => 'announcement::'], function () {
         Route::group(['prefix' => 'admin', 'middleware' => ['permission:sysadmin'], 'as' => ''], function () {
             Route::get('', ['as' => 'index', 'uses' => 'AnnouncementController@index']);
@@ -669,9 +612,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('dismiss/{id}', ['as' => 'dismiss', 'uses' => 'AnnouncementController@dismiss']);
     });
 
-    /*
-     * Routes related to photos.
-     */
+    /* Routes related to photos. */
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
@@ -683,10 +624,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/dislike/{id}', ['as' => 'dislikes', 'middleware' => ['auth'], 'uses' => 'PhotoController@dislikePhoto']);
         Route::get('/photo/{id}', ['as' => 'view', 'uses' => 'PhotoController@photo']);
 
-
-        /*
-         * Routes related to the photo admin
-         */
+        /* Routes related to the photo admin. */
         Route::group(['prefix' => 'admin', 'middleware' => ['permission:protography'], 'as' => 'admin::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'PhotoAdminController@index']);
             Route::post('index', ['as' => 'index', 'uses' => 'PhotoAdminController@search']);
@@ -701,25 +639,19 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    /*
-     * Routes related to Spotify
-     */
+    /* Routes related to Spotify. */
     Route::group(['prefix' => 'spotify', 'middleware' => ['auth', 'permission:board'], 'as' => 'spotify::'], function () {
         Route::get('oauth', ['as' => 'oauth', 'uses' => 'SpotifyController@oauthTool']);
     });
 
-    /*
-     * Routes related to roles and permissions.
-     */
+    /* Routes related to roles and permissions. */
     Route::group(['prefix' => 'authorization', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'authorization::'], function () {
         Route::get('', ['as' => 'overview', 'uses' => 'AuthorizationController@index']);
         Route::post('{id}/grant', ['as' => 'grant', 'uses' => 'AuthorizationController@grant']);
         Route::get('{id}/revoke/{user}', ['as' => 'revoke', 'uses' => 'AuthorizationController@revoke']);
     });
 
-    /*
-     * Routes related to the password manager.
-     */
+    /* Routes related to the password manager. */
     Route::group(['prefix' => 'passwordstore', 'middleware' => ['auth'], 'as' => 'passwordstore::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'PasswordController@index']);
         Route::get('auth', ['as' => 'auth', 'uses' => 'PasswordController@getAuth']);
@@ -731,26 +663,20 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'PasswordController@destroy']);
     });
 
-    /*
-     * Routes related to e-mail aliases.
-     */
+    /* Routes related to e-mail aliases. */
     Route::group(['prefix' => 'alias', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'alias::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'AliasController@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'AliasController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'AliasController@store']);
-        Route::get('delete/{idOrAlias}', ['as' => 'delete', 'uses' => 'AliasController@destroy']);
+        Route::get('delete/{id_or_alias}', ['as' => 'delete', 'uses' => 'AliasController@destroy']);
         Route::post('update', ['as' => 'update', 'uses' => 'AliasController@update']);
     });
 
-    /*
-     * The route for the SmartXp Screen.
-     */
+    /* The route for the SmartXp Screen. */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);
 
-    /*
-     * The routes for Protube.
-     */
+    /* The routes for Protube. */
     Route::group(['prefix' => 'protube', 'as' => 'protube::'], function () {
         Route::get('screen', ['as' => 'screen', 'uses' => 'ProtubeController@screen']);
         Route::get('admin', ['as' => 'admin', 'middleware' => ['auth'], 'uses' => 'ProtubeController@admin']);
@@ -762,12 +688,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'ProtubeController@loginRedirect']);
         Route::get('{id?}', ['as' => 'remote', 'uses' => 'ProtubeController@remote']);
 
+        /* Routes related to the Protube Radio */
         Route::group(['prefix' => 'radio', 'middleware' => ['permission:sysadmin'], 'as' => 'radio::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'RadioController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'RadioController@store']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'RadioController@destroy']);
         });
 
+        /* Routes related to the Protube displays */
         Route::group(['prefix' => 'display', 'middleware' => ['permission:sysadmin'], 'as' => 'display::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'DisplayController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'DisplayController@store']);
@@ -775,6 +703,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DisplayController@destroy']);
         });
 
+        /* Routes related to teh Soundboard */
         Route::group(['prefix' => 'soundboard', 'middleware' => ['permission:sysadmin'], 'as' => 'soundboard::'], function () {
             Route::get('index', ['as' => 'index', 'uses' => 'SoundboardController@index']);
             Route::post('store', ['as' => 'store', 'uses' => 'SoundboardController@store']);
@@ -783,16 +712,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    /*
-     * Routes related to calendars.
-     */
+    /* Routes related to calendars. */
     Route::group(['prefix' => 'ical', 'as' => 'ical::'], function () {
         Route::get('calendar/{personal_key?}', ['as' => 'calendar', 'uses' => 'EventController@icalCalendar']);
     });
 
-    /*
-     * Routes related to the Achievement system.
-     */
+    /* Routes related to the Achievement system. */
     Route::group(['prefix' => 'achievement', 'as' => 'achievement::'], function () {
         Route::group(['middleware' => ['auth', 'permission:board']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'AchievementController@overview']);
@@ -810,18 +735,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
     Route::get('achieve/{achievement}', ['as' => 'achieve', 'middleware' => ['auth'], 'uses' => 'AchievementController@achieve']);
 
-    /*
-     * Routes related to the welcome message system.
-     */
+    /* Routes related to the Welcome Message system. */
     Route::group(['prefix' => 'welcomeMessages', 'middleware' => ['auth', 'permission:board'], 'as' => 'welcomeMessages::'], function () {
         Route::get('', ['as' => 'list', 'uses' => 'WelcomeController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'WelcomeController@store']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WelcomeController@destroy']);
     });
 
-    /*
-     * Tempadmin
-     */
+    /* Routes related to Protube TempAdmin */
     Route::group(['prefix' => 'tempadmin', 'as' => 'tempadmin::', 'middleware' => ['auth', 'permission:board']], function () {
         Route::get('make/{id}', ['as' => 'make', 'uses' => 'TempAdminController@make']);
         Route::get('end/{id}', ['as' => 'end', 'uses' => 'TempAdminController@end']);
@@ -833,11 +754,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'TempAdminController@index']);
     });
 
-    /*
-     * QR Auth
-     */
+    /* Routes related to QR Authentication. */
     Route::group(['prefix' => 'qr', 'as' => 'qr::'], function () {
-
         Route::get('code/{code}', ['as' => 'code', 'uses' => 'QrAuthController@showCode']);
         Route::post('generate', ['as' => 'generate', 'uses' => 'QrAuthController@generateRequest']);
         Route::get('isApproved', ['as' => 'approved', 'uses' => 'QrAuthController@isApproved']);
@@ -846,27 +764,19 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{code}', ['as' => 'dialog', 'uses' => 'QrAuthController@showDialog']);
             Route::get('{code}/approve', ['as' => 'approve', 'uses' => 'QrAuthController@approve']);
         });
-
     });
 
-    /*
-     * Short URL Service
-     */
+    /* Routes related to the Short URL Service */
     Route::group(['prefix' => 'short_url', 'as' => 'short_url::', 'middleware' => ['auth', 'permission:board']], function () {
-
         Route::get('', ['as' => 'index', 'uses' => 'ShortUrlController@index']);
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'ShortUrlController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'ShortUrlController@destroy']);
-
     });
-    Route::get('go/{short}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
+    Route::get('go/{short?}', ['as' => 'short_url::go', 'uses' => 'ShortUrlController@go']);
 
-    /*
-     * DMX Management
-     */
+    /* Routes related to the DMX Management. */
     Route::group(['prefix' => 'dmx', 'as' => 'dmx::', 'middleware' => ['auth', 'permission:board|alfred']], function () {
-
         Route::get('/', ['as' => 'index', 'uses' => 'DmxController@index']);
         Route::get('/add', ['as' => 'add', 'uses' => 'DmxController@create']);
         Route::post('/add', ['as' => 'add', 'uses' => 'DmxController@store']);
@@ -875,37 +785,28 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@delete']);
 
         Route::group(['prefix' => 'override', 'as' => 'override::'], function () {
-
             Route::get('/', ['as' => 'index', 'uses' => 'DmxController@overrideIndex']);
             Route::get('/add', ['as' => 'add', 'uses' => 'DmxController@overrideCreate']);
             Route::post('/add', ['as' => 'add', 'uses' => 'DmxController@overrideStore']);
             Route::get('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@overrideEdit']);
             Route::post('/edit/{id}', ['as' => 'edit', 'uses' => 'DmxController@overrideUpdate']);
             Route::get('/delete/{id}', ['as' => 'delete', 'uses' => 'DmxController@overrideDelete']);
-
         });
-
     });
 
-    /*
-     * Queries
-     */
+    /* Routes related to the Query system. */
     Route::group(['prefix' => 'queries', 'as' => 'queries::', 'middleware' => ['auth', 'permission:board']], function () {
-
         Route::get('/', ['as' => 'index', 'uses' => 'QueryController@index']);
         Route::get('/activity_overview', ['as' => 'activity_overview', 'uses' => 'QueryController@activityOverview']);
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
-
     });
 
+    /* Routes related to the Minisites */
     Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
-
         Route::group(['prefix' => 'isalfredthere', 'as' => 'isalfredthere::'], function () {
             Route::get('/', ['as' => 'index', 'uses' => 'IsAlfredThereController@showMiniSite']);
             Route::get('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@getAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
             Route::post('/admin', ['as' => 'admin', 'uses' => 'IsAlfredThereController@postAdminInterface', 'middleware' => ['auth', 'permission:sysadmin|alfred']]);
         });
-
     });
-
 });

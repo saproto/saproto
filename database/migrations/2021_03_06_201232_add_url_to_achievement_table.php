@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddUrlToAchievementTable extends Migration
 {
@@ -13,7 +13,7 @@ class AddUrlToAchievementTable extends Migration
      */
     public function up()
     {
-        Schema::table('achievement', function(Blueprint $table) {
+        Schema::table('achievement', function (Blueprint $table) {
             $table->boolean('has_page')->after('tier');
             $table->string('page_name')->nullable()->unique()->after('has_page');
             $table->text('page_content')->nullable()->after('page_name');

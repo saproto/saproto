@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class UpdateUsersTablePrivacyName extends Migration
@@ -21,7 +20,7 @@ class UpdateUsersTablePrivacyName extends Migration
         });
 
         foreach (User::all() as $user) {
-            $user->name = $user->name_first . " " . $user->name_last;
+            $user->name = $user->name_first.' '.$user->name_last;
             $user->calling_name = $user->name_first;
             $user->save();
         }
@@ -47,9 +46,9 @@ class UpdateUsersTablePrivacyName extends Migration
         });
 
         foreach (User::all() as $user) {
-            $name = explode(" ", $user->name);
+            $name = explode(' ', $user->name);
             $user->name_first = $name[0];
-            $user->name_last = implode(" ", array_slice($name, 1));
+            $user->name_last = implode(' ', array_slice($name, 1));
             $user->save();
         }
 

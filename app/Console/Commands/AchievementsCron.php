@@ -2,24 +2,21 @@
 
 namespace Proto\Console\Commands;
 
+use Carbon;
 use Illuminate\Console\Command;
-
-use Carbon\Carbon;
-
 use Proto\Models\Achievement;
+use Proto\Models\AchievementOwnership;
 use Proto\Models\Committee;
+use Proto\Models\CommitteeMembership;
+use Proto\Models\Member;
+use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
 use Proto\Models\User;
-use Proto\Models\AchievementOwnership;
-use Proto\Models\OrderLine;
-use Proto\Models\Member;
-use Proto\Models\CommitteeMembership;
 
 class AchievementsCron extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -66,15 +63,15 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->bigKid(), 32);
         $this->giveAchievement($this->NoLife(), 52);
         $this->giveAchievement($this->First(), 51);
-        $this->giveAchievement($this->ForeverMember(),38);
-        $this->giveAchievement($this->GoodHuman(),53);
-        $this->giveAchievement($this->IAmNoodle(),54);
+        $this->giveAchievement($this->ForeverMember(), 38);
+        $this->giveAchievement($this->GoodHuman(), 53);
+        $this->giveAchievement($this->IAmNoodle(), 54);
 
         $this->info('Auto achievement gifting done!');
     }
 
     /**
-     * Give an achievement to a list of users
+     * Give an achievement to a list of users.
      */
     private function giveAchievement($users, $achievement_id)
     {
@@ -83,65 +80,57 @@ class AchievementsCron extends Command
         $achievement = Achievement::find($achievement_id);
 
         if ($achievement) {
-
             foreach ($users as $user) {
-
                 if ($user) {
-
-                    try{
+                    try {
                         $achieved = $user->achieved();
 
-                    $hasAchievement = false;
+                        $hasAchievement = false;
 
-                    foreach ($achieved as $test) {
-                        if ($test->id == $achievement_id) {
-                            $hasAchievement = true;
-                            break;
+                        foreach ($achieved as $test) {
+                            if ($test->id == $achievement_id) {
+                                $hasAchievement = true;
+                                break;
+                            }
                         }
-                    }
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         dd($e);
                     }
 
-                    if (!$hasAchievement) {
-                        $new = array(
+                    if (! $hasAchievement) {
+                        $new = [
                             'user_id' => $user->id,
-                            'achievement_id' => $achievement_id
-                        );
+                            'achievement_id' => $achievement_id,
+                        ];
                         $relation = new AchievementOwnership($new);
                         $relation->save();
                         $changecount += 1;
-                        $this->line('Achievement "' . $achievement->name . '" given to ' . $user->name);
+                        $this->line('Achievement "'.$achievement->name.'" given to '.$user->name);
                     } else {
 //                        $this->line($achievement->name . ' already obtained by ' . $user->name . '.');
                     }
                 } else {
-                    $this->error('Cant find a certain user for ' . $achievement->name . '. User probably deleted.');
+                    $this->error('Cant find a certain user for '.$achievement->name.'. User probably deleted.');
                 }
-
             }
 
-            $this->info('Gave away ' . $changecount . ' of achievement "' . $achievement->name . '".');
-
+            $this->info('Gave away '.$changecount.' of achievement "'.$achievement->name.'".');
         } else {
-            $this->error('Error! ' . $achievement_id . ' is a non-existing achievement ID. Skipping to next auto achievement.');
+            $this->error('Error! '.$achievement_id.' is a non-existing achievement ID. Skipping to next auto achievement.');
         }
-
     }
 
-
     /**
-     *    ------------------------------------------------------------------------   ACHIEVEMENT LOGIC FUNCTIONS   --------------------------------------------------------------------------------
+     *    ------------------------------------------------------------------------   ACHIEVEMENT LOGIC FUNCTIONS   --------------------------------------------------------------------------------.
      */
 
-
     /**
-     * Achievement beast = 10 achievements or more
+     * Achievement beast = 10 achievements or more.
      */
     private function AchievementBeast()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             if (count($user->achieved()) >= 10) {
                 $selected[] = $user;
@@ -151,12 +140,12 @@ class AchievementsCron extends Command
     }
 
     /**
-     * Hangry = bought 5 snickers or more (all time)
+     * Hangry = bought 5 snickers or more (all time).
      */
     private function Hangry()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $orders = Orderline::where('user_id', $user->id)->where('product_id', 2)->get();
             $count = 0;
@@ -171,12 +160,12 @@ class AchievementsCron extends Command
     }
 
     /**
-     * Cry baby = bought 15 surprise eggs or more
+     * Cry baby = bought 15 surprise eggs or more.
      */
     private function CryBaby()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $orders = Orderline::where('user_id', $user->id)->where('product_id', 487)->get();
             $count = 0;
@@ -191,12 +180,12 @@ class AchievementsCron extends Command
     }
 
     /**
-     * True German = more than 20 Weizen in beer history
+     * True German = more than 20 Weizen in beer history.
      */
     private function TrueGerman()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $orders = Orderline::where('user_id', $user->id)->whereIn('product_id', [805, 211, 758])->get();
             $count = 0;
@@ -211,29 +200,27 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  Old Fart = more than 5 years a member
+     *  Old Fart = more than 5 years a member.
      */
     private function OldFart()
     {
-        $members = Member::where('deleted_at', NULL)->where('created_at', '<', Carbon::now()->subYears(5))->get();
-        $selected = array();
+        $members = Member::where('deleted_at', null)->where('created_at', '<', Carbon::now()->subYears(5))->get();
+        $selected = [];
         foreach ($members as $member) {
             $selected[] = User::find($member->user_id);
         }
         return $selected;
     }
 
-
     /**
-     * 4ever committee member = you've been a committee member for more than three years
-    */
-
+     * 4ever committee member = you've been a committee member for more than three years.
+     */
     private function ForeverMember()
     {
-        $selected = array();
+        $selected = [];
 
         foreach (User::all() as $user) {
-            $forever = False;
+            $forever = false;
             foreach (Committee::all() as $committee) {
                 $memberships = CommitteeMembership::withTrashed()
                     ->where('user_id', $user->id)
@@ -241,7 +228,7 @@ class AchievementsCron extends Command
                     ->get();
                 $days = 0;
                 foreach ($memberships as $membership) {
-                    if ($membership->deleted_at != null && !$committee->is_society) {
+                    if ($membership->deleted_at != null && ! $committee->is_society) {
                         $diff = $membership->deleted_at->diff($membership->created_at);
                     } else {
                         $diff = Carbon::now()->diff($membership->created_at);
@@ -249,24 +236,22 @@ class AchievementsCron extends Command
                     $days += $diff->days;
                 }
                 if ($days >= 1095) {
-                    $forever = True;
+                    $forever = true;
                 }
             }
-            if ($forever){
+            if ($forever) {
                 $selected[] = $user;
             }
         }
         return $selected;
     }
 
-
     /**
      *  Good Human = you have donated to a committee!
      */
-
-    private function GoodHuman(){
-
-        $selected = array();
+    private function GoodHuman()
+    {
+        $selected = [];
         $products = ProductCategoryEntry::where('category_id', 28)->get();
         foreach ($products as $product) {
             $orders = OrderLine::where('product_id', $product->id)->get();
@@ -279,12 +264,12 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  I am Bread = you bought more than 100 croque monsieurs
+     *  I am Bread = you bought more than 100 croque monsieurs.
      */
     private function IAmBread()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $orders = Orderline::where('user_id', $user->id)->whereIn('product_id', [22, 219, 419])->get();
             $count = 0;
@@ -299,12 +284,12 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  I am Bread = you bought more than 100 noodles;
+     *  I am Bread = you bought more than 100 noodles;.
      */
     private function IAmNoodle()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $orders = Orderline::where('user_id', $user->id)->where('product_id', 39)->get();
             $count = 0;
@@ -319,14 +304,13 @@ class AchievementsCron extends Command
         return $selected;
     }
 
-
     /**
-     *  Gotta catch 'em all! = at least in 10 different committees
+     *  Gotta catch 'em all! = at least in 10 different committees.
      */
     private function GottaCatchEmAll()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         foreach ($users as $user) {
             $memberships = CommitteeMembership::withTrashed()
                 ->where('user_id', $user->id)
@@ -335,56 +319,57 @@ class AchievementsCron extends Command
             for ($i = 0; $i < count($memberships); $i++) {
                 for ($j = $i + 1; $j < count($memberships); $j++) {
                     if ($memberships[$i]->committee_id == $memberships[$j]->committee_id) {
-                        $memberships[$i] = NULL;
+                        $memberships[$i] = null;
                         break;
                     }
                 }
             }
             $count = 0;
             foreach ($memberships as $temp) {
-                if ($temp != NULL && !$temp->committee->is_society) {
+                if ($temp != null && ! $temp->committee->is_society) {
                     $count++;
                 }
             }
-            if ($count >= 10) $selected[] = $user;
+            if ($count >= 10) {
+                $selected[] = $user;
+            }
         }
 
         return $selected;
     }
 
     /**
-     *  You dandy = you bought 3 different types of merchandise
+     *  You dandy = you bought 3 different types of merchandise.
      */
     private function YouDandy()
     {
         $users = User::all();
-        $selected = array();
+        $selected = [];
         $merch = ProductCategory::find(9)->products()->pluck('id');
         foreach ($users as $user) {
             $merchorders = OrderLine::where('user_id', $user->id)->whereIn('product_id', $merch)->get();
-            if (count($merchorders) > 3) $selected[] = $user;
+            if (count($merchorders) > 3) {
+                $selected[] = $user;
+            }
         }
         return $selected;
     }
 
     /**
-     * FIRST!!!! = you were the first to buy a product
+     * FIRST!!!! = you were the first to buy a product.
      */
-
     private function First()
     {
-
         $products = Product::all();
-        $selected = array();
+        $selected = [];
 
         foreach ($products as $product) {
-
             if ($product->is_visible == 1) {
                 $order = OrderLine::orderBy('id')->where('product_id', $product->id)->first();
-                if ($order != NULL) {
+                if ($order != null) {
                     $user = User::find($order['user_id']);
                     $selected[] = $user;
-                 }
+                }
             }
         }
 
@@ -392,14 +377,14 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  Fristi Member = you're no CreaTer and you bought a Fristi
+     *  Fristi Member = you're no CreaTer and you bought a Fristi.
      */
     private function FristiMember()
     {
-        $selected = array();
+        $selected = [];
         $fristies = OrderLine::where('product_id', 180)->whereNotNull('user_id')->get();
         foreach ($fristies as $fristi) {
-            if ($fristi->user && !$fristi->user->did_study_create) {
+            if ($fristi->user && ! $fristi->user->did_study_create) {
                 $selected[] = User::find($fristi->user_id);
             }
         }
@@ -407,11 +392,11 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  Big spender = you had the max money subtracted for 1 month (=€250)
+     *  Big spender = you had the max money subtracted for 1 month (=€250).
      */
     private function BigSpender()
     {
-        $selected = array();
+        $selected = [];
         if (Carbon::now()->day == 1) {
             $users = User::all();
             foreach ($users as $user) {
@@ -431,14 +416,12 @@ class AchievementsCron extends Command
         return $selected;
     }
 
-    
     /**
      *  No Life = when you have bought the will to live product 777 times.
      */
-
     private function NoLife()
     {
-        $selected = array();
+        $selected = [];
         $users = User::all();
         foreach ($users as $user) {
             $amount = 0;
@@ -454,11 +437,11 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  It’s always 4 o’clock somewhere = a month where more than 25% of OmNomCom purchases is beer
+     *  It’s always 4 o’clock somewhere = a month where more than 25% of OmNomCom purchases is beer.
      */
     private function fourOClock()
     {
-        $selected = array();
+        $selected = [];
         if (Carbon::now()->day == 1) {
             $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
             $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
@@ -481,11 +464,11 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  You’re special = more than 25% of your beer purchases this month is special beer
+     *  You’re special = more than 25% of your beer purchases this month is special beer.
      */
     private function youreSpecial()
     {
-        $selected = array();
+        $selected = [];
         if (Carbon::now()->day == 1) {
             $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
             $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
@@ -508,11 +491,11 @@ class AchievementsCron extends Command
     }
 
     /**
-     *  Big kid = month where more than 25% of purchases is from the kid friendly category
+     *  Big kid = month where more than 25% of purchases is from the kid friendly category.
      */
     private function bigKid()
     {
-        $selected = array();
+        $selected = [];
         if (Carbon::now()->day == 1) {
             $kidIDs = ProductCategory::find(21)->products()->pluck('id')->toArray();
             $users = User::all();
@@ -530,5 +513,4 @@ class AchievementsCron extends Command
         }
         return $selected;
     }
-
 }

@@ -2,70 +2,98 @@
 
 namespace Proto\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use Auth;
-
+/**
+ * Activity Model.
+ *
+ * @property int $id
+ * @property int|null $event_id
+ * @property float|null $price
+ * @property float $no_show_fee
+ * @property int $participants
+ * @property int $registration_start
+ * @property int $registration_end
+ * @property int $deregistration_end
+ * @property int $closed
+ * @property int|null $closed_account
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property string|null $comment
+ * @property-read Collection|User[] $allUsers
+ * @property-read Collection|User[] $backupUsers
+ * @property-read Account|null $closedAccount
+ * @property-read Event|null $event
+ * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
+ * @property-read Collection|Committee[] $helpingCommittees
+ * @property-read Collection|User[] $presentUsers
+ * @property-read Collection|User[] $users
+ * @method static Builder|Activity whereClosed($value)
+ * @method static Builder|Activity whereClosedAccount($value)
+ * @method static Builder|Activity whereComment($value)
+ * @method static Builder|Activity whereCreatedAt($value)
+ * @method static Builder|Activity whereDeregistrationEnd($value)
+ * @method static Builder|Activity whereEventId($value)
+ * @method static Builder|Activity whereId($value)
+ * @method static Builder|Activity whereNoShowFee($value)
+ * @method static Builder|Activity whereParticipants($value)
+ * @method static Builder|Activity wherePrice($value)
+ * @method static Builder|Activity whereRegistrationEnd($value)
+ * @method static Builder|Activity whereRegistrationStart($value)
+ * @method static Builder|Activity whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Activity extends Validatable
 {
+    protected $table = 'activities';
 
-    protected $rules = array(
+    protected $guarded = ['id'];
+
+    protected $rules = [
         'registration_start' => 'required|integer',
         'registration_end' => 'required|integer',
         'deregistration_end' => 'required|integer',
         'participants' => 'integer',
-        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/'
-    );
+        'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
+    ];
 
-    protected $guarded = [];
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'activities';
-
-    /**
-     * @return mixed The event this activity belongs to, if any.
-     */
+    /** @return BelongsTo|Event */
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event');
     }
 
+    /** @return BelongsTo|Account */
     public function closedAccount()
     {
         return $this->belongsTo('Proto\Models\Account', 'closed_account');
     }
 
-    /**
-     * @return mixed A list of participants to this activity.
-     */
+    /** @return BelongsToMany|User[] */
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withTimestamps();
     }
 
-    /**
-     * @return mixed A list of present participants to this activity.
-     */
+    /** @return BelongsToMany|User[] */
     public function presentUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('activities_users.is_present', true)->where('backup', false)->withTimestamps();
     }
 
-    /**
-     * @return mixed A list of participants to this activity.
-     */
+    /** @return BelongsToMany|User[] */
     public function allUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->where('backup', false)->withTimestamps();
     }
 
-    /**
-     * @return mixed A sorted list of participants, not as a relation!
-     */
+    /** @return Collection|User[] */
     public function allUsersSorted()
     {
         return $this->allUsers->sort(function ($a, $b) {
@@ -73,103 +101,102 @@ class Activity extends Validatable
         });
     }
 
-    /**
-     * @return mixed A list of participants to this activity.
-     */
+    /** @return BelongsToMany|User[] */
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
-    /**
-     * @return mixed A list of committees helping out at this activity.
-     */
+    /** @return BelongsToMany|Committee[] */
     public function helpingCommittees()
     {
-        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(array('amount', 'id'))->withTimestamps();
+        return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
-    /**
-     * @param User|null $user
-     * @return bool True or false depending on whether the activity still needs help. If a user is specified, true will only be returned if the user can actually help.
-     */
-    public function inNeedOfHelp(User $user = null)
-    {
-        foreach ($this->helpingCommittees as $committee) {
-            $needed = $committee->pivot->amount;
-            $available = $this->helpingUsers($committee->pivot->id)->count();
-            if ($available < $needed) {
-                if ($user == null) {
-                    return true;
-                } elseif ($user !== null && $committee->isMember($user) && !$this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())) {
-                    return true;
-                }
-            }
-        }
-    }
-
-    /**
-     * @return mixed A list of committees helping out at this activity.
-     */
+    /** @return HasMany|HelpingCommittee[] */
     public function helpingCommitteeInstances()
     {
         return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
     }
 
     /**
-     * @param $helpid The committee-activity link for which helping users should be returned.
-     * @return $this All associated ActivityParticipations.
+     * @param User|null $user If a user is specified, true will only be returned if the user can actually help.
+     * @return bool Whether the activity still needs help.
      */
-    public function helpingUsers($helpid)
+    public function inNeedOfHelp($user = null)
     {
-        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $helpid)->get();
+        foreach ($this->helpingCommittees as $committee) {
+            $needed = $committee->pivot->amount;
+            $available = $this->helpingUsers($committee->pivot->id)->count();
+            return $available < $needed && ($user == null || ($committee->isMember($user) && ! $this->isHelping($user, HelpingCommittee::whereId($committee->pivot->id)->first())));
+        }
+        return false;
     }
 
     /**
-     * @param Committee $committee The committee for which the user should be helping.
-     * @param User $user The user to check helping status for.
-     * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
+     * @param int $help_id
+     * @return Collection|ActivityParticipation[] The ActivityParticipations for the helping users.
      */
-    public function getHelpingParticipation(Committee $committee, User $user)
+    public function helpingUsers($help_id)
     {
-        $h = HelpingCommittee::where('activity_id', $this->id)->where('committee_id', $committee->id)->first();
-        if ($h === null) return null;
+        return ActivityParticipation::whereNull('activities_users.deleted_at')->where('committees_activities_id', $help_id)->get();
+    }
 
-        $p = ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
+    /**
+     * @param Committee $committee
+     * @param User $user
+     * @return ActivityParticipation|null The ActivityParticipation for the supplied user and committee in combination with this activity. Returns null if there is none.
+     */
+    public function getHelpingParticipation($committee, $user)
+    {
+        $h = HelpingCommittee::where('activity_id', $this->id)
+            ->where('committee_id', $committee->id)
+            ->first();
+
+        if ($h === null) {
+            return null;
+        }
+
+        return ActivityParticipation::where('activity_id', $this->id)
+            ->where('user_id', $user->id)
             ->where('committees_activities_id', $h->id)->first();
-        return $p;
     }
 
     /**
-     * @param User $user The user to check participation status for.
+     * @param User $user
+     * @param HelpingCommittee|null $h
      * @return ActivityParticipation|null Return the ActivityParticipation for the supplied user. Returns null if users doesn't participate.
      */
-    public function getParticipation(User $user, HelpingCommittee $h = null)
+    public function getParticipation($user, $h = null)
     {
         if ($h == null) {
-            return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-                ->whereNull('committees_activities_id')->first();
+            return ActivityParticipation::where('activity_id', $this->id)
+                ->where('user_id', $user->id)
+                ->whereNull('committees_activities_id')
+                ->first();
         } else {
-            return ActivityParticipation::where('activity_id', $this->id)->where('user_id', $user->id)
-                ->where('committees_activities_id', $h->id)->first();
+            return ActivityParticipation::where('activity_id', $this->id)
+                ->where('user_id', $user->id)
+                ->where('committees_activities_id', $h->id)
+                ->first();
         }
     }
 
     /**
      * @param User $user
-     * @return bool Return whether the user is participating in the activity.
+     * @return bool Whether the user participates
      */
-    public function isParticipating(User $user)
+    public function isParticipating($user)
     {
         return $this->getParticipation($user) !== null;
     }
 
     /**
      * @param User $user
-     * @param HelpingCommittee|null $h
-     * @return bool Return whether the user is helping at the activity, optionally constraining whether it is for a committee.
+     * @param  HelpingCommittee|null $h
+     * @return bool Whether the user or committee is helping
      */
-    public function isHelping(User $user, HelpingCommittee $h = null)
+    public function isHelping($user, $h = null)
     {
         if ($h) {
             return $this->getParticipation($user, $h) !== null;
@@ -178,13 +205,17 @@ class Activity extends Validatable
         }
     }
 
-    public function isOrganizing(User $user)
+    /**
+     * @param User $user
+     * @return bool Whether the user is organising
+     */
+    public function isOrganising(User $user)
     {
         return $this->event->committee != null && $this->event->committee->isMember($user);
     }
 
     /**
-     * @return bool Returns whether the activity is full or not.
+     * @return bool Whether the activity is full
      */
     public function isFull()
     {
@@ -192,7 +223,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return int The amount of free spots available.
+     * @return int The number of free spots
      */
     public function freeSpots()
     {
@@ -204,7 +235,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return bool Returns whether one can still subscribe for this activity.
+     * @return bool Whether people can still subscribed to the activity.
      */
     public function canSubscribe()
     {
@@ -215,7 +246,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return bool Returns whether one can still subscribe for the back-up list for this activity.
+     * @return bool Whether people can still subscribe to the activity's backup list.
      */
     public function canSubscribeBackup()
     {
@@ -229,7 +260,7 @@ class Activity extends Validatable
     }
 
     /**
-     * @return bool Returns whether one can still unsubscribe for this activity.
+     * @return bool Whether people can still unsubscribe from the activity.
      */
     public function canUnsubscribe()
     {
@@ -239,11 +270,17 @@ class Activity extends Validatable
         return date('U') < $this->deregistration_end;
     }
 
+    /**
+     * @return bool Whether the activity has started yet.
+     */
     public function hasStarted()
     {
         return $this->event->start < date('U');
     }
 
+    /**
+     * @return bool Whether the activity has participants.
+     */
     public function withParticipants()
     {
         return $this->participants !== 0;

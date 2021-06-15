@@ -108,21 +108,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'daily'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -178,18 +163,17 @@ return [
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
         Mollie\Laravel\MollieServiceProvider::class,
-        Lisennk\Laravel\SlackWebApi\Providers\SlackApiServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
-        ApiPostcode\ApiPostcodeServiceProvider::class,
+        nickurt\PostcodeApi\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class
 
     ],
 
@@ -260,29 +244,9 @@ return [
 
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
 
-        'Committee' => Proto\Models\Committee::class,
-        'User' => Proto\Models\User::class,
-        'Role' => Proto\Models\Role::class,
-        'Permission' => Proto\Models\Permission::class,
-        'Member' => Proto\Models\Member::class,
-        'EmailList' => \Proto\Models\EmailList::class,
-        'Email' => \Proto\Models\Email::class,
-        'Event' => \Proto\Models\Event::class,
-        'Product' => \Proto\Models\Product::class,
-        'MollieTransaction' => \Proto\Models\MollieTransaction::class,
-        'Newsletter' => \Proto\Models\Newsletter::class,
-        'PlayedVideo' => \Proto\Models\PlayedVideo::class,
-        'Announcement' => \Proto\Models\Announcement::class,
-
-        'SlackController' => \Proto\Http\Controllers\SlackController::class,
-        'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
-        'MollieController' => \Proto\Http\Controllers\MollieController::class,
-
         'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
         'Mollie' => Mollie\Laravel\Facades\Mollie::class,
-
-        'SlackApi' => \Lisennk\Laravel\SlackWebApi\Facades\SlackApi::class,
 
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
 
@@ -290,9 +254,7 @@ return [
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
 
-        'NumberFormatter' => NumberFormatter::class,
-
-        'Postcode' => ApiPostcode\Facade\Postcode::class,
+        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
     ],
 

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class NewMigrationProgramChanges extends Migration
@@ -26,7 +25,6 @@ class NewMigrationProgramChanges extends Migration
             $table->boolean('is_donator');
         });
         Schema::table('users', function ($table) {
-
             $table->string('phone')->nullable()->default(null)->change();
         });
         Schema::table('bankaccounts', function ($table) {

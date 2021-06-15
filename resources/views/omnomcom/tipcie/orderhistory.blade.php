@@ -82,7 +82,7 @@
 
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
 
                 <div class="card-header">
                     Recorded PIN Transactions

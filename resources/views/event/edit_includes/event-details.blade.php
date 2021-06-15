@@ -25,7 +25,7 @@
                             <label for="name">Event name:</label>
                             <input type="text" class="form-control" id="name" name="title"
                                    placeholder="Lightsaber Building in the SmartXp"
-                                   value="{{ $event->title or '' }}"
+                                   value="{{ $event->title ?? '' }}"
                                    required>
 
                         </div>
@@ -34,7 +34,7 @@
 
                             <label for="location">Location:</label>
                             <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="SmartXp" value="{{ $event->location or '' }}" required>
+                                   placeholder="SmartXp" value="{{ $event->location ?? '' }}" required>
 
                         </div>
 
@@ -90,7 +90,7 @@
                         <div class="col-md-6 mb-3">
 
                             <div class="custom-file">
-                                <label class="custom-file-label" for="customFile">Update committee image.</label>
+                                <label class="custom-file-label" for="customFile">Set event image.</label>
                                 <input type="file" class="custom-file-input" name="image">
                             </div>
 

@@ -51,6 +51,7 @@
 
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-hover">
 
                     <thead>
@@ -94,6 +95,7 @@
                     </tbody>
 
                 </table>
+                </div>
 
             </div>
 
@@ -103,9 +105,7 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
+@push('javascript')
 
     <script type="text/javascript">
 
@@ -129,4 +129,4 @@
 
     </script>
 
-@endsection
+@endpush

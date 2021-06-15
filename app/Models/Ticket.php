@@ -2,21 +2,44 @@
 
 namespace Proto\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Ticket Model.
+ *
+ * @property int $id
+ * @property int $event_id
+ * @property int $product_id
+ * @property int $members_only
+ * @property int $available_from
+ * @property int $available_to
+ * @property int $is_prepaid
+ * @property-read Event $event
+ * @property-read Product $product
+ * @property-read Collection|TicketPurchase[] $purchases
+ * @method static Builder|Ticket whereAvailableFrom($value)
+ * @method static Builder|Ticket whereAvailableTo($value)
+ * @method static Builder|Ticket whereEventId($value)
+ * @method static Builder|Ticket whereId($value)
+ * @method static Builder|Ticket whereIsPrepaid($value)
+ * @method static Builder|Ticket whereMembersOnly($value)
+ * @method static Builder|Ticket whereProductId($value)
+ * @mixin Eloquent
+ */
 class Ticket extends Model
 {
-
     protected $table = 'tickets';
+
+    protected $guarded = ['id'];
+
     public $timestamps = false;
 
-    protected $guarded = [];
-
-    public function purchases()
-    {
-        return $this->hasMany('Proto\Models\TicketPurchase', 'ticket_id');
-    }
-
+    /** @return BelongsTo|Product */
     public function product()
     {
         return $this->belongsTo('Proto\Models\Product', 'product_id');
@@ -27,37 +50,56 @@ class Ticket extends Model
         return $this->belongsTo('Proto\Models\Event', 'event_id');
     }
 
-    public function getUsers()
+    /** @return HasMany|TicketPurchase */
+    public function purchases()
     {
-        $uids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
-        return User::whereIn('id', array_unique($uids))->get();
+        return $this->hasMany('Proto\Models\TicketPurchase', 'ticket_id');
     }
 
+    /** @return User[] */
+    public function getUsers()
+    {
+        $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();
+        return User::whereIn('id', array_unique($ids))->get();
+    }
+
+    /** @return int */
     public function totalAvailable()
     {
         return $this->sold() + $this->product->stock;
     }
 
+    /** @return int */
     public function sold()
     {
         return $this->purchases->count();
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function canBeSoldTo(User $user)
     {
-        return $user->is_member || !$this->members_only;
+        return $user->is_member || ! $this->members_only;
     }
 
+    /** @return bool */
     public function isOnSale()
     {
         return date('U') > $this->available_from && date('U') < $this->available_to;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function isAvailable(User $user)
     {
         return $this->isOnSale() && $this->canBeSoldTo($user) && $this->product->stock > 0;
     }
 
+    /** @return float|int*/
     public function turnover()
     {
         $total = 0;
@@ -66,5 +108,4 @@ class Ticket extends Model
         }
         return $total;
     }
-
 }

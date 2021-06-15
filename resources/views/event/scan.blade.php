@@ -115,11 +115,6 @@
 
     </style>
 
-    <script>
-
-
-    </script>
-
 </head>
 
 <body>
@@ -156,15 +151,14 @@
 <div id="flash">
 </div>
 
-@section('javascript')
-    @include('website.layouts.assets.javascripts')
-@show
+@include('website.layouts.assets.javascripts')
+@stack('javascript')
 
-<script type="text/javascript">
+<script type="text/javascript" nonce="{{ csp_nonce() }}">
 
     let prevRead = "";
 
-    $(document).ready(function () {
+    $(function () {
         initializeCamera();
     });
 
@@ -292,7 +286,7 @@
 
     function timeNow() {
 
-        var d = new Date();
+        let d = new Date();
 
         return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
 

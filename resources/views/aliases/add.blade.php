@@ -60,11 +60,8 @@
 
 @endsection
 
-@section('javascript')
-
-    @parent
-
-    <script type="text/javascript">
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         $("#user").on('change', function () {
             $("#destination").val('');
@@ -77,4 +74,4 @@
 
     </script>
 
-@endsection
+@endpush

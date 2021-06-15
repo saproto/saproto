@@ -18,17 +18,17 @@
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js" nonce="{{ csp_nonce() }}"></script>
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $(document).ready(function () {
+        $(function () {
             $("#search_query").keyup(function () {
-                var query = $("#search_query").val();
+                let query = $("#search_query").val();
                 if (query.length < 2) {
                     $(".result").hide().removeClass("result_left");
                 } else {
                     $(".result").hide().removeClass("result_left");
-                    var c = 1;
+                    let c = 1;
                     $("#results .result").each(function () {
 
                         var name = $(this).find('.result_name').first().html().toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
@@ -57,7 +57,7 @@
 
         body {
             background-color: #0089FA;
-            font-family: "Roboto Slab", "Arial";
+            font-family: "Roboto Slab", "Arial", sans-serif;
             color: #fff;
             font-weight: 400;
             font-size: 14px;
@@ -91,7 +91,7 @@
             font-size: 30px;
             padding: 20px;
             color: #0089FA;
-            font-family: "Roboto Slab", "Arial";
+            font-family: "Roboto Slab", "Arial", sans-serif;
             border: none;
             margin-top: 20px;
             width: 800px;
@@ -180,16 +180,16 @@
     </style>
 
     <!-- Matomo -->
-    <script type="text/javascript">
-        var _paq = _paq || [];
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let _paq = _paq || [];
         /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
         _paq.push(['trackPageView']);
         _paq.push(['enableLinkTracking']);
         (function () {
-            var u = "//{{ config('proto.analytics_url') }}/";
+            let u = "//{{ config('proto.analytics_url') }}/";
             _paq.push(['setTrackerUrl', u + 'piwik.php']);
             _paq.push(['setSiteId', '4']);
-            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
             g.type = 'text/javascript';
             g.async = true;
             g.defer = true;
@@ -205,7 +205,7 @@
     What would you like to eat?<br>
     <input type="text" id="search_query">
     <div id="results">
-        @foreach(Product::where('is_visible', true)
+        @foreach(Proto\Models\Product::where('is_visible', true)
                 ->where(function ($query) {
                     $query->where('is_visible_when_no_stock', true)
                     ->orWhere('stock','>',0);

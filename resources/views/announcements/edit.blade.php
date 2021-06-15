@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="name">Description:</label>
                             <input type="text" class="form-control" id="description" name="description"
-                                   placeholder="Internal description." value="{{ $announcement->description or '' }}"
+                                   placeholder="Internal description." value="{{ $announcement->description ?? '' }}"
                                    required>
                         </div>
 
