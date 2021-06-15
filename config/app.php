@@ -173,7 +173,7 @@ return [
         Vinkla\Hashids\HashidsServiceProvider::class,
         nickurt\PwnedPasswords\ServiceProvider::class,
         nickurt\PostcodeApi\ServiceProvider::class,
-        Aacotroneo\Saml2\Saml2ServiceProvider::class
+        Aacotroneo\Saml2\Saml2ServiceProvider::class,
 
     ],
 
@@ -222,6 +222,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
         'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
@@ -232,11 +233,7 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
 
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
-
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-
-        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
@@ -245,23 +242,7 @@ return [
 
         'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
 
-        'Committee' => Proto\Models\Committee::class,
-        'User' => Proto\Models\User::class,
-        'Role' => Proto\Models\Role::class,
-        'Permission' => Proto\Models\Permission::class,
-        'Member' => Proto\Models\Member::class,
-        'EmailList' => \Proto\Models\EmailList::class,
-        'Email' => \Proto\Models\Email::class,
-        'Event' => \Proto\Models\Event::class,
-        'Product' => \Proto\Models\Product::class,
-        'MollieTransaction' => \Proto\Models\MollieTransaction::class,
-        'Newsletter' => \Proto\Models\Newsletter::class,
-        'PlayedVideo' => \Proto\Models\PlayedVideo::class,
-        'Announcement' => \Proto\Models\Announcement::class,
-
-        'SlackController' => \Proto\Http\Controllers\SlackController::class,
-        'WithdrawalController' => \Proto\Http\Controllers\WithdrawalController::class,
-        'MollieController' => \Proto\Http\Controllers\MollieController::class,
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
 
         'Youtube' => Alaouy\Youtube\Facades\Youtube::class,
 
@@ -272,6 +253,8 @@ return [
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
 
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
+
+        'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
     ],
 

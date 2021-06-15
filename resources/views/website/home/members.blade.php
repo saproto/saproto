@@ -68,7 +68,7 @@
                         @foreach($newsitems as $index => $newsitem)
 
                             @include('website.layouts.macros.card-bg-image', [
-                            'url' => $newsitem->url(),
+                            'url' => $newsitem->url,
                             'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generateImagePath(300,200) : null,
                             'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                             'leftborder' => 'info'
@@ -91,7 +91,7 @@
 
         </div>
 
-        @if(Newsletter::showTextOnHomepage())
+        @if(Proto\Models\Newsletter::showTextOnHomepage())
 
             <div class="col-xl-4 col-md-12">
 
@@ -100,7 +100,7 @@
                         <i class="fas fa-bullhorn fa-fw mr-2"></i> Weekly update
                     </div>
                     <div class="card-body">
-                        {!! Markdown::convertToHtml(Newsletter::text()) !!}
+                        {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
                     </div>
                 </div>
 

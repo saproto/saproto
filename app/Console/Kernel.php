@@ -37,13 +37,13 @@ class Kernel extends ConsoleKernel
         Commands\OmNomComCleanup::class,
         Commands\MakeAdmin::class,
         Commands\DirectAdminSync::class,
-        Commands\SyncWikiAccounts::class
+        Commands\SyncWikiAccounts::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param  Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -61,7 +61,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
         $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
-        $schedule->command('proto:playsound ' . config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
+        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
         $schedule->command('proto:checkutaccounts')->monthly();
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
     }

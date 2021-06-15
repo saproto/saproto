@@ -53,7 +53,7 @@ return [
             'table' => 'jobs',
             'queue' => 'low',
             'retry_after' => 120,
-        ]
+        ],
     ],
 
     /*

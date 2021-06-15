@@ -2,33 +2,43 @@
 
 namespace Proto\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 use Proto\Models\HashMapItem;
+use stdClass;
 
 class IsAlfredThereController extends Controller
 {
     public static $HashMapItemKey = 'is_alfred_there';
 
+    /** @return View */
     public function showMiniSite()
     {
         return view('isalfredthere.minisite');
     }
 
+    /** @return false|string */
     public function getApi()
     {
-        header("Access-Control-Allow-Origin: *");
-        return json_encode(IsAlfredThereController::getAlfredsStatusObject());
+        header('Access-Control-Allow-Origin: *');
+        return json_encode(self::getAlfredsStatusObject());
     }
 
+    /** @return View */
     public function getAdminInterface()
     {
-        return view('isalfredthere.admin', ['status' => IsAlfredThereController::getAlfredsStatusObject()]);
+        return view('isalfredthere.admin', ['status' => self::getAlfredsStatusObject()]);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function postAdminInterface(Request $request)
     {
-        $status = IsAlfredThereController::getAlfredsStatus();
+        $status = self::getAlfredsStatus();
 
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
@@ -43,22 +53,25 @@ class IsAlfredThereController extends Controller
         return Redirect::back();
     }
 
+    /** @return HashMapItem|null */
     public static function getAlfredsStatus()
     {
-        $status = HashMapItem::where('key', IsAlfredThereController::$HashMapItemKey)->first();
+        $status = HashMapItem::where('key', self::$HashMapItemKey)->first();
         if ($status == null) {
             $status = HashMapItem::create([
-                'key' => IsAlfredThereController::$HashMapItemKey,
-                'value' => 'unknown'
+                'key' => self::$HashMapItemKey,
+                'value' => 'unknown',
             ]);
         }
+
         return $status;
     }
 
+    /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $status = IsAlfredThereController::getAlfredsStatus();
-        $result = new \stdClass();
+        $status = self::getAlfredsStatus();
+        $result = new stdClass();
         if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
@@ -70,7 +83,5 @@ class IsAlfredThereController extends Controller
         }
         $result->status = 'unknown';
         return $result;
-
     }
-
 }

@@ -14,8 +14,8 @@ class ChangeUserThemeToEnum extends Migration
      */
     public function up()
     {
-        $i=0;
-        foreach(config('proto.themes') as $theme){
+        $i = 0;
+        foreach (config('proto.themes') as $theme) {
             DB::table('users')->where('theme', "assets/application-{$theme}.css")->update(['theme' => $i]);
             $i++;
         }
@@ -36,8 +36,8 @@ class ChangeUserThemeToEnum extends Migration
             $table->string('theme')->change();
         });
 
-        $i=0;
-        foreach(config('proto.themes') as $theme){
+        $i = 0;
+        foreach (config('proto.themes') as $theme) {
             DB::table('users')->where('theme', $i)->update(['theme' => "assets/application-{$theme}.css"]);
             $i++;
         }

@@ -2,63 +2,57 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
+use Exception;
+use Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
-use Illuminate\Support\Str;
-use PragmaRX\Google2FA\Google2FA;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
+use Mail;
 use nickurt\PwnedPasswords\PwnedPasswords;
-
+use PragmaRX\Google2FA\Google2FA;
 use Proto\Mail\PasswordResetEmail;
 use Proto\Mail\PwnedPasswordNotification;
-use Proto\Mail\UsernameReminderEmail;
 use Proto\Mail\RegistrationConfirmation;
+use Proto\Mail\UsernameReminderEmail;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\Alias;
 use Proto\Models\Bank;
 use Proto\Models\EmailListSubscription;
+use Proto\Models\HashMapItem;
+use Proto\Models\Member;
 use Proto\Models\PasswordReset;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
-use Proto\Models\Member;
-use Proto\Models\HashMapItem;
-
-use Auth;
 use Proto\Models\WelcomeMessage;
 use Redirect;
-use Hash;
-use Mail;
 use Session;
 
 class AuthController extends Controller
 {
+    /* These are the regular, non-static methods serving as entry point to the AuthController */
 
-    /******************************************************
-     * These are the regular, non-static methods serving as entry point to the AuthController
-     *
-     *
-     *
-     */
-
-    /*
-     * Present the login page.
+    /**
+     * @param Request $request
+     * @return View|RedirectResponse
      */
     public function getLogin(Request $request)
     {
-
-
         if (Auth::check()) {
             if ($request->has('SAMLRequest')) {
-                return AuthController::handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
+                return self::handleSAMLRequest(Auth::user(), $request->input('SAMLRequest'));
             }
+
             return Redirect::route('homepage');
         } else {
             if ($request->has('SAMLRequest')) {
                 Session::flash('incoming_saml_request', $request->get('SAMLRequest'));
             }
+
             return view('auth.login');
         }
-
     }
 
     /**
@@ -66,36 +60,27 @@ class AuthController extends Controller
      *
      * @param Request $request The request object, needed for the log-in data.
      * @param Google2FA $google2fa The Google2FA object, because this is apparently the only way to access it.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function postLogin(Request $request, Google2FA $google2fa)
     {
-
         Session::keep('incoming_saml_request');
 
-        if (Auth::check()) { // User is already logged in
-
-            AuthController::postLoginRedirect($request);
-
-        } else { // User is not yet logged in.
-
+        // User is already logged in
+        if (Auth::check()) {
+            selft::postLoginRedirect($request);
+        // User is not yet logged in.
+        } else {
             // Catch a login form submission for two factor authentication.
             if ($request->session()->has('2fa_user')) {
-                return AuthController::handleTwofactorSubmit($request, $google2fa);
+                return selft::handleTwofactorSubmit($request, $google2fa);
             }
-
             // Otherwise this is a regular login.
-            return AuthController::handleRegularLogin($request);
-
+            return selft::handleRegularLogin($request);
         }
-
     }
 
-    /**
-     * Handle a request to the log-out URL.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    /** @return RedirectResponse */
     public function getLogout()
     {
         Auth::logout();
@@ -103,10 +88,8 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a request for the register-an-account page.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
      */
     public function getRegister(Request $request)
     {
@@ -115,16 +98,16 @@ class AuthController extends Controller
             return Redirect::route('user::dashboard');
         }
 
-        if ($request->wizard) Session::flash('wizard', true);
+        if ($request->wizard) {
+            Session::flash('wizard', true);
+        }
 
         return view('users.register');
     }
 
     /**
-     * Handle a submission of the register-an-account page.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function postRegister(Request $request)
     {
@@ -140,7 +123,7 @@ class AuthController extends Controller
             'name' => 'required|string',
             'calling_name' => 'required|string',
             'g-recaptcha-response' => 'required|recaptcha',
-            'privacy_policy_acceptance' => 'required'
+            'privacy_policy_acceptance' => 'required',
         ]);
 
         $this->registerAccount($request);
@@ -150,10 +133,9 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a submission of the register-an-account-with-a-university-account page.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
+     * @throws ValidationException
      */
     public function postRegisterSurfConext(Request $request)
     {
@@ -162,7 +144,7 @@ class AuthController extends Controller
             return Redirect::route('user::dashboard');
         }
 
-        if (!Session::has('surfconext_create_account')) {
+        if (! Session::has('surfconext_create_account')) {
             $request->session()->flash('flash_message', 'Account creation expired. Please try again.');
             return Redirect::route('login::show');
         }
@@ -174,21 +156,21 @@ class AuthController extends Controller
             'name' => $remote_data['name'],
             'calling_name' => $remote_data['calling-name'],
             'edu_username' => $remote_data['uid-full'],
-            'utwente_username' => $remote_data['org'] == 'utwente.nl' ? $remote_data['uid'] : null
+            'utwente_username' => $remote_data['org'] == 'utwente.nl' ? $remote_data['uid'] : null,
         ]);
 
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'name' => 'required|string',
             'calling_name' => 'required|string',
-            'privacy_policy_acceptance' => 'required'
+            'privacy_policy_acceptance' => 'required',
         ]);
 
         $new_user = $this->registerAccount($request);
 
         $new_user->fill([
             'edu_username' => $request->get('edu_username'),
-            'utwente_username' => $request->get('utwente_username')
+            'utwente_username' => $request->get('utwente_username'),
         ]);
 
         $new_user->save();
@@ -197,31 +179,27 @@ class AuthController extends Controller
             HashMapItem::create([
                 'key' => 'wizard',
                 'subkey' => $new_user->id,
-                'value' => 1
+                'value' => 1,
             ]);
         }
 
         $request->session()->flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
-
         return Redirect::route('login::edu');
     }
 
     /**
-     * Shared logic for creating and verifying a user account.
-     *
-     * @param $request
-     * @return $this|\Illuminate\Database\Eloquent\Model
+     * @param Request $request
+     * @return User
      */
     private function registerAccount($request)
     {
-
         $user = User::create($request->only(['email', 'name', 'calling_name']));
 
         if (Session::get('wizard')) {
             HashMapItem::create([
                 'key' => 'wizard',
                 'subkey' => $user->id,
-                'value' => 1
+                'value' => 1,
             ]);
         }
 
@@ -229,27 +207,24 @@ class AuthController extends Controller
 
         Mail::to($user)->queue((new RegistrationConfirmation($user))->onQueue('high'));
 
-        AuthController::dispatchPasswordEmailFor($user);
+        self::dispatchPasswordEmailFor($user);
 
         EmailListController::autoSubscribeToLists('autoSubscribeUser', $user);
 
         return $user;
-
     }
 
     /**
-     * Handle a request to delete the current user account.
-     *
      * @param Request $request
-     * @param $id The user id.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function deleteUser(Request $request)
     {
         $user = Auth::user();
 
         $password = $request->input('password');
-        $auth_check = AuthController::verifyCredentials($user->email, $password);
+        $auth_check = self::verifyCredentials($user->email, $password);
 
         if ($auth_check == null || $auth_check->id != $user->id) {
             $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
@@ -288,50 +263,44 @@ class AuthController extends Controller
         $user->address_visible = 0;
         $user->receive_sms = 0;
 
-        $user->email = 'deleted-' . $user->id . '@deleted.' . config('proto.emaildomain');
+        $user->email = 'deleted-'.$user->id.'@deleted.'.config('proto.emaildomain');
 
+        // Save and softDelete.
         $user->save();
-
         $user->delete();
 
         $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 
-    /**
-     * Handle a request to see the begin-with-password-reset page.
-     *
-     * @return mixed
-     */
-    public function getEmail()
+    /** @return View */
+    public function getPasswordResetEmail()
     {
         return view('auth.passreset_mail');
     }
 
     /**
-     * Handle a submission of the begin-with-password-reset page.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function postEmail(Request $request)
+    public function postPasswordResetEmail(Request $request)
     {
         $user = User::where('email', $request->email)->first();
         if ($user !== null) {
-            AuthController::dispatchPasswordEmailFor($user);
+            self::dispatchPasswordEmailFor($user);
         }
+
         $request->session()->flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
         return Redirect::route('login::show');
     }
 
     /**
-     * Handle a request to see the continue-with-password-reset page.
-     *
      * @param Request $request
-     * @param $token The reset token, as e-mailed to the user.
-     * @return \Illuminate\Http\RedirectResponse
+     * @param string $token The reset token, as e-mailed to the user.
+     * @return View|RedirectResponse
+     * @throws Exception
      */
-    public function getReset(Request $request, $token)
+    public function getPasswordReset(Request $request, $token)
     {
         PasswordReset::where('valid_to', '<', date('U'))->delete();
         $reset = PasswordReset::where('token', $token)->first();
@@ -344,17 +313,15 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a submission of the continue-with-password-reset page.
-     *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function postReset(Request $request)
+    public function postPasswordReset(Request $request)
     {
         PasswordReset::where('valid_to', '<', date('U'))->delete();
         $reset = PasswordReset::where('token', $request->token)->first();
         if ($reset !== null) {
-
             if ($request->password !== $request->password_confirmation) {
                 $request->session()->flash('flash_message', 'Your passwords don\'t match.');
                 return Redirect::back();
@@ -362,23 +329,23 @@ class AuthController extends Controller
                 $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
                 return Redirect::back();
             }
-
             $reset->user->setPassword($request->password);
-
             PasswordReset::where('token', $request->token)->delete();
-
             $request->session()->flash('flash_message', 'Your password has been changed.');
             return Redirect::route('login::show');
-
         } else {
             $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
             return Redirect::route('login::resetpass');
         }
     }
 
-    public function passwordChangeGet(Request $request)
+    /**
+     * @param Request $request
+     * @return View|RedirectResponse
+     */
+    public function getPasswordChange(Request $request)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
@@ -386,15 +353,13 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a submitted password change form.
-     *
      * @param Request $request The request object.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
+     * @throws Exception
      */
-    public function passwordChangePost(Request $request)
+    public function postPasswordChange(Request $request)
     {
-
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
@@ -405,7 +370,7 @@ class AuthController extends Controller
         $pass_new1 = $request->get('new_password1');
         $pass_new2 = $request->get('new_password2');
 
-        $user_verify = AuthController::verifyCredentials($user->email, $pass_old);
+        $user_verify = self::verifyCredentials($user->email, $pass_old);
 
         if ($user_verify && $user_verify->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
@@ -426,17 +391,12 @@ class AuthController extends Controller
 
         $request->session()->flash('flash_message', 'Old password incorrect.');
         return view('auth.passchange');
-
     }
 
-    /**
-     * Display the password sync form to users to allow them to sync their password between services.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function passwordSyncGet(Request $request)
+    /** @return View|RedirectResponse */
+    public function getPasswordSync(Request $request)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
@@ -444,21 +404,20 @@ class AuthController extends Controller
     }
 
     /**
-     * Process a request to synchronize ones password.
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return View|RedirectResponse
+     * @throws Exception
      */
-    public function passwordSyncPost(Request $request)
+    public function postPasswordSync(Request $request)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
 
         $pass = $request->get('password');
         $user = Auth::user();
-
-        $user_verify = AuthController::verifyCredentials($user->email, $pass);
+        $user_verify = self::verifyCredentials($user->email, $pass);
 
         if ($user_verify && $user_verify->id === $user->id) {
             $user->setPassword($pass);
@@ -468,16 +427,9 @@ class AuthController extends Controller
             $request->session()->flash('flash_message', 'Password incorrect.');
             return view('auth.sync');
         }
-
-        return view('auth.sync');
     }
 
-
-    /**
-     * Handle a request for UTwente SSO auth.
-     *
-     * @return Redirect
-     */
+    /** @return RedirectResponse */
     public function startSurfConextAuth()
     {
         Session::reflash();
@@ -485,14 +437,15 @@ class AuthController extends Controller
     }
 
     /**
-     * This is where we land after a successfull SurfConext SSO auth.
+     * This is where we land after a successful SurfConext SSO auth.
      * We do the authentication here because only using the Event handler for the SAML login doesn't let us do the proper redirects.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return View|RedirectResponse
      */
-    public function surfConextAuthPost(Request $request)
+    public function postSurfConextAuth(Request $request)
     {
-        if (!Session::has('surfconext_sso_user')) {
+        if (! Session::has('surfconext_sso_user')) {
             return Redirect::route('login::show');
         }
 
@@ -502,13 +455,13 @@ class AuthController extends Controller
             'surname' => array_key_exists(config('saml2-attr.surname'), $remoteUser) ? $remoteUser[config('saml2-attr.surname')][0] : null,
             'mail' => $remoteUser[config('saml2-attr.email')][0],
             'givenname' => array_key_exists(config('saml2-attr.givenname'), $remoteUser) ? $remoteUser[config('saml2-attr.givenname')][0] : null,
-            'org' => isset($remoteUser[config('saml2-attr.institute')]) ? $remoteUser[config('saml2-attr.institute')][0] : 'utwente.nl'
+            'org' => isset($remoteUser[config('saml2-attr.institute')]) ? $remoteUser[config('saml2-attr.institute')][0] : 'utwente.nl',
         ];
-        $remoteEduUsername = $remoteData['uid'] . '@' . $remoteData['org'];
-        $remoteFullName = "User";
-        $remoteCallingName = "User";
+        $remoteEduUsername = $remoteData['uid'].'@'.$remoteData['org'];
+        $remoteFullName = 'User';
+        $remoteCallingName = 'User';
         if ($remoteData['surname'] && $remoteData['givenname']) {
-            $remoteFullName = $remoteData['givenname'] . " " . $remoteData['surname'];
+            $remoteFullName = $remoteData['givenname'].' '.$remoteData['surname'];
             $remoteCallingName = $remoteData['givenname'];
         } elseif ($remoteData['surname'] || $remoteData['givenname']) {
             $remoteFullName = $remoteData['surname'] ? $remoteData['surname'] : $remoteData['givenname'];
@@ -525,7 +478,7 @@ class AuthController extends Controller
             $user->utwente_username = ($remoteData['org'] == 'utwente.nl' ? $remoteData['uid'] : null);
             $user->edu_username = $remoteEduUsername;
             $user->save();
-            Session::flash('flash_message', 'We linked your institution account ' . $remoteEduUsername . ' to your Proto account.');
+            Session::flash('flash_message', "We linked your institution account $remoteEduUsername to your Proto account.");
             if (Session::has('link_wizard')) {
                 return Redirect::route('becomeamember');
             } else {
@@ -540,11 +493,14 @@ class AuthController extends Controller
         // If we can't find a user account to login to, we have to options:
         if ($localUser == null) {
             $localUser = User::where('email', $remoteData['mail'])->first();
+
             // If we recognize the e-mail address, reminder the user they may already have an account.
             if ($localUser) {
                 Session::flash('flash_message', 'We recognize your e-mail address, but you have not explicitly allowed authentication to your account using your university account. You can link your university account on your dashboard after you have logged in.');
                 return Redirect::route('login::show');
-            } // Else, we'll allow them to create an account using their university account
+            }
+
+            // Else, we'll allow them to create an account using their university account
             else {
                 Session::flash('surfconext_create_account', $remoteData);
                 $request->session()->reflash();
@@ -555,21 +511,19 @@ class AuthController extends Controller
         $localUser->name = $remoteData['name'];
         $localUser->save();
 
-        return AuthController::continueLogin($localUser);
-
+        return self::continueLogin($localUser);
     }
 
     /**
-     * Handle a request for a user's username
-     *
-     * @return Redirect
+     * @param Request $request
+     * @return View|RedirectResponse
      */
     public function requestUsername(Request $request)
     {
         if ($request->has('email')) {
             $user = User::whereEmail($request->get('email'))->first();
             if ($user) {
-                AuthController::dispatchUsernameEmailFor($user);
+                self::dispatchUsernameEmailFor($user);
             }
             Session::flash('flash_message', 'If your e-mail belongs to an account, we have just e-mailed you the username.');
             return Redirect::route('login::show');
@@ -578,24 +532,21 @@ class AuthController extends Controller
         }
     }
 
-    /******************************************************
-     * These are the static helper functions of the AuthController for more overview and modularity. Heuh!
-     *
-     *
-     *
-     */
+    /* These are the static helper functions of the AuthController for more overview and modularity. Heuh! */
 
     /**
-     * This static function takes a supplied username and password, and returns the associated user if the combination is valid. Accepts either Proto username or e-mail and password.
+     * This static function takes a supplied username and password,
+     * and returns the associated user if the combination is valid.
+     * Accepts either Proto username or e-mail and password.
      *
-     * @param $username The e-mail address or Proto username.
-     * @param $password The password.
+     * @param string $username Email address or Proto username.
+     * @param string $password
      * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
      */
     public static function verifyCredentials($username, $password)
     {
-
         $user = User::where('email', $username)->first();
+
         if ($user == null) {
             $member = Member::where('proto_username', $username)->first();
             $user = ($member ? $member->user : null);
@@ -606,33 +557,32 @@ class AuthController extends Controller
                 Mail::to($user)->queue((new PwnedPasswordNotification($user))->onQueue('high'));
                 HashMapItem::create(['key' => 'pwned-pass', 'subkey' => $user->id, 'value' => date('r')]);
             }
+
             return $user;
         }
 
         return null;
-
     }
 
     /**
-     * Login the supplied user and perform post-login checks and redirects. Returns the application's response.
+     * Login the supplied user and perform post-login checks and redirects.
      *
      * @param User $user The user to be logged in.
-     * @param Request $request The request object, needed to handle some checks.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public static function loginUser(User $user)
+    public static function loginUser($user)
     {
         Auth::login($user, true);
         if (Session::has('incoming_saml_request')) {
-            return AuthController::handleSAMLRequest(Auth::user(), Session::get('incoming_saml_request'));
+            return self::handleSAMLRequest(Auth::user(), Session::get('incoming_saml_request'));
         }
-        return AuthController::postLoginRedirect();
+
+        return self::postLoginRedirect();
     }
 
     /**
-     * The login has been completed (succesfull or not). Return where the user is supposed to be redirected.
-     *
-     * @param Request $request The request object.
+     * The login has been completed (successfully or not). Return where the user is supposed to be redirected.
+     * @return RedirectResponse
      */
     private static function postLoginRedirect()
     {
@@ -640,126 +590,109 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle the submission of a regular log-in form with username and password. Return the application's response.
-     *
-     * @param Request $request Thje request object for the data.
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
     private static function handleRegularLogin(Request $request)
     {
-
         $username = $request->input('email');
         $password = $request->input('password');
 
-        $user = AuthController::verifyCredentials($username, $password);
+        $user = self::verifyCredentials($username, $password);
 
         if ($user) {
-            return AuthController::continueLogin($user);
+            return self::continueLogin($user);
         }
 
         $request->session()->flash('flash_message', 'Invalid username or password provided.');
         return Redirect::route('login::show');
-
     }
 
     /**
      * We know a user has identified itself, but we still need to check for other stuff like SAML or Two Factor Authentication. We do this here.
      *
      * @param User $user The username to be logged in.
-     * @param Request $request Thje request object for the data.
-     * @return null
+     * @return View|RedirectResponse
      */
-    public static function continueLogin(User $user)
+    public static function continueLogin($user)
     {
         // Catch users that have 2FA enabled.
         if ($user->tfa_totp_key) {
             Session::flash('2fa_user', $user);
             return view('auth.2fa');
         } else {
-            return AuthController::loginUser($user);
+            return self::loginUser($user);
         }
-
     }
 
     /**
      * Handle the submission of two factor authentication data. Return the application's response.
      *
-     * @param Request $request The request object for the data.
+     * @param Request $request
      * @param Google2FA $google2fa The Google2FA object, because this is apparently the only way to access it.
-     * @return \Illuminate\Http\RedirectResponse
+     * @return View|RedirectResponse
      */
-    private static function handleTwofactorSubmit(Request $request, Google2FA $google2fa)
+    private static function handleTwoFactorSubmit(Request $request, Google2FA $google2fa)
     {
-
         $user = $request->session()->get('2fa_user');
 
-        /*
-         * Time based Two Factor Authentication (Google2FA)
-         */
+        /* Time based Two Factor Authentication (Google2FA) */
         if ($user->tfa_totp_key && $request->has('2fa_totp_token') && $request->input('2fa_totp_token') != '') {
 
             // Verify if the response is valid.
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
-                return AuthController::loginUser($user);
+                return self::loginUser($user);
             } else {
                 $request->session()->flash('flash_message', 'Your code is invalid. Please try again.');
                 $request->session()->reflash();
                 return view('auth.2fa');
             }
-
         }
 
-        /*
-         * Something we don't recognize
-         */
+        /* Something we don't recognize */
         $request->session()->flash('flash_message', 'Please complete the requested challenge.');
         $request->session()->reflash();
         return view('auth.2fa');
-
     }
 
     /**
-     * Static helper function that will dispatch a password reset e-mail for a user.
+     * Static helper function that will dispatch a password reset email for a user.
      *
-     * @param User $user The user to submit the e-mail for.
+     * @param User $user
      */
-    public static function dispatchPasswordEmailFor(User $user)
+    public static function dispatchPasswordEmailFor($user)
     {
-
         $reset = PasswordReset::create([
             'email' => $user->email,
             'token' => str_random(128),
-            'valid_to' => strtotime('+1 hour')
+            'valid_to' => strtotime('+1 hour'),
         ]);
 
         Mail::to($user)->queue((new PasswordResetEmail($user, $reset->token))->onQueue('high'));
-
     }
 
     /**
-     * Static helper function that will dispatch a username reminder for a user.
+     * Static helper function that will dispatch a username reminder email for a user.
      *
      * @param User $user
      */
     public static function dispatchUsernameEmailFor(User $user)
     {
-
         Mail::to($user)->queue((new UsernameReminderEmail($user))->onQueue('high'));
-
     }
 
     /**
      * Static helper function to handle a SAML request.
-     * The function expects an authed user for which to complete the SAML request.
+     * The function expects an authenticated user for which to complete the SAML request.
      * This function assumes the user has already been authenticated one way or another.
      *
-     * @param $user The (currently logged in) user to complete the SAML request for.
-     * @param $saml The SAML data (deflated and encoded).
-     * @return \Illuminate\Http\RedirectResponse
+     * @param $user User The (currently logged in) user to complete the SAML request for.
+     * @param $saml string The SAML data (deflated and encoded).
+     * @return View|RedirectResponse
      */
     private static function handleSAMLRequest($user, $saml)
     {
-        if (!$user->member) {
+        if (! $user->member) {
             Session::flash('flash_message', 'Only members can use the Proto SSO. You only have a user account.');
             return Redirect::route('becomeamember');
         }
@@ -774,12 +707,12 @@ class AuthController extends Controller
         $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest();
         $authnRequest->deserialize($deserializationContext->getDocument()->firstChild, $deserializationContext);
 
-        if (!array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
+        if (! array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
             Session::flash('flash_message', 'You are using an unknown Service Provider. Please contact the System Administrators to get your Service Provider whitelisted for Proto SSO.');
             return Redirect::route('login::show');
         }
 
-        $response = AuthController::buildSAMLResponse($user, $authnRequest);
+        $response = self::buildSAMLResponse($user, $authnRequest);
 
         $bindingFactory = new \LightSaml\Binding\BindingFactory();
         $postBinding = $bindingFactory->create(\LightSaml\SamlConstants::BINDING_SAML2_HTTP_POST);
@@ -788,13 +721,13 @@ class AuthController extends Controller
 
         $httpResponse = $postBinding->send($messageContext);
 
-        return view('auth.saml.samlpostbind', ['response' => $httpResponse->getData()["SAMLResponse"], 'destination' => $httpResponse->getDestination()]);
+        return view('auth.saml.samlpostbind', ['response' => $httpResponse->getData()['SAMLResponse'], 'destination' => $httpResponse->getDestination()]);
     }
 
     /**
      * Another static helper function to build a SAML response based on a user and a request.
      *
-     * @param $user The user to generate the SAML response for.
+     * @param User $user The user to generate the SAML response for.
      * @param $authnRequest The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
@@ -806,8 +739,8 @@ class AuthController extends Controller
         $destination = $authnRequest->getAssertionConsumerServiceURL();
         $issuer = config('saml-idp.idp.issuer');
 
-        $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path() . config('saml-idp.idp.cert'));
-        $privateKey = \LightSaml\Credential\KeyHelper::createPrivateKey(base_path() . config('saml-idp.idp.key'), '', true);
+        $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
+        $privateKey = \LightSaml\Credential\KeyHelper::createPrivateKey(base_path().config('saml-idp.idp.key'), '', true);
 
         $response = new \LightSaml\Model\Protocol\Response();
         $response
@@ -884,6 +817,5 @@ class AuthController extends Controller
             );
 
         return $response;
-
     }
 }

@@ -205,7 +205,7 @@
     What would you like to eat?<br>
     <input type="text" id="search_query">
     <div id="results">
-        @foreach(Product::where('is_visible', true)
+        @foreach(Proto\Models\Product::where('is_visible', true)
                 ->where(function ($query) {
                     $query->where('is_visible_when_no_stock', true)
                     ->orWhere('stock','>',0);

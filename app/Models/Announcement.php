@@ -2,87 +2,79 @@
 
 namespace Proto\Models;
 
+use Carbon;
 use Cookie;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Route;
 
-use Proto\Models\User;
-
-use Illuminate\Database\Eloquent\Model;
-
+/**
+ * Announcement Model.
+ *
+ * @property int $id
+ * @property string $description
+ * @property string $content
+ * @property string $display_from
+ * @property string $display_till
+ * @property int $show_guests
+ * @property int $show_users
+ * @property int $show_members
+ * @property int $show_only_homepage
+ * @property int $show_only_new
+ * @property int $show_only_firstyear
+ * @property int $show_only_active
+ * @property int $show_as_popup
+ * @property int $show_style
+ * @property bool $show_by_time
+ * @property int $is_dismissable
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read string $bootstrap_style
+ * @property-read bool $is_visible
+ * @property-read string $hash_map_id
+ * @property-read string $modal_id
+ * @method static Builder|Announcement whereContent($value)
+ * @method static Builder|Announcement whereCreatedAt($value)
+ * @method static Builder|Announcement whereDescription($value)
+ * @method static Builder|Announcement whereDisplayFrom($value)
+ * @method static Builder|Announcement whereDisplayTill($value)
+ * @method static Builder|Announcement whereId($value)
+ * @method static Builder|Announcement whereIsDismissable($value)
+ * @method static Builder|Announcement whereShowAsPopup($value)
+ * @method static Builder|Announcement whereShowGuests($value)
+ * @method static Builder|Announcement whereShowMembers($value)
+ * @method static Builder|Announcement whereShowOnlyActive($value)
+ * @method static Builder|Announcement whereShowOnlyFirstyear($value)
+ * @method static Builder|Announcement whereShowOnlyHomepage($value)
+ * @method static Builder|Announcement whereShowOnlyNew($value)
+ * @method static Builder|Announcement whereShowStyle($value)
+ * @method static Builder|Announcement whereShowUsers($value)
+ * @method static Builder|Announcement whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Announcement extends Model
 {
-
     protected $table = 'announcements';
+
     protected $guarded = ['id'];
 
-    public function showByTime()
+    /** @return string */
+    public function getBootstrapStyleAttribute()
     {
-        return (strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U'));
+        $map = [
+            'primary',
+            'info',
+            'warning',
+            'danger',
+            'default',
+        ];
+
+        return $map[$this->show_style];
     }
 
-    public function showForUser(User $user = null)
-    {
-
-        // Check for homepage.
-        if ($this->show_only_homepage && Route::current()->getName() != 'homepage') {
-            return false;
-        }
-
-        // Not within the scheduled timeframe.
-        if (!$this->showByTime()) {
-            return false;
-        }
-
-        // Verify user type requirement.
-        if (
-            !($this->show_guests && $user == null) &&
-            !($this->show_users && $user != null && !$user->is_member) &&
-            !($this->show_members && $user != null && $user->is_member)
-        ) {
-            return false;
-        }
-
-        // Check new user requirement
-        if ($this->show_only_new && $user != null && $user->created_at < $this->display_from) {
-            return false;
-        }
-
-        // Check for first years.
-        if ($this->show_only_firstyear && $user != null && $user->is_member && !$user->isFirstYear()) {
-            return false;
-        }
-
-        // Check for first years.
-        if ($this->show_only_active && $user != null && $user->is_member && !$user->isActiveMember()) {
-            return false;
-        }
-
-        // Check if not already dismissed.
-        if ($this->is_dismissable && Cookie::get($this->hashMapId())) {
-            return false;
-        } else if ($user != null && $this->is_dismissable && HashMapItem::where('key', $this->hashMapId())->where('subkey', $user->id)->count() > 0) {
-            return false;
-        }
-        return true;
-    }
-
-    public function bootstrap_style()
-    {
-        switch ($this->show_style) {
-            case 0:
-                return 'primary';
-            case 1:
-                return 'info';
-            case 2:
-                return 'warning';
-            case 3:
-                return 'danger';
-            default:
-                return 'default';
-        }
-    }
-
-    public function textualVisibility()
+    /** @return string */
+    public function getIsVisibleAttribute()
     {
         $flags = [];
 
@@ -96,7 +88,7 @@ class Announcement extends Model
             $flags[] = 'All guests';
         }
         if ($this->show_users) {
-            if ($this->only_new) {
+            if ($this->show_only_new) {
                 $flags[] = 'New users';
             } else {
                 $flags[] = 'All users';
@@ -125,29 +117,90 @@ class Announcement extends Model
             }
         }
 
-        $flags[] = sprintf('Style: %s', $this->bootstrap_style());
+        $flags[] = sprintf('Style: %s', $this->bootstrap_style);
 
         return implode(', ', $flags);
-
     }
 
-    public function dismissForUser(User $user = null)
+    /** @return string */
+    public function getHashMapIdAttribute()
+    {
+        return sprintf('dismiss-announcement-%s', $this->id);
+    }
+
+    /** @return string */
+    public function getModalIdAttribute()
+    {
+        return sprintf('modal-announcement-%s', $this->id);
+    }
+
+    /** @return bool */
+    public function getShowByTimeAttribute()
+    {
+        return strtotime($this->display_from) < date('U') && strtotime($this->display_till) > date('U');
+    }
+
+    /**
+     * @param null $user
+     * @return bool
+     */
+    public function showForUser($user = null)
+    {
+        // Check for homepage.
+        if ($this->show_only_homepage && Route::current()->getName() != 'homepage') {
+            return false;
+        }
+
+        // Not within the scheduled timeframe.
+        if (! $this->show_by_time) {
+            return false;
+        }
+
+        // Verify user type requirement.
+        if (
+            ! ($this->show_guests && $user == null) &&
+            ! ($this->show_users && $user != null && ! $user->is_member) &&
+            ! ($this->show_members && $user != null && $user->is_member)
+        ) {
+            return false;
+        }
+
+        // Check new user requirement
+        if ($this->show_only_new && $user != null && $user->created_at < $this->display_from) {
+            return false;
+        }
+
+        // Check for first years.
+        if ($this->show_only_firstyear && $user != null && $user->is_member && ! $user->isFirstYear()) {
+            return false;
+        }
+
+        // Check for first years.
+        if ($this->show_only_active && $user != null && $user->is_member && ! $user->isActiveMember()) {
+            return false;
+        }
+
+        // Check if not already dismissed.
+        if ($this->is_dismissable && Cookie::get($this->hash_map_id)) {
+            return false;
+        } elseif (
+            $user != null &&
+            $this->is_dismissable &&
+            HashMapItem::where('key', $this->hash_map_id)->where('subkey', $user->id)->count() > 0
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** @param User|null $user */
+    public function dismissForUser($user = null)
     {
         if ($user) {
-            HashMapItem::create(['key' => $this->hashMapId(), 'subkey' => $user->id]);
+            HashMapItem::create(['key' => $this->hash_map_id, 'subkey' => $user->id]);
         } else {
-            Cookie::queue($this->hashMapId(), true, 525600);
+            Cookie::queue($this->hash_map_id, true, 525600);
         }
     }
-
-    public function hashMapId()
-    {
-        return sprintf("dismiss-announcement-%s", $this->id);
-    }
-
-    public function modalId()
-    {
-        return sprintf("modal-announcement-%s", $this->id);
-    }
-
 }

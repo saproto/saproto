@@ -1,4 +1,4 @@
-@foreach(Announcement::all() as $announcement)
+@foreach(Proto\Models\Announcement::all() as $announcement)
 
     @if($announcement->showForUser(Auth::user()))
 
@@ -8,7 +8,7 @@
                 $announcement->dismissForUser(Auth::user());
             ?>
 
-            <div class="modal fade" id="{{ $announcement->modalId() }}" tabindex="-1" role="dialog">
+            <div class="modal fade" id="{{ $announcement->modal_id }}" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -28,7 +28,7 @@
 
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
                     $(window).on('load', function () {
-                        $('#{{ $announcement->modalId() }}').modal('show');
+                        $('#{{ $announcement->modal_id}}').modal('show');
                     });
                 </script>
 

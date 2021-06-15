@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddEmailListFunctionality extends Migration
 {
@@ -12,7 +12,6 @@ class AddEmailListFunctionality extends Migration
      */
     public function up()
     {
-
         Schema::create('mailinglists', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -26,7 +25,6 @@ class AddEmailListFunctionality extends Migration
             $table->text('user_id');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -36,9 +34,7 @@ class AddEmailListFunctionality extends Migration
      */
     public function down()
     {
-
         Schema::drop('mailinglists');
         Schema::drop('users_mailinglists');
-
     }
 }

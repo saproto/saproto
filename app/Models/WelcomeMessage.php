@@ -2,29 +2,42 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Welcome Message Model.
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string $message
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
+ * @method static Builder|WelcomeMessage whereCreatedAt($value)
+ * @method static Builder|WelcomeMessage whereId($value)
+ * @method static Builder|WelcomeMessage whereMessage($value)
+ * @method static Builder|WelcomeMessage whereUpdatedAt($value)
+ * @method static Builder|WelcomeMessage whereUserId($value)
+ * @mixin Eloquent
+ */
 class WelcomeMessage extends Model
 {
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'user_welcome';
 
-    /**
-     * @return mixed The user owning the achievement.
-     */
+    protected $guarded = ['id'];
+
+    protected $rules = [
+        'user_id' => 'required|integer',
+        'message' => 'required|string',
+    ];
+
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
-
-    protected $fillable = ['user_id', 'message'];
-
-    protected $rules = array(
-        'user_id' => 'required|integer',
-        'message' => 'required|string',
-    );
 }

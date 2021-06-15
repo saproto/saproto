@@ -25,13 +25,13 @@
 
                         <p class="card-text text-center">
                             The newsletter was last sent
-                            <strong>{{ Carbon::createFromFormat('U', Newsletter::lastSent())->diffForHumans() }}</strong>
+                            <strong>{{ Carbon::createFromFormat('U', Proto\Models\Newsletter::lastSent())->diffForHumans() }}</strong>
                         </p>
 
-                        <input type="button" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() && NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
+                        <input type="button" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() && Proto\Models\NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
                                data-target="#sendnewsletter"
-                               value="{{ (Newsletter::lastSentMoreThanWeekAgo() ? Newsletter::hasEvents() ? 'Send the weekly newsletter!' : 'No events selected!' : 'Newsletter already sent this week!') }}"
-                               {{ Newsletter::hasEvents() ? '' : 'disabled' }} />
+                               value="{{ (Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? Proto\Models\Newsletter::hasEvents() ? 'Send the weekly newsletter!' : 'No events selected!' : 'Newsletter already sent this week!') }}"
+                               {{ Proto\Models\Newsletter::hasEvents() ? '' : 'disabled' }} />
 
                         <hr>
 
@@ -40,7 +40,7 @@
                             @include('website.layouts.macros.markdownfield', [
                                 'name' => 'text',
                                 'placeholder' => 'Text goes here.',
-                                'value' => Newsletter::getText()->value
+                                'value' => Proto\Models\Newsletter::getText()->value
                             ])
                         </div>
 
@@ -136,7 +136,7 @@
                     <p>
                     The newsletter was last sent: <br>
                     <strong>
-                        {{ Carbon::createFromFormat('U', Newsletter::lastSent())->diffForHumans() }}
+                        {{ Carbon::createFromFormat('U', Proto\Models\Newsletter::lastSent())->diffForHumans() }}
                     </strong>
                     </p>
                     <p>
@@ -147,7 +147,7 @@
                     <form method="post" action="{{ route('newsletter::send') }}">
                         {!! csrf_field() !!}
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }}">Send</button>
+                        <button type="submit" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }}">Send</button>
                     </form>
                 </div>
 
