@@ -5,6 +5,8 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response as SupportResponse;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
 use Proto\Models\Committee;
 use Proto\Models\Event;
@@ -120,7 +122,7 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        return Response::make(View::make('website.opensearch'))->header('Content-Type', 'text/xml');
+        return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
     }
 
     /**
