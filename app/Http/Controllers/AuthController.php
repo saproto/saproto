@@ -68,15 +68,15 @@ class AuthController extends Controller
 
         // User is already logged in
         if (Auth::check()) {
-            selft::postLoginRedirect($request);
+            self::postLoginRedirect($request);
         // User is not yet logged in.
         } else {
             // Catch a login form submission for two factor authentication.
             if ($request->session()->has('2fa_user')) {
-                return selft::handleTwofactorSubmit($request, $google2fa);
+                return self::handleTwofactorSubmit($request, $google2fa);
             }
             // Otherwise this is a regular login.
-            return selft::handleRegularLogin($request);
+            return self::handleRegularLogin($request);
         }
     }
 
