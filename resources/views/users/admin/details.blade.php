@@ -46,7 +46,9 @@
     @include("users.admin.admin_includes.removememberform-modal")
 
     <!-- Modal for setting membership type -->
-    @include("users.admin.admin_includes.setmembershiptype-modal")
+    @if($user->is_member)
+        @include("users.admin.admin_includes.setmembershiptype-modal")
+    @endif
 
 @endsection
 
