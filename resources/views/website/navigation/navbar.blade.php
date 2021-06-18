@@ -53,7 +53,7 @@
 
                 @endforeach
 
-                @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie"]))
+                @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie", "drafters"]))
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
