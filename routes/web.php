@@ -184,8 +184,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
 
-        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@addForm']);
-        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
+        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@store']);
 
         Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
 
