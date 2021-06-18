@@ -28,7 +28,7 @@
                             <strong>{{ Carbon::createFromFormat('U', Proto\Models\Newsletter::lastSent())->diffForHumans() }}</strong>
                         </p>
 
-                        <input type="button" class="btn {{ Newsletter::lastSentMoreThanWeekAgo() && Proto\Models\NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
+                        <input type="button" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() && Proto\Models\NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
                                data-target="#sendnewsletter"
                                value="{{ (Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? Proto\Models\Newsletter::hasEvents() ? 'Send the weekly newsletter!' : 'No events selected!' : 'Newsletter already sent this week!') }}"
                                {{ Proto\Models\Newsletter::hasEvents() ? '' : 'disabled' }} />
