@@ -1,5 +1,5 @@
 <form method="post"
-      action="{{ ($new ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
+      action="{{ (!$achievement ? route("achievement::add") : route("achievement::update", ['id' => $achievement->id])) }}">
 
     {!! csrf_field() !!}
 
@@ -7,7 +7,7 @@
 
         <div class="card-header bg-dark text-white">
             @yield('page-title')
-            @if(!$new)
+            @if($achievement)
                 <span class="badge badge-info float-right">
                     Obtained by {{ count($achievement->currentOwners(true)) }} members
                 </span>

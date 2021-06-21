@@ -2,23 +2,23 @@
 
 namespace Proto\Exceptions;
 
+use App;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Intervention\Image\Exception\NotReadableException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Intervention\Image\Exception\NotReadableException;
-use Illuminate\Session\TokenMismatchException;
-
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Validation\ValidationException;
-
-use Illuminate\Auth\AuthenticationException;
-
-use App;
-use Auth;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
         HttpExceptionInterface::class,
         NotReadableException::class,
         ValidationException::class,
-        AuthorizationException::class
+        AuthorizationException::class,
     ];
 
     private $sentryID;
@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e)
     {
-        if ($this->shouldReport($e) && app()->bound('sentry') &&  App::environment('production')) {
+        if ($this->shouldReport($e) && app()->bound('sentry') && App::environment('production')) {
             app('sentry')->captureException($e);
         }
 
@@ -62,22 +62,26 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param Throwable $e
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws Throwable
      */
     public function render($request, Throwable $e)
     {
+        if ($e instanceof UnauthorizedException) {
+            return response()->view('errors.403');
+        }
+
         return parent::render($request, $e);
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Illuminate\Auth\AuthenticationException $exception
-     * @return \Illuminate\Http\JsonResponse| \Illuminate\Http\RedirectResponse
+     * @param  Request $request
+     * @param  AuthenticationException $exception
+     * @return JsonResponse|RedirectResponse
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
@@ -92,15 +96,13 @@ class Handler extends ExceptionHandler
      * Render the given HttpException.
      *
      * @param HttpExceptionInterface $e
-     * @return Response
+     * @return SymfonyResponse
      */
     protected function renderHttpException(HttpExceptionInterface $e)
     {
-        if (!view()->exists("errors.{$e->getStatusCode()}")) {
+        if (! view()->exists("errors.{$e->getStatusCode()}")) {
             return response()->view('errors.default', ['exception' => $e], 500, $e->getHeaders());
         }
         return parent::renderHttpException($e);
     }
-
-
 }

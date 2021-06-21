@@ -2,24 +2,50 @@
 
 namespace Proto\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * HashMap Item Model.
+ *
+ * @property int $id
+ * @property string $key
+ * @property string|null $subkey
+ * @property string $value
+ * @method static Builder|HashMapItem key($key)
+ * @method static Builder|HashMapItem subkey($subkey)
+ * @method static Builder|HashMapItem whereId($value)
+ * @method static Builder|HashMapItem whereKey($value)
+ * @method static Builder|HashMapItem whereSubkey($value)
+ * @method static Builder|HashMapItem whereValue($value)
+ * @mixin Eloquent
+ */
 class HashMapItem extends Model
 {
     protected $table = 'hashmap';
-    public $timestamps = false;
+
     protected $guarded = [];
 
-    public function scopeKey($query, $key) {
+    public $timestamps = false;
+
+    /**
+     * @param $query
+     * @param string $key
+     * @return mixed
+     */
+    public function scopeKey($query, $key)
+    {
         return $query->where('key', '=', $key);
     }
 
-    public function scopeSubkey($query, $subkey) {
+    /**
+     * @param $query
+     * @param string $subkey
+     * @return mixed
+     */
+    public function scopeSubkey($query, $subkey)
+    {
         return $query->where('subkey', '=', $subkey);
     }
-
-    public function setItem($key, $subkey) {
-
-    }
-
 }

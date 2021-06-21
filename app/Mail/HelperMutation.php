@@ -5,13 +5,13 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 
 class HelperMutation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $helper_name;
     public $committee;
@@ -41,7 +41,7 @@ class HelperMutation extends Mailable
     public function build()
     {
         return $this
-            ->to($this->committee->getHelperReminderSubscribers())
+            ->to($this->committee->helper_reminder_subscribers)
             ->from('webmaster@proto.utwente.nl', 'S.A. Proto')
             ->subject(sprintf('Helper for the %s %s for the activity %s.', $this->committee->name, $this->helping ? 'subscribed' : 'UNSUBSCRIBED', $this->event->title))
             ->view('emails.helpermutation');

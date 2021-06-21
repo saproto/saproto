@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddNotificationSentToCommitteesActivities extends Migration
 {
@@ -17,7 +17,7 @@ class AddNotificationSentToCommitteesActivities extends Migration
             $table->boolean('notification_sent')->after('amount')->default(0);
         });
 
-        DB::table('committees_activities')->where('notification_sent', '=', 0)->update(array('notification_sent' => 1));
+        DB::table('committees_activities')->where('notification_sent', '=', 0)->update(['notification_sent' => 1]);
     }
 
     /**

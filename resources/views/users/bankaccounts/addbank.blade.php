@@ -164,7 +164,7 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $('body').on('delegate', '#iban', 'keyup', function () {
+        $('body').on('keyup', '#iban', function () {
 
             $("#iban").val($("#iban").val().replace(' ', ''));
 
@@ -198,7 +198,7 @@
 
         });
 
-        $('body').on('delegate', '#bic', 'keyup', function () {
+        $('body').on('keyup', '#bic', function () {
 
             if ($("#bic").val().length >= 8) {
                 $("#iban__submit").prop('disabled', false);
@@ -208,7 +208,7 @@
 
         });
 
-        $('body').on('delegate', '#iban__submit', 'click', function () {
+        $('body').on('click', '#iban__submit', function () {
 
             $("#iban__submit").prop('disabled', true);
 

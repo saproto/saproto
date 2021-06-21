@@ -2,27 +2,32 @@
 
 namespace Proto\Http\Controllers;
 
-use Proto\Models\EmailList;
-use Proto\Models\Event;
+use Permission;
 use Proto\Models\Account;
 use Proto\Models\Achievement;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
+use Proto\Models\EmailList;
+use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
-use Spatie\Permission\Models\Permission;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
-use Spatie\Permission\Models\Role;
 use Proto\Models\Ticket;
 use Proto\Models\User;
+use Role;
 
 class ExportController extends Controller
 {
+    /**
+     * @param array $table
+     * @param string $personal_key
+     * @return Account[]|Activity[]|Committee[]|Event[]|Permission[]|ProductCategory[]|User|null
+     */
     public function export($table, $personal_key)
     {
         $user = User::where('personal_key', $personal_key)->first();
-        if (!$user || !$user->is_member || !$user->signed_nda) {
+        if (! $user || ! $user->is_member || ! $user->signed_nda) {
             abort(403, 'You do not have access to this data. You need a membership of a relevant committee to access it.');
         }
         $data = null;
@@ -87,6 +92,7 @@ class ExportController extends Controller
                 $data = Ticket::all();
                 break;
         }
+
         return $data;
     }
 }

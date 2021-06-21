@@ -1,15 +1,13 @@
 <?php
 
-
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
 use Proto\Models\User;
-
-use Session;
 use Redirect;
+use Session;
 
 class LeaderboardEntryController extends Controller
 {
@@ -22,8 +20,8 @@ class LeaderboardEntryController extends Controller
     public function store(Request $request)
     {
         $leaderboard = Leaderboard::findOrFail($request->input('leaderboard_id'));
-        if($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
-            Session::flash("flash_message", "There is already a entry for this user");
+        if ($leaderboard->entries()->where('user_id', $request->user_id)->first()) {
+            Session::flash('flash_message', 'There is already a entry for this user');
             return Redirect::back();
         }
 
@@ -33,7 +31,7 @@ class LeaderboardEntryController extends Controller
         $entry->user()->associate($user);
         $entry->save();
 
-        Session::flash("flash_message", "Added new entry successfully.");
+        Session::flash('flash_message', 'Added new entry successfully.');
         return Redirect::back();
     }
 
@@ -51,7 +49,7 @@ class LeaderboardEntryController extends Controller
     }
 
     /**
-     * Delete leaderboard entry
+     * Delete leaderboard entry.
      *
      * @param  $id
      * @return \Illuminate\Http\Response
@@ -60,7 +58,7 @@ class LeaderboardEntryController extends Controller
     {
         $entry = LeaderboardEntry::findOrFail($id);
         $entry->delete();
-        Session::flash("flash_message", "The entry has been deleted.");
+        Session::flash('flash_message', 'The entry has been deleted.');
         return Redirect::back();
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class RemoveUniquePageSlugIndex extends Migration
 {
@@ -12,7 +12,7 @@ class RemoveUniquePageSlugIndex extends Migration
      */
     public function up()
     {
-        Schema::table('pages', function(Blueprint $table) {
+        Schema::table('pages', function (Blueprint $table) {
             $table->dropUnique('pages_slug_unique');
         });
     }
@@ -24,7 +24,7 @@ class RemoveUniquePageSlugIndex extends Migration
      */
     public function down()
     {
-        Schema::table('pages', function(Blueprint $table) {
+        Schema::table('pages', function (Blueprint $table) {
             $table->unique('slug');
         });
     }

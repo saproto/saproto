@@ -15,7 +15,7 @@
 
             @foreach($years as $y)
 
-                @if(Event::countEventsPerYear($y) > 0)
+                @if(Proto\Models\Event::countEventsPerYear($y) > 0)
 
                     <a href="{{ route('event::archive', ['year'=>$y]) }}"
                        class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}">

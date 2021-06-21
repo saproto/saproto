@@ -17,7 +17,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Aacotroneo\Saml2\Events\Saml2LoginEvent' => [
             'Proto\Handlers\Events\SamlLoginEventHandler',
-        ]
+        ],
     ];
 
     /**

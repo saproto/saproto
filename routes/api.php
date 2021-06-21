@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
-
+    /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], function () {
         Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
@@ -11,6 +11,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('verify_iban', ['as' => 'verify_iban', 'uses' => 'BankController@verifyIban']);
     });
 
+    /* Routes related to the User API */
     Route::group(['prefix' => 'user', 'as' => 'user::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
             Route::get('info', ['uses' => 'UserApiController@getUser']);
@@ -34,6 +35,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
+    /* Routes related to the Events API */
     Route::group(['prefix' => 'events', 'as' => 'events::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
             Route::get('upcoming/for_user/{limit?}', ['as' => 'list_for_user', 'uses' => 'EventController@apiUpcomingEvents']);
@@ -45,6 +47,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
+    /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], function () {
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
@@ -56,11 +59,13 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         });
     });
 
+    /* Routes related to the Quotes API */
     Route::group(['prefix' => 'quotes', 'as' => 'quotes::', 'middleware' => ['auth:api', 'member']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'QuoteCornerController@overview']);
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
     });
 
+    /* Routes related to the Committees API */
     Route::group(['prefix' => 'committees', 'as' => 'committees::'], function () {
         Route::group(['middleware' => ['auth:api']], function () {
             Route::get('', ['as' => 'index', 'uses' => 'CommitteeController@indexApi']);
@@ -77,6 +82,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
     });
 
+    /* Routes related to the Protube API */
     Route::group(['prefix' => 'protube', 'as' => 'protube::', 'middleware' => ['web']], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
         Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
@@ -85,6 +91,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('sounds', ['as' => 'sounds', 'uses' => 'SoundboardController@apiIndex']);
     });
 
+    /* Routes related to the Search API */
     Route::group(['prefix' => 'search', 'as' => 'search::', 'middleware' => ['web', 'auth', 'permission:board|omnomcom']], function () {
         Route::get('user', ['as' => 'user', 'uses' => 'SearchController@getUserSearch']);
         Route::get('committee', ['as' => 'committee', 'uses' => 'SearchController@getCommitteeSearch']);
@@ -92,6 +99,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('product', ['as' => 'product', 'uses' => 'SearchController@getProductSearch']);
     });
 
+    /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
-
 });

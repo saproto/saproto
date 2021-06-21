@@ -1,6 +1,6 @@
 @extends('auth.template')
 
-@push('javascript')
+@push('head')
     {!! htmlScriptTagJsApi() !!}
 @endpush
 

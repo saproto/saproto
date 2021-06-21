@@ -2,85 +2,46 @@
 
 namespace Proto\Http\Controllers;
 
+use Auth;
+use Exception;
+use GrahamCampbell\Markdown\Facades\Markdown;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
+use Illuminate\View\View;
 use Proto\Models\Newsitem;
 use Proto\Models\StorageEntry;
-
-use Auth;
 use Redirect;
 use Session;
-use GrahamCampbell\Markdown\Facades\Markdown;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function admin()
     {
         $newsitems = Newsitem::orderBy('published_at', 'desc')->paginate(20);
-
         return view('news.admin', ['newsitems' => $newsitems]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** @return View */
     public function index()
     {
         $newsitems = Newsitem::all()->sortByDesc('published_at');
 
         $return = [];
 
-        foreach($newsitems as $newsitem) {
-            if($newsitem->isPublished()) $return[] = $newsitem;
+        foreach ($newsitems as $newsitem) {
+            if ($newsitem->isPublished()) {
+                $return[] = $newsitem;
+            }
         }
 
         return view('news.list', ['newsitems' => $return]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("news.edit", ['item' => null, 'new' => true]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $newsitem = new Newsitem();
-
-        $newsitem->fill($request->all());
-        $newsitem->published_at = date("Y-m-d H:i:s", strtotime($request->published_at));
-        $newsitem->user_id = Auth::user()->id;
-
-        $newsitem->save();
-
-        return redirect(route('news::admin'));
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return View
      */
     public function show($id)
     {
@@ -88,10 +49,10 @@ class NewsController extends Controller
 
         $newsitem = Newsitem::findOrFail($id);
 
-        if(!$newsitem->isPublished()) {
-            if(Auth::check() && Auth::user()->can('board')) {
+        if (! $newsitem->isPublished()) {
+            if (Auth::check() && Auth::user()->can('board')) {
                 $preview = true;
-            }else{
+            } else {
                 abort(404);
             }
         }
@@ -99,49 +60,63 @@ class NewsController extends Controller
         return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content), 'preview' => $preview]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    /** @return View */
+    public function create()
     {
-        $newsitem = Newsitem::findOrFail($id);
-
-        return view("news.edit", ['item' => $newsitem, 'new' => false]);
+        return view('news.edit', ['item' => null, 'new' => true]);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $newsitem = new Newsitem();
+
+        $newsitem->fill($request->all());
+        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
+        $newsitem->user_id = Auth::user()->id;
+        $newsitem->save();
+
+        return redirect(route('news::admin'));
+    }
+
+    /** @return View */
+    public function edit($id)
+    {
+        $newsitem = Newsitem::findOrFail($id);
+        return view('news.edit', ['item' => $newsitem, 'new' => false]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
      */
     public function update(Request $request, $id)
     {
+        /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
 
         $newsitem->fill($request->all());
-        $newsitem->published_at = date("Y-m-d H:i:s", strtotime($request->published_at));
-
+        $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         $newsitem->save();
 
         return redirect(route('news::admin'));
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy($id)
     {
+        /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
 
-        Session::flash('flash_message', 'Newsitem ' . $newsitem->title . ' has been removed.');
+        Session::flash('flash_message', 'Newsitem '.$newsitem->title.' has been removed.');
 
         $newsitem->delete();
 
@@ -149,37 +124,38 @@ class NewsController extends Controller
     }
 
     /**
-     * Change the featured image of the page.
-     *
      * @param Request $request
-     * @param $id
-     * @return mixed
+     * @param int $id
+     * @return RedirectResponse
+     * @throws FileNotFoundException
      */
-    public function featuredImage(Request $request, $id) {
+    public function featuredImage(Request $request, $id)
+    {
+        /** @var Newsitem $newsitem */
         $newsitem = Newsitem::findOrFail($id);
 
         $image = $request->file('image');
         if ($image) {
             $file = new StorageEntry();
             $file->createFromFile($image);
-
             $newsitem->featuredImage()->associate($file);
-            $newsitem->save();
         } else {
             $newsitem->featuredImage()->dissociate();
-            $newsitem->save();
         }
+        $newsitem->save();
 
         return Redirect::route('news::edit', ['id' => $id]);
     }
 
-    public function apiIndex() {
+    /** @return array */
+    public function apiIndex()
+    {
         $newsitems = Newsitem::all()->sortByDesc('published_at');
 
         $return = [];
 
-        foreach($newsitems as $newsitem) {
-            if($newsitem->isPublished()) {
+        foreach ($newsitems as $newsitem) {
+            if ($newsitem->isPublished()) {
                 $returnItem = new \stdClass();
                 $returnItem->id = $newsitem->id;
                 $returnItem->title = $newsitem->title;
@@ -194,4 +170,3 @@ class NewsController extends Controller
         return $return;
     }
 }
-

@@ -21,11 +21,10 @@ moment.updateLocale('en', {
 // On document loaded
 $(function() {
     // Execute theme JavaScript
-    try { window[config.theme]() }
-    catch { /* Intentionally left blank */ }
+    window[config.theme]?.()
 
     // Enables tooltips
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip({ boundary: 'window'})
 
     // Enable popover
     $('[data-toggle="popover"]').popover()

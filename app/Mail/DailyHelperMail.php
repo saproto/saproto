@@ -5,11 +5,11 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DailyHelperMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
     public $events;
@@ -34,7 +34,7 @@ class DailyHelperMail extends Mailable
     {
         return $this
             ->from('board@proto.utwente.nl', 'S.A. Proto')
-            ->subject(count($this->events) . ' ' . (count($this->events) === 1 ? 'activity needs' : 'activities need') . ' your help!')
+            ->subject(count($this->events).' '.(count($this->events) === 1 ? 'activity needs' : 'activities need').' your help!')
             ->view('emails.dailyhelpermail');
     }
 }

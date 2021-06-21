@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddTempadminTable extends Migration
 {
@@ -12,7 +12,7 @@ class AddTempadminTable extends Migration
      */
     public function up()
     {
-        Schema::create('tempadmins', function(Blueprint $table) {
+        Schema::create('tempadmins', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('created_by')->references('id')->on('users');

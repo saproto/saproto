@@ -2,108 +2,108 @@
 
 return [
     'permissions' => [
-        'sysadmin' => (object)[
+        'sysadmin' => (object) [
             'display_name' => 'System Admin',
-            'description' => 'Gives admin access to the application.'
+            'description' => 'Gives admin access to the application.',
         ],
-        'board' => (object)[
+        'board' => (object) [
             'display_name' => 'Board Access',
-            'description' => 'Gives access to the association administration.'
+            'description' => 'Gives access to the association administration.',
         ],
-        'protube' => (object)[
+        'protube' => (object) [
             'display_name' => 'Protube Admin',
-            'description' => 'Gives Protube admin access.'
+            'description' => 'Gives Protube admin access.',
         ],
-        'omnomcom' => (object)[
+        'omnomcom' => (object) [
             'display_name' => 'OmNomCom Access',
-            'description' => 'Gives access to the OmNomCom administration.'
+            'description' => 'Gives access to the OmNomCom administration.',
         ],
-        'finadmin' => (object)[
+        'finadmin' => (object) [
             'display_name' => 'Financial Admin',
-            'description' => 'Gives access to the financial administration.'
+            'description' => 'Gives access to the financial administration.',
         ],
-        'tipcie' => (object)[
+        'tipcie' => (object) [
             'display_name' => 'TIPCie Access',
-            'description' => 'Gives access to the TIPCie tools.'
+            'description' => 'Gives access to the TIPCie tools.',
         ],
-        'drafters' => (object)[
+        'drafters' => (object) [
             'display_name' => 'Guild of Drafters Access',
-            'description' => 'Gives access to the relevant tools for drafters.'
+            'description' => 'Gives access to the relevant tools for drafters.',
         ],
-        'alfred' => (object)[
+        'alfred' => (object) [
             'display_name' => 'Alfred\'s Workshop',
-            'description' => 'Manages OmNomCom for workshop functionality.'
+            'description' => 'Manages OmNomCom for workshop functionality.',
         ],
-        'header-image' => (object)[
+        'header-image' => (object) [
             'display_name' => 'Update Header Image',
-            'description' => 'Allows updating the site\'s header images.'
+            'description' => 'Allows updating the site\'s header images.',
         ],
-        'protography' => (object)[
+        'protography' => (object) [
             'display_name' => 'Photo Access',
-            'description' => 'Allows managing photos and albums.'
+            'description' => 'Allows managing photos and albums.',
         ],
-        'publishalbums' => (object)[
+        'publishalbums' => (object) [
             'display_name' => 'Publish Albums',
-            'description' => 'Allows publishing photo albums.'
-        ]
+            'description' => 'Allows publishing photo albums.',
+        ],
     ],
 
     'roles' => [
         'sysadmin' => (object) [
             'display_name' => 'System Administrator',
             'description' => 'Can access all website functionality',
-            'permissions' => '*'
+            'permissions' => '*',
         ],
         'admin' => (object) [
             'display_name' => 'Application Administrator',
             'description' => 'Can administrate the website',
-            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums']
+            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums'],
         ],
         'protube' => (object) [
             'display_name' => 'Protube Administrator',
             'description' => 'Can access Protube admin interface',
-            'permissions' => 'protube'
+            'permissions' => 'protube',
         ],
         'board' => (object) [
             'display_name' => 'Association Board',
             'description' => 'Can administrate the website',
-            'permissions' => ['board', 'omnomcom', 'tipcie', 'protube', 'drafters']
+            'permissions' => ['board', 'omnomcom', 'tipcie', 'protube', 'drafters'],
         ],
         'omnomcom' => (object) [
             'display_name' => 'OmNomCom',
             'description' => 'Can manage the OmNomCom store',
-            'permissions' => ['omnomcom']
+            'permissions' => ['omnomcom'],
         ],
         'finadmin' => (object) [
             'display_name' => 'Financial Administrator',
             'description' => 'Can manage all financials',
-            'permissions' => ['finadmin']
+            'permissions' => ['finadmin'],
         ],
         'tipcie' => (object) [
             'display_name' => 'TipCie',
             'description' => 'Can manage the TipCie store',
-            'permissions' => ['tipcie', 'drafters']
+            'permissions' => ['tipcie', 'drafters'],
         ],
         'drafters' => (object) [
             'display_name' => 'Guild of Drafters',
             'description' => 'Can access the TipCie store',
-            'permissions' => 'drafters'
+            'permissions' => 'drafters',
         ],
         'alfred' => (object) [
             'display_name' => 'Alfred',
             'description' => 'This person is Alfred',
-            'permissions' => ['alfred', 'omnomcom']
+            'permissions' => ['alfred', 'omnomcom'],
         ],
         'protography-admin' => (object) [
             'display_name' => 'Protography Administrator',
             'description' => 'Can manage photos and albums',
-            'permissions' => ['header-image', 'protography', 'publishalbums']
+            'permissions' => ['header-image', 'protography', 'publishalbums'],
         ],
         'protography' => (object) [
             'display_name' => 'Protography',
             'description' => 'Can upload photos',
-            'permissions' => 'protography'
-        ]
+            'permissions' => 'protography',
+        ],
     ],
 
     'models' => [

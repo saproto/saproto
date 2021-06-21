@@ -2,11 +2,9 @@
 
 use Faker\Generator as Faker;
 
-/** @var $factory Closure */
+/* @var $factory Closure */
 $factory->define(Proto\Models\User::class, function (Faker $faker) {
     $gender = mt_rand(1, 2);
-
-
 
     return [
         'name' => $faker->name(($gender == 1 ? 'male' : 'female')),

@@ -9,7 +9,7 @@
 
         <div id="leaderboard-accordion" class="col-10 col-md-6">
 
-            @foreach($leaderboards->reverse() as $leaderboard)
+            @foreach($leaderboards as $leaderboard)
                 <div class="card mb-2">
 
                     <div class="card-header" data-toggle="collapse"

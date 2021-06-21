@@ -2,32 +2,38 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-use Proto\Models\Photo;
-use Proto\Models\PhotoManager;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoLikes;
 use Auth;
-use Session;
-
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\View\View;
+use Proto\Models\Photo;
+use Proto\Models\PhotoAlbum;
+use Proto\Models\PhotoManager;
 use Proto\Models\StorageEntry;
 use Redirect;
+use Session;
 
 class PhotoAdminController extends Controller
 {
+    /** @return View */
     public function index()
     {
         return view('photos.admin.index', ['query' => '']);
     }
 
+    /** @return View */
     public function search(Request $request)
     {
         return view('photos.admin.index', ['query' => $request->input('query')]);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function create(Request $request)
     {
         $album = new PhotoAlbum();
@@ -41,16 +47,26 @@ class PhotoAdminController extends Controller
         return redirect(route('photo::admin::edit', ['id' => $album->id]));
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
     public function edit($id)
     {
-
         $photos = PhotoManager::getPhotos($id);
 
-        if ($photos) return view('photos.admin.edit', ['photos' => $photos]);
+        if ($photos) {
+            return view('photos.admin.edit', ['photos' => $photos]);
+        }
 
         abort(404);
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         $album = PhotoAlbum::find($id);
@@ -62,102 +78,139 @@ class PhotoAdminController extends Controller
             $album->private = false;
         }
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return View
+     * @throws FileNotFoundException
+     */
     public function upload(Request $request, $id)
     {
         $album = PhotoAlbum::find($id);
-        $response = "ERROR";
-        if ($request->has('file') && !$album->published) {
+        $response = 'ERROR';
+        if ($request->has('file') && ! $album->published) {
             $uploadFile = $request->file('file');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id);
 
             $response = view('website.layouts.macros.selectablephoto', ['photo' => $photo]);
         }
+
         return $response;
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
     public function action(Request $request, $id)
     {
         $action = $request->input('submit');
         $photos = $request->input('photo');
 
-        if($photos)
-        {
+        if ($photos) {
             $album = PhotoAlbum::where('id', $id)->get()->first();
 
-            if ($album->published && !Auth::user()->can('publishalbums')) {
+            if ($album->published && ! Auth::user()->can('publishalbums')) {
                 abort(403, 'Unauthorized action.');
             }
 
-
             switch ($action) {
-                case "remove":
+                case 'remove':
                     foreach ($photos as $photoId => $photo) {
                         Photo::find($photoId)->delete();
                     }
                     break;
 
-                case "thumbnail":
+                case 'thumbnail':
                     reset($photos);
                     $album->thumb_id = key($photos);
                     break;
 
-                case "private":
+                case 'private':
                     foreach ($photos as $photoId => $photo) {
                         $photo = Photo::find($photoId);
-                        if ($album->published && $photo->private) continue;
-                        $photo->private = !$photo->private;
+                        if ($album->published && $photo->private) {
+                            continue;
+                        }
+                        $photo->private = ! $photo->private;
                         $photo->save();
                     }
                     break;
             }
             $album->save();
         }
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
+    /**
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
     public function delete($id)
     {
         PhotoManager::deleteAlbum($id);
         return redirect(route('photo::admin::index'));
     }
 
+    /**
+     * @param int $id
+     * @return RedirectResponse
+     */
     public function publish($id)
     {
         $album = PhotoAlbum::where('id', '=', $id)->first();
 
-        if(!count($album->items)>0 || $album->thumb_id == null) {
+        if (! count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+
             return Redirect::back();
         }
 
         $album->published = true;
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
+    /**
+     * @param int $id
+     * @return RedirectResponse
+     */
     public function unpublish($id)
     {
         $album = PhotoAlbum::where('id', '=', $id)->first();
         $album->published = false;
         $album->save();
+
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
-    private function createPhotoFromUpload($uploadedPhoto, $albumID)
+    /**
+     * @param UploadedFile $uploaded_photo
+     * @param int $album_id
+     * @return Photo
+     * @throws FileNotFoundException
+     */
+    private function createPhotoFromUpload($uploaded_photo, $album_id)
     {
-        $path = "photos/" . $albumID . "/";
+        $path = 'photos/'.$album_id.'/';
 
         $file = new StorageEntry();
-        $file->createFromFile($uploadedPhoto, $path);
+        $file->createFromFile($uploaded_photo, $path);
         $file->save();
 
         $photo = new Photo();
-        $photo->date_taken = $uploadedPhoto->getCTime();
-        $photo->album_id = $albumID;
+        $photo->date_taken = $uploaded_photo->getCTime();
+        $photo->album_id = $album_id;
         $photo->file_id = $file->id;
         $photo->save();
 

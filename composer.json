@@ -44,7 +44,6 @@
     "aacotroneo/laravel-saml2": "2.1.*",
     "abcaeffchen/sephpa": "~2.0.0-beta1",
     "alaouy/youtube": "2.1.*",
-    "barryvdh/laravel-ide-helper": "2.8.*",
     "barryvdh/laravel-snappy": "0.4.*",
     "directadmin/directadmin": "1.0.*",
     "doctrine/dbal": "2.*",
@@ -81,9 +80,18 @@
     "ext-calendar": "*"
   },
   "require-dev": {
+    "barryvdh/laravel-ide-helper": "^2.8.2",
     "symfony/css-selector": "~4.0",
     "symfony/dom-crawler": "~4.0",
-    "fakerphp/faker": "^1.13"
+    "fakerphp/faker": "^1.13",
+    "friendsofphp/php-cs-fixer": "^3.0.0"
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": [
+        "barryvdh/laravel-ide-helper"
+      ]
+    }
   },
   "autoload": {
     "classmap": [
@@ -101,6 +109,14 @@
       "php artisan clear-compiled"
     ],
     "post-update-cmd": [],
+    "fix": [
+      "php-cs-fixer fix"
+    ],
+    "ide-helper": [
+      "php artisan cache:clear",
+      "php artisan ide-helper:generate",
+      "php artisan ide-helper:meta"
+    ],
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
     ],

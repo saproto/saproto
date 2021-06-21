@@ -79,11 +79,11 @@
                                 </td>
 
                                 <td>
-                                    @if(MollieTransaction::translateStatus($transaction->status) == 'open')
+                                    @if(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'open')
                                         <span class="label label-default">{{ $transaction->status }}</span>
-                                    @elseif(MollieTransaction::translateStatus($transaction->status) == 'paid')
+                                    @elseif(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'paid')
                                         <span class="label label-success">{{ $transaction->status }}</span>
-                                    @elseif(MollieTransaction::translateStatus($transaction->status) == 'failed')
+                                    @elseif(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'failed')
                                         <span class="label label-danger">{{ $transaction->status }}</span>
                                     @else
                                         <span class="label label-warning">{{ $transaction->status }}</span>
@@ -138,7 +138,7 @@
                         @for($m = 0; $m <= 11 ; $m++)
                             <?php
                             $month = strtotime(sprintf('-%s months', $m));
-                            $total = MollieController::getTotalForMonth(date('Y-m', $month));
+                            $total = \Proto\Http\Controllers\MollieController::getTotalForMonth(date('Y-m', $month));
                             ?>
                             <tr>
                                 <td>

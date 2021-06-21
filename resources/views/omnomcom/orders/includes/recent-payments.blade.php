@@ -54,7 +54,7 @@
                 <li class="list-group-item">
                     <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
                         {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
-                        {!! MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
+                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
                     </a>
                     <span class="float-right">&euro;{{ number_format($transaction->amount, 2, '.', ',') }}</span>
                 </li>

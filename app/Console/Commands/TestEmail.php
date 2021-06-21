@@ -3,13 +3,11 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Proto\Mail\TestMail;
-
 use Mail;
+use Proto\Mail\TestMail;
 
 class TestEmail extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -39,13 +37,10 @@ class TestEmail extends Command
      */
     public function handle()
     {
-
         $email = $this->ask('What is the destination for this e-mail?');
 
         Mail::to($email)->queue((new TestMail())->onQueue('high'));
 
         $this->info('Sent!');
-
     }
-
 }

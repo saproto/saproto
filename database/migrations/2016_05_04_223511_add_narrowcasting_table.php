@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddNarrowcastingTable extends Migration
 {
@@ -12,7 +12,6 @@ class AddNarrowcastingTable extends Migration
      */
     public function up()
     {
-
         Schema::create('narrowcasting', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -22,7 +21,6 @@ class AddNarrowcastingTable extends Migration
             $table->integer('slide_duration');
             $table->timestamps();
         });
-
     }
 
     /**

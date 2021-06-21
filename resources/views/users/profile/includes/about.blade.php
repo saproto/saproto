@@ -23,11 +23,18 @@
 
     <div class="card-body">
 
-        @if($user->is_member && $user->member->is_honorary)
-            <p class="card-text ellipsis">
-                <i class="fas fa-trophy fa-fw mr-3 text-primary" aria-hidden="true"></i>
-                <strong>{{ $user->calling_name }} is an honorary member.</strong>
-            </p>
+        @if($user->is_member)
+            @if($user->member->is_honorary)
+                <p class="card-text ellipsis">
+                    <i class="fas fa-trophy fa-fw mr-3 text-primary" aria-hidden="true"></i>
+                    <strong>{{ $user->calling_name }} is an honorary member.</strong>
+                </p>
+            @elseif($user->member->is_pet)
+                <p class="card-text ellipsis">
+                    <i class="fas fa-paw fa-fw mr-3 text-primary" aria-hidden="true"></i>
+                    <strong>{{ $user->calling_name }} is a pet.</i></strong>
+                </p>
+            @endif
         @endif
 
         @can('board')

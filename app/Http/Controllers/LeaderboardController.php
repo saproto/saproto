@@ -1,14 +1,12 @@
 <?php
 
-
 namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Proto\Models\Committee;
 use Proto\Models\Leaderboard;
-
-use Session;
 use Redirect;
+use Session;
 
 class LeaderboardController extends Controller
 {
@@ -19,11 +17,11 @@ class LeaderboardController extends Controller
      */
     public function index()
     {
-        $leaderboards = Leaderboard::all();
+        $leaderboards = Leaderboard::all()->reverse();
         if (count($leaderboards) > 0) {
             return view('leaderboards.list', ['leaderboards' => $leaderboards]);
         } else {
-            Session::flash("flash_message", "There are currently no leaderboards, but please check back real soon!");
+            Session::flash('flash_message', 'There are currently no leaderboards, but please check back real soon!');
             return Redirect::back();
         }
     }
@@ -59,14 +57,14 @@ class LeaderboardController extends Controller
         $leaderboard = new Leaderboard();
         $committee = Committee::findOrFail($request->input('committee'));
         $leaderboard->committee()->associate($committee);
-        $leaderboard->name = $request->name;
-        $leaderboard->description = $request->description;
-        $leaderboard->icon = $request->icon;
-        $leaderboard->points_name = $request->points_name;
+        $leaderboard->name = $request->input('name');
+        $leaderboard->featured = $request->has('featured');
+        $leaderboard->description = $request->input('description');
+        $leaderboard->icon = $request->input('icon');
+        $leaderboard->points_name = $request->input('points_name');
         $leaderboard->save();
 
-
-        Session::flash("flash_message", "Your leaderboard '" . $leaderboard->name . "' has been added.");
+        Session::flash('flash_message', "Your leaderboard '".$leaderboard->name."' has been added.");
         return Redirect::route('leaderboards::edit', ['id'=>$leaderboard->id]);
     }
 
@@ -85,22 +83,25 @@ class LeaderboardController extends Controller
 
     public function update(Request $request, $id)
     {
-        $leaderboard = Leaderboard::findOrFail($id);
-
-        $leaderboard->name = $request->name;
-        $leaderboard->description = $request->description;
-        $leaderboard->points_name = $request->points_name;
-        $leaderboard->icon = $request->icon;
-
-        $committee = Committee::findOrFail($request->input('committee'));
-        if($committee != $leaderboard->committee) {
-            $leaderboard->committee()->associate($committee);
+        if ($request->featured && Leaderboard::where('featured', true)->first() != null) {
+            Leaderboard::where('featured', true)->update(['featured' => false]);
         }
 
+        $leaderboard = Leaderboard::findOrFail($id);
+        $leaderboard->name = $request->input('name');
+        $leaderboard->featured = $request->has('featured');
+        $leaderboard->description = $request->input('description');
+        $leaderboard->points_name = $request->input('points_name');
+        if ($request->input('icon') != null) {
+            $leaderboard->icon = $request->input('icon');
+        }
+        $committee = Committee::findOrFail($request->input('committee'));
+        if ($committee != $leaderboard->committee) {
+            $leaderboard->committee()->associate($committee);
+        }
         $leaderboard->save();
 
-        Session::flash("flash_message", "Leaderboard has been updated.");
-
+        Session::flash('flash_message', 'Leaderboard has been updated.');
         return Redirect::back();
     }
 
@@ -108,7 +109,7 @@ class LeaderboardController extends Controller
     {
         $leaderboard = Leaderboard::findOrFail($id);
 
-        Session::flash("flash_message", "The leaderboard '" . $leaderboard->name . "' has been deleted.");
+        Session::flash('flash_message', "The leaderboard '".$leaderboard->name."' has been deleted.");
         $leaderboard->delete();
         return Redirect::route('leaderboards::admin');
     }

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreatePlayedvideosTable extends Migration
 {
@@ -12,7 +12,7 @@ class CreatePlayedvideosTable extends Migration
      */
     public function up()
     {
-        Schema::create('playedvideos', function(Blueprint $table) {
+        Schema::create('playedvideos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->references('id')->on('users')->nullable();
             $table->string('video_id');

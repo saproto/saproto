@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class Alterevents extends Migration
 {
@@ -13,8 +13,8 @@ class Alterevents extends Migration
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string("location");
-            $table->dropColumn("slug");
+            $table->string('location');
+            $table->dropColumn('slug');
         });
     }
 
@@ -26,8 +26,8 @@ class Alterevents extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn("location");
-            $table->string("slug");
+            $table->dropColumn('location');
+            $table->string('slug');
         });
     }
 }

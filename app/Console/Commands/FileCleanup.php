@@ -4,12 +4,10 @@ namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-
 use Proto\Models\StorageEntry;
 
 class FileCleanup extends Command
 {
-
     /**
      * The name and signature of the console command.
      *
@@ -39,23 +37,18 @@ class FileCleanup extends Command
      */
     public function handle()
     {
-
         $this->info('Starting clean-up.');
 
         $count = 0;
 
         foreach (StorageEntry::all() as $file) {
-
             if ($file->isOrphan()) {
                 $count++;
                 Storage::delete($file->filename);
                 $file->delete();
             }
-
         }
 
         $this->info("Found and deleted $count orphaned files.");
-
     }
-
 }

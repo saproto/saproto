@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    {{ ($new ? "Create a new Achievement" : "Edit Achievement " . $achievement->name) }}
+    {{ (!$achievement ? "Create a new Achievement" : "Edit Achievement " . $achievement->name) }}
 @endsection
 
 @section('container')
@@ -10,7 +10,7 @@
 
         <div class="col-md-3">
 
-            @if(!$new)
+            @if($achievement)
                 @include('achievement.includes.achievement_include', [
                     'achievement' => $achievement
                 ])
@@ -20,7 +20,7 @@
 
         </div>
 
-        @if(!$new)
+        @if($achievement)
             <div class="col-md-3">
                 @include('achievement.admin_includes.icon')
             </div>

@@ -28,15 +28,15 @@ class AuthLoginEventHandler
         $user->generateNewToken();
 
         // We will grant the user all roles to which he is entitled!
-        $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
-        $boardcommittee = Committee::find(config('proto.committee')['board']);
+        $root = Committee::where('slug', config('proto.rootcommittee'))->first();
+        $board = Committee::find(config('proto.committee')['board']);
         $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
         $tipcie = Committee::find(config('proto.committee')['tipcie']);
         $drafters = Committee::find(config('proto.committee')['drafters']);
         $protography = Committee::find(config('proto.committee')['protography']);
 
-        if ($user->isInCommittee($rootcommittee) && $user->signed_nda) {
-            if (!$user->hasRole('protube')) {
+        if ($user->isInCommittee($root) && $user->signed_nda) {
+            if (! $user->hasRole('protube')) {
                 $user->assignRole('protube');
             }
         } else {
@@ -45,8 +45,8 @@ class AuthLoginEventHandler
             }
         }
 
-        if ($user->isInCommittee($boardcommittee) && $user->signed_nda) {
-            if (!$user->hasRole('board')) {
+        if ($user->isInCommittee($board) && $user->signed_nda) {
+            if (! $user->hasRole('board')) {
                 $user->assignRole('board');
             }
         } else {
@@ -56,7 +56,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
-            if (!$user->hasRole('omnomcom')) {
+            if (! $user->hasRole('omnomcom')) {
                 $user->assignRole('omnomcom');
             }
         } else {
@@ -66,7 +66,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($tipcie) && $user->signed_nda) {
-            if (!$user->hasRole('tipcie')) {
+            if (! $user->hasRole('tipcie')) {
                 $user->assignRole('tipcie');
             }
         } else {
@@ -76,7 +76,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($drafters)) {
-            if (!$user->hasRole('drafters')) {
+            if (! $user->hasRole('drafters')) {
                 $user->assignRole('drafters');
             }
         } else {
@@ -86,7 +86,7 @@ class AuthLoginEventHandler
         }
 
         if ($user->isInCommittee($protography)) {
-            if (!$user->hasRole('protography')) {
+            if (! $user->hasRole('protography')) {
                 $user->assignRole('protography');
             }
         } else {
@@ -94,6 +94,5 @@ class AuthLoginEventHandler
                 $user->removeRole('protography');
             }
         }
-
     }
 }
