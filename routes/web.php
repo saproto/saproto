@@ -47,7 +47,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getPasswordReset']);
         Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordReset']);
 
-        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getPasswordReset']);
+        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getPasswordResetEmail']);
         Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordResetEmail']);
 
         Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@getPasswordSync']);
