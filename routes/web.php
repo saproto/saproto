@@ -43,6 +43,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
         Route::post('login', ['as' => 'post', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postLogin']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
+        Route::get('logout/redirect', ['as' => 'logout::redirect', 'uses' => 'AuthController@getLogoutRedirect']);
 
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getPasswordReset']);
         Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordReset']);

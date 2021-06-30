@@ -87,6 +87,13 @@ class AuthController extends Controller
         return Redirect::route('homepage');
     }
 
+    /** @return RedirectResponse */
+    public function getLogoutRedirect(Request $request)
+    {
+        Auth::logout();
+        return Redirect::route($request->route, $request->parameters);
+    }
+
     /**
      * @param Request $request
      * @return View|RedirectResponse
