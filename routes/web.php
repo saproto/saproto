@@ -130,7 +130,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => 'bank', 'as' => 'bank::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'BankController@add']);
             Route::post('add', ['as' => 'add', 'uses' => 'BankController@store']);
-            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@destory']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@destroy']);
             Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
             Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@update']);
         });
