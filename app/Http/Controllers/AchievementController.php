@@ -53,7 +53,7 @@ class AchievementController extends Controller
             abort(404);
         }
 
-        return view('achievement.manage', ['new' => false, 'achievement' => $achievement]);
+        return view('achievement.manage', ['achievement' => $achievement]);
     }
 
     /** @return View */

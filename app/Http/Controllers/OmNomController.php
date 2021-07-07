@@ -51,7 +51,7 @@ class OmNomController extends Controller
 
             if ($store == 'tipcie') {
                 $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get()->reject(function ($user, $index) {
-                    return $user->member->is_pending == true;
+                    return $user->member->is_pending || $user->member->is_pet;
                 });
             } else {
                 $minors = collect([]);

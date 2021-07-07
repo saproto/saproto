@@ -15,7 +15,7 @@ $factory->define(
             'is_honorary' => mt_rand(0, 100) > 98 ? 1 : 0,
             'is_donor' => mt_rand(0, 100) > 98 ? 1 : 0,
             'is_pet' => mt_rand(0, 100) > 98 ? 1 : 0,
-            'pending' => mt_rand(0, 100) > 85 ? 1 : 0,
+            'is_pending' => mt_rand(0, 100) > 85 ? 1 : 0,
         ];
     }
 );

@@ -63,11 +63,11 @@ class PhotoAlbum extends Model
         return $this->hasMany('Proto\Models\Photo', 'album_id');
     }
 
-    /** @return Photo|null */
+    /** @return string */
     public function thumb()
     {
         if ($this->thumb_id) {
-            return $this->thumb_photo;
+            return $this->thumbPhoto()->first()->thumb();
         } else {
             return null;
         }

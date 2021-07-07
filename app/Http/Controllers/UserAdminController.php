@@ -224,7 +224,7 @@ class UserAdminController extends Controller
 
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
-        Session::flash('flash_message', 'Membership of '.$user->name.' has been termindated.');
+        Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
         return redirect()->back();
     }
 

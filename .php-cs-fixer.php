@@ -33,7 +33,7 @@ $rules = [
     'increment_style' => ['style' => 'post'],
     'indentation_type' => true,
     'linebreak_after_opening_tag' => true,
-    'line_ending' => true,
+    'line_ending' => false,
     'lowercase_cast' => true,
     'lowercase_keywords' => true,
     'lowercase_static_reference' => true,

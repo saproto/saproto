@@ -27,6 +27,7 @@ class ProtoPolicy extends Policy
                     'https://analytics.saproto.nl/piwik.js',
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com',
+                    'https://www.google.com/recaptcha/api.js',
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
@@ -66,9 +67,7 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                 ]);
-        } catch (InvalidDirective $e) {
-            captureException($e);
-        } catch (InvalidValueSet $e) {
+        } catch (InvalidValueSet | InvalidDirective $e) {
             captureException($e);
         }
     }

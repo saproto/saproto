@@ -45,7 +45,7 @@
                     <tr>
                         <td>All active members</td>
                         <td></td>
-                        <td>{{ Member::countActiveMembers() }}</td>
+                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
                         <td></td>
                     </tr>
 

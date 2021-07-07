@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
+use Proto\Models\Role;
 use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
