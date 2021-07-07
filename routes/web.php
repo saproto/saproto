@@ -43,11 +43,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('login', ['as' => 'show', 'uses' => 'AuthController@getLogin']);
         Route::post('login', ['as' => 'post', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postLogin']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AuthController@getLogout']);
+        Route::get('logout/redirect', ['as' => 'logout::redirect', 'uses' => 'AuthController@getLogoutRedirect']);
 
         Route::get('password/reset/{token}', ['as' => 'resetpass::token', 'uses' => 'AuthController@getPasswordReset']);
         Route::post('password/reset', ['as' => 'resetpass::submit', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordReset']);
 
-        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getPasswordReset']);
+        Route::get('password/email', ['as' => 'resetpass', 'uses' => 'AuthController@getPasswordResetEmail']);
         Route::post('password/email', ['as' => 'resetpass::send', 'middleware' => ['throttle:5,1'], 'uses' => 'AuthController@postPasswordResetEmail']);
 
         Route::get('password/sync', ['as' => 'password::sync', 'middleware' => ['auth'], 'uses' => 'AuthController@getPasswordSync']);
@@ -129,7 +130,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::group(['prefix' => 'bank', 'as' => 'bank::'], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'BankController@add']);
             Route::post('add', ['as' => 'add', 'uses' => 'BankController@store']);
-            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@destory']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'BankController@destroy']);
             Route::get('edit', ['as' => 'edit', 'uses' => 'BankController@edit']);
             Route::post('edit', ['as' => 'edit', 'uses' => 'BankController@update']);
         });
@@ -480,7 +481,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         /* Routes related to OmNomCom stores. */
         Route::group(['prefix' => 'store', 'as' => 'store::'], function () {
-            Route::get('', ['as' => 'show', 'uses' => 'OmNomController@choose']);
+            Route::get('', ['as' => 'show', 'middleware' => ['auth'], 'uses' => 'OmNomController@choose']);
             Route::get('{store?}', ['as' => 'show', 'uses' => 'OmNomController@display']);
             Route::post('rfid/add', ['as' => 'rfidadd', 'uses' => 'RfidCardController@store']);
             Route::post('{store}/buy', ['as' => 'buy', 'uses' => 'OmNomController@buy']);
