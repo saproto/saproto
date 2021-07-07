@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
     <head>
         <title>OmNomCom Store</title>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='initial-scale=1, maximum-scale=1, user-scalable=no'/>
 
-        <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
-        <link rel="stylesheet" href="{{ mix('/assets/application-dark.css') }}">
+        <link rel='shortcut icon' href='{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}'/>
+        <link rel='stylesheet' href='{{ mix('/assets/application-dark.css') }}'>
 
         <style>
             * { box-sizing: border-box; }
@@ -34,7 +34,7 @@
                 @php($bg_image = 'images/omnomcom/cookiemonster.png')
                 @foreach(config('omnomcom.cookiemonsters') as $cookiemonster)
                     @if(date('U') > strtotime($cookiemonster->start) && date('U') < strtotime($cookiemonster->end))
-                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png")
+                       @php($bg_image = 'images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png')
                        @break
                     @endif
                 @endforeach
@@ -46,9 +46,9 @@
         </style>
     </head>
 
-    <body id="omnomcom">
+    <body id='omnomcom'>
 
-        <div class="d-flex px-2">
+        <div class='d-flex px-2'>
             @include('omnomcom.store.includes.categories')
 
             @include('omnomcom.store.includes.product_overview')
@@ -61,7 +61,7 @@
         @include('website.layouts.assets.javascripts')
         @stack('javascript')
 
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        <script type='text/javascript' nonce='{{ csp_nonce() }}'>
             let modal_status = null;
             let purchase_processing = null;
             let rfid_link_card = null;
@@ -109,7 +109,7 @@
                 if ($(this).hasClass('random')) {
                     if ($(this).attr('data-stock') > 0) {
                         let list = $(this).attr('data-list');
-                        let data = list.split(",");
+                        let data = list.split('','');
                         let selected = Math.floor(Math.random() * data.length);
                         if (stock[data[selected]] < 1) {
                             $(this).trigger('click');
@@ -117,11 +117,11 @@
                         }
                         $(this).siblings("div.product[data-id=" + data[selected] + "]").first().click();
                     } else {
-                        $("#outofstock-modal").modal('show');
+                        $('#outofstock-modal').modal('show');
                     }
                 } else {
                     if (stock[$(this).attr('data-id')] <= 0) {
-                        $("#outofstock-modal").modal('show');
+                        $('#outofstock-modal').modal('show');
                     } else {
                         cart[$(this).attr('data-id')]++;
                         stock[$(this).attr('data-id')]--;
@@ -140,8 +140,8 @@
                 update();
             });
 
-            $("#purchase-button").on('click', function () {
-                $("#rfid-modal .modal-status").html("<span style='color: orange;'>Working on your purchase...<span>");
+            $('#purchase-button').on('click', function () {
+                $('#rfid-modal .modal-status').html("<span style='color: orange;'>Working on your purchase...<span>");
                 purchase(null, 'account');
             });
 
@@ -160,46 +160,44 @@
                         _token: '{{ csrf_token() }}',
                         credentialtype: type,
                         credentials: (type !== 'account' ? credential : {
-                            username: $("#purchase-username").val(),
-                            password: $("#purchase-password").val()
+                            username: $('#purchase-username').val(),
+                            password: $('#purchase-password').val()
                         }),
-                        cash: {{ ($store->cash_allowed ? "cash" : "false") }},
-                        bank_card: {{ ($store->bank_card_allowed ? "bank_card" : "false") }},
+                        cash: {{ ($store->cash_allowed ? 'cash' : 'false') }},
+                        bank_card: {{ ($store->bank_card_allowed ? 'bank_card' : 'false') }},
                         cart: cart_to_object(cart)
                     },
                     dataType: 'html',
                     success: function (data) {
                         data = JSON.parse(data);
 
-                        if (data.status === "OK") {
+                        if (data.status === 'OK') {
                             if (!data.hasOwnProperty('message')) finishPurchase();
                             else finishPurchase(data.message);
                         } else {
-                            $("#purchase-modal .modal-status").html(data.message);
+                            $('#purchase-modal .modal-status').html(data.message);
                             purchase_processing = null;
                         }
                     },
                     error: function (xhr, status) {
                         purchase_processing = null;
                         if (xhr.status === 503) {
-                            $("#purchase-modal .modal-status").html("The website is currently in maintenance. Please try again in 30 seconds.");
+                            $('#purchase-modal .modal-status').html('The website is currently in maintenance. Please try again in 30 seconds.');
                         } else {
-                            $("#purchase-modal .modal-status").html("There is something wrong with the website, call someone to help!");
+                            $('#purchase-modal .modal-status').html('There is something wrong with the website, call someone to help!');
                         }
                     }
                 });
             }
 
             function finishPurchase(display_message = null) {
-                $('#purchase-modal').modal('hide')
-                if (display_message) {
-                    $("#finished-overlay-message").html(display_message);
-                }
-                $("#finished-modal").modal('show');
-                document.getElementById("purchase-movie").play();
-                setTimeout(function () {
-                    window.location.reload();
-                }, 7000);
+                $('#finished-modal').siblings().modal('hide')
+                if (display_message) $('#finished-modal-message').html(display_message);
+                $('#finished-modal-continue').on('click', () => window.location.reload());
+                $('#finished-modal').modal({ backdrop: 'static', keyboard: false, show: true});
+                let movie = $('#purchase-movie');
+                movie.on('ended', () => window.location.reload());
+                movie.trigger('play');
             }
 
             /*
@@ -207,33 +205,33 @@
              */
 
             function update() {
-                $("#cart").html("");
+                $('#cart').html('');
                 let anythingincart = false;
                 let ordertotal = 0;
                 for (let id in cart) {
                     if (cart[id] > 0) {
                         ordertotal += price[id] * cart[id];
                         anythingincart = true;
-                        $("#cart").append(
-                            '<div class="cart-product" data-id="' + id + '">' +
-                                '<div class="cart-product-image">' +
-                                    '<div class="cart-product-image-inner" style="background-image: url(\'' + images[id] + '\');"></div>' +
-                                '</div>' +
-                                '<div class="cart-product-count">' + cart[id] + 'x </div>' +
-                            '</div>'
+                        $('#cart').append(
+                            "<div class='cart-product' data-id='" + id + "'>" +
+                                "<div class='cart-product-image'>" +
+                                    "<div class='cart-product-image-inner' style='background-image: url('" + images[id] + "');></div>" +
+                                "</div>" +
+                                "<div class='cart-product-count'>" + cart[id] + "x </div>" +
+                            "</div>"
                         );
                     }
                 }
                 if (anythingincart) {
-                    $("#purchase").removeClass("inactive");
-                    $("#purchase-cash-initiate").removeClass("inactive");
-                    $("#purchase-bank-card-initiate").removeClass("inactive");
+                    $('#purchase').removeClass('inactive');
+                    $('#purchase-cash-initiate').removeClass('inactive');
+                    $('#purchase-bank-card-initiate').removeClass('inactive');
                 } else {
-                    $("#purchase").addClass("inactive");
-                    $("#purchase-cash-initiate").addClass("inactive");
-                    $("#purchase-bank-card-initiate").addClass("inactive");
+                    $('#purchase').addClass('inactive');
+                    $('#purchase-cash-initiate').addClass('inactive');
+                    $('#purchase-bank-card-initiate').addClass('inactive');
                 }
-                $("#total").html(ordertotal.toFixed(2));
+                $('#total').html(ordertotal.toFixed(2));
 
                 let lists = $('.random');
                 for (let i = 0; i < lists.length; i++) {
@@ -256,23 +254,23 @@
 
             function establishNfcConnection() {
                 try {
-                    $("#status").addClass("inactive").html("RFID Service: Connecting...");
-                    server = new WebSocket("ws://localhost:3000", "nfc");
+                    $('#status').addClass('inactive').html('RFID Service: Connecting...');
+                    server = new WebSocket('ws://localhost:3000', 'nfc');
                 } catch (err) {
-                    if (err.message.indexOf("insecure") !== -1) {
-                        $("#status").addClass("inactive").html("RFID Service: Not Supported");
+                    if (err.message.indexOf('insecure') !== -1) {
+                        $('#status').addClass('inactive').html('RFID Service: Not Supported');
                         return;
                     } else {
-                        console.log("Unexpected error:", err.message);
+                        console.log('Unexpected error:', err.message);
                     }
                 }
 
                 server.onopen = function () {
-                    $("#status").removeClass("inactive").html("RFID Service: Connected");
+                    $('#status').removeClass('inactive').html('RFID Service: Connected');
                 };
 
                 server.onclose = function () {
-                    $("#status").addClass("inactive").html("RFID Service: Disconnected");
+                    $('#status').addClass('inactive').html('RFID Service: Disconnected');
                     setTimeout(establishNfcConnection, 5000);
                 };
 
@@ -280,31 +278,33 @@
                     let data = JSON.parse(raw.data).uid;
                     console.log('Received card input: ' + data);
 
-                    if (modal_status === "badcard") {
+                    if (modal_status === 'badcard') {
                         return;
                     }
 
-                    if (data === "") {
-                        $(".modal").modal('hide');
-                        $("#badcard-modal").modal('show');
-                        modal_status = "badcard";
+                    if (data === '') {
+                        $('.modal').modal('hide');
+                        $('#badcard-modal').modal('show');
+                        modal_status = 'badcard';
                         return;
                     }
 
-                    $("#badcard-modal").modal('hide');
+                    $('#badcard-modal').modal('hide');
 
                     if (modal_status === 'rfid') {
 
                         if (rfid_link_card == null) {
                             rfid_link_card = data;
-                            $("#rfid-modal .modal-body").html('<div class="qrAuth">Loading QR authentication...</div>\n' +
-                                '\n' +
-                                '        <hr>\n' +
-                                '\n' +
-                                '        <span class="modal-status">\n' +
-                                '            Authenticate using the QR code above to link RFID card.\n' +
-                                '        </span>');
-                            doQrAuth($("#rfid-modal .qrAuth"), "Link RFID card to account", function (auth_token, credentialtype) {
+                            $('#rfid-modal .modal-body').html(
+                                "<div class='qrAuth'>Loading QR authentication...</div>\n" +
+                                "\n" +
+                                "        <hr>\n" +
+                                "\n" +
+                                "<span class='modal-status''>\n" +
+                                "   Authenticate using the QR code above to link RFID card.\n" +
+                                "</span>"
+                            );
+                            doQrAuth($('#rfid-modal .qrAuth'), 'Link RFID card to account', function (auth_token, credentialtype) {
                                 $.ajax({
                                     url: '{{ route('omnomcom::store::rfidadd') }}',
                                     method: 'post',
@@ -316,7 +316,7 @@
                                     },
                                     dataType: 'html',
                                     success: function (data) {
-                                        $("#rfid-modal .modal-status").html(data);
+                                        $('#rfid-modal .modal-status').html(data);
                                     }
                                 });
                             });
@@ -332,15 +332,12 @@
                             }
                         }
                         if (anythingincart) {
-                            $("#purchase").trigger('click');
                             purchase(data, 'card');
                         } else {
-                            $("#emptycart-modal").modal('show');
+                            $('#emptycart-modal').modal('show');
                         }
-
                     }
-
-                };
+                }
             }
 
             function doQrAuth(element, description, onComplete) {
@@ -355,7 +352,9 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        element.html('Scan this QR code<br><br><img src="{{ route('qr::code', '') }}/' + data.qr_token + '" width="200px" height="200px"><br><br>or go to<br><strong>{{ route('qr::dialog', '') }}/' + data.qr_token + "</strong>");
+                        let qr_img = "{{ route('qr::code', '') }}" + '/' + data.qr_token;
+                        let qr_link = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token;
+                        element.html("Scan this QR code<br><br><img src='" +  qr_img + "' width='200px' height='200px'><br><br>or go to<br><strong>" + qr_link + '</strong>');
                         auth_token = data.auth_token;
 
                         let qrAuthInterval = setInterval(function () {
@@ -391,39 +390,39 @@
              Modal handlers
              */
 
-            $("#rfid").on("click", function () {
+            $('#rfid').on('click', function () {
                 rfid_link_card = null;
                 modal_status = 'rfid';
-                $("#rfid-modal").modal('show')
-                $("#rfid-modal .modal-body").html("<h1>Please present your RFID card</h1>");
+                $('#rfid-modal').modal('show')
+                $('#rfid-modal .modal-body').html('<h1>Please present your RFID card</h1>');
             });
 
-            $("#purchase").on("click", function () {
-                $("#purchase-modal").modal('show');
-                doQrAuth($("#purchase-modal .qrAuth"), "Payment of €" + $("#total").html() + " for purchases in Omnomcom", purchase);
+            $('#purchase').on('click', function () {
+                $('#purchase-modal').modal('show');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Payment of €' + $('#total').html() + ' for purchases in Omnomcom', purchase);
 
-                $("#purchase-modal h1").html("Complete purchase using your <i class=\"fas fa-cookie-bite\"></i> OmNomCom bill.");
+                $('#purchase-modal h1').html("Complete purchase using your <i class='fas fa-cookie-bite'></i> OmNomCom bill.");
                 cash = false;
                 bank_card = false;
                 modal_status = 'purchase';
             });
 
-            $("#purchase-cash-initiate").on("click", function () {
-                $("#purchase-modal").modal('show');
-                doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for cash purchases in Omnomcom", purchase);
+            $('#purchase-cash-initiate').on('click', function () {
+                $('#purchase-modal').modal('show');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Cashier payment for cash purchases in Omnomcom', purchase);
 
-                $("#purchase-modal h1").html("Complete purchase as cashier, payed with cash.");
+                $('#purchase-modal h1').html('Complete purchase as cashier, payed with cash.');
                 cash = true;
                 bank_card = false;
                 modal_status = 'purchase';
             });
 
-            $("#purchase-bank-card-initiate").on("click", function () {
-                $("#purchase-modal").modal('show')
-                $("#purchase-bank-card").addClass('modal-toggle-true');
-                doQrAuth($("#purchase-modal .qrAuth"), "Cashier payment for bank card purchases in Omnomcom", purchase);
+            $('#purchase-bank-card-initiate').on('click', function () {
+                $('#purchase-modal').modal('show')
+                $('#purchase-bank-card').addClass('modal-toggle-true');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Cashier payment for bank card purchases in Omnomcom', purchase);
 
-                $("#purchase-modal h1").html("Complete purchase as cashier, payed with bank card.");
+                $('#purchase-modal h1').html('Complete purchase as cashier, payed with bank card.');
                 cash = false;
                 bank_card = true;
                 modal_status = 'purchase';
@@ -439,7 +438,7 @@
 
             $(function () {
                 //Increment the idle time counter every minute.
-                let idleInterval = setInterval(timerIncrement, 1000); // 1 second
+                setInterval(timerIncrement, 1000); // 1 second
 
                 //Zero the idle timer on mouse movement.
                 $(this).on('mousemove', function (e) {
@@ -465,9 +464,10 @@
                         }
                     }
 
-                    if (anythingincart && !$(".modal").data('bs.modal')?._isShown) {
+                    if (anythingincart && !$('.modal').data('bs.modal')?._isShown) {
                         idleWarning = true;
-                        $("#idlewarning-modal").modal('show');
+                        $('.modal').modal('hide');
+                        $('#idlewarning-modal').modal('show');
 
                         setTimeout(function () {
                             if (idleWarning) window.location.reload();
