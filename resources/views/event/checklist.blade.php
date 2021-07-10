@@ -83,7 +83,9 @@
 
                                 @if ($event->shouldShowDietInfo())
                                     <td>
-                                        {!! Markdown::convertToHtml($user->diet) !!}
+                                        @if($user->hasDiet())
+                                            {!! Markdown::convertToHtml($user->diet) !!}
+                                        @endif
                                     </td>
                                 @endif
                             </tr>
