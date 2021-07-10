@@ -1,4 +1,4 @@
-name: Format (PHP)
+name: 🛠 Format
 
 on:
   pull_request:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   php-cs-fixer:
+    name: 🛠 Fix PHP formatting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
