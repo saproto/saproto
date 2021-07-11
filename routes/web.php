@@ -640,6 +640,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
+    Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
+        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
+        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
+    });
+
     /* Routes related to Spotify. */
     Route::group(['prefix' => 'spotify', 'middleware' => ['auth', 'permission:board'], 'as' => 'spotify::'], function () {
         Route::get('oauth', ['as' => 'oauth', 'uses' => 'SpotifyController@oauthTool']);
