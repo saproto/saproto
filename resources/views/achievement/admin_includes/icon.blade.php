@@ -3,8 +3,6 @@
 
     {!! csrf_field() !!}
 
-    <input type="hidden" name="fa_icon" id="icon">
-
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
@@ -15,7 +13,8 @@
 
             <div class="form-group">
                 <label data-placement="inline" class="icp icp-auto"
-                       data-selected="{{  substr($achievement->fa_icon, 3) }}"></label>
+                       data-selected="{{  $achievement->fa_icon }}"></label>
+                <input type="hidden" name="fa_icon" id="icon" value="{{ $achievement->fa_icon }}">
             </div>
 
         </div>

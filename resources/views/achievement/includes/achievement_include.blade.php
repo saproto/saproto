@@ -2,7 +2,7 @@
 
     <div class="card-header">
 
-        <i class="fas fa-{{ $achievement->fa_icon }} fa-fw mr-2 text-white"></i>
+        <i class="{{ $achievement->fa_icon }} fa-fw mr-2 text-white"></i>
 
         <strong class="text-white">{{ $achievement->name }}</strong>
 
