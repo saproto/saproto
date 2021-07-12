@@ -73,8 +73,8 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label>Event visibility:</label>
-                            <select name="secret" class="form-control" required>
+                            <label for="secret">Event visibility:</label>
+                            <select id="secret" name="secret" class="form-control" required>
                                 <option value="1" {{ ($event != null && $event->secret ? 'selected' : '') }}>
                                     This activity is
                                     secret.
@@ -89,9 +89,40 @@
 
                         <div class="col-md-6 mb-3">
 
+                            <label>Event image:</label>
                             <div class="custom-file">
                                 <label class="custom-file-label" for="customFile">Set event image.</label>
                                 <input type="file" class="custom-file-input" name="image">
+                            </div>
+
+                        </div>
+
+                        @php($categories = Proto\Models\EventCategory::all())
+                        @if(count($categories) > 0)
+                            <div class="col-md-6 mb-3">
+
+                                <label for="category">Event category:</label>
+                                <select id="category" name="category" class="form-control">
+                                    <option {{ $event && !$event->category ? 'selected' : '' }}>
+                                        Uncategorised
+                                    </option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ $event && $event->category_id == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        @endif
+
+                        <div class="col-md-6 mb-3">
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_external" {{ ($event && $event->is_external ? 'checked' : '') }}>
+                                    This activity is not organized by Proto.
+                                </label>
                             </div>
 
                         </div>
@@ -115,30 +146,6 @@
                                     <input type="checkbox" name="force_calendar_sync"
                                             {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
                                     Always sync this event to user calendars. <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_external"
-                                            {{ ($event && $event->is_external ? 'checked' : '') }}>
-                                    This activity is not organized by Proto.
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_educational"
-                                            {{ ($event && $event->is_educational ? 'checked' : '') }}>
-                                    This activity is educational.
                                 </label>
                             </div>
 

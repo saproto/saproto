@@ -12,6 +12,7 @@ use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
+use Proto\Models\EventCategory;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
@@ -22,22 +23,28 @@ use Session;
 
 class EventController extends Controller
 {
-    /** @return View */
-    public function index()
+    /**
+     * @param Request $request
+     * @return View
+     */
+    public function index(Request $request)
     {
         $events = Event::orderBy('start')->get();
+        $category = EventCategory::find($request->category);
         $data = [[], [], []];
         $years = [];
 
         foreach ($events as $event) {
-            if ((! $event->activity || ! $event->activity->secret) && $event->end > date('U')) {
-                $delta = $event->start - date('U');
-                if ($delta < 3600 * 24 * 7) {
-                    $data[0][] = $event;
-                } elseif ($delta < 3600 * 24 * 21) {
-                    $data[1][] = $event;
-                } else {
-                    $data[2][] = $event;
+            if (! $category || $category == $event->category) {
+                if ((! $event->activity || ! $event->activity->secret) && $event->end > date('U')) {
+                    $delta = $event->start - date('U');
+                    if ($delta < 3600 * 24 * 7) {
+                        $data[0][] = $event;
+                    } elseif ($delta < 3600 * 24 * 21) {
+                        $data[1][] = $event;
+                    } else {
+                        $data[2][] = $event;
+                    }
                 }
             }
             if (! in_array(date('Y', $event->start), $years)) {
@@ -53,7 +60,7 @@ class EventController extends Controller
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
 
-        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder]);
+        return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
     }
 
     /** @return View */
@@ -91,10 +98,8 @@ class EventController extends Controller
         $event->secret = $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
-        $event->involves_food = $request->has('involves_food');
-        $event->is_external = $request->has('is_external');
-        $event->is_educational = $request->has('is_educational');
         $event->is_featured = $request->has('is_featured');
+        $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
@@ -110,6 +115,8 @@ class EventController extends Controller
 
         $committee = Committee::find($request->input('committee'));
         $event->committee()->associate($committee);
+        $category = EventCategory::find($request->input('category'));
+        $event->category()->associate($category);
         $event->save();
 
         Session::flash('flash_message', "Your event '".$event->title."' has been added.");
@@ -146,9 +153,8 @@ class EventController extends Controller
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
-        $event->is_external = $request->has('is_external');
-        $event->is_educational = $request->has('is_educational');
         $event->is_featured = $request->has('is_featured');
+        $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
 
         if ($event->end < $event->start) {
@@ -168,6 +174,11 @@ class EventController extends Controller
             $event->committee()->associate($committee);
         }
 
+        if ($request->has('category')) {
+            $category = EventCategory::find($request->input('category'));
+            $event->category()->associate($category);
+        }
+
         $event->save();
 
         $changed_important_details = $event->start != strtotime($request->start) || $event->end != strtotime($request->end) || $event->location != $request->location;
@@ -181,12 +192,14 @@ class EventController extends Controller
     }
 
     /**
-     * @param $year
+     * @param Request $request
+     * @param int $year
      * @return View
      */
-    public function archive($year)
+    public function archive(Request $request, $year)
     {
         $events = Event::orderBy('start')->get();
+        $category = EventCategory::find($request->category);
 
         $months = [];
         $years = [];
@@ -195,15 +208,17 @@ class EventController extends Controller
         }
 
         foreach ($events as $event) {
-            if ($event->start > strtotime($year.'-01-01 00:00:01') && $event->end < strtotime($year.'-12-31 23:59:59')) {
-                $months[intval(date('n', $event->start))][] = $event;
-            }
-            if (! in_array(date('Y', $event->start), $years)) {
-                $years[] = date('Y', $event->start);
+            if (! $category || $category == $event->category) {
+                if ($event->start > strtotime($year.'-01-01 00:00:01') && $event->end < strtotime($year.'-12-31 23:59:59')) {
+                    $months[intval(date('n', $event->start))][] = $event;
+                }
+                if (! in_array(date('Y', $event->start), $years)) {
+                    $years[] = date('Y', $event->start);
+                }
             }
         }
 
-        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months]);
+        return view('event.archive', ['years' => $years, 'year' => $year, 'months' => $months, 'cur_category' => $category]);
     }
 
     /**
@@ -542,11 +557,6 @@ class EventController extends Controller
 
             $status = null;
 
-            if ($event->is_external) {
-                $status = 'External';
-                $info_text .= ' This activity is not organised by S.A. Proto';
-            }
-
             if ($user) {
                 if ($event->isOrganising($user)) {
                     $status = 'Organizing';
@@ -602,5 +612,66 @@ class EventController extends Controller
         return Response::make($calendar_wrapped)
             ->header('Content-Type', 'text/calendar; charset=utf-8')
             ->header('Content-Disposition', 'attachment; filename="protocalendar.ics"');
+    }
+
+    /**
+     * @param Request $request
+     * @return View
+     */
+    public function categoryAdmin(Request $request)
+    {
+        $category = EventCategory::find($request->id);
+        return view('event.categories', ['cur_category' => $category]);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function categoryStore(Request $request)
+    {
+        $category = new EventCategory();
+        $category->name = $request->input('name');
+        $category->icon = $request->input('icon');
+        $category->save();
+
+        Session::flash('flash_message', 'The category '.$category->name.' has been created.');
+        return Redirect::back();
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function categoryUpdate(Request $request, $id)
+    {
+        $category = EventCategory::findOrFail($id);
+        $category->name = $request->input('name');
+        $category->icon = $request->input('icon');
+        $category->save();
+
+        Session::flash('flash_message', 'The category '.$category->name.' has been updated.');
+        return Redirect::back();
+    }
+
+    /**
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function categoryDestroy($id)
+    {
+        $category = EventCategory::findOrFail($id);
+        $events = $category->events();
+        if ($events) {
+            foreach ($events as $event) {
+                $event->category()->dissociate();
+            }
+        }
+        $category->delete();
+
+        Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
+        return Redirect::route('event::category::admin', ['category' => null]);
     }
 }

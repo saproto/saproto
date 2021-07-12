@@ -315,6 +315,14 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
 }
 
 // Global
+main {
+  min-height: calc(100vh - 292px);
+}
+
+.main-footer {
+  height: 205px;
+}
+
 .underline-on-hover:hover {
   text-decoration: underline !important;
 }
