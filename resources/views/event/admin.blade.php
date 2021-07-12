@@ -103,9 +103,9 @@
                                                     <th>Price</th>
                                                     <th>Date of Purchase</th>
                                                     <th>Ticket Scanned</th>
-                                                    @if (Auth::user()->can('board'))
+                                                    @can('board')
                                                         <th></th>
-                                                    @endif
+                                                    @endcan
                                                 </tr>
                                                 </thead>
 
@@ -156,7 +156,7 @@
                                                                 </a>
                                                             @endif
                                                         </td>
-                                                        @if (Auth::user()->can('board'))
+                                                        @can('board')
                                                             <td class="dontprint">
                                                                 @if($purchase->scanned)
                                                                     Used
@@ -170,7 +170,7 @@
                                                                     </a>
                                                                 @endif
                                                             </td>
-                                                        @endif
+                                                        @endcan
                                                     </tr>
                                                 @endforeach
                                                 </tbody>
@@ -213,7 +213,6 @@
             var barcode = $(this).attr('data-id');
             var parent = $(this).parent();
             if (barcode === undefined) throw new Error("Can\'t find barcode");
-            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
             $.ajax({
                 type: "GET",
                 url: '{!! route('api::scan', ['event' => $event->id]) !!}',

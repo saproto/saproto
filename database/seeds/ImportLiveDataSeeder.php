@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\DB;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
-use Proto\Models\Role;
 use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
@@ -49,49 +48,17 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's import all data we can from the live environment.
         $tables = [
-            [
-                'tableName' => 'accounts',
-            ],
-            [
-                'tableName' => 'achievement',
-            ],
-            [
-                'tableName' => 'activities',
-            ],
-            [
-                'tableName' => 'committees',
-            ],
-            [
-                'tableName' => 'committees_activities',
-            ],
-            [
-                'tableName' => 'events',
-                'exclude' => ['formatted_date', 'is_future'],
-            ],
-            [
-                'tableName' => 'mailinglists',
-            ],
-            [
-                'tableName' => 'permissions',
-            ],
-            [
-                'tableName' => 'permission_role',
-            ],
-            [
-                'tableName' => 'products',
-            ],
-            [
-                'tableName' => 'products_categories',
-            ],
-            [
-                'tableName' => 'product_categories',
-            ],
-            [
-                'tableName' => 'roles',
-            ],
-            [
-                'tableName' => 'tickets',
-            ],
+            ['tableName' => 'accounts'],
+            ['tableName' => 'achievement'],
+            ['tableName' => 'activities'],
+            ['tableName' => 'committees'],
+            ['tableName' => 'committees_activities'],
+            ['tableName' => 'events', 'exclude' => ['formatted_date', 'is_future']],
+            ['tableName' => 'mailinglists'],
+            ['tableName' => 'products'],
+            ['tableName' => 'products_categories'],
+            ['tableName' => 'product_categories'],
+            ['tableName' => 'tickets'],
         ];
 
         foreach ($tables as $table) {
@@ -114,13 +81,13 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's add our user account so that they can access everything.
 
-        $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
+        $root = Committee::where('slug', config('proto.rootcommittee'))->first();
         CommitteeMembership::create([
             'user_id' => $newUser->id,
-            'committee_id' => $rootcommittee->id,
+            'committee_id' => $root->id,
             'role' => 'Automatically Added',
         ]);
-        $newUser->attachRole(Role::where('name', '=', 'sysadmin')->first());
+        $newUser->assignRole('sysadmin');
 
         echo 'Your new user now has admin rights.'.PHP_EOL;
     }

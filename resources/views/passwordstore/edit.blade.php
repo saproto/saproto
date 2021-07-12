@@ -31,12 +31,12 @@
 
                         <label>Authorized users:</label>
                         <select name="permission_id" class="form-control mb-3" required>
-                            @foreach(Proto\Models\Permission::all() as $permission)
-                                @if(Auth::user()->can($permission->name))
+                            @foreach(Permission::all() as $permission)
+                                @can($permission->name)
                                     <option value="{{ $permission->id }}" {{ ($password && $permission->id == $password->permission_id ? 'selected' : '') }}>
                                         {{ $permission->display_name }}
                                     </option>
-                                @endif
+                                @endcan
                             @endforeach
                         </select>
 

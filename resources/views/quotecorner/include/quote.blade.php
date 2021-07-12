@@ -16,10 +16,10 @@
             {{ $quote->user->name }}
         @endif
 
-        @if (Auth::check() && Auth::user()->can("board"))
+        @can("board")
             <a href="{{ route('quotes::delete', ['id' => $quote->id]) }}" class="float-right ml-3"><i
                         class="fas fa-trash-alt text-white"></i></a>
-        @endif
+        @endcan
 
     </div>
 

@@ -20,12 +20,11 @@ class DatabaseSeeder extends Seeder
 
         Model::unguard();
 
+        echo 'Fixing roles.'.PHP_EOL;
+        Artisan::call('proto:generateroles');
+
         $this->call(ImportLiveDataSeeder::class);
         $this->call(OtherDataSeeder::class);
-
-        echo 'Fixing roles.'.PHP_EOL;
-
-        Artisan::call('proto:generateroles');
 
         Model::reguard();
 
