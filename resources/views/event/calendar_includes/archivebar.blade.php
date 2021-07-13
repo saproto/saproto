@@ -1,39 +1,61 @@
-<div class="row" style="overflow-x: auto;">
+<div class="row justify-content-center">
 
-    <div class="col text-center">
+    <div class="col-12 col-sm-auto text-center mb-2" style="overflow-x: auto;">
 
-        <div class="btn-group mb-3">
+        <div class="btn-group mb-1">
 
-            <a href="{{ route("event::list") }}"
-               class="btn btn-{{ Route::currentRouteName() == 'event::list' ? 'primary' : 'light' }}">
-                Upcoming
-            </a>
-
-            <button type="button" class="btn btn-secondary">
-                Archive
-            </button>
+            @if (Route::currentRouteName() == 'event::list')
+                <span class="bg-primary text-white px-3 py-2 rounded-left">Upcoming</span>
+                <span class="bg-secondary text-white px-3 py-2">Archive</span>
+            @else
+                <a href="{{ route('event::list', ['category' => $cur_category]) }}" class="btn btn-secondary">
+                    Upcoming
+                </a>
+                <span class="bg-primary text-white px-3 py-2">Archive</span>
+            @endif
 
             @foreach($years as $y)
-
                 @if(Proto\Models\Event::countEventsPerYear($y) > 0)
-
-                    <a href="{{ route('event::archive', ['year'=>$y]) }}"
-                       class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}">
+                    <a href="{{ route('event::archive', ['year'=>$y, 'category' => $cur_category]) }}"
+                       class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}
+                        {{ $loop->index == count($years)-1 ? 'rounded-right' : '' }}">
                         {{ $y }}
                     </a>
-
                 @endif
-
             @endforeach
-
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fas fa-calendar-alt mr-2"></i> Import calendar
+        </div>
+    </div>
+    <div class="col-12 col-sm-auto mb-2 text-center">
+        <div class="btn-group">
+            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-right' : '' }}" data-toggle="modal" data-target="#calendar-modal">
+                <i class="fas fa-calendar-alt"></i><span class="d-none d-sm-inline-block ml-2">Import Calendar</span>
             </button>
 
             @if(Auth::check() && Auth::user()->can('board'))
-                <a href="{{ route("event::add") }}" class="btn btn-info">
-                    <i class="fas fa-calendar-plus mr-2"></i> Create event
+                <a href="{{ route("event::add") }}" class="btn btn-info px-4 px-sm-3 rounded-right">
+                    <i class="fas fa-calendar-plus"></i><span class="d-none d-sm-inline-block ml-2">Create Event</span>
                 </a>
+            @endif
+
+            @php($categories = \Proto\Models\EventCategory::all())
+            @if(count($categories) > 0)
+                <form class="form-inline ml-3" action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::list')}}">
+                    <div class="input-group" style="max-width: 250px">
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
+                        </div>
+                        <select id="category" name="category" class="form-control">
+                            <option value="" {{ !$cur_category ? 'selected' : '' }}>
+                                All
+                            </option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ $cur_category && $cur_category == $category ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
             @endif
 
         </div>
