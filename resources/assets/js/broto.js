@@ -8,8 +8,10 @@ function broto() {
             $(this).attr('src', '/images/logo/broto-regular.png')
     })
 
-    $("body").children().each(function () {
-        $(this).html($(this).html().replace(/(Proto)(.?)\b/g, 'Broto$2'))
+    $("body *").contents().each(function() {
+        if(this.nodeType === 3){
+            this.nodeValue = this.nodeValue.replace(/(Proto)(.?)\b/g, 'Broto$2')
+        }
     })
 }
 
