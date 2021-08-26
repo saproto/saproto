@@ -222,7 +222,7 @@ class DirectAdminSync extends Command
                     'action' => 'create',
                     'user' => $alias,
                     'email' => implode(',', $destination),
-                ]
+                ],
             ];
         }
 
@@ -234,7 +234,7 @@ class DirectAdminSync extends Command
                     'action' => 'modify',
                     'user' => $alias,
                     'email' => implode(',', $destination),
-                ]
+                ],
             ];
         }
 
@@ -245,7 +245,7 @@ class DirectAdminSync extends Command
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'delete',
                     'select0' => $del,
-                ]
+                ],
             ];
         }
 
@@ -268,7 +268,7 @@ class DirectAdminSync extends Command
                     'passwd2' => $password,
                     'quota' => 0, // Unlimited
                     'limit' => 0, // Unlimited
-                ]
+                ],
             ];
         }
 
@@ -279,7 +279,7 @@ class DirectAdminSync extends Command
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'delete',
                     'user' => $account,
-                ]
+                ],
             ];
         }
 
