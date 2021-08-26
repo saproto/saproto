@@ -2,17 +2,13 @@
 
 namespace Proto\Console\Commands;
 
-use DirectAdmin\DirectAdmin;
 use Illuminate\Console\Command;
 use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
+use Solitweb\DirectAdmin\DirectAdmin;
 
-/**
- * TODO
- * Autorelate permissions to roles.
- */
 class DirectAdminSync extends Command
 {
     /**
@@ -39,11 +35,7 @@ class DirectAdminSync extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
+    /** Execute the console command. */
     public function handle()
     {
         $da = new DirectAdmin();
@@ -51,84 +43,29 @@ class DirectAdminSync extends Command
         $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
 
         // Mail forwarders
-        $da->set_method('get');
-        $da->query($this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
+        $da->query('/CMD_API_EMAIL_FORWARDERS', [
             'domain' => getenv('DA_DOMAIN'),
-        ]));
+        ]);
 
-        $current = $this->decodeForwarders($da->fetch_body());
+        $current = $da->fetch_parsed_body();
         $target = $this->constructForwarderList();
-
         $patch = $this->constructPatchList($current, $target);
-
         $forwarder_queries = $this->applyPatchList($patch);
 
         // E-mail accounts
-        $da->query($this->constructQuery('CMD_API_POP', [
+        $da->query('CMD_API_POP', [
             'domain' => getenv('DA_DOMAIN'),
             'action' => 'list',
-        ]));
+        ]);
 
-        $current = $this->decodeAccounts($da->fetch_body());
+        $current = $da->fetch_parsed_body();
         $target = $this->constructAccountList();
-
         $patch = $this->constructAccountPatchList($current, $target);
-
         $account_queries = $this->applyAccountPatchList($patch);
 
         // Execute queries
         $this->executeQueries($da, array_merge($forwarder_queries, $account_queries));
-
         $this->info('Done!');
-    }
-
-    public static function constructQuery($command, $options = [])
-    {
-        $query = '/'.$command;
-        if (count($options) > 0) {
-            $query .= '?';
-            foreach ($options as $key => $val) {
-                $query .= $key.'='.urlencode($val).'&';
-            }
-        }
-        return $query;
-    }
-
-    private function decodeForwarders($string)
-    {
-        $data = [];
-        if (strlen($string) > 0) {
-            $array = explode('&', urldecode($string));
-            foreach ($array as $entry) {
-                $item = explode('=', $entry);
-                $data[$item[0]] = (array) explode(',', $item[1]);
-            }
-        }
-        return $data;
-    }
-
-    private function decodeAccounts($string)
-    {
-        $data = [];
-        if (strlen($string) > 0) {
-            $array = explode('&', urldecode($string));
-            foreach ($array as $entry) {
-                $item = explode('=', $entry);
-                $data[] = $item[1];
-            }
-        }
-        return $data;
-    }
-
-    private function decodeResponse($string)
-    {
-        $data = [];
-        $array = explode('&', urldecode($string));
-        for ($i = 0; $i < 2; $i++) {
-            $e = explode('=', $array[$i]);
-            $data[$e[0]] = $e[1];
-        }
-        return $data;
     }
 
     private function constructForwarderList()
@@ -226,8 +163,9 @@ class DirectAdminSync extends Command
                 }
 
                 // Otherwise, we do not modify this alias.
-            } else {
-                // The forwarder should not exist according to the target list. Remove the forwarder.
+            }
+            // The forwarder should not exist according to the target list. Remove the forwarder.
+            else {
                 $data['del'][] = $alias;
             }
         }
@@ -277,29 +215,38 @@ class DirectAdminSync extends Command
         $queries = [];
 
         foreach ($patch['add'] as $alias => $destination) {
-            $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
-                'action' => 'create',
-                'user' => $alias,
-                'email' => implode(',', $destination),
-            ]);
+            $queries[] = [
+                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'create',
+                    'user' => $alias,
+                    'email' => implode(',', $destination),
+                ]
+            ];
         }
 
         foreach ($patch['mod'] as $alias => $destination) {
-            $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
-                'action' => 'modify',
-                'user' => $alias,
-                'email' => implode(',', $destination),
-            ]);
+            $queries[] = [
+                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'modify',
+                    'user' => $alias,
+                    'email' => implode(',', $destination),
+                ]
+            ];
         }
 
         foreach ($patch['del'] as $del) {
-            $queries[] = $this->constructQuery('CMD_API_EMAIL_FORWARDERS', [
-                'domain' => getenv('DA_DOMAIN'),
-                'action' => 'delete',
-                'select0' => $del,
-            ]);
+            $queries[] = [
+                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'delete',
+                    'select0' => $del,
+                ]
+            ];
         }
 
         return $queries;
@@ -311,23 +258,29 @@ class DirectAdminSync extends Command
 
         foreach ($patch['add'] as $account) {
             $password = str_random(32);
-            $queries[] = $this->constructQuery('CMD_API_POP', [
-                'domain' => getenv('DA_DOMAIN'),
-                'action' => 'create',
-                'user' => $account,
-                'passwd' => $password,
-                'passwd2' => $password,
-                'quota' => 0, // Unlimited
-                'limit' => 0, // Unlimited
-            ]);
+            $queries[] = [
+                'cmd' => 'CMD_API_POP',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'create',
+                    'user' => $account,
+                    'passwd' => $password,
+                    'passwd2' => $password,
+                    'quota' => 0, // Unlimited
+                    'limit' => 0, // Unlimited
+                ]
+            ];
         }
 
         foreach ($patch['del'] as $account) {
-            $queries[] = $this->constructQuery('CMD_API_POP', [
-                'domain' => getenv('DA_DOMAIN'),
-                'action' => 'delete',
-                'user' => $account,
-            ]);
+            $queries[] = [
+                'cmd' => 'CMD_API_POP',
+                'options' => [
+                    'domain' => getenv('DA_DOMAIN'),
+                    'action' => 'delete',
+                    'user' => $account,
+                ]
+            ];
         }
 
         return $queries;
@@ -337,13 +290,11 @@ class DirectAdminSync extends Command
     {
         foreach ($queries as $i => $query) {
             $this->info('Query '.$i.'/'.count($queries).': '.$query);
+            $da->query($query['cmd'], $query['options']);
 
-            $da->set_method('get');
-            $da->query($query);
-
-            $response = $this->decodeResponse($da->fetch_body());
+            $response = $da->fetch_parsed_body();
             if ($response['error'] == 1) {
-                $this->info('Error: '.$response['text'].PHP_EOL);
+                $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
             }
         }
     }
