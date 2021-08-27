@@ -50,6 +50,15 @@
             </li>
         @endif
 
+        @if($event->category)
+            <li class="list-group-item">
+                <span><i class="fas fa-tag fa-fw"></i>Category:</span><br>
+                <span class="badge-pill badge-info px-3 mt-2 d-inline-block mw-100 ellipsis">
+                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
+                </span>
+            </li>
+        @endif
+
         <li class="list-group-item">
             <i class="fas fa-fw fa-clock" aria-hidden="true"></i>
             {{ $event->generateTimespanText('l j F Y, H:i', 'H:i', 'till') }}
@@ -64,12 +73,6 @@
                 <i class="fas fa-fw fa-utensils" aria-hidden="true"></i> There will be food, please indicate
                 any allergies or diets on your dashboard
             </a>
-        @endif
-
-        @if ($event->is_educational == true)
-            <li class="list-group-item">
-                <i class="fas fa-fw fa-book-open" aria-hidden="true"></i> This event is directly related to your study
-            </li>
         @endif
 
         @if ($event->is_external == true)

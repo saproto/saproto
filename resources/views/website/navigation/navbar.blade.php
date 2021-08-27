@@ -111,6 +111,7 @@
                                     </li>
                                 @endcan
                                 <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
+                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 

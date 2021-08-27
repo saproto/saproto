@@ -1,0 +1,53 @@
+name: 🚀 Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      PHP_VERSION: 7.4
+      BUILD_SOURCE_DIR: /
+      BUILD_ARTIFACT_STAGING_DIR: build/
+      BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
+      HOST_SERVER: s176.webhostingserver.nl
+    steps:
+      - name: 🛎️ Checkout project
+        uses: actions/checkout@v2
+
+      - name: 🔍 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+
+      - name: 📥 Install back-end dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: 📥 Install front-end dependencies
+        run: npm install
+
+      - name: 🔨 build front-end
+        run: npm run prod
+
+      - name: 🗑️ Remove storage directory
+        run: rm -rf storage
+
+      - name: 🗄️ ZIP Build
+        uses: papeloto/action-zip@v1
+        with:
+          files: ${{ env.BUILD_SOURCE_DIR }}
+          dest: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
+
+      - name: ➗ Calculate checksum
+        run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.1.0
+        with:
+          server: ${{ env.HOST_SERVER }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
+          server-dir: ${{ env.BUILD_ARTIFACT_DESTINATION_DIR }}

@@ -303,6 +303,14 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('close/{id}', ['as' => 'close', 'uses' => 'EventController@finclose']);
         });
 
+        Route::group(['prefix' => 'categories', 'middleware' => ['permission:board'], 'as' => 'category::'], function () {
+            Route::get('', ['as' => 'admin', 'uses' => 'EventController@categoryAdmin']);
+            Route::post('add', ['as' => 'add', 'uses' => 'EventController@categoryStore']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'EventController@categoryEdit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'EventController@categoryUpdate']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'EventController@categoryDestroy']);
+        });
+
         Route::get('', ['as' => 'list', 'uses' => 'EventController@index']);
         Route::get('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@create']);
         Route::post('add', ['as' => 'add', 'middleware' => ['permission:board'], 'uses' => 'EventController@store']);
@@ -638,6 +646,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('publish/{id}', ['as' => 'publish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@publish']);
             Route::get('unpublish/{id}', ['as' => 'unpublish', 'middleware' => ['permission:publishalbums'], 'uses' => 'PhotoAdminController@unpublish']);
         });
+    });
+
+    Route::group(['prefix' => 'image', 'as' => 'image::'], function () {
+        Route::get('{id}/{hash}', ['as' => 'get', 'uses' => 'FileController@getImage']);
+        Route::get('{id}/{hash}/{name}', ['uses' => 'FileController@getImage']);
     });
 
     /* Routes related to Spotify. */

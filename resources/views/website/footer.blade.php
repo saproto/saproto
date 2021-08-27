@@ -50,7 +50,7 @@
 
         </div>
 
-        <p class="text-center mt-3 mb-0">
+        <p class="text-center mt-3 mb-2">
             <sub>
                 &copy; {{ date('Y') }} S.A. Proto. All rights reserved.
                 <span class="d-sm-none">

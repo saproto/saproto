@@ -23,7 +23,6 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $title
  * @property string $description
  * @property int $is_external
- * @property int $is_educational
  * @property int $start
  * @property int $end
  * @property Carbon|null $created_at
@@ -36,22 +35,28 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int|null $image_id
  * @property Carbon|null $deleted_at
  * @property int|null $committee_id
+ * @property int|null $category_id
  * @property string|null $summary
  * @property int $include_in_newsletter
  * @property-read Activity $activity
  * @property-read Collection|PhotoAlbum[] $albums
  * @property-read Committee|null $committee
+ * @property-read EventCategory $category
  * @property-read mixed $formatted_date
  * @property-read mixed $is_future
  * @property-read StorageEntry|null $image
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos
+ * @property-read int|null $albums_count
+ * @property-read int|null $tickets_count
+ * @property-read int|null $videos_count
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|Event onlyTrashed()
  * @method static QueryBuilder|Event withTrashed()
  * @method static QueryBuilder|Event withoutTrashed()
  * @method static bool|null restore()
  * @method static Builder|Event whereCommitteeId($value)
+ * @method static Builder|Event whereCategoryId($value)
  * @method static Builder|Event whereCreatedAt($value)
  * @method static Builder|Event whereDeletedAt($value)
  * @method static Builder|Event whereDescription($value)
@@ -70,6 +75,9 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Event whereSummary($value)
  * @method static Builder|Event whereTitle($value)
  * @method static Builder|Event whereUpdatedAt($value)
+ * @method static Builder|Event newModelQuery()
+ * @method static Builder|Event newQuery()
+ * @method static Builder|Event query()
  * @mixin Eloquent
  */
 class Event extends Model
@@ -132,10 +140,16 @@ class Event extends Model
         return $this->hasMany('Proto\Models\PhotoAlbum', 'event_id');
     }
 
-    /** @return HasMany|Ticker[] */
+    /** @return HasMany|Ticket[] */
     public function tickets()
     {
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
+    }
+
+    /** @return BelongsTo|EventCategory */
+    public function category()
+    {
+        return $this->BelongsTo('Proto\Models\EventCategory');
     }
 
     /**
