@@ -1,10 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
-use Proto\Models\Activity;
-use Proto\Models\Event;
+use Illuminate\Database\Schema\Blueprint;
 
 class AssociateHelpingWithEvents extends Migration
 {
@@ -15,19 +12,13 @@ class AssociateHelpingWithEvents extends Migration
      */
     public function up()
     {
-
         Schema::table('events', function (Blueprint $table) {
-
             $table->integer('committee_id')->nullable()->default(null);
-
         });
 
         Schema::table('activities', function (Blueprint $table) {
-
             $table->dropColumn('organizing_commitee');
-
         });
-
     }
 
     /**
@@ -37,18 +28,12 @@ class AssociateHelpingWithEvents extends Migration
      */
     public function down()
     {
-
         Schema::table('events', function (Blueprint $table) {
-
             $table->dropColumn('committee_id');
-
         });
 
         Schema::table('activities', function (Blueprint $table) {
-
             $table->integer('organizing_commitee')->nullable()->default(null);
-
         });
-
     }
 }

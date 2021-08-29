@@ -18,6 +18,7 @@
                         Add header image.</a>
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-hover table-sm">
 
                     <thead>
@@ -52,6 +53,7 @@
                     @endforeach
 
                 </table>
+                </div>
 
                 <div class="card-footer pb-0">
                     {{ $images->links() }}

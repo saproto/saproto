@@ -8,7 +8,7 @@
 
     @if($photos->event !== null)
 
-        <a class="btn btn-info btn-block mb-3" href="{{ route('event::show', ['event_id'=>$photos->event->getPublicId()]) }}">
+        <a class="btn btn-info btn-block mb-3" href="{{ route('event::show', ['id'=>$photos->event->getPublicId()]) }}">
             These photos were taken at the event {{ $photos->event->title }}, click here for more info.
         </a>
 

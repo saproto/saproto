@@ -28,8 +28,8 @@
 
                 <small href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
                     @if(Auth::check())
-                        Logged in as <strong>{{ Auth::user()->name }}</strong>. <a href="{{ route('login::logout') }}">Log
-                            out.</a>
+                        Logged in as <strong>{{ Auth::user()->name }}</strong>.
+                        <a href="{{ route('login::logout::redirect', ['route' => 'omnomcom::store::show']) }}">Log out.</a>
                     @else
                         Nog logged in. <a href="{{ route('login::show') }}">Log in.</a>
                     @endif
@@ -43,9 +43,7 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
+@push('stylesheet')
 
     <style>
 
@@ -55,4 +53,4 @@
 
     </style>
 
-@endsection
+@endpush

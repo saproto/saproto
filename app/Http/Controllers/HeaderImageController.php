@@ -2,35 +2,44 @@
 
 namespace Proto\Http\Controllers;
 
+use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\View\View;
 use Proto\Models\HeaderImage;
 use Proto\Models\StorageEntry;
 
 class HeaderImageController extends Controller
 {
+    /** @return View */
     public function index()
     {
         return view('website.headerimages.index', ['images' => HeaderImage::paginate(5)]);
     }
 
+    /** @return View */
     public function create()
     {
         return view('website.headerimages.add');
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws FileNotFoundException
+     */
     public function store(Request $request)
     {
         $header = HeaderImage::create([
             'title' => $request->get('title'),
-            'credit_id' => $request->get('user')
+            'credit_id' => $request->get('user'),
         ]);
 
         $image = $request->file('image');
-        if (!$image) {
+        if (! $image) {
             Session::flash('flash_message', 'Image is required.');
             Redirect::back();
         }
@@ -43,10 +52,16 @@ class HeaderImageController extends Controller
         return Redirect::route('headerimage::index');
     }
 
+    /**
+     * @param $id
+     * @return RedirectResponse
+     * @throws Exception
+     */
     public function destroy($id)
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
+
         return Redirect::route('headerimage::index');
     }
 }

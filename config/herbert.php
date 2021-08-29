@@ -7,6 +7,6 @@ return [
     */
 
     'server' => env('HERBERT_SERVER'),
-    'secret' => env('HERBERT_SECRET')
+    'secret' => env('HERBERT_SECRET'),
 
 ];

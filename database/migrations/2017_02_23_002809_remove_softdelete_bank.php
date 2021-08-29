@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
-use Proto\Models\Bank;
 
 class RemoveSoftdeleteBank extends Migration
 {

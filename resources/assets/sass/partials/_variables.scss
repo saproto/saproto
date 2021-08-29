@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+$font-family-sans-serif: 'Lato', sans-serif;
+
+$primary: #83b71a;
+$brand-primary: $primary;
+$success: #00aac0;
+$info: $success;
+$warning: #f37e16;
+$danger: #c50005;
+$omnomcom: #26ade4;
+
+$theme-colors: (
+    "primary": $primary,
+    "brand-primary": $brand-primary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "omnomcom": $omnomcom
+);

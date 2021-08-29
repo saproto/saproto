@@ -2,30 +2,25 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use Proto\Http\Requests;
-use Proto\Http\Controllers\Controller;
-
-use Proto\Models\User;
-
 use Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Redirect;
 use Session;
 
 class SurfConextController extends Controller
 {
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function create(Request $request)
     {
         $user = Auth::user();
 
-        if ($request->wizard) Session::flash("wizard", true);
+        if ($request->wizard) {
+            Session::flash('wizard', true);
+        }
 
         Session::flash('link_edu_to_user', $user);
 
@@ -37,10 +32,8 @@ class SurfConextController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request)
     {
@@ -52,6 +45,7 @@ class SurfConextController extends Controller
         $user->save();
 
         $request->session()->flash('flash_message', 'The link with your university account has been deleted.');
+
         return Redirect::route('user::dashboard');
     }
 }

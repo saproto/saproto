@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddMembershipFormToMembersTable extends Migration
 {
@@ -13,7 +13,7 @@ class AddMembershipFormToMembersTable extends Migration
      */
     public function up()
     {
-        Schema::table('members', function(Blueprint $table) {
+        Schema::table('members', function (Blueprint $table) {
             $table->string('membership_form_id')->after('proto_username')->nullable()->default(null);
             $table->string('pending')->after('is_donator')->default(false);
         });

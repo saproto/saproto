@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="name">Campaign name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Lightsaber Building in the SmartXp" value="{{ $item->name or '' }}"
+                                   placeholder="Lightsaber Building in the SmartXp" value="{{ $item->name ?? '' }}"
                                    required>
                         </div>
 
@@ -52,13 +52,13 @@
                         <div class="form-group">
                             <label for="slide_duration">Slide duration in seconds:</label>
                             <input type="text" class="form-control" id="slide_duration" name="slide_duration"
-                                   value="{{ $item->slide_duration or '30' }}" required>
+                                   value="{{ $item->slide_duration ?? '30' }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="youtube_id">YouTube ID:</label>
                             <input type="text" class="form-control" id="youtube_id" name="youtube_id"
-                                   placeholder="Only the ID!" value="{{ $item->youtube_id or '' }}">
+                                   placeholder="Only the ID!" value="{{ $item->youtube_id ?? '' }}">
                         </div>
 
                         <p>

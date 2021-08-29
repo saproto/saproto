@@ -13,7 +13,7 @@ return [
     */
 
     'stores' => [
-        'protopolis' => (object)[
+        'protopolis' => (object) [
             'name' => 'Protopolis',
             'categories' => [12, 1, 4, 5, 6, 22, 24, 7, 9, 11, 26],
             'addresses' => ['130.89.190.22', '2001:67c:2564:318:baae:edff:fe79:9aa3'],
@@ -22,7 +22,7 @@ return [
             'bank_card_allowed' => false,
             'alcohol_time_constraint' => true,
         ],
-        'tipcie' => (object)[
+        'tipcie' => (object) [
             'name' => 'TIPCie',
             'categories' => [15, 18, 25],
             'addresses' => [],
@@ -31,7 +31,65 @@ return [
             'bank_card_allowed' => true,
             'col_override' => 3,
             'alcohol_time_constraint' => false,
-        ]
+        ],
+    ],
+
+    'cookiemonsters' => [
+        (object) [
+            'name' => 'valentine',
+            'start' => 'February 14',
+            'end' => 'February 15',
+        ],
+        (object) [
+            'name' => 'stpatrick',
+            'start' => 'March 10',
+            'end' => 'March 18',
+        ],
+        (object) [
+            'name' => 'easter',
+            'start' => date('M-d-Y', easter_date()),
+            'end' => date('M-d-Y', easter_date()).' +1 day',
+        ],
+        (object) [
+            'name' => 'dies',
+            'start' => 'April 1',
+            'end' => 'April 21',
+        ],
+        (object) [
+            'name' => 'may4th',
+            'start' => 'May 4',
+            'end' => 'May 5',
+        ],
+        (object) [
+            'name' => 'talklikeapirate',
+            'start' => 'September 19',
+            'end' => 'September 20',
+        ],
+        (object) [
+            'name' => 'oktoberfest',
+            'start' => 'September 22',
+            'end' => 'October 3',
+        ],
+        (object) [
+            'name' => 'halloween',
+            'start' => 'October 24',
+            'end' => 'November 1',
+        ],
+        (object) [
+            'name' => 'sinterklaas',
+            'start' => 'November 25',
+            'end' => 'December 6',
+        ],
+        (object) [
+            'name' => 'autumn',
+            'start' => 'September 23',
+            'end' => 'December 22',
+        ],
+        (object) [
+            'name' => 'christmas',
+            'start' => 'December 6',
+            'end' => 'December 31',
+        ],
     ],
 
     /*
@@ -79,7 +137,7 @@ return [
     'mollie' => [
         'fixed_fee' => .3,
         'variable_fee' => .02,
-        'fee_id' => 887
+        'fee_id' => 887,
     ],
 
     /*
@@ -118,8 +176,8 @@ return [
     |
     */
 
-    'alcohol-start' => "15:30",
-    'alcohol-end' => "08:00",
+    'alcohol-start' => '15:30',
+    'alcohol-end' => '08:00',
 
     /*
     |--------------------------------------------------------------------------

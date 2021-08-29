@@ -11,7 +11,7 @@ return [
     | most cases.
     |
     */
-    'cache.location' => storage_path() . '/framework/cache',
+    'cache.location' => storage_path().'/framework/cache',
 
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +32,6 @@ return [
     |
     */
     'ssl_check.disabled' => false,
-
 
     /*
     |--------------------------------------------------------------------------

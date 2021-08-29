@@ -2,29 +2,70 @@
 
 namespace Proto\Models;
 
+use Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Played Video Model.
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property string $video_id
+ * @property string $video_title
+ * @property string|null $spotify_id
+ * @property string|null $spotify_name
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $user
+ * @method static Builder|PlayedVideo whereCreatedAt($value)
+ * @method static Builder|PlayedVideo whereId($value)
+ * @method static Builder|PlayedVideo whereSpotifyId($value)
+ * @method static Builder|PlayedVideo whereSpotifyName($value)
+ * @method static Builder|PlayedVideo whereUpdatedAt($value)
+ * @method static Builder|PlayedVideo whereUserId($value)
+ * @method static Builder|PlayedVideo whereVideoId($value)
+ * @method static Builder|PlayedVideo whereVideoTitle($value)
+ * @mixin Eloquent
+ */
 class PlayedVideo extends Model
 {
     protected $table = 'playedvideos';
 
+    protected $guarded = ['id'];
+
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    static public function generateYoutubeThumbnail($youtube_id)
+    /**
+     * @param string $youtube_id
+     * @return string
+     */
+    public static function generateYoutubeThumbnail(string $youtube_id)
     {
         return "https://img.youtube.com/vi/$youtube_id/mqdefault.jpg";
     }
 
-    static public function generateSpotifyUri($spotify_id)
+    /**
+     * @param string $spotify_id
+     * @return string
+     */
+    public static function generateSpotifyUri(string $spotify_id)
     {
-        $spotify_id = str_replace("spotify:track:", "", $spotify_id);
+        $spotify_id = str_replace('spotify:track:', '', $spotify_id);
         return "https://open.spotify.com/track/$spotify_id";
     }
 
-    static public function generateYoutubeUrl($youtube_id)
+    /**
+     * @param string $youtube_id
+     * @return string
+     */
+    public static function generateYoutubeUrl(string $youtube_id)
     {
         return "https://www.youtube.com/watch?v=$youtube_id";
     }

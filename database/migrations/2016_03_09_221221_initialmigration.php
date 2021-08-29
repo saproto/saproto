@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class Initialmigration extends Migration
@@ -12,7 +11,6 @@ class Initialmigration extends Migration
      */
     public function up()
     {
-
         Schema::table('users', function ($table) {
             $table->dropColumn('name');
 
@@ -116,7 +114,6 @@ class Initialmigration extends Migration
 
             $table->timestamps();
         });
-
     }
 
     /**

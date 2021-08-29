@@ -45,15 +45,18 @@
     <!-- Modal for removing signed membership contract -->
     @include("users.admin.admin_includes.removememberform-modal")
 
+    <!-- Modal for setting membership type -->
+    @if($user->is_member)
+        @include("users.admin.admin_includes.setmembershiptype-modal")
+    @endif
+
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    <script type="text/javascript">
-
-        $('body').delegate('#print-card', 'click', function () {
+        $('body').on('delegate', '#print-card', 'click', function () {
 
             if (confirm("Please confirm you want to print a membership card.")) {
                 $.ajax({
@@ -75,7 +78,7 @@
 
         });
 
-        $('body').delegate('#print-card-overlay', 'click', function () {
+        $('body').on('delegate', '#print-card-overlay', 'click', function () {
 
             if (confirm("Please confirm you have the right member card loaded.")) {
                 $.ajax({
@@ -99,4 +102,4 @@
 
     </script>
 
-@endsection
+@endpush

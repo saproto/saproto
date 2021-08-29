@@ -16,6 +16,7 @@
                     @yield('page-title')
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-hover">
 
                     <thead>
@@ -37,7 +38,7 @@
 
                                 <strong>{{ $alias }}</strong> @ {{ config('proto.emaildomain') }}
 
-                                <a href="{{ route('alias::delete', ['idOrAlias' => $alias]) }}" class="ml-2">
+                                <a href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}" class="ml-2">
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
 
@@ -46,7 +47,7 @@
 
                                 @foreach($destinations as $destination)
 
-                                    <a href="{{ route('alias::delete', ['idOrAlias' => $destination->id]) }}" class="mr-2">
+                                    <a href="{{ route('alias::delete', ['id_or_alias' => $destination->id]) }}" class="mr-2">
                                         <i class="fas fa-trash text-danger"></i>
                                     </a>
 
@@ -79,6 +80,7 @@
                     @endforeach
 
                 </table>
+                </div>
 
             </div>
 

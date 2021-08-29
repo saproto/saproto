@@ -53,7 +53,7 @@
 
                 @endforeach
 
-                @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie"]))
+                @if (Auth::check() && Auth::user()->can(["omnomcom","tipcie", "drafters"]))
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true"
@@ -111,6 +111,7 @@
                                     </li>
                                 @endif
                                 <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
+                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -123,10 +124,7 @@
                                 <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
                                 <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
                                 <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
-
-                                <li role="separator" class="dropdown-divider"></li>
-
-                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Edit Newsletter</a>
+                                <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
 
                             @endif
 
@@ -192,7 +190,9 @@
                                 <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                                <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
                                 <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
                                 <li role="separator" class="dropdown-divider"></li>
@@ -272,7 +272,7 @@
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-right">
+                            <ul class="dropdown-menu dropdown-menu-right mt-2">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
                                 @if(Auth::check() && Auth::user()->is_member)
                                     <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
@@ -286,15 +286,6 @@
                                         <i class="fas fa-user mr-1"></i> <span id="discord__online">...</span>
                                     </span>
                                 </a>
-
-                                @if (Auth::check() && Auth::user()->is_member)
-                                    <a href="#" data-toggle="modal" data-target="#slack-modal" class="dropdown-item">
-                                        Slack
-                                        <span class="badge badge-secondary" style="transform: translateY(-1px)">
-                                            <i class="fas fa-user mr-1"></i> <span id="slack__online">...</span>
-                                        </span>
-                                    </a>
-                                @endif
 
                                 <a class="dropdown-item" href="{{ route('protube::dashboard') }}">
                                     ProTube Dashboard

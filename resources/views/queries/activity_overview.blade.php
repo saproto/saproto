@@ -58,6 +58,7 @@
 
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-sm table-hover">
 
                     <thead>
@@ -122,6 +123,7 @@
                     @endforeach
 
                 </table>
+                </div>
 
             </div>
 

@@ -47,12 +47,12 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @endif
             <strong>{{ $event->title }}</strong>
 
-            @if($event->is_educational)
+            @if($event->category)
                 <br>
 
-                <span>
-                    <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-                    Study related
+                <span class="badge-pill badge-info px-3 mt-1 d-inline-block mw-100 ellipsis">
+                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>
+                    {{ $event->category->name }}
                 </span>
             @endif
 

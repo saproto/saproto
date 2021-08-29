@@ -51,7 +51,7 @@
 
                 {!! csrf_field() !!}
 
-                <div class="card">
+                <div class="card mb-3">
 
                     <div class="card-header bg-dark text-white">
                         Update the stock
@@ -88,6 +88,7 @@
 
                 @if (count($products) > 0)
 
+                    <div class="table-responsive">
                     <table class="table table-hover table-sm">
 
                         <thead>
@@ -118,7 +119,7 @@
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->is_visible ? 'Yes' : 'No' }}</td>
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
-                                <td class="text-right">
+                                <td style="min-width: 60px">
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
                                         <i class="fas fa-edit mr-2"></i>
                                     </a>
@@ -135,6 +136,7 @@
                         </tbody>
 
                     </table>
+                    </div>
 
                     @if(method_exists($products, 'links'))
                         <div class="card-footer pb-0">

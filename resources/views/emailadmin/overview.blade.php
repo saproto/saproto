@@ -19,6 +19,7 @@
                     </a>
                 </div>
 
+                <div class="table-responsive">
                 <table class="table table-hover table-sm">
 
                     <thead>
@@ -37,14 +38,14 @@
                     <tr>
                         <td>All members</td>
                         <td></td>
-                        <td>{{ Member::count() }}</td>
+                        <td>{{ Proto\Models\Member::count() }}</td>
                         <td></td>
                     </tr>
 
                     <tr>
                         <td>All active members</td>
                         <td></td>
-                        <td>{{ Member::countActiveMembers() }}</td>
+                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
                         <td></td>
                     </tr>
 
@@ -70,6 +71,7 @@
                     @endforeach
 
                 </table>
+                </div>
 
             </div>
 

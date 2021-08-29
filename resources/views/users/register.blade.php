@@ -1,5 +1,9 @@
 @extends('auth.template')
 
+@push('head')
+    {!! htmlScriptTagJsApi() !!}
+@endpush
+
 @section('page-title')
     Register account
 @endsection
@@ -33,7 +37,7 @@
 
         @endif
 
-        {!! csrf_field() !!}
+        @csrf
 
         <p>
             <input type="text" class="form-control" id="email" name="email" placeholder="Your e-mail address" required
@@ -61,7 +65,7 @@
         <hr>
 
         <p>
-            <a a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+            <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
                target="_blank" class="btn btn-outline-secondary btn-block">
                 Privacy policy
             </a>
@@ -76,7 +80,7 @@
 
         <hr>
 
-        {!! Recaptcha::render() !!}
+        {!! htmlFormSnippet() !!}
 
         <hr>
 

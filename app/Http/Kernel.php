@@ -27,10 +27,11 @@ class Kernel extends HttpKernel
             \Proto\Http\Middleware\EnforceTFA::class,
             \Proto\Http\Middleware\EnforceWizard::class,
             \Proto\Http\Middleware\ApiMiddleware::class,
+            \Spatie\Csp\AddCspHeaders::class,
         ],
         'api' => [
             'throttle:60,1',
-        ]
+        ],
     ];
 
     /**

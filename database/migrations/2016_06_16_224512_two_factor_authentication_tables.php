@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class TwoFactorAuthenticationTables extends Migration
 {
@@ -12,7 +12,6 @@ class TwoFactorAuthenticationTables extends Migration
      */
     public function up()
     {
-
         Schema::create('google2fa', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');

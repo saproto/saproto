@@ -67,9 +67,7 @@
 
 @endsection
 
-@section('stylesheet')
-
-    @parent
+@push('stylesheet')
 
     <style type="text/css">
         #main {
@@ -77,4 +75,4 @@
         }
     </style>
 
-@endsection
+@endpush
