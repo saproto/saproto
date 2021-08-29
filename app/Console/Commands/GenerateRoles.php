@@ -115,6 +115,12 @@ class GenerateRoles extends Command
             $permissions['publishalbums']->save();
             $this->info('Added publishalbums permission.');
         }
+        $permissions['registermembers'] = Permission::where('name', '=', 'signup')->first();
+        if ($permissions['registermembers'] == null) {
+            $permissions['registermembers'] = new Permission(array('name' => 'registermembers', 'display_name' => 'Register Members', 'description' => 'Allows completing new member registrations.'));
+            $permissions['registermembers']->save();
+            $this->info('Added registermembers permission.');
+        }
 
         $roles['sysadmin'] = Role::where('name', '=', 'sysadmin')->first();
         if ($roles['sysadmin'] == null) {
@@ -182,16 +188,22 @@ class GenerateRoles extends Command
             $roles['protography']->save();
             $this->info('Added protography role.');
         }
+        $roles['registration-helper'] = Role::where('name', '=', 'registration-helper')->first();
+        if ($roles['registration-helper'] == null) {
+            $roles['registration-helper'] = new Role(array('name' => 'registration-helper', 'display_name' => 'Registration Helper', 'description' => 'Helper during the kick-in member registration session.'));
+            $roles['registration-helper']->save();
+            $this->info('Added registration-helper role.');
+        }
 
         $this->info('Now all roles and permissions exist.');
 
-        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id));
+        $roles['sysadmin']->perms()->sync(array($permissions['sysadmin']->id, $permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id, $permissions['registermembers']->id));
         $this->info('Synced sysadmin role with permissions.');
-        $roles['admin']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id));
+        $roles['admin']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['finadmin']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['header-image']->id, $permissions['protography']->id, $permissions['publishalbums']->id, $permissions['registermembers']->id));
         $this->info('Synced admin role with permissions.');
         $roles['protube']->perms()->sync(array($permissions['protube']->id));
         $this->info('Synced admin role with permissions.');
-        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id));
+        $roles['board']->perms()->sync(array($permissions['board']->id, $permissions['omnomcom']->id, $permissions['tipcie']->id, $permissions['protube']->id, $permissions['drafters']->id, $permissions['registermembers']->id));
         $this->info('Synced board role with permissions.');
         $roles['finadmin']->perms()->sync(array($permissions['finadmin']->id));
         $this->info('Synced finadmin role with permissions.');
@@ -207,6 +219,8 @@ class GenerateRoles extends Command
         $this->info('Synced protography-admin role with permissions.');
         $roles['protography']->perms()->sync(array($permissions['protography']->id));
         $this->info('Synced protography role with permissions.');
+        $roles['registration-helper']->perms()->sync(array($permissions['registermembers']->id));
+        $this->info('Synced registration-helper role with permissions');
 
         $this->info('Fixed required permissions and roles.');
 
