@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Registration Helper
+    User Registration
 @endsection
 
 @section('container')
@@ -10,9 +10,9 @@
 
         <div class="col-md-3">
 
-            <form method="get" action="{{ route('user::admin::list') }}">
+            <form method="get" action="{{ route('user::registrationhelper::list') }}">
                 <div class="card mb-4">
-                    <div class="card-header bg-dark text-white">Search in users</div>
+                    <div class="card-header bg-dark text-white">Search Pending Users</div>
                     <div class="card-body">
                         <div class="input-group mb-2">
                             <input type="text" class="form-control" placeholder="Search term" name="query"
@@ -39,6 +39,8 @@
 
                         <thead>
                         <tr class="bg-dark text-white">
+                            <td></td>
+                            <td></td>
                             <td>Name</td>
                             <td>E-mail</td>
                             <td>Username</td>
@@ -48,8 +50,10 @@
 
                         <tbody>
                         @foreach($users as $user)
-                            <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
+
                                 <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
+                                    <td class="text-center"><a href="{{ route('user::registrationhelper::details', ['id'=>$user->id]) }}"><i class="fas fa-info-circle"></i></a></td>
+                                    <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>
                                         {{ $user->email }}
@@ -66,7 +70,7 @@
                                         {{ $user->utwente_department }}
                                     </td>
                                 </tr>
-                            </a>
+
                         @endforeach
                         </tbody>
 

@@ -6,23 +6,23 @@
 
 @section('container')
 
-    <div class="row">
+    <div class="row justify-content-center">
 
-        <div class="col-md-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
-            @include('users.admin.admin_includes.contact')
+            <div class="col-12">
+                @include('users.admin.admin_includes.hoofd')
+            </div>
+
+            <div class="col-12">
+                @include('users.admin.admin_includes.contact')
+            </div>
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-12 col-sm-6 col-lg-3">
 
             @include('users.admin.admin_includes.membership')
-
-        </div>
-
-        <div class="col-md-3">
-
-            @include('users.admin.admin_includes.hoofd')
 
         </div>
 

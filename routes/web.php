@@ -107,7 +107,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         Route::group(['prefix' => 'registrationhelper', 'as' => 'registrationhelper::', 'middleware' => ['auth' => 'permission:registermembers']], function () {
             Route::get('', ['as' => 'list', 'uses' => 'RegistrationHelperController@index']);
-            Route::get('', ['as' => 'details', 'uses' => 'RegistrationHelperController@details']);
+            Route::get('{id}', ['as' => 'details', 'uses' => 'RegistrationHelperController@details']);
         });
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);

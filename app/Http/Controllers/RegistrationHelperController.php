@@ -18,11 +18,19 @@ class RegistrationHelperController extends Controller
         $search = $request->input('query');
 
         $users = User::whereHas('member', function ($q) {
-            $q->where('pending', '=', 1);
+            $q->where('is_pending', true);
         });
 
         if ($search) {
-            $users = $users->where('name', 'LIKE', '%'.$search.'%')->orWhere('calling_name', 'LIKE', '%'.$search.'%')->orWhere('email', 'LIKE', '%'.$search.'%')->orWhere('utwente_username', 'LIKE', '%'.$search.'%');
+            $users = $users->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%$search%")
+                    ->orWhere('calling_name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%")
+                    ->orWhere('utwente_username', 'LIKE', "%$search%")
+                    ->orWhereHas('member', function ($q) use ($search) {
+                        $q->where('proto_username', 'LIKE', "%$search%");
+                    });
+            });
         }
 
         $users = $users->paginate(20);
@@ -39,7 +47,7 @@ class RegistrationHelperController extends Controller
     public function details($id)
     {
         $user = User::whereHas('member', function ($q) {
-            $q->where('pending', '=', 1);
+            $q->where('is_pending', true);
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 
