@@ -327,7 +327,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('board')) {
+        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
             abort(403);
         }
 
