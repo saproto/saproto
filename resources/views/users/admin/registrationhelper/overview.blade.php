@@ -10,7 +10,7 @@
 
         <div class="col-md-3">
 
-            <form method="get" action="{{ route('user::admin::list') }}">
+            <form method="get" action="{{ route('user::registrationhelper::list') }}">
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-white">Search in users</div>
                     <div class="card-body">
@@ -39,6 +39,7 @@
 
                         <thead>
                         <tr class="bg-dark text-white">
+                            <td></td>
                             <td>Name</td>
                             <td>E-mail</td>
                             <td>Username</td>
@@ -48,8 +49,13 @@
 
                         <tbody>
                         @foreach($users as $user)
-                            <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}">
-                                <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
+                                <tr style="transform: rotate(0)">
+                                    <td>
+                                        <a href="{{ route('user::registrationhelper::details', ['id'=>$user->id]) }}"
+                                           data-toggle="tooltip" data-placement="top" title="Go to user" class="text-decoration-none">
+                                            <i class="fas fa-info-circle fa-fw mr-1 text-info" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
                                     <td>{{ $user->name }}</td>
                                     <td>
                                         {{ $user->email }}
@@ -66,7 +72,6 @@
                                         {{ $user->utwente_department }}
                                     </td>
                                 </tr>
-                            </a>
                         @endforeach
                         </tbody>
 

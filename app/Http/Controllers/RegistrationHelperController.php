@@ -2,6 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Proto\Models\User;
 
@@ -18,7 +19,7 @@ class RegistrationHelperController extends Controller
         $search = $request->input('query');
 
         $users = User::whereHas('member', function ($q) {
-            $q->where('pending', '=', 1);
+            $q->where('is_pending', '=', 1);
         });
 
         if ($search) {
@@ -39,7 +40,7 @@ class RegistrationHelperController extends Controller
     public function details($id)
     {
         $user = User::whereHas('member', function ($q) {
-            $q->where('pending', '=', 1);
+            $q->where('is_pending', '=', 1)->orWhere('updated_at', '>', Carbon::now()->subDay(1));
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 
