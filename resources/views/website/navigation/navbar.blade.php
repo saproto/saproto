@@ -107,11 +107,13 @@
                                 <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
                                 @if(Auth::user()->can('protography'))
                                     <li class="nav-item">
-                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
+                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo
+                                            Admin</a>
                                     </li>
                                 @endif
                                 <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
-                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
+                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event
+                                    Categories</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -191,7 +193,8 @@
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
                                 <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
+                                    Messages</a>
                                 <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
@@ -237,8 +240,17 @@
 
                 @if(Auth::check() && Auth::user()->can('protography') && !Auth::user()->can('board'))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button" aria-haspopup="false"
+                        <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button"
+                           aria-haspopup="false"
                            aria-expanded="false">Photo Admin</a>
+                    </li>
+                @endif
+
+                @if(Auth::check() && Auth::user()->can('registermembers') && !Auth::user()->can('board'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('user::registrationhelper::list')}}" role="button"
+                           aria-haspopup="false"
+                           aria-expanded="false">Registration Helper</a>
                     </li>
                 @endif
 
