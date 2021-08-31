@@ -114,7 +114,7 @@ class GenerateRoles extends Command
             $permissions['publishalbums']->save();
             $this->info('Added publishalbums permission.');
         }
-        $permissions['registermembers'] = Permission::where('name', '=', 'signup')->first();
+        $permissions['registermembers'] = Permission::where('name', '=', 'registermembers')->first();
         if ($permissions['registermembers'] == null) {
             $permissions['registermembers'] = new Permission(['name' => 'registermembers', 'display_name' => 'Register Members', 'description' => 'Allows completing new member registrations.']);
             $permissions['registermembers']->save();
