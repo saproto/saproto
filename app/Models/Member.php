@@ -22,7 +22,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property int $is_lifelong
  * @property int $is_honorary
  * @property int $is_donor
- * @property string $pending
+ * @property string $is_pending
  * @property Carbon|null $deleted_at
  * @property string|null $card_printed_on
  * @property-read StorageEntry|null $membershipForm
