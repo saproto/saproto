@@ -6,14 +6,16 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Proto\Models\User;
 
-class RegistrationHelperController extends Controller {
+class RegistrationHelperController extends Controller
+{
     /**
-     * Display a list of pending members
+     * Display a list of pending members.
      *
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $search = $request->input('query');
 
         $users = User::whereHas('member', function ($q) {
@@ -38,7 +40,7 @@ class RegistrationHelperController extends Controller {
     }
 
     /**
-     * Show the user details for registration helper
+     * Show the user details for registration helper.
      *
      * @param $id
      * @return \Illuminate\View\View

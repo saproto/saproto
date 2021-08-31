@@ -116,7 +116,7 @@ class GenerateRoles extends Command
         }
         $permissions['registermembers'] = Permission::where('name', '=', 'signup')->first();
         if ($permissions['registermembers'] == null) {
-            $permissions['registermembers'] = new Permission(array('name' => 'registermembers', 'display_name' => 'Register Members', 'description' => 'Allows completing new member registrations.'));
+            $permissions['registermembers'] = new Permission(['name' => 'registermembers', 'display_name' => 'Register Members', 'description' => 'Allows completing new member registrations.']);
             $permissions['registermembers']->save();
             $this->info('Added registermembers permission.');
         }
@@ -189,7 +189,7 @@ class GenerateRoles extends Command
         }
         $roles['registration-helper'] = Role::where('name', '=', 'registration-helper')->first();
         if ($roles['registration-helper'] == null) {
-            $roles['registration-helper'] = new Role(array('name' => 'registration-helper', 'display_name' => 'Registration Helper', 'description' => 'Helper during the kick-in member registration session.'));
+            $roles['registration-helper'] = new Role(['name' => 'registration-helper', 'display_name' => 'Registration Helper', 'description' => 'Helper during the kick-in member registration session.']);
             $roles['registration-helper']->save();
             $this->info('Added registration-helper role.');
         }
@@ -218,7 +218,7 @@ class GenerateRoles extends Command
         $this->info('Synced protography-admin role with permissions.');
         $roles['protography']->perms()->sync([$permissions['protography']->id]);
         $this->info('Synced protography role with permissions.');
-        $roles['registration-helper']->perms()->sync(array($permissions['registermembers']->id));
+        $roles['registration-helper']->perms()->sync([$permissions['registermembers']->id]);
         $this->info('Synced registration-helper role with permissions');
 
         $this->info('Fixed required permissions and roles.');
