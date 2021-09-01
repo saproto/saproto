@@ -28,6 +28,8 @@
 </head>
 <body>
 
+<h2>Becoming a member of Study Association Proto</h2>
+
 @include('users.includes.membershipform_include')
 
 <div style="height: 30mm;">
