@@ -68,11 +68,11 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Address $address
  * @property-read Bank $bank
  * @property-read Collection|Client[] $clients
- * @property-read mixed $completed_profile
- * @property-read mixed $is_member
- * @property-read mixed $is_protube_admin
- * @property-read mixed $photo_preview
- * @property-read mixed $signed_membership_form
+ * @property-read bool $completed_profile
+ * @property-read bool $is_member
+ * @property-read bool $is_protube_admin
+ * @property-read bool $photo_preview
+ * @property-read bool $signed_membership_form
  * @property-read mixed $welcome_message
  * @property-read HelperReminder $helperReminderSubscriptions
  * @property-read Collection|EmailList[] $lists

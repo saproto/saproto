@@ -45,7 +45,6 @@
     "abcaeffchen/sephpa": "~2.0.0-beta1",
     "alaouy/youtube": "2.1.*",
     "barryvdh/laravel-snappy": "0.4.*",
-    "directadmin/directadmin": "1.0.*",
     "doctrine/dbal": "2.*",
     "ext-curl": "*",
     "ext-json": "*",
@@ -77,14 +76,16 @@
     "willvincent/feeds": "2.*",
     "spatie/laravel-csp": "^2.6",
     "spatie/laravel-permission": "^4.2.0",
-    "ext-calendar": "*"
+    "ext-calendar": "*",
+    "solitweb/directadmin": "^3.0"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",
     "symfony/css-selector": "~4.0",
     "symfony/dom-crawler": "~4.0",
     "fakerphp/faker": "^1.13",
-    "friendsofphp/php-cs-fixer": "^3.0.0"
+    "friendsofphp/php-cs-fixer": "^3.0.0",
+    "laravel/tinker": "^2.6"
   },
   "extra": {
     "laravel": {

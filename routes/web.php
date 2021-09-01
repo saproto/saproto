@@ -76,7 +76,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('personal_key', ['as' => 'personal_key::generate', 'uses' => 'UserDashboardController@generateKey']);
 
         /* Routes related to members. */
-        Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:board']], function () {
+        Route::group(['prefix' => '{id}/member', 'as' => 'member::', 'middleware' => ['auth', 'permission:registermembers']], function () {
             Route::get('impersonate', ['as' => 'impersonate', 'middleware' => ['auth', 'permission:board'], 'uses' => 'UserAdminController@impersonate']);
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
@@ -100,6 +100,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('studied_itech/{id}', ['as' => 'toggle_studied_itech', 'uses' => 'UserAdminController@toggleStudiedITech']);
             Route::get('nda/{id}', ['as' => 'toggle_nda', 'middleware' => ['permission:board'], 'uses' => 'UserAdminController@toggleNda']);
             Route::get('unblock_omnomcom/{id}', ['as' => 'unblock_omnomcom', 'uses' => 'UserAdminController@unblockOmnomcom']);
+        });
+
+        Route::group(['prefix' => 'registrationhelper', 'as' => 'registrationhelper::', 'middleware' => ['auth' => 'permission:registermembers']], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'RegistrationHelperController@index']);
+            Route::get('{id}', ['as' => 'details', 'uses' => 'RegistrationHelperController@details']);
         });
 
         Route::get('quit_impersonating', ['as' => 'quitimpersonating', 'uses' => 'UserAdminController@quitImpersonating']);

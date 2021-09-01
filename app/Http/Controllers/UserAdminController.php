@@ -201,7 +201,8 @@ class UserAdminController extends Controller
             'value' => 1,
         ]);
 
-        Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
+        // Disabled because ProTube is down.
+        // Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
         return redirect()->back();
@@ -326,7 +327,7 @@ class UserAdminController extends Controller
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
 
-        if ($user->id != $member->user_id && ! $user->can('board')) {
+        if ($user->id != $member->user_id && ! $user->can('registermembers')) {
             abort(403);
         }
 

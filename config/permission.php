@@ -46,6 +46,10 @@ return [
             'display_name' => 'Publish Albums',
             'description' => 'Allows publishing photo albums.',
         ],
+        'registermembers' => (object) [
+            'display_name' => 'Register Members',
+            'description' => 'Allows finalisation of memberships.'
+        ]
     ],
 
     'roles' => [
@@ -57,7 +61,7 @@ return [
         'admin' => (object) [
             'display_name' => 'Application Administrator',
             'description' => 'Can administrate the website',
-            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums'],
+            'permissions' => ['board', 'omnomcom', 'finadmin', 'tipcie', 'protube', 'drafters', 'header-image', 'protography', 'publishalbums', 'registermembers'],
         ],
         'protube' => (object) [
             'display_name' => 'Protube Administrator',
@@ -67,7 +71,7 @@ return [
         'board' => (object) [
             'display_name' => 'Association Board',
             'description' => 'Can administrate the website',
-            'permissions' => ['board', 'omnomcom', 'tipcie', 'protube', 'drafters'],
+            'permissions' => ['board', 'omnomcom', 'tipcie', 'protube', 'drafters', 'registermembers'],
         ],
         'omnomcom' => (object) [
             'display_name' => 'OmNomCom',

@@ -107,11 +107,13 @@
                                 <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp Admin Admin</a>
                                 @can('protography')
                                     <li class="nav-item">
-                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
+                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo
+                                            Admin</a>
                                     </li>
                                 @endcan
                                 <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URL Service</a>
-                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
+                                <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event
+                                    Categories</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 
@@ -195,7 +197,8 @@
                                 <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
                                 <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
                                 <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome
+                                    Messages</a>
                                 <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
                                 <li role="separator" class="dropdown-divider"></li>
                                 <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
@@ -232,26 +235,37 @@
                     </li>
                 @endcanany
 
-                @if(Auth::check() && (Auth::user()->isTempadmin() || (Auth::user()->can('protube') && !Auth::user()->can('board'))))
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
-                           aria-expanded="false">ProTube Admin</a>
-                    </li>
-                @endif
+                @cannot('board')
+                    @can('protube')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route("protube::admin") }}" role="button" aria-haspopup="false"
+                               aria-expanded="false">ProTube Admin</a>
+                        </li>
+                    @endcan
 
-                @if(Auth::check() && Auth::user()->can('protography') && !Auth::user()->can('board'))
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button" aria-haspopup="false"
-                           aria-expanded="false">Photo Admin</a>
-                    </li>
-                @endif
+                    @can('protography')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button"
+                               aria-haspopup="false"
+                               aria-expanded="false">Photo Admin</a>
+                        </li>
+                    @endcan
+
+                    @can('registermembers')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('user::registrationhelper::list')}}" role="button"
+                               aria-haspopup="false"
+                               aria-expanded="false">Registration Helper</a>
+                        </li>
+                    @endcan
+                @endcan
 
             </ul>
 
             <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
                 {{ csrf_field() }}
                 <div class="input-group">
-                    <input type="text" class="form-control"
+                    <input class="form-control"
                            placeholder="Search" type="search" name="query" style="max-width: 125px;">
                     <div class="input-group-append">
                         <button type="submit" class="input-group-text btn btn-info">
@@ -273,12 +287,13 @@
                                aria-expanded="false">
                                 {{ Auth::user()->calling_name }}
                                 <img class="rounded-circle ml-2"
+                                     alt="your profile picture"
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right mt-2">
                                 <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
-                                @if(Auth::check() && Auth::user()->is_member)
+                                @if(Auth::user()->is_member)
                                     <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
                                 @else
                                     <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
@@ -322,8 +337,6 @@
                     </a>
                     <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i>
                         Log-in</a>
-                </form>
-
                 </form>
 
             @endif
