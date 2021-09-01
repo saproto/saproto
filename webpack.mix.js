@@ -28,7 +28,12 @@ mix.options({
 glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
     let src = paths.styles.src+fileName
     let dest = paths.public+'application-'+fileName.replace('scss', 'css')
-    mix.sass(src, dest)
+    mix.sass(src, dest, {
+        sassOptions: {
+            // Mute deprecation warnings because of Bootstrap 4
+            quietDeps: true,
+        }
+    })
 })
 
 // Compile all javascript
