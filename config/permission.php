@@ -48,8 +48,8 @@ return [
         ],
         'registermembers' => (object) [
             'display_name' => 'Register Members',
-            'description' => 'Allows finalisation of memberships.'
-        ]
+            'description' => 'Allows finalisation of memberships.',
+        ],
     ],
 
     'roles' => [
