@@ -248,7 +248,7 @@ return [
             'www.isalfredthere.nl',
         ],
         'static' => [
-            !env('APP_ENV') == 'local' ? 'static.saproto.com' : '',
+            ! env('APP_ENV') == 'local' ? 'static.saproto.com' : '',
         ],
     ],
 
