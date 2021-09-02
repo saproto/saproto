@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group mb-4">
-                <label for="number">Street number</label>
+                <label for="number">House number</label>
                 <input type="text" class="form-control" id="number" name="number-nl" placeholder="42">
             </div>
 
