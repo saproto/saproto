@@ -4,7 +4,6 @@ namespace Proto\Models;
 
 use Carbon;
 use DateTime;
-use Solitweb\DirectAdmin\DirectAdmin;
 use Eloquent;
 use Exception;
 use Hash;
@@ -23,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
+use Solitweb\DirectAdmin\DirectAdmin;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
