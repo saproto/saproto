@@ -4,7 +4,6 @@ namespace Proto\Models;
 
 use Carbon;
 use DateTime;
-use DirectAdmin\DirectAdmin;
 use Eloquent;
 use Exception;
 use Hash;
@@ -23,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
-use Proto\Console\Commands\DirectAdminSync;
+use Solitweb\DirectAdmin\DirectAdmin;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
@@ -337,9 +336,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $da = new DirectAdmin();
             $da->connect(getenv('DA_HOSTNAME'), getenv('DA_PORT'));
             $da->set_login(getenv('DA_USERNAME'), getenv('DA_PASSWORD'));
-
-            $da->set_method('post');
-            $q = DirectAdminSync::constructQuery('CMD_API_POP', [
+            $da->set_method('POST');
+            $da->query('/CMD_API_POP', [
                 'action' => 'modify',
                 'domain' => env('DA_DOMAIN'),
                 'user' => $this->member->proto_username,
@@ -349,7 +347,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
                 'quota' => 0, // Unlimited
                 'limit' => 0, // Unlimited
             ]);
-            $da->query($q);
         }
 
         // Remove breach notification flag
