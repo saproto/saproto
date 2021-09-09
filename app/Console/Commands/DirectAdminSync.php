@@ -53,7 +53,7 @@ class DirectAdminSync extends Command
         $forwarder_queries = $this->applyPatchList($patch);
 
         // E-mail accounts
-        $da->query('CMD_API_POP', [
+        $da->query('/CMD_API_POP', [
             'domain' => getenv('DA_DOMAIN'),
             'action' => 'list',
         ]);
@@ -142,6 +142,7 @@ class DirectAdminSync extends Command
 
         // For each current forwarder, we check if it should exist against the target list.
         foreach ($current as $alias => $destination) {
+            $destination = explode(',', $destination);
 
             // It should exist, now we check if the forwarder needs to be rewritten.
             if (array_key_exists($alias, $target)) {
@@ -216,7 +217,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['add'] as $alias => $destination) {
             $queries[] = [
-                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'create',
@@ -228,7 +229,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['mod'] as $alias => $destination) {
             $queries[] = [
-                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'modify',
@@ -240,7 +241,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['del'] as $del) {
             $queries[] = [
-                'cmd' => 'CMD_API_EMAIL_FORWARDERS',
+                'cmd' => '/CMD_API_EMAIL_FORWARDERS',
                 'options' => [
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'delete',
@@ -259,7 +260,7 @@ class DirectAdminSync extends Command
         foreach ($patch['add'] as $account) {
             $password = str_random(32);
             $queries[] = [
-                'cmd' => 'CMD_API_POP',
+                'cmd' => '/CMD_API_POP',
                 'options' => [
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'create',
@@ -274,7 +275,7 @@ class DirectAdminSync extends Command
 
         foreach ($patch['del'] as $account) {
             $queries[] = [
-                'cmd' => 'CMD_API_POP',
+                'cmd' => '/CMD_API_POP',
                 'options' => [
                     'domain' => getenv('DA_DOMAIN'),
                     'action' => 'delete',
