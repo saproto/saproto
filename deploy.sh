@@ -29,8 +29,8 @@ echo "Shuffling files..."
 cp uploads/checksum.txt new_build
 cp environment/.env new_build
 echo "Fixing file permissions"
-chmod +x new_build/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
-chmod +x new_build/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64
+chmod u+x new_build/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64
+chmod u+x new_build/vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64
 echo "Symlinking storage..."
 ln -s /actual/path \
   /symlinked/path
