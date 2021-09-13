@@ -1,41 +1,5 @@
 @extends('website.layouts.redesign.generic')
 
-@push('javascript')
-
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let mySwiper = new Swiper.default('.swiper-container', {
-            @if( count($companies) > 1 )
-            loop: true,
-            slidesPerView: 2,
-            @else
-            slidesPerView: 1,
-            @endif
-            spaceBetween: 10,
-
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-
-            breakpoints: {
-                1200: {
-                    @if( count($companies) >= 4 )
-                    loop: true,
-                    slidesPerView: 4,
-                    spaceBetween: 50,
-                    watchOverflow: true,
-                    @else
-                    slidesPerView: "<?= count($companies) ?>",
-                    spaceBetween: 50,
-                    watchOverflow: true,
-                    @endif
-                }
-            }
-        })
-    </script>
-
-@endpush
-
 @section('page-title')
     Homepage
 @endsection
@@ -78,7 +42,7 @@
 
                 <div class="card mb-3">
                     <div class="card-body pb-0 pt-1 position-relative">
-                        <div class="row mb-1 swiper-container" style="height:70px">
+                        <div class="row mb-1 swiper" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
                                     @if($company->image)

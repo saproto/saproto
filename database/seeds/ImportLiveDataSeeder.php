@@ -53,6 +53,7 @@ class ImportLiveDataSeeder extends Seeder
             ['tableName' => 'activities'],
             ['tableName' => 'committees'],
             ['tableName' => 'committees_activities'],
+            ['tableName' => 'companies'],
             ['tableName' => 'events', 'exclude' => ['formatted_date', 'is_future']],
             ['tableName' => 'mailinglists'],
             ['tableName' => 'products'],

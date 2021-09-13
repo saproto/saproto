@@ -7,6 +7,7 @@ use Proto\Models\Account;
 use Proto\Models\Achievement;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
+use Proto\Models\Company;
 use Proto\Models\EmailList;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
@@ -62,6 +63,9 @@ class ExportController extends Controller
                 break;
             case 'committees_activities':
                 $data = HelpingCommittee::all();
+                break;
+            case 'companies':
+                $data = Company::all();
                 break;
             case 'events':
                 if ($user->can('admin')) {

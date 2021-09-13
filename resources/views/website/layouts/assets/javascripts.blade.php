@@ -9,7 +9,8 @@
         },
         analytics_url: "{{ config('proto.analytics_url') }}",
         discord_server_id: "{{ config('proto.discord_server_id') }}",
-        theme: "{{ Auth::check() && Auth::user()->theme !== null ? config('proto.themes')[Auth::user()->theme] : 'light' }}"
+        theme: "{{ Auth::check() && Auth::user()->theme !== null ? config('proto.themes')[Auth::user()->theme] : 'light' }}",
+        @isset($companies) company_count: {{ count($companies) }} @endisset
     }
 </script>
 

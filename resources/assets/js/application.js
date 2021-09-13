@@ -3,7 +3,6 @@ global.$ = global.jQuery = require('jquery');
 window.popper = require('popper.js')
 window.moment = require('moment')
 window.SignaturePad = require('signature_pad')
-window.Swiper = require('swiper')
 window.EasyMDE = require('easymde')
 window.io = require('socket.io-client')
 window.Cookies = require('js-cookie')
@@ -17,6 +16,28 @@ require('fontawesome-iconpicker')
 moment.updateLocale('en', {
     week: {dow: 1}
 });
+
+// Initialise Swiper on home page
+import Swiper, { Autoplay, Navigation} from 'swiper'
+if($('.swiper-container') != null) {
+    Swiper.use([Autoplay, Navigation]);
+    window.swiper = new Swiper('.swiper', {
+        loop: config.company_count > 2,
+        slidesPerView: config.company_count > 1 ? 2 : 1,
+        spaceBetween: 10,
+        watchOverflow: false,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false
+        },
+        breakpoints: {
+            1200: {
+                slidesPerView: (config.company_count > 4 ? 4 : config.company_count),
+                spaceBetween: 50,
+            }
+        }
+    })
+}
 
 // On document loaded
 $(function() {

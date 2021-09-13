@@ -26,7 +26,7 @@
 
 This README is tailored to install on a Debian system. You may need to change commands to match your operating system.
 
-Before following the installation instructions, you need to have a working installation of `php`, `git`, `npm`, `composer`. Depending on your operating system and plans for your development environment, you need to either set up a webserver and database or install docker using the [instructions below](#running-with-docker). JetBrains [PhpStorm IDE](https://www.jetbrains.com/help/phpstorm/installation-guide.html) is strongly recommended for development on this project, especially with the laravel plugin for proper code completion and reverences.
+Before following the installation instructions, you need to have a working installation of `php`, `git`, `npm`, `composer`. Depending on your operating system and plans for your development environment, you need to either set up a webserver and database or install docker using the [instructions below](#running-with-docker). JetBrains [PhpStorm IDE](https://www.jetbrains.com/help/phpstorm/installation-guide.html) is strongly recommended for development on this project, especially with the laravel plugin for proper code completion and reverences. To make sure you use the correct version of Node and NPM, installing Node using [NVM](https://github.com/coreybutler/nvm-windows) is also recommended.
 
 ## Installation instructions
 
