@@ -82,12 +82,14 @@
                                 </a>
                             @endif
 
-                            <li role="separator" class="dropdown-divider"></li>
+                            @if(Auth::check() && Auth::user()->can("tipcie"))
+                                <li role="separator" class="dropdown-divider"></li>
 
-                            <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
-                                TIPCie Order Overview
-                            </a>
-                            <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                                <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
+                                    TIPCie Order Overview
+                                </a>
+                                <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                            @endif
                         </ul>
                     </li>
                 @endif
