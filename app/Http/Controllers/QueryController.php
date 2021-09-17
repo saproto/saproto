@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 use Proto\Models\Event;
 use Proto\Models\Member;
-use Redirect;
-use Session;
 
 class QueryController extends Controller
 {
@@ -58,14 +56,14 @@ class QueryController extends Controller
     public function membershipTotals(Request $request)
     {
         // Get a list of all CreaTe students.
-        $ldap_students = LdapController::searchUtwente("|(department=*B-CREA*)(department=*M-ITECH*)");
+        $ldap_students = LdapController::searchUtwente('|(department=*B-CREA*)(department=*M-ITECH*)');
 
         $names = [];
         $emails = [];
         $usernames = [];
 
         foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname . ' ' . $student->sn);
+            $names[] = strtolower($student->givenname.' '.$student->sn);
             $emails[] = strtolower($student->userprincipalname);
             $usernames[] = $student->uid;
         }
@@ -84,7 +82,6 @@ class QueryController extends Controller
 
         // Loop over all members and determine if they are studying CreaTe.
         foreach (Member::all() as $member) {
-
             $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
                 in_array($member->user->utwente_username, $usernames) ||
                 in_array(strtolower($member->user->name), $names);
@@ -127,27 +124,24 @@ class QueryController extends Controller
 
             if ($request->has('export_subsidies')) {
                 if ($is_ut) {
-                    $export_subsidies[] = (object)[
+                    $export_subsidies[] = (object) [
                         'primary' => $is_primary_student ? 'true' : 'false',
                         'name' => $member->user->name,
                         'email' => $has_ut_mail ? $member->user->email : null,
-                        'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null
+                        'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null,
                     ];
                 }
             }
-
         }
 
         if ($request->has('export_subsidies')) {
-
             $headers = [
                 'Content-Encoding' => 'UTF-8',
                 'Content-Type' => 'text/csv; charset=UTF-8',
-                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y'))
+                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y')),
             ];
 
             return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
-
         } elseif ($request->has('export_active')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
