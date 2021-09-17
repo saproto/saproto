@@ -61,6 +61,14 @@
                         <td>{{ $donor }}</td>
                     </tr>
 
+                    <tr>
+                        <td>
+                            <strong>Total number of pending members</strong>
+                            <sup>For this overview pending members are not counted as members.</sup>
+                        </td>
+                        <td>{{ $pending }}</td>
+                    </tr>
+
                 </table>
 
                 <div class="card-body mt-0 pt-0">
