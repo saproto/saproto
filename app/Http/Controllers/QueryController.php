@@ -25,7 +25,7 @@ class QueryController extends Controller
      */
     public function activityOverview(Request $request)
     {
-        if (!$request->has('start') || !$request->has('start')) {
+        if (! $request->has('start') || ! $request->has('start')) {
             if (intval(date('n')) >= 9) {
                 $year_start = intval(date('Y'));
             } else {
@@ -63,7 +63,7 @@ class QueryController extends Controller
         $usernames = [];
 
         foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname . ' ' . $student->sn);
+            $names[] = strtolower($student->givenname.' '.$student->sn);
             $emails[] = strtolower($student->userprincipalname);
             $usernames[] = $student->uid;
         }
@@ -92,8 +92,7 @@ class QueryController extends Controller
             if ($member->is_pending) {
                 $count_pending++;
             } else {
-
-                if (!$member->is_pet) {
+                if (! $member->is_pet) {
                     $count_total++;
                 }
 
@@ -101,7 +100,7 @@ class QueryController extends Controller
                     $count_active++;
 
                     if ($request->has('export_active')) {
-                        $export_active[] = (object)[
+                        $export_active[] = (object) [
                             'name' => $member->user->name,
                             'committees' => $member->user->committees->pluck('name'),
                         ];
@@ -129,7 +128,7 @@ class QueryController extends Controller
 
                 if ($request->has('export_subsidies')) {
                     if ($is_ut) {
-                        $export_subsidies[] = (object)[
+                        $export_subsidies[] = (object) [
                             'primary' => $is_primary_student ? 'true' : 'false',
                             'name' => $member->user->name,
                             'email' => $has_ut_mail ? $member->user->email : null,
