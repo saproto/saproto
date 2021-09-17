@@ -58,19 +58,19 @@ class QueryController extends Controller
     public function membershipTotals(Request $request)
     {
         // Get a list of all CreaTe students.
-//        $ldap_students = LdapController::searchUtwente("|(department=*B-CREA*)(department=*M-ITECH*)");
-//
-//        $names = [];
-//        $emails = [];
-//        $usernames = [];
-//
-//        foreach ($ldap_students as $student) {
-//            $names[] = strtolower($student->givenname . ' ' . $student->sn);
-//            $emails[] = strtolower($student->userprincipalname);
-//            $usernames[] = $student->uid;
-//        }
+        $ldap_students = LdapController::searchUtwente("|(department=*B-CREA*)(department=*M-ITECH*)");
 
-        $count_total = 0;
+        $names = [];
+        $emails = [];
+        $usernames = [];
+
+        foreach ($ldap_students as $student) {
+            $names[] = strtolower($student->givenname . ' ' . $student->sn);
+            $emails[] = strtolower($student->userprincipalname);
+            $usernames[] = $student->uid;
+        }
+
+        $count = 0;
         $count_primary = 0;
         $count_secondary = 0;
         $count_ut = 0;
@@ -85,11 +85,11 @@ class QueryController extends Controller
         // Loop over all members and determine if they are studying CreaTe.
         foreach (Member::all() as $member) {
 
-//            $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
-//                in_array($member->user->utwente_username, $usernames) ||
-//                in_array(strtolower($member->user->name), $names);
-//            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
-//            $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
+            $is_primary_student = in_array(strtolower($member->user->email), $emails) ||
+                in_array($member->user->utwente_username, $usernames) ||
+                in_array(strtolower($member->user->name), $names);
+            $has_ut_mail = substr($member->user->email, -10) == 'utwente.nl';
+            $is_ut = $is_primary_student || $has_ut_mail || $member->user->utwente_username !== null;
 
             if (! $member->is_pet) {
                 $count_total++;
@@ -115,40 +115,39 @@ class QueryController extends Controller
                 $count_donor++;
             }
 
-//            if ($is_primary_student) {
-//                $count_primary++;
-//            } else {
-//                $count_secondary++;
-//            }
-//
-//            if ($is_ut) {
-//                $count_ut++;
-//            }
+            if ($is_primary_student) {
+                $count_primary++;
+            } else {
+                $count_secondary++;
+            }
 
-//            if ($request->has('export_subsidies')) {
-//                if ($is_ut) {
-//                    $export_subsidies[] = (object)[
-//                        'primary' => $is_primary_student ? 'true' : 'false',
-//                        'name' => $member->user->name,
-//                        'email' => $has_ut_mail ? $member->user->email : null,
-//                        'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null
-//                    ];
-//                }
-//            }
+            if ($is_ut) {
+                $count_ut++;
+            }
+
+            if ($request->has('export_subsidies')) {
+                if ($is_ut) {
+                    $export_subsidies[] = (object)[
+                        'primary' => $is_primary_student ? 'true' : 'false',
+                        'name' => $member->user->name,
+                        'email' => $has_ut_mail ? $member->user->email : null,
+                        'ut_number' => $member->user->utwente_username ? $member->user->utwente_username : null
+                    ];
+                }
+            }
+
         }
 
         if ($request->has('export_subsidies')) {
 
-//            $headers = [
-//                'Content-Encoding' => 'UTF-8',
-//                'Content-Type' => 'text/csv; charset=UTF-8',
-//                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y'))
-//            ];
-//
-//            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
+            $headers = [
+                'Content-Encoding' => 'UTF-8',
+                'Content-Type' => 'text/csv; charset=UTF-8',
+                'Content-Disposition' => sprintf('attachment; filename="primary_member_overview_%s.csv"', date('d_m_Y'))
+            ];
 
-            Session::flash('flash_message', 'Cannot currently export subsidies for more info contact the HYTTIOAOAc.');
-            return Redirect::back();
+            return Response::make(view('queries.export_subsidies', ['export' => $export_subsidies]), 200, $headers);
+
         } elseif ($request->has('export_active')) {
             $headers = [
                 'Content-Encoding' => 'UTF-8',
@@ -159,7 +158,7 @@ class QueryController extends Controller
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
         } else {
             return view('queries.membership_totals', [
-                'total' => $count_total,
+                'total' => $count,
                 'primary' => $count_primary,
                 'secondary' => $count_secondary,
                 'ut' => $count_ut,
