@@ -70,7 +70,7 @@ class QueryController extends Controller
             $usernames[] = $student->uid;
         }
 
-        $count = 0;
+        $count_total = 0;
         $count_primary = 0;
         $count_secondary = 0;
         $count_ut = 0;
@@ -158,7 +158,7 @@ class QueryController extends Controller
             return Response::make(view('queries.export_active_members', ['export' => $export_active]), 200, $headers);
         } else {
             return view('queries.membership_totals', [
-                'total' => $count,
+                'total' => $count_total,
                 'primary' => $count_primary,
                 'secondary' => $count_secondary,
                 'ut' => $count_ut,
