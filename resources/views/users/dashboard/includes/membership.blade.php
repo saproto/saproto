@@ -4,7 +4,7 @@
             Your membership
         </div>
         <div class="card-body">
-            <table class="table table-borderless table-sm mb-0">
+            <table class="table table-borderless table-sm mb-2">
                 <tbody>
                 @if($user->is_member)
                     <tr>
@@ -147,6 +147,10 @@
                 @endif
                 </tbody>
             </table>
+
+            <small>
+                If you would like to end your membership, please contact the secretary at <a href="mailto:secretary@proto.utwente.nl">secretary@proto.utwente.nl</a>.
+            </small>
 
         </div>
     </div>
