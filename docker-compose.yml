@@ -3,7 +3,6 @@ services:
   app:
     build: ./docker/build/php
     container_name: ${DOCKER_NAME}-app
-    env_file: .env
     volumes:
       - .:/var/www
 
