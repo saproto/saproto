@@ -46,7 +46,7 @@ class ProtoPolicy extends Policy
                 ])
                 ->addDirective(Directive::FRAME, [
                     Keyword::SELF,
-                    'https://www.youtube.com/embed',
+                    'https://www.youtube.com/embed/',
                     'https://www.google.com/recaptcha/',
                     'https://recaptcha.google.com/recaptcha/',
                 ])
