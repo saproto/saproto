@@ -21,12 +21,16 @@
                     </div>
 
                     <div class="card-body">
+                        <div class="alert alert-danger" role="alert">
+                            This feature is currently disabled due to our disabled YouTube API Key.
+                        </div>
+
                         <label>YouTube video ID:</label>
-                        <input type="text" class="form-control" name="youtube_id" placeholder="M11SvDtPBhA">
+                        <input disabled type="text" class="form-control" name="youtube_id" placeholder="M11SvDtPBhA">
                     </div>
 
                     <div class="card-footer text-center">
-                        <button type="submit" class="btn btn-success btn-block">Add video</button>
+                        <button disabled type="submit" class="btn btn-success btn-block">Add video</button>
                         <br>
                         Developed with
                         <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
