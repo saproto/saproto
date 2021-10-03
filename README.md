@@ -98,6 +98,44 @@ docker compose stop
 docker compose exec app /bin/bash
 ```
 
+### Debugging
+Xdebug has been added to the php runner in docker to aid you while debugging the website.
+Xdebug enables breakpoints and step debugging which can easily be controlled from your IDE.
+For this to work, you will have to set up your IDE correctly.
+
+#### PhpStorm Configuration
+To make sure the Xdebug server can connect to PhpStorm you will have to set it up in PhpStorm by following the steps below:
+1. Open the Settings menu by clicking File>Settings in the top right.
+2. Under the PHP menu, click on the Servers entry.
+3. Add a new server with the following parameters:
+   - Name: `saproto-debug` (or any other name you like)
+   - Host: `localhost`
+   - Port: `8080`
+   - Debugger: `Xdebug`
+   - Absolute path on the server: `/var/www`
+     - Note: only set this for the `saproto` folder under `Project files`
+4. Click OK in the bottom right
+5. In the dropdown to the left of the run button, choose `Edit Configurations...`
+6. Add a new `PHP Remote Debug` configuration with the following parameters:
+   - Name: `saproto-debug` (or any other name you like)
+   - Server: `saproto-debug` (or the server name you chose in step 3)
+   - IDE key(session id): `XDEBUG_ECLIPSE`
+7. Click OK in the bottom right
+8. Select the `saproto-debug` configuration in the dropdown menu on the left of the run button.
+9. Press the green `Debug` button to start debugging.
+
+#### Browser configuration
+If you just visit the local website normally, no debug session will be started.
+A specific parameter hase to be sent with the request to enable debugging.
+Luckily, there are easy browser extensions to help you with this:
+- [Xdebug Helper for Firefox](https://addons.mozilla.org/en-GB/firefox/addon/xdebug-helper-for-firefox/)
+- [Xdebug Helper for Chrome](https://chrome.google.com/extensions/detail/eadndfjplgieldjbigjakmdgkmoaaaoc)
+- [XDebugToggle for Safari](https://apps.apple.com/app/safari-xdebug-toggle/id1437227804?mt=12)
+
+If you don't want to use a browser extension, you can also choose to add ?XDEBUG_SESSION=XDEBUG_ECLIPSE after the url.
+Do keep in mind that clicking an internal link will not also add this, so it has to be added every time.
+When using a browser extension this will be automatically taken care of.
+
 ## Running without Docker
 
 In the repository you'll find a file called `.env.example`. Make a copy of this file called `.env`:
