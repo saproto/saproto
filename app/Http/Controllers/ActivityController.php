@@ -32,6 +32,14 @@ class ActivityController extends Controller
         $newPrice = floatval(str_replace(',', '.', $request->price));
         $newNoShow = floatval(str_replace(',', '.', $request->no_show_fee));
 
+        $newRegistrationStart=strtotime($request->registration_start);
+        $newRegistrationEnd=strtotime($request->registration_end);
+
+        if ($newRegistrationEnd < $newRegistrationStart) {
+            $request->session()->flash('flash_message', 'You cannot let the event sign-up end before it starts.');
+            return Redirect::route('event::edit', ['id' => $event->id]);
+        }
+
         if ($newNoShow > floatval($activity->no_show_fee) && $activity->users->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot make the no show fee higher since this activity already has participants.');
 
@@ -49,8 +57,8 @@ class ActivityController extends Controller
         }
 
         $data = [
-            'registration_start' => strtotime($request->registration_start),
-            'registration_end' => strtotime($request->registration_end),
+            'registration_start' => $newRegistrationStart,
+            'registration_end' => $newRegistrationEnd,
             'deregistration_end' => strtotime($request->deregistration_end),
             'participants' => $request->participants,
             'price' => $newPrice,
