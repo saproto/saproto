@@ -17,7 +17,7 @@ jobs:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v2
 
-      - name: 🔍 Setup PHP
+      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
@@ -25,8 +25,25 @@ jobs:
       - name: 📥 Install back-end dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: 🔍 Get Node version
+        id: nvm
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: 🖱️ Set Node v${{ steps.nvm.outputs.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+
+      - name: 📂 Cache front-end dependencies
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
       - name: 📥 Install front-end dependencies
-        run: npm install
+        run: npm ci --ignore-scripts
 
       - name: 🔨 build front-end
         run: npm run prod
