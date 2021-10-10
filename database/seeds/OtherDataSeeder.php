@@ -9,9 +9,7 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
-use Proto\Models\MenuItem;
 use Proto\Models\OrderLine;
-use Proto\Models\Page;
 use Proto\Models\User;
 
 class OtherDataSeeder extends Seeder
@@ -27,7 +25,7 @@ class OtherDataSeeder extends Seeder
 
         // Create users
         $n = 100;
-        
+
         foreach (range(1, $n) as $index) {
             /** @var $user User */
             $user = factory(User::class)->create();
