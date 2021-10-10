@@ -19,7 +19,7 @@ moment.updateLocale('en', {
 
 // Initialise Swiper on home page
 import Swiper, { Autoplay, Navigation} from 'swiper'
-if($('.swiper-container') != null) {
+if($('.swiper').length) {
     Swiper.use([Autoplay, Navigation]);
     window.swiper = new Swiper('.swiper', {
         loop: config.company_count > 2,
