@@ -25,37 +25,9 @@ class OtherDataSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        // Create parent menu items
-        MenuItem::create([
-            'menuname' => 'public pages',
-            'order' => 0,
-            'is_member_only' => 0,
-        ]);
-
-        MenuItem::create([
-            'menuname' => 'member pages',
-            'order' => 1,
-            'is_member_only' => 1,
-        ]);
-
-        // Create pages
-        $n = 10;
-        echo "Creating $n pages".PHP_EOL;
-        foreach (range(1, $n) as $index) {
-            $page = factory(Page::class)->create();
-
-            MenuItem::create([
-                'parent' => $page->is_member_only + 1,
-                'menuname' => $page->title,
-                'page_id' => $page->id,
-                'order' => $index + 1,
-                'is_member_only' => $page->is_member_only,
-            ]);
-        }
-
         // Create users
         $n = 100;
-
+        
         foreach (range(1, $n) as $index) {
             /** @var $user User */
             $user = factory(User::class)->create();
