@@ -43,6 +43,9 @@ jobs:
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
 
+      - name: 📝 Set Sentry release
+        run: sed -i "s/GIT_SHA/$(git --git-dir .git log --pretty="%h" -n1 HEAD)/" config/sentry.php
+
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
         with:

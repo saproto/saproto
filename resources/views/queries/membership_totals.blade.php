@@ -23,19 +23,19 @@
                         <td>{{ $total }}</td>
                     </tr>
 
-                    <tr class="text-muted">
+                    <tr>
                         <td><strong>Total number of primary members</strong></td>
-                        <td><i class="fas fa-times"></i></td>
+                        <td>{{ $primary }}</td>
                     </tr>
 
-                    <tr class="text-muted">
+                    <tr>
                         <td><strong>Total number of secondary members</strong></td>
-                        <td><i class="fas fa-times"></i></td>
+                        <td>{{ $secondary }}</td>
                     </tr>
 
-                    <tr class="text-muted">
+                    <tr>
                         <td><strong>Total number of members that are affiliated with the UT</strong></td>
-                        <td><i class="fas fa-times"></i></td>
+                        <td>{{ $ut }}</td>
                     </tr>
 
                     <tr>
@@ -61,6 +61,14 @@
                         <td>{{ $donor }}</td>
                     </tr>
 
+                    <tr>
+                        <td>
+                            <strong>Total number of pending members</strong>
+                            <sup>For this overview pending members are not counted as members.</sup>
+                        </td>
+                        <td>{{ $pending }}</td>
+                    </tr>
+
                 </table>
 
                 <div class="card-body mt-0 pt-0">
@@ -68,10 +76,9 @@
                     <hr>
 
                     <p>
-                        <a href="?export_subsidies" class="btn btn-info btn-block disabled">
+                        <a href="?export_subsidies" class="btn btn-success btn-block">
                             Export overview for UT subsidies.
                         </a><br>
-                        <span class="badge-warning badge-pill">This feature is currently disabled</span>
                         This overview only includes users whose UT affiliation could be verified. UTwente numbers are
                         only included if available, and e-mail addresses are only included if they are an <code>@utwente.nl</code>
                         address.
