@@ -1,65 +1,73 @@
-<div id="committee_collapse">
+<div id="committee_collapse" class="row">
 
-    <?php $display = true; ?>
+    @php($display = true)
 
-    @if(count($members['editions']) > 0)
+    <div class="col-md-6 col-lg-12">
 
-        @foreach($members['editions'] as $edition => $memberships)
+        @if(count($members['editions']) > 0)
+
+            @foreach($members['editions'] as $edition => $memberships)
+
+                @include('committee.include.render-memberships',[
+                    'committee' => $committee,
+                    'title' => sprintf('%s <strong>%s</strong>', $committee->name, $edition),
+                    'memberships' => $memberships,
+                    'unique' => md5($edition),
+                    'display' => $display
+                ])
+
+                @php($display = false)
+
+            @endforeach
+
+        @endif
+
+    </div>
+
+    <div class="col-md-6 col-lg-12">
+
+        @if(count($members['members']['current']) > 0)
 
             @include('committee.include.render-memberships',[
                 'committee' => $committee,
-                'title' => sprintf('%s <strong>%s</strong>', $committee->name, $edition),
-                'memberships' => $memberships,
-                'unique' => md5($edition),
+                'memberships' => $members['members']['current'],
+                'title' => 'Current members',
+                'unique' => 'current',
                 'display' => $display
             ])
 
-            <?php $display = false; ?>
+            @php($display = false)
 
-        @endforeach
+        @endif
 
-    @endif
+        @if(count($members['members']['future']) > 0)
 
-    @if(count($members['members']['current']) > 0)
+            @include('committee.include.render-memberships',[
+                'committee' => $committee,
+                'memberships' => $members['members']['future'],
+                'title' => 'Future members',
+                'unique' => 'future',
+                'display' => $display
+            ])
 
-        @include('committee.include.render-memberships',[
-            'committee' => $committee,
-            'memberships' => $members['members']['current'],
-            'title' => 'Current members',
-            'unique' => 'current',
-            'display' => $display
-        ])
+            @php($display = false)
 
-        <?php $display = false; ?>
+        @endif
 
-    @endif
+        @if(count($members['members']['past']) > 0)
 
-    @if(count($members['members']['future']) > 0)
+            @include('committee.include.render-memberships',[
+                'committee' => $committee,
+                'memberships' => $members['members']['past'],
+                'title' => 'Previous members',
+                'unique' => 'previous',
+                'display' => $display
+            ])
 
-        @include('committee.include.render-memberships',[
-            'committee' => $committee,
-            'memberships' => $members['members']['future'],
-            'title' => 'Future members',
-            'unique' => 'future',
-            'display' => $display
-        ])
+            @php($display = false)
 
-        <?php $display = false; ?>
+        @endif
 
-    @endif
-
-    @if(count($members['members']['past']) > 0)
-
-        @include('committee.include.render-memberships',[
-            'committee' => $committee,
-            'memberships' => $members['members']['past'],
-            'title' => 'Previous members',
-            'unique' => 'previous',
-            'display' => $display
-        ])
-
-        <?php $display = false; ?>
-
-    @endif
+    </div>
 
 </div>

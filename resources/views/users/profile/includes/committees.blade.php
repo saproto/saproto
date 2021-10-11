@@ -12,7 +12,7 @@
 
                 @foreach($user->committees as $committee)
                     <div class="col-md-6 col-xs-12">
-                        @include('committee.include.committee_block', [
+                        @include('committee.include.committee-block', [
                          'committee' => $committee,
                          'override_committee_name' => sprintf('<strong>%s</strong> %s', $committee->name, $committee->pivot->edition),
                          'footer' => sprintf('<strong>%s</strong><br><sup>Since %s</sup>',
@@ -54,7 +54,7 @@
 
                 @foreach($pastcommittees as $committeeparticipation)
                     <div class="col-md-6 col-xs-12">
-                        @include('committee.include.committee_block', [
+                        @include('committee.include.committee-block', [
                          'committee' => $committeeparticipation->committee,
                          'override_committee_name' => sprintf('<strong>%s</strong> %s', $committeeparticipation ->committee->name, $committeeparticipation->edition),
                          'footer' => sprintf('<strong>%s</strong><br><sup>Between %s and %s</sup>',

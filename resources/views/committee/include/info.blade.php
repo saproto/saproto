@@ -1,6 +1,10 @@
-@if (!$committee->public)
-    <div class="alert alert-info" role="alert">
-        This is a hidden @if($committee->is_society) society! @else committee! @endif
+@if ($committee->trashed())
+    <div class="alert alert-danger text-center" role="alert">
+        This {{ $committee->is_society ? 'society' : 'committee' }} is archived! Members will not be able to see it.
+    </div>
+@elseif (!$committee->public)
+    <div class="alert alert-info text-center" role="alert">
+        This is a hidden {{ $committee->is_society ? 'society' : 'committee' }}!
     </div>
 @endif
 
@@ -37,9 +41,15 @@
 
                 @if(Auth::user()->can('board'))
                     <div class="col-4">
-                        <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-primary btn-block">
-                            <i class="fas fa-edit fa-fw"></i> Edit
-                        </a>
+                        @if($committee->trashed())
+                            <a href="{{ route("committee::restore", ["id" => $committee->id]) }}" class="btn btn-warning btn-block">
+                                <i class="fas fa-undo fa-fw"></i> Restore
+                            </a>
+                        @else
+                            <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-primary btn-block">
+                                <i class="fas fa-edit fa-fw"></i> Edit
+                            </a>
+                        @endif
                     </div>
                 @endif
 

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Committee Model.
@@ -46,6 +47,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Committee extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'committees';
 
     protected $guarded = ['id'];
@@ -61,7 +64,11 @@ class Committee extends Model
     /** @return Committee */
     public static function fromPublicId($public_id)
     {
-        return self::where('slug', $public_id)->firstOrFail();
+        if(auth::check() && auth::user()->can('board')) {
+            return self::withTrashed()->where('slug', $public_id)->firstOrFail();
+        } else {
+            return self::where('slug', $public_id)->firstOrFail();
+        }
     }
 
     /** @return BelongsToMany */

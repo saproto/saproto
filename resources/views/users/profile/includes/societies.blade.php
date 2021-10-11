@@ -12,7 +12,7 @@
 
                 @foreach($user->societies as $society)
                     <div class="col-md-6 col-xs-12">
-                        @include('committee.include.committee_block', [
+                        @include('committee.include.committee-block', [
                          'committee' => $society,
                          'override_committee_name' => sprintf('<strong>%s</strong> %s', $society->name, $society->pivot->edition),
                          'footer' => sprintf('<strong>%s</strong><br><sup>Since %s</sup>',
@@ -54,7 +54,7 @@
 
                 @foreach($pastsocieties as $societyparticipations)
                     <div class="col-md-6 col-xs-12">
-                        @include('committee.include.committee_block', [
+                        @include('committee.include.committee-block', [
                          'committee' => $societyparticipations->committee,
                          'override_committee_name' => sprintf('<strong>%s</strong> %s', $societyparticipations ->committee->name, $societyparticipations->edition),
                          'footer' => sprintf('<strong>%s</strong><br><sup>Between %s and %s</sup>',

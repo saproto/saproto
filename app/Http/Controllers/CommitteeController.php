@@ -30,7 +30,7 @@ class CommitteeController extends Controller
         $user = Auth::user();
 
         if (Auth::check() && $user->can('board')) {
-            return view('committee.list', ['data' => Committee::where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
+            return view('committee.list', ['data' => Committee::withTrashed()->where('is_society', $showSociety)->orderby('name', 'asc')->get()]);
         } else {
             $publicGroups = Committee::where('public', 1)->where('is_society', $showSociety)->get();
 
@@ -104,7 +104,7 @@ class CommitteeController extends Controller
     /** @return View */
     public function add()
     {
-        return view('committee.edit', ['new' => true]);
+        return view('committee.edit');
     }
 
     /**
@@ -115,10 +115,18 @@ class CommitteeController extends Controller
     {
         $committee = new Committee();
 
+        $request->validate([
+            'name' => 'string|required',
+            'slug' => 'string|required',
+            'public' => 'boolean|required',
+            'allow_anonymous_email' => 'boolean|required',
+            'description' => 'string|nullable',
+        ]);
+
         $committee->fill($request->all());
         $committee->save();
 
-        Session::flash('flash_message', 'Your new committee has been added!');
+        Session::flash('flash_message', 'The new committee "'.$committee->name.'" has been added!');
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
@@ -129,13 +137,9 @@ class CommitteeController extends Controller
      */
     public function edit($id)
     {
-        $committee = Committee::find($id);
+        $committee = Committee::findOrFail($id);
 
-        if ($committee == null) {
-            abort(404);
-        }
-
-        return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
+        return view('committee.edit', ['id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
     /**
@@ -145,21 +149,71 @@ class CommitteeController extends Controller
      */
     public function update($id, Request $request)
     {
-        $committee = Committee::find($id);
+        $committee = Committee::findOrFail($id);
 
-        if ($committee->slug == config('proto.rootcommittee') && $request->slug != $committee->slug) {
-            Session::flash('flash_message', "This committee is protected. You cannot change it's e-mail alias.");
+        if (! Auth::user()->can('sysadmin') && $protected && $request->get('slug') != $committee->slug) {
+            Session::flash('flash_message', 'This committee is protected. You cannot change its email alias.');
 
             return Redirect::back();
         }
 
-        $committee->fill($request->all());
+        $request->merge([
+            'slug' => str_slug($request->get('slug')),
+        ]);
 
+        $request->validate([
+            'name' => 'string|required',
+            'slug' => 'string|required|unique:committees,slug,'.$committee->id.',id',
+            'public' => 'boolean|required',
+            'allow_anonymous_email' => 'boolean|required',
+            'description' => 'string|nullable',
+        ]);
+
+        $committee->fill($request->all());
         $committee->save();
 
         Session::flash('flash_message', 'Changes have been saved.');
 
-        return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
+        return Redirect::route('committee::edit', ['id' => $id]);
+    }
+
+    /**
+     * @param int $id
+     * @throws Exception
+     * @return RedirectResponse
+     */
+    public function archive($id)
+    {
+        $committee = Committee::findOrFail($id);
+
+        if(in_array($committee->id, config('proto.committee'))) {
+            Session::flash('flash_message', 'You cannot archive a protected committee.');
+
+            return Redirect::back();
+        }
+
+        $committee->delete();
+
+        Session::flash('flash_message', 'The committee' . $committee->name . 'has been archived.');
+
+        return Redirect::route('committee::show', ['id' => $committee->slug]);
+    }
+
+    public function restore($id)
+    {
+        $committee = Committee::withTrashed()->findOrFail($id);
+
+        if(!$committee->trashed()) {
+            Session::flash('flash_message', 'The committee' . $committee->name . 'is not archived.');
+
+            return Redirect::back();
+        }
+
+        $committee->restore();
+
+        Session::flash('flash_message', 'The committee' . $committee->name . 'is restored.');
+
+        return Redirect::back();
     }
 
     /**
@@ -356,5 +410,10 @@ class CommitteeController extends Controller
         }
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
+    }
+
+    public function updateBoard(Request $request)
+    {
+        return Redirect::back();
     }
 }

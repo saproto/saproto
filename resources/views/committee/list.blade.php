@@ -16,7 +16,7 @@
 
                     <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                        @include('committee.include.committee_block', ['committee' => $committee])
+                        @include('committee.include.committee-block', ['committee' => $committee])
 
                     </div>
 

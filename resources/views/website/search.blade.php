@@ -64,7 +64,7 @@
 
                         @foreach($committees as $committee)
 
-                            @include('committee.include.committee_block', ['committee' => $committee])
+                            @include('committee.include.committee-block', ['committee' => $committee])
 
                         @endforeach
 

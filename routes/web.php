@@ -181,6 +181,26 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* Routes related to committees. */
     Route::group(['prefix' => 'committee', 'as' => 'committee::'], function () {
+        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
+
+        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
+
+        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
+        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@store']);
+
+        Route::get('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
+        Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@update']);
+
+        Route::get('{id}/archive', ['as' => 'archive', 'middleware' => ['permission:board'], 'uses' => 'CommitteeController@archive']);
+        Route::get('{id}/restore', ['as' => 'restore', 'middleware' => ['permission:board'], 'uses' => 'CommitteeController@restore']);
+
+        Route::get('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@showAnonMailForm']);
+        Route::post('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@postAnonMailForm']);
+
+        Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
+
+        Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
+
         Route::group(['prefix' => 'membership', 'as' => 'membership::', 'middleware' => ['auth', 'permission:board']], function () {
             Route::post('add', ['as' => 'add', 'uses' => 'CommitteeController@addMembership']);
             Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
@@ -188,22 +208,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
         });
 
-        Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
-
-        Route::get('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@add']);
-        Route::post('add', ['as' => 'add', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@store']);
-
-        Route::get('{id}', ['as' => 'show', 'uses' => 'CommitteeController@show']);
-
-        Route::get('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@showAnonMailForm']);
-        Route::post('{id}/send_anonymous_email', ['as' => 'anonymousmail', 'middleware' => ['auth', 'member'], 'uses' => 'CommitteeController@postAnonMailForm']);
-
-        Route::get('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@edit']);
-        Route::post('{id}/edit', ['as' => 'edit', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@update']);
-
-        Route::post('{id}/image', ['as' => 'image', 'middleware' => ['auth', 'permission:board'], 'uses' => 'CommitteeController@image']);
-
-        Route::get('{slug}/toggle_helper_reminder', ['as' => 'toggle_helper_reminder', 'middleware' => ['auth'], 'uses' => 'CommitteeController@toggleHelperReminder']);
     });
 
     /* Routes related to societies. */
