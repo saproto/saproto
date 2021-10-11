@@ -186,7 +186,7 @@ class CommitteeController extends Controller
     {
         $committee = Committee::findOrFail($id);
 
-        if(in_array($committee->id, config('proto.committee'))) {
+        if (in_array($committee->id, config('proto.committee'))) {
             Session::flash('flash_message', 'You cannot archive a protected committee.');
 
             return Redirect::back();
@@ -194,7 +194,7 @@ class CommitteeController extends Controller
 
         $committee->delete();
 
-        Session::flash('flash_message', 'The committee' . $committee->name . 'has been archived.');
+        Session::flash('flash_message', 'The committee'.$committee->name.'has been archived.');
 
         return Redirect::route('committee::show', ['id' => $committee->slug]);
     }
@@ -203,15 +203,15 @@ class CommitteeController extends Controller
     {
         $committee = Committee::withTrashed()->findOrFail($id);
 
-        if(!$committee->trashed()) {
-            Session::flash('flash_message', 'The committee' . $committee->name . 'is not archived.');
+        if (! $committee->trashed()) {
+            Session::flash('flash_message', 'The committee'.$committee->name.'is not archived.');
 
             return Redirect::back();
         }
 
         $committee->restore();
 
-        Session::flash('flash_message', 'The committee' . $committee->name . 'is restored.');
+        Session::flash('flash_message', 'The committee'.$committee->name.'is restored.');
 
         return Redirect::back();
     }

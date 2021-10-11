@@ -207,7 +207,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembershipForm']);
             Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
         });
-
     });
 
     /* Routes related to societies. */

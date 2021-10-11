@@ -64,7 +64,7 @@ class Committee extends Model
     /** @return Committee */
     public static function fromPublicId($public_id)
     {
-        if(auth::check() && auth::user()->can('board')) {
+        if (auth::check() && auth::user()->can('board')) {
             return self::withTrashed()->where('slug', $public_id)->firstOrFail();
         } else {
             return self::where('slug', $public_id)->firstOrFail();
