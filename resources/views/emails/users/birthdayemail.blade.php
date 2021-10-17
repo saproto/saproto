@@ -14,7 +14,7 @@
 
     <p>
         Have a great day,
-        Board {{ config('proto.boardnumber') }}
+        Board {{ settings()->group('board')->get('board_number') }}
     </p>
 
 @endsection

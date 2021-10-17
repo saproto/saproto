@@ -357,4 +357,23 @@ class CommitteeController extends Controller
 
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
+
+    public function updateBoard(Request $request)
+    {
+        $request->validate([
+            'board_number' => 'required',
+            'secretary' => 'required',
+            'treasurer' => 'required',
+            'internal' => 'required',
+        ]);
+
+        settings()->group('board')->set([
+            'board_number' => $request->get('board_number'),
+            'secretary' => $request->get('secretary'),
+            'treasurer' => $request->get('treasurer'),
+            'internal' => $request->get('internal'),
+        ]);
+
+        return Redirect::back();
+    }
 }

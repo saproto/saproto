@@ -32,7 +32,7 @@ class BirthdayEmail extends Mailable
     public function build()
     {
         return $this
-            ->from('internal@'.config('proto.emaildomain'), config('proto.internal'))
+            ->from('internal@'.config('proto.emaildomain'), settings()->group('board')->get('internal'))
             ->subject('Happy birthday!')
             ->view('emails.users.birthdayemail');
     }

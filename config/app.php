@@ -174,6 +174,7 @@ return [
         nickurt\PwnedPasswords\ServiceProvider::class,
         nickurt\PostcodeApi\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
+        QCod\Settings\SettingsServiceProvider::class,
 
     ],
 
@@ -255,6 +256,8 @@ return [
         'PwnedPasswords' => nickurt\PwnedPasswords\Facade::class,
 
         'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
+
+        "Settings" => QCod\Settings\Facade::class,
 
     ],
 

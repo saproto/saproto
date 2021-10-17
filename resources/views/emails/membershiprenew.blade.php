@@ -28,7 +28,7 @@
 
     <p>
         Kind regards,<br>
-        {{ config('proto.secretary') }}<br>
+        {{ settings()->group('board')->get('secretary') }}<br>
         <i>On behalf of the board of Study Association Proto</i>
     </p>
 

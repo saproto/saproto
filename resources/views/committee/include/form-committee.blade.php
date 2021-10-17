@@ -3,7 +3,7 @@
 
     {!! csrf_field() !!}
 
-    <div class="card">
+    <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
 

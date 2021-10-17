@@ -35,7 +35,7 @@ class OmnomcomFailedWithdrawalNotification extends Mailable
     public function build()
     {
         return $this
-            ->from('treasurer@'.config('proto.emaildomain'), config('proto.treasurer'))
+            ->from('treasurer@'.config('proto.emaildomain'), settings()->group('board')->get('treasurer'))
             ->subject('S.A. Proto Failed Withdrawal Notification')
             ->view('emails.omnomcom.failedwithdrawalnotification');
     }

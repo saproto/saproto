@@ -22,6 +22,10 @@
 
             <div class="col-md-3">
 
+                @if($committee->id == config('proto.committee.board'))
+                    @include('committee.include.board-settings')
+                @endif
+
                 @include('committee.include.form-image')
 
                 @include('committee.include.form-members')

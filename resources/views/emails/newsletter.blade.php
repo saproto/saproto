@@ -117,7 +117,7 @@
 
     <p>
         Kind regards,<br>
-        {{ config('proto.internal') }}<br>
+        {{ settings()->group('board')->get('internal') }}<br>
         <em>Secretary & Officer of Internal Affairs</em>
     </p>
 

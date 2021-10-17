@@ -32,7 +32,7 @@ class MembershipStarted extends Mailable
     public function build()
     {
         return $this
-            ->from('internal@proto.utwente.nl', config('proto.internal').' (Officer Internal Affairs)')
+            ->from('internal@proto.utwente.nl', settings()->group('board')->get('internal').' (Officer Internal Affairs)')
             ->subject('Start of your membership of Study Association Proto')
             ->view('emails.membership');
     }
