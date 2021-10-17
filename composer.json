@@ -77,7 +77,8 @@
     "willvincent/feeds": "2.*",
     "spatie/laravel-csp": "^2.6",
     "ext-calendar": "*",
-    "solitweb/directadmin": "^3.0"
+    "solitweb/directadmin": "^3.0",
+    "qcod/laravel-settings": "^1.0"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",

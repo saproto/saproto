@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fd144638f6508a2e5822c4ca3a2b72b",
+    "content-hash": "dd166e83be3a6081957979e062c90d27",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -5323,6 +5323,76 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "qcod/laravel-settings",
+            "version": "1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qcod/laravel-settings.git",
+                "reference": "09a6d8a0457038e2d672ab57ed54e459103ba1f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qcod/laravel-settings/zipball/09a6d8a0457038e2d672ab57ed54e459103ba1f1",
+                "reference": "09a6d8a0457038e2d672ab57ed54e459103ba1f1",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "php": "^7.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4 || ~1.0",
+                "orchestra/testbench": "3.8.*|4.*|5.*",
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "QCod\\Settings\\SettingsServiceProvider"
+                    ],
+                    "aliases": {
+                        "Settings": "QCod\\Settings\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/migrations"
+                ],
+                "psr-4": {
+                    "QCod\\Settings\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohd Saqueib Ansari",
+                    "email": "saquibweb@gmail.com"
+                }
+            ],
+            "description": "Store key value pair in database as settings",
+            "homepage": "https://github.com/qcod/laravel-settings",
+            "keywords": [
+                "database settings",
+                "db settings",
+                "eloquent",
+                "laravel",
+                "qcod"
+            ],
+            "support": {
+                "issues": "https://github.com/qcod/laravel-settings/issues",
+                "source": "https://github.com/qcod/laravel-settings/tree/1.0.9"
+            },
+            "time": "2020-09-14T01:17:40+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
