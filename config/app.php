@@ -257,7 +257,7 @@ return [
 
         'Postcode' => nickurt\PostcodeApi\ServiceProvider::class,
 
-        "Settings" => QCod\Settings\Facade::class,
+        'Settings' => QCod\Settings\Facade::class,
 
     ],
 
