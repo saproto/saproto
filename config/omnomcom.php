@@ -24,7 +24,7 @@ return [
         ],
         'tipcie' => (object) [
             'name' => 'TIPCie',
-            'categories' => [15, 18, 25, 29, 30],
+            'categories' => [15, 18, 25],
             'addresses' => [],
             'roles' => ['board', 'tipcie', 'drafters'],
             'cash_allowed' => false,
