@@ -185,7 +185,7 @@ class MollieController extends Controller
             ],
             'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-            'webhookUrl' => 'https://example.com',//route('webhook::mollie', ['id' => $transaction->id]),
+            'webhookUrl' => 'https://example.com', //route('webhook::mollie', ['id' => $transaction->id]),
         ]);
 
         $transaction->mollie_id = $mollie->id;
