@@ -27,7 +27,7 @@
                     </tr>
                     <tr>
                         <th>Amount</th>
-                        <td>&euro;{{ number_format($mollie->amount, 2) }}</td>
+                        <td>&euro;{{ number_format($mollie->amount->value, 2) }}</td>
                     </tr>
                     <tr>
                         <th>Status</th>
