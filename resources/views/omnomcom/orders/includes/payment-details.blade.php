@@ -42,8 +42,7 @@
 
         <div class="card-footer">
 
-            {{--    Disabled because of bug with mollie payments https://github.com/saproto/saproto/issues/1367   --}}
-            <a href="javascript:void();" class="btn btn-secondary btn-block disabled" data-toggle="modal" data-target="#mollie-modal">
+            <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
                 Pay now
             </a>
 
