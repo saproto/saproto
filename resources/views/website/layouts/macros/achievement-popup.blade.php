@@ -1,4 +1,4 @@
-@if($newAchievements && count($newAchievements)>0)
+@if(isset($newAchievements) && count($newAchievements)>0)
 
     <div class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog"
          aria-labelledby="newAchievementModalLabel">
