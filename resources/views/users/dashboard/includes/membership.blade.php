@@ -40,7 +40,7 @@
                         @if($user->member->getMembertype())
                             <td>{{ ucfirst($user->member->getMembertype()) }} member
                                 <br>
-                                <sup class="text-muted">{{ '&euro; '. $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) }}</sup>
+                                <sup class="text-muted">{{ '€ '. $user->member->getMembershipOrderline()->total_price . ' was paid on ' . date('F j, Y', strtotime($user->member->getMembershipOrderline()->created_at)) }}</sup>
                             </td>
                         @else
                             <td>
