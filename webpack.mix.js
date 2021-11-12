@@ -37,9 +37,7 @@ glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
                 quietDeps: true,
             }
         })
-        .purgeCss({
-            enabled: true
-        })
+        .purgeCss()
 })
 
 // Compile all javascript
