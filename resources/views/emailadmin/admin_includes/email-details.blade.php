@@ -115,13 +115,13 @@
                             </p>
 
                             <p>
-                            <ul class="list-group">
-                                @foreach($email->events as $event)
-                                    <li class="list-group-item">
-                                        {{ $event->title }} ({{ $event->formatted_date->simple }})
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <ul class="list-group">
+                                    @foreach($email->events as $event)
+                                        <li class="list-group-item">
+                                            {{ $event->title }} ({{ $event->formatted_date->simple }})
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </p>
 
                             <p>
@@ -129,8 +129,10 @@
                             </p>
                         @endif
 
-                        <select class="form-control event-search" id="eventSelect" name="eventSelect[]"
-                                {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple></select>
+                        <div class="form-group">
+                            <input class="form-control event-search" id="eventSelect" name="eventSelect[]"
+                                   {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple>
+                        </div>
 
                         <div class="radio">
                             <label>
@@ -158,16 +160,11 @@
                 </div>
 
                 <div class="col-md-6">
-
-                    <div class="form-group">
-                        <label for="time">Scheduled:</label>
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'time',
-                            'format' => 'datetime',
-                            'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay())
-                        ])
-                    </div>
-
+                    @include('website.layouts.macros.datetimepicker', [
+                        'name' => 'time',
+                        'label' => 'Scheduled:',
+                        'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay())
+                    ])
                 </div>
 
             </div>
@@ -185,3 +182,21 @@
     </div>
 
 </form>
+
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        const eventSelect = document.getElementById('eventSelect')
+        const listSelect = document.getElementById('listSelect')
+
+        document.getElementById('destinationEvent').addEventListener('click', e => disableSelect(false, true))
+        document.getElementById('destinationLists').addEventListener('click', e => disableSelect(true, false))
+        document.getElementById('destinationMembers').addEventListener('click', e => disableSelect(true, true))
+        document.getElementById('destinationActiveMembers').addEventListener('click', e => disableSelect(true, true))
+
+        function disableSelect(event, list) {
+            eventSelect.disabled = event
+            listSelect.disabled = list
+        }
+    </script>
+
+@endpush

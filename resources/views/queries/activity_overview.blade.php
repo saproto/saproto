@@ -23,33 +23,25 @@
                         <div class="row">
 
                             <div class="col-md-3">
-
-                                <div class="form-group">
-                                    @include('website.layouts.macros.datetimepicker',[
-                                        'name' => 'start',
-                                        'format' => 'date'
-                                    ])
-                                    <label for="signup_start">Query start</label>
-                                </div>
-
+                                @include('website.layouts.macros.datetimepicker',[
+                                    'name' => 'start',
+                                    'label' => 'Query start:',
+                                    'format' => 'date',
+                                    'placeholder' => $start
+                                ])
                             </div>
 
                             <div class="col-md-3">
-
-                                <div class="form-group">
-                                    @include('website.layouts.macros.datetimepicker',[
-                                        'name' => 'end',
-                                        'format' => 'date'
-                                    ])
-                                    <label for="signup_start">Query end</label>
-                                </div>
-
+                                @include('website.layouts.macros.datetimepicker',[
+                                    'name' => 'end',
+                                    'label' => 'Query end:',
+                                    'format' => 'date',
+                                    'placeholder' => $end
+                                ])
                             </div>
 
                             <div class="col-md-3">
-
                                 <input type="submit" class="btn btn-success btn-block" value="Get me some activities!">
-
                             </div>
 
                         </div>

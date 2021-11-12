@@ -63,20 +63,17 @@
 
                         <hr>
 
-                        <div class="form-group">
-                            <label for="start">Override start:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'start',
-                                'format' => 'datetime',
-                                'placeholder' => $override ? $override->start : strtotime(Carbon::now())
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'start',
+                            'label' => 'Override start:',
+                            'placeholder' => $override ? $override->start : strtotime(Carbon::now())
+                        ])
 
                         <div class="form-group">
                             <label for="end">Override end:</label>
                             @include('website.layouts.macros.datetimepicker', [
                                 'name' => 'end',
-                                'format' => 'datetime',
+                                'label' => 'Override end:',
                                 'placeholder' => $override ? $override->end : strtotime(Carbon::now()->endOfDay())
                             ])
                         </div>

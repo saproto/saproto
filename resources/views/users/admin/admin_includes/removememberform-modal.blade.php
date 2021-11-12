@@ -1,6 +1,6 @@
-<div class="modal fade" id="removeMemberForm" tabindex="-1" role="dialog" aria-labelledby="removeMemberFormLabel">
+<div class="modal fade" id="remove-member-form" tabindex="-1" role="dialog">
     <div class="modal-dialog model-sm" role="document">
-        <form method="post" name="removeMemberForm">
+        <form method="post" name="remove-member-form">
             {!! csrf_field() !!}
             <div class="modal-content">
                 <div class="modal-header">
@@ -22,9 +22,9 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $('#removeMemberForm').on('show.bs.modal', function(e) {
-           let memberformId = $(e.relatedTarget).data('memberform-id');
-           $('#removeMemberForm').find('form').attr('action', "{{ route("memberform::delete", ['id' => ':id']) }}".replace(':id', memberformId));
-        });
+        document.getElementById('remove-member-form').addEventListener('show.bs.modal', e => {
+            const id = e.relatedTarget.getAttribute('data-id')
+            e.target.querySelector('form').setAttribute('action', "{{ route("memberform::delete", ['id' => ':id']) }}".replace(':id', id))
+        })
     </script>
 @endpush

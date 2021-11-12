@@ -1,4 +1,4 @@
-<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderlinemodal" href="javascript:void();">
+<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderline-modal" href="#">
     Add orderline wizard. <span class="ms-3">🧙</span>
 </a>
 
@@ -14,12 +14,12 @@
 
         <div class="card-body">
             <div class="form-group">
-                <label for="date">User(s):</label>
-                <select class="form-control user-search" id="user" name="user[]" multiple required></select>
+                <label for="user">User(s):</label>
+                <input class="form-control user-search" id="user" name="user[]" multiple required>
             </div>
             <div class="form-group">
-                <label for="date">Product(s):</label>
-                <select class="form-control product-search" id="product" name="product[]" multiple required></select>
+                <label for="product">Product(s):</label>
+                <input class="form-control product-search" id="product" name="product[]" multiple required>
             </div>
         </div>
 
@@ -28,10 +28,6 @@
         </div>
 
     </div>
-
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $('.form-control').select2({width: 'resolve'});
-    </script>
 
 
 </form>

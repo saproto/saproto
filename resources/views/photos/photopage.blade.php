@@ -42,7 +42,7 @@
                     @endif
 
                     @if($photo->private)
-                        <a href="javascript:void();" class="btn btn-info me-3" data-bs-toggle="tooltip"
+                        <a href="#" class="btn btn-info me-3" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="This photo is only visible to members.">
                             <i class="fas fa-eye-slash"></i>
                         </a>
@@ -84,7 +84,7 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $('main').on('keydown', (e) => {
+        document.querySelector('main').addEventListener('keydown', e => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
                 e.preventDefault();
 

@@ -59,23 +59,6 @@ select {
   }
 }
 
-// FontAwesome icon picker
-.iconpicker-container, .iconpicker-popover.popover, .popover-title {
-  border: none !important;
-  background: transparent !important;
-  width: 100% !important;
-}
-
-.iconpicker-items {
-  min-height: 0 !important;
-  max-height: none !important;
-  height: 260px;
-}
-
-.iconpicker .iconpicker-item {
-  margin: 0 11px 11px 0 !important;
-}
-
 // Card collapse
 $card-collapse-bg: #fff !default;
 .card-body.collapse {
@@ -212,28 +195,6 @@ $event-hover-bg: #aaa !default;
 }
 
 // Photo admin
-#photoadmin {
-  &__droparea {
-    display: none;
-    z-index: 99999;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top:0;
-    left: 0;
-    background: rgba(200,200,200,0.5);
-    color: white;
-    * { pointer-events: none; }
-    &__content {
-      font-size: 5rem;
-      position: fixed;
-      top: 50%;
-      left:50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-}
-
 .photo-select {
   input{ display: none; }
   .photo-select .card {
@@ -314,6 +275,17 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   * { z-index: 1; }
 }
 
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background-image: unset;
+  background-color: $dark;
+  height: 15px;
+  mask: url("~@fortawesome/fontawesome-free/svgs/solid/calendar.svg") no-repeat;
+  -webkit-mask: url("~@fortawesome/fontawesome-free/svgs/solid/calendar.svg") no-repeat;
+  &:hover {
+    cursor: pointer
+  }
+}
+
 // Global
 main {
   min-height: calc(100vh - 292px);
@@ -327,13 +299,70 @@ main {
   text-decoration: underline !important;
 }
 
-.card > .table {
+.btn-success, .btn-info {
+  color: $white;
+  &:hover, &:focus, &:active {
+    color: $white;
+  }
+}
+
+a.badge {
+  text-decoration: none;
+  &:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+
+.user-search, .event-search, .product-search, .committee-search {
+  & ~ .selected-items > .selected-item:hover {
+    cursor: pointer;
+    background-color: mix($white, $success, 10%) !important;
+  }
+
+  & ~ .search-results {
+    display: none;
+    z-index: 1;
+    position: absolute;
+    transform: translateX(-15px);
+    max-height: 200px;
+    max-width: calc(100vw - 20px);
+    overflow-y: auto;
+
+    &:not(:disabled):hover {
+      display: block;
+    }
+
+    option, span {
+      padding-left: 7px;
+      padding-right: 7px;
+      overflow-x: hidden;
+    }
+    option {
+      &:hover {
+        background-color: $dark;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &:not(:disabled) {
+    &:focus, &:active {
+      & + .search-results {
+        display: block;
+      }
+    }
+  }
+}
+
+.card > .table-responsive .table {
   th {
     &:first-child {
       padding-left: 20px !important;
     }
     &:last-child {
       padding-right: 20px !important;
+      a { text-decoration: none }
     }
   }
   td {
@@ -343,6 +372,7 @@ main {
 
     &:last-child {
       padding-right: 20px !important;
+      a { text-decoration: none }
     }
   }
 }

@@ -40,35 +40,25 @@
 
                         <div class="col-md-4 mb-3">
 
-                            <label for="organisation">Organization: {!! $event && $event->committee ? $event->committee->name : null !!}</label>
-                            <select class="form-control committee-search" id="organisation" name="committee"></select>
+                            <label for="organisation">Organisation:</label>
+                            <input class="form-control committee-search" id="organisation" name="committee" placeholder="{{ $event && $event->committee ? $event->committee->name : '' }}" value="{{ $event && $event->committee ? $event->committee->id : '' }}">
 
                         </div>
 
                         <div class="col-md-6 mb-3">
-
-                            <div class="form-group">
-                                <label for="event_start">Event start:</label>
-                                @include('website.layouts.macros.datetimepicker',[
-                                    'name' => 'start',
-                                    'format' => 'datetime',
-                                    'placeholder' => $event ? $event->start : null
-                                ])
-                            </div>
-
+                            @include('website.layouts.macros.datetimepicker',[
+                                'name' => 'start',
+                                'label' => 'Event start:',
+                                'placeholder' => $event ? $event->start : null
+                            ])
                         </div>
 
                         <div class="col-md-6 mb-3">
-
-                            <div class="form-group">
-                                <label for="event_end">Event end:</label>
-                                @include('website.layouts.macros.datetimepicker',[
-                                    'name' => 'end',
-                                    'format' => 'datetime',
-                                    'placeholder' => $event ? $event->end : null
-                                ])
-                            </div>
-
+                            @include('website.layouts.macros.datetimepicker',[
+                                'name' => 'end',
+                                'label' => 'Event end:',
+                                'placeholder' => $event ? $event->end : null
+                            ])
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -76,12 +66,10 @@
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
                                 <option value="1" {{ ($event != null && $event->secret ? 'selected' : '') }}>
-                                    This activity is
-                                    secret.
+                                    Secret
                                 </option>
                                 <option value="0" {{ ($event != null && !$event->secret ? 'selected' : '') }}>
-                                    This activity is
-                                    public.
+                                    Public
                                 </option>
                             </select>
 
@@ -89,10 +77,9 @@
 
                         <div class="col-md-6 mb-3">
 
-                            <label>Event image:</label>
                             <div class="custom-file">
-                                <label class="custom-file-label" for="customFile">Set event image.</label>
-                                <input type="file" class="custom-file-input" name="image">
+                                <label class="form-label" for="image">Set event image:</label>
+                                <input type="file" id="image" class="form-control" name="image">
                             </div>
 
                         </div>

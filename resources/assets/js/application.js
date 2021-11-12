@@ -1,25 +1,28 @@
 // Vendors
-global.$ = global.jQuery = require('jquery');
-window.popper = require('popper.js')
 window.moment = require('moment')
 window.SignaturePad = require('signature_pad')
-window.EasyMDE = require('easymde')
 window.io = require('socket.io-client')
 window.Cookies = require('js-cookie')
-require('bootstrap')
-require('tempusdominus-bootstrap-4')
-require('bootstrap-slider')
-require('select2')
-require('fontawesome-iconpicker')
+window.axios = require('axios')
+require('./countdown-timer')
+require('./search-complete')
+
+import EasyMDE from "easymde";
+import Iconpicker from "codethereal-iconpicker"
+import { Modal, Tooltip, Popover } from 'bootstrap'
+
+// Register CSRF token
+let token = document.head.querySelector('meta[name="csrf-token"]')
+if (token) window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
+else console.error('CSRF token not found')
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 // Update locale
-moment.updateLocale('en', {
-    week: {dow: 1}
-});
+moment.updateLocale('en', { week: {dow: 1} })
 
 // Initialise Swiper on home page
 import Swiper, { Autoplay, Navigation} from 'swiper'
-if($('.swiper').length) {
+if(document.getElementsByClassName('.swiper').length) {
     Swiper.use([Autoplay, Navigation]);
     window.swiper = new Swiper('.swiper', {
         loop: config.company_count > 2,
@@ -39,55 +42,101 @@ if($('.swiper').length) {
     })
 }
 
-// On document loaded
-$(function() {
-    // Execute theme JavaScript
-    window[config.theme]?.()
+// Execute theme JavaScript
+window[config.theme]?.()
 
-    // Enables tooltips
-    $('[data-toggle="tooltip"]').tooltip({ boundary: 'window'})
+// Enables tooltips elements
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+const tooltipList = tooltipTriggerList.map((el) => new Tooltip(el, {boundary: 'window'}))
 
-    // Enable popover
-    $('[data-toggle="popover"]').popover()
+// Enable popover elements
+const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
+const popoverList = popoverTriggerList.map((el) => new Popover(el))
 
-    $(".custom-file-input").on("change", function() {
-        let fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+// Enable custom file input elements
+const customFileInputList = Array.from(document.getElementsByClassName('custom-file-input'))
+customFileInputList.map((el) => {
+    el.addEventListener('change', () => {
+        let fileName = this.value.split('\\').pop()
+        let label = this.nextElementSibling
+        label.classList.add( 'selected')
+        label.innerHTML = fileName
     })
-
-    // Enables the fancy scrolling effect
-    $(window).on("scroll",function () {
-        let scroll = $(window).scrollTop();
-        if (scroll >= 100) $("#nav").addClass("navbar-scroll");
-        else $("#nav").removeClass("navbar-scroll");
-    })
-
-    // Scroll to top of collapse on click.
-    // Code borrowed from: https://stackoverflow.com/a/44303674/7316014
-    $('.collapse').not('#navbar').on('shown.bs.collapse', function (e) {
-        let card = $(this).closest('.card');
-        $('html,body').animate({
-            scrollTop: card.offset().top - 50
-        }, 500);
-    })
-
-    // Matomo Analytics
-    const _paq = _paq || [];
-    // tracker methods like "setCustomDimension" should be called before "trackPageView"
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
-    (function () {
-        let u = "//"+config.analytics_url+"/";
-        _paq.push(['setTrackerUrl', u + 'piwik.php']);
-        _paq.push(['setSiteId', '1']);
-        let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-        g.type = 'text/javascript';
-        g.async = true;
-        g.defer = true;
-        g.src = u + 'piwik.js';
-        s.parentNode.insertBefore(g, s);
-    })();
-
-    // Set Select2 theme
-    $.fn.select2.defaults.set("theme", "bootstrap4");
 })
+
+let modalList = Array.from(document.getElementsByClassName('modal'))
+if (modalList.length) {
+    window.modals = {}
+    for (const el of modalList) {
+        window.modals[el.id] = Modal.getOrCreateInstance(el)
+    }
+}
+
+// Enable EasyMDE markdown fields
+const markdownFieldList = Array.from(document.getElementsByClassName('markdownfield'))
+if (markdownFieldList.length) {
+    window.easyMDEFields = {}
+    for (const el of markdownFieldList) {
+        window.easyMDEFields[el.id] =
+            new EasyMDE({
+                element: el,
+                toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview"],
+                autoDownloadFontAwesome: false
+            })
+    }
+    const statusbarList = Array.from(document.querySelectorAll('.editor-statusbar'))
+    const link = "<a class='md-ref float-start' target='_blank' href='https://www.markdownguide.org/basic-syntax/'>markdown syntax</a>"
+    statusbarList.map(el => el.innerHTML = link + el.innerHTML)
+}
+
+const iconPickerList = Array.from(document.getElementsByClassName('iconpicker-wrapper'))
+if (iconPickerList.length){
+    const iconPickers = iconPickerList.map(el => {
+        const iconpicker = el.querySelector('.iconpicker')
+        return new Iconpicker(iconpicker, {
+            icons: require('./fontawesome-icons.json'), // Make sure this list is up to date!
+            defaultValue: iconpicker.value,
+            showSelectedIn: el.querySelector('.selected-icon'),
+        })
+    })
+}
+
+// Enables the fancy scrolling effect
+const navbar = document.getElementById('nav')
+if (navbar) {
+    const navbarHeight = 100;
+    let currentScroll = 0;
+    window.addEventListener('wheel', (e) => {
+        currentScroll = document.documentElement.scrollTop
+        if (currentScroll > navbarHeight) navbar.classList.add('navbar-scroll')
+        else navbar.classList.remove('navbar-scroll')
+    })
+}
+
+// Scroll to top of collapse on show.
+// https://stackoverflow.com/a/44303674/7316014
+// https://stackoverflow.com/a/18673641/14133333
+const collapseList = Array.from(document.querySelectorAll('.collapse:not(#navbar)'))
+collapseList.map((el) => {
+    el.addEventListener('shown.bs.collapse', (e) => {
+        let card = e.target.closest('.card').getBoundingClientRect()
+        window.scrollTo(0, card.top + window.scrollY - 60)
+    })
+})
+
+// Matomo Analytics
+const _paq = _paq || [];
+// tracker methods like "setCustomDimension" should be called before "trackPageView"
+_paq.push(['trackPageView']);
+_paq.push(['enableLinkTracking']);
+(() => {
+    let u = "//"+config.analytics_url+"/";
+    _paq.push(['setTrackerUrl', u + 'piwik.php']);
+    _paq.push(['setSiteId', '1']);
+    let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.type = 'text/javascript';
+    g.async = true;
+    g.defer = true;
+    g.src = u + 'piwik.js';
+    s.parentNode.insertBefore(g, s);
+})()

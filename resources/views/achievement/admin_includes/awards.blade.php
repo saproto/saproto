@@ -36,7 +36,7 @@
 
             {!! csrf_field() !!}
 
-            <select class="form-control user-search" name="user-id"></select>
+            <input class="form-control user-search" name="user-id"/>
 
             <button type="submit" class="mt-3 btn btn-success btn-block">
                 Award

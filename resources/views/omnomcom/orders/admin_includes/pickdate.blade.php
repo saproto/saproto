@@ -10,7 +10,8 @@
 
             @include('website.layouts.macros.datetimepicker',[
                 'name' => 'date',
-                'placeholder' => $date && $date != null ? strtotime($date) : strtotime(date('Y-m-d'))
+                'format' => 'date',
+                'placeholder' => $date ? strtotime($date) : strtotime(date('Y-m-d'))
             ])
 
         </div>

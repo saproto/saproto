@@ -108,8 +108,8 @@
                         <div class="card-body">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image">
-                                <label class="custom-file-label" for="customFile">Upload featured image</label>
+                                <input id="image" type="file" class="form-control" name="image">
+                                <label class="form-label" for="image">Upload featured image</label>
                             </div>
 
                         </div>
@@ -189,8 +189,8 @@
                         <div class="card-body">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="files[]" multiple>
-                                <label class="custom-file-label" for="customFile">Upload a file</label>
+                                <input id="files" type="file" class="form-control" name="files[]" multiple>
+                                <label class="form-label" for="files">Upload a file</label>
                             </div>
 
                         </div>
@@ -220,29 +220,26 @@
 @push('javascript')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        // Borrowed from http://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
+        // Borrowed from https://stackoverflow.com/questions/23733455/inserting-a-new-text-at-given-cursor-position
         function insertLineAtCursor(data) {
-            let cm = $('.CodeMirror')[0].CodeMirror;
-            let doc = cm.getDoc();
-            let cursor = doc.getCursor(); // gets the line number in the cursor position
-            let line = doc.getLine(cursor.line); // get the line contents
-            let pos = { // create a new object to avoid mutation of the original selection
+            const cm = document.getElementsByClassName('.CodeMirror')[0].CodeMirror
+            const doc = cm.getDoc()
+            const cursor = doc.getCursor() // gets the line number in the cursor position
+            const line = doc.getLine(cursor.line) // get the line contents
+            const pos = { // create a new object to avoid mutation of the original selection
                 line: cursor.line, ch: line.length - 1 // set the character position to the end of the line
-            };
-            doc.replaceRange('\n' + data + '\n', pos); // adds a new line
+            }
+            doc.replaceRange('\n' + data + '\n', pos) // adds a new line
         }
 
-        $(".pageEdit_insertLink").click(function (e) {
-            e.preventDefault();
-            let linkUrl = $(this).attr('rel');
-            insertLineAtCursor("[Link text](" + linkUrl + ")");
-        });
-
-        $(".pageEdit_insertImage").click(function (e) {
-            e.preventDefault();
-            let linkUrl = $(this).attr('rel');
-            insertLineAtCursor("![Alt text](" + linkUrl + ")");
-        });
+        const insertLinks = document.querySelectorAll('.pageEdit_insertLink, .pageEdit_insertImage')
+        insertLinks.forEach(el => {
+            el.addEventListener('click', e => {
+                e.preventDefault()
+                const linkUrl = e.target.getAttribute('rel')
+                insertLineAtCursor(`[Link text](${linkUrl})`)
+            })
+        })
     </script>
 
 @endpush

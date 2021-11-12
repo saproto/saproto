@@ -8,6 +8,8 @@ $info: $success;
 $warning: #f37e16;
 $danger: #c50005;
 $omnomcom: #26ade4;
+$dark: #303030;
+$light: #f1f1f1;
 
 $theme-colors: (
     "primary": $primary,
@@ -16,5 +18,7 @@ $theme-colors: (
     "info": $info,
     "warning": $warning,
     "danger": $danger,
-    "omnomcom": $omnomcom
+    "omnomcom": $omnomcom,
+    "dark": $dark,
+    "light": $light
 );

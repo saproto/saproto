@@ -41,7 +41,7 @@ glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
 })
 
 // Compile all javascript
-mix .js(paths.scripts.src+'!(*.example).js', paths.public)
+mix .js(paths.scripts.src+'application.js', paths.public)
     .extract()
 
 // Enable sourcemap and versioning

@@ -150,7 +150,7 @@ hr {
 }
 
 //datetimepicker
-.bootstrap-datetimepicker-widget.dropdown-menu { background-color: $grey-dark !important; }
+input[type="datetime-local"]::-webkit-calendar-picker-indicator { background-color: #f1f1f1 }
 
 //custom file labels
 .custom-file-label::after {
@@ -163,7 +163,7 @@ hr {
 }
 
 //font-awesome icon picker
-.iconpicker .iconpicker-items {
+.iconpicker-dropdown ul {
   background-color: $grey-medium !important;
 }
 

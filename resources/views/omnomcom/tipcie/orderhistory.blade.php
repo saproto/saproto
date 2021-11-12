@@ -34,11 +34,11 @@
 
                         <hr>
 
-                        <label>Orderlines from:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'date',
-                            'format' => 'date',
-                            'placeholder' => date('U')
+                            'label' => 'Orderlines from:',
+                            'placeholder' => date('U'),
+                            'format' => 'date'
                         ])
 
                     </div>

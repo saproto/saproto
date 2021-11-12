@@ -49,13 +49,13 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
 
     /* Routes related to the Photos API */
     Route::group(['prefix' => 'photos', 'as' => 'photos::'], function () {
-        Route::group(['middleware' => ['web']], function () {
-            Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
-            Route::get('photos/{id}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
-        });
         Route::group(['middleware' => ['auth:api']], function () {
             Route::get('photos_api', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
-            Route::get('photos_api/{id}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
+            Route::get('photos_api/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
+        });
+        Route::group(['middleware' => ['web']], function () {
+            Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
+            Route::get('photos/{id?}', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
         });
     });
 

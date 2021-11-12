@@ -25,9 +25,7 @@
             @push('javascript')
 
                 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-                    $(window).on('load', function () {
-                        $('#{{ $announcement->modal_id}}').modal('show');
-                    });
+                    window.onload = modals['{{ $announcement->modal_id}}'].show()
                 </script>
 
             @endpush

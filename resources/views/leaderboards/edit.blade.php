@@ -26,9 +26,7 @@
 
                         <div class="form-group">
                             <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
-                            <select class="form-control committee-search" id="organisation" name="committee" required>
-                                <option value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}"></option>
-                            </select>
+                            <input class="form-control committee-search" id="organisation" name="committee" value=value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}" required>
                         </div>
 
                         @if($leaderboard)
@@ -53,11 +51,12 @@
                         </div>
 
                         <input type="hidden" name="icon" id="icon" required>
-                        <div class="form-group">
-                            <label for="name">Icon:</label>
-                                <label data-placement="inline" class="icp icp-auto"
-                                       data-selected="{{$leaderboard ? $leaderboard->icon : ''}}"></label>
-                        </div>
+
+                        @include('website.layouts.macros.iconpicker', [
+                            'name' => 'icon',
+                            'placeholder' => isset($leaderboard) ? $leaderboard->icon : null,
+                            'label' => 'Icon:'
+                        ])
 
                         <div class="form-group">
                                 <label for="editor">Description:</label>
@@ -124,15 +123,15 @@
 
                                             <tbody>
                                                 @foreach($entries as $entry)
-                                                    <tr>
+                                                    <tr class="le-points" data-id="{{ $entry->id }}">
                                                         <td>#{{ $loop->index+1 }}</td>
                                                         <td>{{ $entry->user->name }}</td>
                                                         <td style="width: 80px">
-                                                            <input id="le_{{ $entry->id }}" data-id="{{ $entry->id }}" value="{{ $entry->points}}" class="le_points">
+                                                            <input id="le_{{ $entry->id }}" value="{{ $entry->points}}" class="le-points-input">
                                                         </td>
-                                                        <td style="min-width: 60px">
-                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ms-2 le_increase"></a>
-                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ms-1 le_decrease"></a>
+                                                        <td style="min-width: 60px; cursor: pointer;">
+                                                            <span class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"></span>
+                                                            <span class="fa fas fa-lg fa-caret-down ms-1 le-points-decrease"></span>
                                                         </td>
                                                         <td>
                                                             <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
@@ -159,7 +158,7 @@
 
                                 <div class="row">
                                     <div class="col-9">
-                                        <select class="form-control user-search" name="user_id" required></select>
+                                        <input class="form-control user-search" name="user_id" required/>
                                     </div>
                                     <div class="col-3">
                                         <button class="btn btn-outline-primary btn-block" type="submit">
@@ -182,60 +181,33 @@
 
 @endsection
 
-@section('javascript')
+@push('javascript')
 
-    @parent
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        Array.from(document.getElementsByClassName('le-points')).forEach(el => {
+            ['click', 'keyup'].forEach(e => el.addEventListener(e, e => {
+                    const id = el.getAttribute('data-id')
+                    const input = el.querySelector('.le-points-input')
+                    let points = input.value
+                    if (e.target.classList.contains('le-points-increase')) points++
+                    else if (e.target.classList.contains('le-points-decrease')) points--
+                    input.value = points
+                    updatePoints(id, points)
+                })
+            )
+        })
 
-    <script type="text/javascript">
-
-    </script>
-
-    <script type="text/javascript">
-        $('.icp-auto').iconpicker();
-        $('.icp').on('iconpickerSelected', function (e) {
-            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
-        });
-
-        $(function() {
-            $('.le_points').on('change', function(e) {
-                let id = $(e.target).attr('data-id');
-                let points = parseInt($(`.le_points[data-id='${id}']`).val())
-                updatePoints(id, points);
-            });
-
-            $('.le_increase').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                let points = parseInt($(`.le_points[data-id='${id}']`).val())+1;
-                updatePoints(id, points);
-            });
-
-            $('.le_decrease').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                let points = parseInt($(`.le_points[data-id='${id}']`).val())-1;
-                updatePoints(id, points);
-            });
-        });
 
         function updatePoints(id, points) {
-            let data = new FormData();
-            data.append('id', id);
-            data.append('points', points);
-            data.append('_token', '{{ csrf_token() }}');
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('leaderboards::entries::update') }}',
-                data: data,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    $(`.le_points[data-id='${id}']`).val(response.points);
-                },
-                error: function() {
-                    window.alert('Something went wrong while updating the points. Please try again.');
-                }
+            let data = new FormData()
+            data.append('id', id)
+            data.append('points', points)
+            window.axios.post('{{ route('leaderboards::entries::update') }}', data)
+            .catch(error => {
+                console.error(error)
+                window.alert('Something went wrong while updating the points. Please try again.')
             })
         }
     </script>
 
-@endsection
+@endpush

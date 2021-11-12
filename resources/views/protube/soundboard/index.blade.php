@@ -77,8 +77,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="sound">
-                                            <label class="custom-file-label">MP3</label>
+                                            <input id="sound" type="file" class="form-control" name="sound">
+                                            <label for="sound" class="form-label">MP3</label>
                                         </div>
                                     </div>
                                 </div>

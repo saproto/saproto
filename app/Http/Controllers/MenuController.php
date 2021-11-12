@@ -128,7 +128,10 @@ class MenuController extends Controller
 
         $menuItem->save();
 
-        $this->fixDuplicateMenuItemsOrder($oldparent);
+        if(isset($oldparent)) {
+            $this->fixDuplicateMenuItemsOrder($oldparent);
+        }
+
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
         return Redirect::route('menu::list');

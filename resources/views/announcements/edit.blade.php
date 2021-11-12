@@ -40,23 +40,17 @@
                             ])
                         </div>
 
-                        <div class="form-group">
-                            <label for="campaign_end">Start:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'display_from',
-                                'format' => 'datetime',
-                                'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'display_from',
+                            'label' => 'Start:',
+                            'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
+                        ])
 
-                        <div class="form-group">
-                            <label for="campaign_end">End:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'display_till',
-                                'format' => 'datetime',
-                                'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'display_till',
+                            'label' => 'End:',
+                            'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )
+                        ])
 
                         <hr>
 

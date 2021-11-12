@@ -37,7 +37,7 @@
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
                                     <label>Link to event:</label>
-                                    <select class="form-control event-search" name="event"></select>
+                                    <input class="form-control event-search" name="event"/>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 @if (isset($errors) && count($errors->all()) > 0)
 
-    <div class="modal fade" id="flashModal" tabindex="-1" role="dialog" aria-labelledby="flashModalLabel">
+    <div class="modal fade" id="flash-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content bg-danger text-white">
                 <div class="modal-body text-center">
@@ -16,7 +16,7 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $('#flashModal').modal('show');
+        window.onload = modals['flash-modal'].show()
     </script>
 
 @endif

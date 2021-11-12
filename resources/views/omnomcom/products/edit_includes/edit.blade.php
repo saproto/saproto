@@ -188,8 +188,8 @@
             <hr>
 
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="image" name="image">
-                <label class="custom-file-label" for="customFile">Update product image</label>
+                <input type="file" class="form-control" id="image" name="image">
+                <label class="form-label" for="image">Update product image</label>
             </div>
 
         </div>

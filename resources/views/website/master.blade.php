@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="position: relative; min-height: 100%;">
+<html lang="en" class="position-relative mh-100">
 
 <head>
 
@@ -21,7 +21,6 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    @include('website.layouts.assets.customcss')
     @stack('stylesheet')
 
     @section('opengraph')
@@ -36,24 +35,23 @@
 
 </head>
 
-<body class="template-{{ $viewName }}"
-      style="@section('body-style')@show">
+<body class="template-{{ $viewName }}" style="@section('body-style')@show">
 
 @yield('body')
 
+@include('discord.modal')
+
 @if(!App::isDownForMaintenance())
 
-@include('website.layouts.assets.javascripts')
-<!-- Page scripts -->
-@stack('javascript')
+    @include('website.layouts.macros.flashmessages')
 
-@include('website.layouts.macros.flashmessages')
+    @include('website.layouts.macros.errormessages')
 
-@include('website.layouts.macros.errormessages')
+    @include('website.layouts.assets.javascripts')
+    <!-- Page scripts -->
+    @stack('javascript')
 
 @endif
-
-@include('discord.modal')
 
 </body>
 

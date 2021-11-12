@@ -17,7 +17,7 @@
                         <span class="text-muted">{{ $orderline->id }}</span>
                         @if($orderline->canBeDeleted())
                             <a href="{{ route('omnomcom::orders::delete', ['id' => $orderline->id]) }}"
-                               onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
+                               onclick="return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
                                 <i class="fas fa-trash ms-3 text-danger" aria-hidden="true"></i>
                             </a>
                         @endif

@@ -28,7 +28,7 @@
                             <label for="menuname">User:</label>
                             @if($new)
                                 <div class="input-group" style="width: 100%;">
-                                    <select class="form-control user-search" name="user_id" required></select>
+                                    <input class="form-control user-search" name="user_id" required />
                                 </div>
                             @else
                                 <div class="input-group">
@@ -37,23 +37,19 @@
                             @endif
                         </div>
 
-                        <div class="form-group">
-                            <label for="url">Start at:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'start_at',
-                                'format' => 'datetime',
-                                'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'start_at',
+                            'label' => 'Start at:',
+                            'format' => 'datetime',
+                            'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
+                        ])
 
-                        <div class="form-group">
-                            <label for="url">End at:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'end_at',
-                                'format' => 'datetime',
-                                'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'end_at',
+                            'label' => 'End at:',
+                            'format' => 'datetime',
+                            'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)
+                        ])
 
                     </div>
 

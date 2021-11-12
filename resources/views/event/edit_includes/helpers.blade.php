@@ -13,7 +13,7 @@
                 {!! csrf_field() !!}
 
                 <div class="form-group">
-                    <select class="form-control committee-search" name="committee" required></select>
+                    <input class="form-control committee-search" name="committee" required>
                 </div>
 
                 <div class="row">

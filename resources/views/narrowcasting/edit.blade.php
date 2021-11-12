@@ -31,23 +31,17 @@
                                    required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="campaign_start">Campaign start:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'campaign_start',
-                                'format' => 'datetime',
-                                'placeholder' => $item ? $item->campaign_start : date('U')
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'campaign_start',
+                            'label' => 'Campaign start:',
+                            'placeholder' => $item ? $item->campaign_start : date('U')
+                        ])
 
-                        <div class="form-group">
-                            <label for="campaign_end">Campaign end:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'campaign_end',
-                                'format' => 'datetime',
-                                'placeholder' => $item ? $item->campaign_end : null
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'campaign_end',
+                            'label' => 'Campaign end:',
+                            'placeholder' => $item ? $item->campaign_end : null
+                        ])
 
                         <div class="form-group">
                             <label for="slide_duration">Slide duration in seconds:</label>
@@ -88,8 +82,8 @@
                         @else
 
                             <div class="custom-file mb-3">
-                                <input type="file" class="custom-file-input" name="image">
-                                <label class="custom-file-label">Upload an image</label>
+                                <input id="image" type="file" class="form-control" name="image">
+                                <label class="form-label">Upload an image</label>
                             </div>
 
                             <p>

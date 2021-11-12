@@ -94,7 +94,7 @@
 
                                     <div class="card-footer">
 
-                                        <select class="form-control user-search" name="user"></select>
+                                        <input class="form-control user-search" name="user"/>
 
                                         <input type="submit" class="btn btn-success btn-block mt-3" value="Grant">
 

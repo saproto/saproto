@@ -151,7 +151,7 @@
             <div class="card-footer">
 
                 <button type="submit" class="btn btn-success btn-block"
-                       onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
+                       onclick="return confirm('You are about to buy €'+total+' worth of tickets. Are you sure?')">
                     Total: <strong>&euro;<span id="ticket-total" class="me-3">0.00</span></strong> Finish purchase!
                 </button>
 
@@ -163,17 +163,13 @@
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
-        let total = 0;
+        let total
 
         function updateOrderTotal() {
-            total = 0;
-            $('.ticket-select').each(function () {
-                total += $(this).attr('data-price') * $(this).val();
-            });
-            $('#ticket-total').html(total.toFixed(2))
+            const selectList = Array.from(document.getElementsByClassName('ticket-select'))
+            total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
+            document.getElementById('ticket-total').innerHTML = total
         }
-
     </script>
 
 @endif

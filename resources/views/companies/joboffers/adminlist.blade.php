@@ -27,7 +27,7 @@
 
                         <td>Company</td>
                         <td>Title</td>
-                        <td></td>
+                        <td class="text-end">Control</td>
 
                     </tr>
 
@@ -41,7 +41,7 @@
                             <td>{{ $joboffer->title}}</td>
 
 
-                            <td>
+                            <td class="text-end">
                                 <a href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}">
                                     <i class="fas fa-edit me-2 fa-fw"></i>
                                 </a>

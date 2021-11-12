@@ -25,42 +25,27 @@
                 <div class="row">
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signup_start">Sign-up start:</label>
-                            @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'registration_start',
-                                'format' => 'datetime',
-                                'placeholder' => $event->activity ? $event->activity->registration_start : null
-                            ])
-                        </div>
-
+                        @include('website.layouts.macros.datetimepicker',[
+                            'name' => 'registration_start',
+                            'label' => 'Sign-up start:',
+                            'placeholder' => $event->activity ? $event->activity->registration_start : null
+                        ])
                     </div>
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signup_end">Sign-up end:</label>
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'registration_end',
-                                'format' => 'datetime',
+                                'label' => 'Sign-up end:',
                                 'placeholder' => $event->activity ? $event->activity->registration_end : null
                             ])
-                        </div>
-
                     </div>
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signout_end">Sign-out end:</label>
-                            @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'deregistration_end',
-                                'format' => 'datetime',
-                                'placeholder' => $event->activity ? $event->activity->deregistration_end : null
-                            ])
-                        </div>
-
+                        @include('website.layouts.macros.datetimepicker',[
+                            'name' => 'deregistration_end',
+                            'label' => 'Sign-out end:',
+                            'placeholder' => $event->activity ? $event->activity->deregistration_end : null
+                        ])
                     </div>
 
                     <div class="col-md-6">

@@ -29,34 +29,31 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        $(".qq_like i").on('click', function (event) {
+        likeBtnList = Array.from(document.getElementsByClassName('qq_like'))
+        likeBtnList.forEach(el => {
+            el.addEventListener('click', e => {
+                const id = el.getAttribute('data-id')
+                if (id === undefined) return
 
-            let id = $(event.target).parent().attr('data-id');
-
-            if (id === undefined) { return; }
-
-            $.ajax({
-                type: "GET",
-                url: '{{ route('quotes::like', ['id' => 'qid']) }}'.replace('qid', id),
-                success: function () {
-
-                    if ($(event.target).hasClass('fas')) {
-                        $(event.target).next().html(parseInt($(event.target).next().html())-1);
-                    } else {
-                        $(event.target).next().html(parseInt($(event.target).next().html())+1);
+                window.axios.get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id))
+                .then(res => {
+                    const icon = el.children[0]
+                    const likes = el.children[1]
+                    if (icon.classList.contains('fas')) {
+                        likes.innerHTML = parseInt(likes.innerHTML) - 1
+                        icon.classList.replace('fas', 'far')
                     }
-
-                    $(event.target).toggleClass('fas').toggleClass('far');
-
-                },
-                error: function () {
-
-                    window.alert('Something went wrong liking the quote. Please try again.');
-
-                }
-            });
-
-        });
+                    else {
+                        likes.innerHTML = parseInt(likes.innerHTML) + 1
+                        icon.classList.replace('far', 'fas')
+                    }
+                })
+                .catch(error => {
+                    console.error(error)
+                    window.alert('Something went wrong liking the quote. Please try again.')
+                })
+            })
+        })
 
     </script>
 

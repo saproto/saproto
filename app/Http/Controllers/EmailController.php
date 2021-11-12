@@ -298,18 +298,6 @@ class EmailController extends Controller
                 $email->events()->sync([]);
                 break;
 
-            case 'lists':
-                $email->to_user = false;
-                $email->to_member = false;
-                $email->to_active = false;
-
-                $email->to_list = true;
-                $email->to_event = false;
-
-                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
-                $email->events()->sync([]);
-                break;
-
             case 'event':
                 $email->to_user = false;
                 $email->to_member = false;
@@ -322,6 +310,18 @@ class EmailController extends Controller
                 if (isset($events) && count($events) > 0) {
                     $email->events()->sync($events);
                 }
+                break;
+
+            case 'lists':
+                $email->to_user = false;
+                $email->to_member = false;
+                $email->to_active = false;
+
+                $email->to_list = true;
+                $email->to_event = false;
+
+                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
+                $email->events()->sync([]);
                 break;
 
             default:

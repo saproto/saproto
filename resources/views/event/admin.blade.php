@@ -74,7 +74,7 @@
                             <div class="card mb-3">
 
                                 <div class="card-header bg-dark text-white" style="cursor: pointer;"
-                                     data-bs-toggle="collapse" data-bs-target="#ticket__collapse__{{ $ticket->id }}">
+                                     data-bs-toggle="collapse" data-bs-target="#ticket-collapse-{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
                                     <span class="badge badge-primary float-end">
                                         {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
@@ -84,7 +84,7 @@
                                     </span>
                                 </div>
 
-                                <div class="collapse" id="ticket__collapse__{{ $ticket->id }}">
+                                <div class="collapse" id="ticket-collapse-{{ $ticket->id }}">
 
                                     <div class="card-body">
 
@@ -143,18 +143,10 @@
                                                         <td>
                                                             &euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
                                                         <td>{{ $purchase->created_at }}</td>
-                                                        <td class="events__scanned">
-                                                            @if ($purchase->scanned === null)
-                                                                <a data-id="{{ $purchase->barcode }}"
-                                                                   class="events__scannedButton dontprint" href="#">
-                                                                    Scan Manually
-                                                                </a>
-                                                            @else
-                                                                {{ $purchase->scanned }} /
-                                                                <a href="{{ route('tickets::unscan', ['barcode' => $purchase->barcode]) }}">
-                                                                    Unscan
-                                                                </a>
-                                                            @endif
+                                                        <td class="events-scanned">
+                                                            <a data-id="{{ $purchase->barcode }}" class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint" href="#">
+                                                                {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
+                                                            </a>
                                                         </td>
                                                         @can('board')
                                                             <td class="dontprint">
@@ -207,26 +199,44 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        const scanList = Array.from(document.getElementsByClassName("scan"))
+        const unscanList = Array.from(document.getElementsByClassName("unscan"))
+        scanList.forEach(el => setEventListener(el, false))
+        unscanList.forEach(el => setEventListener(el, true))
 
-        $(".events__scannedButton").on('click', function (event) {
-            event.preventDefault();
-            var barcode = $(this).attr('data-id');
-            var parent = $(this).parent();
-            if (barcode === undefined) throw new Error("Can\'t find barcode");
-            $.ajax({
-                type: "GET",
-                url: '{!! route('api::scan', ['event' => $event->id]) !!}',
-                data: {'barcode': barcode},
-                success: function () {
-                    console.log('Scanned barcode ' + barcode);
-                    parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan') }}/" + barcode + "'>Unscan</a>");
-                },
-                error: function () {
-                    window.alert('Couldn\'t register scan.');
-                }
-            });
-        });
+        const scanRequest =
+            barcode => window.axios.get(
+                '{{ route('api::scan', ['event' => $event->id]) }}',
+                { params: {'barcode': barcode} },
+            )
 
+        const unscanRequest = barcode => window.axios.get('{{ route('tickets::unscan') }}/' + barcode,)
+
+        function setEventListener(el, unscan) {
+            el.addEventListener('click', (e) => {
+                e.preventDefault()
+                let barcode = e.target.getAttribute('data-id')
+                let parent = e.target.parentElement
+                if (barcode === undefined) throw new Error("Can't find barcode")
+                let request = unscan ? unscanRequest : scanRequest
+                request(barcode)
+                .then( () => {
+                    console.log('Scanned barcode ' + barcode)
+                    let link = document.createElement('a')
+                    link.href = '#ticket-collapse-{{ $ticket->id }}'
+                    link.setAttribute('data-id', barcode)
+                    link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
+                    link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
+                    parent.innerHTML = ''
+                    parent.append(link)
+                    setEventListener(link, !unscan)
+                })
+                .catch((err) => {
+                    console.error(err)
+                    window.alert("Couldn't register scan.")
+                })
+            })
+        }
     </script>
 
 @endpush

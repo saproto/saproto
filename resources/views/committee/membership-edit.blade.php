@@ -48,23 +48,19 @@
                         <div class="row">
 
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label>Since</label>
-                                    @include('website.layouts.macros.datetimepicker', [
-                                        'name' => 'start',
-                                        'placeholder' => strtotime($membership->created_at)
-                                    ])
-                                </div>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'start',
+                                    'label' => 'Since',
+                                    'placeholder' => strtotime($membership->created_at)
+                                ])
                             </div>
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label>Till</label>
-                                    @include('website.layouts.macros.datetimepicker', [
-                                        'name' => 'end',
-                                        'placeholder' => ($membership->deleted_at == null ? null : strtotime($membership->deleted_at)),
-                                        'not_required' => true
-                                    ])
-                                </div>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'end',
+                                    'label' => 'Until',
+                                    'placeholder' => ($membership->deleted_at == null ? null : strtotime($membership->deleted_at)),
+                                    'not_required' => true
+                                ])
                             </div>
 
                         </div>

@@ -20,15 +20,14 @@
                         {!! csrf_field() !!}
 
                         <label for="name">Category Name:</label>
-                        <input type="text" class="form-control" id="name" name="name"
+                        <input type="text" class="form-control mb-3" id="name" name="name"
                                placeholder="OmNomNom" value="{{ $cur_category->name ?? '' }}" required>
 
-                        <div class="form-group mt-2">
-                            <label class="mb-0">Category Icon:</label>
-                            <label data-placement="inline" class="icp icp-auto"
-                                   data-selected="{{ $cur_category ? $cur_category->icon : null }}"></label>
-                            <input type="hidden" name="icon" id="icon" value="{{ $cur_category ? $cur_category->icon : null }}">
-                        </div>
+                        @include('website.layouts.macros.iconpicker', [
+                            'name' => 'icon',
+                            'placeholder' => isset($cur_category) ? $cur_category->icon : null,
+                            'label' => 'Category icon:'
+                        ])
 
                         <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if($cur_category)
@@ -58,7 +57,7 @@
                                     <a href="{{ route('event::category::admin', ['id' => $category]) }}">
                                         <i class="fas fa-edit me-2 ms-1 mt-1"></i>
                                     </a>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#delete-category-modal" data-category-id="{{ $category->id }}">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#delete-category-modal" data-id="{{ $category->id }}">
                                         <i class="fas fa-trash mt-1 text-danger"></i>
                                     </a>
                                 </div>
@@ -98,14 +97,9 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $('.icp-auto').iconpicker();
-        $('.icp').on('iconpickerSelected', function (e) {
-            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
-        });
-
-        $('#delete-category-modal').on('show.bs.modal', function(e) {
-            let categoryId = $(e.relatedTarget).data('category-id');
-            $('#delete-category').attr('href', "{{ route('event::category::delete', ['id' => ':id']) }}".replace(':id', categoryId));
-        });
+        document.getElementById('delete-category-modal').addEventListener('show.bs.modal', e => {
+            let categoryId = e.relatedTarget.getAttribute('data-id')
+            document.getElementById('delete-category').href = '{{ route('event::category::delete', ['id' => ':id']) }}'.replace(':id', categoryId)
+        })
     </script>
 @endpush

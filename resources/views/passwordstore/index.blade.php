@@ -184,10 +184,12 @@
 @push('javascript')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $(".passwordmanager__copy").on('click', function () {
-            //copyToClipboard($("#" + $(this).attr("copyTarget")));
-            copyToClipboard(document.getElementById($(this).attr("copyTarget")));
-        });
+        const copyBtnList = document.getElementsByClassName(".passwordmanager__copy")
+        copyBtnList.forEach(el => {
+            el.addEventListener('click', e => {
+                copyToClipboard(document.getElementById(e.target.getAttribute("copyTarget")));
+            })
+        })
 
         function copyToClipboard(elem) {
             // create hidden text element, if it doesn't already exist

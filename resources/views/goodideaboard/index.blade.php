@@ -21,49 +21,53 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $(function() {
-            $('.gi_upvote').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, 1, e.target);
-            });
+        const upvoteList = Array.from(document.getElementsByClassName('gi_upvote'))
+        upvoteList.forEach(el => {
+            el.addEventListener('click', e => {
+                let id = e.target.getAttribute('data-id')
+                if (id) sendVote(id, 1, e.target)
+            })
+        })
 
-            $('.gi_downvote').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, -1, e.target);
-            });
+        const downvoteList = Array.from(document.getElementsByClassName('gi_downvote'))
+        downvoteList.forEach(el => {
+            el.addEventListener('click', e => {
+                let id = e.target.getAttribute('data-id')
+                if(id) sendVote(id, -1, e.target)
+            })
+        })
 
-            function sendVote(id, voteValue, target) {
-                let data = new FormData();
-                data.append('id', id);
-                data.append('voteValue', voteValue);
-                data.append('_token', '{{ csrf_token() }}');
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('goodideas::vote') }}',
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $(`span[data-id='${id}']`).html(response.voteScore);
-                        switch(response.userVote) {
-                            case 1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('fas').removeClass('far');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('far').removeClass('fas');
-                                break;
-                            case -1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('far').removeClass('fas');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('fas').removeClass('far');
-                                break;
-                            case 0:
-                                $(`a[data-id='${id}']`).addClass('far').removeClass('fas');
-                        }
-                    },
-                    error: function() {
-                        window.alert('Something went wrong voting the idea. Please try again.');
+        function sendVote(id, voteValue, target) {
+            window.axios.post(
+                '{{ route('goodideas::vote') }}',
+                {
+                    id: id,
+                    voteValue: voteValue
+                }
+            )
+                .then(res => {
+                    const data = res.data
+                    const votes = document.querySelector(`span[data-id='${id}']`)
+                    const upvote = document.querySelector(`.gi_upvote[data-id='${id}']`)
+                    const downvote = document.querySelector(`.gi_downvote[data-id='${id}']`)
+                    votes.innerHTML = data.voteScore
+                    switch(data.userVote) {
+                        case 1:
+                            upvote.classList.replace('far', 'fas')
+                            downvote.classList.replace('fas', 'far')
+                            break
+                        case -1:
+                            upvote.classList.replace('fas', 'far')
+                            downvote.classList.replace('far', 'fas')
+                            break
+                        case 0:
+                            votes.classList.replace('fas', 'far')
                     }
                 })
-            }
-        });
+                .catch(error => {
+                    console.error(error)
+                    window.alert('Something went wrong voting the idea. Please try again.')
+                })
+        }
     </script>
 @endpush

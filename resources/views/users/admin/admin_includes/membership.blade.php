@@ -11,17 +11,17 @@
             </li>
 
             @if($user->is_member)
-                <a href="javascript:void();" class="list-group-item text-danger" data-bs-toggle="modal" data-bs-target="#removeMembership">
+                <a href="#" class="list-group-item text-danger" data-bs-toggle="modal" data-bs-target="#removeMembership">
                     End membership
                 </a>
-                <a href="javascript:void();" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
+                <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
                 <a href="{{ route('membercard::download', ['id' => $user->id]) }}" target="_blank"
                    class="list-group-item">
                     Preview membership card
                 </a>
-                <a href="javascript:void();" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
+                <a href="#" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
                     Print membership card<br>
                     @if($user->member->card_printed_on)
                         (Last printed: {{ $user->member->card_printed_on }})
@@ -29,7 +29,7 @@
                         (Never printed before)
                     @endif
                 </a>
-                <a href="javascript:void();" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
+                <a href="#" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                     Print opener overlay
                 </a>
             @else
@@ -41,7 +41,7 @@
                         <i class="fas fa-check-circle text-success"></i>
                         Has complete profile
                     </li>
-                    <a href="javascript:void();" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#addMembership">
+                    <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#addMembership">
                         Make member
                     </a>
                 @else
@@ -132,7 +132,7 @@
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void();" data-bs-toggle="modal" data-bs-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                                 <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -177,7 +177,7 @@
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="javascript:void();" data-bs-toggle="modal" data-bs-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                             <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -193,3 +193,35 @@
     </div>
 
 </div>
+
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+
+        function req(e, url) {
+            window.axios.post(url, {'id': e.target.getAttribute('data-id')})
+            .then(res => {
+                if (res.data.includes('Exception')) throw res.data
+                alert(res.data)
+            })
+            .catch(error => {
+                console.error(error)
+                alert("Something went wrong while requesting the print.")
+            })
+        }
+
+        document.getElementById('print-card').addEventListener('click', e => {
+            if (confirm('please confirm you want to print a membership card.')) {
+                req(e, '{{ route('membercard::print') }}')
+            }
+        })
+
+        document.getElementById('print-card-overlay').addEventListener('click', e => {
+            if (confirm("Please confirm you have the right member card loaded.")) {
+                req(e, '{{ route('membercard::printoverlay') }}')
+            }
+        })
+
+    </script>
+
+@endpush

@@ -1,26 +1,12 @@
-function initializeCountdowns() {
-    $(".proto-countdown").each(function (i, el) {
-        setInterval(updateCountdown(el), 1000)
-    });
-}
-
-function updateCountdown(e) {
+function updateCountdown(el) {
     return function () {
-        if (!$(e).hasClass('proto-countdown')) return;
-        const start = new Date(e.getAttribute('data-countdown-start') * 1000);
-        const countdown_text = e.getAttribute('data-countdown-text-counting');
-        const finished_text = e.getAttribute('data-countdown-text-finished');
-        const delta = start.getTime() - (new Date()).getTime();
-
-        let text;
-        if (delta < 0) {
-            text = finished_text
-        } else {
-            const deltaText = updateCountdownGetTimeString(delta)
-            text = countdown_text.replace("{}", deltaText)
-        }
-
-        $(e).html(text);
+        if (!el.classList.contains('proto-countdown')) return
+        const start = new Date(el.getAttribute('data-countdown-start') * 1000)
+        const countdown_text = el.getAttribute('data-countdown-text-counting')
+        const finished_text = el.getAttribute('data-countdown-text-finished')
+        const delta = start.getTime() - (new Date()).getTime()
+        const deltaText = updateCountdownGetTimeString(delta)
+        el.innerHTML = delta < 0 ? finished_text : countdown_text.replace("{}", deltaText)
     }
 }
 
@@ -49,6 +35,11 @@ function pad(n, width, z) {
     z = z || '0';
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+window.initializeCountdowns = function() {
+    const countdownList = [].slice.call(document.getElementsByClassName("proto-countdown"))
+    countdownList.map(el => { setInterval(updateCountdown(el), 1000) })
 }
 
 initializeCountdowns()

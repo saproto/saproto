@@ -21,7 +21,7 @@
                           class="form-main">
                         {{ csrf_field() }}
                         <div class="input-group">
-                            <input type="text" class="form-control"
+                            <input class="form-control"
                                    placeholder="Search albums" type="search" name="query">
                             <div class="input-group-append">
                                 <button type="submit" class="input-group-text btn btn-info">
@@ -47,14 +47,11 @@
                             <label for="name">Album name:</label>
                             <input required type="text" id="name" name="name" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="date">Album date:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                    'name' => 'date',
-                                    'format' => 'date',
-                                    'placeholder' => strtotime(Carbon::now())
-                                ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'date',
+                            'label' => 'Album date:',
+                            'placeholder' => strtotime(Carbon::now())
+                        ])
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="private" name="private">
                             <label class="form-check-label" for="private">Private album</label>

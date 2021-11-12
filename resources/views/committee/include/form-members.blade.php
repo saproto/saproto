@@ -14,7 +14,7 @@
 
                 <div class="form-group">
                     <label>Member</label>
-                    <select class="form-control user-search" name="user_id" required></select>
+                    <input class="form-control user-search" name="user_id" required/>
                     <input type="hidden" name="committee_id" value="{{ $committee->id }}">
                 </div>
 
@@ -35,21 +35,18 @@
 
                 <div class="row">
                     <div class="col-6">
-                        <div class="form-group">
-                            <label>Since</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'start'
-                            ])
-                        </div>
+                        <label>Since</label>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'start',
+                            'label' => 'Since'
+                        ])
                     </div>
                     <div class="col-6">
-                        <div class="form-group">
-                            <label>Till</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'end',
-                                'not_required' => true
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'end',
+                            'label' => 'Until',
+                            'not_required' => true
+                        ])
                     </div>
                 </div>
             </div>

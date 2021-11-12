@@ -48,11 +48,11 @@
                     </table>
 
                     <div class="card-body">
-                        <label>Change date:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'date',
-                            'format' => 'date',
-                            'placeholder' => strtotime($withdrawal->date)
+                            'label' => 'Change date:',
+                            'placeholder' => strtotime($withdrawal->date),
+                            'format' => 'date'
                         ])
                     </div>
 
