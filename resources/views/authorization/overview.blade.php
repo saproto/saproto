@@ -69,7 +69,7 @@
                             <div class="card mb-2">
 
                                 <div class="card-header bg-info text-white" style="cursor: pointer;"
-                                     data-toggle="collapse" data-target="#role-accordion-{{ $role->id }}">
+                                     data-bs-toggle="collapse" data-bs-target="#role-accordion-{{ $role->id }}">
                                     {{ $role->name }}
                                 </div>
 

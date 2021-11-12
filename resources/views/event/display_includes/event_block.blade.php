@@ -19,31 +19,31 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
 
             @if($event->secret)
                 <span class="badge badge-info float-end"
-                      data-toggle="tooltip" data-placement="top" title="Secret activities can only be visited if you know the link. You can see it now because you are an admin.">
+                      data-bs-toggle="tooltip" data-bs-placement="top" title="Secret activities can only be visited if you know the link. You can see it now because you are an admin.">
                     <i class="fas fa-eye-slash fa-fw me-1"></i> Secret activity!</span>
             @endif
 
             @if($event->is_featured)
                 <i class="fas fa-star fa-fw" aria-hidden="true" style="color: gold"
-                   data-toggle="tooltip" data-placement="top" title="This is a featured activity!"></i>
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="This is a featured activity!"></i>
             @endif
             @if($event->activity && Auth::check())
                 @if($event->activity->isParticipating(Auth::user()))
                     <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                       data-toggle="tooltip" data-placement="top" title="You are participating!"></i>
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
                 @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw" style="color: red;" aria-hidden="true"
-                       data-toggle="tooltip" data-placement="top" title="You are helping!"></i>
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
                 @endif
             @endif
             @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
                 <i class="fas fa-ticket-alt fa-fw" style="color: dodgerblue;" aria-hidden="true"
-                   data-toggle="tooltip" data-placement="top" title="You bought a ticket!"></i>
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
             @endif
             @if (Auth::check() && Auth::user()->is_member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
                 <i class="fas fa-exclamation-triangle fa-fw" style="color: red;" aria-hidden="true"
-                   data-toggle="tooltip" data-placement="top" title="This activity needs your help!"></i>
+                   data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif
             <strong>{{ $event->title }}</strong>
 

@@ -28,8 +28,8 @@
                             <strong>{{ Carbon::createFromFormat('U', Proto\Models\Newsletter::lastSent())->diffForHumans() }}</strong>
                         </p>
 
-                        <input type="button" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() && Proto\Models\NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
-                               data-target="#sendnewsletter"
+                        <input type="button" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() && Proto\Models\NewsLetter::hasEvents() ? "btn-success" : "btn-danger" }} btn-block" data-bs-toggle="modal"
+                               data-bs-target="#sendnewsletter"
                                value="{{ (Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? Proto\Models\Newsletter::hasEvents() ? 'Send the weekly newsletter!' : 'No events selected!' : 'Newsletter already sent this week!') }}"
                                {{ Proto\Models\Newsletter::hasEvents() ? '' : 'disabled' }} />
 
@@ -128,9 +128,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Send the newsletter?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -146,7 +144,7 @@
                 <div class="modal-footer">
                     <form method="post" action="{{ route('newsletter::send') }}">
                         {!! csrf_field() !!}
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }}">Send</button>
                     </form>
                 </div>

@@ -42,8 +42,8 @@
                     @endif
 
                     @if($photo->private)
-                        <a href="javascript:void();" class="btn btn-info me-3" data-toggle="tooltip"
-                           data-placement="top" title="This photo is only visible to members.">
+                        <a href="javascript:void();" class="btn btn-info me-3" data-bs-toggle="tooltip"
+                           data-bs-placement="top" title="This photo is only visible to members.">
                             <i class="fas fa-eye-slash"></i>
                         </a>
                     @endif

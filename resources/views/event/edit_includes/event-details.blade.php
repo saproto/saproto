@@ -145,7 +145,7 @@
                                 <label>
                                     <input type="checkbox" name="force_calendar_sync"
                                             {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
-                                    Always sync this event to user calendars. <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
+                                    Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
                                 </label>
                             </div>
 

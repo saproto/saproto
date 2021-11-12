@@ -12,10 +12,10 @@
 
         @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
-            <div class="card mb-3 achievement-{{ $tier }}" name="achievement-{{ $tier }}">
+            <div class="card mb-3 achievement-{{ $tier }}" id="achievement-{{ $tier }}">
 
-                <div class="card-header text-white" data-toggle="collapse"
-                     data-target="#collapse-achievement-{{ $tier }}"
+                <div class="card-header text-white" data-bs-toggle="collapse"
+                     data-bs-target="#collapse-achievement-{{ $tier }}"
                      style="cursor: pointer;">
 
                     @for($i = 0; $i < 5; $i++)
@@ -69,7 +69,7 @@
 
 @push('stylesheet')
 
-    <style type="text/css">
+    <style>
         #main {
             overflow-x: hidden;
         }

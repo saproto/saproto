@@ -3,9 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="exampleModalLongTitle">Pay outstanding balance</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-justify">
                 <p>
@@ -42,7 +40,7 @@
                             </div>
                         </div>
                         <div class="col-3">
-                            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">
+                            <button type="button" class="btn btn-default btn-block" data-bs-dismiss="modal">
                                 Close
                             </button>
                         </div>

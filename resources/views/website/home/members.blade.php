@@ -120,8 +120,8 @@
 
         <div class="card mb-3">
 
-            <div class="card-header bg-dark" data-toggle="collapse"
-                 data-target="#collapse-leaderboard-{{ $leaderboard->id }}">
+            <div class="card-header bg-dark" data-bs-toggle="collapse"
+                 data-bs-target="#collapse-leaderboard-{{ $leaderboard->id }}">
                 <i class="fa {{ $leaderboard->icon }}"></i> {{ $leaderboard->name }} Leaderboard
             </div>
 

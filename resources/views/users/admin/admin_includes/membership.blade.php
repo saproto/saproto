@@ -11,10 +11,10 @@
             </li>
 
             @if($user->is_member)
-                <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMembership">
+                <a href="javascript:void();" class="list-group-item text-danger" data-bs-toggle="modal" data-bs-target="#removeMembership">
                     End membership
                 </a>
-                <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#setMembershipType">
+                <a href="javascript:void();" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
                 <a href="{{ route('membercard::download', ['id' => $user->id]) }}" target="_blank"
@@ -41,7 +41,7 @@
                         <i class="fas fa-check-circle text-success"></i>
                         Has complete profile
                     </li>
-                    <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#addMembership">
+                    <a href="javascript:void();" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#addMembership">
                         Make member
                     </a>
                 @else
@@ -93,7 +93,7 @@
                                             <i class="fas fa-download"></i>
                                         </a>
                                     @else
-                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive."></i>
+                                        <i class="fa fa-file-alt" data-bs-toggle="tooltip" data-bs-placement="top" title="No digital membership form, check the physical archive."></i>
                                     @endif
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                            <a href="javascript:void();" data-bs-toggle="modal" data-bs-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                                 <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                             </a>
                                         </td>
@@ -177,7 +177,7 @@
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                        <a href="javascript:void();" data-bs-toggle="modal" data-bs-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
                                             <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                         </a>
                                     </td>

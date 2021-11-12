@@ -27,7 +27,7 @@
     </div>
     <div class="col-12 col-sm-auto mb-2 text-center">
         <div class="btn-group">
-            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-end' : '' }}" data-toggle="modal" data-target="#calendar-modal">
+            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-end' : '' }}" data-bs-toggle="modal" data-bs-target="#calendar-modal">
                 <i class="fas fa-calendar-alt"></i><span class="d-none d-sm-inline-block ms-2">Import Calendar</span>
             </button>
 
@@ -68,8 +68,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h4 class="modal-title">Import our calendar into yours!</h4>
             </div>
             <div class="modal-body">

@@ -42,8 +42,8 @@
 
                 @if(!$user->is_member)
 
-                    <a class="btn btn-outline-danger w-50" data-toggle="modal"
-                            data-target="#bank-modal-cancel">
+                    <a class="btn btn-outline-danger w-50" data-bs-toggle="modal"
+                            data-bs-target="#bank-modal-cancel">
                         Cancel authorization
                     </a>
 
@@ -73,9 +73,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Cancel withdrawal authorisation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -111,7 +109,7 @@
                     <button type="submit" class="btn btn-danger w-50" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
                         Cancel my authorization
                     </button>
-                        <button type="button" class="btn btn-default w-50" data-dismiss="modal">
+                        <button type="button" class="btn btn-default w-50" data-bs-dismiss="modal">
                             Keep my authorization active
                         </button>
                     </div>

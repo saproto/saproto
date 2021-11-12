@@ -77,8 +77,8 @@
 
                         <div class="card-footer">
                             <input type="submit" class="btn btn-success btn-block" value="Save">
-                            <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
-                                    data-target="#deleteModal">
+                            <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal">
                                 Delete Album
                             </button>
                         </div>
@@ -103,7 +103,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Delete Album</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="bnt-close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -112,7 +112,7 @@
                             Are you sure you want to delete the album?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <a class="btn btn-danger"
                                href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">Delete Album</a>
                         </div>
@@ -183,7 +183,7 @@
                                     <div class="btn-group" role="group" aria-label="Toolbar">
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                type="button" data-bs-toggle="modal" data-bs-target="#publishedModal"
                                                 @else
                                                 type="submit"
                                                 @endif
@@ -192,7 +192,7 @@
                                         </button>
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                type="button" data-bs-toggle="modal" data-bs-target="#publishedModal"
                                                 @else
                                                 type="submit"
                                                 @endif
@@ -201,7 +201,7 @@
                                         </button>
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                type="button" data-bs-toggle="modal" data-bs-target="#publishedModal"
                                                 @else
                                                 type="submit"
                                                 @endif
@@ -218,10 +218,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Perform action</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     This album has already been published.<br>
@@ -229,7 +226,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Close
+                                                            data-bs-dismiss="modal">Close
                                                     </button>
                                                     <button id="confirmButton" type="submit" name="submit" value=""
                                                             class="btn"></button>

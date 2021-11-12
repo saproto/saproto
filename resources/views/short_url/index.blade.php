@@ -56,11 +56,11 @@
                                 </td>
                                 <td class="text-center">
                                     <button
-                                       data-toggle="popover"
-                                       data-placement="right"
-                                       data-trigger="focus"
-                                       data-title="{{ $url->description }}"
-                                       data-content="{{ $url->target }}"
+                                       data-bs-toggle="popover"
+                                       data-bs-placement="right"
+                                       data-bs-trigger="focus"
+                                       title="{{ $url->description }}"
+                                       data-bs-content="{{ $url->target }}"
                                        class="btn badge badge-info">
                                         <i class="fas fa-link text-white"></i>
                                     </button>

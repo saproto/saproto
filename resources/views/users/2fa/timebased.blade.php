@@ -7,9 +7,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Time Based Two-Factor Authentication</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -38,7 +36,7 @@
 
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success" value="Save">
-                    <a data-dismiss="modal" class="btn btn-default">Cancel</a>
+                    <a data-bs-dismiss="modal" class="btn btn-default">Cancel</a>
                 </div>
 
             </form>
@@ -56,9 +54,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Disable Time Based Two-Factor Authentication</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -77,7 +73,7 @@
 
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success" value="Disable two-factor authentication">
-                    <a data-dismiss="modal" class="btn btn-default">Cancel</a>
+                    <a data-bs-dismiss="modal" class="btn btn-default">Cancel</a>
                 </div>
 
             </form>

@@ -74,7 +74,7 @@
                             <div class="card mb-3">
 
                                 <div class="card-header bg-dark text-white" style="cursor: pointer;"
-                                     data-toggle="collapse" data-target="#ticket__collapse__{{ $ticket->id }}">
+                                     data-bs-toggle="collapse" data-bs-target="#ticket__collapse__{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
                                     <span class="badge badge-primary float-end">
                                         {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available

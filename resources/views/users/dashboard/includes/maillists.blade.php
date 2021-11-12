@@ -22,8 +22,8 @@
                 @foreach(Proto\Models\EmailList::all() as $i => $list)
 
                     <div class="card border">
-                        <div class="card-header border-bottom-0" data-toggle="collapse"
-                             data-target="#email__collapse__{{ $list->id }}" style="cursor: pointer;">
+                        <div class="card-header border-bottom-0" data-bs-toggle="collapse"
+                             data-bs-target="#email__collapse__{{ $list->id }}" style="cursor: pointer;">
                             {{ $list->name }}
 
                             @if($list->isSubscribed($user))

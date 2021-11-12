@@ -86,7 +86,7 @@
             </div>
 
         </div>
-        <div class="card-footer border-bottom">
+        <div class="card-footer">
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($dinnerformCurrent)

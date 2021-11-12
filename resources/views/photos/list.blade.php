@@ -20,7 +20,7 @@
                         'url' => route('photo::album::list', ['id' => $album->id]) ,
                         'img' => $album->thumb(),
                         'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
-                        $album->private ? '<i class="fas fa-eye-slash me-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
+                        $album->private ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>' : null,
                         $album->name),
                         'photo_pop' => true,
                         'height' => 150

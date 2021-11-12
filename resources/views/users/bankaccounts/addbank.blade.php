@@ -144,7 +144,7 @@
                             I have read the authorization statement and agree with it.
                         </button>
 
-                        <a href="{{ route('user::dashboard') }}" class="btn btn-default" data-dismiss="modal">
+                        <a href="{{ route('user::dashboard') }}" class="btn btn-default" data-bs-dismiss="modal">
                             Cancel
                         </a>
 

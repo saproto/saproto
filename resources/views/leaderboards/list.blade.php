@@ -12,8 +12,8 @@
             @foreach($leaderboards as $leaderboard)
                 <div class="card mb-2">
 
-                    <div class="card-header" data-toggle="collapse"
-                         data-target="#collapse-leaderboard-{{ $leaderboard->id }}">
+                    <div class="card-header" data-bs-toggle="collapse"
+                         data-bs-target="#collapse-leaderboard-{{ $leaderboard->id }}">
                         <i class="fa {{ $leaderboard->icon }}"></i> {{ $leaderboard->name }} Leaderboard
                     </div>
 

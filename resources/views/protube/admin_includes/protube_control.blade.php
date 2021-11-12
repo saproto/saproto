@@ -24,7 +24,7 @@
                     <i class="fas fa-random fa-fw me-3"></i> Radio
                 </button>
 
-                <button type="button" class="btn btn-info w-25 dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="btn btn-info w-25 dropdown-toggle" data-bs-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
 

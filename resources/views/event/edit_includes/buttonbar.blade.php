@@ -1,4 +1,4 @@
-<div class="card-footer border-bottom">
+<div class="card-footer">
 
     <button type="submit" class="btn btn-success float-end ms-4">Submit
     </button>

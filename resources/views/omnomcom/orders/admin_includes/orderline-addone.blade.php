@@ -1,4 +1,4 @@
-<a class="btn btn-success btn-block mb-3" data-toggle="modal" data-target="#orderlinemodal" href="javascript:void();">
+<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderlinemodal" href="javascript:void();">
     Add orderline wizard. <span class="ms-3">🧙</span>
 </a>
 

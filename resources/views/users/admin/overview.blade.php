@@ -75,30 +75,30 @@
                                 <td class="ps-3" style="min-width: 100px">
                                     @if(!$user->deleted_at)
                                         <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
-                                           data-toggle="tooltip" data-placement="top" title="Go to user admin" class="text-decoration-none">
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Go to user admin" class="text-decoration-none">
                                             <i class="fas fa-info-circle fa-fw me-1 text-info" aria-hidden="true"></i>
                                         </a>
                                         @if($user->is_member)
                                             <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
-                                               data-toggle="tooltip" data-placement="top" title="Go to public profile" class="text-decoration-none">
+                                               data-bs-toggle="tooltip" data-bs-placement="top" title="Go to public profile" class="text-decoration-none">
                                                 <i class="fas fa-user-circle fa-fw me-1 text-primary" aria-hidden="true"></i>
                                             </a>
                                         @else
                                             <i class="fas fa-user-circle fa-fw me-1 text-muted" aria-hidden="true"></i>
                                         @endif
                                         <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
-                                           data-toggle="tooltip" data-placement="top" title="Impersonate" class="text-decoration-none">
+                                           data-bs-toggle="tooltip" data-bs-placement="top" title="Impersonate" class="text-decoration-none">
                                             <i class="fas fa-sign-in-alt fa-fw me-1 text-warning" aria-hidden="true"></i>
                                         </a>
                                         @if ($user->isTempadmin())
                                             <a href="{{ route('tempadmin::end', ['id'=>$user->id]) }}"
-                                               data-toggle="tooltip" data-placement="top" title="Revoke temp admin" class="text-decoration-none">
+                                               data-bs-toggle="tooltip" data-bs-placement="top" title="Revoke temp admin" class="text-decoration-none">
                                                 <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
                                             </a>
                                         @else
                                             {{-- Button removed because ProTube is not usable --}}
                                             {{-- <a  href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
-                                               data-toggle="tooltip" data-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
+                                               data-bs-toggle="tooltip" data-bs-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
                                                 <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
                                             </a>  --}}
                                         @endif

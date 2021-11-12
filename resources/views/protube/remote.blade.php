@@ -534,8 +534,7 @@
                  alt="Profile picture">
             <h2 id="protube__remote__login__status"><strong>You are not logged in</strong> <br/> <a
                         class="btn btn-default" href="{{ env('APP_URL') . route('protube::login', array(), false)  }}"
-                        data-toggle="tooltip"
-                        data-placement="right"
+                        data-bs-toggle="tooltip" data-bs-placement="right"
                         title="Logging in will keep your personal ProTube history, and will show other members you entered a song into the queue.">Login</a>
             </h2>
             <form id="pin-input">
@@ -591,8 +590,8 @@
 
             <div class="col-md-1 col-6 text-left">
 
-                <img class="rounded-circle" data-toggle="modal" id="protube__remote__profilePic"
-                     data-target="#protube__remote__userModal" src="{{ asset('images/protube/incognito.png') }}"
+                <img class="rounded-circle" data-bs-toggle="modal" id="protube__remote__profilePic"
+                     data-bs-target="#protube__remote__userModal" src="{{ asset('images/protube/incognito.png') }}"
                      alt="Profile picture" style="border: 2px solid #fff; height: 40px; width: 40px;">
 
             </div>
@@ -607,7 +606,7 @@
     </div>
 
     <div class="protube__remote__queue">
-        <div class="protube__remote__queue_nowPlaying" data-toggle="collapse" href="#protube__remote__queue__container">
+        <div class="protube__remote__queue_nowPlaying" data-bs-toggle="collapse" href="#protube__remote__queue__container">
             <div id="protube__remote__queue_nowPlaying_progress"></div>
 
             <div id="protube__remote__queue_nowPlaying_container">
@@ -632,8 +631,7 @@
             <div class="color-overlay"></div>
 
             <div class="modal-body" style="text-align: center;">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <img id="protube__remote__userModal__photo" src="{{ asset('images/protube/incognito.png') }}"
                      alt="Profile picture">
                 <h2 id="protube__remote__userModal__status">You are not logged in</h2>
@@ -933,9 +931,10 @@
         return result;
     }
 
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
 
 </script>
 

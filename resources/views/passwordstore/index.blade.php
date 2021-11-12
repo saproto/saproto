@@ -110,8 +110,8 @@
 
                                     <td class="text-center">
                                         @if($password->note)
-                                            <span class="passwordmanager__shownote" data-toggle="modal"
-                                                  data-target="#passwordmodal-{{ $password->id }}">
+                                            <span class="passwordmanager__shownote" data-bs-toggle="modal"
+                                                  data-bs-target="#passwordmodal-{{ $password->id }}">
                                             <i class="fas fa-sticky-note"></i>
                                         </span>
                                         @endif
@@ -165,9 +165,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">{{ $password->description }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <textarea class="form-control" rows="15"

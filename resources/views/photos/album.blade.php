@@ -34,7 +34,7 @@
                         'img' => $photo->thumb(),
                         'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
                             $photo->getLikes(), $photo->private ?
-                            '<i class="fas fa-eye-slash ms-4 me-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
+                            '<i class="fas fa-eye-slash ms-4 me-2 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This photo is only visible to members."></i>'
                              : null),
                         'photo_pop' => true,
                         'height' => 200

@@ -69,7 +69,7 @@
 
                     <label for="supplier_collo">
                         Collo size
-                        <span data-toggle="tooltip" data-placement="top"
+                        <span data-bs-toggle="tooltip" data-bs-placement="top"
                               title="The amount of units in a package when bought. (e.g.: there are 24 cans in a tray)">(?)</span>
                         :
                     </label>

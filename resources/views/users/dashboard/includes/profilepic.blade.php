@@ -29,15 +29,10 @@
             <div class="row">
                 <div class="col-9">
                     <div class="input-group">
-                        <div class="custom-file">
-                            <input name="image" type="file" class="custom-file-input">
-                            <label class="custom-file-label">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-outline-info" type="button">
-                                <i class="fas fa-file-upload"></i>
-                            </button>
-                        </div>
+                        <input id="profile-pic" name="image" type="file" class="form-control">
+                        <button type="submit" class="btn btn-outline-info">
+                            <i class="fas fa-file-upload"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="col-3">

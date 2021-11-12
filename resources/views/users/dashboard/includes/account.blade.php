@@ -79,13 +79,13 @@
                         <th>Studies attended</th>
                         <td>
                         <span class="badge badge-pill badge-{{ $user->did_study_create ? 'primary' : 'dark' }} text-white"
-                              data-toggle="tooltip" data-placement="bottom"
+                              data-bs-toggle="tooltip" data-bs-placement="bottom"
                               title="Is this incorrect? Let the board know.">
                             <i class="fas fa-{{ $user->did_study_create ? 'check-' : null }}square fa-fw"></i>
                             Creative Technology
                         </span>
                             <span class="badge badge-pill badge-{{ $user->did_study_itech ? 'primary' : 'dark' }} text-white"
-                                  data-toggle="tooltip" data-placement="bottom"
+                                  data-bs-toggle="tooltip" data-bs-placement="bottom"
                                   title="Is this incorrect? Let the board know.">
                             <i class="fas fa-{{ $user->did_study_itech ? 'check-' : null }}square fa-fw"></i>
                             Interaction Technology

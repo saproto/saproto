@@ -122,6 +122,10 @@ hr {
   border-color: $warning;
 }
 
+.btn-close {
+  @extend .btn-close-white
+}
+
 //modals
 .modal-header button {
   color: #fff;

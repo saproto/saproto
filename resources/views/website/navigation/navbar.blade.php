@@ -7,7 +7,7 @@
             S.A. Proto
             @if(config('app.env') != 'production') | <span class="text-uppercase">{{ config('app.env') }}</span> @endif
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar"
                 aria-expanded="false" aria-label="Toggle navigation" style="outline: none !important;">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,7 +24,7 @@
 
                             <li class="nav-item dropdown">
                                 <a href="{{ $menuItem->getUrl()  }}" class="nav-link dropdown-toggle"
-                                   data-toggle="dropdown"
+                                   data-bs-toggle="dropdown"
                                    role="button" aria-haspopup="true"
                                    aria-expanded="false">{{ $menuItem->menuname }}</a>
                                 <ul class="dropdown-menu">
@@ -55,7 +55,7 @@
 
                 @canany(["omnomcom","tipcie","drafters"])
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">OmNomCom</a>
                         <ul class="dropdown-menu">
@@ -94,7 +94,7 @@
 
                 @canany(["board","finadmin","alfred"])
                     <li id="admin-nav-item" class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -184,7 +184,7 @@
 
                 @canany(["board", "header-image"])
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
                            aria-haspopup="true"
                            aria-expanded="false">Site <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -282,7 +282,7 @@
                     <ul class="navbar-nav me-auto">
 
                         <li class="nav-item dropdown float-end">
-                            <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
+                            <a href="#" class="dropdown-toggle nav-link active" data-bs-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
                                 {{ Auth::user()->calling_name }}
@@ -299,7 +299,7 @@
                                     <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
                                 @endif
 
-                                <a href="#" data-toggle="modal" data-target="#discord-modal" class="dropdown-item">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#discord-modal" class="dropdown-item">
                                     Discord
                                     <span class="badge badge-secondary" style="transform: translateY(-1px)">
                                         <i class="fas fa-user me-1"></i> <span id="discord__online">...</span>

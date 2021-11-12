@@ -1,5 +1,5 @@
 <input type="text" class="form-control datetimepicker-input" id="datetimepicker-{{ $name }}"
-       data-toggle="datetimepicker" data-target="#datetimepicker-{{ $name }}" name="{{ $name }}"
+       data-bs-toggle="datetimepicker" data-bs-target="#datetimepicker-{{ $name }}" name="{{ $name }}"
        {!! isset($not_required) && $not_required == true ? null : 'required' !!}
 />
 
