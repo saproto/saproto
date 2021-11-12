@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('leaderboards::add') }}" class="badge badge-info float-right">
+                    <a href="{{ route('leaderboards::add') }}" class="badge badge-info float-end">
                         Create a new leaderboard.
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                             <td>{{ count($leaderboard->entries)}}</td>
                             <td>
                                 <a href="{{ route('leaderboards::edit', ['id' => $leaderboard->id]) }}">
-                                    <i class="fas fa-edit mr-2 fa-fw"></i>
+                                    <i class="fas fa-edit me-2 fa-fw"></i>
                                 </a>
                                 <a href="{{ route('leaderboards::delete', ['id' => $leaderboard->id]) }}">
                                     <i class="fas fa-trash text-danger fa-fw"></i>

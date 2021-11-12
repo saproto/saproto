@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success pull-right">Save text</button>
+                        <button type="submit" class="btn btn-success float-end">Save text</button>
                         <a class="btn btn-default" target="_blank"
                            href="{{ route("newsletter::preview") }}">
                             Preview

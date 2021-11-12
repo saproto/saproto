@@ -66,7 +66,7 @@
 
                                 <tr>
 
-                                    <td class="text-right">
+                                    <td class="text-end">
                                         @if($password->username == null)
                                             <i class="fas fa-sticky-note" aria-hidden="true"></i>
                                         @else
@@ -88,7 +88,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($password->username != null)
-                                            <i class="fas fa-user mr-1"></i>
+                                            <i class="fas fa-user me-1"></i>
                                             <a class="passwordmanager__copy" href="#" copyTarget="user_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
                                             </a>
@@ -98,7 +98,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($password->password != null)
-                                            <i class="fas fa-key mr-1"></i>
+                                            <i class="fas fa-key me-1"></i>
                                             <a class="passwordmanager__copy" href="#"
                                                copyTarget="pass_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
@@ -123,7 +123,7 @@
 
                                     <td>
                                         <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}">
-                                            <i class="fas fa-edit mr-2"></i>
+                                            <i class="fas fa-edit me-2"></i>
                                         </a>
                                         <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}">
                                             <i class="fas fa-trash text-danger"></i>

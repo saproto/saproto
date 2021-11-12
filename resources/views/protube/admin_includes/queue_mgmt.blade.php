@@ -1,7 +1,7 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-search fa-fw mr-3"></i> Search
+        <i class="fas fa-search fa-fw me-3"></i> Search
     </div>
 
     <div class="card-body">
@@ -48,7 +48,7 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-list fa-fw mr-3"></i> Queue
+        <i class="fas fa-list fa-fw me-3"></i> Queue
     </div>
 
     <div id="queue" class="card-body">

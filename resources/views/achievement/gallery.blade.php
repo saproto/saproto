@@ -26,7 +26,7 @@
                         @endif
                     @endfor
 
-                    <span class="text-capitalize ml-3">
+                    <span class="text-capitalize ms-3">
                     <strong>{{ $tier }}</strong>
                 </span>
 

@@ -76,10 +76,10 @@
                                 <div class="card-header bg-dark text-white" style="cursor: pointer;"
                                      data-toggle="collapse" data-target="#ticket__collapse__{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
-                                    <span class="badge badge-primary float-right">
+                                    <span class="badge badge-primary float-end">
                                         {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
                                     </span>
-                                    <span class="badge badge-info float-right" style="margin-right: 10px;">
+                                    <span class="badge badge-info float-end me-4">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
                                     </span>
                                 </div>

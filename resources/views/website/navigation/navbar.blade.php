@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-xl navbar-dark fixed-top bg-primary">
 
         <a class="navbar-brand" href="{{ route('homepage') }}">
-            @if(config('app.env') != 'production') <i class="fas fa-hammer mr-2"></i> @endif
+            @if(config('app.env') != 'production') <i class="fas fa-hammer me-2"></i> @endif
             S.A. Proto
             @if(config('app.env') != 'production') | <span class="text-uppercase">{{ config('app.env') }}</span> @endif
         </a>
@@ -262,7 +262,7 @@
 
             </ul>
 
-            <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 mr-2 float-right">
+            <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 me-2 float-end">
                 {{ csrf_field() }}
                 <div class="input-group">
                     <input class="form-control"
@@ -279,14 +279,14 @@
 
                 <form class="form-inline mt-2 mt-md-0">
 
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto">
 
-                        <li class="nav-item dropdown float-right">
+                        <li class="nav-item dropdown float-end">
                             <a href="#" class="dropdown-toggle nav-link active" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">
                                 {{ Auth::user()->calling_name }}
-                                <img class="rounded-circle ml-2"
+                                <img class="rounded-circle ms-2"
                                      alt="your profile picture"
                                      src="{{ Auth::user()->generatePhotoPath(100, 100) }}"
                                      style="width: 45px; height: 45px; border: 2px solid white; margin: -14px 0 -11px 0;">
@@ -302,7 +302,7 @@
                                 <a href="#" data-toggle="modal" data-target="#discord-modal" class="dropdown-item">
                                     Discord
                                     <span class="badge badge-secondary" style="transform: translateY(-1px)">
-                                        <i class="fas fa-user mr-1"></i> <span id="discord__online">...</span>
+                                        <i class="fas fa-user me-1"></i> <span id="discord__online">...</span>
                                     </span>
                                 </a>
 
@@ -333,9 +333,9 @@
                 <form class="form-inline mt-2 mt-md-0">
                     <a class="btn btn-outline-light" href="{{ route('login::register') }}"
                        style="margin-right: 10px;">
-                        <i class="fas fa-user-plus mr-2"></i> Register
+                        <i class="fas fa-user-plus me-2"></i> Register
                     </a>
-                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw mr-2"></i>
+                    <a class="btn btn-light" href="{{ route('login::show') }}"><i class="fas fa-id-card fa-fw me-2"></i>
                         Log-in</a>
                 </form>
 

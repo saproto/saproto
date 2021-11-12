@@ -1,5 +1,5 @@
 <a class="btn btn-success btn-block mb-3" data-toggle="modal" data-target="#orderlinemodal" href="javascript:void();">
-    Add orderline wizard. <span class="ml-3">🧙</span>
+    Add orderline wizard. <span class="ms-3">🧙</span>
 </a>
 
 <form method="post" action="{{ route('omnomcom::orders::add') }}">

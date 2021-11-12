@@ -7,7 +7,7 @@
    style="text-decoration: none !important;">
 
     <h5>
-    <span class="mr-2">
+    <span class="me-2">
         <i class="fa-fw {{ $done ? 'fas fa-check' : $icon }}"></i>
     </span>
     {{ $heading }}

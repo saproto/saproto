@@ -193,10 +193,11 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
+                        <button type="submit" class="btn btn-success float-end ms-4">
+                            Submit
                         </button>
 
-                        <a href="{{ route("announcement::index") }}" class="btn btn-default pull-right">Back</a>
+                        <a href="{{ route("announcement::index") }}" class="btn btn-default pull-end">Back</a>
 
                     </div>
 

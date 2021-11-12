@@ -17,7 +17,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-title">
-                                <span class="badge badge-dark text-white float-right">
+                                <span class="badge badge-dark text-white float-end">
                                     #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>{{ $purchase->ticket->product->name }}</strong>
@@ -46,7 +46,7 @@
 
             @if($has_unpaid_tickets)
                 <div class="card-footer text-center">
-                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw mr-2"></i> Attention!</strong><br>
+                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw me-2"></i> Attention!</strong><br>
                     You have unpaid tickets. You need to pay for your tickets before you can download and use them.
                     Unpaid tickets will be invalidated if payment takes too long.
                 </div>
@@ -91,9 +91,9 @@
 
                                     @if ($ticket->is_prepaid)
                                         <?php $has_prepay_tickets = true; ?>
-                                        <span class="badge badge-danger float-right">Pre-Paid</span>
+                                        <span class="badge badge-danger float-end">Pre-Paid</span>
                                     @else
-                                        <span class="badge badge-info float-right">Withdrawal</span>
+                                        <span class="badge badge-info float-end">Withdrawal</span>
                                     @endif
 
                                     <strong>{{ $ticket->product->name }}</strong>
@@ -104,7 +104,7 @@
                                 <p class="card-text">
 
                                     @if ($ticket->isAvailable(Auth::user()))
-                                        <span class="badge badge-info float-right">
+                                        <span class="badge badge-info float-end">
                                     {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                             available
                                     </span>
@@ -152,7 +152,7 @@
 
                 <button type="submit" class="btn btn-success btn-block"
                        onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
-                    Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
+                    Total: <strong>&euro;<span id="ticket-total" class="me-3">0.00</span></strong> Finish purchase!
                 </button>
 
             </div>

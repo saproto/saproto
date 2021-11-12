@@ -10,7 +10,7 @@
 
             <p class="card-text text-center">
                 You have issued us an authorisation for:<br>
-                <strong class="mr-5">{{ iban_to_human_format($user->bank->iban) }}</strong>{{ iban_to_human_format($user->bank->bic) }}
+                <strong class="me-5">{{ iban_to_human_format($user->bank->iban) }}</strong>{{ iban_to_human_format($user->bank->bic) }}
             </p>
 
             <table class="table table-borderless table-sm text-muted mb-0">

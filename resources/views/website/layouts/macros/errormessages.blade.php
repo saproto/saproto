@@ -7,7 +7,7 @@
                     <h5 class="text-center">Whoops</h5>
                     @foreach($errors->all() as $e)
                         <div>
-                        <i class="fas fa-exclamation-triangle mr-2"></i> {{ $e }}
+                        <i class="fas fa-exclamation-triangle me-2"></i> {{ $e }}
                         </div>
                     @endforeach
                 </div>

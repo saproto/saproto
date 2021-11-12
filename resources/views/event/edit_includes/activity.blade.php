@@ -81,7 +81,7 @@
                     <div class="col-md-6">
 
                         <label for="no_show_fee">
-                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fas fa-question-circle me-2" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="Input only the additional no show fee."></i>
                             No show fee:
                         </label>
@@ -100,7 +100,7 @@
                     <div class="col-md-6">
 
                         <label for="participants">
-                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fas fa-question-circle me-2" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="Use -1 for unlimited.<br>Use 0 for helpers only."></i>
                             Participant limit:
                         </label>

@@ -13,7 +13,7 @@
             <div class="card mb-3">
 
                 <div class="card-header bg-danger text-white fishcam-warning">
-                    <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i> Warning | Please don't
+                    <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i> Warning | Please don't
                     load this stream over a mobile connection.
                 </div>
 
@@ -32,7 +32,7 @@
                 <div class="card-footer fishcam-warning">
 
                     <button href="#" id="fishcam__activate" class="btn btn-warning btn-block">
-                        <i class="fas fa-fish mr-2"></i> I understand, start the fishcam anyway!
+                        <i class="fas fa-fish me-2"></i> I understand, start the fishcam anyway!
                     </button>
 
                 </div>

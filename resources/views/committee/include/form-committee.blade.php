@@ -99,7 +99,7 @@
             </a>
             &nbsp;
 
-            <button type="submit" class="btn btn-success float-right">
+            <button type="submit" class="btn btn-success float-end">
                 Save
             </button>
 

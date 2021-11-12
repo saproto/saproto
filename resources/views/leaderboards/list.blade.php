@@ -35,12 +35,12 @@
                                 <tbody>
                                     @foreach($leaderboard->entries->sortByDesc('points') as $entry)
                                         <tr>
-                                            <td class="pl-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
+                                            <td class="ps-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
                                                 <i class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"></i>
                                                 {{ $loop->index+1 }}
                                             </td>
                                             <td>{{ $entry->user->name }}</td>
-                                            <td class="pr-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
+                                            <td class="pe-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

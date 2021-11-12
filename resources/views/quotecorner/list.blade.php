@@ -15,7 +15,7 @@
 
         </div>
 
-        <div class="col-md-8 col-md-pull-4">
+        <div class="col-md-8 col-md-4">
 
             @include('quotecorner.allquotes')
 

@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">S.A. Proto Discord <i class="fab fa-discord ml-1 fa-flip-horizontal"></i></h4>
+                <h4 class="modal-title">S.A. Proto Discord <i class="fab fa-discord ms-1 fa-flip-horizontal"></i></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,7 +24,7 @@
             </div>
             <div class="modal-footer">
 
-                <a href="https://discord.com/" class="btn btn-default pull-left" target="_blank">
+                <a href="https://discord.com/" class="btn btn-default float-start" target="_blank">
                     About Discord
                 </a>
 

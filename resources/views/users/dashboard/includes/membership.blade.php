@@ -56,25 +56,25 @@
                             <td>
                                 @if($user->member->is_honorary)
                                     <span class="badge badge-pill badge-primary">
-                                        Honorary member! <i class="fas fa-trophy ml-1"></i>
+                                        Honorary member! <i class="fas fa-trophy ms-1"></i>
                                     </span>
                                 @endif
 
                                 @if($user->member->is_donor)
                                     <span class="badge badge-pill badge-primary">
-                                        Donor <i class="far fa-hand-holding-usd ml-1"></i>
+                                        Donor <i class="far fa-hand-holding-usd ms-1"></i>
                                     </span>
                                 @endif
 
                                 @if($user->member->is_lifelong)
                                     <span class="badge badge-pill badge-primary">
-                                        Lifelong member <i class="fas fa-clock ml-1"></i>
+                                        Lifelong member <i class="fas fa-clock s-1"></i>
                                     </span>
                                 @endif
 
                                     @if($user->member->is_pet)
                                         <span class="badge badge-pill badge-primary">
-                                        Pet member <i class="fas fa-cat ml-1"></i>
+                                        Pet member <i class="fas fa-cat ms-1"></i>
                                     </span>
                                     @endif
                             </td>
@@ -86,14 +86,14 @@
                                 <td>
                                     Since {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }} <br>
                                     <a href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}" class="badge badge-pill badge-info">
-                                        Download membership form <i class="fas fa-download ml-1"></i>
+                                        Download membership form <i class="fas fa-download ms-1"></i>
                                     </a>
                                 </td>
                             @else
                                 <td>
                                     Since {{ strtotime($user->member->created_at) > 0 ? date('d-m-Y', strtotime($user->member->created_at)) : 'forever' }} <br>
                                     <span class="badge badge-pill badge-warning">
-                                        No digital membership form <i class="fas fa-times-circle ml-1"></i>
+                                        No digital membership form <i class="fas fa-times-circle ms-1"></i>
                                     </span>
                                 </td>
                             @endif
@@ -108,14 +108,14 @@
                                 <td>
                                     {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} - {{ date('d-m-Y', strtotime($membership->deleted_at)) }} <br>
                                     <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="badge badge-pill badge-info">
-                                        Download membership form <i class="fas fa-download ml-1"></i>
+                                        Download membership form <i class="fas fa-download ms-1"></i>
                                     </a>
                                 </td>
                             @else
                                 <td>
                                     {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} - {{ date('d-m-Y', strtotime($membership->deleted_at)) }} <br>
                                     <span class="badge badge-pill badge-warning">
-                                        No digital membership form <i class="fas fa-times-circle ml-1"></i>
+                                        No digital membership form <i class="fas fa-times-circle ms-1"></i>
                                     </span>
                                 </td>
                             @endif
@@ -131,14 +131,14 @@
                                 <td>
                                     Since {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} <br>
                                     <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="badge badge-pill badge-info">
-                                        Download membership form <i class="fas fa-download ml-1"></i>
+                                        Download membership form <i class="fas fa-download ms-1"></i>
                                     </a>
                                 </td>
                             @else
                                 <td>
                                     Since {{ strtotime($membership->created_at) > 0 ? date('d-m-Y', strtotime($membership->created_at)) : 'forever' }} <br>
                                     <span class="badge badge-pill badge-warning">
-                                        No digital membership form <i class="fas fa-times-circle ml-1"></i>
+                                        No digital membership form <i class="fas fa-times-circle ms-1"></i>
                                     </span>
                                 </td>
                             @endif

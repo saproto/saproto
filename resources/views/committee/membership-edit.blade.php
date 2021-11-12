@@ -73,16 +73,16 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-end">
                             Save
                         </button>
 
                         <a href="{{ route('committee::membership::delete', ["id" => $membership->id]) }}"
-                           class="btn btn-danger pull-right" style="margin-right: 15px;">
+                           class="btn btn-danger float-end me-4">
                             Was never a member
                         </a>
 
-                        <a href="javascript:history.go(-1);" class="btn btn-default float-right">
+                        <a href="javascript:history.go(-1);" class="btn btn-default float-end">
                             Cancel
                         </a>
 

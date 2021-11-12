@@ -140,7 +140,7 @@
 
                     <div class="card-footer">
 
-                        <button type="button" id="iban__submit" class="btn btn-success float-right" disabled>
+                        <button type="button" id="iban__submit" class="btn btn-success float-end" disabled>
                             I have read the authorization statement and agree with it.
                         </button>
 

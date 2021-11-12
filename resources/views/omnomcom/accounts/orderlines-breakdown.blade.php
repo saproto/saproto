@@ -51,7 +51,7 @@
 
                         <tr>
                             <td></td>
-                            <td class="text-right">Total</td>
+                            <td class="text-end">Total</td>
                             <td class="font-weight-bold">
                                 &euro; {{ number_format($total, 2) }}
                             </td>

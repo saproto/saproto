@@ -1,9 +1,9 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-play fa-fw mr-3"></i> ProTube
+        <i class="fas fa-play fa-fw me-3"></i> ProTube
         <!-- PIN //-->
-        <span id="currentPin" class="float-right font-weight-bold">...</span>
+        <span id="currentPin" class="float-end font-weight-bold">...</span>
     </div>
 
     <div class="card-body">
@@ -21,7 +21,7 @@
             <div class="btn-group w-50">
 
                 <button type="button" class="btn btn-info w-75" id="shuffleRadio">
-                    <i class="fas fa-random fa-fw mr-3"></i> Radio
+                    <i class="fas fa-random fa-fw me-3"></i> Radio
                 </button>
 
                 <button type="button" class="btn btn-info w-25 dropdown-toggle" data-toggle="dropdown">
@@ -100,7 +100,7 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-music fa-fw mr-3"></i> Now playing
+        <i class="fas fa-music fa-fw me-3"></i> Now playing
     </div>
 
     <div id="nowPlaying" class="card-body">

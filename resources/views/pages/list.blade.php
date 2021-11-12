@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
-                    <a href="{{ route('page::add') }}" class="badge badge-info float-right">
+                    <a href="{{ route('page::add') }}" class="badge badge-info float-end">
                         Create a new page.
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                             <td>@if($page->is_member_only) <i class="fas fa-lock"></i> @endif</td>
                             <td>
                                 <a href="{{ route('page::edit', ['id' => $page->id]) }}">
-                                    <i class="fas fa-edit mr-2"></i>
+                                    <i class="fas fa-edit me-2"></i>
                                 </a>
 
                                 <a href="{{ route('page::delete', ['id' => $page->id]) }}" onclick="return confirm('Are you sure?')">

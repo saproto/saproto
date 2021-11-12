@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
-                    <a href="{{ route('omnomcom::categories::add') }}" class="float-right badge badge-success">
+                    <a href="{{ route('omnomcom::categories::add') }}" class="float-end badge badge-success">
                         Add new category
                     </a>
                 </div>
@@ -28,7 +28,7 @@
 
                                 <tr>
 
-                                    <td class="text-right">{{ $category->id }}</td>
+                                    <td class="text-end">{{ $category->id }}</td>
                                     <td>
                                         {{ $category->name }}
                                     </td>
@@ -37,7 +37,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
-                                            <i class="fas fa-edit mr-2" aria-hidden="true"></i>
+                                            <i class="fas fa-edit me-2" aria-hidden="true"></i>
                                         </a>
                                         <a onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
                                            href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">

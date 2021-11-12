@@ -12,37 +12,37 @@
 
             <div class="card mb-3">
 
-                <div class="card-header bg-dark text-right">
+                <div class="card-header bg-dark text-end">
 
                     <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
-                       class="btn btn-success float-left mr-3">
-                        <i class="fas fa-images mr-3"></i> {{ $photo->album_name }}
+                       class="btn btn-success float-start me-3">
+                        <i class="fas fa-images me-3"></i> {{ $photo->album_name }}
                     </a>
 
                     @if ($photo->previous != null)
-                        <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark mr-3">
+                        <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark me-3">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @else
-                        <a class="btn btn-dark mr-3" disabled>
+                        <a class="btn btn-dark me-3" disabled>
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
 
                     @if ($photo->liked == null)
-                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info mr-3">
+                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info me-3">
                             <i class="far fa-heart"></i> {{ $photo->likes }}
                         </a>
                     @endif
 
                     @if($photo->liked != null)
-                        <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info mr-3">
+                        <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info me-3">
                             <i class="fas fa-heart"></i> {{ $photo->likes }}
                         </a>
                     @endif
 
                     @if($photo->private)
-                        <a href="javascript:void();" class="btn btn-info mr-3" data-toggle="tooltip"
+                        <a href="javascript:void();" class="btn btn-info me-3" data-toggle="tooltip"
                            data-placement="top" title="This photo is only visible to members.">
                             <i class="fas fa-eye-slash"></i>
                         </a>
@@ -50,11 +50,11 @@
 
                     @if($photo->next != null)
                         <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
-                            <i class="fas fa-arrow-right"></i>
+                            <i class="fas fa-arrow-end"></i>
                         </a>
                     @else
                         <a class="btn btn-dark" disabled>
-                            <i class="fas fa-arrow-right"></i>
+                            <i class="fas fa-arrow-end"></i>
                         </a>
                     @endif
 
@@ -66,7 +66,7 @@
 
             <div class="card mb-3">
                 <div class="card-body text-center">
-                    <i class="fas fa-shield-alt fa-fw mr-3"></i>
+                    <i class="fas fa-shield-alt fa-fw me-3"></i>
                     If there is a photo that you would like removed, please contact
                     <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
                         photos&#64;{{ config('proto.emaildomain') }}.

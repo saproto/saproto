@@ -69,7 +69,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-end">
                             Submit
                         </button>
 
@@ -116,7 +116,7 @@
 
                         <div class="card-footer">
 
-                            <button type="submit" class="btn btn-success pull-right btn-block">
+                            <button type="submit" class="btn btn-success float-end btn-block">
                                 Replace featured image
                             </button>
 
@@ -156,7 +156,7 @@
 
                                     <tr>
 
-                                        <td class="pl-3 ellipsis">
+                                        <td class="ps-3 ellipsis">
                                             <a href="{{ $file->generatePath() }}" target="_blank">
                                                 {{ $file->original_filename }}
                                             </a>
@@ -165,12 +165,12 @@
                                             @if(substr($file->mime, 0, 5) == 'image')
                                                 <a class="pageEdit_insertImage" href="#"
                                                    rel="{{ $file->generateImagePath(1000, null) }}">
-                                                    <i class="fas fa-image mr-2 fa-fw"></i>
+                                                    <i class="fas fa-image me-2 fa-fw"></i>
                                                 </a>
                                             @else
                                                 <a class="pageEdit_insertLink" href="#" role="button"
                                                    rel="{{ $file->generatePath() }}">
-                                                    <i class="fas fa-link mr-2 fa-fw"></i>
+                                                    <i class="fas fa-link me-2 fa-fw"></i>
                                                 </a>
                                             @endif
                                             <a href="{{ route('page::file::delete', ['id' => $item->id, 'file_id' => $file->id]) }}">

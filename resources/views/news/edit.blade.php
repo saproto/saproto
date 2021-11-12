@@ -52,7 +52,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-end">
                             Submit
                         </button>
 

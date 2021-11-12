@@ -7,12 +7,12 @@
 @section('container')
 
     <div class="btn text-center btn-block mb-3">
-        <i class="fas fa-bolt mr-3"></i>
+        <i class="fas fa-bolt me-3"></i>
         ProTube is developed with
         <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span> and
         <span class="text-primary"><i class="fab fa-spotify fa-fw"></i> Spotify</span>.
 
-        <i class="fab fa-spotify fa-fw ml-3 text-primary" aria-hidden="true"></i>
+        <i class="fab fa-spotify fa-fw ms-3 text-primary" aria-hidden="true"></i>
         <a href="https://open.spotify.com/user/studyassociationproto/playlist/213N4HAIKNZe7H0X3R79I2"
            target="_blank" class="text-primary">
             Get the ProTube Hits Spotify playlist!

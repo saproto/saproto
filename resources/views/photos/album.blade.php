@@ -34,7 +34,7 @@
                         'img' => $photo->thumb(),
                         'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
                             $photo->getLikes(), $photo->private ?
-                            '<i class="fas fa-eye-slash ml-4 mr-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
+                            '<i class="fas fa-eye-slash ms-4 me-2 text-info" data-toggle="tooltip" data-placement="top" title="This photo is only visible to members."></i>'
                              : null),
                         'photo_pop' => true,
                         'height' => 200
@@ -52,7 +52,7 @@
         </div>
 
         <div class="card-footer text-center">
-            <i class="fas fa-shield-alt fa-fw mr-3"></i>
+            <i class="fas fa-shield-alt fa-fw me-3"></i>
             If there is a photo that you would like removed, please contact
             <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
                 photos&#64;{{ config('proto.emaildomain') }}.

@@ -176,7 +176,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-success float-right">Save</button>
+            <button type="submit" class="btn btn-success float-end">Save</button>
 
             <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
 

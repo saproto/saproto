@@ -20,7 +20,7 @@
                         @yield('page-title')
                     </div>
 
-                    <table class="table table-sm table-borderless ml-3">
+                    <table class="table table-sm table-borderless ms-3">
 
                         <tbody>
                         <tr>

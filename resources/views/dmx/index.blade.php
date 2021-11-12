@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('dmx::add') }}" class="badge badge-info float-right">
+                    <a href="{{ route('dmx::add') }}" class="badge badge-info float-end">
                         Create a new fixture.
                     </a>
                 </div>
@@ -85,7 +85,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('dmx::edit', ['id' => $fixture->id]) }}">
-                                        <i class="fas fa-edit mr-2" aria-hidden="true"></i>
+                                        <i class="fas fa-edit me-2" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{ route('dmx::delete', ['id' => $fixture->id]) }}">
                                         <i class="fas fa-trash text-danger" aria-hidden="true"></i>

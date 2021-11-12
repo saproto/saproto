@@ -71,11 +71,11 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-right ml-2">
+                        <button type="submit" class="btn btn-success float-end ms-2">
                             Submit
                         </button>
                         @if($leaderboard != null)
-                            <a class="btn btn-danger float-right" href="{{ route("leaderboards::delete", ['id'=>$leaderboard->id]) }}">Delete</a>
+                            <a class="btn btn-danger float-end" href="{{ route("leaderboards::delete", ['id'=>$leaderboard->id]) }}">Delete</a>
                         @endif
                     </div>
 
@@ -116,7 +116,7 @@
                                                 <tr>
                                                     <th></th>
                                                     <th>Name</th>
-                                                    <th>{{ $leaderboard->points_name }} <i class="ml-1 {{ $leaderboard->icon }}"></i></th>
+                                                    <th>{{ $leaderboard->points_name }} <i class="ms-1 {{ $leaderboard->icon }}"></i></th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -131,8 +131,8 @@
                                                             <input id="le_{{ $entry->id }}" data-id="{{ $entry->id }}" value="{{ $entry->points}}" class="le_points">
                                                         </td>
                                                         <td style="min-width: 60px">
-                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ml-2 le_increase"></a>
-                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ml-1 le_decrease"></a>
+                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-up ms-2 le_increase"></a>
+                                                            <a data-id="{{ $entry->id }}" class="fa fas fa-lg fa-caret-down ms-1 le_decrease"></a>
                                                         </td>
                                                         <td>
                                                             <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">

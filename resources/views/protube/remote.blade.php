@@ -560,13 +560,14 @@
 
             <div class="col-md-8 col-12 justify-content-center">
 
-                <form id="protube__remote__ytSearch_form"><input type="search" id="protube__remote__ytSearch"
-                                                                 class="form-control" placeholder="Search on Youtube (maximum duration {{ $max_duration }})..."
-                                                                 style="width: 100%;">
+                <form id="protube__remote__ytSearch_form">
+                    <input type="search" id="protube__remote__ytSearch"
+                           class="form-control" placeholder="Search on Youtube (maximum duration {{ $max_duration }})..."
+                           style="width: 100%;">
                 </form>
 
                 <sub>
-                    <i class="fas fa-bolt mr-1"></i>
+                    <i class="fas fa-bolt me-1"></i>
                     Developed with
                     <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span>
                 </sub>

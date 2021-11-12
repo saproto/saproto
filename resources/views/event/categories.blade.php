@@ -30,9 +30,9 @@
                             <input type="hidden" name="icon" id="icon" value="{{ $cur_category ? $cur_category->icon : null }}">
                         </div>
 
-                        <button type="submit" class="btn btn-success float-right">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
                         @if($cur_category)
-                            <a class="btn btn-warning float-right mr-1" href="{{ route('event::category::admin') }}">Cancel</a>
+                            <a class="btn btn-warning float-end me-1" href="{{ route('event::category::admin') }}">Cancel</a>
                         @endif
                     </form>
                 </div>
@@ -50,13 +50,13 @@
                     @if(count($categories) > 0)
                         @foreach($categories as $category)
                             <div class="col-5 row m-1">
-                                <div class="px-4 py-2 my-2 w-75 rounded-left overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}">
-                                    <i class="{{ $category->icon }} mr-2"></i>
+                                <div class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}">
+                                    <i class="{{ $category->icon }} me-2"></i>
                                     {{ $category->name }}
                                 </div>
-                                <div class="bg-white px-2 py-2 my-2 w-25 rounded-right">
+                                <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
                                     <a href="{{ route('event::category::admin', ['id' => $category]) }}">
-                                        <i class="fas fa-edit mr-2 ml-1 mt-1"></i>
+                                        <i class="fas fa-edit me-2 ms-1 mt-1"></i>
                                     </a>
                                     <a href="#" data-toggle="modal" data-target="#delete-category-modal" data-category-id="{{ $category->id }}">
                                         <i class="fas fa-trash mt-1 text-danger"></i>

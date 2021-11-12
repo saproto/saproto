@@ -86,7 +86,7 @@
 
                 <div class="card-header">
                     Recorded PIN Transactions
-                    <span class="float-right">
+                    <span class="float-end">
                         &euro; {{ number_format($pinTotal, 2) }}
                     </span>
                 </div>

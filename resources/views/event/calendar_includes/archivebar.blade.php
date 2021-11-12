@@ -5,7 +5,7 @@
         <div class="btn-group mb-1">
 
             @if (Route::currentRouteName() == 'event::list')
-                <span class="bg-primary text-white px-3 py-2 rounded-left">Upcoming</span>
+                <span class="bg-primary text-white px-3 py-2 rounded-start">Upcoming</span>
                 <span class="bg-secondary text-white px-3 py-2">Archive</span>
             @else
                 <a href="{{ route('event::list', ['category' => $cur_category]) }}" class="btn btn-secondary">
@@ -18,7 +18,7 @@
                 @if(Proto\Models\Event::countEventsPerYear($y) > 0)
                     <a href="{{ route('event::archive', ['year'=>$y, 'category' => $cur_category]) }}"
                        class="btn btn-{{ Route::currentRouteName() == 'event::archive' && $y == $year ? 'primary' : 'light' }}
-                        {{ $loop->index == count($years)-1 ? 'rounded-right' : '' }}">
+                        {{ $loop->index == count($years)-1 ? 'rounded-end' : '' }}">
                         {{ $y }}
                     </a>
                 @endif
@@ -27,19 +27,19 @@
     </div>
     <div class="col-12 col-sm-auto mb-2 text-center">
         <div class="btn-group">
-            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-right' : '' }}" data-toggle="modal" data-target="#calendar-modal">
-                <i class="fas fa-calendar-alt"></i><span class="d-none d-sm-inline-block ml-2">Import Calendar</span>
+            <button type="button" class="btn btn-info px-4 px-sm-3 {{ !Auth::check() || !Auth::user()->can('board') ? 'rounded-end' : '' }}" data-toggle="modal" data-target="#calendar-modal">
+                <i class="fas fa-calendar-alt"></i><span class="d-none d-sm-inline-block ms-2">Import Calendar</span>
             </button>
 
             @can('board')
                 <a href="{{ route("event::add") }}" class="btn btn-info">
-                    <i class="fas fa-calendar-plus mr-2"></i> Create event
+                    <i class="fas fa-calendar-plus me-2"></i> Create event
                 </a>
             @endcan
 
             @php($categories = \Proto\Models\EventCategory::all())
             @if(count($categories) > 0)
-                <form class="form-inline ml-3" action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::list')}}">
+                <form class="form-inline ms-3" action="{{ Route::currentRouteName() == 'event::archive' ? route('event::archive', ['year' => $year]) : route('event::list')}}">
                     <div class="input-group" style="max-width: 250px">
                         <div class="input-group-prepend">
                             <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>

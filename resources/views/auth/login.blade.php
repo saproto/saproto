@@ -12,7 +12,7 @@
 
         <p>
             <a href="{{ route('login::edu') }}" class="btn btn-success" style="width: 100%;">
-                <i class="fas fa-university mr-2"></i> Login with a university account
+                <i class="fas fa-university me-2"></i> Login with a university account
             </a>
         </p>
 
@@ -30,25 +30,25 @@
 
         <p>
             <button type="submit" class="btn btn-success" style="width: 100%;">
-                <i class="fas fa-unlock mr-2"></i> Login with Proto account
+                <i class="fas fa-unlock me-2"></i> Login with Proto account
             </button>
         </p>
 
         <p>
             <a class="btn btn-outline-secondary" href="{{ route('login::register') }}" style="width: 100%;">
-                <i class="fas fa-user-plus mr-2"></i> Create Proto account
+                <i class="fas fa-user-plus me-2"></i> Create Proto account
             </a>
         </p>
 
         <p>
             <a class="btn btn-outline-secondary" href="{{ route('login::requestusername') }}" style="width: 100%;">
-                <i class="fas fa-question mr-2"></i> Forgot your username?
+                <i class="fas fa-question me-2"></i> Forgot your username?
             </a>
         </p>
 
         <p>
             <a class="btn btn-outline-secondary" href="{{ route('login::resetpass') }}" style="width: 100%;">
-                <i class="fas fa-question mr-2"></i> Forgot your password?
+                <i class="fas fa-question me-2"></i> Forgot your password?
             </a>
         </p>
 

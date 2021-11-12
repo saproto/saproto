@@ -56,7 +56,7 @@
 
                             <tr>
 
-                                <td class="text-right">{{ $order->product->id }}</td>
+                                <td class="text-end">{{ $order->product->id }}</td>
                                 <td>
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $order->product->id]) }}">{{ $order->product->name }}</a>
                                 </td>

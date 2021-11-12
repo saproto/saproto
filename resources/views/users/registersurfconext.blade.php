@@ -72,7 +72,7 @@
 
             <hr>
 
-        <button type="submit" class="btn btn-success pull-right">Create my account</button>
+        <button type="submit" class="btn btn-success float-end">Create my account</button>
 
     </form>
 

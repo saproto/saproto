@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to change the membership type of {{ $user->name }}?</p>
-                    <span class="mr-1">Membership type:</span>
+                    <span class="me-1">Membership type:</span>
                         <select class="form-select px-2 py-1" aria-label="Membership types" name="type">
                         <option>Regular member</option>
                         <option {{ $user->member->is_honorary ? 'selected' : '' }} value="honorary">Honorary member</option>

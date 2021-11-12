@@ -8,7 +8,7 @@
         <div class="card-header bg-dark text-white">
             @yield('page-title')
             @if($achievement)
-                <span class="badge badge-info float-right">
+                <span class="badge badge-info float-end">
                     Obtained by {{ count($achievement->currentOwners(true)) }} members
                 </span>
             @endif
@@ -98,7 +98,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-success float-right">Submit</button>
+            <button type="submit" class="btn btn-success float-end">Submit</button>
 
             <a href="{{ route("achievement::list") }}" class="btn btn-default">Cancel</a>
 

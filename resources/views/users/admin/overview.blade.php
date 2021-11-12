@@ -19,15 +19,15 @@
                         </div>
                         <b>Filter users</b>
                         <div class="input-group mb-2">
-                            <div class="form-check mr-2">
+                            <div class="form-check me-2">
                                 <input class="form-check-input" type="radio" name="filter" id="users" value="users" @if($filter == 'users') checked @endif>
                                 <label class="form-check-label" for="users"> Users </label>
                             </div>
-                            <div class="form-check mr-2">
+                            <div class="form-check me-2">
                                 <input class="form-check-input" type="radio" name="filter" id="members" value="members" @if($filter == 'members') checked @endif>
                                 <label class="form-check-label" for="members"> Members </label>
                             </div>
-                            <div class="form-check mr-2">
+                            <div class="form-check me-2">
                                 <input class="form-check-input" type="radio" name="filter" id="pending" value="pending" @if($filter == 'pending') checked @endif>
                                 <label class="form-check-label" for="pending"> Pending </label>
                             </div>
@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-info">
-                            <i class="fas fa-sm fa-filter mr-1"></i> Filter
+                            <i class="fas fa-sm fa-filter me-1"></i> Filter
                         </button>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
 
                         <thead>
                         <tr class="bg-dark text-white">
-                            <td class="pl-3">Controls</td>
+                            <td class="ps-3">Controls</td>
                             <td></td>
                             <td>Calling Name</td>
                             <td>Full Name</td>
@@ -72,23 +72,23 @@
                         <tbody>
                         @foreach($users as $user)
                             <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
-                                <td class="pl-3" style="min-width: 100px">
+                                <td class="ps-3" style="min-width: 100px">
                                     @if(!$user->deleted_at)
                                         <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Go to user admin" class="text-decoration-none">
-                                            <i class="fas fa-info-circle fa-fw mr-1 text-info" aria-hidden="true"></i>
+                                            <i class="fas fa-info-circle fa-fw me-1 text-info" aria-hidden="true"></i>
                                         </a>
                                         @if($user->is_member)
                                             <a href="{{ route('user::profile', ['id'=>$user->getPublicId()]) }}"
                                                data-toggle="tooltip" data-placement="top" title="Go to public profile" class="text-decoration-none">
-                                                <i class="fas fa-user-circle fa-fw mr-1 text-primary" aria-hidden="true"></i>
+                                                <i class="fas fa-user-circle fa-fw me-1 text-primary" aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            <i class="fas fa-user-circle fa-fw mr-1 text-muted" aria-hidden="true"></i>
+                                            <i class="fas fa-user-circle fa-fw me-1 text-muted" aria-hidden="true"></i>
                                         @endif
                                         <a href="{{ route('user::member::impersonate', ['id'=>$user->id]) }}"
                                            data-toggle="tooltip" data-placement="top" title="Impersonate" class="text-decoration-none">
-                                            <i class="fas fa-sign-in-alt fa-fw mr-1 text-warning" aria-hidden="true"></i>
+                                            <i class="fas fa-sign-in-alt fa-fw me-1 text-warning" aria-hidden="true"></i>
                                         </a>
                                         @if ($user->isTempadmin())
                                             <a href="{{ route('tempadmin::end', ['id'=>$user->id]) }}"
@@ -104,7 +104,7 @@
                                         @endif
                                     @endif
                                 </td>
-                                <td class="text-right">#{{ $user->id }}</td>
+                                <td class="text-end">#{{ $user->id }}</td>
                                 <td>{{ $user->calling_name }}</td>
                                 <td style="min-width: 180px">{{ $user->name }}</td>
                                 <td>

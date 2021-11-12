@@ -10,7 +10,7 @@
 
 @section('login-body')
 
-    <form method="POST" action="{{ route('login::register') }}" class="text-left">
+    <form method="POST" action="{{ route('login::register') }}" class="text-start">
 
         @if(Session::get('wizard'))
             @include('users.registerwizard_macro')

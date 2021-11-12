@@ -40,7 +40,7 @@
                  class="alert alert-{{ $announcement->bootstrap_style() }}">
 
                 @if ($announcement->is_dismissable)
-                    <span class="float-right">
+                    <span class="float-end">
                        <a href="{{ route('announcement::dismiss', ['id' => $announcement->id]) }}">
                            <i class="fas fa-times-circle" aria-hidden="true"></i>
                        </a>

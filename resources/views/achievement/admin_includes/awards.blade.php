@@ -13,7 +13,7 @@
                 <div class="badge badge-primary">
                     <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}" class="text-white">{{ $user->name }}</a>
                     <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}" class="text-white">
-                        <i class="fas fa-times ml-2"></i>
+                        <i class="fas fa-times ms-2"></i>
                     </a>
                 </div>
 

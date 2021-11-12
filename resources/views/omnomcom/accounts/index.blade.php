@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('omnomcom::accounts::add') }}" class="badge badge-info float-right">
+                    <a href="{{ route('omnomcom::accounts::add') }}" class="badge badge-info float-end">
                         Create a new account.
                     </a>
                 </div>
@@ -54,7 +54,7 @@
                                     </td>
                                     <td style="min-width:60px">
                                         <a href="{{ route('omnomcom::accounts::edit', ['id' => $account->id]) }}">
-                                            <i class="fas fa-edit mr-2"></i>
+                                            <i class="fas fa-edit me-2"></i>
                                         </a>
                                         <a href="{{ route('omnomcom::accounts::delete', ['id' => $account->id]) }}">
                                             <i class="fas fa-trash text-danger"></i>

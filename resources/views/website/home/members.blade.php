@@ -23,7 +23,7 @@
 
                 <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw mr-2"></i> Dinner Form</div>
+                    <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinner Form</div>
                     <div class="card-body">
 
                         @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform])
@@ -38,7 +38,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        <i class="fas fa-birthday-cake fa-fw mr-2"></i> Birthdays
+                        <i class="fas fa-birthday-cake fa-fw me-2"></i> Birthdays
                     </div>
                     <div class="card-body">
 
@@ -60,7 +60,7 @@
             @endif
 
             <div class="card mb-3">
-                <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw mr-2"></i> News</div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
                 <div class="card-body">
 
                     @if(count($newsitems) > 0)
@@ -97,7 +97,7 @@
 
                 <div class="card mb-3">
                     <div class="card-header bg-dark text-white">
-                        <i class="fas fa-bullhorn fa-fw mr-2"></i> Weekly update
+                        <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
                     </div>
                     <div class="card-body">
                         {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
@@ -129,12 +129,12 @@
                 <table class="table table-sm mb-0">
                     @foreach($leaderboard->entries()->orderBy('points', 'DESC')->limit(5)->get() as $entry)
                         <tr>
-                            <td class="pl-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
+                            <td class="ps-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
                                 <i class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"></i>
                                 {{ $loop->index+1 }}
                             </td>
                             <td>{{ $entry->user->name }}</td>
-                            <td class="pr-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
+                            <td class="pe-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
                         </tr>
                     @endforeach
                 </table>

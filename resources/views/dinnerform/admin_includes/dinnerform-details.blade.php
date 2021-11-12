@@ -91,7 +91,7 @@
 
             @if($dinnerformCurrent)
                 <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
-                   class="btn btn-danger ml-4">Delete</a>
+                   class="btn btn-danger ms-4">Delete</a>
             @endif
         </div>
 

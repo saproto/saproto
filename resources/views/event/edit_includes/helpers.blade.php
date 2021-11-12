@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <input type="submit" class="btn btn-success pull-right" value="Add">
+                        <input type="submit" class="btn btn-success float-end" value="Add">
                     </div>
 
                 </div>

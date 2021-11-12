@@ -20,7 +20,7 @@
                     height: 150px !important;
             @endif">
                 @if($header && $header->user)
-                    <small class="ellipsis text-right pr-3 pt-2">
+                    <small class="ellipsis text-end pe-3 pt-2">
                         @if (Auth::check() && Auth::user()->is_member && $header->user->member)
                             Photo by <a href="{{ route('user::profile', ['id' => $header->user->getPublicId()]) }}"
                                         class="text-white">
@@ -30,7 +30,7 @@
                         @endif
                     </small>
                 @endif
-                <div class="card-body" style="text-align: left; vertical-align: bottom; font-size: 30px; display: flex;">
+                <div class="card-body text-start" style="vertical-align: bottom; font-size: 30px; display: flex;">
                     <p class="card-text ellipsis px-1" style="align-self: flex-end;">
                         @section('greeting')
                         @show
@@ -73,7 +73,7 @@
 
                     <div class="card mb-3">
                         <div class="card-header bg-dark text-white">
-                            <i class="fab fa-youtube fa-fw mr-2"></i> Recent videos
+                            <i class="fab fa-youtube fa-fw me-2"></i> Recent videos
                         </div>
                         <div class="card-body">
 

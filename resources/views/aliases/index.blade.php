@@ -23,7 +23,7 @@
 
                     <tr class="bg-dark text-white">
 
-                        <td class="text-right">Alias</td>
+                        <td class="text-end">Alias</td>
                         <td>Destination</td>
 
                     </tr>
@@ -34,11 +34,11 @@
 
                         <tr>
 
-                            <td class="text-right">
+                            <td class="text-end">
 
                                 <strong>{{ $alias }}</strong> @ {{ config('proto.emaildomain') }}
 
-                                <a href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}" class="ml-2">
+                                <a href="{{ route('alias::delete', ['id_or_alias' => $alias]) }}" class="ms-2">
                                     <i class="fas fa-trash text-danger"></i>
                                 </a>
 
@@ -47,7 +47,7 @@
 
                                 @foreach($destinations as $destination)
 
-                                    <a href="{{ route('alias::delete', ['id_or_alias' => $destination->id]) }}" class="mr-2">
+                                    <a href="{{ route('alias::delete', ['id_or_alias' => $destination->id]) }}" class="me-2">
                                         <i class="fas fa-trash text-danger"></i>
                                     </a>
 

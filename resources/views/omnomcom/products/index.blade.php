@@ -121,7 +121,7 @@
                                 <td>{{ $product->is_alcoholic ? 'Yes' : 'No' }}</td>
                                 <td style="min-width: 60px">
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                                        <i class="fas fa-edit mr-2"></i>
+                                        <i class="fas fa-edit me-2"></i>
                                     </a>
                                     <a onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
                                        href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">

@@ -19,7 +19,7 @@
                                    value="{{ $query }}">
                         </div>
                         <button type="submit" class="btn btn-info">
-                            <i class="fas fa-sm fa-filter mr-1"></i> Filter
+                            <i class="fas fa-sm fa-filter me-1"></i> Filter
                         </button>
                     </div>
                 </div>

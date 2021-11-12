@@ -205,12 +205,12 @@
                 </a>
             @endif
 
-            <button type="submit" class="btn btn-success float-right ml-3">Submit</button>
+            <button type="submit" class="btn btn-success float-end ms-3">Submit</button>
 
-            <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-right">Cancel</a>
+            <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-end">Cancel</a>
 
             @if ($product && $product->ticket)
-                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-right">
+                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-end">
                     Go to event ticket
                 </a>
             @endif

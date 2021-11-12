@@ -81,7 +81,7 @@
 
                     <div class="card-footer">
                         <a class="btn btn-default" href="{{ route("joboffers::admin") }}">Cancel</a>
-                        <button type="submit" class="btn btn-success float-right">Save</button>
+                        <button type="submit" class="btn btn-success float-end">Save</button>
                     </div>
 
                 </div>

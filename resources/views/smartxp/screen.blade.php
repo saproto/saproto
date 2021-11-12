@@ -221,7 +221,7 @@
 
                 <div class="box-header">
 
-                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
+                    <i class="fas fa-calendar-alt fa-fw me-2"></i>
                     Timetable
 
                 </div>
@@ -274,7 +274,7 @@
             <div id="protopeners" class="box" style="height: 100%;">
 
                 <div class="box-header small">
-                    <i class="fas fa-door-closed fa-fw mr-2" id="protopolis-fa"></i>
+                    <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
                     Protopolis
                 </div>
 
@@ -294,7 +294,7 @@
 
                 <div class="box-header">
 
-                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
+                    <i class="fas fa-calendar-alt fa-fw me-2"></i>
                     Activities
 
                 </div>
@@ -318,7 +318,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            <i class="fas fa-bus fa-fw mr-1"></i>
+                            <i class="fas fa-bus fa-fw me-1"></i>
                             Hallenweg
                         </div>
 
@@ -331,7 +331,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            <i class="fas fa-bus fa-fw mr-1"></i>
+                            <i class="fas fa-bus fa-fw me-1"></i>
                             Westerbegraafplaats
                         </div>
 
@@ -358,7 +358,7 @@
 
     function updateClock() {
         let now = moment();
-        $("#clock").html('<i class="fas fa-clock fa-fw mr-2"></i>' + now.format('HH:mm:ss'));
+        $("#clock").html('<i class="fas fa-clock fa-fw me-2"></i>' + now.format('HH:mm:ss'));
         $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
 
@@ -378,9 +378,9 @@
                             let end = moment.unix(data[i].end);
                             let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
                             let title = data[i].title;
-                            let displayTime = '<i class="fas fa-clock fa-fw mr-1"></i>' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i>' + data[i].place + '</span>';
+                            let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + data[i].place + '</span>';
                             $("#timetable").append('<div class="activity">' +
-                                (data[i].studyShort ? '<span class="float-right ml-2">' + '<i class="fas fa-graduation-cap fa-fw mr-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
+                                (data[i].studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
                                 '<strong>' + data[i].type + '</strong><br>' +
                                 '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span>' +
                                 '<br>' +
@@ -423,7 +423,7 @@
                         } else {
                             time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
+                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' + data[i].location + '</span></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
@@ -491,7 +491,7 @@
                         $("#protopeners-timetable").append('' +
                             '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
                             '<div class="float-left">' + time + '</div>' +
-                            '<div class="float-right"><strong>' + data[i].title + '</strong></div>' +
+                            '<div class="float-end"><strong>' + data[i].title + '</strong></div>' +
                             '</div>');
                     }
                     if (open) {
@@ -541,13 +541,13 @@
 
         nowplaying = data;
         if (typeof data.title == "undefined") {
-            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ProTube Idle');
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw me-2"></i> ProTube Idle');
             $("#protube-ticker").css("width", "100%");
             $("#protube").addClass('inactive').css("background-image", "auto");
         } else {
             let url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
             $("#protube-ticker").css("width", "0%");
-            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ' + data.title);
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw me-2"></i> ' + data.title);
             $("#protube").removeClass('inactive').css("background-image", url);
         }
 

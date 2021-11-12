@@ -7,7 +7,7 @@
                    style="display: flex; height: 200px; background-image: url({{ $photo->thumb() }});">
                 @if($photo->private)
                     <p class="card-text ellipsis" style="align-self: flex-end;">
-                        <i class="fas fa-eye-slash ml-4 mr-2 text-info"
+                        <i class="fas fa-eye-slash ms-4 me-2 text-info"
                            data-toggle="tooltip" data-placement="top"
                            title="This photo is only visible to members."></i>
                     </p>

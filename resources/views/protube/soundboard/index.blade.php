@@ -39,7 +39,7 @@
 
                                 <td>
                                     <a href="{{ $sound->file->generatePath() }}">
-                                        <i class="fas fa-cloud-download-alt fa-fw mr-2"></i>
+                                        <i class="fas fa-cloud-download-alt fa-fw me-2"></i>
                                     </a>
                                     {{ $sound->name }}
                                 </td>
@@ -47,7 +47,7 @@
                                     <a class="btn btn-danger"
                                        onclick="return confirm('Are you sure you want to delete {{ $sound->name }}?');"
                                        href="{{ route('protube::soundboard::delete', ['id' => $sound->id]) }}">
-                                        <i class="fas fa-trash mr-2"></i> Delete
+                                        <i class="fas fa-trash me-2"></i> Delete
                                     </a>
                                     <div class="btn btn-success sound__test" data-url="{{ $sound->file->generatePath() }}">
                                         <i class="fas fa-volume-up"></i> Test
@@ -85,7 +85,7 @@
                             </td>
                             <td>
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save mr-2" aria-hidden="true"></i> Save
+                                    <i class="fas fa-save me-2" aria-hidden="true"></i> Save
                                 </button>
                             </td>
 

@@ -13,7 +13,7 @@
             <div class="row">
 
                 <div class="col-5 d-flex align-items-center">
-                    <h5 class="text-center">This is you <i class="far fa-hand-point-right ml-2"></i></h5>
+                    <h5 class="text-center">This is you <i class="far fa-hand-point-right ms-2"></i></h5>
                 </div>
 
                 <div class="col-7 text-center">

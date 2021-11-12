@@ -62,7 +62,7 @@
                         @foreach($transactions as $transaction)
 
                             <tr>
-                                <td class="text-right">
+                                <td class="text-end">
                                     <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
                                         #{{$transaction->id}}
                                     </a>
@@ -130,7 +130,7 @@
                         <thead>
                         <tr class="bg-dark text-white">
                             <td>Month</td>
-                            <td class="text-right">Total</td>
+                            <td class="text-end">Total</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -146,7 +146,7 @@
                                         <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
                                     </a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-end">
                                     @if ($total > 0)
                                         <span class="label label-success">
                                              &euro; {{ number_format($total,2) }}

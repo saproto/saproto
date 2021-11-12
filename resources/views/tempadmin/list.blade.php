@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('tempadmin::add') }}" class="float-right badge-info badge">
+                    <a href="{{ route('tempadmin::add') }}" class="float-end badge-info badge">
                         Add new temporary admin.
                     </a>
                 </div>
@@ -48,7 +48,7 @@
                             <td>{{ $tempadmin->end_at }}</td>
                             <td>
                                 <a href="{{ route("tempadmin::edit", ['id' => $tempadmin->id]) }}">
-                                    <i class="fas fa-edit fa-fw mr-2"></i>
+                                    <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
 
                                 <a href="{{ route('tempadmin::endId', ['id' => $tempadmin->id]) }}"

@@ -81,7 +81,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
                         <a href="{{ route("tickets::list") }}" class="btn btn-default">Cancel</a>
 

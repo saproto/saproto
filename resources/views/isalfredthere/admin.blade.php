@@ -76,7 +76,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right ml-3">Save!</button>
+                        <button type="submit" class="btn btn-success float-end ms-3">Save!</button>
 
                     </div>
 

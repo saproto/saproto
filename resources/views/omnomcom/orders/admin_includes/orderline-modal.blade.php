@@ -80,7 +80,7 @@
 
                 <div class="card-footer border-bottom">
                     <div class="row">
-                        <div class="col-md-2 offset-md-8 text-right">Total price:</div>
+                        <div class="col-md-2 offset-md-8 text-end">Total price:</div>
                         <div class="col-md-2" id="totalprice">&euro; 0.00</div>
                     </div>
                 </div>

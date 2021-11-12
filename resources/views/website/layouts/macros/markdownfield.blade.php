@@ -13,7 +13,7 @@
 
         $('.editor-statusbar').each(function() {
             if ($(this).find(".md-ref").length === 0)
-                $(this).prepend("<a class='md-ref float-left' target='_blank' href='https://www.markdownguide.org/basic-syntax/'>markdown syntax</a>");
+                $(this).prepend("<a class='md-ref float-start' target='_blank' href='https://www.markdownguide.org/basic-syntax/'>markdown syntax</a>");
         });
     </script>
 
