@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge badge-info float-right" href="{{ route('headerimage::add') }}">
+                    <a class="badge bg-info float-end" href="{{ route('headerimage::add') }}">
                         Add header image.</a>
                 </div>
 

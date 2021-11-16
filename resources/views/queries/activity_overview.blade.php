@@ -22,29 +22,27 @@
 
                         <div class="row">
 
-                            <div class="col-md-3">
-                                @include('website.layouts.macros.datetimepicker',[
-                                    'name' => 'start',
-                                    'label' => 'Query start:',
-                                    'format' => 'date',
-                                    'placeholder' => $start
-                                ])
-                            </div>
+                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
+                                    <div class="col-sm-auto">
+                                        @include('website.layouts.macros.datetimepicker',[
+                                            'name' => 'start',
+                                            'format' => 'date',
+                                            'placeholder' => $start
+                                        ])
+                                    </div>
+                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
+                                    <div class="col-sm-auto mb-3">
+                                        @include('website.layouts.macros.datetimepicker',[
+                                            'name' => 'end',
+                                            'format' => 'date',
+                                            'placeholder' => $end
+                                        ])
+                                    </div>
 
-                            <div class="col-md-3">
-                                @include('website.layouts.macros.datetimepicker',[
-                                    'name' => 'end',
-                                    'label' => 'Query end:',
-                                    'format' => 'date',
-                                    'placeholder' => $end
-                                ])
+                                    <div class="col-sm-auto">
+                                        <button type="submit" class="btn btn-success">Find activities!</button>
+                                    </div>
                             </div>
-
-                            <div class="col-md-3">
-                                <input type="submit" class="btn btn-success btn-block" value="Get me some activities!">
-                            </div>
-
-                        </div>
 
                     </form>
 

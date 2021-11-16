@@ -11,9 +11,11 @@
             <table class="table">
 
                 <thead>
-                <th>File</th>
-                <th>Size</th>
-                <th></th>
+                    <tr>
+                        <th>File</th>
+                        <th>Size</th>
+                        <th></th>
+                    </tr>
                 </thead>
 
                 @foreach($email->attachments as $attachment)

@@ -55,7 +55,7 @@ const popoverList = popoverTriggerList.map((el) => new Popover(el))
 
 // Enable custom file input elements
 const customFileInputList = Array.from(document.getElementsByClassName('custom-file-input'))
-customFileInputList.map((el) => {
+customFileInputList.forEach((el) => {
     el.addEventListener('change', () => {
         let fileName = this.value.split('\\').pop()
         let label = this.nextElementSibling
@@ -65,41 +65,37 @@ customFileInputList.map((el) => {
 })
 
 let modalList = Array.from(document.getElementsByClassName('modal'))
-if (modalList.length) {
-    window.modals = {}
-    for (const el of modalList) {
-        window.modals[el.id] = Modal.getOrCreateInstance(el)
-    }
-}
+window.modals = {}
+modalList.forEach(el => {
+    window.modals[el.id] = Modal.getOrCreateInstance(el)
+})
 
 // Enable EasyMDE markdown fields
 const markdownFieldList = Array.from(document.getElementsByClassName('markdownfield'))
-if (markdownFieldList.length) {
-    window.easyMDEFields = {}
-    for (const el of markdownFieldList) {
-        window.easyMDEFields[el.id] =
-            new EasyMDE({
-                element: el,
-                toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview"],
-                autoDownloadFontAwesome: false
-            })
-    }
-    const statusbarList = Array.from(document.querySelectorAll('.editor-statusbar'))
-    const link = "<a class='md-ref float-start' target='_blank' href='https://www.markdownguide.org/basic-syntax/'>markdown syntax</a>"
-    statusbarList.map(el => el.innerHTML = link + el.innerHTML)
-}
+window.easyMDEFields = {}
+markdownFieldList.forEach(el => {
+    window.easyMDEFields[el.id] =
+        new EasyMDE({
+            element: el,
+            toolbar: ["bold", "italic", "|", "unordered-list", "ordered-list", "|", "image", "link", "quote", "table", "code", "|", "preview"],
+            autoDownloadFontAwesome: false
+        })
+})
+const statusbarList = Array.from(document.querySelectorAll('.editor-statusbar'))
+const link = "<a class='md-ref float-start' target='_blank' href='https://www.markdownguide.org/basic-syntax/'>markdown syntax</a>"
+statusbarList.forEach(el => el.innerHTML = link + el.innerHTML)
 
 const iconPickerList = Array.from(document.getElementsByClassName('iconpicker-wrapper'))
-if (iconPickerList.length){
-    const iconPickers = iconPickerList.map(el => {
-        const iconpicker = el.querySelector('.iconpicker')
-        return new Iconpicker(iconpicker, {
-            icons: require('./fontawesome-icons.json'), // Make sure this list is up to date!
-            defaultValue: iconpicker.value,
-            showSelectedIn: el.querySelector('.selected-icon'),
-        })
+window.iconPickers = {}
+iconPickerList.forEach(el => {
+    const iconpicker = el.querySelector('.iconpicker')
+    window.iconPickers[el.id] = new Iconpicker(iconpicker, {
+        icons: require('./fontawesome-icons.json'), // Make sure this list is up to date!
+        defaultValue: iconpicker.value,
+        showSelectedIn: el.querySelector('.selected-icon'),
     })
-}
+})
+
 
 // Enables the fancy scrolling effect
 const navbar = document.getElementById('nav')

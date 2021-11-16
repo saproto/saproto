@@ -76,10 +76,10 @@
                                 <div class="card-header bg-dark text-white" style="cursor: pointer;"
                                      data-bs-toggle="collapse" data-bs-target="#ticket-collapse-{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
-                                    <span class="badge badge-primary float-end">
+                                    <span class="badge bg-primary float-end">
                                         {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
                                     </span>
-                                    <span class="badge badge-info float-end me-4">
+                                    <span class="badge bg-info float-end me-4">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
                                     </span>
                                 </div>
@@ -116,11 +116,11 @@
                                                         <td>{{ $purchase->user->name }}</td>
                                                         <td>
                                                             @if($purchase->user->age() >= 18)
-                                                                <span class="badge badge-success">
+                                                                <span class="badge bg-success">
                                                                 <i class="fas fa-check" aria-hidden="true"></i> 18+
                                                             </span>
                                                             @else
-                                                                <span class="badge badge-danger">
+                                                                <span class="badge bg-danger">
                                                                 <i class="fas fa-exclamation-triangle"
                                                                    aria-hidden="true"></i> 18-
                                                             </span>
@@ -129,13 +129,13 @@
                                                         @if($event->shouldShowDietInfo())
                                                             <td>
                                                                 @if ($purchase->user->hasDiet())
-                                                                    <span class="badge badge-danger">
+                                                                    <span class="badge bg-danger">
                                                                     <i class="fas fa-exclamation-triangle"
                                                                        aria-hidden="true"></i>
                                                                 </span>
                                                                 @else
                                                                     <span class="label label-success">
-                                                                    <i class="badge badge-check" aria-hidden="true"></i>
+                                                                    <i class="badge bg-check" aria-hidden="true"></i>
                                                                 </span>
                                                                 @endif
                                                             </td>
@@ -155,7 +155,7 @@
                                                                 @elseif($purchase->orderline->isPayed())
                                                                     Paid
                                                                 @else
-                                                                    <a class="badge badge-danger"
+                                                                    <a class="badge bg-danger"
                                                                        href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
                                                                        onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
                                                                         Delete

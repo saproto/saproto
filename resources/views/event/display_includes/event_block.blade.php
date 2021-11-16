@@ -18,7 +18,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @endif
 
             @if($event->secret)
-                <span class="badge badge-info float-end"
+                <span class="badge bg-info float-end"
                       data-bs-toggle="tooltip" data-bs-placement="top" title="Secret activities can only be visited if you know the link. You can see it now because you are an admin.">
                     <i class="fas fa-eye-slash fa-fw me-1"></i> Secret activity!</span>
             @endif
@@ -50,7 +50,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @if($event->category)
                 <br>
 
-                <span class="badge-pill badge-info px-3 mt-1 d-inline-block mw-100 ellipsis">
+                <span class="badge rounded-pill bg-info px-3 mt-1 d-inline-block mw-100 ellipsis">
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>
                     {{ $event->category->name }}
                 </span>

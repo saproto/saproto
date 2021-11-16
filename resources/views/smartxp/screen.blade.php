@@ -490,7 +490,7 @@
 
                         $("#protopeners-timetable").append('' +
                             '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
-                            '<div class="float-left">' + time + '</div>' +
+                            '<div class="float-start">' + time + '</div>' +
                             '<div class="float-end"><strong>' + data[i].title + '</strong></div>' +
                             '</div>');
                     }

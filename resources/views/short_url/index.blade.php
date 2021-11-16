@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge badge-info float-end" href="{{ route('short_url::edit', ['id' => 'new']) }}">
+                    <a class="badge bg-info float-end" href="{{ route('short_url::edit', ['id' => 'new']) }}">
                         Create Short URL</a>
                 </div>
 
@@ -61,7 +61,7 @@
                                        data-bs-trigger="focus"
                                        title="{{ $url->description }}"
                                        data-bs-content="{{ $url->target }}"
-                                       class="btn badge badge-info">
+                                       class="btn badge bg-info">
                                         <i class="fas fa-link text-white"></i>
                                     </button>
                                 </td>

@@ -7,9 +7,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Proto\Models\Event;
 use Proto\Models\Member;
+use Redirect;
 
 class QueryController extends Controller
 {
@@ -21,7 +23,7 @@ class QueryController extends Controller
 
     /**
      * @param Request $request
-     * @return View
+     * @return RedirectResponse|View
      */
     public function activityOverview(Request $request)
     {
@@ -35,7 +37,7 @@ class QueryController extends Controller
             $end = date('U');
         } else {
             $start = strtotime($request->start);
-            $end = strtotime($request->end) + 86400; // Add one day to make it inclusive.
+            $end = strtotime($request->end) + 86399; // Add one day to make it inclusive.
         }
 
         $events = Event::with(['activity', 'activity.users', 'activity.helpingCommitteeInstances'])

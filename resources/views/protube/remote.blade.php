@@ -588,7 +588,7 @@
 
             </div>
 
-            <div class="col-md-1 col-6 text-left">
+            <div class="col-md-1 col-6 text-start">
 
                 <img class="rounded-circle" data-bs-toggle="modal" id="protube__remote__profilePic"
                      data-bs-target="#protube__remote__userModal" src="{{ asset('images/protube/incognito.png') }}"

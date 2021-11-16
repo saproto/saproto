@@ -17,7 +17,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-title">
-                                <span class="badge badge-dark text-white float-end">
+                                <span class="badge bg-dark text-white float-end">
                                     #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>{{ $purchase->ticket->product->name }}</strong>
@@ -91,9 +91,9 @@
 
                                     @if ($ticket->is_prepaid)
                                         <?php $has_prepay_tickets = true; ?>
-                                        <span class="badge badge-danger float-end">Pre-Paid</span>
+                                        <span class="badge bg-danger float-end">Pre-Paid</span>
                                     @else
-                                        <span class="badge badge-info float-end">Withdrawal</span>
+                                        <span class="badge bg-info float-end">Withdrawal</span>
                                     @endif
 
                                     <strong>{{ $ticket->product->name }}</strong>
@@ -104,7 +104,7 @@
                                 <p class="card-text">
 
                                     @if ($ticket->isAvailable(Auth::user()))
-                                        <span class="badge badge-info float-end">
+                                        <span class="badge bg-info float-end">
                                     {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                             available
                                     </span>

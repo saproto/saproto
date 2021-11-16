@@ -14,9 +14,9 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge badge-info float-end" href="{{ route('narrowcasting::add') }}">
+                    <a class="badge bg-info float-end" href="{{ route('narrowcasting::add') }}">
                         Create a new campaign.</a>
-                    <a class="badge badge-danger float-end me-2" href="{{ route('narrowcasting::clear') }}">
+                    <a class="badge bg-danger float-end me-2" href="{{ route('narrowcasting::clear') }}">
                         Delete all past campaigns.</a>
                 </div>
 

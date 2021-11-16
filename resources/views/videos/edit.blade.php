@@ -25,19 +25,17 @@
 
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
-                                <div class="form-group">
-                                    <label>Video date:</label>
-                                    @include('website.layouts.macros.datetimepicker', [
-                                        'name' => 'video_date',
-                                        'format' => 'date',
-                                        'placeholder' => strtotime($video->video_date)
-                                    ])
-                                </div>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'video_date',
+                                    'label' => 'Video date:',
+                                    'format' => 'date',
+                                    'placeholder' => strtotime($video->video_date)
+                                ])
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="form-group">
-                                    <label>Link to event:</label>
-                                    <input class="form-control event-search" name="event"/>
+                                    <label for="event">Link to event:</label>
+                                    <input id="event" class="form-control event-search" name="event"/>
                                 </div>
                             </div>
                         </div>

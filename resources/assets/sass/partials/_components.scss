@@ -275,7 +275,7 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   * { z-index: 1; }
 }
 
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+.datetimepicker::-webkit-calendar-picker-indicator {
   background-image: unset;
   background-color: $dark;
   height: 15px;
@@ -299,10 +299,24 @@ main {
   text-decoration: underline !important;
 }
 
-.btn-success, .btn-info {
-  color: $white;
-  &:hover, &:focus, &:active {
+.btn {
+  // Style btn-block like Bootstrap 4
+  &-block {
+    width: 100%;
+  }
+  &-outline {
+    &-info, &-success {
+      &:hover, &:focus, &:active {
+        color: $white;
+      }
+    }
+  }
+  &-info, &-success, &-primary {
     color: $white;
+
+    &:hover, &:focus, &:active {
+      color: $white;
+    }
   }
 }
 
@@ -340,7 +354,7 @@ a.badge {
     }
     option {
       &:hover {
-        background-color: $dark;
+        background-color: $gray-300;
         cursor: pointer;
       }
     }
@@ -381,6 +395,12 @@ header > nav.navbar {
   @media (max-width: 1200px) {
     max-height: 100vh;
     overflow-y: auto;
+  }
+  #profile-picture {
+    width: 45px;
+    height: 45px;
+    border: 2px solid white;
+    margin: -14px 0 -11px 0;
   }
 }
 

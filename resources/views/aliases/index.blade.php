@@ -100,7 +100,7 @@
                         <a href="{{ route('alias::add') }}" class="form-control btn btn-success">Create a new alias.</a>
                     </p>
 
-                    <p style="text-align: center;">
+                    <p class="text-center">
                         - or -
                     </p>
 

@@ -28,12 +28,12 @@
 
                             @if($list->isSubscribed($user))
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"
-                                   class="badge badge-danger float-end">Unsubscribe</a>
+                                   class="badge bg-danger float-end">Unsubscribe</a>
                             @elseif(!$list->is_member_only || $user->member)
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"
-                                   class="badge badge-info float-end">Subscribe</a>
+                                   class="badge bg-info float-end">Subscribe</a>
                             @else
-                                <span class="badge badge-dark float-end">Members only</span>
+                                <span class="badge bg-dark float-end">Members only</span>
                             @endif
                         </div>
 

@@ -14,10 +14,10 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('announcement::clear') }}" class="badge badge-info float-end">
+                    <a href="{{ route('announcement::clear') }}" class="badge bg-info float-end">
                         Delete all past announcements.
                     </a>
-                    <a href="{{ route('announcement::add') }}" class="badge badge-info float-end me-2">
+                    <a href="{{ route('announcement::add') }}" class="badge bg-info float-end me-2">
                         Add announcement.
                     </a>
                 </div>

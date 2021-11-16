@@ -8,7 +8,7 @@
         <div class="card-header bg-dark text-white">
             @yield('page-title')
             @if($achievement)
-                <span class="badge badge-info float-end">
+                <span class="badge bg-info float-end">
                     Obtained by {{ count($achievement->currentOwners(true)) }} members
                 </span>
             @endif

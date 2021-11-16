@@ -20,9 +20,11 @@ $modal-content-bg: $grey-medium;
 //table
 $table-color: #fff;
 $table-border-color: $grey-light;
+table > tbody { border-top-color: $grey-light !important; }
 
 //list group
 $list-group-bg: $grey-medium;
+$list-group-color: #fff;
 
 //input
 $input-group-addon-border-color: $grey-light;
@@ -96,12 +98,6 @@ hr {
   color: #fff;
 }
 
-//select2
-.select2-dropdown {
-  background-color: $grey-dark;
-  border: 1px solid rgba(0,0,0,.125);
-}
-
 //buttons
 .btn.btn-outline-dark {
   color: #fff;
@@ -146,11 +142,11 @@ hr {
 }
 
 .editor-toolbar.disabled-for-preview button {
-    @extend .bg-dark
+    @extend .bg-dark;
 }
 
 //datetimepicker
-input[type="datetime-local"]::-webkit-calendar-picker-indicator { background-color: #f1f1f1 }
+.datetimepicker::-webkit-calendar-picker-indicator { background-color: #f1f1f1; }
 
 //custom file labels
 .custom-file-label::after {

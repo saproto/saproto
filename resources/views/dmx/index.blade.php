@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('dmx::add') }}" class="badge badge-info float-end">
+                    <a href="{{ route('dmx::add') }}" class="badge bg-info float-end">
                         Create a new fixture.
                     </a>
                 </div>

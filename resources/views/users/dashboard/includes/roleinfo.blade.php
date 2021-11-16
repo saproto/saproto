@@ -13,7 +13,7 @@
                     <i class="fas fa-user-friends fa-fw me-2"></i><strong>{{ $role->display_name }}</strong><br>
                     <small>{{ $role->description }}</small><br>
                 @foreach($role->permissions as $permission)
-                    <span class="badge badge-info badge-pill">
+                    <span class="badge rounded-pill bg-info">
                         <i class="fas fa-plus fa-fw me-1"></i> {{ $permission->description }}
                     </span><br>
                 @endforeach

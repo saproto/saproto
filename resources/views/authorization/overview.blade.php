@@ -81,8 +81,8 @@
 
                                             @include('users.includes.usercard', [
                                                 'user' => $user,
-                                                'subtitle' => sprintf('<div class="badge badge-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
-                                                    <a href="%s"><div class="badge badge-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
+                                                'subtitle' => sprintf('<div class="badge bg-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
+                                                    <a href="%s"><div class="badge bg-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
                                                     $user->signed_nda ? 'primary' : 'danger',
                                                     $user->signed_nda ? 'fa-user-shield' : 'fa-user-times',
                                                     route("authorization::revoke", ['id' => $role->id, 'user' => $user->id]))
