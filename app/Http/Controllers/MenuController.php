@@ -128,7 +128,7 @@ class MenuController extends Controller
 
         $menuItem->save();
 
-        if(isset($oldparent)) {
+        if (isset($oldparent)) {
             $this->fixDuplicateMenuItemsOrder($oldparent);
         }
 

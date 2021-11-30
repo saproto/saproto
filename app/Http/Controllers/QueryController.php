@@ -7,11 +7,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 use Proto\Models\Event;
 use Proto\Models\Member;
-use Redirect;
 
 class QueryController extends Controller
 {
