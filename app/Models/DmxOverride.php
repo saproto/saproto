@@ -30,8 +30,6 @@ class DmxOverride extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['start', 'end'];
-
     public $timestamps = false;
 
     /** @return Collection|DmxOverride[] */
