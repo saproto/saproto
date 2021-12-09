@@ -80,17 +80,21 @@
                 <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto
             </li>
         @endif
-        @if (!Auth::check()&&$event->activity !== null)
+        @if (!Auth::check())
             <a href="{{route('becomeamember')}}" class="list-group-item bg-info text-white text-center">
-                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp; To join this activity you need to sign up for it as a member.
-                <br> Sign up to be a member by clicking on this message or log in!
+                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                    To join this activity you need to be a member.
+                    <br> Become a a member by clicking on this message or log in.
             </a>
-        @elseif(!Auth::check())
-                <a href="{{route('becomeamember')}}" class="list-group-item bg-info text-white text-center">
-                    <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp; To join this activity you need to be a member.
-                    <br> Sign up to be a member by clicking on this message or log in!
-                </a>
         @endif
+
+            @if (!Auth::check() && !isset($event->activity))
+                <a href="{{route('event::login', ['id' => $event->getPublicId()])}}" class="list-group-item bg-info text-white text-center">
+                    <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                    <i>Note: this event has a sign up! Make sure to put yourself on the list when logged in!</i>
+                </a>
+            @endif
+
     </ul>
 
     <div class="card-body">
