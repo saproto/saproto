@@ -85,9 +85,9 @@ class Email extends Model
             return 'users';
         } elseif ($this->to_member) {
             return 'members';
-        }elseif ($this->to_pending) {
+        } elseif ($this->to_pending) {
             return 'pending';
-        }elseif ($this->to_active) {
+        } elseif ($this->to_active) {
             return 'active members';
         } elseif ($this->to_list) {
             return 'list';
@@ -107,7 +107,7 @@ class Email extends Model
             });
         } elseif ($this->to_pending) {
             return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user) {
-                return $user->member->is_pending == False;
+                return $user->member->is_pending == false;
             });
         } elseif ($this->to_active) {
             $user_ids = [];
