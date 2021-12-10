@@ -79,6 +79,10 @@ class Member extends Model
         return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->count();
     }
 
+    public static function countPendingMembers(){
+        return Member::where('is_pending', true)->count();
+    }
+
     /** @return Orderline */
     public function getMembershipOrderline()
     {
