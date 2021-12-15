@@ -15,6 +15,7 @@ use Proto\Models\Product;
 use Proto\Models\TicketPurchase;
 use Proto\Models\User;
 use Redirect;
+use function Clue\StreamFilter\append;
 
 class OrderLineController extends Controller
 {
@@ -22,41 +23,42 @@ class OrderLineController extends Controller
      * @param null $date
      * @return View
      */
-    public function index($date = null)
+    public function index($selected_month = null)
     {
         $user = Auth::user();
 
-        $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
+        $next_withdrawal = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
-        $orderlines = OrderLine::where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->format('Y-m');
-        });
-
-        if ($date != null) {
-            $selected_month = $date;
-        } else {
-            $selected_month = date('Y-m');
+        if($selected_month==null){
+            $selected_month=Carbon::Now()->toDateTimeString();
         }
 
-        $available_months = $orderlines->keys()->groupBy(function ($date) {
-            return Carbon::parse($date)->format('Y');
+        $this_month=Carbon::createFromDate($selected_month)->startOfMonth();
+        $next_month=Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
+
+        $orderlines = OrderLine::where('user_id', $user->id)->where('created_at','>=',$this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
+        $total = $orderlines->sum('total_price');
+
+        $grouped_orderlines=$orderlines->groupBy(function ($orderline_date) {
+            return Carbon::parse($orderline_date->created_at)->format('Y-m');
         });
 
-        $total = 0;
-        if ($orderlines->has($selected_month)) {
-            $selected_orders = $orderlines[Carbon::parse($date)->format('Y-m')];
-            foreach ($selected_orders as $orderline) {
-                if ($orderline->total_price > 0) {
-                    $total += $orderline->total_price;
-                }
+        $available_months_collection = OrderLine::selectRaw('MONTH(created_at) month, YEAR(created_at) year')->where('user_id', $user->id)->groupBy('month')->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
+
+        $available_months = array();
+
+        foreach($available_months_collection as $month) {
+            if(!array_key_exists($month->year, $available_months)) {
+                $available_months[$month->year] = array();
             }
+            array_push($available_months[$month->year], $month->month);
         }
 
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
             'selected_month' => $selected_month,
-            'orderlines' => ($orderlines->has($selected_month) ? $orderlines[$selected_month] : []),
+            'orderlines' => ($grouped_orderlines->has($selected_month) ? $grouped_orderlines[$selected_month] : []),
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
         ]);
