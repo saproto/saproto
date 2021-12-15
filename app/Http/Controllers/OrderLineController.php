@@ -29,11 +29,13 @@ class OrderLineController extends Controller
         $next_withdrawal = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
         if ($selected_month == null) {
-            $selected_month = Carbon::Now()->toDateTimeString();
+            $this_month = Carbon::now()->startOfMonth();
+            $next_month = Carbon::now()->startOfMonth()->addMonth(1);
+        }else{
+            $this_month = Carbon::createFromDate($selected_month)->startOfMonth();
+            $next_month = Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
         }
 
-        $this_month = Carbon::createFromDate($selected_month)->startOfMonth();
-        $next_month = Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
 
         $orderlines = OrderLine::where('user_id', $user->id)->where('created_at', '>=', $this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
         $total = $orderlines->sum('total_price');
@@ -56,8 +58,8 @@ class OrderLineController extends Controller
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
-            'selected_month' => $selected_month,
-            'orderlines' => ($grouped_orderlines->has($selected_month) ? $grouped_orderlines[$selected_month] : []),
+            'selected_month' => $this_month,
+            'orderlines' => $grouped_orderlines[Carbon::parse($this_month)->format('Y-m')],
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
         ]);
