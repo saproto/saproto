@@ -31,11 +31,10 @@ class OrderLineController extends Controller
         if ($selected_month == null) {
             $this_month = Carbon::now()->startOfMonth();
             $next_month = Carbon::now()->startOfMonth()->addMonth(1);
-        }else{
+        } else {
             $this_month = Carbon::createFromDate($selected_month)->startOfMonth();
             $next_month = Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
         }
-
 
         $orderlines = OrderLine::where('user_id', $user->id)->where('created_at', '>=', $this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
         $total = $orderlines->sum('total_price');
