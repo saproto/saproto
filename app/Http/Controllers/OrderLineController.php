@@ -15,7 +15,6 @@ use Proto\Models\Product;
 use Proto\Models\TicketPurchase;
 use Proto\Models\User;
 use Redirect;
-use function Clue\StreamFilter\append;
 
 class OrderLineController extends Controller
 {
@@ -29,27 +28,27 @@ class OrderLineController extends Controller
 
         $next_withdrawal = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
-        if($selected_month==null){
-            $selected_month=Carbon::Now()->toDateTimeString();
+        if ($selected_month == null) {
+            $selected_month = Carbon::Now()->toDateTimeString();
         }
 
-        $this_month=Carbon::createFromDate($selected_month)->startOfMonth();
-        $next_month=Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
+        $this_month = Carbon::createFromDate($selected_month)->startOfMonth();
+        $next_month = Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
 
-        $orderlines = OrderLine::where('user_id', $user->id)->where('created_at','>=',$this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
+        $orderlines = OrderLine::where('user_id', $user->id)->where('created_at', '>=', $this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
         $total = $orderlines->sum('total_price');
 
-        $grouped_orderlines=$orderlines->groupBy(function ($orderline_date) {
+        $grouped_orderlines = $orderlines->groupBy(function ($orderline_date) {
             return Carbon::parse($orderline_date->created_at)->format('Y-m');
         });
 
         $available_months_collection = OrderLine::selectRaw('MONTH(created_at) month, YEAR(created_at) year')->where('user_id', $user->id)->groupBy('month')->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
 
-        $available_months = array();
+        $available_months = [];
 
-        foreach($available_months_collection as $month) {
-            if(!array_key_exists($month->year, $available_months)) {
-                $available_months[$month->year] = array();
+        foreach ($available_months_collection as $month) {
+            if (! array_key_exists($month->year, $available_months)) {
+                $available_months[$month->year] = [];
             }
             array_push($available_months[$month->year], $month->month);
         }
