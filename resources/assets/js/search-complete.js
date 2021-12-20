@@ -57,12 +57,12 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
     const input = document.createElement('input')
     input.type = 'hidden'
     input.name = el.name
+    el.name = ''
     input.value = el.value
     el.value = el.placeholder
-    el.name = ''
 
     const selected = document.createElement('div')
-    selected.className = 'selected-items form-control p-0'
+    selected.className = 'selected-items form-control p-0 d-none'
 
     const selectedItem = document.createElement('span')
     selectedItem.className = 'selected-item d-block-inline badge bg-success px-2 my-1 mx-2'
@@ -75,7 +75,7 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
     search()
     el.addEventListener('keyup', search)
 
-    function search() {
+    function search(e) {
         searchResults.innerHTML = ''
 
         // Search input must be at least 3 characters
@@ -110,11 +110,18 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
                 option.addEventListener('click', (e) => {
                     // Check if input accepts multiple selections
                     if (multiple) {
+                        selected.classList.remove('d-none')
+                        el.required = false
+
                         // Create new selected item
                         let newSelectedItem = selectedItem.cloneNode()
                         newSelectedItem.innerHTML = selectedTemplate?.(item) ?? item.id
                         newSelectedItem.addEventListener('click', (e) => {
                             newSelectedItem.remove()
+                            if (selected.children.length === 0) {
+                                el.required = true
+                                selected.classList.add('d-none')
+                            }
                         })
 
                         // Create new hidden input
@@ -124,7 +131,10 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
                         // append selection to selected items container
                         newSelectedItem.append(multipleInput)
                         selected.append(newSelectedItem)
-                        // In case only one selection is allowed
+
+                        el.value = ''
+                        searchResults.innerHTML = ''
+                    // In case only one selection is allowed
                     } else {
                         // set the hidden input value
                         input.value = item.id
@@ -133,7 +143,7 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
                         searchResults.append(option)
                     }
 
-                    el.dispatchEvent(new Event('change'))
+                    el.dispatchEvent(new Event('keyup'))
                 })
                 searchResults.append(option)
             })
