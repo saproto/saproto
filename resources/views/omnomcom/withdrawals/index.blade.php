@@ -79,7 +79,7 @@
 
                 @else
 
-                    <p style="text-align: center;">
+                    <p class="text-center">
                         There are no withdrawals.
                     </p>
 

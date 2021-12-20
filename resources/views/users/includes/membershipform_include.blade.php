@@ -37,7 +37,7 @@
     <strong>
         {{ $user->address->street }} {{ $user->address->number }}<br>
         {{ $user->address->zipcode }}
-        <span style="text-transform: uppercase;">{{ $user->address->city }}</span><br>
+        <span class="text-uppercase">{{ $user->address->city }}</span><br>
         {{ $user->address->country }}
     </strong>
 </p>

@@ -82,8 +82,7 @@
 
                     @foreach($event->tickets as $ticket)
 
-                        <div class="card mb-3"
-                             style="opacity: {{ ($ticket->isAvailable(Auth::user()) ? '1' : '0.5') }};">
+                        <div class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}">
 
                             <div class="card-body">
 

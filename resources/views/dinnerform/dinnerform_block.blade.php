@@ -1,8 +1,7 @@
 <div class="card mb-3 leftborder leftborder-info">
 
         <div class="card-body text-start">
-            <a class="stretched-link"
-               style="text-decoration: none;"
+            <a class="stretched-link text-decoration-none"
                href="{{ route("dinnerform::show", ['id' => $dinnerform->id]) }}">
 
                 @if($dinnerform->hasExpired())
@@ -22,7 +21,7 @@
             </a>
 
             <span>
-                <i class="fas fa-utensils fa-fw" aria-hidden="true" style="color: gold"></i>
+                <i class="fas fa-utensils fa-fw text-gold" aria-hidden="true"></i>
                 <strong>{{ $dinnerform->restaurant }}</strong>
             </span>
 

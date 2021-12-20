@@ -1,10 +1,5 @@
-<a @if($unlocked && !$done && $url)
-   href="{{ $url }}"
-   @else
-   disabled
-   @endif
-   class="list-group-item {{ $unlocked ? ($done ? 'list-group-item-primary' : null) : 'list-group-item-dark' }}"
-   style="text-decoration: none !important;">
+<a {{ $unlocked && !$done && $url ? "href=$url" : 'disabled' }}
+   class="list-group-item text-decoration-none {{ $unlocked ? ($done ? 'list-group-item-primary' : null) : 'list-group-item-dark' }}">
 
     <h5>
     <span class="me-2">

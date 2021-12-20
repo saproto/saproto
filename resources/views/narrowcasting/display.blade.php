@@ -13,8 +13,6 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    @include('website.layouts.assets.customcss')
-
     <style>
 
         html, body, #slideshow, #fullpagetext, .slide, #protologo {
@@ -63,9 +61,9 @@
 
 </head>
 
-<body style="display: block;">
+<body class="d-block">
 
-<div id="fullpagetext" style="opacity: 0;">
+<div id="fullpagetext" class="opacity-0">
 
 </div>
 
@@ -117,13 +115,13 @@
 
         if (campaigns.length === 0) {
             text.innerHTML = "There are no messages to display. :)"
-            text.classList.replace('opacity-0', 'opacity-100')
-            slides.classList.replace('opacity-100', 'opacity-0')
+            text.classList.remove('opacity-0')
+            slides.classList.add('opacity-0')
             setTimeout(updateSlide, 1000)
         } else {
             text.innerHTML = 'Starting slideshow... :)'
-            text.classList.replace('opacity-100', 'opacity-0')
-            slides.classList.replace('opacity-0', 'opacity-100')
+            text.classList.add('opacity-0')
+            slides.classList.remove('opacity-0')
             slides.classList.add('old')
 
             if (currentCampaign >= campaigns.length) { currentCampaign = 0 }
@@ -131,8 +129,8 @@
 
             if (campaign.hasOwnProperty('image')) {
                 if (previousWasVideo) {
-                    slides.classList.replace('opacity-0', 'opacity-100')
-                    player.classList.replace('opacity-100', 'opacity-0')
+                    player.classList.remove('opacity-0')
+                    slides.classList.add('opacity-0')
                 }
 
                 slides.innerHTML += '<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaign.image + ');"></div>'
@@ -147,8 +145,8 @@
                 youtubePlayer.playVideo();
 
                 if (!previousWasVideo) {
-                    slides.classList.replace('opacity-100', 'opacity-0')
-                    player.classList.replace('opacity-0', 'opacity-100')
+                    slides.classList.add('opacity-0')
+                    player.classList.remove('opacity-0')
                 }
 
                 setTimeout(updateSlide, (campaign.slide_duration - 1) * 1000)

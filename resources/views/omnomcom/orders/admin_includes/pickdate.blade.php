@@ -17,7 +17,7 @@
         </div>
 
         <div class="card-footer">
-            <input type="submit" class="btn btn-success btn-block" value="Get orders">
+            <input type="submit" class="btn btn-success btn-block mb-2" value="Get orders">
             <a href="{{ route('omnomcom::orders::adminlist') }}" class="btn btn-success btn-block">Today</a>
         </div>
 

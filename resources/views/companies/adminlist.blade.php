@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div id="companies-admin" class="row justify-content-center">
 
         <div class="col-md-8">
 
@@ -41,10 +41,10 @@
 
                             <tr>
 
-                                <td style="overflow-wrap: break-word; max-width: 130px">{{ $company->name }}</td>
-                                <td style="overflow-wrap: break-word; max-width: 220px"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
-                                <td>{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
-                                <td>{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
+                                <td class="name">{{ $company->name }}</td>
+                                <td class="url"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
+                                <td class="on-carreer-page">{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
+                                <td class="in-logo-bar">{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
                                 <td>
 
                                     <a href="{{ route('companies::edit', ['id' => $company->id]) }}">

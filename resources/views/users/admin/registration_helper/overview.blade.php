@@ -51,7 +51,7 @@
                         <tbody>
                         @foreach($users as $user)
 
-                                <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
+                                <tr class="{{ $user->deleted_at ? 'opacity-50' : '' }}">
                                     <td class="text-center"><a href="{{ route('user::registrationhelper::details', ['id'=>$user->id]) }}"><i class="fas fa-info-circle"></i></a></td>
                                     <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>

@@ -1,28 +1,24 @@
-<html>
+<html lang="en">
 <head>
 
-    <style type="text/css">
+    <title>S.A. Proto Ticket</title>
 
-        * {
-            box-sizing: border-box;
-        }
+    <style>
+        * { box-sizing: border-box; }
 
         body {
             width: 100%;
             height: 100%;
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             margin: 0 auto;
         }
 
         .half {
             position: absolute;
-
             left: 10%;
             right: 10%;
-
             height: 49%;
             margin: 0;
-
             text-align: center;
         }
 
@@ -36,13 +32,9 @@
             padding-top: 45mm;
         }
 
-        p {
-            margin: 40px auto;
-        }
+        p { margin: 40px auto; }
 
-        h3 {
-            margin-bottom: -20px;
-        }
+        h3 { margin-bottom: -20px; }
 
         .barcode {
             width: 75mm;
@@ -54,13 +46,9 @@
             margin-bottom: 7mm;
         }
 
-        #barcode2 {
-            margin-top: 5mm;
-        }
+        #barcode2 { margin-top: 5mm; }
 
-        #protologo {
-            width: 40%;
-        }
+        #protologo { width: 40%; }
 
     </style>
 

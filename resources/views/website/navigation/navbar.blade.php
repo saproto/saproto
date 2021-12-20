@@ -9,8 +9,8 @@
                 S.A. Proto
                 @if(config('app.env') != 'production') | <span class="text-uppercase">{{ config('app.env') }}</span> @endif
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar"
-                    aria-expanded="false" aria-label="Toggle navigation" style="outline: none !important;">
+            <button class="navbar-toggler outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -334,8 +334,7 @@
                 @else
 
                     <form class="form-inline mt-2 mt-md-0">
-                        <a class="btn btn-outline-light" href="{{ route('login::register') }}"
-                           style="margin-right: 10px;">
+                        <a class="btn btn-outline-light me-5" href="{{ route('login::register') }}">
                             <i class="fas fa-user-plus me-2"></i> Register
                         </a>
                         <a class="btn btn-light" href="{{ route('login::show') }}">

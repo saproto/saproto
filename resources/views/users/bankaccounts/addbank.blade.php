@@ -85,8 +85,8 @@
                             {!! csrf_field() !!}
                             <div class="form-group">
                                 <label for="iban">IBAN Bank Account Number</label>
-                                <input type="text" class="form-control" id="iban" name="iban"
-                                       placeholder="NL42INGB0013371337" style="text-transform: uppercase;">
+                                <input type="text" class="form-control text-uppercase" id="iban" name="iban"
+                                       placeholder="NL42INGB0013371337">
                             </div>
 
                             <p>

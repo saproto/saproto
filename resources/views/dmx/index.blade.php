@@ -55,7 +55,7 @@
                                 <td>{{ $fixture->channel_end }}</td>
                                 <td>
                                     @if(count($fixture->getChannels('red')) > 0)
-                                        <span style="color: red;">
+                                        <span class="text-danger">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('red')->pluck('id')->toArray()) }}
                                         </span>
@@ -63,7 +63,7 @@
                                 </td>
                                 <td>
                                     @if(count($fixture->getChannels('green')) > 0)
-                                        <span style="color: green;">
+                                        <span class="text-primary">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('green')->pluck('id')->toArray()) }}
                                         </span>
@@ -71,7 +71,7 @@
                                 </td>
                                 <td>
                                     @if(count($fixture->getChannels('blue')) > 0)
-                                        <span style="color: blue;">
+                                        <span class="text-info">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('blue')->pluck('id')->toArray()) }}
                                         </span>

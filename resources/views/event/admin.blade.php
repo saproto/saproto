@@ -73,7 +73,7 @@
 
                             <div class="card mb-3">
 
-                                <div class="card-header bg-dark text-white" style="cursor: pointer;"
+                                <div class="card-header bg-dark text-white cursor-pointer"
                                      data-bs-toggle="collapse" data-bs-target="#ticket-collapse-{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
                                     <span class="badge bg-primary float-end">

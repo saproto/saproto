@@ -44,13 +44,11 @@
                         history.
                     </p>
                     @if($user->keep_protube_history)
-                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-danger"
-                           style="width: 100%;">
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-danger btn-block">
                             Stop keeping my ProTube history.
                         </a>
                     @else
-                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-primary"
-                           style="width: 100%;">
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-primary btn-block">
                             Start keeping my ProTube history.
                         </a>
                     @endif
@@ -65,10 +63,12 @@
                             them. This action is irreversible.
                         </p>
 
-                        <a href="{{ route('protube::clearhistory') }}" class="btn btn-outline-danger"
-                           onclick="return confirm('Are you sure?');" style="width: 100%;">
+                        <a id="clear-history" href="{{ route('protube::clearhistory') }}" class="btn btn-outline-danger btn-block">
                             Clear my ProTube history.
                         </a>
+                        <script nonce="{{ csp_nonce() }}">
+                            document.getElementById('clear-history').addEventListener('click', e => confirm('Are you sure?'))
+                        </script>
 
                     @endif
 

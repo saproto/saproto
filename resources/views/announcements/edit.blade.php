@@ -92,8 +92,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Announcement style:</label>
-                            <select name="show_style" class="form-control">
+                            <label for="show-style">Announcement style:</label>
+                            <select id="show-style" name="show_style" class="form-control">
                                 <option value="0" {{ ($announcement != null && $announcement->show_style == 0 ? 'selected' : '') }}>
                                     Primary (Green)
                                 </option>

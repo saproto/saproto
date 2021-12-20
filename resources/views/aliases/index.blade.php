@@ -58,7 +58,7 @@
                                             <a href="{{ route('user::profile', ['id' => $destination->user->getPublicId()]) }}">
                                                 @endif
                                                 @if($destination->user->trashed())
-                                                    <span style="text-decoration: line-through;">{{ $destination->user->name }}</span>
+                                                    <span class="text-decoration-line-through">{{ $destination->user->name }}</span>
                                                 @else
                                                     {{ $destination->user->name }}
                                                 @endif

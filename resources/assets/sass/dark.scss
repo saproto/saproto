@@ -10,6 +10,19 @@ $grey-dark: #212121;
 $dark: $grey-medium;
 $light: $grey-medium;
 
+$theme-colors: (
+        "primary": $primary,
+        "secondary": $secondary,
+        "brand-primary": $brand-primary,
+        "success": $success,
+        "info": $info,
+        "warning": $warning,
+        "danger": $danger,
+        "omnomcom": $omnomcom,
+        "dark": $dark,
+        "light": $light
+);
+
 //body
 $body-bg: $grey-light;
 $body-color: #fff;
@@ -67,6 +80,7 @@ $pagination-hover-bg: $grey-medium;
 $pagination-hover-border-color: $grey-dark;
 $pagination-disabled-bg: $grey-medium;
 $pagination-disabled-border-color: $grey-light;
+$pagination-focus-bg: $grey-medium;
 
 $popover-bg: $grey-medium;
 $popover-header-bg: $grey-dark;
@@ -98,28 +112,32 @@ hr {
   color: #fff;
 }
 
+//input
+.form-control[readonly] {
+  background-color: inherit;
+  @extend .text-muted
+}
+
 //buttons
-.btn.btn-outline-dark {
-  color: #fff;
-  border-color: #aaa;
-}
+.btn {
+  &-outline-dark {
+    color: #fff;
+    border-color: #aaa;
+    &:hover { background: $info; }
+  }
 
-.btn.btn-outline-dark:hover {
-  background: $info;
-}
+  &.lamp {
+    &On:hover {
+      background: $primary;
+      border-color: $primary;
+    }
+    &Off:hover {
+      background: $warning;
+      border-color: $warning;
+    }
+  }
 
-.btn.lampOn:hover {
-  background: $primary;
-  border-color: $primary;
-}
-
-.btn.lampOff:hover {
-  background: $warning;
-  border-color: $warning;
-}
-
-.btn-close {
-  @extend .btn-close-white
+  &-close { @extend .btn-close-white }
 }
 
 //modals

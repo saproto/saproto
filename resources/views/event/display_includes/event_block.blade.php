@@ -2,7 +2,7 @@
 Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::user())) || Auth::user()->can('board'))
 ))
 
-    <a class="card mb-3 leftborder leftborder-info" style="text-decoration: none !important;"
+    <a class="card mb-3 leftborder leftborder-info text-decoration-none"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
         <div class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}"
@@ -24,7 +24,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @endif
 
             @if($event->is_featured)
-                <i class="fas fa-star fa-fw" aria-hidden="true" style="color: gold"
+                <i class="fas fa-star fa-fw text-gold" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This is a featured activity!"></i>
             @endif
             @if($event->activity && Auth::check())
@@ -33,16 +33,16 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
                 @endif
                 @if($event->activity->isHelping(Auth::user()))
-                    <i class="fas fa-life-ring fa-fw" style="color: red;" aria-hidden="true"
+                    <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
                 @endif
             @endif
             @if (Auth::check() && $event->hasBoughtTickets(Auth::user()))
-                <i class="fas fa-ticket-alt fa-fw" style="color: dodgerblue;" aria-hidden="true"
+                <i class="fas fa-ticket-alt fa-fw text-info" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="You bought a ticket!"></i>
             @endif
             @if (Auth::check() && Auth::user()->is_member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
-                <i class="fas fa-exclamation-triangle fa-fw" style="color: red;" aria-hidden="true"
+                <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif
             <strong>{{ $event->title }}</strong>

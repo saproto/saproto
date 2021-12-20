@@ -6,6 +6,7 @@
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <meta name='viewport' content='initial-scale=1, maximum-scale=1, user-scalable=no'/>
+        <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
         <link rel='shortcut icon' href='{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}'/>
         <link rel='stylesheet' href='{{ mix('/assets/application-dark.css') }}'>
@@ -46,20 +47,36 @@
         </style>
     </head>
 
-    <body id='omnomcom'>
+    <body>
 
-        <div class='d-flex px-2'>
-            @include('omnomcom.store.includes.categories')
-
-            @include('omnomcom.store.includes.product_overview')
+        <div id="display-fullscreen" class="modal" tabindex="-1">
+            <div class="modal-dialog-centered mx-auto">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title w-100">Please display OmNomCom in fullscreen!</h5>
+                    </div>
+                    <div class="modal-body d-flex justify-content-center pb-0">
+                        <img src="{{ asset('images/omnomcom/cookiemonster_seasonal/pixels.png') }}" alt="cookie monster">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        @include('omnomcom.store.includes.controls')
+        <div id="omnomcom">
+
+            <div class='d-flex ps-2'>
+                @include('omnomcom.store.includes.categories')
+
+                @include('omnomcom.store.includes.product_overview')
+            </div>
+
+            @include('omnomcom.store.includes.controls')
+
+        </div>
 
         @include('omnomcom.store.includes.modals')
 
         @include('website.layouts.assets.javascripts')
-        @stack('javascript')
 
         <script type='text/javascript' nonce='{{ csp_nonce() }}'>
             let modalStatus = null;
@@ -146,7 +163,7 @@
                 }
             })
 
-            document.getElementById('purchase-button').addEventListener('click', e => {
+            document.getElementById('purchase').addEventListener('click', e => {
                 document.querySelector('#rfic-modal .modal-status').innerHTML = '<span class="text-warning" >Working on your purchase...<span>'
                 purchase(null, 'account')
             })
@@ -242,6 +259,7 @@
                 try {
                     status.classList.add('inactive')
                     status.innerHTML = 'RFID Service: Connecting...'
+                    server = new WebSocket('ws://localhost:3000', 'nfc')
                 } catch (error) {
                     if (error.message.indexOf('insecure') !== -1) {
                         status.classList.add('inactive')
@@ -351,17 +369,23 @@
                 'Complete purchase using your <i class="fas fa-cookie-bite"></i> OmNomCom bill.'
             ))
 
-            document.getElementById('purchase-cash-initiate').addEventListener('click', e => purchaseInitiate(
-                [true, false],
-                'Cashier payment for cash purchases in Omnomcom',
-                'Complete purchase as cashier, payed with cash.'
-            ))
+            cashCompleted = document.getElementById('purchase-cash-initiate')
+            if(cashCompleted) {
+                cashCompleted.addEventListener('click', e => purchaseInitiate(
+                    [true, false],
+                    'Cashier payment for cash purchases in Omnomcom',
+                    'Complete purchase as cashier, payed with cash.'
+                ))
+            }
 
-            document.getElementById('purchase-bank-card-initiate').addEventListener('click', e => purchaseInitiate(
-                [false, true],
-                'Cashier payment for bank card purchases in Omnomcom',
-                'Complete purchase as cashier, payed with bank card.'
-            ))
+            cardCompleted = document.getElementById('purchase-bank-card-initiate')
+            if(cardCompleted) {
+                cardCompleted.addEventListener('click', e => purchaseInitiate(
+                    [false, true],
+                    'Cashier payment for bank card purchases in Omnomcom',
+                    'Complete purchase as cashier, payed with bank card.'
+                ))
+            }
 
             function purchaseInitiate(cashOrCard, message, title) {
                 modals['purchase-modal'].show()

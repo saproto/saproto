@@ -9,7 +9,7 @@
         <form id="searchForm">
             <div class="input-group mb-1">
                 <div class="input-group-prepend">
-                <span id="showVideo" class="input-group-text" style="cursor: pointer;">
+                <span id="showVideo" class="input-group-text cursor-pointer">
                     <i class="fab fa-youtube fa-fw"></i>
                 </span>
                 </div>

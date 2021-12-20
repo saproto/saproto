@@ -10,7 +10,7 @@
         <h3><i class='fas fa-spinner fa-spin me-2'></i> Connecting...</h3>
     </div>
 
-    <div id="no_admin" class="text-center mt-5" style="display: none;">
+    <div id="no_admin" class="text-center mt-5 d-none">
         <h3><i class="fas fa-exclamation-triangle me-2"></i> Could not connect to ProTube admin!</h3>
         Very probably something went wrong. Please log-out, log-in and try again.
     </div>

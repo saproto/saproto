@@ -68,7 +68,7 @@
 
                                 <div class="col-md-6">
                                     <img src="https://i.ytimg.com/vi/{{ $item->youtube_id }}/hqdefault.jpg"
-                                         style="width: 100%">
+                                         class="w-100">
                                 </div>
                                 <div class="col-md-6">
                                     <strong><a href="https://youtu.be/{{ $item->youtube_id }}"
@@ -93,7 +93,7 @@
                             @if($item && $item->image)
 
                                 <label>Current image:</label>
-                                <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
+                                <img src="{!! $item->image->generateImagePath(500, null) !!}" class="w-100">
 
                             @endif
 

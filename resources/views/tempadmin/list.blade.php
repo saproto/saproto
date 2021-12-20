@@ -44,7 +44,7 @@
                             <td>
                                 <a href="{{ route("user::profile", ['id' => $tempadmin->creator->getPublicId()]) }}">{{ $tempadmin->creator->name }}</a>
                             </td>
-                            <td @if(Carbon::parse($tempadmin->start_at)->isPast()) style="opacity: 0.5;" @endif>{{ $tempadmin->start_at }}</td>
+                            <td class="{{ Carbon::parse($tempadmin->start_at)->isPast() ? 'opacity-50' : '' }}">{{ $tempadmin->start_at }}</td>
                             <td>{{ $tempadmin->end_at }}</td>
                             <td>
                                 <a href="{{ route("tempadmin::edit", ['id' => $tempadmin->id]) }}">
@@ -66,7 +66,7 @@
 
                     @foreach($pastTempadmins as $pastTempadmin)
 
-                        <tr style="opacity: 0.5;">
+                        <tr class="opacity-50">
                             <td>
                                 <a href="{{ route("user::profile", ['id' => $pastTempadmin->user->getPublicId()]) }}">{{ $pastTempadmin->user->name }}</a>
                             </td>

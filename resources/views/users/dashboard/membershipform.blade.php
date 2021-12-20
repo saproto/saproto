@@ -43,9 +43,9 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div id="membership-contract" class="row justify-content-center">
 
-        <div class="col-lg-6 col-md-7" style="max-width: 600px">
+        <div class="col-lg-6 col-md-7">
 
                 <div class="card mb-3">
 

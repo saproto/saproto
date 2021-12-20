@@ -1,10 +1,8 @@
-<div class="card mb-3">
+<div id="about" class="card mb-3">
 
-    <div class="card-header text-white border-bottom-0 bg-white" style="position: relative; height: 250px;">
+    <div class="card-header text-white border-bottom-0 bg-white position-relative mb-2">
 
-        <div class="card-header bg-dark" style="position: absolute; top: 0; left: 0; right: 0; height: 200px;"></div>
-
-        <div style="position: absolute; top: 0; left: 0; right: 0;">
+        <div>
 
             <h3 class="text-center ellipsis mb-3 mt-4">
                 {{ $user->name }}
@@ -12,8 +10,8 @@
 
             <div class="text-center">
 
-                <img src="{{ $user->generatePhotoPath(170, 170) }}" class="rounded-circle mt-2 border-white"
-                     width="170px" height="170px" style="border-style: solid; border-width: 5px;">
+                <img src="{{ $user->generatePhotoPath(170, 170) }}" class="rounded-circle mt-2 border border-5 border-white bg-dark"
+                     width="170px" height="170px">
 
             </div>
 

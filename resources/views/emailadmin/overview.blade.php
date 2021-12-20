@@ -104,7 +104,7 @@
 
                     @foreach($emails as $email)
 
-                        <tr style="{{ ($email->sent ? 'opacity: 0.5;' : '') }}">
+                        <tr class="{{ $email->sent ? 'opacity-50' : '' }}">
 
                             <td>{{ $email->description }}</td>
                             <td>

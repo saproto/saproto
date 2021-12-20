@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div id="user-admin" class="row justify-content-center">
 
         <div class="col-md-3">
 
@@ -71,8 +71,8 @@
 
                         <tbody>
                         @foreach($users as $user)
-                            <tr style="opacity: {{ $user->deleted_at ? '0.5' : '1' }};">
-                                <td class="ps-3" style="min-width: 100px">
+                            <tr class="{{ $user->deleted_at ? 'opacity-50' : '' }}">
+                                <td class="controls" class="ps-3">
                                     @if(!$user->deleted_at)
                                         <a href="{{ route('user::admin::details', ['id'=>$user->id]) }}"
                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Go to user admin" class="text-decoration-none">
@@ -104,10 +104,10 @@
                                         @endif
                                     @endif
                                 </td>
-                                <td class="text-end">#{{ $user->id }}</td>
+                                <td class="userid text-end">#{{ $user->id }}</td>
                                 <td>{{ $user->calling_name }}</td>
-                                <td style="min-width: 180px">{{ $user->name }}</td>
-                                <td>
+                                <td class="fullname">{{ $user->name }}</td>
+                                <td class="membertype">
                                     @if($user->deleted_at)
                                         Deleted
                                     @elseif($user->member)
@@ -120,18 +120,18 @@
                                         User
                                     @endif
                                 </td>
-                                <td>
+                                <td class="proto-email">
                                     {{ $user->deleted_at ? '' : $user->email }}
                                 </td>
-                                <td>
+                                <td class="proto-username">
                                     @if($user->is_member)
                                         {{$user->member->proto_username}}
                                     @endif
                                 </td>
-                                <td>
+                                <td class="utwente-username">
                                     {{ $user->utwente_username }}
                                 </td>
-                                <td style="min-width: 70px">
+                                <td class="utwente-department">
                                     {{ $user->utwente_department }}
                                 </td>
                             </tr>

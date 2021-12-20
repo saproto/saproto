@@ -2,6 +2,7 @@
 $font-family-sans-serif: 'Lato', sans-serif;
 
 $primary: #83b71a;
+$secondary: #6c757d;
 $brand-primary: $primary;
 $success: #00aac0;
 $info: $success;
@@ -10,9 +11,11 @@ $danger: #c50005;
 $omnomcom: #26ade4;
 $dark: #303030;
 $light: #f1f1f1;
+$gold: #ffd700ff;
 
 $theme-colors: (
     "primary": $primary,
+    "secondary": $secondary,
     "brand-primary": $brand-primary,
     "success": $success,
     "info": $info,
@@ -20,5 +23,6 @@ $theme-colors: (
     "danger": $danger,
     "omnomcom": $omnomcom,
     "dark": $dark,
-    "light": $light
+    "light": $light,
+    "gold": $gold
 );

@@ -25,10 +25,10 @@
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="menuname">User:</label>
+                            <label for="user-id">User:</label>
                             @if($new)
-                                <div class="input-group" style="width: 100%;">
-                                    <input class="form-control user-search" name="user_id" required />
+                                <div class="input-group w-100">
+                                    <input id="user-id" class="form-control user-search" name="user_id" required />
                                 </div>
                             @else
                                 <div class="input-group">

@@ -8,7 +8,7 @@
 
         @foreach($available_months as $year => $months)
 
-            <li class="list-group-item" data-bs-toggle="collapse" style="cursor: pointer;"
+            <li class="list-group-item cursor-pointer" data-bs-toggle="collapse"
                 data-bs-target="#omnomcom-years-{{ $year }}">
                 <strong>{{ $year }}</strong>
             </li>

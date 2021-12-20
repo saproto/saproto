@@ -14,9 +14,8 @@
 
             <div class="card mb-3 achievement-{{ $tier }}" id="achievement-{{ $tier }}">
 
-                <div class="card-header text-white" data-bs-toggle="collapse"
-                     data-bs-target="#collapse-achievement-{{ $tier }}"
-                     style="cursor: pointer;">
+                <div class="card-header text-white cursor-pointer" data-bs-toggle="collapse"
+                     data-bs-target="#collapse-achievement-{{ $tier }}">
 
                     @for($i = 0; $i < 5; $i++)
                         @if ($i >= $achievements[0]->numberOfStars())
@@ -66,13 +65,3 @@
     </div>
 
 @endsection
-
-@push('stylesheet')
-
-    <style>
-        #main {
-            overflow-x: hidden;
-        }
-    </style>
-
-@endpush

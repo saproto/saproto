@@ -35,12 +35,12 @@
                 @if(!$event->activity->closed && $instance->committee->isMember(Auth::user()))
 
                     @if($event->activity->getHelpingParticipation($instance->committee, Auth::user()) !== null)
-                        <a class="btn btn-outline-warning btn-block mt-1" style="width: 100%;"
+                        <a class="btn btn-outline-warning btn-block mt-1"
                            href="{{ route('event::deleteparticipation', ['participation_id' => $event->activity->getHelpingParticipation($instance->committee, Auth::user())->id]) }}">
                             I won't help anymore.
                         </a>
                     @elseif($instance->users->count() < $instance->amount)
-                        <a class="btn btn-outline-success btn-block mt-1" style="width: 100%;"
+                        <a class="btn btn-outline-success btn-block mt-1"
                            href="{{ route('event::addparticipation', ['id' => $event->id, 'helping_committee_id' => $instance->id]) }}">
                             I'll help!
                         </a>

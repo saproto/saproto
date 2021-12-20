@@ -2,7 +2,7 @@
 
     <div class="card-header bg-dark text-white">
 
-        <span class="qq_like me-3" data-id="{{ $quote->id }}" style="cursor: pointer;">
+        <span class="qq_like me-3 cursor-pointer" data-id="{{ $quote->id }}">
             <i class="fa-thumbs-up {{ $quote->liked(Auth::user()->id) ? "fas" : "far" }}"></i>
             <span>{{ count($quote->likes()) }}</span>
         </span>

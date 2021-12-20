@@ -33,11 +33,11 @@
                         @endif
                     </small>
                 @endif
-                <div class="card-body text-start" style="vertical-align: bottom; font-size: 30px; display: flex;">
-                    <p class="card-text ellipsis px-1" style="align-self: flex-end;">
+                <div class="card-body text-start d-flex align-items-end">
+                    <h2 class="card-text ellipsis px-1" style="font-size: 30px">
                         @section('greeting')
                         @show
-                    </p>
+                    </h2>
                 </div>
             </div>
 
@@ -52,7 +52,9 @@
                                         <div class="swiper-slide justify-content-center align-items-center d-flex">
                                             <a href="{{ route('companies::show', ['id' => $company->id]) }}">
                                                 <img class="company-{{strtolower($company->name)}}"
-                                                     src="{{ $company->image->generateImagePath(null, 50) }}"/>
+                                                     src="{{ $company->image->generateImagePath(null, 50) }}"
+                                                     alt="logo of {{ $company->name }}"
+                                                />
                                             </a>
                                         </div>
                                     @endif

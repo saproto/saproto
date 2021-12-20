@@ -13,7 +13,7 @@
     <div class="card mb-3">
 
         @if($page->featuredImage)
-            <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}" style="width: 100%;">
+            <img class="card-img-top w-100" alt="featured image" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}">
         @endif
 
         <div class="card-header">

@@ -41,7 +41,7 @@
                         </div>
 
                         @if ($video->event)
-                            <p style="text-align: center;">
+                            <p class="text-center">
                                 Currently linked to:<br>
                                 <strong>{{ $video->event->title }} ({{ date('d-m-Y', $video->event->start) }})</strong>
                             </p>
@@ -49,7 +49,7 @@
 
                         <hr>
 
-                        <img src="{{ $video->youtube_thumb_url }}" width="100%">
+                        <img src="{{ $video->youtube_thumb_url }}" alt="video thumbnail" width="100%">
 
                     </div>
 

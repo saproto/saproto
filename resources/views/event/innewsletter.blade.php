@@ -87,7 +87,7 @@
 
                         @foreach($events as $event)
 
-                            <tr style="opacity: {{ ($event->include_in_newsletter ? '1' : '0.4') }};">
+                            <tr class="{{ $event->include_in_newsletter ? '' : 'opacity-50' }}">
 
                                 <td>{{ $event->title }}</td>
                                 <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>

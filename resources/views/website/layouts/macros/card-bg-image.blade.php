@@ -1,25 +1,8 @@
-<div id="{{ isset($id) ? $id : null  }}" class="card mb-3 {{ isset($classes) ? implode(' ', $classes) : null }}
-{{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}"
-   style="text-decoration: none !important;">
-    <a href="{{ $url ?? '#' }}" class="card-body
-    @if(isset($photo_pop) && $photo_pop)
-            photo_pop
-    @else
-            photo
-    @endif
-            " style="height: 100px; display: flex; text-decoration: none !important;
-    @if(isset($img) && $img)
-    @if(isset($photo_pop) && $photo_pop)
-            background-image: {{ sprintf('url(%s);', $img) }};
-    @else
-            background-image: {{ sprintf('url(%s);', $img) }};
-    @endif
-    @else
-            background: #333;
-    @endif
-    {{ isset($height) ? sprintf('height: %spx;', $height) : null }}
-            ">
-        <p class="card-text ellipsis" style="align-self: flex-end;">
+<div id="{{ isset($id) ? $id : null  }}" class="card mb-3 text-decoration-none {{ isset($classes) ? implode(' ', $classes) : null }}
+{{ isset($leftborder) ? sprintf('leftborder leftborder-%s', $leftborder) : null }}">
+    <a href="{{ $url ?? '#' }}" class="card-body d-flex justify-content-end text-decoration-none {{ $photo_pop ? 'photo_pop' : 'photo' }}"
+       style="height: 100px; background: {{ isset($img) ? "url($img)" : '#333' }}{{ isset($height) ? sprintf('height: %spx;', $height) : null }}">
+        <p class="card-text ellipsis">
             {!! $html !!}
         </p>
     </a>

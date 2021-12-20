@@ -80,7 +80,7 @@
                                         {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
                                     </a>
                                 @else
-                                    <i style="color: lightgray">none</i>
+                                    <i class="opacity-50">none</i>
                                 @endif
                             </td>
                             <td>

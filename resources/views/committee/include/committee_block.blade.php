@@ -6,7 +6,7 @@
             'data-bs-toggle="tooltip" data-bs-placement="top" title="This committee is hidden. You cannot see its details."',
             $name) : sprintf('<strong>%s</strong>', $name),
             'height' => isset($height) ? $height : 120,
-            'classes' => !$committee->public ? ['committee__hidden'] : null,
+            'classes' => !$committee->public ? ['opacity-50'] : null,
             'photo_pop' => isset($photo_pop) ? $photo_pop : true,
             'footer' => isset($footer) ? $footer : null
 ])

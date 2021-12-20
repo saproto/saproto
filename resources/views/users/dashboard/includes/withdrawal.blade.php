@@ -78,12 +78,10 @@
                 <div class="modal-body">
 
                     @if($user->hasUnpaidOrderlines())
-                        <p style="color: red;">
+                        <p class="text-danger">
                             You have unpaid orderlines. You cannot revoke your authorization until you have settled all
-                            your
-                            purhcases with Proto. You can await the next withdrawal, or head over to your
-                            <a href="{{ route("omnomcom::orders::list") }}">purchase history</a> to pay manually via
-                            iDeal.
+                            your purchases with Proto. You can await the next withdrawal, or head over to your
+                            <a href="{{ route("omnomcom::orders::list") }}">purchase history</a> to pay manually via iDeal.
                         </p>
                         <hr>
                     @endif

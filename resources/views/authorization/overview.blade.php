@@ -36,7 +36,7 @@
                                 </th>
                                 @foreach($permissions as $permission)
                                     <td width="{{ $width }}%">
-                        <span style="opacity: {{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '1' : '0.2' }};">
+                        <span class="{{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '' : 'opacity-25' }}">
                             {{ $permission->name }}
                         </span>
                                     </td>
@@ -68,7 +68,7 @@
 
                             <div class="card mb-2">
 
-                                <div class="card-header bg-info text-white" style="cursor: pointer;"
+                                <div class="card-header bg-info text-white cursor-pointer"
                                      data-bs-toggle="collapse" data-bs-target="#role-accordion-{{ $role->id }}">
                                     {{ $role->name }}
                                 </div>

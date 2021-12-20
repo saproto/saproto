@@ -129,7 +129,7 @@
                                                         <td style="width: 80px">
                                                             <input id="le_{{ $entry->id }}" value="{{ $entry->points}}" class="le-points-input">
                                                         </td>
-                                                        <td style="min-width: 60px; cursor: pointer;">
+                                                        <td class="cursor-pointer" style="min-width: 60px;">
                                                             <span class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"></span>
                                                             <span class="fa fas fa-lg fa-caret-down ms-1 le-points-decrease"></span>
                                                         </td>

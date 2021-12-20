@@ -22,7 +22,7 @@
                         This album is published so editing is limited, click here to unpublish the album.
                     </a>
                 @else
-                    <span class="btn btn-warning text-white btn-block mb-3" style="cursor: default;">
+                    <span class="btn btn-warning text-white btn-block mb-3 cursor-default">
                         This album is published so editing is limited, ask a Protography admin to unpublish it if you wish to make changed.
                     </span>
                 @endcan
@@ -32,7 +32,7 @@
                         This album is not yet published, click here to publish the album.
                     </a>
                 @else
-                    <span class="btn btn-warning text-white btn-block mb-3" style="cursor: default;">
+                    <span class="btn btn-warning text-white btn-block mb-3 cursor-default">
                 This album is not yet published, ask a Protography admin to publish it.
             </span>
                 @endcan
@@ -144,7 +144,7 @@
                         </div>
                         <div id="upload-view" class="row position-relative"></div>
                         <div id="droparea" class="d-flex opacity-25 border border-2 border-light rounded-3" style="height: 200px">
-                            <div id="droparea-content" class="text-center m-auto" style="pointer-events: none">
+                            <div id="droparea-content" class="text-center m-auto pointer-events-none">
                                 <i class="fa fa-images fa-5x mt-2"></i>
                                 <p>
                                     <span>Drop photos to upload</span>

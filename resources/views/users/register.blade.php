@@ -16,7 +16,7 @@
             @include('users.registerwizard_macro')
         @endif
 
-        <a href="{{ route('login::edu') }}" class="btn btn-success" style="width: 100%;">
+        <a href="{{ route('login::edu') }}" class="btn btn-success w-100">
             Create an account with your university account
         </a>
 
@@ -28,7 +28,7 @@
                 Using this form you can register a new account on the S.A. Proto website.
             </p>
 
-            <p style="font-weight: bold;">
+            <p class="fw-bold">
                 Creating and having an account on the website does not make you a member of S.A. Proto and is free of
                 charge.
             </p>
@@ -39,10 +39,8 @@
 
         @csrf
 
-        <p>
-            <input type="text" class="form-control" id="email" name="email" placeholder="Your e-mail address" required
-                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['email'] : '') }}">
-        </p>
+        <input type="text" class="form-control mb-3" id="email" name="email" placeholder="Your e-mail address" required
+               value="{{ (Session::has('register_persist') ? Session::get('register_persist')['email'] : '') }}">
 
         <p>
             Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
@@ -51,31 +49,23 @@
 
         <hr>
 
-        <p>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Full name" required
-                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}">
-        </p>
+        <input type="text" class="form-control mb-1" id="name" name="name" placeholder="Full name" required
+               value="{{ (Session::has('register_persist') ? Session::get('register_persist')['name'] : '') }}">
 
-        <p>
-            <input type="text" class="form-control" id="calling_name" name="calling_name" placeholder="Calling name"
-                   required
-                   value="{{ (Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '') }}">
-        </p>
+        <input type="text" class="form-control" id="calling_name" name="calling_name" placeholder="Calling name"
+               required
+               value="{{ (Session::has('register_persist') ? Session::get('register_persist')['calling_name'] : '') }}">
 
         <hr>
 
-        <p>
-            <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
-               target="_blank" class="btn btn-outline-secondary btn-block">
-                Privacy policy
-            </a>
-        </p>
+        <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+           target="_blank" class="btn btn-outline-secondary btn-block mb-2">
+            Privacy policy
+        </a>
 
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="privacy_policy_acceptance" required>
-                I have read and acknowledge the privacy policy.
-            </label>
+        <div class="form-check">
+            <input id="privay-policy-check" class="form-check-input" type="checkbox" name="privacy_policy_acceptance" required>
+            <label class="form-check-label" for="privacy-policy-check">I have read and acknowledge the privacy policy.</label>
         </div>
 
         <hr>

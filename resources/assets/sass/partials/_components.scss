@@ -165,6 +165,10 @@ $event-hover-bg: #aaa !default;
   }
 }
 
+#archive-bar {
+  #category-search { width: 250px; }
+}
+
 // Product images
 .product-image {
   width: 90px;
@@ -275,6 +279,7 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   * { z-index: 1; }
 }
 
+// Datetimepicker
 .datetimepicker::-webkit-calendar-picker-indicator {
   background-image: unset;
   background-color: $dark;
@@ -286,13 +291,36 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   }
 }
 
+// Profile
+#about {
+  .card-header {
+    height: 240px;
+  }
+}
+
 // Global
 main {
   min-height: calc(100vh - 292px);
+  &#nonavandfooter {
+    margin-bottom: 20px;
+    border-top: solid 20px $dark;
+    border-bottom: solid 20px $dark;
+  }
+  &#dashboard {
+    margin-top: 66px;
+    padding-bottom: 20px;
+    min-height: calc(100vh - 66px);
+    margin-bottom: 30px;
+    border-bottom: solid 20px $dark;
+  }
+
+  &-footer {
+    height: 205px;
+  }
 }
 
-.main-footer {
-  height: 205px;
+.outline-none {
+  outline: none !important;
 }
 
 .underline-on-hover:hover {
@@ -484,6 +512,10 @@ a.card {
   }
 }
 
+.cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
+.pointer-events-none { pointer-events: none}
+
 //Select2
 .select2-dropdown {
   border: 1px solid rgba(0,0,0,.125) !important;
@@ -534,8 +566,20 @@ ul.pagination {
 }
 
 //OmNomCom
+#display-fullscreen {
+  display: none;
+  .modal-dialog-centered { max-width: 500px; }
+  img { height: 200px; }
+}
+
+@media (max-width: 1280px) and (max-height: 720px), (orientation: portrait) {
+  #omnomcom { display: none; }
+  #display-fullscreen { display: unset; }
+}
+
 #omnomcom {
   .btn-category {
+    min-width: 190px;
     transform: translate(20px, 0);
 
     &.inactive {
@@ -556,6 +600,7 @@ ul.pagination {
   .category-view {
     display: flex;
     flex-wrap: wrap;
+    padding-right: 10px;
 
     &.inactive {
       display: none;
@@ -566,9 +611,7 @@ ul.pagination {
   }
 
   .product {
-    padding: 20px 0 0 20px;
-    float: left;
-    height: 150px;
+    padding: 10px 0 0 10px;
 
     &:hover:not(.nostock) { cursor: pointer; }
 
@@ -764,6 +807,41 @@ ul.pagination {
         margin-top: 20px;
         margin-bottom: -30px;
       }
+    }
+  }
+}
+
+// Membership Contract
+#membership-contract > div {
+  max-width: 600px
+}
+
+// Tables
+#user-admin {
+  .table-responsive {
+    .controls { min-width: 100px; }
+    .fullname { min-width: 180px; }
+    .utwente-department { min-width: 70px; }
+  }
+}
+
+#news-admin {
+  .table-responsive {
+    .title {
+      min-width: 160px;
+      overflow-wrap: break-word }
+  }
+}
+
+#companies-admin {
+  .table-responsive {
+    .name {
+      overflow-wrap: break-word;
+      max-width: 130px;
+    }
+    .url {
+      overflow-wrap: break-word;
+      max-width: 220px;
     }
   }
 }
