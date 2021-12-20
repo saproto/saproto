@@ -93,7 +93,7 @@ class MollieTransaction extends Model
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
-        $this->payment_url = $mollie->getPaymentUrl();
+        $this->payment_url = $mollie->getCheckoutUrl();
 
         $this->save();
 

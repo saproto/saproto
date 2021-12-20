@@ -44,8 +44,8 @@
 
                             <label for="url">Url:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   value="{{ $dinnerformCurrent->url ?? 'https://forms.gle/t2hDEnkNCLXNpvYTA' }}" required>
-
+                                   placeholder='https://forms.gle/t2hDEnkNCLXNpvYTA'
+                                   value="{{ $dinnerformCurrent->url ?? ''}}" required>
                         </div>
                     </div>
                 </div>
