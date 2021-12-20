@@ -179,15 +179,18 @@ class MollieController extends Controller
         $total = OrderLine::whereIn('id', $orderlines)->sum('total_price');
 
         $mollie = Mollie::api()->payments()->create([
-            'amount' => $total,
+            'amount' => [
+                'currency' => 'EUR',
+                'value' => strval($total),
+            ],
             'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
             'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
         ]);
 
         $transaction->mollie_id = $mollie->id;
-        $transaction->amount = $mollie->amount;
-        $transaction->payment_url = $mollie->getPaymentUrl();
+        $transaction->amount = $mollie->amount->value;
+        $transaction->payment_url = $mollie->getCheckoutUrl();
         $transaction->save();
 
         return $transaction;

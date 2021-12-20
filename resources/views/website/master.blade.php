@@ -45,6 +45,8 @@
 
     @include('website.layouts.macros.flashmessages')
 
+    @include('website.layouts.macros.achievement-popup')
+
     @include('website.layouts.macros.errormessages')
 
     @include('website.layouts.assets.javascripts')

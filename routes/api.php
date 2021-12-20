@@ -3,7 +3,7 @@
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], function () {
-        Route::get('dmx_values', ['as', 'dmx_values', 'uses' => 'DmxController@valueApi']);
+        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'ApiController@fishcamStream']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);

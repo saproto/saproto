@@ -102,7 +102,7 @@
 
                     </table>
 
-                    <div class="card-footer pb-0">{{ $transactions->appends(Input::except('page'))->links() }}</div>
+                    <div class="card-footer pb-0">{{ $transactions->links() }}</div>
 
                 @else
                     <div class="card-body">

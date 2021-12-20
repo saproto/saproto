@@ -84,15 +84,17 @@
                                     </a>
                                 @endcan
 
+                            @can("tipcie")
                                 <li role="separator" class="dropdown-divider"></li>
 
                                 <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
                                     TIPCie Order Overview
                                 </a>
                                 <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
-                            </ul>
-                        </li>
-                    @endcan
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
 
                     @canany(["board","finadmin","alfred"])
                         <li id="admin-nav-item" class="nav-item dropdown">

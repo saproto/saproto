@@ -65,7 +65,7 @@
     "league/oauth1-client": "1.7.*",
     "lisennk/laravel-slack-web-api": "0.1.*",
     "milon/barcode": "^7.0",
-    "mollie/laravel-mollie": "2.*",
+    "mollie/laravel-mollie": "2.15.0",
     "nesbot/carbon": "2.*",
     "nickurt/laravel-pwned-passwords": "1.*",
     "nickurt/laravel-postcodeapi": "1.15.*",
