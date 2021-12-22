@@ -13,6 +13,18 @@ require('bootstrap-slider')
 require('select2')
 require('fontawesome-iconpicker')
 
+/*disable all buttons on a page after a form has been submitted so spamming the button doesnt result in two or more entries*/
+window.addEventListener('load', (event) => {
+    let forms = document.querySelectorAll("form")
+    forms.forEach((form) => {
+        form.addEventListener('submit', (event) => {
+            event.preventDefault()
+            event.submitter.disabled=true
+            event.target.submit()
+        })
+    })
+});
+
 // Update locale
 moment.updateLocale('en', {
     week: {dow: 1}
