@@ -187,7 +187,7 @@
                                                 @else
                                                 type="submit"
                                                 @endif
-                                                name="submit" value="remove" class="btn btn-danger"><i
+                                                name="submitBtn" value="remove" class="btn btn-danger"><i
                                                     class="fa fa-trash"></i> Remove
                                         </button>
                                         <button
@@ -196,7 +196,7 @@
                                                 @else
                                                 type="submit"
                                                 @endif
-                                                name="submit" value="thumbnail" class="btn btn-success"><i
+                                                name="submitBtn" value="thumbnail" class="btn btn-success"><i
                                                     class="fa fa-image"></i> Set thumbnail
                                         </button>
                                         <button
@@ -205,7 +205,7 @@
                                                 @else
                                                 type="submit"
                                                 @endif
-                                                name="submit" value="private" class="btn btn-warning"><i
+                                                name="submitBtn" value="private" class="btn btn-warning"><i
                                                     class="fa fa-eye"></i> Toggle private
                                         </button>
 
@@ -231,7 +231,7 @@
                                                     <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close
                                                     </button>
-                                                    <button id="confirmButton" type="submit" name="submit" value=""
+                                                    <button id="confirmButton" type="submit" name="submitBtn" value=""
                                                             class="btn"></button>
                                                 </div>
                                             </div>
