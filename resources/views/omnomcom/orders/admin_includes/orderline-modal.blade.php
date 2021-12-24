@@ -43,9 +43,7 @@
 
                             <div class="input-group mb-3">
                                 <input type="number" class="form-control orderline-units" name="units[]" value="1">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">x</span>
-                                </div>
+                                <span class="input-group-text">x</span>
                             </div>
 
                         </div>

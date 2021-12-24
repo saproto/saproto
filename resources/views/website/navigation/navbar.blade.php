@@ -271,11 +271,9 @@
                     <div class="input-group">
                         <input class="form-control bg-white"
                                placeholder="Search" type="search" name="query" style="max-width: 125px;">
-                        <div class="input-group-append">
-                            <button type="submit" class="input-group-text btn btn-info">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
+                        <button type="submit" class="input-group-text btn btn-info">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
                 </form>
 

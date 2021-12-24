@@ -23,11 +23,9 @@
                         <div class="input-group">
                             <input class="form-control"
                                    placeholder="Search albums" type="search" name="query">
-                            <div class="input-group-append">
-                                <button type="submit" class="input-group-text btn btn-info">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                            <button type="submit" class="input-group-text btn btn-info">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                     </form>
                 </div>

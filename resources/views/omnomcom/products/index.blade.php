@@ -22,11 +22,9 @@
 
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="search">
-                            <div class="input-group-append">
-                                <button type="submit" class="input-group-text" id="basic-addon2"><i
-                                            class="fas fa-search"></i>
-                                </button>
-                            </div>
+                            <button type="submit" class="input-group-text" id="basic-addon2">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
 
                     </form>

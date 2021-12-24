@@ -57,9 +57,7 @@
                         <label for="sender_address">Sender e-mail:</label>
                         <div class="input-group mb-3">
                             <input name="sender_address" type="text" class="form-control" placeholder="board" value="{{ $email->sender_address ?? '' }}" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
-                            </div>
+                            <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
                         </div>
                     </div>
 

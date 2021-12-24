@@ -24,9 +24,7 @@
 
                         <div class="input-group mb-3">
                             <input type="text" id="alias" class="form-control" placeholder="awesome-alias" name="alias" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
-                            </div>
+                            <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
                         </div>
 
                         <hr>

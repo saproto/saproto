@@ -34,9 +34,7 @@
                                 </div>
                                 <input class="form-control float-start" type="number" name="cap"
                                        value="{{ ceil($next_withdrawal) }}">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">.00</span>
-                                </div>
+                                <span class="input-group-text">.00</span>
                             </div>
                         </div>
                         <div class="col-3">
