@@ -62,10 +62,10 @@ function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter)
     el.value = el.placeholder
 
     const selected = document.createElement('div')
-    selected.className = 'selected-items form-control p-0 d-none'
+    selected.className = 'selected-items form-control bg-dark border-top-0 p-1 d-none'
 
     const selectedItem = document.createElement('span')
-    selectedItem.className = 'selected-item d-block-inline badge bg-success px-2 my-1 mx-2'
+    selectedItem.className = 'selected-item d-block-inline badge bg-success ps-1 my-1 mx-2'
 
     // Append results and hidden inputs
     el.parentNode.append(searchResults)

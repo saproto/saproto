@@ -357,9 +357,16 @@ a.badge {
 }
 
 .user-search, .event-search, .product-search, .committee-search {
-  & ~ .selected-items > .selected-item:hover {
-    cursor: pointer;
-    background-color: mix($white, $success, 10%) !important;
+  & ~ .selected-items > .selected-item {
+    &:before {
+      content: '⨯';
+      margin-right: 3px;
+    }
+    &:hover {
+      &:before { color: $danger; }
+      cursor: pointer;
+      background-color: mix($white, $success, 10%) !important;
+    }
   }
 
   & ~ .search-results {
@@ -370,6 +377,7 @@ a.badge {
     max-height: 200px;
     max-width: calc(100vw - 20px);
     overflow-y: auto;
+    background-color: $dark;
 
     &:not(:disabled):hover {
       display: block;
@@ -380,9 +388,10 @@ a.badge {
       padding-right: 7px;
       overflow-x: hidden;
     }
+
     option {
       &:hover {
-        background-color: $gray-300;
+        background-color: $info;
         cursor: pointer;
       }
     }
