@@ -14,6 +14,8 @@
     }
 </script>
 
-<script type="text/javascript" src="{{ mix('/assets/manifest.js') }}"></script>
-<script type="text/javascript" src="{{ mix('/assets/vendor.js') }}"></script>
-<script type="text/javascript" src="{{ mix('/assets/application.js') }}"></script>
+<script type="text/javascript" src="{{ mix('/js/manifest.js') }}" defer></script>
+@foreach(glob('js/*vendor.js') as $chunk)
+    <script type="text/javascript" src="{{ mix("$chunk") }}" defer></script>
+@endforeach
+<script type="text/javascript" src="{{ mix('/js/application.js') }}" defer></script>

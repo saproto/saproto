@@ -1,8 +1,5 @@
 // Vendors
-window.moment = require('moment')
 window.SignaturePad = require('signature_pad')
-window.io = require('socket.io-client')
-window.Cookies = require('js-cookie')
 window.axios = require('axios')
 require('./countdown-timer')
 require('./search-complete')
@@ -16,9 +13,6 @@ let token = document.head.querySelector('meta[name="csrf-token"]')
 if (token) window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
 else console.error('CSRF token not found')
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-
-// Update locale
-moment.updateLocale('en', { week: {dow: 1} })
 
 // Initialise Swiper on home page
 import Swiper, { Autoplay, Navigation} from 'swiper'

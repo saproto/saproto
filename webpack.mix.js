@@ -5,16 +5,19 @@ require('laravel-mix-purgecss')
 const paths = {
     styles: {
         src: 'resources/assets/sass/',
-        components: 'resources/assets/sass/partials/_components.scss'
+        dst: 'public/css/'
     },
     scripts: {
         src: 'resources/assets/js/',
+        dst: 'public/js/',
+        chunks: {
+            bootstrap: ['bootstrap', 'popper.js'],
+            interface: ['easymde', 'swiper', 'signature_pad', 'codethereal-iconpicker']
+        }
     },
-    public: 'public/assets/'
 }
 
-mix
-    .webpackConfig({ devtool: "inline-source-map" })
+mix .webpackConfig({ devtool: "inline-source-map" })
     .options({
         postCss: [
             require('postcss-discard-comments')({
@@ -26,23 +29,22 @@ mix
         }
     })
 
-//Compile all theme SCSS to public folder
+//Compile all theme SCSS
 glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
     let src = paths.styles.src+fileName
-    let dest = paths.public+'application-'+fileName.replace('scss', 'css')
-    mix
-        .sass(src, dest, {
-            sassOptions: {
-                // Mute deprecation warnings because of Bootstrap 4
-                quietDeps: true,
-            }
+    let dest = paths.styles.dst+'application-'+fileName.replace('scss', 'css')
+    mix .sass(src, dest, {
+            sassOptions: { quietDeps: true } // Mute deprecation warnings because of Bootstrap 4
         })
         .purgeCss()
 })
 
 // Compile all javascript
-mix .js(paths.scripts.src+'application.js', paths.public)
-    .extract()
+mix.js(paths.scripts.src+'application.js', paths.scripts.dst)
+Object.entries(paths.scripts.chunks).forEach(([name, packages]) => {
+    mix.extract(packages, paths.scripts.dst+name+'~vendor.js')
+})
+mix.extract()
 
-// Enable sourcemap and versioning
-mix .version()
+// Enable versioning
+mix.version()
