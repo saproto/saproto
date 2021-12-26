@@ -1,155 +1,117 @@
-const userSearchList = [].slice.call(document.getElementsByClassName('user-search'))
-userSearchList.map((el) => searchAutocomplete(
-    el,
-    config.routes.api_search_user,
-    (option, item) => {
-        option.innerHTML = `#${item.id} ${item.name}`
-    },
-    (item) => { return item.name }
-))
+export default class SearchComplete {
+    constructor(el, route, optionTemplate, selectedTemplate, sorter) {
+        this.el = el
+        this.route = route
+        this.optionTemplate = optionTemplate
+        this.selectedTemplate = selectedTemplate
+        this.sorter = sorter
+        this.multiple = el.hasAttribute('multiple')
 
-const eventSearchList = [].slice.call(document.getElementsByClassName('event-search'))
-eventSearchList.map((el) => searchAutocomplete(
-    el,
-    config.routes.api_search_event,
-    (option, item) => {
-        option.className = item.is_future ? '' : 'text-muted'
-        option.innerHTML = `${item.title} (${item.formatted_date.simple})`
-    },
-    (item) => { return item.title },
-    (a, b) => {
-        if (a.start < b.start) return 1;
-        else if (a.start > b.start) return -1;
-        else return 0;
+        // Search result container
+        this.searchResults = document.createElement('div')
+        this.searchResults.className = 'search-results form-control p-0'
+        this.searchResults.id = el.id + '-search-results'
+
+        // Input template
+        this.input = document.createElement('input')
+        this.input.type = 'hidden'
+        this.input.name = el.name
+        this.input.value = el.value
+        el.name = ''
+        el.value = el.placeholder
+
+        // Selected item container
+        this.selected = document.createElement('div')
+        this.selected.className = 'selected-items form-control bg-dark border-top-0 p-1 d-none'
+
+        // Selected item template
+        this.selectedItem = document.createElement('span')
+        this.selectedItem.className = 'selected-item d-block-inline badge bg-success ps-1 my-1 mx-2'
+
+        // Append results and hidden inputs
+        el.parentNode.append(this.searchResults)
+        if (this.multiple) el.parentNode.append(this.selected)
+        else el.parentNode.append(this.input)
+
+        this.search()
+        el.addEventListener('keyup', this.search)
     }
-))
 
-const productSearchList = [].slice.call(document.getElementsByClassName('product-search'))
-productSearchList.map((el) => searchAutocomplete(
-    el,
-    config.routes.api_search_product,
-    (option, item) => {
-        option.className = item.is_visible ? '' : 'text-muted'
-        option.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
-    },
-    (item) => { return item.name + (el.multiple ? ' (€' + item.price.toFixed(2) + ')' : '') },
-    (a, b) => {
-        if (a.is_visible === 0 && b.is_visible === 1) return 1
-        else if (a.is_visible === 1 && b.is_visible === 0) return -1
-        else return 0
-    }
-))
-
-const committeeSearchList = [].slice.call(document.getElementsByClassName('committee-search'))
-committeeSearchList.map((el) => searchAutocomplete(
-    el,
-    config.routes.api_search_committee,
-))
-
-function searchAutocomplete(el, route, optionTemplate, selectedTemplate, sorter) {
-    const multiple = el.hasAttribute('multiple')
-
-    const searchResults = document.createElement('div')
-    searchResults.className = 'search-results form-control p-0'
-    searchResults.id = el.id + '-search-results'
-    searchResults.innerHTML = '<span>type at least 3 characters</span>'
-
-    const input = document.createElement('input')
-    input.type = 'hidden'
-    input.name = el.name
-    el.name = ''
-    input.value = el.value
-    el.value = el.placeholder
-
-    const selected = document.createElement('div')
-    selected.className = 'selected-items form-control bg-dark border-top-0 p-1 d-none'
-
-    const selectedItem = document.createElement('span')
-    selectedItem.className = 'selected-item d-block-inline badge bg-success ps-1 my-1 mx-2'
-
-    // Append results and hidden inputs
-    el.parentNode.append(searchResults)
-    if (multiple) el.parentNode.append(selected)
-    else el.parentNode.append(input)
-
-    search()
-    el.addEventListener('keyup', search)
-
-    function search(e) {
-        searchResults.innerHTML = ''
+    search = () => {
+        this.searchResults.innerHTML = ''
 
         // Search input must be at least 3 characters
-        if (el.value.length < 3) return searchResults.innerHTML = '<span>type at least 3 characters</span>'
-        else searchResults.innerHTML = '<span>searching...</span>'
+        if (this.el.value.length < 3) return this.searchResults.innerHTML = '<span>type at least 3 characters</span>'
+        else this.searchResults.innerHTML = '<span>searching...</span>'
 
         // Get search results
         window.axios.get(
-            route,
+            this.route,
             {
                 responseType: 'json',
-                params: {q: el.value}
+                params: {q: this.el.value}
             }
             // On success handle search results
         ).then((res) => {
             const data = res.data
 
             // Check if there are any results
-            if (data.length === 0) return searchResults.innerHTML = '<span>no results</span>'
-            else searchResults.innerHTML = ''
+            if (data.length === 0) return this.searchResults.innerHTML = '<span>no results</span>'
+            else this.searchResults.innerHTML = ''
 
             // Sort data if sorter is defined
-            if (sorter === 'function') data.sort(sorter)
+            if (this.sorter === 'function') data.sort(this.sorter)
 
             data.forEach((item) => {
                 // For each result create an option in the search results container
                 let option = document.createElement('option')
-                if (typeof optionTemplate === 'function') optionTemplate(option, item)
+                if (typeof this.optionTemplate === 'function') this.optionTemplate(option, item)
                 else option.innerHTML = item.name
 
                 // Add onclick eventListener to option to be able to select one
                 option.addEventListener('click', (e) => {
                     // Check if input accepts multiple selections
-                    if (multiple) {
-                        selected.classList.remove('d-none')
-                        el.required = false
+                    if (this.multiple) {
+                        this.selected.classList.remove('d-none')
+                        this.el.required = false
 
                         // Create new selected item
-                        let newSelectedItem = selectedItem.cloneNode()
-                        newSelectedItem.innerHTML = selectedTemplate?.(item) ?? item.id
+                        let newSelectedItem = this.selectedItem.cloneNode()
+                        newSelectedItem.innerHTML = this.selectedTemplate?.(item) ?? item.id
                         newSelectedItem.addEventListener('click', (e) => {
                             newSelectedItem.remove()
-                            if (selected.children.length === 0) {
-                                el.required = true
-                                selected.classList.add('d-none')
+                            if (this.selected.children.length === 0) {
+                                this.el.required = true
+                                this.selected.classList.add('d-none')
                             }
                         })
 
                         // Create new hidden input
-                        let multipleInput = input.cloneNode()
+                        let multipleInput = this.input.cloneNode()
                         multipleInput.value = item.id
 
                         // append selection to selected items container
                         newSelectedItem.append(multipleInput)
-                        selected.append(newSelectedItem)
+                        this.selected.append(newSelectedItem)
 
-                        el.value = ''
-                        searchResults.innerHTML = ''
-                    // In case only one selection is allowed
+                        this.el.value = ''
+                        this.searchResults.innerHTML = ''
+                        // In case only one selection is allowed
                     } else {
                         // set the hidden input value
-                        input.value = item.id
-                        el.value = selectedTemplate?.(item) ?? item.name ?? item.id
-                        searchResults.innerHTML = ''
-                        searchResults.append(option)
+                        this.input.value = item.id
+                        this.el.value = this.selectedTemplate?.(item) ?? item.name ?? item.id
+                        this.searchResults.innerHTML = ''
+                        this.searchResults.append(option)
                     }
 
-                    el.dispatchEvent(new Event('keyup'))
+                    this.el.dispatchEvent(new Event('keyup'))
                 })
-                searchResults.append(option)
+                this.searchResults.append(option)
             })
             // Log and return error to user
         }).catch((err) => {
-            searchResults.innerHTML = '<span class="text-danger"> there was an error</span>'
+            this.searchResults.innerHTML = '<span class="text-danger"> there was an error</span>'
             console.error(err)
         })
     }

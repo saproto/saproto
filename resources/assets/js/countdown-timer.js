@@ -38,8 +38,8 @@ function pad(n, width, z) {
 }
 
 window.initializeCountdowns = function() {
-    const countdownList = [].slice.call(document.getElementsByClassName("proto-countdown"))
-    countdownList.map(el => { setInterval(updateCountdown(el), 1000) })
+    const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
+    countdownList.forEach(el => { setInterval(updateCountdown(el), 1000) })
 }
 
 initializeCountdowns()

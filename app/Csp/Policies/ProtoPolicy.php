@@ -70,6 +70,7 @@ class ProtoPolicy extends Policy
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
                     'https://ka-f.fontawesome.com/',
+                    'https://api.fontawesome.com/',
                 ]);
         } catch (InvalidValueSet | InvalidDirective $e) {
             captureException($e);
