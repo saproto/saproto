@@ -284,8 +284,8 @@ $photo-hover-gradient: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 
   background-image: unset;
   background-color: $dark;
   height: 15px;
-  mask: url("/public/images/calendar.svg") no-repeat;
-  -webkit-mask: url("/public/images/calendar.svg") no-repeat;
+  mask: url("/images/calendar.svg") no-repeat;
+  -webkit-mask: url("/images/calendar.svg") no-repeat;
   &:hover {
     cursor: pointer
   }
