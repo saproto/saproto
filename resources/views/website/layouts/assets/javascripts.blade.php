@@ -14,8 +14,8 @@
     }
 </script>
 
-<script type="text/javascript" src="{{ mix('/js/manifest.js') }}" defer></script>
+<script type="text/javascript" src="{{ mix('/js/manifest.js') }}"></script>
 @foreach(glob('js/*vendor.js') as $chunk)
-    <script type="text/javascript" src="{{ mix("$chunk") }}" defer></script>
+    <script type="text/javascript" src="{{ mix("$chunk") }}"></script>
 @endforeach
-<script type="text/javascript" src="{{ mix('/js/application.js') }}" defer></script>
+<script type="text/javascript" src="{{ mix('/js/application.js') }}"></script>
