@@ -13,7 +13,7 @@
 
             @include('website.layouts.macros.iconpicker', [
                 'name' => 'fa_icon',
-                'placeholder' => isset($achievement) ? $achievement->icon : null,
+                'placeholder' => isset($achievement) ? $achievement->fa_icon : null,
                 'label' => 'Achievement icon:'
             ])
 
