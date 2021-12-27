@@ -17,6 +17,7 @@ use Proto\Models\QrAuthRequest;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use stdClass;
+use Illuminate\Support\Arr;
 
 class OmNomController extends Controller
 {
@@ -29,7 +30,8 @@ class OmNomController extends Controller
     {
         $stores = config('omnomcom.stores');
 
-        if (array_key_exists($store, $stores)) {
+        // if (array_key_exists($store, $stores)) {
+        if (Arr::exists($stores, $store)) {
             $store_data = $stores[$store];
 
             if (! in_array($request->ip(), $store_data->addresses) && (! Auth::check() || ! Auth::user()->can($store_data->roles))) {
@@ -76,7 +78,8 @@ class OmNomController extends Controller
         $result = new stdClass();
         $result->status = 'ERROR';
 
-        if (array_key_exists($store, $stores)) {
+        // if (array_key_exists($store, $stores)) {
+        if (Arr::exists($stores, $store)) {
             $store_data = $stores[$store];
             if (! in_array($request->ip(), $store_data->addresses) && ! Auth::user()->can($store_data->roles)) {
                 $result->message = "<span style='color: red;'>You are not authorized to do this.</span>";

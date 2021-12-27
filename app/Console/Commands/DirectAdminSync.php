@@ -8,6 +8,7 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
 use Solitweb\DirectAdmin\DirectAdmin;
+use Illuminate\Support\Arr;
 
 class DirectAdminSync extends Command
 {
@@ -145,7 +146,8 @@ class DirectAdminSync extends Command
             $destination = explode(',', $destination);
 
             // It should exist, now we check if the forwarder needs to be rewritten.
-            if (array_key_exists($alias, $target)) {
+            // if (array_key_exists($alias, $target)) {
+            if (Arr::exists($target, $alias)) {
 
                 // If one target destination is not currently present, rewrite whole forwarder.
                 foreach ($target[$alias] as $d) {
@@ -175,7 +177,8 @@ class DirectAdminSync extends Command
         foreach ($target as $alias => $destination) {
 
             // A forwarder does not yet exist...
-            if (! array_key_exists($alias, $current)) {
+            // if (! array_key_exists($alias, $current)) {
+            if (! Arr::exists($current, $alias)) {
                 $data['add'][$alias] = $destination;
             }
         }
@@ -294,7 +297,8 @@ class DirectAdminSync extends Command
             $da->query($query['cmd'], $query['options']);
 
             $response = $da->fetch_parsed_body();
-            if (array_key_exists('error', $response) && $response['error'] == 1) {
+            // if (array_key_exists('error', $response) && $response['error'] == 1) {
+            if (Arr::exists($response, 'error') && $response['error'] == 1) {
                 $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
             }
         }

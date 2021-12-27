@@ -1,11 +1,12 @@
 <?php
 
+use Proto\Models\User;
+use Proto\Models\Member;
+use Illuminate\Support\Arr;
+use Proto\Models\Committee;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
-use Proto\Models\Member;
-use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
 {
@@ -19,7 +20,8 @@ class ImportLiveDataSeeder extends Seeder
 
         // First let's create our user.
         $userData = (array) self::getDataFromExportApi('user');
-        $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
+        // $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
+        $memberData = (array) (Arr::exists($userData, 'member') ? $userData['member'] : null);
         unset($userData['member']);
         unset($userData['photo']);
         unset($userData['roles']);

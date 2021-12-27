@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 return [
 
     /*
@@ -150,7 +152,8 @@ return [
     |
     */
 
-    'domain' => (array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : env('FALLBACK_COOKIE_DOMAIN')),
+    // 'domain' => (array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : env('FALLBACK_COOKIE_DOMAIN')),
+    'domain' => (Arr::exists($_SERVER, 'SERVER_NAME') ? $_SERVER['SERVER_NAME'] : env('FALLBACK_COOKIE_DOMAIN')),
 
     /*
     |--------------------------------------------------------------------------

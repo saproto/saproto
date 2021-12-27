@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\Bank;
 use Proto\Models\User;
+use Illuminate\Support\Arr;
 use Redirect;
 use Session;
 
@@ -311,6 +312,7 @@ class BankController extends Controller
         ];
 
         $bank = substr($iban, 4, 4);
-        return array_key_exists($bank, $data) ? $data[$bank] : null;
+        // return array_key_exists($bank, $data) ? $data[$bank] : null;
+        return Arr::exists($data, $bank) ? $data[$bank] : null;
     }
 }

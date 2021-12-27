@@ -3,10 +3,12 @@
 namespace Proto\Http\Controllers;
 
 use Carbon;
-use Illuminate\Http\Request;
+use PhpParser\Node\Arg;
 use Illuminate\View\View;
 use Proto\Models\Account;
+use Illuminate\Support\Arr;
 use Proto\Models\OrderLine;
+use Illuminate\Http\Request;
 
 class TIPCieController extends Controller
 {
@@ -38,7 +40,8 @@ class TIPCieController extends Controller
             if (in_array($order->product_id, $tipcieProductIds)) {
                 $pid = (string) $order->product_id;
 
-                if (! array_key_exists($pid, $tipcieOrders)) {
+                // if (! array_key_exists($pid, $tipcieOrders)) {
+                if (! Arr::exists($tipcieOrders, $pid)) {
                     $productInfo = new \stdClass();
                     $productInfo->name = $tipcieProductNames[array_search($pid, $tipcieProductIds)];
                     $productInfo->amount = 0;
@@ -53,7 +56,8 @@ class TIPCieController extends Controller
 
                 if ($order->payed_with_bank_card) {
                     $time = (string) $order->created_at;
-                    if (! array_key_exists($time, $pinOrders)) {
+                    // if (! array_key_exists($time, $pinOrders)) {
+                    if (! Arr::exists($pinOrders, $time)) {
                         $pinOrders[$time] = 0;
                     }
                     $pinOrders[$time] += $order->total_price;

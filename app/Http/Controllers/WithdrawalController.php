@@ -2,28 +2,29 @@
 
 namespace Proto\Http\Controllers;
 
-use AbcAeffchen\SepaUtilities\SepaUtilities;
-use AbcAeffchen\Sephpa\SephpaDirectDebit;
-use AbcAeffchen\Sephpa\SephpaInputException;
-use Auth;
-use Carbon;
 use DB;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Auth;
 use Mail;
-use Proto\Mail\OmnomcomFailedWithdrawalNotification;
-use Proto\Mail\OmnomcomWithdrawalNotification;
-use Proto\Models\Account;
-use Proto\Models\FailedWithdrawal;
-use Proto\Models\OrderLine;
-use Proto\Models\Product;
-use Proto\Models\User;
-use Proto\Models\Withdrawal;
+use Carbon;
 use Redirect;
 use Response;
+use Exception;
+use Proto\Models\User;
+use Illuminate\View\View;
+use Proto\Models\Account;
+use Proto\Models\Product;
+use Illuminate\Support\Arr;
+use Proto\Models\OrderLine;
+use Illuminate\Http\Request;
+use Proto\Models\Withdrawal;
+use Proto\Models\FailedWithdrawal;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Session;
+use AbcAeffchen\Sephpa\SephpaDirectDebit;
+use AbcAeffchen\SepaUtilities\SepaUtilities;
+use AbcAeffchen\Sephpa\SephpaInputException;
+use Proto\Mail\OmnomcomWithdrawalNotification;
+use Proto\Mail\OmnomcomFailedWithdrawalNotification;
 
 class WithdrawalController extends Controller
 {
@@ -75,7 +76,8 @@ class WithdrawalController extends Controller
                 continue;
             }
 
-            if (! array_key_exists($orderline->user->id, $totalPerUser)) {
+            // if (! array_key_exists($orderline->user->id, $totalPerUser)) {
+            if (! Arr::exists($totalPerUser, $orderline->user->id)) {
                 $totalPerUser[$orderline->user->id] = 0;
             }
 

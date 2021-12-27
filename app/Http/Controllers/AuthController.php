@@ -27,6 +27,7 @@ use Proto\Models\PasswordReset;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use Proto\Models\WelcomeMessage;
+use Illuminate\Support\Arr;
 use Redirect;
 use Session;
 
@@ -459,9 +460,11 @@ class AuthController extends Controller
         $remoteUser = Session::pull('surfconext_sso_user');
         $remoteData = [
             'uid' => $remoteUser[config('saml2-attr.uid')][0],
-            'surname' => array_key_exists(config('saml2-attr.surname'), $remoteUser) ? $remoteUser[config('saml2-attr.surname')][0] : null,
+            // 'surname' => array_key_exists(config('saml2-attr.surname'), $remoteUser) ? $remoteUser[config('saml2-attr.surname')][0] : null,
+            'surname' => Arr::exists($remoteUser, config('saml2-attr.surname')) ? $remoteUser[config('saml2-attr.surname')][0] : null,
             'mail' => $remoteUser[config('saml2-attr.email')][0],
-            'givenname' => array_key_exists(config('saml2-attr.givenname'), $remoteUser) ? $remoteUser[config('saml2-attr.givenname')][0] : null,
+            // 'givenname' => array_key_exists(config('saml2-attr.givenname'), $remoteUser) ? $remoteUser[config('saml2-attr.givenname')][0] : null,
+            'givenname' => Arr::exists($remoteUser, config('saml2-attr.givenname')) ? $remoteUser[config('saml2-attr.givenname')][0] : null,
             'org' => isset($remoteUser[config('saml2-attr.institute')]) ? $remoteUser[config('saml2-attr.institute')][0] : 'utwente.nl',
         ];
         $remoteEduUsername = $remoteData['uid'].'@'.$remoteData['org'];
@@ -714,7 +717,8 @@ class AuthController extends Controller
         $authnRequest = new \LightSaml\Model\Protocol\AuthnRequest();
         $authnRequest->deserialize($deserializationContext->getDocument()->firstChild, $deserializationContext);
 
-        if (! array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
+        // if (! array_key_exists(base64_encode($authnRequest->getAssertionConsumerServiceURL()), config('saml-idp.sp'))) {
+        if (! Arr::exists(config('saml-idp.sp'), base64_encode($authnRequest->getAssertionConsumerServiceURL()))) {
             Session::flash('flash_message', 'You are using an unknown Service Provider. Please contact the System Administrators to get your Service Provider whitelisted for Proto SSO.');
             return Redirect::route('login::show');
         }
