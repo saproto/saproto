@@ -7,6 +7,7 @@ use Exception;
 use Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Mail;
@@ -27,7 +28,6 @@ use Proto\Models\PasswordReset;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use Proto\Models\WelcomeMessage;
-use Illuminate\Support\Arr;
 use Redirect;
 use Session;
 

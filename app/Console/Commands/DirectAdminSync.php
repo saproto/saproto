@@ -3,12 +3,12 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Proto\Models\Alias;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
 use Solitweb\DirectAdmin\DirectAdmin;
-use Illuminate\Support\Arr;
 
 class DirectAdminSync extends Command
 {

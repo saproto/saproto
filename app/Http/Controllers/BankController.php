@@ -6,10 +6,10 @@ use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Proto\Models\Bank;
 use Proto\Models\User;
-use Illuminate\Support\Arr;
 use Redirect;
 use Session;
 

@@ -7,6 +7,7 @@ use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -17,7 +18,6 @@ use Proto\Models\QrAuthRequest;
 use Proto\Models\RfidCard;
 use Proto\Models\User;
 use stdClass;
-use Illuminate\Support\Arr;
 
 class OmNomController extends Controller
 {

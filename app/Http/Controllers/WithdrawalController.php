@@ -2,29 +2,29 @@
 
 namespace Proto\Http\Controllers;
 
-use DB;
+use AbcAeffchen\SepaUtilities\SepaUtilities;
+use AbcAeffchen\Sephpa\SephpaDirectDebit;
+use AbcAeffchen\Sephpa\SephpaInputException;
 use Auth;
-use Mail;
 use Carbon;
+use DB;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
+use Illuminate\View\View;
+use Mail;
+use Proto\Mail\OmnomcomFailedWithdrawalNotification;
+use Proto\Mail\OmnomcomWithdrawalNotification;
+use Proto\Models\Account;
+use Proto\Models\FailedWithdrawal;
+use Proto\Models\OrderLine;
+use Proto\Models\Product;
+use Proto\Models\User;
+use Proto\Models\Withdrawal;
 use Redirect;
 use Response;
-use Exception;
-use Proto\Models\User;
-use Illuminate\View\View;
-use Proto\Models\Account;
-use Proto\Models\Product;
-use Illuminate\Support\Arr;
-use Proto\Models\OrderLine;
-use Illuminate\Http\Request;
-use Proto\Models\Withdrawal;
-use Proto\Models\FailedWithdrawal;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
-use AbcAeffchen\Sephpa\SephpaDirectDebit;
-use AbcAeffchen\SepaUtilities\SepaUtilities;
-use AbcAeffchen\Sephpa\SephpaInputException;
-use Proto\Mail\OmnomcomWithdrawalNotification;
-use Proto\Mail\OmnomcomFailedWithdrawalNotification;
 
 class WithdrawalController extends Controller
 {
