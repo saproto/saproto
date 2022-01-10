@@ -5,7 +5,6 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Route for smartXp dmx_values (excluded from web and therefore https) */
     Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
 
-
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], function () {
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
