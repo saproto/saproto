@@ -1,10 +1,10 @@
 <?php
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
-    /* Routes for smartXp dmx_values (excluded from web and therefore https) */
-    Route::group(['middleware' => ['api']], function () {
-        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
-    });
+
+    /* Route for smartXp dmx_values (excluded from web and therefore https) */
+    Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
+
 
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], function () {
