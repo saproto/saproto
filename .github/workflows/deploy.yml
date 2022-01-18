@@ -50,18 +50,18 @@ jobs:
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
-
+        
+      - name: 📝 Set Sentry release
+        run: sed -i "s/GIT_SHA/$(git rev-parse --short "$GITHUB_SHA")/" config/sentry.php
+          
       - name: 🗄️ ZIP Build
-        uses: papeloto/action-zip@v1
+        uses: TheDoctor0/zip-release@0.6.1
         with:
-          files: ${{ env.BUILD_SOURCE_DIR }}
-          dest: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
+          filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
+          path: ${{ env.BUILD_SOURCE_DIR }}
 
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
-
-      - name: 📝 Set Sentry release
-        run: sed -i "s/GIT_SHA/$(git rev-parse --short "$GITHUB_SHA")/" config/sentry.php
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
