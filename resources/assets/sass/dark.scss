@@ -102,6 +102,11 @@ hr {
   border: 1px solid rgba(0,0,0,.125);
 }
 
+//user select
+.select2-selection--multiple  {
+  color: $grey-dark;
+}
+
 //buttons
 .btn.btn-outline-dark {
   color: #fff;
