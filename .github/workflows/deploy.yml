@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: 7.4
-      BUILD_SOURCE_DIR: /
+      BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
       BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
       HOST_SERVER: s176.webhostingserver.nl
