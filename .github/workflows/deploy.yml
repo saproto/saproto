@@ -53,12 +53,16 @@ jobs:
         
       - name: 📝 Set Sentry release
         run: sed -i "s/GIT_SHA/$(git rev-parse --short "$GITHUB_SHA")/" config/sentry.php
+        
+      - name: 📁 Create build directory
+        run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
           
       - name: 🗄️ ZIP Build
         uses: TheDoctor0/zip-release@0.6.1
         with:
           filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
           path: ${{ env.BUILD_SOURCE_DIR }}
+          exclusions: 'storage/* build/*'
 
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
