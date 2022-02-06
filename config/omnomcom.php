@@ -131,12 +131,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | Defines various configuration options for the Mollie integration.
-    |
+    | Free methods will not have any fees when use_fees is true, to exclude use the 
+    | ids as in the mollie api. 
     */
 
     'mollie' => [
         'fee_id' => 887,
-        'free_methods' => ['creditcard'], //free methods use mollie_id as in api
+        'free_methods' => ['creditcard'], 
         'use_fees' => false
     ],
 

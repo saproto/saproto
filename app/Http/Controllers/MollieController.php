@@ -275,9 +275,7 @@ class MollieController extends Controller
                 'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
                 'description' => 'OmNomCom Settlement (€' . number_format($total, 2) . ')',
                 'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-                // 'redirectUrl' => 'https://83.82.194.127:8008/omnomcom/orders/history',
-                'webhookUrl' => 'https://83.82.194.127:8080/webhook/mollie/' . $transaction->id
-                //'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
+                'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
             ]);
 
         $transaction->mollie_id = $mollie->id;
