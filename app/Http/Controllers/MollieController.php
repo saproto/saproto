@@ -217,9 +217,7 @@ class MollieController extends Controller
     public function webhook($id)
     {
         /** @var MollieTransaction $transaction */
-        //$transaction = MollieTransaction::firstOrFail($id);
         $transaction = MollieTransaction::findOrFail($id);
-        // dd($transaction);
         $transaction->updateFromWebhook();
         abort(200, 'Mollie webhook processed correctly!');
     }
