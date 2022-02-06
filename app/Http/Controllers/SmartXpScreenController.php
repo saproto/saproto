@@ -33,22 +33,20 @@ class SmartXpScreenController extends Controller
      * @param $stop
      * @return object[]
      */
-    public function bus($tpc_id)
+    public function bus($tpc_id, $tpc_id_other_side)
     {
         try {
-            $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id")));
-            return json_encode($departures->$tpc_id->Passes);
+            $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id,$tpc_id_other_side")));
+            return json_encode( (object) array_merge((array) $departures->$tpc_id->Passes, (array) $departures->$tpc_id_other_side->Passes));
         } catch (Exception $e) {
-            return [(object) [
-                'time' => $tpc_id,
-                'service' => '',
-                'mode' => (object) [
-                    'name' => 'Error in API!',
-                ],
-                'realtimeText' => '',
-                'realtimeState' => '9292',
-                'destinationName' => 'who knows?',
-            ]];
+            return json_encode((object)[
+                'dragon'=>(object)[
+                'ExpectedArrivalTime' => '1',
+                'TransportType' => 'ERROR',
+                'LinePublicNumber' =>' ',
+                'TripStopStatus' => 'Dragon',
+                'DestinationName50' => 'who knows?',
+            ]]);
         }
     }
 

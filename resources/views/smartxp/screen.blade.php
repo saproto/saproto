@@ -440,22 +440,26 @@
     updateActivities();
 
     function updateBuses() {
-        updateBus(43005640, '#businfo-hallen');
-        updateBus(43005640, '#businfo-wester');
+        updateBus(43005640, 43005630, '#businfo-hallen');
+        updateBus(43005640, 43005630, '#businfo-wester');
     }
 
-    function updateBus(stop, element) {
+    function updateBus(stop, stop_other_side, element) {
         $.ajax({
-            url: "{{ urldecode(route('api::screen::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
+            url: "{{ urldecode(route('api::screen::bus',['stop' => '43005630', 'other_stop'=>'43005630'])) }}",
             dataType: 'json',
             success: function (data) {
-                console.log()
+                console.log(Object.keys(data))
                 if (Object.keys(data).length > 0) {
-                    console.log(data);
                     $(element).html('');
-                    for (const [key, value] of Object.entries(data)) {
-                        console.log(`${key}: ${value}`);
-                        $(element).append('<div class="busentry">' + value.ExpectedArrivalTime + ' ' + value.TransportType+' '+ value.LinePublicNumber + ' <span style="color: #c1ff00;">' + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>');
+
+                    let sortableBusses =Object.entries(data).slice(0)
+                    sortableBusses.sort(function(a,b) {
+                        return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
+                    });
+                    for (const [key, value] of sortableBusses) {
+                        // let colorLate= (Math.abs(value.ExpectedArrivalTime - value.TargetArrivalTime)/1000*60 < 1) ? '#ff0000':'#ff0000';
+                        $(element).append('<div class="busentry">'+ new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0,5)+ ' ' + value.TransportType+' '+ value.LinePublicNumber + ' <span style="color: #c1ff00;">' + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>');
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');

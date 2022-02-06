@@ -79,7 +79,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     Route::group(['prefix' => 'screen', 'as' => 'screen::'], function () {
-        Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
+        Route::get('bus/{stop}/{stop_other_side}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);
