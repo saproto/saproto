@@ -33,15 +33,14 @@ class SmartXpScreenController extends Controller
      * @param $stop
      * @return object[]
      */
-    public function bus($stop)
+    public function bus($tpc_id)
     {
         try {
-            $departures = json_decode(stripslashes(file_get_contents("https://api.9292.nl/0.1/locations/enschede/$stop/departure-times?lang=en-GB")));
-
-            return $departures->tabs[0]->departures;
+            $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id")));
+            return json_encode($departures->$tpc_id->Passes);
         } catch (Exception $e) {
             return [(object) [
-                'time' => '00:00',
+                'time' => $tpc_id,
                 'service' => '',
                 'mode' => (object) [
                     'name' => 'Error in API!',
@@ -104,3 +103,6 @@ class SmartXpScreenController extends Controller
             'answer' => $this->smartxpTimetable()->answer, ]);
     }
 }
+
+
+

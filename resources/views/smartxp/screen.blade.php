@@ -440,8 +440,8 @@
     updateActivities();
 
     function updateBuses() {
-        updateBus('bushalte-ut-hallenweg', '#businfo-hallen');
-        updateBus('bushalte-westerbegraafplaats-ut', '#businfo-wester');
+        updateBus(43005640, '#businfo-hallen');
+        updateBus(43005640, '#businfo-wester');
     }
 
     function updateBus(stop, element) {
@@ -449,15 +449,19 @@
             url: "{{ urldecode(route('api::screen::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
             dataType: 'json',
             success: function (data) {
-                if (data.length > 0) {
+                console.log()
+                if (Object.keys(data).length > 0) {
+                    console.log(data);
                     $(element).html('');
-                    for (i in data) {
-                        $(element).append('<div class="busentry">' + data[i].time + ' ' + data[i].mode.name + ' ' + data[i].service + ' <span style="color: #c1ff00;">' + (data[i].realtimeText !== null ? data[i].realtimeText + ' (' + data[i].realtimeState + ')' : '(' + data[i].realtimeState + ')') + '</span><br>Towards ' + data[i].destinationName + '</div>');
+                    for (const [key, value] of Object.entries(data)) {
+                        console.log(`${key}: ${value}`);
+                        $(element).append('<div class="busentry">' + value.ExpectedArrivalTime + ' ' + value.TransportType+' '+ value.LinePublicNumber + ' <span style="color: #c1ff00;">' + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>');
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');
                 }
             },
+
             error: function () {
                 $(element).html('<div class="notice">Error...</div>');
             }
