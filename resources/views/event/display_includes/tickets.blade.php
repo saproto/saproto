@@ -61,9 +61,12 @@
         {!! csrf_field() !!}
 
         <div class="card mb-3">
-
-            <?php $has_prepay_tickets = false; ?>
-            <?php $tickets_available = 0; ?>
+            
+            @php
+                $has_prepay_tickets = false;
+                $tickets_available = 0;
+                $only_prepaid = true;
+            @endphp
 
             <div class="card-header ellipsis">
                 Buy tickets for {{ $event->title }}
@@ -90,9 +93,14 @@
                                 <p class="card-title">
 
                                     @if ($ticket->is_prepaid)
-                                        <?php $has_prepay_tickets = true; ?>
+                                        @php 
+                                            $has_prepay_tickets = true;
+                                        @endphp
                                         <span class="badge badge-danger float-right">Pre-Paid</span>
                                     @else
+                                        @php 
+                                            $only_prepaid = false;
+                                        @endphp
                                         <span class="badge badge-info float-right">Withdrawal</span>
                                     @endif
 
@@ -120,7 +128,9 @@
                                     @elseif($ticket->product->stock <= 0)
                                         Sold-out!
                                     @else
-                                        <?php $tickets_available++; ?>
+                                        @php
+                                            $tickets_available++;
+                                        @endphp
                                         <strong>On sale!</strong><br>
                                         Available until {{ date('d-m-Y H:i', $ticket->available_to) }}
                                     @endif
@@ -130,7 +140,10 @@
                                 @if($ticket->isAvailable(Auth::user()))
                                     <select required class="form-control ticket-select"
                                             name="tickets[{{$ticket->id}}]"
+                                            autocomplete="off"
                                             data-price="{{ $ticket->product->price }}"
+                                            prepaid={{ $ticket->is_prepaid }}
+                                            previous-value=0
                                             onchange="updateOrderTotal();">
                                         @for($i = 0; $i <= min(config('proto.maxtickets'), $ticket->product->stock); $i++)
                                             <option value="{{ $i }}">{{ $i }}x</option>
@@ -147,33 +160,87 @@
 
             </div>
 
+            {{-- 5 cases (pp = prepaid, npp = not prepaid) 
+                1: pp, npp and fees
+                2: pp, npp and no fees
+                3: pp, and fees
+                4: pp and no fees
+                5: npp    
+            --}}
             @if(Auth::check() && $tickets_available > 0)
             <div class="card-footer">
-
-                <button type="submit" class="btn btn-success btn-block"
-                       onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
-                    Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
-                </button>
-
+                {{-- No fees of no prepaid (2,4,5) --}}
+                @if (!config('omnomcom.mollie.use_fees') || !$has_prepay_tickets)
+                    <button type="submit" class="btn btn-success btn-block">
+                        Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
+                    </button>
+                {{-- fees and only prepaid (3) --}}
+                @elseif (config('omnomcom.mollie.use_fees') && $only_prepaid)
+                    @include('event.display_includes.mollie-modal')
+                    <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
+                        Get tickets now!
+                    </a>
+                @else
+                    <button id="directpay" type="submit" class="btn btn-success btn-block">
+                        Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
+                    </button>
+                    @include('event.display_includes.mollie-modal')
+                    <a hidden id="feesbutton" href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
+                        Get tickets now!
+                    </a>
+                @endif
             </div>
             @endif
-
         </div>
 
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        console.log("test")
+        var total = 0;
+        
 
-        let total = 0;
-
+        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', updateOrderTotal))
         function updateOrderTotal() {
             total = 0;
+            console.log("hi");
             $('.ticket-select').each(function () {
                 total += $(this).attr('data-price') * $(this).val();
             });
-            $('#ticket-total').html(total.toFixed(2))
+            $('#ticket-total').html(total.toFixed(2));
         }
 
     </script>
 
+    @if(!(config('omnomcom.mollie.use_fees') && $only_prepaid) && !(!config('omnomcom.mollie.use_fees') || !$has_prepay_tickets))
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        console.log("test2")
+        var totalPrepaidTicketsSelected = 0;
+
+        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', ticketSelectChange))
+
+        function selectedPrepaidTickets(){
+            document.getElementById('directpay').hidden = true;
+            document.getElementById('feesbutton').hidden = false;
+        }
+        function unselectedPrepaidTickets(){
+            document.getElementById('directpay').hidden = false;
+            document.getElementById('feesbutton').hidden = true;
+        }
+
+        function ticketSelectChange(){
+            console.log("hi2");
+            if($(this).attr('prepaid') == true){
+                totalPrepaidTicketsSelected += $(this).val()-$(this).attr('previous-value');
+                $(this).attr('previous-value', $(this).val());
+            }
+            console.log(totalPrepaidTicketsSelected);
+            if (totalPrepaidTicketsSelected == 0){
+                unselectedPrepaidTickets();
+            } else if (totalPrepaidTicketsSelected > 0){
+                selectedPrepaidTickets();
+            }
+        }
+    </script>
+    @endif
 @endif

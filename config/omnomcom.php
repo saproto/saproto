@@ -135,9 +135,9 @@ return [
     */
 
     'mollie' => [
-        'fixed_fee' => .3,
-        'variable_fee' => .02,
         'fee_id' => 887,
+        'free_methods' => ['creditcard'], //free methods use mollie_id as in api
+        'use_fees' => false
     ],
 
     /*

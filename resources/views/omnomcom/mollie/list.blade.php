@@ -79,7 +79,13 @@
                                 </td>
 
                                 <td>
-                                    @if(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'open')
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "open" ? '<i class="fas fa-spinner ml-2 text-normal"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "paid" ? '<i class="fas fa-check ml-2 text-success"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "unknown" ? '<i class="fas fa-question ml-2 text-normal"></i>' : "" !!}
+                                    <span class="label label-default"> - {{ $transaction->status }}</span>
+                                    {{-- Doen de labels wel iets?? --}}
+                                    {{-- @if(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'open')
                                         <span class="label label-default">{{ $transaction->status }}</span>
                                     @elseif(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'paid')
                                         <span class="label label-success">{{ $transaction->status }}</span>
@@ -87,7 +93,7 @@
                                         <span class="label label-danger">{{ $transaction->status }}</span>
                                     @else
                                         <span class="label label-warning">{{ $transaction->status }}</span>
-                                    @endif
+                                    @endif --}}
                                 </td>
 
                                 <td>
