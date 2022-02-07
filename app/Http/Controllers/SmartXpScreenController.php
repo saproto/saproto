@@ -37,16 +37,16 @@ class SmartXpScreenController extends Controller
     {
         try {
             $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id,$tpc_id_other")));
-            return json_encode( (object) array_merge((array) $departures->$tpc_id->Passes, (array) $departures->$tpc_id_other->Passes));
+            return json_encode((object) array_merge((array) $departures->$tpc_id->Passes, (array) $departures->$tpc_id_other->Passes));
         } catch (Exception $e) {
-            return json_encode((object)[
-                'dragon'=>(object)[
+            return json_encode((object) [
+                'dragon'=>(object) [
                 'ExpectedArrivalTime' => '1',
                 'TransportType' => 'ERROR',
                 'LinePublicNumber' =>' ',
                 'TripStopStatus' => 'Dragon',
                 'DestinationName50' => 'who knows?',
-            ]]);
+            ], ]);
         }
     }
 
@@ -101,6 +101,3 @@ class SmartXpScreenController extends Controller
             'answer' => $this->smartxpTimetable()->answer, ]);
     }
 }
-
-
-
