@@ -319,10 +319,10 @@
 
                         <div class="box-header small">
                             <i class="fas fa-bus fa-fw mr-1"></i>
-                            Hallenweg
+                            Westerbegraafplaats
                         </div>
 
-                        <div id="businfo-hallen" class="businfo">
+                        <div id="businfo-wester" class="businfo">
 
                         </div>
 
@@ -332,10 +332,10 @@
 
                         <div class="box-header small">
                             <i class="fas fa-bus fa-fw mr-1"></i>
-                            Westerbegraafplaats
+                            Langenkampweg
                         </div>
 
-                        <div id="businfo-wester" class="businfo">
+                        <div id="businfo-langen" class="businfo">
 
                         </div>
 
@@ -440,26 +440,26 @@
     updateActivities();
 
     function updateBuses() {
-        updateBus(43005640, 43005630, '#businfo-hallen');
+        updateBus(43110270, 43110270, '#businfo-langen');
         updateBus(43005640, 43005630, '#businfo-wester');
     }
 
     function updateBus(stop, stop_other_side, element) {
         $.ajax({
-            url: "{{ urldecode(route('api::screen::bus',['stop' => '43005630', 'other_stop'=>'43005630'])) }}",
+            url: "{{urldecode(route('api::screen::bus',['stop' => '--replaceme--','stop_other_side' => '--replaceme_other--']))}}".replace('--replaceme--', stop).replace('--replaceme_other--', stop_other_side),
             dataType: 'json',
             success: function (data) {
                 console.log(Object.keys(data))
                 if (Object.keys(data).length > 0) {
                     $(element).html('');
 
-                    let sortableBusses =Object.entries(data).slice(0)
+                    let sortableBusses = Object.entries(data).slice(0)
                     sortableBusses.sort(function(a,b) {
                         return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
                     });
                     for (const [key, value] of sortableBusses) {
-                        // let colorLate= (Math.abs(value.ExpectedArrivalTime - value.TargetArrivalTime)/1000*60 < 1) ? '#ff0000':'#ff0000';
-                        $(element).append('<div class="busentry">'+ new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0,5)+ ' ' + value.TransportType+' '+ value.LinePublicNumber + ' <span style="color: #c1ff00;">' + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>');
+                         let colorLate= (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime))/1000*60 > 1) ? '#ff0000':'#c1ff00';
+                        $(element).append('<div class="busentry">'+`<span style=color:${colorLate}>` +new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0,5)+'</span>'+ ' ' + value.TransportType+' '+ value.LinePublicNumber + ' <span style="color: #c1ff00;">' + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>')
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');

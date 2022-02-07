@@ -33,11 +33,11 @@ class SmartXpScreenController extends Controller
      * @param $stop
      * @return object[]
      */
-    public function bus($tpc_id, $tpc_id_other_side)
+    public function bus($tpc_id, $tpc_id_other)
     {
         try {
-            $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id,$tpc_id_other_side")));
-            return json_encode( (object) array_merge((array) $departures->$tpc_id->Passes, (array) $departures->$tpc_id_other_side->Passes));
+            $departures = json_decode(file_get_contents(stripslashes("http://v0.ovapi.nl/tpc/$tpc_id,$tpc_id_other")));
+            return json_encode( (object) array_merge((array) $departures->$tpc_id->Passes, (array) $departures->$tpc_id_other->Passes));
         } catch (Exception $e) {
             return json_encode((object)[
                 'dragon'=>(object)[
