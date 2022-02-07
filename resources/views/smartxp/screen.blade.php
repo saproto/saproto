@@ -458,9 +458,11 @@
                         return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
                     });
                     for (const [key, value] of sortableBusses) {
-                         let colorLate= (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime))/1000*60 > 1) ? '#ff0000':'#c1ff00';
-                         let drivingColor= value.TripStopStatus==="DRIVING"?'#c1ff00':'#fff'
-                        $(element).append('<div class="busentry">'+`<span style=color:${colorLate}>` +new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0,5)+'</span>'+ ' ' + value.TransportType+' '+ value.LinePublicNumber +` `+ `<span style="color: ${drivingColor};">` + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>')
+                        let colorLate = (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) / 1000 * 60 > 1) ? '#ff0000' : '#c1ff00';
+                        let drivingColor = value.TripStopStatus === "DRIVING" ? '#c1ff00' : '#fff'
+                        if (value.TripStopStatus != "ARRIVED") {
+                            $(element).append('<div class="busentry">' + `<span style=color:${colorLate}>` + new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0, 5) + '</span>' + ' ' + value.TransportType + ' ' + value.LinePublicNumber + ` ` + `<span style="color: ${drivingColor};">` + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>')
+                        }
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');
