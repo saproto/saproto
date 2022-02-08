@@ -17,7 +17,8 @@
     of the association and promises to follow them. (Please note that the Dutch version of the documents are leading.)
 </p>
 <p>
-    Membership of the association is renewed annually, following a timely notice reminding the member their membership will be renewed. Membership may be terminated, without cost, before the start of the new academic year.
+    Membership of the association is renewed annually, following a timely notice reminding the member their membership will be renewed. Membership may be terminated, without cost, before the start of the new academic year. In addition, the undersigned promises to pay for any cost incurred as member of the association, including the
+    membership fee, in a timely manner via any of the payment options made available by the association.
 </p>
 <p>
     For the administration of the association, the undersigned provided at the time of registration the e-mail address <b>{{ $user->email }}</b> and phone number <b>{{ $user->phone }}</b>, as well as the following physical address:
