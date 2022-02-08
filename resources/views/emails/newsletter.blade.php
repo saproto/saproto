@@ -95,25 +95,15 @@
 
         @endforeach
 
-    @else
+        <p>
+            &nbsp;
+        </p>
 
         <p>
-            <strong>
-                There are no activities to show. The newsletter will not be sent this week.
-            </strong>
-            If for some reason you're seeing this in your e-mail and not in your browser, something has gone horribly
-            wrong. Please do let the board know this happened.
+            If anything about the activities is not clear, please let me know!
         </p>
 
     @endif
-
-    <p>
-        &nbsp;
-    </p>
-
-    <p>
-        If anything about the activities is not clear, please let me know!
-    </p>
 
     <p>
         Kind regards,<br>
