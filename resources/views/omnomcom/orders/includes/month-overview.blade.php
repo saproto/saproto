@@ -14,9 +14,9 @@
             </li>
             <div id="omnomcom-years-{{ $year }}" class="collapse {{ $year == date('Y') ? 'show' : null }}" data-parent="#omnomcom-years-accordion">
                 @foreach($months as $month)
-                    <a href="{{ route("omnomcom::orders::list", ['date' => $month]) }}"
+                    <a href="{{ route("omnomcom::orders::list", ['date' => $year.'-'. \Carbon\Carbon::create()->month($month)->format('m')]) }}"
                        class="list-group-item">
-                        {{ date('F Y', strtotime($month)) }}
+                        {{ \Carbon\Carbon::create()->month($month)->format('F').' '.$year }}
                     </a>
                 @endforeach
             </div>
