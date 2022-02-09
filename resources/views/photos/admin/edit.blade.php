@@ -183,30 +183,30 @@
                                     <div class="btn-group" role="group" aria-label="Toolbar">
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                    type="button" data-toggle="modal" data-target="#publishedModal"
                                                 @else
-                                                type="submit"
+                                                    type="submit"
                                                 @endif
-                                                name="submitBtn" value="remove" class="btn btn-danger"><i
-                                                    class="fa fa-trash"></i> Remove
+                                                value="remove" class="btn btn-danger"><i
+                                                class="fa fa-trash"></i> Remove
                                         </button>
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                    type="button" data-toggle="modal" data-target="#publishedModal"
                                                 @else
-                                                type="submit"
+                                                    type="submit"
                                                 @endif
-                                                name="submitBtn" value="thumbnail" class="btn btn-success"><i
-                                                    class="fa fa-image"></i> Set thumbnail
+                                                value="thumbnail" class="btn btn-success"><i
+                                                class="fa fa-image"></i> Set thumbnail
                                         </button>
                                         <button
                                                 @if($photos->published)
-                                                type="button" data-toggle="modal" data-target="#publishedModal"
+                                                    type="button" data-toggle="modal" data-target="#publishedModal"
                                                 @else
-                                                type="submit"
+                                                    type="submit"
                                                 @endif
-                                                name="submitBtn" value="private" class="btn btn-warning"><i
-                                                    class="fa fa-eye"></i> Toggle private
+                                                value="private" class="btn btn-warning"><i
+                                                class="fa fa-eye"></i> Toggle private
                                         </button>
 
                                     </div>
@@ -231,8 +231,7 @@
                                                     <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">Close
                                                     </button>
-                                                    <button id="confirmButton" type="submit" name="submitBtn" value=""
-                                                            class="btn"></button>
+                                                    <button id="confirmButton" type="submit" class="btn"></button>
                                                 </div>
                                             </div>
                                         </div>
