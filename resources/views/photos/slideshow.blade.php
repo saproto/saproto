@@ -140,7 +140,7 @@
                 displayRandomAlbum()
             })
             .catch(error => { console.error(error) })
-            albumEl.addEventListener('change', e => { displayAlbum(albumEl.value) })
+            albumEl.addEventListener('change', _ => { displayAlbum(albumEl.value) })
         }
 
         function displayRandomAlbum() {

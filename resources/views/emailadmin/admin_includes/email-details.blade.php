@@ -186,10 +186,10 @@
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
 
-        document.getElementById('destinationEvent').addEventListener('click', e => disableSelect(false, true))
-        document.getElementById('destinationLists').addEventListener('click', e => disableSelect(true, false))
-        document.getElementById('destinationMembers').addEventListener('click', e => disableSelect(true, true))
-        document.getElementById('destinationActiveMembers').addEventListener('click', e => disableSelect(true, true))
+        document.getElementById('destinationEvent').addEventListener('click', _ => disableSelect(false, true))
+        document.getElementById('destinationLists').addEventListener('click', _ => disableSelect(true, false))
+        document.getElementById('destinationMembers').addEventListener('click', _ => disableSelect(true, true))
+        document.getElementById('destinationActiveMembers').addEventListener('click', _ => disableSelect(true, true))
 
         function disableSelect(event, list) {
             eventSelect.disabled = event

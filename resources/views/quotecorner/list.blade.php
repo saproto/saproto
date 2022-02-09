@@ -31,7 +31,7 @@
 
         likeBtnList = Array.from(document.getElementsByClassName('qq_like'))
         likeBtnList.forEach(el => {
-            el.addEventListener('click', e => {
+            el.addEventListener('click', _ => {
                 const id = el.getAttribute('data-id')
                 if (id === undefined) return
 

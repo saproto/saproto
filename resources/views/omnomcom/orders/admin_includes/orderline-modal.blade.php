@@ -131,7 +131,7 @@
             calculateTotalPrice()
         })
 
-        document.getElementById('orderline-modal').addEventListener('change', () => { calculateTotalPrice() })
+        document.getElementById('orderline-modal').addEventListener('change', _ => { calculateTotalPrice() })
 
         function calculateTotalPrice() {
             const rows = Array.from(document.getElementsByClassName('orderline-row'))

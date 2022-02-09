@@ -130,7 +130,7 @@
                                     <select required class="form-control ticket-select"
                                             name="tickets[{{$ticket->id}}]"
                                             data-price="{{ $ticket->product->price }}"
-                                            onchange="updateOrderTotal();">
+                                            >
                                         @for($i = 0; $i <= min(config('proto.maxtickets'), $ticket->product->stock); $i++)
                                             <option value="{{ $i }}">{{ $i }}x</option>
                                         @endfor
@@ -162,11 +162,11 @@
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let total
+        const selectList = Array.from(document.getElementsByClassName('ticket-select'))
+        selectList.forEach(ticket => ticket.addEventListener('change', updateOrderTotal))
 
         function updateOrderTotal() {
-            const selectList = Array.from(document.getElementsByClassName('ticket-select'))
-            total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
+            const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
             document.getElementById('ticket-total').innerHTML = total
         }
     </script>

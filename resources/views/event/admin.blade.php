@@ -213,7 +213,7 @@
         const unscanRequest = barcode => window.axios.get('{{ route('tickets::unscan') }}/' + barcode,)
 
         function setEventListener(el, unscan) {
-            el.addEventListener('click', (e) => {
+            el.addEventListener('click', e => {
                 e.preventDefault()
                 let barcode = e.target.getAttribute('data-id')
                 let parent = e.target.parentElement

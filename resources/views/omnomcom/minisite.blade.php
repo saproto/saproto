@@ -201,7 +201,7 @@
         <script type="text/javascript" nonce="{{ csp_nonce() }}">
             const search = document.getElementById('search_query')
             const results = Array.from(document.getElementsByClassName('result'))
-            search.addEventListener('keyup', () => {
+            search.addEventListener('keyup', _ => {
                 let query = search.value;
                 results.forEach(el => el.classList.replace('result_left', 'd-none'))
                 if (query.length > 2) {

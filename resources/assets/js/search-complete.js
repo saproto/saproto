@@ -69,7 +69,7 @@ export default class SearchComplete {
                 else option.innerHTML = item.name
 
                 // Add onclick eventListener to option to be able to select one
-                option.addEventListener('click', (e) => {
+                option.addEventListener('click', _ => {
                     // Check if input accepts multiple selections
                     if (this.multiple) {
                         this.selected.classList.remove('d-none')
@@ -78,7 +78,7 @@ export default class SearchComplete {
                         // Create new selected item
                         let newSelectedItem = this.selectedItem.cloneNode()
                         newSelectedItem.innerHTML = this.selectedTemplate?.(item) ?? item.id
-                        newSelectedItem.addEventListener('click', (e) => {
+                        newSelectedItem.addEventListener('click', _ => {
                             newSelectedItem.remove()
                             if (this.selected.children.length === 0) {
                                 this.el.required = true

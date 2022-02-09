@@ -87,7 +87,7 @@
 
         const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
         radioList.forEach(el => {
-            el.addEventListener('change', () => {
+            el.addEventListener('change', _ => {
                 if (el.checked && el.value === 'away') {
                         dateSelect.classList.remove('d-none')
                         dateBack.required = true

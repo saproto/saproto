@@ -169,7 +169,7 @@
         const ibanMessage = document.getElementById('iban-message')
         const bicMessage = document.getElementById('bic-message')
 
-        iban.addEventListener('keyup', e => {
+        iban.addEventListener('keyup', _ => {
             iban.value = iban.value.replace(' ', '')
             if (iban.value.length >= 15) {
                 window.axios.get('{{ route('api::verify_iban') }}', {
@@ -192,9 +192,9 @@
             }
         })
 
-        bic.addEventListener('keyup', e => { submit.disabled = bic.value < 8 })
+        bic.addEventListener('keyup', _ => { submit.disabled = bic.value < 8 })
 
-        submit.addEventListener('click', e => {
+        submit.addEventListener('click', _ => {
             submit.disabled = true
             if (bic.value.length >= 8) {
                 window.axios.get('{{ route('api::verify_iban') }}', {

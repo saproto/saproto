@@ -111,7 +111,7 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let pageBlock = document.getElementById('achieve_page_block')
-        document.getElementById('has_page').addEventListener('click', (e) => {
+        document.getElementById('has_page').addEventListener('click', e => {
             if(e.target.checked) {
                 pageBlock.classList.remove('d-none')
                 pageBlock.querySelector('input').required = true

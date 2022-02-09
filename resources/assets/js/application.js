@@ -12,6 +12,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 // Execute theme JavaScript
 window[config.theme]?.()
 
+// Disable submit buttons after a form has been submitted
+// so spamming the button doesnt result in multiple requests
+window.addEventListener('load', _ => {
+    let forms = document.querySelectorAll("form")
+    forms.forEach(form => {
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            e.submitter.disabled = true
+            e.target.submit()
+        })
+    })
+})
+
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -36,7 +49,7 @@ if (modalList.length) {
 const customFileInputList = Array.from(document.getElementsByClassName('custom-file-input'))
 if (customFileInputList.length) {
     customFileInputList.forEach((el) => {
-        el.addEventListener('change', () => {
+        el.addEventListener('change', _ => {
             let fileName = this.value.split('\\').pop()
             let label = this.nextElementSibling
             label.classList.add( 'selected')
@@ -127,7 +140,7 @@ const navbar = document.getElementById('nav')
 if (navbar) {
     const navbarHeight = 100;
     let currentScroll = 0;
-    window.addEventListener('wheel', (e) => {
+    window.addEventListener('wheel', _ => {
         currentScroll = document.documentElement.scrollTop
         if (currentScroll > navbarHeight) navbar.classList.add('navbar-scroll')
         else navbar.classList.remove('navbar-scroll')
@@ -139,7 +152,7 @@ if (navbar) {
 // https://stackoverflow.com/a/18673641/14133333
 const collapseList = Array.from(document.querySelectorAll('.collapse:not(#navbar)'))
 collapseList.map((el) => {
-    el.addEventListener('shown.bs.collapse', (e) => {
+    el.addEventListener('shown.bs.collapse', e => {
         let card = e.target.closest('.card').getBoundingClientRect()
         window.scrollTo(0, card.top + window.scrollY - 60)
     })

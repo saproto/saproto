@@ -119,15 +119,13 @@
             history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
             history.pushState(null, document.title, location.pathname);
 
-            window.addEventListener("popstate", function () {
+            window.addEventListener("popstate", _ => {
                 if (location.hash === "#!/stealingyourhistory") {
                     history.replaceState(null, document.title, location.pathname);
-                    setTimeout(function () {
-                        location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."#photo_".$photo->id }}");
-                    }, 0);
+                    setTimeout(_ => { location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."#photo_".$photo->id }}") }, 0)
                 }
-            }, false);
-        }(window, location));
+            }, false)
+        }(window, location))
     </script>
 
 @endpush

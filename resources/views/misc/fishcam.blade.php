@@ -44,7 +44,7 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const fishcam = document.getElementById("fishcam")
-        document.getElementById("fishcam__activate").addEventListener('click', () => {
+        document.getElementById("fishcam__activate").addEventListener('click', _ => {
             fishcam.setAttribute('src', '{{ route("api::fishcam") }}')
             document.getElementById('fishcam-warning').classList.add('d-none')
             fishcam.classList.remove('d-none')

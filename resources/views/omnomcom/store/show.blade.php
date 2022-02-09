@@ -105,13 +105,13 @@
             @endforeach
 
             /* Register button handlers */
-            document.getElementById('reload-button').addEventListener('click', () => {
+            document.getElementById('reload-button').addEventListener('click', _ => {
                 window.location.reload()
             })
 
             const categoryBtnList = Array.from(document.getElementsByClassName('btn-category'))
             categoryBtnList.forEach(el => {
-                el.addEventListener('click', e => {
+                el.addEventListener('click', _ => {
                     Array.from(el.parent.childNodes).forEach(el => el.classList.add('inactive'))
                     el.classList.remove('inactive')
                     const categoryViewList = Array.from(document.getElementsByClassName('category-view'))
@@ -125,7 +125,7 @@
 
             const productList = Array.from(document.getElementsByClassName('product'))
             productList.forEach(el => {
-                el.addEventListener('click', e => {
+                el.addEventListener('click', _ => {
                     if (el.classList.contains('random')) {
                         if (el.getAttribute('data-stock') > 0) {
                             let data = el.getAttribute('data-list').split('')
@@ -208,7 +208,7 @@
             function finishPurchase(display_message = null) {
                 modals.forEach(el => el.hide())
                 if (display_message) document.getElementById('finished-modal-message').innerHTML = display_message
-                document.getElementById('finished-modal-continue').addEventListener('click', e => window.location.reload())
+                document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
                 modals['finished-modal'].show()
                 const movie = document.getElementById('purchase-movie')
                 movie.addEventListener('ended', e => window.location.reload())
@@ -356,14 +356,14 @@
             }
 
             /* Modal handlers */
-            document.getElementById('rfid').addEventListener('click', e => {
+            document.getElementById('rfid').addEventListener('click', _ => {
                 rfidLinkCard = null
                 modalStatus = 'rfid'
                 modals['rfid-modal'].show()
                 document.querySelector('#rfid-modal .modal-body').innerHTML = '<h1>Please present your RFID card</h1>'
             })
 
-            document.getElementById('purchase').addEventListener('click', e => purchaseInitiate(
+            document.getElementById('purchase').addEventListener('click', _ => purchaseInitiate(
                 [false, false],
                 'Payment of €' + document.getElementById('total').innerHTML + ' for purchases in Omnomcom',
                 'Complete purchase using your <i class="fas fa-cookie-bite"></i> OmNomCom bill.'
@@ -371,7 +371,7 @@
 
             cashCompleted = document.getElementById('purchase-cash-initiate')
             if(cashCompleted) {
-                cashCompleted.addEventListener('click', e => purchaseInitiate(
+                cashCompleted.addEventListener('click', _ => purchaseInitiate(
                     [true, false],
                     'Cashier payment for cash purchases in Omnomcom',
                     'Complete purchase as cashier, payed with cash.'
@@ -380,7 +380,7 @@
 
             cardCompleted = document.getElementById('purchase-bank-card-initiate')
             if(cardCompleted) {
-                cardCompleted.addEventListener('click', e => purchaseInitiate(
+                cardCompleted.addEventListener('click', _ => purchaseInitiate(
                     [false, true],
                     'Cashier payment for bank card purchases in Omnomcom',
                     'Complete purchase as cashier, payed with bank card.'
@@ -409,13 +409,13 @@
             setInterval(timerIncrement, 1000) // 1 second
 
             // Reset idle timer on mouse movement.
-            document.body.addEventListener('mousemove', e => {
+            document.body.addEventListener('mousemove', _ => {
                 idleTime = 0;
                 idleWarning = false;
             })
 
             // Reset idle timer on keydown
-            document.body.addEventListener('keydown', e => {
+            document.body.addEventListener('keydown', _ => {
                 idleTime = 0
                 idleWarning = false
             })
