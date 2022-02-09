@@ -446,18 +446,26 @@
 
     function updateBus(stop, stop_other_side, element) {
         $.ajax({
-            url: "{{urldecode(route('api::screen::bus',['stop' => '--replaceme--','stop_other_side' => '--replaceme_other--']))}}".replace('--replaceme--', stop).replace('--replaceme_other--', stop_other_side),
-            dataType: 'json',
-            success: function (data) {
-                console.log(Object.keys(data))
-                if (Object.keys(data).length > 0) {
-                    $(element).html('');
+            url: "{{urldecode(route('api::screen::bus'))}}",
+            data:{
+                'tpc_id':stop,
+                'tpc_id_other':stop_other_side,
+            },
 
-                    let sortableBusses = Object.entries(data).slice(0)
-                    sortableBusses.sort(function(a,b) {
+            success: function (data) {
+                let dataInJSON= JSON.parse(data)
+                let combinedBusses= {};
+                for (const [key, value] of Object.entries(dataInJSON)) {
+                    Object.assign(combinedBusses, value.Passes)
+                }
+
+                if (Object.keys(combinedBusses).length > 0) {
+                    $(element).html('');
+                    Object.entries(combinedBusses).sort(function(a,b) {
                         return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
                     });
-                    for (const [key, value] of sortableBusses) {
+
+                    for (const [key, value] of Object.entries(combinedBusses).slice(0,4)) {
                         let colorLate = (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) / 1000 * 60 > 1) ? '#ff0000' : '#c1ff00';
                         let drivingColor = value.TripStopStatus === "DRIVING" ? '#c1ff00' : '#fff'
                         if (value.TripStopStatus != "ARRIVED") {
