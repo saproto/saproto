@@ -3,10 +3,10 @@
 namespace Proto\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class SmartXpScreenController extends Controller
 {
@@ -41,10 +41,9 @@ class SmartXpScreenController extends Controller
             return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
         } catch (Exception $e) {
             return response()->json([
-                'message'=>'OV_API not available'
+                'message'=>'OV_API not available',
             ], 503);
         }
-
     }
 
     /** @return object */
