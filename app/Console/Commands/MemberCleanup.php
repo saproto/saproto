@@ -13,7 +13,7 @@ class MemberCleanup extends Command
      *
      * @var string
      */
-    protected $signature = 'proto:membercleanup}';
+    protected $signature = 'proto:membercleanup';
 
     /**
      * The console command description.
