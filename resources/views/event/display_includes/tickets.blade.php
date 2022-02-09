@@ -131,7 +131,7 @@
                                     <select required class="form-control ticket-select"
                                             name="tickets[{{$ticket->id}}]"
                                             data-price="{{ $ticket->product->price }}"
-                                            onchange="updateOrderTotal();">
+                                            >
                                         @for($i = 0; $i <= min(config('proto.maxtickets'), $ticket->product->stock); $i++)
                                             <option value="{{ $i }}">{{ $i }}x</option>
                                         @endfor
@@ -163,15 +163,20 @@
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
-        let total = 0;
+        var total=0
+        //attach eventlistener to all tickets
+        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', updateOrderTotal))
 
         function updateOrderTotal() {
-            total = 0;
-            $('.ticket-select').each(function () {
-                total += $(this).attr('data-price') * $(this).val();
-            });
-            $('#ticket-total').html(total.toFixed(2))
+                total=0;
+                //get all tickets
+                var tickets = document.querySelectorAll(".ticket-select");
+                for (var i = 0; i < tickets.length; i++) {
+                    //add all the ticket indexes times the price of that ticket to the total
+                    total+=parseInt(tickets[i].options[tickets[i].selectedIndex].value)*tickets[i].getAttribute('data-price');
+                }
+            //update the button (span) text
+            document.getElementById('ticket-total').innerHTML=total;
         }
 
     </script>

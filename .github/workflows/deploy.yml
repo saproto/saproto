@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PHP_VERSION: 7.4
-      BUILD_SOURCE_DIR: /
+      BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
       BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
       HOST_SERVER: s176.webhostingserver.nl
@@ -17,7 +17,7 @@ jobs:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v2
 
-      - name: 🔍 Setup PHP
+      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
@@ -25,26 +25,47 @@ jobs:
       - name: 📥 Install back-end dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: 🔍 Get Node version
+        id: nvm
+        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+
+      - name: 🖱️ Set Node v${{ steps.nvm.outputs.NODE_VERSION }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+
+      - name: 📂 Cache front-end dependencies
+        id: npm-cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
       - name: 📥 Install front-end dependencies
-        run: npm install
+        run: npm ci --ignore-scripts
 
       - name: 🔨 build front-end
         run: npm run prod
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
-
+        
+      - name: 📝 Set Sentry release
+        run: sed -i "s/GIT_SHA/$(git rev-parse --short "$GITHUB_SHA")/" config/sentry.php
+        
+      - name: 📁 Create build directory
+        run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
+          
       - name: 🗄️ ZIP Build
-        uses: papeloto/action-zip@v1
+        uses: TheDoctor0/zip-release@0.6.1
         with:
-          files: ${{ env.BUILD_SOURCE_DIR }}
-          dest: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
+          filename: ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip
+          path: ${{ env.BUILD_SOURCE_DIR }}
+          exclusions: 'storage/* build/*'
 
       - name: ➗ Calculate checksum
         run: openssl md5 ${{ env.BUILD_ARTIFACT_STAGING_DIR }}build.zip | cut -d" " -f2 > ${{ env.BUILD_ARTIFACT_STAGING_DIR }}checksum.txt
-
-      - name: 📝 Set Sentry release
-        run: sed -i "s/GIT_SHA/$(git --git-dir .git log --pretty="%h" -n1 HEAD)/" config/sentry.php
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.1.0
