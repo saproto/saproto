@@ -414,16 +414,20 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#activities").html('');
+                    let counter=0;
                     for (let i in data) {
-                        let start = moment.unix(data[i].start);
-                        let end = moment.unix(data[i].end);
-                        let time;
-                        if (start.format('DD-MM') === end.format('DD-MM')) {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
-                        } else {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                        if (counter < 3) {
+                            let start = moment.unix(data[i].start);
+                            let end = moment.unix(data[i].end);
+                            let time;
+                            if (start.format('DD-MM') === end.format('DD-MM')) {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
+                            } else {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                            }
+                            $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
+                            counter++;
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
@@ -453,12 +457,10 @@
             },
 
             success: function (data) {
-                let dataInJSON= JSON.parse(data)
                 let combinedBusses= {};
-                for (const [key, value] of Object.entries(dataInJSON)) {
+                for (const [key, value] of Object.entries(data)) {
                     Object.assign(combinedBusses, value.Passes)
                 }
-
                 if (Object.keys(combinedBusses).length > 0) {
                     $(element).html('');
                     Object.entries(combinedBusses).sort(function(a,b) {
@@ -477,8 +479,8 @@
                 }
             },
 
-            error: function () {
-                $(element).html('<div class="notice">Error...</div>');
+            error: function (data) {
+                $(element).html('<div class="notice">Something went wrong during retrieval...</div>');
             }
         })
     }
