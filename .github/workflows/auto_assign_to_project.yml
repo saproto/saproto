@@ -3,7 +3,7 @@ name: Auto add new issues and pull requests to the right column
 on:
   issues:
     types: [opened]
-  pull_request_target:
+  pull_request:
     types: [opened]
 
 env:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Assign new issues to the project in 'new issues'
         uses: srggrs/assign-one-project-github-action@1.2.1
-        if: github.event_name == 'issue'
+        if: github.event_name == 'issues'
         with:
           project: 'https://github.com/saproto/saproto/projects/5'
           column_name: 'New Issues'
@@ -27,3 +27,4 @@ jobs:
         with:
           project: 'https://github.com/saproto/saproto/projects/5'
           column_name: 'In Review'
+
