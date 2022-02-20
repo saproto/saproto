@@ -120,7 +120,7 @@ class DirectAdminSync extends Command
     }
 
     /**
-     * Generate the list of accounts for all members
+     * Generate the list of accounts for all members.
      *
      * @return array
      */
@@ -198,7 +198,7 @@ class DirectAdminSync extends Command
     }
 
     /**
-     * Generate queries to apply the forwarders patch lists
+     * Generate queries to apply the forwarders patch lists.
      *
      * @param array $patch The forwarders patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the forwarders patch
@@ -281,7 +281,7 @@ class DirectAdminSync extends Command
     }
 
     /**
-     * Generate queries to apply the accounts patch lists
+     * Generate queries to apply the accounts patch lists.
      *
      * @param array $patch The accounts patch list containing a 'add' and 'del' array.
      * @return array A list of queries to apply the accounts patch
