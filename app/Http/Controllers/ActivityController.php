@@ -91,7 +91,7 @@ class ActivityController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function delete(Request $request, $id)
+    public function destroy(Request $request, $id)
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
