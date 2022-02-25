@@ -40,13 +40,14 @@ If you want to run a development environment in Docker **(you most likely do)** 
 
 ## Running with Docker
 
-This repository can be run through Docker by using `docker compose`. This is still a work in progress, but for now the website can be run locally using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
+This repository can be run through Docker by using `docker compose`. The website can be run locally using the instructions below. Be aware that as a Windows user you need to have either **Windows Educational or Pro** installed, because Docker uses the Hyper-V engine. 
+
+On Windows, Docker can also run using WSL 2. However, this is not recommended as the local server becomes very slow. On a new installation of Docker Desktop go to Settings>General and disable the option "Use the WSL 2 based engine".
 
 For more information on installing and using Docker check out their documentation at [docs.docker.com](https://docs.docker.com).
 
-After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
-
 ### Setup
+After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
 
 ##### Configuration
 Copy and rename `.env.docker.example` to `.env`.
