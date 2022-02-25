@@ -1,4 +1,4 @@
-name: Auto add new issues and pull requests to the right column
+name: 📌 Assign Project
 
 on:
   issues:
