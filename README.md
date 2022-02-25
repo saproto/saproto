@@ -81,6 +81,8 @@ When you have finished the setup and Docker the following port will be exposed o
 
 You can sign in with the same Proto username you use on the *live* website and the password given to you during the database seeding. This user will have full admin rights on the local website.
 
+> _Note:_ the php-queue container might not work yet on the first run. Restart the Docker containers after you have installed the backend dependencies and the container should be functional.
+
 ### Handy commands
 
 ##### Running

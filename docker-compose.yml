@@ -7,8 +7,9 @@ services:
       - .:/var/www
 
   queue:
-    build: ./docker/build/php-queue
+    build: ./docker/build/php
     container_name: ${DOCKER_NAME}-queue
+    command: 'php artisan queue:work --verbose --tries=3 --timeout=90 --queue=low,medium,high'
     volumes:
       - .:/var/www
 
