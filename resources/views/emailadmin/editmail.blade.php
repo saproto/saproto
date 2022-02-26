@@ -51,6 +51,10 @@
             $("#listSelect").prop('disabled', true);
             $("#eventSelect").prop('disabled', true);
         });
+        $("#destinationPendingMembers").on('click', function () {
+            $("#listSelect").prop('disabled', true);
+            $("#eventSelect").prop('disabled', true);
+        });
     </script>
 
 @endpush

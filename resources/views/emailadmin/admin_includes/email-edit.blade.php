@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label for="description">Internal description:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                               placeholder="A short descritpion that only the board can see."
+                               placeholder="A short description that only the board can see."
                                value="{{ $email->description ?? '' }}" required>
                     </div>
 
@@ -98,6 +98,15 @@
                                        required
                                        value="active" {{ ($email && $email->to_active ? 'checked' : '') }}>
                                 All active members
+                            </label>
+                        </div>
+
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="destinationType" id="destinationPendingMembers"
+                                       required
+                                       value="pending" {{ ($email && $email->to_pending ? 'checked' : '') }}>
+                                All pending members
                             </label>
                         </div>
 
