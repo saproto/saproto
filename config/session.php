@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'domain' => (in_array('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : env('FALLBACK_COOKIE_DOMAIN')),
+    'domain' => (array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : env('FALLBACK_COOKIE_DOMAIN')),
 
     /*
     |--------------------------------------------------------------------------

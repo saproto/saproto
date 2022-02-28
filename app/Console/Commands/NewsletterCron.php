@@ -46,16 +46,12 @@ class NewsletterCron extends Command
 
         $text = Newsletter::getText()->value;
 
-        if ($events->count() > 0) {
-            $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
+        $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 
-            foreach ($newsletterlist->users as $user) {
-                Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $text))->onQueue('low'));
-            }
-
-            $this->info('Done!');
-        } else {
-            $this->info('No activities scheduled for the newsletter. Newsletter not sent.');
+        foreach ($newsletterlist->users as $user) {
+            Mail::to($user)->queue((new NewsletterMail($user, $newsletterlist, $text))->onQueue('low'));
         }
+
+        $this->info('Done!');
     }
 }

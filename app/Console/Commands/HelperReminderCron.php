@@ -61,7 +61,7 @@ class HelperReminderCron extends Command
                 if ($helping_committee->getHelpingCount() >= $helping_committee->amount) {
                     $this->info(sprintf('%s has enough helpers, skipping.', $helping_committee->committee->name));
                     continue;
-                } elseif (count($helping_committee->committee->helper_reminder_subscribers) == 0) {
+                } elseif (count($helping_committee->committee->helperReminderSubscribers()) == 0) {
                     $this->info(sprintf('%s has no people subscribed to helper reminders, skipping.', $helping_committee->committee->name));
                     continue;
                 } else {

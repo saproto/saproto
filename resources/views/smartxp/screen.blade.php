@@ -319,10 +319,10 @@
 
                         <div class="box-header small">
                             <i class="fas fa-bus fa-fw mr-1"></i>
-                            Hallenweg
+                            Westerbegraafplaats
                         </div>
 
-                        <div id="businfo-hallen" class="businfo">
+                        <div id="businfo-wester" class="businfo">
 
                         </div>
 
@@ -332,10 +332,10 @@
 
                         <div class="box-header small">
                             <i class="fas fa-bus fa-fw mr-1"></i>
-                            Westerbegraafplaats
+                            Langenkampweg
                         </div>
 
-                        <div id="businfo-wester" class="businfo">
+                        <div id="businfo-langen" class="businfo">
 
                         </div>
 
@@ -414,16 +414,20 @@
             success: function (data) {
                 if (data.length > 0) {
                     $("#activities").html('');
+                    let counter=0;
                     for (let i in data) {
-                        let start = moment.unix(data[i].start);
-                        let end = moment.unix(data[i].end);
-                        let time;
-                        if (start.format('DD-MM') === end.format('DD-MM')) {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
-                        } else {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                        if (counter < 3) {
+                            let start = moment.unix(data[i].start);
+                            let end = moment.unix(data[i].end);
+                            let time;
+                            if (start.format('DD-MM') === end.format('DD-MM')) {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
+                            } else {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                            }
+                            $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
+                            counter++;
                         }
-                        $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
                     }
                 } else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
@@ -440,26 +444,43 @@
     updateActivities();
 
     function updateBuses() {
-        updateBus('bushalte-ut-hallenweg', '#businfo-hallen');
-        updateBus('bushalte-westerbegraafplaats-ut', '#businfo-wester');
+        updateBus(43110270, 43110270, '#businfo-langen');
+        updateBus(43005640, 43005630, '#businfo-wester');
     }
 
-    function updateBus(stop, element) {
+    function updateBus(stop, stop_other_side, element) {
         $.ajax({
-            url: "{{ urldecode(route('api::screen::bus',['stop' => '--replaceme--'])) }}".replace('--replaceme--', stop),
-            dataType: 'json',
+            url: "{{urldecode(route('api::screen::bus'))}}",
+            data:{
+                'tpc_id':stop,
+                'tpc_id_other':stop_other_side,
+            },
+
             success: function (data) {
-                if (data.length > 0) {
+                let combinedBusses= {};
+                for (const [key, value] of Object.entries(data)) {
+                    Object.assign(combinedBusses, value.Passes)
+                }
+                if (Object.keys(combinedBusses).length > 0) {
                     $(element).html('');
-                    for (i in data) {
-                        $(element).append('<div class="busentry">' + data[i].time + ' ' + data[i].mode.name + ' ' + data[i].service + ' <span style="color: #c1ff00;">' + (data[i].realtimeText !== null ? data[i].realtimeText + ' (' + data[i].realtimeState + ')' : '(' + data[i].realtimeState + ')') + '</span><br>Towards ' + data[i].destinationName + '</div>');
+                    Object.entries(combinedBusses).sort(function(a,b) {
+                        return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
+                    });
+
+                    for (const [key, value] of Object.entries(combinedBusses).slice(0,4)) {
+                        let colorLate = (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) / 1000 * 60 > 1) ? '#ff0000' : '#c1ff00';
+                        let drivingColor = value.TripStopStatus === "DRIVING" ? '#c1ff00' : '#fff'
+                        if (value.TripStopStatus != "ARRIVED") {
+                            $(element).append('<div class="busentry">' + `<span style=color:${colorLate}>` + new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0, 5) + '</span>' + ' ' + value.TransportType + ' ' + value.LinePublicNumber + ` ` + `<span style="color: ${drivingColor};">` + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>')
+                        }
                     }
                 } else {
                     $(element).html('<div class="notice">No buses!</div>');
                 }
             },
-            error: function () {
-                $(element).html('<div class="notice">Error...</div>');
+
+            error: function (data) {
+                $(element).html('<div class="notice">Something went wrong during retrieval...</div>');
             }
         })
     }

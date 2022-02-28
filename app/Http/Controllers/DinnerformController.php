@@ -93,9 +93,10 @@ class DinnerformController extends Controller
 
         $dinnerform->update([
             'restaurant' => $request->restaurant,
+            'description' => $request->description,
+            'url' => $request->url,
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
-            'description' => $request->description,
         ]);
 
         if ($changed_important_details) {

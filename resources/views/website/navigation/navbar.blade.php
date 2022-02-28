@@ -82,12 +82,16 @@
                                 </a>
                             @endif
 
-                            <li role="separator" class="dropdown-divider"></li>
+                            @if(Auth::check() && Auth::user()->can("tipcie"))
+                                <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinner Forms</a>
 
-                            <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
-                                TIPCie Order Overview
-                            </a>
-                            <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                                <li role="separator" class="dropdown-divider"></li>
+
+                                <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">
+                                    TIPCie Order Overview
+                                </a>
+                                <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                            @endif
                         </ul>
                     </li>
                 @endif
@@ -119,7 +123,6 @@
 
                                 <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
                                 <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
-                                <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Add Dinner Form</a>
 
                                 <li role="separator" class="dropdown-divider"></li>
 

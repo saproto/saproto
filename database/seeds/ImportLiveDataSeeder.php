@@ -72,6 +72,9 @@ class ImportLiveDataSeeder extends Seeder
                 'tableName' => 'mailinglists',
             ],
             [
+                'tableName' => 'menuitems',
+            ],
+            [
                 'tableName' => 'permissions',
             ],
             [
