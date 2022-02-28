@@ -695,6 +695,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('update', ['as' => 'update', 'uses' => 'AliasController@update']);
     });
 
+    /* Routes related to e-mail inboxes */
+    Route::group(['prefix' => 'inbox', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'inbox::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'InboxController@index']);
+        Route::post('add', ['as' => 'add', 'uses' => 'InboxController@store']);
+        Route::get('delete/{inbox}', ['as' => 'delete', 'uses' => 'InboxController@destroy']);
+    });
+
     /* The route for the SmartXp Screen. */
     Route::get('smartxp', ['as' => 'smartxp', 'uses' => 'SmartXpScreenController@show']);
     Route::get('caniworkinthesmartxp', ['uses' => 'SmartXpScreenController@canWork']);

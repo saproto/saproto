@@ -222,6 +222,7 @@
                                     Soundboard Sounds
                                 </a>
                                 <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
+                                <a class="dropdown-item" href="{{ route("inbox::index") }}">Inboxes</a>
                                 <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
                                 <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                             @endif

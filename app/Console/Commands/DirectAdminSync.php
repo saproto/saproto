@@ -133,7 +133,7 @@ class DirectAdminSync extends Command
             $data[] = $member->proto_username;
         }
 
-        foreach (config('proto.additional_mailboxes') as $additional) {
+        foreach (json_decode(settings()->group('email')->get('additional_mailboxes')) as $additional) {
             $data[] = $additional;
         }
 
