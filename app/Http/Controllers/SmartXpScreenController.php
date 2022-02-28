@@ -3,7 +3,9 @@
 namespace Proto\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class SmartXpScreenController extends Controller
@@ -31,25 +33,16 @@ class SmartXpScreenController extends Controller
 
     /**
      * @param $stop
-     * @return object[]
+     * @return Response|JsonResponse
      */
-    public function bus($stop)
+    public function bus(Request $request)
     {
         try {
-            $departures = json_decode(stripslashes(file_get_contents("https://api.9292.nl/0.1/locations/enschede/$stop/departure-times?lang=en-GB")));
-
-            return $departures->tabs[0]->departures;
+            return response(file_get_contents("http://v0.ovapi.nl/tpc/$request->tpc_id,$request->tpc_id_other"), 200)->header('Content-Type', 'application/json');
         } catch (Exception $e) {
-            return [(object) [
-                'time' => '00:00',
-                'service' => '',
-                'mode' => (object) [
-                    'name' => 'Error in API!',
-                ],
-                'realtimeText' => '',
-                'realtimeState' => '9292',
-                'destinationName' => 'who knows?',
-            ]];
+            return response()->json([
+                'message'=>'OV_API not available',
+            ], 503);
         }
     }
 

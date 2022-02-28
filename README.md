@@ -40,13 +40,14 @@ If you want to run a development environment in Docker **(you most likely do)** 
 
 ## Running with Docker
 
-This repository can be run through Docker by using `docker compose`. This is still a work in progress, but for now the website can be run locally using the instructions below. Be aware that as a Windows user you need to have either Windows Educational or Pro installed, because Docker uses Hyper-V.
+This repository can be run through Docker by using `docker compose`. The website can be run locally using the instructions below. Be aware that as a Windows user you need to have either **Windows Educational or Pro** installed, because Docker uses the Hyper-V engine. 
+
+On Windows, Docker can also run using WSL 2. However, this is not recommended as the local server becomes very slow. On a new installation of Docker Desktop go to Settings>General and disable the option "Use the WSL 2 based engine".
 
 For more information on installing and using Docker check out their documentation at [docs.docker.com](https://docs.docker.com).
 
-After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
-
 ### Setup
+After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
 
 ##### Configuration
 Copy and rename `.env.docker.example` to `.env`.
@@ -104,7 +105,7 @@ Xdebug enables breakpoints and step debugging which can easily be controlled fro
 For this to work, you will have to set up your IDE correctly.
 
 #### PhpStorm Configuration
-To make sure the Xdebug server can connect to PhpStorm you will have to set it up in PhpStorm by following the steps below:
+To make the Xdebug server connect to PhpStorm you can follow the steps below:
 1. Open the Settings menu by clicking File>Settings in the top right.
 2. Under the PHP menu, click on the Servers entry.
 3. Add a new server with the following parameters:
@@ -126,14 +127,14 @@ To make sure the Xdebug server can connect to PhpStorm you will have to set it u
 
 #### Browser configuration
 If you just visit the local website normally, no debug session will be started.
-A specific parameter hase to be sent with the request to enable debugging.
+A specific parameter has to be sent with the request to enable debugging.
 Luckily, there are easy browser extensions to help you with this:
 - [Xdebug Helper for Firefox](https://addons.mozilla.org/en-GB/firefox/addon/xdebug-helper-for-firefox/)
 - [Xdebug Helper for Chrome](https://chrome.google.com/extensions/detail/eadndfjplgieldjbigjakmdgkmoaaaoc)
 - [XDebugToggle for Safari](https://apps.apple.com/app/safari-xdebug-toggle/id1437227804?mt=12)
 
-If you don't want to use a browser extension, you can also choose to add ?XDEBUG_SESSION=XDEBUG_ECLIPSE after the url.
-Do keep in mind that clicking an internal link will not also add this, so it has to be added every time.
+If you don't want to use a browser extension, you can also choose to add `?XDEBUG_SESSION=XDEBUG_ECLIPSE` after the url.
+Do keep in mind that clicking an internal link will not add this parameter, so it has to be added every time you navigate to a new page.
 When using a browser extension this will be automatically taken care of.
 
 ## Running without Docker
@@ -146,7 +147,7 @@ cp .env.example .env
 
 This is the environment configuration. In this file you will establish your own database connection, e-mail credentials and whatnot. You will at least need to set the following options for your instance of the website to work:
 
-* `APP_URL` is the URL (including https://, but without trailing slash) of your own website instance.
+* `APP_URL` is the URL (including https://, but **without** trailing slash) of your own website instance.
 * `PRIMARY_DOMAIN` and `FALLBACK_COOKIE_DOMAIN` is only the [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) domain part of `APP_URL`.
 * `DEBUG` should be set to `true` so you can see in detail what goes wrong if an error occurs.
 * All the `DB_*` settings should be set to reflect your database set-up.

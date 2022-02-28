@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label for="description">Internal description:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                               placeholder="A short descritpion that only the board can see."
+                               placeholder="A short description that only the board can see."
                                value="{{ $email->description ?? '' }}" required>
                     </div>
 
@@ -84,7 +84,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationMembers" required
+                                <input type="radio" name="destinationType" required
                                        value="members" {{ ($email && $email->to_member ? 'checked' : '') }}>
                                 All members
                             </label>
@@ -92,8 +92,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationActiveMembers"
-                                       required
+                                <input type="radio" name="destinationType" required
                                        value="active" {{ ($email && $email->to_active ? 'checked' : '') }}>
                                 All active members
                             </label>
@@ -101,7 +100,15 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationEvent" required
+                                <input type="radio" name="destinationType" required
+                                       value="pending" {{ ($email && $email->to_pending ? 'checked' : '') }}>
+                                All pending members
+                            </label>
+                        </div>
+
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="destinationType" required
                                        value="event" {{ ($email && $email->to_event ? 'checked' : '') }}>
                                 These events:
                             </label>
@@ -134,7 +141,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationLists" required
+                                <input type="radio" name="destinationType" required
                                        value="lists" {{ ($email && $email->to_list ? 'checked' : '') }}>
                                 These e-mail lists:
                             </label>
@@ -185,16 +192,22 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
-
-        document.getElementById('destinationEvent').addEventListener('click', _ => disableSelect(false, true))
-        document.getElementById('destinationLists').addEventListener('click', _ => disableSelect(true, false))
-        document.getElementById('destinationMembers').addEventListener('click', _ => disableSelect(true, true))
-        document.getElementById('destinationActiveMembers').addEventListener('click', _ => disableSelect(true, true))
-
-        function disableSelect(event, list) {
-            eventSelect.disabled = event
-            listSelect.disabled = list
+        const destinationSelectList = Array.from(document.getElementsByName('destinationType'))
+        const toggleList = {
+            'event': [false, true],
+            'members': [true, true],
+            'active': [true, true],
+            'pending': [true, true],
+            'lists': [true, false]
         }
+
+        destinationSelectList.forEach(el => {
+            el.addEventListener('click', e => {
+                const toggle = toggleList[el.value]
+                eventSelect.disabled = toggle[0]
+                listSelect.disabled = toggle[1]
+            })
+        })
     </script>
 
 @endpush

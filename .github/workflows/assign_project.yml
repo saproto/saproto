@@ -1,0 +1,30 @@
+name: 📌 Assign Project
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  assign_to_project:
+    runs-on: ubuntu-latest
+    name: Assign to the Project
+    steps:
+      - name: Assign new issues to the project in 'new issues'
+        uses: srggrs/assign-one-project-github-action@1.2.1
+        if: github.event_name == 'issues'
+        with:
+          project: 'https://github.com/saproto/saproto/projects/5'
+          column_name: 'New Issues'
+
+      - name: Assign new pull requests to the project in 'in review'
+        uses: srggrs/assign-one-project-github-action@1.2.1
+        if: github.event_name == 'pull_request'
+        with:
+          project: 'https://github.com/saproto/saproto/projects/5'
+          column_name: 'In Review'
+

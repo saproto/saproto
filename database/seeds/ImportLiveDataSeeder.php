@@ -13,6 +13,7 @@ class ImportLiveDataSeeder extends Seeder
      * This seeder imports some non-sensitive data from the live environment to make your development environment more 'real'.
      *
      * @return void
+     * @throws Exception
      */
     public function run()
     {
@@ -48,33 +49,34 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's import all data we can from the live environment.
         $tables = [
-            ['tableName' => 'accounts'],
-            ['tableName' => 'achievement'],
-            ['tableName' => 'activities'],
-            ['tableName' => 'committees'],
-            ['tableName' => 'committees_activities'],
-            ['tableName' => 'companies'],
-            ['tableName' => 'events', 'exclude' => ['formatted_date', 'is_future']],
-            ['tableName' => 'mailinglists'],
-            ['tableName' => 'products'],
-            ['tableName' => 'products_categories'],
-            ['tableName' => 'product_categories'],
-            ['tableName' => 'tickets'],
+            ['name' => 'accounts'],
+            ['name' => 'achievement'],
+            ['name' => 'activities'],
+            ['name' => 'committees'],
+            ['name' => 'committees_activities'],
+            ['name' => 'companies'],
+            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
+            ['name' => 'mailinglists'],
+            ['name' => 'menu_items'],
+            ['name' => 'products'],
+            ['name' => 'products_categories'],
+            ['name' => 'product_categories'],
+            ['name' => 'tickets'],
         ];
 
         foreach ($tables as $table) {
-            echo 'Importing table '.$table['tableName'].PHP_EOL;
-            $data = (array) self::getDataFromExportApi($table['tableName']);
+            echo 'Importing table '.$table['name'].PHP_EOL;
+            $data = (array) self::getDataFromExportApi($table['name']);
             foreach ($data as $entry) {
                 $entry = (array) $entry;
 
-                if (isset($table['exclude'])) {
-                    foreach ($table['exclude'] as $exclude) {
-                        unset($entry[$exclude]);
+                if (isset($table['exclude_columns'])) {
+                    foreach ($table['excluded_columns'] as $column) {
+                        unset($entry[$column]);
                     }
                 }
 
-                DB::table($table['tableName'])->insert($entry);
+                DB::table($table['name'])->insert($entry);
             }
         }
 

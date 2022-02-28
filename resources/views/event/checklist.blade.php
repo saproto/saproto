@@ -38,7 +38,7 @@
 
                         <tbody>
 
-                        @foreach($event->activity->allUsersSorted() as $user)
+                        @foreach($event->returnAllUsers() as $user)
                             <tr>
 
                                 <td>

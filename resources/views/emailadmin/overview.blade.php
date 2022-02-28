@@ -49,6 +49,13 @@
                         <td></td>
                     </tr>
 
+                    <tr>
+                        <td>All pending members</td>
+                        <td></td>
+                        <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
+                        <td></td>
+                    </tr>
+
                     @foreach($lists as $list)
 
                         <tr>
@@ -117,6 +124,8 @@
                                 via
                                 @if ($email->to_user)
                                     all users
+                                @elseif ($email->to_pending)
+                                    all pending members
                                 @elseif($email->to_member)
                                     all members
                                 @elseif($email->to_active)
