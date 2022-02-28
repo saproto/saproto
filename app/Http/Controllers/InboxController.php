@@ -24,7 +24,7 @@ class InboxController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'new_inbox' => 'required'
+            'new_inbox' => 'required',
         ]);
 
         $inboxes = json_decode(settings()->group('email')->get('additional_inboxes'));
