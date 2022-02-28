@@ -27,10 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address
- * @property-read Collection|User[] $helper_reminder_subscribers
- * @property-read Collection|HelperReminder[] $helperReminderSubscribers
  * @property-read StorageEntry|null $image
- * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
  * @method static Builder|Committee whereCreatedAt($value)
@@ -91,12 +88,6 @@ class Committee extends Model
         return $this->hasMany('Proto\Models\Event', 'committee_id');
     }
 
-    /** @return HasMany|HelperReminder[] */
-    public function helperReminderSubscribers()
-    {
-        return $this->hasMany('Proto\Models\HelperReminder');
-    }
-
     /** @return string */
     public function getEmailAddressAttribute()
     {
@@ -104,12 +95,15 @@ class Committee extends Model
     }
 
     /** @return User[] */
-    public function getHelperReminderSubscribersAttribute()
+    public function HelperReminderSubscribers()
     {
+        $helper_reminder_subscribers = $this->hasMany('Proto\Models\HelperReminder')->get();
+
         $users = [];
-        foreach ($this->helperReminderSubscribers as $subscriber) {
+        foreach ($helper_reminder_subscribers as $subscriber) {
             $users[] = $subscriber->user;
         }
+
         return $users;
     }
 

@@ -11,6 +11,8 @@ use Proto\Models\Company;
 use Proto\Models\EmailList;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
+use Proto\Models\MenuItem;
+use Proto\Models\Page;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
@@ -76,6 +78,12 @@ class ExportController extends Controller
                 break;
             case 'mailinglists':
                 $data = EmailList::all();
+                break;
+            case 'menuitems':
+                $data = MenuItem::all();
+                break;
+            case 'pages':
+                $data = Page::all();
                 break;
             case 'permissions':
                 $data = Permission::all();

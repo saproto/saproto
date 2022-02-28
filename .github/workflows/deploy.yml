@@ -1,8 +1,14 @@
 name: 🚀 Deploy
+
 on:
   push:
     branches:
       - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy
@@ -13,6 +19,8 @@ jobs:
       BUILD_ARTIFACT_STAGING_DIR: build/
       BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
       HOST_SERVER: s176.webhostingserver.nl
+      SENTRY_ORG: sa-proto
+      SENTRY_PROJECT: sa-proto-website
     steps:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v2
@@ -51,8 +59,14 @@ jobs:
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
         
-      - name: 📝 Set Sentry release
-        run: sed -i "s/GIT_SHA/$(git rev-parse --short "$GITHUB_SHA")/" config/sentry.php
+      - name: 📝 Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+        with:
+          environment: production
         
       - name: 📁 Create build directory
         run: mkdir ${{ env.BUILD_ARTIFACT_STAGING_DIR }}
