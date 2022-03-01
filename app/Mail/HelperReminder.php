@@ -38,7 +38,7 @@ class HelperReminder extends Mailable
     public function build()
     {
         return $this
-            ->to($this->committee->helperReminderSubscribers())
+            ->to($this->committee->helper_reminder_subscribers)
             ->from('webmaster@proto.utwente.nl', 'S.A. Proto')
             ->subject(sprintf('Activity %s is in three days, but doesn\'t have enough helpers for the %s.', $this->event->title, $this->committee->name))
             ->view('emails.helperreminder');
