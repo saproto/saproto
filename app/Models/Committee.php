@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $is_society
  * @property-read string $email_address
  * @property-read Collection|User[] $helper_reminder_subscribers
- * @property-read Collection|HelperReminder[] $helperReminderSubscribers
+ * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read StorageEntry|null $image
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
@@ -92,7 +92,7 @@ class Committee extends Model
     }
 
     /** @return HasMany|HelperReminder[] */
-    public function helperReminderSubscribers()
+    public function helperReminderSubscriptions()
     {
         return $this->hasMany('Proto\Models\HelperReminder');
     }
@@ -104,11 +104,12 @@ class Committee extends Model
     }
 
     /** @return User[] */
-    public function getHelperReminderSubscribersAttribute()
+    public function HelperReminderSubscribers()
     {
         $users = [];
-        foreach ($this->helperReminderSubscribers() as $subscriber) {
-            $users[] = $subscriber->user;
+        $subscriptions = $this->helperReminderSubscriptions()->get();
+        foreach ($subscriptions as $subscription) {
+            $users[] = $subscription->user;
         }
         return $users;
     }
@@ -119,7 +120,7 @@ class Committee extends Model
      */
     public function wantsToReceiveHelperReminder($user)
     {
-        return HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->count() > 0;
+        return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
     /** @return Collection|Event[] */
