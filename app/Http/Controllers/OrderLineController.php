@@ -51,14 +51,16 @@ class OrderLineController extends Controller
             if (! array_key_exists($month->year, $available_months)) {
                 $available_months[$month->year] = [];
             }
-            array_push($available_months[$month->year], $month->month);
+            $available_months[$month->year][] = $month->month;
         }
+
+        $current_orderlines = $grouped_orderlines->has($this_month->format('Y-m')) ? $grouped_orderlines[$this_month->format('Y-m')] : null;
 
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
             'selected_month' => $this_month,
-            'orderlines' => $grouped_orderlines[Carbon::parse($this_month)->format('Y-m')],
+            'orderlines' => $current_orderlines,
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
         ]);
