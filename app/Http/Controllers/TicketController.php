@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use PDF;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -15,7 +14,7 @@ use Proto\Models\Ticket;
 use Proto\Models\TicketPurchase;
 use Redirect;
 use Session;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use PDF;
 
 class TicketController extends Controller
 {
@@ -240,7 +239,7 @@ class TicketController extends Controller
 
     /**
      * @param int $id
-     * @return RedirectResponse|StreamedResponse
+     * @return string
      */
     public function download($id)
     {
@@ -253,7 +252,9 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream(sprintf('saproto-ticket-%s.pdf', $ticket->id));
+        $pdf = new PDF('P', 'A4', 'en');
+        $pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));
+        return $pdf->output(sprintf('saproto-ticket-%s.pdf', $ticket->id));
     }
 
     /**
