@@ -4,10 +4,8 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use PDF;
 use Proto\Models\User;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MemberCardController extends Controller
 {
