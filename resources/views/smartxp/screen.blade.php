@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta http-equiv="refresh" content="3600">
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
@@ -409,14 +410,12 @@
 
     function updateActivities() {
         $.ajax({
-            url: '{{ route('api::events::upcoming', ['limit' => 10]) }}',
+            url: '{{ route('api::events::upcoming', ['limit' => 3]) }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
                     $("#activities").html('');
-                    let counter=0;
                     for (let i in data) {
-                        if (counter < 3) {
                             let start = moment.unix(data[i].start);
                             let end = moment.unix(data[i].end);
                             let time;
@@ -426,10 +425,9 @@
                                 time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
                             }
                             $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
-                            counter++;
                         }
                     }
-                } else {
+                 else {
                     $("#activities").html('<div class="notice">No upcoming activities!</div>');
                 }
                 setTimeout(updateActivities, 60000);
