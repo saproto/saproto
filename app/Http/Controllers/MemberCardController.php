@@ -4,17 +4,15 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use PDF;
 use Proto\Models\User;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MemberCardController extends Controller
 {
     /**
      * @param Request $request
      * @param int $id
-     * @return Response|StreamedResponse
+     * @return string
      */
     public function download(Request $request, $id)
     {
@@ -29,16 +27,13 @@ class MemberCardController extends Controller
             abort(403, 'Only members can have a member card printed.');
         }
 
-        $card = PDF::loadView('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]);
-
-        $card = $card
-            ->setOption('page-width', 86)->setOption('page-height', 54)
-            ->setOption('margin-bottom', 0)->setOption('margin-left', 0)->setOption('margin-right', 0)->setOption('margin-top', 0);
+        $card = new PDF('L', [86, 54], 'en');
+        $card->writeHTML(view('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]));
 
         if ($request->ip() != config('app-proto.printer-host')) {
-            return $card->stream();
+            return $card->output();
         } else {
-            return $card->download();
+            return $card->output('D');
         }
     }
 

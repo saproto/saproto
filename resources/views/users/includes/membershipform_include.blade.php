@@ -24,7 +24,7 @@
     For the administration of the association, the undersigned provided at the time of registration the e-mail address <b>{{ $user->email }}</b> and phone number <b>{{ $user->phone }}</b>, as well as the following physical address:
 </p>
 @php($address = $user->address)
-<ul class="list-unstyled">
+<ul>
     <li><b>{{ $address->street }} {{ $address->number }}</b></li>
     <li><b>{{ $address->zipcode }} {{ $address->city }}</b></li>
     <li><b>{{ $address->country }}</b></li>
