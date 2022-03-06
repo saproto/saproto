@@ -9,7 +9,7 @@
         #card {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: 99%;
             font-family: Arial, sans-serif;
         }
 
