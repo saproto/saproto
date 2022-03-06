@@ -248,7 +248,7 @@ return [
             'www.isalfredthere.nl',
         ],
         'static' => [
-            'static.saproto.com',
+            env('STATIC_URL'),
         ],
     ],
 
