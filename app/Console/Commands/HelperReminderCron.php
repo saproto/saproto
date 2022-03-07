@@ -58,15 +58,15 @@ class HelperReminderCron extends Command
             }
 
             foreach ($helping_committees as $helping_committee) {
-                if ($helping_committee->getHelpingCount() >= $helping_committee->amount) {
+                if ($helping_committee->helperCount() >= $helping_committee->amount) {
                     $this->info(sprintf('%s has enough helpers, skipping.', $helping_committee->committee->name));
                     continue;
                 }
-                if (count($helping_committee->committee->helper_reminder_subscribers) == 0) {
+                if (count($helping_committee->committee->helperReminderSubscribers()) == 0) {
                     $this->info(sprintf('%s has no people subscribed to helper reminders, skipping.', $helping_committee->committee->name));
                     continue;
                 }
-                $this->error(sprintf('Sending reminder e-mail for %s (%s/%s helping).', $helping_committee->committee->name, $helping_committee->getHelpingCount(), $helping_committee->amount));
+                $this->error(sprintf('Sending reminder e-mail for %s (%s/%s helping).', $helping_committee->committee->name, $helping_committee->helperCount(), $helping_committee->amount));
                 Mail::queue((new HelperReminder($helping_committee))->onQueue('medium'));
             }
         }

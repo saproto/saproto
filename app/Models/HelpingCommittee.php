@@ -65,7 +65,7 @@ class HelpingCommittee extends Validatable
     }
 
     /** @return int */
-    public function getHelpingCount()
+    public function helperCount()
     {
         return ActivityParticipation::where('activity_id', $this->activity->id)->where('committees_activities_id', $this->id)->count();
     }

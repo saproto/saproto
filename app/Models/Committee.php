@@ -27,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address
- * @property-read Collection|User[] $helper_reminder_subscribers
  * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read StorageEntry|null $image
  * @property-read Collection|Event[] $organizedEvents
