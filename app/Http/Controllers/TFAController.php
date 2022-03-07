@@ -58,7 +58,8 @@ class TFAController extends Controller
         return Redirect::route('user::dashboard');
     }
 
-    public function adminDestroy(Request $request, $id) {
+    public function adminDestroy(Request $request, $id)
+    {
         $user = User::findOrFail($id);
         $user->tfa_totp_key = null;
 
