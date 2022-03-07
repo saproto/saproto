@@ -162,8 +162,9 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
         /* Routes related to 2FA. */
         Route::group(['prefix' => '2fa', 'as' => '2fa::'], function () {
-            Route::post('timebased', ['as' => 'addtimebased', 'uses' => 'TFAController@timebasedPost']);
-            Route::post('deletetimebased', ['as' => 'deletetimebased', 'uses' => 'TFAController@timebasedDelete']);
+            Route::post('add', ['as' => 'add', 'uses' => 'TFAController@create']);
+            Route::post('delete', ['as' => 'delete', 'uses' => 'TFAController@destroy']);
+            Route::post('delete/{id}', ['as' => 'admindelete', 'middleware' => ['permission:board'], 'uses' => 'TFAController@adminDestroy']);
         });
     });
 
