@@ -109,6 +109,8 @@ class ApiController extends Controller
 
     public function fishcamStream()
     {
+        if (! file_exists(env('FISHCAM_URL'))) abort(404);
+
         header('Content-Transfer-Encoding: binary');
         header('Content-Type: multipart/x-mixed-replace; boundary=video-boundary--');
         header('Cache-Control: no-cache');
