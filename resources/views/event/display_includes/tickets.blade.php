@@ -196,14 +196,12 @@
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        console.log("test")
         var total = 0;
         
 
         document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', updateOrderTotal))
         function updateOrderTotal() {
             total = 0;
-            console.log("hi");
             $('.ticket-select').each(function () {
                 total += $(this).attr('data-price') * $(this).val();
             });
@@ -214,7 +212,6 @@
 
     @if(!(config('omnomcom.mollie.use_fees') && $only_prepaid) && !(!config('omnomcom.mollie.use_fees') || !$has_prepay_tickets))
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        console.log("test2")
         var totalPrepaidTicketsSelected = 0;
 
         document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', ticketSelectChange))
@@ -229,12 +226,10 @@
         }
 
         function ticketSelectChange(){
-            console.log("hi2");
             if($(this).attr('prepaid') == true){
                 totalPrepaidTicketsSelected += $(this).val()-$(this).attr('previous-value');
                 $(this).attr('previous-value', $(this).val());
             }
-            console.log(totalPrepaidTicketsSelected);
             if (totalPrepaidTicketsSelected == 0){
                 unselectedPrepaidTickets();
             } else if (totalPrepaidTicketsSelected > 0){
