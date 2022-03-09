@@ -210,7 +210,6 @@
 
     </script>
 
-    @if(!(config('omnomcom.mollie.use_fees') && $only_prepaid) && !(!config('omnomcom.mollie.use_fees') || !$has_prepay_tickets))
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         var totalPrepaidTicketsSelected = 0;
 
@@ -237,5 +236,4 @@
             }
         }
     </script>
-    @endif
 @endif
