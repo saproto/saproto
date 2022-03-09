@@ -18,8 +18,6 @@ use Proto\Models\Product;
 use Proto\Models\User;
 use Redirect;
 use Session;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Redirect;
 
 class MollieController extends Controller
 {
