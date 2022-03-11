@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form method="post" action="{{ route('user::2fa::addtimebased') }}"
+            <form method="post" action="{{ route('user::2fa::add') }}"
                   class="form-horizontal">
 
                 <div class="modal-header">
@@ -51,7 +51,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form method="post" action="{{ route('user::2fa::deletetimebased') }}"
+            <form method="post" action="{{ route('user::2fa::delete') }}"
                   class="form-horizontal">
 
                 <div class="modal-header">
