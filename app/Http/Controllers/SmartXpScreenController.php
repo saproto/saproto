@@ -49,8 +49,6 @@ class SmartXpScreenController extends Controller
     /** @return object */
     public function smartxpTimetable()
     {
-        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.config('proto.smartxp-google-timetable-id').'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday'))).'';
-        $data = json_decode(str_replace('$', '', file_get_contents($url)));
         $roster = [
             'monday' => [],
             'tuesday' => [],
@@ -59,7 +57,15 @@ class SmartXpScreenController extends Controller
             'friday' => [],
             'weekend' => [],
         ];
-        $answer = true;
+        $occupied = false;
+        $url = 'https://www.googleapis.com/calendar/v3/calendars/'.config('proto.smartxp-google-timetable-id').'/events?singleEvents=true&orderBy=startTime&key='.config('app-proto.google-key-private').'&timeMin='.urlencode(date('c', strtotime('last monday', strtotime('tomorrow')))).'&timeMax='.urlencode(date('c', strtotime('next monday')));
+
+        try {
+            $data = json_decode(str_replace('$', '', file_get_contents($url)));
+        } catch (Exception $e) {
+            return (object) ['roster' => $roster, 'occupied' => $occupied];
+        }
+
         foreach ($data->items as $entry) {
             $end_time = ($entry->end->date ?? $entry->end->dateTime);
             $start_time = (isset($entry->start->date) ? $entry->end->date : $entry->start->dateTime);
@@ -75,9 +81,10 @@ class SmartXpScreenController extends Controller
             preg_match('/Type: (.*)/', $entry->description, $type);
             $current = strtotime($start_time) < time() && strtotime($end_time) > time();
             if ($current) {
-                $answer = false;
+                $occupied = true;
             }
-            $roster[strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))))][] = (object) [
+            $day = strtolower(str_replace(['Saturday', 'Sunday'], ['weekend', 'weekend'], date('l', strtotime($start_time))));
+            $roster[$day][] = (object) [
                 'title' => $name,
                 'start' => strtotime($start_time),
                 'end' => strtotime($end_time),
@@ -87,13 +94,13 @@ class SmartXpScreenController extends Controller
             ];
         }
 
-        return (object) ['roster' => $roster, 'answer' => $answer];
+        return (object) ['roster' => $roster, 'occupied' => $occupied];
     }
 
     /** @return View */
     public function canWork()
     {
         return view('smartxp.caniwork', ['timetable' => $this->smartxpTimetable()->roster,
-            'answer' => $this->smartxpTimetable()->answer, ]);
+            'occupied' => $this->smartxpTimetable()->occupied, ]);
     }
 }

@@ -137,10 +137,10 @@
         <div class="box-header">
             The SmartXp is currently
 
-            @if($answer)
-                <span class="green">not occupied!</span>
+            @if($occupied)
+                <span class="text-danger">occupied.</span>
             @else
-                <span style="color: red;">occupied.</span>
+                <span class="text-primary">not occupied!</span>
             @endif
 
             Here's the timetable for this week:
