@@ -41,7 +41,6 @@ $rules = [
     'magic_constant_casing' => true,
     'method_argument_space' => false,
     'native_function_casing' => true,
-    'no_alias_functions' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
     'no_closing_tag' => true,
@@ -66,7 +65,6 @@ $rules = [
     'no_trailing_whitespace' => true,
     'no_trailing_whitespace_in_comment' => true,
     'no_unneeded_control_parentheses' => true,
-    'no_unreachable_default_argument_value' => true,
     'no_unused_imports' => true,
     'no_useless_return' => true,
     'no_whitespace_before_comma_in_array' => true,
@@ -86,7 +84,6 @@ $rules = [
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
     'phpdoc_var_without_name' => true,
-    'self_accessor' => true,
     'short_scalar_cast' => true,
     'simplified_null_return' => false,
     'single_blank_line_at_eof' => false,
@@ -131,5 +128,5 @@ $config = new Config();
 return $config
     ->setFinder($finder)
     ->setRules($rules)
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setUsingCache(true);
