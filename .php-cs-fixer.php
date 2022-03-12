@@ -10,12 +10,12 @@ $rules = [
         'default' => 'single_space',
         'operators' => ['=>' => null]
     ],
-    'blank_line_after_namespace' => true,
+    'blank_line_after_namespace' => false,
     'blank_line_after_opening_tag' => true,
-    'braces' => true,
+    'braces' => false,
     'cast_spaces' => true,
     'class_attributes_separation' => [
-        'elements' => ['method'=>'one']
+        'elements' => ['method'=>'one', 'trait_import'=>'none']
     ],
     'class_definition' => true,
     'concat_space' => [
@@ -39,17 +39,9 @@ $rules = [
     'lowercase_static_reference' => true,
     'magic_method_casing' => true,
     'magic_constant_casing' => true,
-    'method_argument_space' => true,
+    'method_argument_space' => false,
     'native_function_casing' => true,
     'no_alias_functions' => true,
-    'no_extra_blank_lines' => [
-        'tokens' => [
-            'extra',
-            'throw',
-            'use',
-            'use_trait',
-        ]
-    ],
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
     'no_closing_tag' => true,
@@ -78,7 +70,7 @@ $rules = [
     'no_unused_imports' => true,
     'no_useless_return' => true,
     'no_whitespace_before_comma_in_array' => true,
-    'no_whitespace_in_blank_line' => true,
+    'no_whitespace_in_blank_line' => false,
     'normalize_index_brace' => true,
     'not_operator_with_successor_space' => true,
     'object_operator_without_whitespace' => true,
@@ -97,7 +89,7 @@ $rules = [
     'self_accessor' => true,
     'short_scalar_cast' => true,
     'simplified_null_return' => false,
-    'single_blank_line_at_eof' => true,
+    'single_blank_line_at_eof' => false,
     'single_blank_line_before_namespace' => true,
     'single_class_element_per_statement' => true,
     'single_import_per_statement' => true,
@@ -140,5 +132,4 @@ return $config
     ->setFinder($finder)
     ->setRules($rules)
     ->setRiskyAllowed(true)
-    ->setUsingCache(true)
-    ->setLineEnding(PHP_EOL);
+    ->setUsingCache(true);
