@@ -6,6 +6,11 @@
 
         <strong class="text-white">{{ $achievement->name }}</strong>
 
+        @if(Auth::user()&&in_array($achievement, Auth::user()->achieved(), True))
+            <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+               data-toggle="tooltip" data-placement="top" title="You have achieved this!"></i>
+        @endif
+
         @if(isset($include_delete_for) && $include_delete_for)
             <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
                class="float-right text-white">
