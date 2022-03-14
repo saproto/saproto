@@ -6,10 +6,12 @@
 
         <strong class="text-white">{{ $achievement->name }}</strong>
 
-        @if(Auth::user()&&in_array($achievement, Auth::user()->achieved(), True))
+        @foreach(Auth::user()->achieved() as $achievedMent)
+            @if($achievedMent->id==$achievement->id)
             <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
                data-toggle="tooltip" data-placement="top" title="You have achieved this!"></i>
-        @endif
+            @endif
+        @endforeach
 
         @if(isset($include_delete_for) && $include_delete_for)
             <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
