@@ -43,7 +43,6 @@ class MollieController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-
     public function pay(Request $request): RedirectResponse
     {
         $cap = intval($request->cap);
@@ -114,7 +113,7 @@ class MollieController extends Controller
     {
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::findOrFail($id);
-        if ($transaction->user->id != Auth::id() && !Auth::user()->can('board')) {
+        if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
             abort(403, 'You are unauthorized to view this transcation.');
         }
         $transaction = $transaction->updateFromWebhook();
@@ -123,7 +122,7 @@ class MollieController extends Controller
             'transaction' => $transaction,
             'mollie' => Mollie::api()
                 ->payments()
-                ->get($transaction->mollie_id)
+                ->get($transaction->mollie_id),
         ]);
     }
 
@@ -135,7 +134,7 @@ class MollieController extends Controller
     public function monthly(Request $request, $month)
     {
         if (strtotime($month) === false) {
-            $request->session()->flash('flash_message', 'Invalid date: ' . $month);
+            $request->session()->flash('flash_message', 'Invalid date: '.$month);
 
             return Redirect::back();
         }
@@ -146,12 +145,12 @@ class MollieController extends Controller
             ->join('accounts', 'products.account_id', '=', 'accounts.id')
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->whereNotNull('orderlines.payed_with_mollie')
-            ->where('orderlines.created_at', 'like', $month . '-%')
+            ->where('orderlines.created_at', 'like', $month.'-%')
             ->get();
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
-            'title' => 'Account breakdown for Mollie transactions in ' . date('F Y', strtotime($month))
+            'title' => 'Account breakdown for Mollie transactions in '.date('F Y', strtotime($month)),
         ]);
     }
 
@@ -164,17 +163,17 @@ class MollieController extends Controller
         $transaction = MollieTransaction::findOrFail($id);
         // $transaction = $transaction->updateFromWebhook();
 
-        $flash_message = "Unknown error";
+        $flash_message = 'Unknown error';
         if ($transaction->user_id == Auth::id()) {
             switch(MollieTransaction::translateStatus($transaction->status)){
                 case 'failed':
-                    $flash_message = "Your payment has failed";
+                    $flash_message = 'Your payment has failed';
                     break;
                 case 'open':
-                    $flash_message = "Your payment is still open";
+                    $flash_message = 'Your payment is still open';
                     break;
                 case 'paid':
-                    $flash_message = "Your payment was completed successfully!";
+                    $flash_message = 'Your payment was completed successfully!';
                     break;
             }
             Session::flash('flash_message', $flash_message);
@@ -188,16 +187,16 @@ class MollieController extends Controller
             switch(MollieTransaction::translateStatus($transaction->status)){
                 case 'failed':
                     if($isMember){
-                        $flash_message = "Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.";
+                        $flash_message = 'Your payment has failed, the tickets are still yours but they are now listed as a withdrawal.';
                     } else {
-                        $flash_message = "Your payment has failed, the tickets have not been added to your account, please retry the purchase.";
+                        $flash_message = 'Your payment has failed, the tickets have not been added to your account, please retry the purchase.';
                     }
                     break;
                 case 'open':
-                    $flash_message = "Your payment is still open, the payment can still be completed.";
+                    $flash_message = 'Your payment is still open, the payment can still be completed.';
                     break;
                 case 'paid':
-                    $flash_message = "Your payment was completed successfully! The tickets have been mailed to you!";
+                    $flash_message = 'Your payment was completed successfully! The tickets have been mailed to you!';
                     break;
             }
             Session::flash('flash_message', $flash_message);
@@ -256,7 +255,7 @@ class MollieController extends Controller
         $transaction = MollieTransaction::create([
             'user_id' => Auth::id(),
             'mollie_id' => 'temp',
-            'status' => 'draft'
+            'status' => 'draft',
         ]);
 
         $total = number_format($total, 2, '.', '');
@@ -266,10 +265,10 @@ class MollieController extends Controller
             ->create([
                 'amount' => [
                     'currency' => 'EUR',
-                    'value' => strval($total)
+                    'value' => strval($total),
                 ],
                 'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
-                'description' => 'OmNomCom Settlement (€' . number_format($total, 2) . ')',
+                'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
                 'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
                 'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
             ]);
@@ -305,7 +304,7 @@ class MollieController extends Controller
             ->all([
                 'locale' => 'nl_NL',
                 'billingCountry' => 'NL',
-                'include' => 'pricing'
+                'include' => 'pricing',
             ]);
         $methodsList = (array) $api_response;
         
@@ -319,9 +318,9 @@ class MollieController extends Controller
                     'description' => $method->description,
                     'fixed' => (object) [
                         'value' => '0.00',
-                        'currency' => 'EUR'
+                        'currency' => 'EUR',
                     ],
-                    'variable' => '0'
+                    'variable' => '0',
                 ];
             }
         }

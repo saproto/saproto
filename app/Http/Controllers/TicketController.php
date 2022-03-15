@@ -329,7 +329,7 @@ class TicketController extends Controller
         }
 
         $payment_method = '';
-        if (config('omnomcom.mollie.use_fees') && !$request->has('method') && count($prepaid_tickets) > 0){
+        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
             return Redirect::back()->with('flash_message', 'No payment method is selected!');
         }
 

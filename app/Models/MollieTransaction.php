@@ -61,7 +61,7 @@ class MollieTransaction extends Model
             ->get($this->mollie_id);
     }
 
-   /**
+    /**
      * @param string $status
      * @return string
      */

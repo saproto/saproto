@@ -33,8 +33,8 @@ class OmNomController extends Controller
             $store_data = $stores[$store];
 
             if (
-                !in_array($request->ip(), $store_data->addresses) &&
-                (!Auth::check() || !Auth::user()->can($store_data->roles))
+                ! in_array($request->ip(), $store_data->addresses) &&
+                (! Auth::check() || ! Auth::user()->can($store_data->roles))
             ) {
                 abort(403);
             }
@@ -47,7 +47,7 @@ class OmNomController extends Controller
                     $prods = $cat->products();
                     $categories[] = (object) [
                         'category' => $cat,
-                        'products' => $prods
+                        'products' => $prods,
                     ];
                 }
             }
@@ -67,7 +67,7 @@ class OmNomController extends Controller
                 'categories' => $categories,
                 'store' => $store_data,
                 'storeslug' => $store,
-                'minors' => $minors
+                'minors' => $minors,
             ]);
         } else {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
@@ -89,7 +89,7 @@ class OmNomController extends Controller
 
         if (array_key_exists($store, $stores)) {
             $store_data = $stores[$store];
-            if (!in_array($request->ip(), $store_data->addresses) && !Auth::user()->can($store_data->roles)) {
+            if (! in_array($request->ip(), $store_data->addresses) && ! Auth::user()->can($store_data->roles)) {
                 $result->message = "<span style='color: red;'>You are not authorized to do this.</span>";
             }
         } else {
@@ -100,13 +100,13 @@ class OmNomController extends Controller
             case 'card':
                 $auth_method = sprintf('omnomcom_rfid_%s', $request->input('credentials'));
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
-                if (!$card) {
+                if (! $card) {
                     $result->message = "<span style='color: red;'>Unknown card.</span>";
                     return json_encode($result);
                 }
                 $card->touch();
                 $user = $card->user;
-                if (!$user) {
+                if (! $user) {
                     $result->message = "<span style='color: red;'>Unknown user.</span>";
                     return json_encode($result);
                 }
@@ -115,13 +115,13 @@ class OmNomController extends Controller
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
-                if (!$qrAuthRequest) {
+                if (! $qrAuthRequest) {
                     $result->message = "<span style='color: red;'>Invalid authentication token.</span>";
                     return json_encode($result);
                 }
 
                 $user = $qrAuthRequest->authUser();
-                if (!$user) {
+                if (! $user) {
                     $result->message = "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                     return json_encode($result);
                 }
@@ -132,7 +132,7 @@ class OmNomController extends Controller
                 break;
         }
 
-        if (!$user->is_member) {
+        if (! $user->is_member) {
             $result->message = "<span style='color: red;'>Only members can use the OmNomCom.</span>";
             return json_encode($result);
         }
@@ -146,12 +146,12 @@ class OmNomController extends Controller
         $withCash = $request->input('cash');
         $withBankCard = $request->input('bank_card');
 
-        if ($withCash == 'true' && !$store_data->cash_allowed) {
+        if ($withCash == 'true' && ! $store_data->cash_allowed) {
             $result->message = "<span style='color: red;'>You cannot use cash in this store.</span>";
             return json_encode($result);
         }
 
-        if ($withBankCard == 'true' && !$store_data->bank_card_allowed) {
+        if ($withBankCard == 'true' && ! $store_data->bank_card_allowed) {
             $result->message = "<span style='color: red;'>You cannot use a bank card in this store.</span>";
             return json_encode($result);
         }
@@ -161,11 +161,11 @@ class OmNomController extends Controller
         foreach ($cart as $id => $amount) {
             if ($amount > 0) {
                 $product = Product::find($id);
-                if (!$product) {
+                if (! $product) {
                     $result->message = "<span style='color: red;'>You tried to buy a product that didn't exist!</span>";
                     return json_encode($result);
                 }
-                if (!$product->isVisible()) {
+                if (! $product->isVisible()) {
                     $result->message =
                         "<span style='color: red;'>You tried to buy a product that is not available!</span>";
                     return json_encode($result);
@@ -183,16 +183,16 @@ class OmNomController extends Controller
                 if (
                     $product->is_alcoholic &&
                     $stores[$store]->alcohol_time_constraint &&
-                    !(
+                    ! (
                         date('Hi') > str_replace(':', '', config('omnomcom.alcohol-start')) ||
                         date('Hi') < str_replace(':', '', config('omnomcom.alcohol-end'))
                     )
                 ) {
                     $result->message =
-                        "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between " .
-                        config('omnomcom.alcohol-start') .
-                        ' and ' .
-                        config('omnomcom.alcohol-end') .
+                        "<span style='color: red;'>You can't buy alcohol at the moment; alcohol can only be bought between ".
+                        config('omnomcom.alcohol-start').
+                        ' and '.
+                        config('omnomcom.alcohol-end').
                         '.</span>';
                     return json_encode($result);
                 }
@@ -212,16 +212,16 @@ class OmNomController extends Controller
                     $auth_method
                 );
                 if ($product->id == config('omnomcom.protube-skip')) {
-                    file_get_contents(config('herbert.server') . '/skip?secret=' . config('herbert.secret'));
+                    file_get_contents(config('herbert.server').'/skip?secret='.config('herbert.secret'));
                 }
             }
         }
 
-        if (!isset($result->message)) {
+        if (! isset($result->message)) {
             $result->status = 'OK';
 
             if ($user->show_omnomcom_total) {
-                if (!isset($result->message)) {
+                if (! isset($result->message)) {
                     $result->message = '';
                 }
                 $result->message .= sprintf(
@@ -233,7 +233,7 @@ class OmNomController extends Controller
             }
 
             if ($user->show_omnomcom_calories) {
-                if (!isset($result->message)) {
+                if (! isset($result->message)) {
                     $result->message = '';
                 }
                 if ($user->show_omnomcom_total) {
@@ -283,7 +283,7 @@ class OmNomController extends Controller
                 'order_collo' => $order_collo,
                 'order_products' => $order_products,
                 'new_stock' => $new_stock,
-                'new_surplus' => $new_surplus
+                'new_surplus' => $new_surplus,
             ];
         }
 

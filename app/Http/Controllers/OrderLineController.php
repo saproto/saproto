@@ -70,7 +70,7 @@ class OrderLineController extends Controller
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
             'methods' => $payment_methods,
-            'use_fees' => config('omnomcom.mollie')['use_fees']
+            'use_fees' => config('omnomcom.mollie')['use_fees'],
         ]);
     }
 
@@ -107,7 +107,7 @@ class OrderLineController extends Controller
             $orderlines = $orderlines->where(
                 'created_at',
                 '<=',
-                Carbon::parse($date . ' 23:59:59')->format('Y-m-d H:i:s')
+                Carbon::parse($date.' 23:59:59')->format('Y-m-d H:i:s')
             );
         }
 
@@ -115,7 +115,7 @@ class OrderLineController extends Controller
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
-            'orderlines' => $orderlines ? $orderlines : []
+            'orderlines' => $orderlines ? $orderlines : [],
         ]);
     }
 
@@ -181,7 +181,7 @@ class OrderLineController extends Controller
         /** @var OrderLine $order */
         $order = OrderLine::findOrFail($id);
 
-        if (!$order->canBeDeleted()) {
+        if (! $order->canBeDeleted()) {
             $request->session()->flash('flash_message', 'The orderline cannot be deleted.');
             return Redirect::back();
         }
@@ -226,11 +226,11 @@ class OrderLineController extends Controller
                 'start' => $request->start,
                 'end' => $request->end,
                 'total_cash' => $total_cash,
-                'total_card' => $total_card
+                'total_card' => $total_card,
             ]);
         } else {
             return view('omnomcom.statistics.date-select', [
-                'select_text' => 'Select a time range over which to calculate payment totals.'
+                'select_text' => 'Select a time range over which to calculate payment totals.',
             ]);
         }
     }
