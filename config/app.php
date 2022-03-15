@@ -163,7 +163,6 @@ return [
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
         Alaouy\Youtube\YoutubeServiceProvider::class,
@@ -230,7 +229,7 @@ return [
 
         'Image' => Intervention\Image\Facades\Image::class,
 
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'PDF' => Spipu\Html2Pdf\Html2Pdf::class,
 
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,

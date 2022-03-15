@@ -3,7 +3,7 @@
 @section('body')
 
     <p>
-        Hey {{ User::orderByRaw("RAND()")->first()->calling_name }},
+        Hey {{ Proto\Models\User::orderByRaw("RAND()")->first()->calling_name }},
     </p>
 
     <p>
