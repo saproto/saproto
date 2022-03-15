@@ -3,9 +3,6 @@
 return [
     'dsn' => env('SENTRY_LARAVEL_DSN', env('SENTRY_DSN')),
 
-    // Release as git sha is captured in deploy action
-    'release' => 'GIT_SHA',
-
     // When left empty or `null` the Laravel environment will be used
     'environment' => null,
 

@@ -123,7 +123,7 @@ return [
     |
     */
 
-    'google-timetable-id' => '76ambpj6tq40mlht0ok7ibonori7dliv@import.calendar.google.com',
+    'google-timetable-id' => 'rtd50enlsplm3enp0fds670khglrsqmm@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -134,7 +134,7 @@ return [
     |
     */
 
-    'smartxp-google-timetable-id' => 'sk5jps5kgrmvq5gp6oc20qfrmsvdfin7@import.calendar.google.com',
+    'smartxp-google-timetable-id' => 'dgri3lct14aq5ujencd64iikti7n237k@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -145,7 +145,7 @@ return [
     |
     */
 
-    'protopeners-google-timetable-id' => 'student.utwente.nl_fnulbjgdr41qdppgdv4asa17ck@group.calendar.google.com',
+    'protopeners-google-timetable-id' => '0u65jbm7rgtqq6m7aoni69v4vk@group.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -248,7 +248,7 @@ return [
             'www.isalfredthere.nl',
         ],
         'static' => [
-            'static.saproto.com',
+            env('STATIC_URL'),
         ],
     ],
 

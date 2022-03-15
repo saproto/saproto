@@ -1,12 +1,9 @@
 <?php
 
 Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
-
-    /* Route for smartXp dmx_values (excluded from web and therefore https) */
-    Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
-
     /* Routes related to the General APIs */
     Route::group(['middleware' => ['web']], function () {
+        Route::get('dmx_values', ['as' => 'dmx_values', 'uses' => 'DmxController@valueApi']);
         Route::get('token', ['as' => 'token', 'uses' => 'ApiController@getToken']);
         Route::get('fishcam', ['as' => 'fishcam', 'uses' => 'ApiController@fishcamStream']);
         Route::get('scan/{event}', ['as' => 'scan', 'middleware' => ['auth'], 'uses' => 'TicketController@scanApi']);
@@ -79,7 +76,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     Route::group(['prefix' => 'screen', 'as' => 'screen::'], function () {
-        Route::get('bus/{stop}', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
+        Route::get('bus', ['as' => 'bus', 'uses' => 'SmartXpScreenController@bus']);
         Route::get('timetable', ['as' => 'timetable', 'uses' => 'SmartXpScreenController@timetable']);
         Route::get('timetable/protopeners', ['as' => 'timetable::protopeners', 'uses' => 'SmartXpScreenController@protopenersTimetable']);
         Route::get('narrowcasting', ['as' => 'narrowcasting', 'uses' => 'NarrowcastingController@indexApi']);

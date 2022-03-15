@@ -6,6 +6,13 @@
 
         <strong class="text-white">{{ $achievement->name }}</strong>
 
+        @foreach(Auth::user()->achieved() as $achievedMent)
+            @if($achievedMent->id==$achievement->id)
+            <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+               data-toggle="tooltip" data-placement="top" title="You have achieved this!"></i>
+            @endif
+        @endforeach
+
         @if(isset($include_delete_for) && $include_delete_for)
             <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}"
                class="float-right text-white">

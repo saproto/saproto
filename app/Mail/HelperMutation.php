@@ -41,7 +41,7 @@ class HelperMutation extends Mailable
     public function build()
     {
         return $this
-            ->to($this->committee->helper_reminder_subscribers)
+            ->to($this->committee->helperReminderSubscribers())
             ->from('webmaster@proto.utwente.nl', 'S.A. Proto')
             ->subject(sprintf('Helper for the %s %s for the activity %s.', $this->committee->name, $this->helping ? 'subscribed' : 'UNSUBSCRIBED', $this->event->title))
             ->view('emails.helpermutation');

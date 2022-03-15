@@ -15,7 +15,6 @@ use Proto\Models\Ticket;
 use Proto\Models\TicketPurchase;
 use Redirect;
 use Session;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TicketController extends Controller
 {
@@ -240,7 +239,7 @@ class TicketController extends Controller
 
     /**
      * @param int $id
-     * @return RedirectResponse|StreamedResponse
+     * @return string
      */
     public function download($id)
     {
@@ -253,7 +252,9 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream(sprintf('saproto-ticket-%s.pdf', $ticket->id));
+        $pdf = new PDF('P', 'A4', 'en');
+        $pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));
+        return $pdf->output(sprintf('saproto-ticket-%s.pdf', $ticket->id));
     }
 
     /**

@@ -111,7 +111,7 @@ class PhotoAdminController extends Controller
      */
     public function action(Request $request, $id)
     {
-        $action = $request->input('submit');
+        $action = $request->input('action');
         $photos = $request->input('photo');
 
         if ($photos) {

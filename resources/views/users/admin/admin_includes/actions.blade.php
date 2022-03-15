@@ -4,12 +4,10 @@
 
     <div class="card-body">
 
-        @if(Auth::user()->can('board'))
-            <a class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
-               href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
-                User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
-            </a>
-        @endif
+        <a class="btn btn-{{ $user->signed_nda ? 'info' : 'warning' }} btn-block mb-3"
+           href="{{ route('user::admin::toggle_nda', ['id' => $user->id]) }}">
+            User <strong>{{ !$user->signed_nda ? 'did not sign' : 'signed' }}</strong> an NDA.
+        </a>
 
         <ul class="list-group mb-3">
 
@@ -29,18 +27,23 @@
                     Make temporary admin
                 </a>
             @endif
-            @if($user->disable_omnomcom)
-                <a href="{{ route('user::admin::unblock_omnomcom', ['id' => $user->id]) }}"
-                   class="list-group-item">
-                    Unblock OmNomCom
-                </a>
-            @endif
             @if($user->is_member)
                 <a class="list-group-item"
                    href="{{ route('user::profile', ['id' => $user->getPublicId()]) }}">
                     Go to profile
                 </a>
             @endif
+            @if($user->disable_omnomcom)
+                <a href="{{ route('user::admin::unblock_omnomcom', ['id' => $user->id]) }}"
+                   class="list-group-item text-warning">
+                    Unblock OmNomCom
+                </a>
+            @endif
+            @isset($user->tfa_totp_key)
+                <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#disable2FA">
+                    Disable 2FA
+                </a>
+            @endisset
 
         </ul>
 
@@ -62,3 +65,5 @@
     </div>
 
 </div>
+
+@include('users.admin.admin_includes.disable2fa-modal')

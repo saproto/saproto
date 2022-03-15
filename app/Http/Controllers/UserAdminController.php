@@ -7,7 +7,6 @@ use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Mail;
@@ -338,7 +337,7 @@ class UserAdminController extends Controller
 
     /**
      * @param int $id
-     * @return RedirectResponse|Response
+     * @return string
      */
     public function getNewMemberForm($id)
     {
@@ -355,10 +354,11 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        $form = PDF::loadView('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]);
-        $form = $form->setPaper('a4');
+        $form = new PDF('P', 'A4', 'en');
+        $form->setDefaultFont('Arial');
+        $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => null]));
 
-        return $form->download();
+        return $form->output();
     }
 
     /**
