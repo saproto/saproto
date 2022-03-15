@@ -1,5 +1,6 @@
 // Vendors
 global.$ = global.jQuery = require('jquery');
+global.Quagga = require('quagga');
 window.popper = require('popper.js')
 window.moment = require('moment')
 window.SignaturePad = require('signature_pad')

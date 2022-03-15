@@ -108,7 +108,7 @@
     ],
     "post-update-cmd": [],
     "fix": [
-      "php-cs-fixer fix"
+      "php-cs-fixer fix --verbose"
     ],
     "ide-helper": [
       "php artisan cache:clear",

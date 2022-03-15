@@ -187,7 +187,7 @@
                                                 @else
                                                     type="submit"
                                                 @endif
-                                                value="remove" class="btn btn-danger"><i
+                                                name="action" value="remove" class="btn btn-danger"><i
                                                 class="fa fa-trash"></i> Remove
                                         </button>
                                         <button
@@ -196,7 +196,7 @@
                                                 @else
                                                     type="submit"
                                                 @endif
-                                                value="thumbnail" class="btn btn-success"><i
+                                                name="action" value="thumbnail" class="btn btn-success"><i
                                                 class="fa fa-image"></i> Set thumbnail
                                         </button>
                                         <button
@@ -205,7 +205,7 @@
                                                 @else
                                                     type="submit"
                                                 @endif
-                                                value="private" class="btn btn-warning"><i
+                                                name="action" value="private" class="btn btn-warning"><i
                                                 class="fa fa-eye"></i> Toggle private
                                         </button>
 
