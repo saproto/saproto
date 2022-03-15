@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Mollie;
 use Proto\Models\Account;
@@ -16,8 +17,6 @@ use Proto\Models\MollieTransaction;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\User;
-use Redirect;
-use Session;
 
 class MollieController extends Controller
 {
@@ -48,7 +47,7 @@ class MollieController extends Controller
     {
         $cap = intval($request->cap);
         $total = 0;
-        $requested_method = $request->method;
+        $requested_method = $request->getMethod();
         $selected_method = null;
         $use_fees = config('omnomcom.mollie')['use_fees'];
         $available_methods = $use_fees ? self::getPaymentMethods() : null;
@@ -101,8 +100,7 @@ class MollieController extends Controller
         }
 
         $transaction = self::createPaymentForOrderlines($orderlines, $selected_method);
-
-        return Redirect::to($transaction->payment_url);
+        return redirect($transaction->payment_url);
     }
 
     /**
@@ -271,7 +269,7 @@ class MollieController extends Controller
                 'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
                 'description' => 'OmNomCom Settlement (€' . number_format($total, 2) . ')',
                 'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-                'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
+                'webhookUrl' => "https://google.com",
             ]);
 
         $transaction->mollie_id = $mollie->id;
