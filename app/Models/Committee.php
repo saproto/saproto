@@ -27,7 +27,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address
+ * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read StorageEntry|null $image
+ * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
  * @method static Builder|Committee whereCreatedAt($value)
@@ -88,6 +90,12 @@ class Committee extends Model
         return $this->hasMany('Proto\Models\Event', 'committee_id');
     }
 
+    /** @return HasMany|HelperReminder[] */
+    public function helperReminderSubscriptions()
+    {
+        return $this->hasMany('Proto\Models\HelperReminder');
+    }
+
     /** @return string */
     public function getEmailAddressAttribute()
     {
@@ -97,13 +105,11 @@ class Committee extends Model
     /** @return User[] */
     public function HelperReminderSubscribers()
     {
-        $helper_reminder_subscribers = $this->hasMany('Proto\Models\HelperReminder')->get();
-
         $users = [];
-        foreach ($helper_reminder_subscribers as $subscriber) {
-            $users[] = $subscriber->user;
+        $subscriptions = $this->helperReminderSubscriptions()->get();
+        foreach ($subscriptions as $subscription) {
+            $users[] = $subscription->user;
         }
-
         return $users;
     }
 
@@ -113,7 +119,7 @@ class Committee extends Model
      */
     public function wantsToReceiveHelperReminder($user)
     {
-        return HelperReminder::where('user_id', $user->id)->where('committee_id', $this->id)->count() > 0;
+        return $this->helperReminderSubscriptions()->where('user_id', $user->id)->count() > 0;
     }
 
     /** @return Collection|Event[] */

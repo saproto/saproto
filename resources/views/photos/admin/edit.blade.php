@@ -180,13 +180,13 @@
                                             'type=button data-bs-toggle=modal data-bs-target=#published-modal' :
                                             'type=submit'
                                         @endphp
-                                        <button {{ $attr }} value="remove" class="btn btn-danger">
+                                        <button {{ $attr }} name="action" value="remove" class="btn btn-danger">
                                             <i class="fa fa-trash"></i> Remove
                                         </button>
-                                        <button {{ $attr }} value="thumbnail" class="btn btn-success">
+                                        <button {{ $attr }} name="action" value="thumbnail" class="btn btn-success">
                                             <i class="fa fa-image"></i> Set thumbnail
                                         </button>
-                                        <button {{ $attr }} value="private" class="btn btn-warning">
+                                        <button {{ $attr }} name="action" value="private" class="btn btn-warning">
                                             <i class="fa fa-eye"></i> Toggle private
                                         </button>
 

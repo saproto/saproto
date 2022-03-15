@@ -44,19 +44,15 @@
     "aacotroneo/laravel-saml2": "2.1.*",
     "abcaeffchen/sephpa": "2.0.0-beta1",
     "alaouy/youtube": "2.1.*",
-    "barryvdh/laravel-snappy": "0.4.*",
     "doctrine/dbal": "2.*",
     "ext-curl": "*",
     "ext-json": "*",
     "globalcitizen/php-iban": "2.6.*",
     "graham-campbell/markdown": "13.1.*",
     "biscolab/laravel-recaptcha": "4.2.*",
-    "h4cc/wkhtmltopdf-amd64": "0.12.*",
-    "h4cc/wkhtmltoimage-amd64": "0.12.*",
     "intervention/image": "2.*",
     "intervention/imagecache": "2.*",
     "jwilsson/spotify-web-api-php": "1.12.*",
-    "knplabs/knp-snappy": "^1.0.0",
     "laravel/framework": "^7.0",
     "laravel/helpers": "1.*",
     "laravelcollective/html": "6.*",
@@ -77,7 +73,8 @@
     "spatie/laravel-csp": "^2.6",
     "spatie/laravel-permission": "^4.2.0",
     "ext-calendar": "*",
-    "solitweb/directadmin": "^3.0"
+    "solitweb/directadmin": "^3.0",
+    "spipu/html2pdf": "^5.2"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",
@@ -111,7 +108,7 @@
     ],
     "post-update-cmd": [],
     "fix": [
-      "php-cs-fixer fix"
+      "php-cs-fixer fix --verbose"
     ],
     "ide-helper": [
       "php artisan cache:clear",

@@ -19,7 +19,7 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param  Events $event
+     * @param $event
      * @return void
      */
     public function handle($event)
@@ -27,71 +27,25 @@ class AuthLoginEventHandler
         $user = $event->user;
         $user->generateNewToken();
 
-        // We will grant the user all roles to which he is entitled!
-        $root = Committee::where('slug', config('proto.rootcommittee'))->first();
-        $board = Committee::find(config('proto.committee')['board']);
-        $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
-        $tipcie = Committee::find(config('proto.committee')['tipcie']);
-        $drafters = Committee::find(config('proto.committee')['drafters']);
-        $protography = Committee::find(config('proto.committee')['protography']);
+        // We will grant the user all roles to which they are entitled to!
+        $committees = [
+            ['committee' => Committee::where('slug', config('proto.rootcommittee'))->first(), 'permission' => 'protube', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['board']), 'permission' => 'board', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['omnomcom']), 'permission' => 'omnomcom', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['tipcie']), 'permission' => 'tipcie', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['drafters']), 'permission' => 'drafters', 'nda' => false],
+            ['committee' => Committee::find(config('proto.committee')['protography']), 'permission' => 'protography', 'nda' => false],
+        ];
 
-        if ($user->isInCommittee($root) && $user->signed_nda) {
-            if (! $user->hasRole('protube')) {
-                $user->assignRole('protube');
-            }
-        } else {
-            if ($user->hasRole('protube')) {
-                $user->removeRole('protube');
-            }
-        }
-
-        if ($user->isInCommittee($board) && $user->signed_nda) {
-            if (! $user->hasRole('board')) {
-                $user->assignRole('board');
-            }
-        } else {
-            if ($user->hasRole('board')) {
-                $user->removeRole('board');
-            }
-        }
-
-        if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
-            if (! $user->hasRole('omnomcom')) {
-                $user->assignRole('omnomcom');
-            }
-        } else {
-            if ($user->hasRole('omnomcom')) {
-                $user->removeRole('omnomcom');
-            }
-        }
-
-        if ($user->isInCommittee($tipcie) && $user->signed_nda) {
-            if (! $user->hasRole('tipcie')) {
-                $user->assignRole('tipcie');
-            }
-        } else {
-            if ($user->hasRole('tipcie')) {
-                $user->removeRole('tipcie');
-            }
-        }
-
-        if ($user->isInCommittee($drafters)) {
-            if (! $user->hasRole('drafters')) {
-                $user->assignRole('drafters');
-            }
-        } else {
-            if ($user->hasRole('drafters')) {
-                $user->removeRole('drafters');
-            }
-        }
-
-        if ($user->isInCommittee($protography)) {
-            if (! $user->hasRole('protography')) {
-                $user->assignRole('protography');
-            }
-        } else {
-            if ($user->hasRole('protography')) {
-                $user->removeRole('protography');
+        foreach($committees as $committee) {
+            if ($user->isInCommittee($committee['committee']) && ($user->signed_nda and $committee['nda'])) {
+                if (! $user->hasRole($committee['permission'])) {
+                    $user->assignRole($committee['permission']);
+                }
+            } else {
+                if ($user->hasRole($committee['permission'])) {
+                    $user->removeRole($committee['permission']);
+                }
             }
         }
     }

@@ -7,8 +7,18 @@ services:
       - .:/var/www
 
   queue:
-    build: ./docker/build/php-queue
+    build: ./docker/build/php
     container_name: ${DOCKER_NAME}-queue
+    command:
+      'php /var/www/artisan queue:work --verbose --tries=3 --timeout=90 --queue=low,medium,high'
+    volumes:
+      - .:/var/www
+
+  schedule:
+    build: ./docker/build/php
+    container_name: ${DOCKER_NAME}-schedule
+    command:
+      "/bin/bash -c 'while true; do php /var/www/artisan schedule:run --verbose --no-interaction & sleep 60; done'"
     volumes:
       - .:/var/www
 

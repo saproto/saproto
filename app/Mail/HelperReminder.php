@@ -27,7 +27,7 @@ class HelperReminder extends Mailable
         $this->help = $help;
         $this->committee = $help->committee;
         $this->event = $help->activity->event;
-        $this->helping_count = $help->getHelpingCount();
+        $this->helping_count = $help->helperCount();
     }
 
     /**

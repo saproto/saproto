@@ -1,44 +1,37 @@
-<html lang="en">
-<head>
-    <title>S.A. Proto Membership Contract</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<page backtop="15mm" backbottom="15mm" backleft="23mm" backright="23mm">
 
     <style>
         * { box-sizing: border-box; }
 
-        body {
-            width: 100%;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            padding: 60px 80px;
+        h2 {
+            margin-bottom: 12mm;
+            font-size: 15pt;
         }
-
-        h2 { margin-bottom: 60px; }
 
         p {
-            margin: 40px auto;
-            font-size: 16px;
+            margin: 5mm auto;
+            line-height: 12pt;
+            font-size: 10pt;
         }
+
+        li { padding-left: 2mm; }
     </style>
 
-</head>
-<body>
 
-<h2>Becoming a member of Study Association Proto</h2>
+    <h2>Becoming a member of Study Association Proto</h2>
 
-@include('users.includes.membershipform_include')
+    @include('users.includes.membershipform_include')
 
-<div style="height: 30mm;">
-    <p style="margin-bottom: 0">Signature:</p>
-    @if ($signature)
-        <img src="{{ $signature }}" alt="signature" height="150">
-    @endif
-</div>
+    <div style="height: 30mm;">
+        <p style="margin-bottom: 0">Signature:</p>
+        @if ($signature)
+            <img src="{{ $signature }}" height="150">
+        @endif
+    </div>
 
-<p>
-    <strong>{{ $user->name }}</strong><br>
-    Enschede, {{ date('F j, Y') }}
-</p>
+    <p>
+        <strong>{{ $user->name }}</strong><br>
+        Enschede, {{ date('F j, Y') }}
+    </p>
 
-</body>
-</html>
+</page>

@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta http-equiv="refresh" content="3600">
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
@@ -409,34 +410,31 @@
 
     function updateActivities() {
         $.ajax({
-            url: '{{ route('api::events::upcoming', ['limit' => 10]) }}',
+            url: '{{ route('api::events::upcoming', ['limit' => 3]) }}',
             dataType: 'json',
             success: function (data) {
                 if (data.length > 0) {
-                    $("#activities").html('');
-                    let counter=0;
+                    document.getElementById("activities").html('');
                     for (let i in data) {
-                        if (counter < 3) {
-                            let start = moment.unix(data[i].start);
-                            let end = moment.unix(data[i].end);
-                            let time;
+                            let start = moment.unix(data[i].start)
+                            let end = moment.unix(data[i].end)
+                            let time
                             if (start.format('DD-MM') === end.format('DD-MM')) {
-                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm")
                             } else {
-                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm")
                             }
-                            $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' + data[i].location + '</span></div>');
-                            counter++;
+                            document.getElementById("activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' + data[i].location + '</span></div>')
                         }
                     }
-                } else {
-                    $("#activities").html('<div class="notice">No upcoming activities!</div>');
+                 else {
+                    document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
                 }
-                setTimeout(updateActivities, 60000);
+                setTimeout(updateActivities, 60000)
             },
-            error: function () {
-                $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
-                setTimeout(updateActivities, 5000);
+            error: () => {
+                document.getElementById("activities").innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
+                setTimeout(updateActivities, 5000)
             }
         })
     }

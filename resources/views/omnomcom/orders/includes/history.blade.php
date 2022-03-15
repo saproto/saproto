@@ -4,7 +4,7 @@
         @yield('page-title')
     </div>
 
-    @if(count($orderlines) > 0)
+    @isset($orderlines)
 
         <table class="table table-borderless table-hover table-sm mt-1">
 
