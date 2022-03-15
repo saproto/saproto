@@ -17,12 +17,14 @@ require('fontawesome-iconpicker')
 /*disable all buttons on a page after a form has been submitted so spamming the button doesnt result in two or more entries*/
 window.addEventListener('load', (event) => {
     let forms = document.querySelectorAll("form")
+    let formEventListener = event => {
+        event.preventDefault()
+        event.target.removeEventListener('submit', formEventListener);
+        event.target.onsubmit = _ => false;
+        event.target.submit()
+    }
     forms.forEach((form) => {
-        form.addEventListener('submit', (event) => {
-            event.preventDefault()
-            event.submitter.disabled=true
-            event.target.submit()
-        })
+        form.addEventListener('submit', formEventListener)
     })
 });
 
