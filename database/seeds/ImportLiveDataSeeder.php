@@ -57,7 +57,7 @@ class ImportLiveDataSeeder extends Seeder
             ['name' => 'companies'],
             ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
             ['name' => 'mailinglists'],
-            ['name' => 'menu_items'],
+            ['name' => 'menuitems'],
             ['name' => 'products'],
             ['name' => 'products_categories'],
             ['name' => 'product_categories'],
@@ -70,7 +70,7 @@ class ImportLiveDataSeeder extends Seeder
             foreach ($data as $entry) {
                 $entry = (array) $entry;
 
-                if (isset($table['exclude_columns'])) {
+                if (array_key_exists('excluded_columns', $table)) {
                     foreach ($table['excluded_columns'] as $column) {
                         unset($entry[$column]);
                     }
