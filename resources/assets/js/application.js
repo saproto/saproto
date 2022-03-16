@@ -1,6 +1,7 @@
 // Vendors
 window.SignaturePad = require('signature_pad')
 window.axios = require('axios')
+window.moment = require('moment/moment')
 require('./countdown-timer')
 
 // Register CSRF token in axios
