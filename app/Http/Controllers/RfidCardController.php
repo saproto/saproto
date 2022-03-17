@@ -24,7 +24,7 @@ class RfidCardController extends Controller
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 if (! $qrAuthRequest) {
-                    return ['ok' => false, 'text' => "Invalid authentication token."];
+                    return ['ok' => false, 'text' => 'Invalid authentication token.'];
                 }
                 $user = $qrAuthRequest->authUser();
                 if (! $user) {
@@ -33,24 +33,24 @@ class RfidCardController extends Controller
                 break;
 
             default:
-                return ['ok' => false, 'text' => "Invalid credential type."];
+                return ['ok' => false, 'text' => 'Invalid credential type.'];
         }
 
         if (! $user->is_member) {
-            return ['ok' => false, 'text' => "You must be a member to use the OmNomCom."];
+            return ['ok' => false, 'text' => 'You must be a member to use the OmNomCom.'];
         }
 
         $uid = $request->input('card');
         if (strlen($uid) == 0) {
-            return ['ok' => false, 'text' => "Empty card UID provided. Did you scan your card properly?"];
+            return ['ok' => false, 'text' => 'Empty card UID provided. Did you scan your card properly?'];
         }
 
         $card = RfidCard::where('card_id', $uid)->first();
         if ($card) {
             if ($card->user->id == $user->id) {
-                return ['ok' => false, 'text' => "This card is already registered to you!"];
+                return ['ok' => false, 'text' => 'This card is already registered to you!'];
             } else {
-                return ['ok' => false, 'text' => "This card is already registered to someone."];
+                return ['ok' => false, 'text' => 'This card is already registered to someone.'];
             }
         } else {
             $card = RfidCard::create([
@@ -59,7 +59,7 @@ class RfidCardController extends Controller
             ]);
             $card->save();
 
-            return ['ok' => true, 'text' => "This card has been successfully registered to " . $user->name];
+            return ['ok' => true, 'text' => 'This card has been successfully registered to '.$user->name];
         }
     }
 
