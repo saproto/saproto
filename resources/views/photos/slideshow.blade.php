@@ -130,16 +130,16 @@
         startSlideshow()
 
         function startSlideshow() {
-            window.axios.get('{{ route("api::photos::albums") }}')
-            .then(res => {
+            get('{{ route("api::photos::albums") }}')
+            .then(data => {
                 albumEl.innerHTML = ''
-                for (const album of res.data) {
+                for (const album of data) {
                     const albumDate = new Date(album['date_taken'] * 1000)
                     album.innerHTML += `<option value="${album.id}">${album.name} (${MONTH_NAMES[albumDate.getMonth()]} ${albumDate.getFullYear()})</option>`
                 }
                 displayRandomAlbum()
             })
-            .catch(error => { console.error(error) })
+            .catch(err => { console.error(err) })
             albumEl.addEventListener('change', _ => { displayAlbum(albumEl.value) })
         }
 
@@ -158,8 +158,8 @@
             slideshow.classList.add('loading')
             slideshow.innerHTML = ''
 
-            window.axios.get('{{ route("api::photos::albumList") }}/' + id)
-            .then(res => {
+            get('{{ route("api::photos::albumList") }}/' + id)
+            .then(data => {
                 slideshow.classList.remove('loading')
                 albumOptionList.forEach(el => {
                     el.removeAttribute('selected')
@@ -169,7 +169,7 @@
                     }
                 })
 
-                res.data['photos'].forEach(el => {
+                data['photos'].forEach(el => {
                     slideshow.innerHTML += '<div style="background-image:url(' + el.url + ');"></div>'
                 })
 

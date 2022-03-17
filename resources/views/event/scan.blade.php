@@ -153,7 +153,7 @@
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
     const scannerField = document.getElementById("scanner-field")
     const feedbackField = document.getElementById("feedback-field")
-    let prevRead = '';
+    let prevRead = ''
 
     initializeCamera()
 
@@ -171,14 +171,14 @@
                 readers: ["codabar_reader"],
                 multiple: false
             }
-        }, (err) => {
+        }, err => {
             if (err) return console.error(err)
             console.log("Scanner initialized!")
             Quagga.start()
         })
 
-        Quagga.onDetected((data) => {
-            const rawCode = data.codeResult.code;
+        Quagga.onDetected(data => {
+            const rawCode = data.codeResult.code
             const code = rawCode.substring(1, rawCode.length-1)
             if (code !== prevRead) {
                 scan(code)
@@ -214,51 +214,42 @@
         }
     }
 
-    function flash(color) {
-        document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50'
-    }
+    const flash = color => { document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50' }
 
     function scan(barcode) {
         if (barcode === '') return
-
         setStatus('received')
-
-        window.axios.get(
-            '{{ route('api::scan', ['event' => $event->id]) }}',
-            { params: {'barcode': barcode} }
-        )
-            .then(res => parseReply(res['data'], res['message'], res['code']))
-            .catch(() => setStatus('error'))
+        get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode }, { parse: false })
+        .then(res => parseReply(res.json(), res.statusText, res.status))
+        .catch(err => {
+            console.error(err)
+            setStatus('error')
+        })
     }
 
     function parseReply(data, message, code) {
         switch (code) {
-
             case 500:
-                flash('danger');
+                flash('danger')
                 feedbackField.classList.remove('blink')
                 feedbackField.innerHTML = message
                 setTimeout(setStatus, 1000)
                 break
-
             case 403:
                 flash('warning')
                 feedbackField.classList.remove('blink')
                 feedbackField.innerHTML = message
-                setTimeout(setStatus, 1000);
+                setTimeout(setStatus, 1000)
                 document.getElementById('history').prepend(
                     "<tr>" +
                         "<td>" + data.id + "</td>" +
                         "<td>" + data.user.name + "</td>" +
                         "<td>" + data.ticket.product.name + "</td>" +
                         "<td>" + timeNow() + "</td>" +
-                        "<td>" +
-                            "<span class='text-warning'>Used on " + data.scanned + "</span>" +
-                        "</td>" +
+                        "<td><span class='text-warning'>Used on " + data.scanned + "</span></td>" +
                     "</tr>"
                 )
                 break
-
             case 200:
                 setStatus('ok')
                 document.getElementById('history').prepend(

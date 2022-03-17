@@ -173,21 +173,19 @@
                 if (purchaseProcessing != null) return
                 else purchaseProcessing = true
 
-                window.axios.post(
-                    '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}',
-                    {
-                        _token: '{{ csrf_token() }}',
-                        credentialtype: type,
-                        credentials: (type !== 'account' ? credential : {
-                            username: document.getElementById('purchase-username').value,
-                            password: document.getElementById('purchase-password').value
-                        }),
-                        cash: {{ ($store->cash_allowed ? 'cash' : 'false') }},
-                        bank_card: {{ ($store->bank_card_allowed ? 'bank_card' : 'false') }},
-                        cart: cart_to_object(cart)
-                    }
-                ).then(res => {
-                    const data = res.data
+                post(
+                    '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}', {
+                    credentialtype: type,
+                    credentials: (type !== 'account' ? credential : {
+                        username: document.getElementById('purchase-username').value,
+                        password: document.getElementById('purchase-password').value
+                    }),
+                    cash: {{ ($store->cash_allowed ? 'cash' : 'false') }},
+                    bank_card: {{ ($store->bank_card_allowed ? 'bank_card' : 'false') }},
+                    cart: cart_to_object(cart)
+                }, { parse: false })
+                .then(res => {
+                    const data = res.json()
                     if (res.status === 200) {
                         if (data.hasOwnProperty('message')) finishPurchase()
                         else finishPurchase(data.message)
@@ -195,13 +193,12 @@
                         document.querySelector('#purchase-modal .modal-status').innerHTML = data.message
                         purchaseProcessing = null
                     }
-                }).catch(error => {
+                })
+                .catch(err => {
                     const status = document.querySelector('#purchase-modal .modal-status')
-                    purchaseProcessing = null;
-                    if (error.status === 503)
-                        status.innerHTML = 'The website is currently in maintenance. Please try again in 30 seconds.'
-                    else
-                        status.innerHTML = 'There is something wrong with the website, call someone to help!'
+                    purchaseProcessing = null
+                    if (err.status === 503) status.innerHTML = 'The website is currently in maintenance. Please try again in 30 seconds.'
+                    else status.innerHTML = 'There is something wrong with the website, call someone to help!'
                 })
             }
 
@@ -302,21 +299,20 @@
                             document.querySelector('#rfid-modal .modal-body').innerHTML =
                                 '<div class="qrAuth">Loading QR authentication...</div>' +
                                 '<hr>' +
-                                '<span class="modal-status">' +
-                                'Authenticate using the QR code above to link RFID card.' +
-                                '</span>'
+                                '<span class="modal-status">Authenticate using the QR code above to link RFID card.</span>'
                             doQrAuth(
                                 document.querySelector('#rfid-modal .qrAuth'),
                                 'Link RFID card to account',
                                 (auth_token, credentialtype) => {
-                                    window.axios.post(
+                                    post(
                                         '{{ route('omnomcom::store::rfidadd') }}',
                                         {
                                             card: rfidLinkCard,
                                             credentialtype: credentialtype,
                                             credentials: auth_token,
                                         }
-                                    ).then(res => document.querySelector('#rfid-modal .modal-status').innerHTML = res.data)
+                                    )
+                                    .then(data => document.querySelector('#rfid-modal .modal-status').innerHTML = '<span class="' + (data.ok ? 'primary' : 'danger') + '">' + data.text + '</span>')
                                 }
                             )
                         }
@@ -334,19 +330,17 @@
 
             function doQrAuth(element, description, onComplete) {
                 let authToken = null
-                window.axios.post(
-                    '{{ route('qr::generate') }}',
-                    { description: description }
-                ).then(res => {
-                    const data = res.data
+                post('{{ route('qr::generate') }}', { description: description })
+                .then(res => res.json())
+                .then(data => {
                     const qrImg = "{{ route('qr::code', '') }}" + '/' + data.qr_token
                     const qrLink = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token
                     element.innerHTML = 'Scan this QR code<br><br><img src="' +  qrImg + '" width="200px" height="200px"><br><br>or go to<br><strong>' + qrLink + '</strong>'
                     authToken = data.auth_token
                     const qrAuthInterval = setInterval(() => {
                         if (modalStatus == null) return clearInterval(qrAuthInterval)
-                        window.axios.get('{{ route('qr::approved') }}', {params: {code: authToken}})
-                        .then(res => {
+                        get('{{ route('qr::approved') }}', { code: authToken })
+                        .then(_ => {
                             element.innerHTML = 'Successfully authenticated :)'
                             clearInterval(qrAuthInterval)
                             onComplete(authToken, 'qr')

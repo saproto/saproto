@@ -172,10 +172,8 @@
         iban.addEventListener('keyup', _ => {
             iban.value = iban.value.replace(' ', '')
             if (iban.value.length >= 15) {
-                window.axios.get('{{ route('api::verify_iban') }}', {
-                    params: { 'iban': iban.value }
-                })
-                .then(res => update_iban_form(res.data))
+                get('{{ route('api::verify_iban') }}', { 'iban': iban.value })
+                .then(data => update_iban_form(data))
                 .catch(error => {
                     console.error(error)
                     iban_message('black', 'We could not automatically verify your IBAN.')
@@ -197,19 +195,16 @@
         submit.addEventListener('click', _ => {
             submit.disabled = true
             if (bic.value.length >= 8) {
-                window.axios.get('{{ route('api::verify_iban') }}', {
-                    params: { 'iban': iban.value, 'bic': bic.value }
-                })
-                .then(res => {
-                    if (res.data.status === true) {
+                get('{{ route('api::verify_iban') }}', { 'iban': iban.value, 'bic': bic.value })
+                .then(data => {
+                    if (data.status === true) {
                         bic.disabled = false
                         form.submit()
                     } else {
-                        update_iban_form(res.data)
+                        update_iban_form(data)
                     }
-                })
-                .catch(error => {
-                    console.error(error)
+                }).catch(err => {
+                    console.error(err)
                     bic.disabled = true
                     form.submit()
                 })

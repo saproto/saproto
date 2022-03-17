@@ -204,13 +204,8 @@
         scanList.forEach(el => setEventListener(el, false))
         unscanList.forEach(el => setEventListener(el, true))
 
-        const scanRequest =
-            barcode => window.axios.get(
-                '{{ route('api::scan', ['event' => $event->id]) }}',
-                { params: {'barcode': barcode} },
-            )
-
-        const unscanRequest = barcode => window.axios.get('{{ route('tickets::unscan') }}/' + barcode,)
+        const scanRequest = barcode => get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode })
+        const unscanRequest = barcode => get('{{ route('tickets::unscan') }}/' + barcode,)
 
         function setEventListener(el, unscan) {
             el.addEventListener('click', e => {

@@ -35,21 +35,21 @@
                 const id = el.getAttribute('data-id')
                 if (id === undefined) return
 
-                window.axios.get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id))
-                .then(res => {
+               get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id))
+                .then(_ => {
                     const icon = el.children[0]
                     const likes = el.children[1]
                     if (icon.classList.contains('fas')) {
-                        likes.innerHTML = parseInt(likes.innerHTML) - 1
+                        likes.innerHTML = `${parseInt(likes.innerHTML) - 1}`
                         icon.classList.replace('fas', 'far')
                     }
                     else {
-                        likes.innerHTML = parseInt(likes.innerHTML) + 1
+                        likes.innerHTML = `${parseInt(likes.innerHTML) + 1}`
                         icon.classList.replace('far', 'fas')
                     }
                 })
-                .catch(error => {
-                    console.error(error)
+                .catch(err => {
+                    console.error(err)
                     window.alert('Something went wrong liking the quote. Please try again.')
                 })
             })

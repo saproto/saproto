@@ -292,7 +292,7 @@
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
     function updateClock() {
-        let now = moment();
+        let now = moment()
         document.getElementById("clock").innerHTML = '<i class="fas fa-clock fa-fw me-2"></i>' + now.format('HH:mm:ss')
         document.getElementById("ticker").style.width = ((now.format('s.SSS') / 60) * 100) + "%"
     }
@@ -302,25 +302,24 @@
     function updateTimetable() {
         const timetable = document.getElementById("timetable")
 
-        axios.get('{{ route('api::screen::timetable') }}')
-        .then(res => {
-            const data = res.data
+        get('{{ route('api::screen::timetable') }}')
+        .then(data => {
             if (data.length > 0) {
-                timetable.innerHTML = '';
-                let count = 0;
+                timetable.innerHTML = ''
+                let count = 0
                 for (let i in data) {
                     if (!data[i].over) {
-                        let start = moment.unix(data[i].start);
-                        let end = moment.unix(data[i].end);
-                        let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                        let title = data[i].title;
-                        let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + data[i].place + '</span>';
-                        timetable.innerHTML += '<div class="activity">' +
-                            (data[i].studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
-                            '<strong>' + data[i].type + '</strong><br>' +
-                            '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span>' +
-                            '<br>' +
-                            displayTime + '' +
+                        let start = moment.unix(data[i].start)
+                        let end = moment.unix(data[i].end)
+                        let time = start.format("HH:mm") + ' - ' + end.format("HH:mm")
+                        let title = data[i].title
+                        let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + data[i].place + '</span>'
+                        timetable.innerHTML +=
+                            '<div class="activity">' +
+                                (data[i].studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
+                                '<strong>' + data[i].type + '</strong><br>' +
+                                '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span><br>' +
+                                displayTime +
                             '</div>'
                         count++
                     }
@@ -332,7 +331,9 @@
                 timetable.innerHTML = '<div class="notice">No lectures today!</div>'
             }
             setTimeout(updateTimetable, 60000);
-        }).catch(err => {
+        })
+        .catch(err => {
+            console.error(err)
             timetable.innerHTML = '<div class="notice">Lectures could not be found...</div>'
             setTimeout(updateTimetable, 5000);
         })
@@ -341,9 +342,8 @@
     updateTimetable();
 
     function updateActivities() {
-        axios.get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
-        .then(res => {
-            const data = res.data
+        get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
+        .then(data => {
             if (data.length > 0) {
                 document.getElementById("activities").innerHTML = '';
                 for (let i in data) {
@@ -362,7 +362,9 @@
                 document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
             }
             setTimeout(updateActivities, 60000)
-        }).catch(err => {
+        })
+        .catch(err => {
+            console.error(err)
             document.getElementById("activities").innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
             setTimeout(updateActivities, 5000)
         })
@@ -377,15 +379,9 @@
 
     function updateBus(stop, stop_other_side, id) {
         const element = document.getElementById(id)
-        axios.get(
-            "{{urldecode(route('api::screen::bus'))}}",
-            {
-                responseType: 'json',
-                params: {'tpc_id': stop, 'tpc_id_other': stop_other_side}
-            },
-        ).then(res => {
-            const data = res.data
-            let combinedBusses= {};
+        get("{{urldecode(route('api::screen::bus'))}}", { tpc_id: stop, tpc_id_other: stop_other_side })
+        .then(data => {
+            let combinedBusses= {}
             for (const [key, value] of Object.entries(data)) {
                 Object.assign(combinedBusses, value.Passes)
             }
@@ -405,7 +401,9 @@
             } else {
                 element.innerHTML = '<div class="notice">No buses!</div>'
             }
-        }).catch(err => {
+        })
+        .catch(err => {
+            console.error(err)
             element.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
         })
     }
@@ -417,28 +415,23 @@
         const timetable = document.getElementById("protopeners-timetable")
         const protopolisFa = document.getElementById('protopolis-fa')
 
-        axios.get(
-            '{{ route('api::screen::timetable::protopeners') }}'
-        ).then(res => {
-            const data = res.data
+        get('{{ route('api::screen::timetable::protopeners') }}')
+        .then(data => {
             if (data.length > 0) {
                 document.getElementById("protopeners-timetable").innerHTML = ''
-                let open = false
-                let count = 0
+                let open = false, count = 0
                 for (let i in data) {
                     if (data[i].over) continue
                     else if (data[i].current) open = true
-                    count++
-
                     let start = moment.unix(data[i].start);
                     let end = moment.unix(data[i].end);
                     let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-
                     document.getElementById("protopeners-timetable").innerHTML +=
                         '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
                         '   <div class="float-start">' + time + '</div>' +
                         '   <div class="float-end"><strong>' + data[i].title + '</strong></div>' +
                         '</div>'
+                    count++
                 }
                 if (open) {
                     protopolisFa.classList.add('fa-door-open green')
@@ -447,14 +440,13 @@
                     protopolisFa.classList.remove('fa-door-open green')
                     protopolisFa.classList.add('fa-door-closed')
                 }
-                if (count === 0) {
-                    timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
-                }
+                if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
             } else {
                 timetable.innerHTML = '<div class="notice">Protopolis closed today!</div>'
             }
             setTimeout(updateProtopeners, 60000)
-        }).catch(() => {
+        })
+        .catch(_ => {
             timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
             setTimeout(updateProtopeners, 5000)
         })

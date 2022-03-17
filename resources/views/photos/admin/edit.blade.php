@@ -289,16 +289,17 @@
                 let formData = new FormData()
                 formData.append('file', file)
                 toggleRunning()
-                await window.axios.post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData)
-                .then(res => {
-                    if (res.data === 'ERROR') return uploadError(file)
+                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData)
+                .then(res => res.json())
+                .then(data => {
+                    if (data === 'ERROR') return uploadError(file)
                     document.getElementById('photo-view').innerHTML += res.data
                     document.getElementById('error-bar').classList.add('d-none')
                     document.querySelector('#error-bar ul').innerHTML = ''
                     toggleRunning()
                 })
-                .catch(error => {
-                    console.error(error)
+                .catch(err => {
+                    console.error(err)
                     uploadError(file)
                     toggleRunning()
                 })

@@ -199,12 +199,9 @@
 
 
         function updatePoints(id, points) {
-            let data = new FormData()
-            data.append('id', id)
-            data.append('points', points)
-            window.axios.post('{{ route('leaderboards::entries::update') }}', data)
-            .catch(error => {
-                console.error(error)
+            post('{{ route('leaderboards::entries::update') }}', {id: id, points: points})
+            .catch(err => {
+                console.error(err)
                 window.alert('Something went wrong while updating the points. Please try again.')
             })
         }

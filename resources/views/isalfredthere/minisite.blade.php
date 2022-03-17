@@ -54,46 +54,45 @@
             const text = document.getElementById('alfred-text')
             const time = document.getElementById('alfred-actualtime')
             const emoji = document.getElementById('alfred-emoji')
-            window.axios.get('{{ config('app-proto.primary-domain') }}{{ route('api::isalfredthere', [], false) }}')
-                .then(res => {
-                    const data = res.data
-                    switch(data.status) {
-                        case('there'):
-                            text.classList.remove('proto-countdown')
-                            text.innerHTML = 'Alfred is there!'
-                            time.innerHTML = ''
-                            time.classList.add('d-none')
-                            emoji.innerHTML = '🎉😁'
-                            document.body.classList.add('bg-success')
-                        break
-                        case('unknown'):
-                            text.classList.remove('proto-countdown')
-                            text.innerHTML = "We couldn't find Alfred..."
-                            time.innerHTML = ''
-                            time.classList.add('d-none')
-                            emoji.innerHTML = '👀'
-                            document.body.classList.add('bg-warning')
-                        break
-                        case('away'):
-                            text.classList.add('proto-countdown')
-                            text.setAttribute('data-countdown-start', data.backunix)
-                            time.innerHTML = `That would be ${data.back}.`
-                            time.classList.remove('d-none')
-                            emoji.innerHTML = '😞🕓'
-                            document.body.classList.add('bg-danger')
-                            if (! alfredCountdownStarted) {
-                                initializeCountdowns()
-                                alfredCountdownStarted = true
-                            }
-                        break
-                    }
-                })
-                .catch(error => {
-                    console.error(error)
-                    text.innerHTML = "We couldn't find Alfred..."
-                    emoji.innerHTML = '👀'
-                    document.body.classList.add('bg-warning')
-                })
+            get('{{ config('app-proto.primary-domain') }}{{ route('api::isalfredthere', [], false) }}')
+            .then(data => {
+                switch(data.status) {
+                    case('there'):
+                        text.classList.remove('proto-countdown')
+                        text.innerHTML = 'Alfred is there!'
+                        time.innerHTML = ''
+                        time.classList.add('d-none')
+                        emoji.innerHTML = '🎉😁'
+                        document.body.classList.add('bg-success')
+                    break
+                    case('unknown'):
+                        text.classList.remove('proto-countdown')
+                        text.innerHTML = "We couldn't find Alfred..."
+                        time.innerHTML = ''
+                        time.classList.add('d-none')
+                        emoji.innerHTML = '👀'
+                        document.body.classList.add('bg-warning')
+                    break
+                    case('away'):
+                        text.classList.add('proto-countdown')
+                        text.setAttribute('data-countdown-start', data.backunix)
+                        time.innerHTML = `That would be ${data.back}.`
+                        time.classList.remove('d-none')
+                        emoji.innerHTML = '😞🕓'
+                        document.body.classList.add('bg-danger')
+                        if (! alfredCountdownStarted) {
+                            initializeCountdowns()
+                            alfredCountdownStarted = true
+                        }
+                    break
+                }
+            })
+            .catch(error => {
+                console.error(error)
+                text.innerHTML = "We couldn't find Alfred..."
+                emoji.innerHTML = '👀'
+                document.body.classList.add('bg-warning')
+            })
         }
     </script>
 

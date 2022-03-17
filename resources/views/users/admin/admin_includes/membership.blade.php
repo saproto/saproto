@@ -199,13 +199,14 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         function req(e, url) {
-            window.axios.post(url, {'id': e.target.getAttribute('data-id')})
-            .then(res => {
-                if (res.data.includes('Exception')) throw res.data
-                alert(res.data)
+            get(url, { 'id': e.target.getAttribute('data-id') })
+            .then(res => res.json())
+            .then(data => {
+                if (data.includes('Exception')) throw data
+                alert(data)
             })
-            .catch(error => {
-                console.error(error)
+            .catch(err => {
+                console.error(err)
                 alert("Something went wrong while requesting the print.")
             })
         }

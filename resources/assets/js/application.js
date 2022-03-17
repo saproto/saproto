@@ -1,15 +1,8 @@
 // Vendors
 window.SignaturePad = require('signature_pad')
-window.axios = require('axios')
 window.moment = require('moment/moment')
 window.Quagga = require('quagga')
 require('./countdown-timer')
-
-// Register CSRF token in axios
-let token = document.head.querySelector('meta[name="csrf-token"]')
-if (token) window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
-else console.error('CSRF token not found')
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 // Execute theme JavaScript
 window[config.theme]?.()
@@ -26,6 +19,32 @@ window.addEventListener('load', _ => {
         })
     })
 })
+
+// Find CSRF token in de page meta tags
+const token = document.head.querySelector('meta[name="csrf-token"]')
+if (token === undefined) console.error('X-CSRF token could not be found!')
+
+// Global wrapper methods for the native fetch api
+const request = (method, url, params, options) => {
+    options.method = method
+    if ('GET' === method) {
+        url += '?' + (new URLSearchParams(params)).toString()
+    } else {
+        options.headers = {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            'X-CSRF-TOKEN': token.content
+        }
+        options.credentials = "same-origin"
+        options.body = JSON.stringify(params)
+    }
+    const result = fetch(url, options)
+    if (options.parse !== undefined && options.parse === false) return result
+    else return result.then(res => res.json())
+}
+
+global.get = (url, params = {}, options = {}) => request('GET', url, params, options)
+global.post = (url, params = {}, options = {}) => request('POST', url, params, options)
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'

@@ -100,7 +100,7 @@
     }
 
     async function updateCampaigns() {
-        await window.axios.get('{{ route("api::screen::narrowcasting") }}').then(res => campaigns = res.data)
+        await get('{{ route("api::screen::narrowcasting") }}').then(data => campaigns = data)
     }
 
     function onPlayerReady(event) {

@@ -1,14 +1,11 @@
-<div class="card mb-3 h-100">
+<div class="goodidea card mb-3 h-100">
 
     <div class="card-header bg-dark text-white">
 
-
-        <span>
-            <span data-id="{{ $idea->id }}">{{ $idea->voteScore() }}</span>
-            <a data-id="{{ $idea->id }}"
-               class="gi_upvote fa-thumbs-up {{ $idea->userVote(Auth::user()) == 1 ? "fas" : "far" }}"></a>
-            <a data-id="{{ $idea->id }}"
-               class="gi_downvote fa-thumbs-down {{ $idea->userVote(Auth::user()) == -1 ? "fas" : "far" }}"></a>
+        <span data-id="{{ $idea->id }}">
+            <span class="votes d-inline-block">{{ $idea->voteScore() }}</span>
+            <i class="upvote fa-thumbs-up {{ $idea->userVote(Auth::user()) == 1 ? "fas" : "far" }}"></i>
+            <i class="downvote fa-thumbs-down {{ $idea->userVote(Auth::user()) == -1 ? "fas" : "far" }}"></i>
         </span>
 
         @if (Auth::user()->can("board") || Auth::user()->id == $idea->user->id)
@@ -21,7 +18,6 @@
     <div class="card-body">
 
         {!! $idea->idea !!}
-
 
     </div>
 

@@ -59,6 +59,18 @@ select {
   }
 }
 
+.goodidea {
+  .votes { min-width: 20px; }
+  .upvote:hover {
+    color: $success;
+    font-weight: bolder;
+  }
+  .downvote:hover {
+    color: $danger;
+    font-weight: bolder;
+  }
+}
+
 // Card collapse
 $card-collapse-bg: #fff !default;
 .card-body.collapse {
