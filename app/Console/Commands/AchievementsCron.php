@@ -6,8 +6,11 @@ use Carbon;
 use Illuminate\Console\Command;
 use Proto\Models\Achievement;
 use Proto\Models\AchievementOwnership;
+use Proto\Models\Activity;
+use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
+use Proto\Models\Event;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -66,6 +69,8 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->ForeverMember(), 38);
         $this->giveAchievement($this->GoodHuman(), 53);
         $this->giveAchievement($this->IAmNoodle(), 54);
+        $this->giveAchievement($this->nThActivity(1), 62);
+        $this->giveAchievement($this->nThActivity(100), 63);
 
         $this->info('Auto achievement gifting done!');
     }
@@ -510,6 +515,20 @@ class AchievementsCron extends Command
             }
         } else {
             $this->info('Its not the first of the month! Cancelling Big kid...');
+        }
+        return $selected;
+    }
+
+    private function nThActivity($activityAmount){
+        $selected=[];
+        $users = User::all();
+        foreach ($users as $user) {
+            $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+            $activities=Activity::WhereIn('id', $participated)->pluck('event_id');
+            $CountEvents=Event::whereIn('id', $activities)->whereTime('end', '<', Carbon::now()->valueOf())->count();
+            if($CountEvents>=$activityAmount){
+                $selected[] = $user;
+            }
         }
         return $selected;
     }
