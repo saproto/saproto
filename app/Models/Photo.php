@@ -92,19 +92,17 @@ class Photo extends Model
         return $this->getAdjacentPhoto(false);
     }
 
-    /** @return int */
-    public function getPageNumberInAlbum()
+    public function getAlbumPageNumber($paginateLimit)
     {
-        $photo_index = 0;
-        $photos = self::where('album_id', $this->album_id)->where('date_taken', '>'.'=', $this->date_taken)->orderBy('date_taken', '>')->orderBy('id', '>');
-        foreach ($photos as $post) {
-            if ($post->id == $this->id) {
-                break;
+        $photoIndex = 1;
+        $photos = self::where('album_id', $this->album_id)->orderBy('date_taken', 'ASC')->orderBy('id', 'ASC')->get();
+        foreach($photos as $photoItem){
+            if($this->id==$photoItem->id){
+                return ceil($photoIndex/$paginateLimit);
             }
-            $photo_index++;
+            $photoIndex++;
         }
-        $page = (int)($photo_index / 10) + 1;
-        return $page;
+        return 1;
     }
 
     /** @return int */
