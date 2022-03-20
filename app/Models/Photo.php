@@ -97,8 +97,8 @@ class Photo extends Model
         $photoIndex = 1;
         $photos = self::where('album_id', $this->album_id)->orderBy('date_taken', 'ASC')->orderBy('id', 'ASC')->get();
         foreach($photos as $photoItem){
-            if($this->id==$photoItem->id){
-                return ceil($photoIndex/$paginateLimit);
+            if($this->id == $photoItem->id){
+                return ceil($photoIndex / $paginateLimit);
             }
             $photoIndex++;
         }
