@@ -519,14 +519,14 @@ class AchievementsCron extends Command
         return $selected;
     }
 
-    private function nThActivity($activityAmount){
-        $selected=[];
+    private function nThActivity($activityAmount) {
+        $selected = [];
         $users = User::all();
         foreach ($users as $user) {
             $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
-            $activities=Activity::WhereIn('id', $participated)->pluck('event_id');
-            $CountEvents=Event::whereIn('id', $activities)->whereTime('end', '<', Carbon::now()->valueOf())->count();
-            if($CountEvents>=$activityAmount){
+            $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+            $CountEvents = Event::whereIn('id', $activities)->whereTime('end', '<', Carbon::now()->valueOf())->count();
+            if($CountEvents >= $activityAmount){
                 $selected[] = $user;
             }
         }
