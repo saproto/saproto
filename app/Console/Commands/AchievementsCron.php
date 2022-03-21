@@ -6,8 +6,11 @@ use Carbon;
 use Illuminate\Console\Command;
 use Proto\Models\Achievement;
 use Proto\Models\AchievementOwnership;
+use Proto\Models\Activity;
+use Proto\Models\ActivityParticipation;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
+use Proto\Models\Event;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -66,6 +69,9 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->ForeverMember(), 38);
         $this->giveAchievement($this->GoodHuman(), 53);
         $this->giveAchievement($this->IAmNoodle(), 54);
+        $this->giveAchievement($this->percentageActivities(25), 55);
+        $this->giveAchievement($this->percentageActivities(75), 56);
+        $this->giveAchievement($this->percentageActivities(100), 57);
 
         $this->info('Auto achievement gifting done!');
     }
@@ -513,4 +519,27 @@ class AchievementsCron extends Command
         }
         return $selected;
     }
+
+    private function percentageActivities($percentage){
+        $selected = [];
+            if (Carbon::now()->day == 1) {
+                $users = User::all();
+                foreach ($users as $user) {
+                    $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+                    $activities = Activity::whereIn('id', $participated)->pluck('event_id');
+                    $CountEventsParticipated = Event::whereIn('id', $activities)->where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->count();
+
+                    $possibleActivities=Event::where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->has('activity')->count();
+
+                    if (floor($CountEventsParticipated/$possibleActivities*100)>=$percentage) {
+                        $selected[] = $user;
+                    }
+                }
+            }
+            else {
+                $this->info('Its not the first of the month! Cancelling ' . $percentage . ' of Activities this month!');
+            }
+            return $selected;
+        }
+
 }
