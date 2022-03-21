@@ -520,7 +520,7 @@ class AchievementsCron extends Command
         return $selected;
     }
 
-    private function percentageActivities($percentage){
+    private function percentageActivities($percentage) {
         $selected = [];
             if (Carbon::now()->day == 1) {
                 $users = User::all();
@@ -529,17 +529,16 @@ class AchievementsCron extends Command
                     $activities = Activity::whereIn('id', $participated)->pluck('event_id');
                     $CountEventsParticipated = Event::whereIn('id', $activities)->where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->count();
 
-                    $possibleActivities=Event::where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->has('activity')->count();
+                    $possibleActivities = Event::where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->has('activity')->count();
 
-                    if (floor($CountEventsParticipated/$possibleActivities*100)>=$percentage) {
+                    if (floor($CountEventsParticipated / $possibleActivities * 100) >= $percentage) {
                         $selected[] = $user;
                     }
                 }
             }
             else {
-                $this->info('Its not the first of the month! Cancelling ' . $percentage . ' of Activities this month!');
+                $this->info('Its not the first of the month! Cancelling '.$percentage.' of Activities this month!');
             }
             return $selected;
         }
-
 }
