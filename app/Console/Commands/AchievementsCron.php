@@ -537,7 +537,7 @@ class AchievementsCron extends Command
                 }
             }
             else {
-                $this->info('Its not the first of the month! Cancelling '.$percentage.' of Activities this month!');
+                $this->info('Its not the first of the month! Cancelling participation trophee for '.$percentage.' of activities attended!');
             }
             return $selected;
         }
