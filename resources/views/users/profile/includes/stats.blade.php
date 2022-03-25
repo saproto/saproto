@@ -1,13 +1,12 @@
 <div class="card mb-3">
 
-    <div class="card-header text-white border-bottom-0 bg-white" style="position: relative; height: 80px;">
+    <div class="card-header text-white border-bottom-0 bg-white" style="position: relative; height: 85px;">
 
-        <div style="position: absolute; top: 0; left: 0; right: 0;">
-
-            <h3 class="text-center ellipsis mb-3 mt-4 text-dark">
+        <div style="position: absolute; top: 0; left: 0; right: 0;" class="text-center text-dark">
+            <h3 class="mt-4 mb-0">
                 User statistics <i class="fas fa-info-circle fa-fw mr-2" data-toggle="tooltip" data-placement="top" title="This info is only visible to you!"></i>
             </h3>
-
+            <i><small>Note: These statistics are not visible to other members!</small></i>
         </div>
 
     </div>
