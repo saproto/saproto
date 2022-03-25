@@ -5,8 +5,8 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
-use Proto\Models\CommitteeMembership;
 use Proto\Models\ActivityParticipation;
+use Proto\Models\CommitteeMembership;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
 
@@ -30,9 +30,9 @@ class UserProfileController extends Controller
 
         $pastCommittees = $this->getPastMemberships($user, false);
         $pastSocieties = $this->getPastMemberships($user, true);
-        $moneySpent=$this->getSpentMoney($user);
-        $totalProducts=$this->getProductsPurchased($user);
-        $totalSignups=$this->getTotalSignups($user);
+        $moneySpent = $this->getSpentMoney($user);
+        $totalProducts = $this->getProductsPurchased($user);
+        $totalSignups = $this->getTotalSignups($user);
         return view('users.profile.profile', ['user' => $user, 'pastcommittees' => $pastCommittees, 'pastsocieties' => $pastSocieties, 'spentmoney'=>$moneySpent, 'signups'=>$totalSignups, 'totalproducts'=>$totalProducts]);
     }
 
@@ -50,14 +50,15 @@ class UserProfileController extends Controller
             ->where('committee.is_society', $with_societies);
     }
 
-    private function getSpentMoney($user){
+    private function getSpentMoney($user) {
         return OrderLine::where('user_id', $user->id)->pluck('total_price')->sum();
     }
-    private function getProductsPurchased($user){
+
+    private function getProductsPurchased($user) {
         return OrderLine::where('user_id', $user->id)->pluck('units')->sum();
     }
 
-    private function getTotalSignups($user){
+    private function getTotalSignups($user) {
         return ActivityParticipation::where('user_id', $user->id)->count();
     }
 }
