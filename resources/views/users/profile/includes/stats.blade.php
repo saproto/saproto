@@ -16,7 +16,7 @@
 
         <p class="card-text ellipsis">
                 <i class="fas fa-user-clock fa-fw mr-2" data-toggle="tooltip" data-placement="top" title="The date your account got created"></i>
-            Account created on: {{ date('F j, Y', strtotime($user->member->created_at)) }}.
+            Account created on: {{ date('F j, Y', strtotime($user->created_at)) }}.
         </p>
         <p class="card-text ellipsis">
             <i class="fas fa-calendar-alt fa-fw mr-2" data-toggle="tooltip" data-placement="top" title="This is the total amount of events you have signed up for!"></i>
