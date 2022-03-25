@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Address;
@@ -11,7 +12,6 @@ use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
-use Proto\Models\AchievementOwnership;
 
 class OtherDataSeeder extends Seeder
 {

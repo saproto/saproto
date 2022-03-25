@@ -9,7 +9,7 @@ $factory->define(
         $mintime = date('U', strtotime('-1 year'));
         $maxtime = date('U', strtotime('now'));
 
-        $achievement= Proto\Models\Achievement::inRandomOrder()->first();
+        $achievement = Proto\Models\Achievement::inRandomOrder()->first();
 
         $date = date('Y-m-d H:i:s', mt_rand($mintime, $maxtime));
         $alerted = mt_rand(0,1);
@@ -18,7 +18,7 @@ $factory->define(
             'achievement_id' => $achievement->id,
             'created_at' => $date,
             'updated_at' => $date,
-            'alerted' => $alerted
+            'alerted' => $alerted,
         ];
     }
 );
