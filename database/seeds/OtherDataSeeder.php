@@ -11,6 +11,7 @@ use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
+use Proto\Models\AchievementOwnership;
 
 class OtherDataSeeder extends Seeder
 {
@@ -66,6 +67,16 @@ class OtherDataSeeder extends Seeder
                 'user_id' => array_random($users),
             ]);
             echo 'Creating '.$index.'/'.$n." orderlines\r";
+        }
+
+        // Create AchievementOwnership
+        $n = 200;
+
+        foreach (range(1, $n) as $index) {
+            factory(AchievementOwnership::class)->create([
+                'user_id' => array_random($users),
+            ]);
+            echo 'Creating '.$index.'/'.$n." achievement ownerships\r";
         }
 
         echo PHP_EOL;
