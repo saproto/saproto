@@ -49,12 +49,12 @@ global.post = (url, params = {}, options = {}) => request('POST', url, params, o
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-if (tooltipTriggerList.length) tooltipTriggerList.forEach((el) => new Tooltip(el, {boundary: 'window'}))
+if (tooltipTriggerList.length) tooltipTriggerList.forEach(el => new Tooltip(el))
 
 // Enable popover elements
 import { Popover } from 'bootstrap'
 const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'))
-if (popoverTriggerList.length) popoverTriggerList.forEach((el) => new Popover(el))
+if (popoverTriggerList.length) popoverTriggerList.forEach(el => new Popover(el))
 
 // Enable modal elements
 import { Modal } from 'bootstrap'
@@ -126,20 +126,20 @@ const iconPickerList = Array.from(document.getElementsByClassName('iconpicker-wr
 window.iconPickers = {}
 if (iconPickerList.length) {
     // Get available icons from fontawesome GraphQL api
-    axios.post('https://api.fontawesome.com/', {
+    post('https://api.fontawesome.com/', {
         query:
-        `{
-          release(version: "latest") {
-            version
-            icons {
-              id
-              membership { free }
-            }
-          }
-        }`
-    }).then(res => {
-        const data = res.data.data.release
-        const icons = data.icons.reduce((collection, icon) => {
+            `{
+              release(version: "latest") {
+                version
+                icons {
+                  id
+                  membership { free }
+                }
+              }
+            }`
+    })
+    .then(data => {
+        const icons = data.data.release.icons.reduce((collection, icon) => {
             const styles = icon.membership.free
             for (const key in styles) { collection.push(`fa${styles[key].charAt(0)} fa-${icon.id}`) }
             return collection
@@ -152,7 +152,7 @@ if (iconPickerList.length) {
                 showSelectedIn: el.querySelector('.selected-icon'),
             })
         })
-        console.log(`Icon-picker initialized (FontAwesome v${data.version}, ${icons.length} icons)`)
+        console.log(`Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`)
     })
 }
 

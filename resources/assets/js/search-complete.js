@@ -45,15 +45,8 @@ export default class SearchComplete {
         else this.searchResults.innerHTML = '<span>searching...</span>'
 
         // Get search results
-        window.axios.get(
-            this.route,
-            {
-                responseType: 'json',
-                params: {q: this.el.value}
-            }
-            // On success handle search results
-        ).then((res) => {
-            const data = res.data
+        get( this.route,{q: this.el.value})
+        .then((data) => {
 
             // Check if there are any results
             if (data.length === 0) return this.searchResults.innerHTML = '<span>no results</span>'
@@ -110,7 +103,8 @@ export default class SearchComplete {
                 this.searchResults.append(option)
             })
             // Log and return error to user
-        }).catch((err) => {
+        })
+        .catch((err) => {
             this.searchResults.innerHTML = '<span class="text-danger"> there was an error</span>'
             console.error(err)
         })

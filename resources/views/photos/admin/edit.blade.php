@@ -290,7 +290,6 @@
                 formData.append('file', file)
                 toggleRunning()
                 await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData)
-                .then(res => res.json())
                 .then(data => {
                     if (data === 'ERROR') return uploadError(file)
                     document.getElementById('photo-view').innerHTML += res.data

@@ -200,7 +200,6 @@
 
         function req(e, url) {
             get(url, { 'id': e.target.getAttribute('data-id') })
-            .then(res => res.json())
             .then(data => {
                 if (data.includes('Exception')) throw data
                 alert(data)

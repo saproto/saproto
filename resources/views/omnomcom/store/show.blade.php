@@ -9,7 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
         <link rel='shortcut icon' href='{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}'/>
-        <link rel='stylesheet' href='{{ mix('/assets/application-dark.css') }}'>
+        <link rel='stylesheet' href='{{ mix('/css/application-dark.css') }}'>
 
         <style>
             * { box-sizing: border-box; }
@@ -331,7 +331,6 @@
             function doQrAuth(element, description, onComplete) {
                 let authToken = null
                 post('{{ route('qr::generate') }}', { description: description })
-                .then(res => res.json())
                 .then(data => {
                     const qrImg = "{{ route('qr::code', '') }}" + '/' + data.qr_token
                     const qrLink = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token
