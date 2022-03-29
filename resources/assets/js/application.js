@@ -7,16 +7,16 @@ require('./countdown-timer')
 // Execute theme JavaScript
 window[config.theme]?.()
 
-// Disable submit buttons after a form has been submitted
-// so spamming the button doesnt result in multiple requests
+// Disable submit buttons after a form has been submitted so
+// spamming the button does not result in multiple requests
 window.addEventListener('load', _ => {
-    let forms = document.querySelectorAll("form")
-    forms.forEach(form => {
+    let formList = Array.from(document.getElementsByTagName("form"))
+    formList.forEach(form => {
         form.addEventListener('submit', e => {
             e.preventDefault()
-            e.submitter.disabled = true
+            e.target.onsubmit = _ => false
             e.target.submit()
-        })
+        }, { once: true })
     })
 })
 
