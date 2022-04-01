@@ -56,6 +56,10 @@
 
 @include('discord.modal')
 
+<div id="april-glasses">
+    <img src="{{ asset('images/glasses.png') }}"/>
+</div>
+
 </body>
 
 </html>
