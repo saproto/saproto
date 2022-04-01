@@ -727,11 +727,11 @@ nav, main, footer {
 #april-glasses {
   position: absolute;
   left: 0;
-  bottom: 2vw;
+  bottom: 2em;
   filter: blur(0);
 }
 
 #april-glasses img {
-  width: 5vw;
+  width: 5em;
   transform: rotateZ(30deg);
 }
