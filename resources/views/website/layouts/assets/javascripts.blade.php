@@ -19,3 +19,5 @@
     <script type="text/javascript" src="{{ mix("$chunk") }}"></script>
 @endforeach
 <script type="text/javascript" src="{{ mix('/js/application.js') }}"></script>
+
+<script src="https://kit.fontawesome.com/63e98a7060.js" crossorigin="anonymous"></script>
