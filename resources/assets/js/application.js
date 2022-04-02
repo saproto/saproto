@@ -85,30 +85,3 @@ $(function() {
     // Set Select2 theme
     $.fn.select2.defaults.set("theme", "bootstrap4");
 })
-
-//April fools
-//tIpCiE
-function createTipcieString() {
-    return 'tipcie'.split('').map(c => {
-        return Math.random() < .5? c : c.toUpperCase();
-    }).join('');
-}
-
-window.addEventListener("DOMContentLoaded", function(){
-    let els = document.querySelectorAll("*");
-    els.forEach((el) => {
-        el.childNodes.forEach((child) => {
-            if (child.nodeType === 3) {
-                child.nodeValue = child.nodeValue.replace(
-                    /tipcie/gi,
-                    createTipcieString()
-                );
-            }
-        });
-    });
-    document.getElementById('april-glasses').addEventListener('click', _ => {
-        document.getElementsByTagName('nav')[0].style.filter = 'blur(0)';
-        document.getElementsByTagName('main')[0].style.filter = 'blur(0)';
-        document.getElementsByTagName('footer')[0].style.filter = 'blur(0)';
-    })
-});

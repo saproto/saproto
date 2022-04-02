@@ -717,21 +717,3 @@ ul.pagination {
     }
   }
 }
-
-//April fools
-nav, main, footer {
-  filter: blur(5px);
-  transition: 1s filter;
-}
-
-#april-glasses {
-  position: absolute;
-  left: 0;
-  bottom: 2em;
-  filter: blur(0);
-}
-
-#april-glasses img {
-  width: 5em;
-  transform: rotateZ(30deg);
-}
