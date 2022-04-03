@@ -94,7 +94,7 @@
                                         @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
                                             <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
                                                 {{ $helping_committee->committee->name }}
-                                            </a>: {{ $helping_committee->getHelpingCount() }}<br>
+                                            </a>: {{ $helping_committee->helperCount() }}<br>
                                         @endforeach
                                     @else
                                         <span class="font-italic text-muted">not set</span>
