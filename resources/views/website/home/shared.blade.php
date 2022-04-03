@@ -45,7 +45,7 @@
 
                 <div class="card mb-3">
                     <div class="card-body pb-0 pt-1 position-relative">
-                        <div class="row mb-1 swiper" style="height:70px">
+                        <div class="swiper row mb-1" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
                                     @if($company->image)

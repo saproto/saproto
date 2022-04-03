@@ -41,7 +41,7 @@
     "moment": "^2.29.1",
     "quagga": "^0.12.1",
     "signature_pad": "^3.0.0-beta.4",
-    "swiper": "^7.0",
+    "swiper": "^8.0.7",
     "util.promisify": "^1.0.1"
   },
   "devDependencies": {

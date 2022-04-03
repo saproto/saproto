@@ -69,7 +69,7 @@ if (modalList.length) {
 // Enable custom file input elements
 const customFileInputList = Array.from(document.getElementsByClassName('custom-file-input'))
 if (customFileInputList.length) {
-    customFileInputList.forEach((el) => {
+    customFileInputList.forEach(el => {
         el.addEventListener('change', _ => {
             let fileName = this.value.split('\\').pop()
             let label = this.nextElementSibling
@@ -80,10 +80,13 @@ if (customFileInputList.length) {
 }
 
 // Initialise Swiper
-import Swiper, { Autoplay, Navigation} from 'swiper'
-if(document.getElementsByClassName('.swiper').length) {
-    Swiper.use([Autoplay, Navigation]);
+import Swiper, { Autoplay, Navigation } from 'swiper'
+import 'swiper/css'
+import 'swiper/css/autoplay'
+import 'swiper/css/navigation'
+if(document.querySelectorAll('.swiper').length) {
     window.swiper = new Swiper('.swiper', {
+        modules: [Autoplay, Navigation],
         loop: config.company_count > 2,
         slidesPerView: config.company_count > 1 ? 2 : 1,
         spaceBetween: 10,
@@ -103,7 +106,8 @@ if(document.getElementsByClassName('.swiper').length) {
 
 
 // Enable EasyMDE markdown fields
-import EasyMDE from 'easymde';
+import EasyMDE from 'easymde'
+import 'easymde/dist/easymde.min.css'
 const markdownFieldList = Array.from(document.getElementsByClassName('markdownfield'))
 if (markdownFieldList.length) {
     window.easyMDEFields = {}
@@ -159,8 +163,8 @@ if (iconPickerList.length) {
 // Enables fancy scrolling effect
 const navbar = document.getElementById('nav')
 if (navbar) {
-    const navbarHeight = 100;
-    let currentScroll = 0;
+    const navbarHeight = 100
+    let currentScroll = 0
     window.addEventListener('wheel', _ => {
         currentScroll = document.documentElement.scrollTop
         if (currentScroll > navbarHeight) navbar.classList.add('navbar-scroll')
@@ -172,7 +176,7 @@ if (navbar) {
 // https://stackoverflow.com/a/44303674/7316014
 // https://stackoverflow.com/a/18673641/14133333
 const collapseList = Array.from(document.querySelectorAll('.collapse:not(#navbar)'))
-collapseList.map((el) => {
+collapseList.map(el => {
     el.addEventListener('shown.bs.collapse', e => {
         let card = e.target.closest('.card').getBoundingClientRect()
         window.scrollTo(0, card.top + window.scrollY - 60)
@@ -180,42 +184,42 @@ collapseList.map((el) => {
 })
 
 // Enable search autocomplete fields
-import SearchComplete from './search-complete';
+import SearchComplete from './search-complete'
 const userSearchList = Array.from(document.querySelectorAll('.user-search'))
-userSearchList.forEach((el) => new SearchComplete(
+userSearchList.forEach(el => new SearchComplete(
     el,
     config.routes.api_search_user,
     (option, item) => {
         option.innerHTML = `#${item.id} ${item.name}`
     },
-    (item) => { return item.name }
+    item => { return item.name }
 ))
 
 const eventSearchList = Array.from(document.querySelectorAll('.event-search'))
-eventSearchList.forEach((el) => new SearchComplete(
+eventSearchList.forEach(el => new SearchComplete(
     el,
     config.routes.api_search_event,
     (option, item) => {
         option.className = item.is_future ? '' : 'text-muted'
         option.innerHTML = `${item.title} (${item.formatted_date.simple})`
     },
-    (item) => { return item.title },
+    item => { return item.title },
     (a, b) => {
-        if (a.start < b.start) return 1;
-        else if (a.start > b.start) return -1;
-        else return 0;
+        if (a.start < b.start) return 1
+        else if (a.start > b.start) return -1
+        else return 0
     }
 ))
 
 const productSearchList = Array.from(document.querySelectorAll('.product-search'))
-productSearchList.forEach((el) => new SearchComplete(
+productSearchList.forEach(el => new SearchComplete(
     el,
     config.routes.api_search_product,
     (option, item) => {
         option.className = item.is_visible ? '' : 'text-muted'
         option.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
     },
-    (item) => { return item.name + (el.multiple ? ' (€' + item.price.toFixed(2) + ')' : '') },
+    item => { return item.name + (el.multiple ? ' (€' + item.price.toFixed(2) + ')' : '') },
     (a, b) => {
         if (a.is_visible === 0 && b.is_visible === 1) return 1
         else if (a.is_visible === 1 && b.is_visible === 0) return -1
@@ -224,7 +228,7 @@ productSearchList.forEach((el) => new SearchComplete(
 ))
 
 const committeeSearchList = Array.from(document.querySelectorAll('.committee-search'))
-committeeSearchList.forEach((el) => new SearchComplete(
+committeeSearchList.forEach(el => new SearchComplete(
     el,
     config.routes.api_search_committee,
 ))
@@ -233,7 +237,7 @@ committeeSearchList.forEach((el) => new SearchComplete(
 const _paq = _paq || [];
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
-(() => {
+(_ => {
     let u = '//'+config.analytics_url+'/';
     _paq.push(['setTrackerUrl', u + 'piwik.php']);
     _paq.push(['setSiteId', '1']);
