@@ -34,8 +34,10 @@
                             <input type="text" class="form-control" id="destination" name="destination">
                         </div>
 
+                    <div class="form-group autocomplete">
                         <label for="user">Or forward to a member:</label>
                         <input type="text" name="user" id="user" class="user-search form-control">
+                    </div>
 
                 </div>
 

@@ -24,12 +24,12 @@
 
                         {!! csrf_field() !!}
 
-                        <div class="form-group">
+                        <div class="form-group autocomplete">
                             <label for="product">Product:</label>
                             <input class="form-control product-search" id="product" name="product" placeholder="{{ $ticket ? $ticket->product->name : '' }}" value="{{ $ticket ? $ticket->product->id : '' }}" {{ $ticket ? '' : 'required' }}>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group autocomplete">
                             <label for="event">Event:</label>
                             <input class="form-control event-search" id="event" name="event" placeholder="{{ $ticket ? $ticket->event->title : '' }}" value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
                         </div>

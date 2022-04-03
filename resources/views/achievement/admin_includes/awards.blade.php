@@ -36,7 +36,9 @@
 
             {!! csrf_field() !!}
 
-            <input class="form-control user-search" name="user-id"/>
+            <div class="form-group autocomplete">
+                <input class="form-control user-search" name="user-id"/>
+            </div>
 
             <button type="submit" class="mt-3 btn btn-success btn-block">
                 Award

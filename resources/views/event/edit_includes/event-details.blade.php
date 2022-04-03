@@ -21,28 +21,26 @@
                     <div class="row align-items-end mb-3">
 
                         <div class="col-md-4 mb-3">
-
                             <label for="name">Event name:</label>
                             <input type="text" class="form-control" id="name" name="title"
                                    placeholder="Lightsaber Building in the SmartXp"
                                    value="{{ $event->title ?? '' }}"
                                    required>
-
                         </div>
 
                         <div class="col-md-4 mb-3">
-
                             <label for="location">Location:</label>
                             <input type="text" class="form-control" id="location" name="location"
                                    placeholder="SmartXp" value="{{ $event->location ?? '' }}" required>
-
                         </div>
 
                         <div class="col-md-4 mb-3">
-
-                            <label for="organisation">Organisation:</label>
-                            <input class="form-control committee-search" id="organisation" name="committee" placeholder="{{ $event && $event->committee ? $event->committee->name : '' }}" value="{{ $event && $event->committee ? $event->committee->id : '' }}">
-
+                            <div class="form-group autocomplete">
+                                <label for="organisation">Organisation:</label>
+                                <input class="form-control committee-search" id="organisation" name="committee"
+                                       placeholder="{{ $event && $event->committee ? $event->committee->name : '' }}"
+                                       value="{{ $event && $event->committee ? $event->committee->id : '' }}">
+                            </div>
                         </div>
 
                         <div class="col-md-6 mb-3">

@@ -2,7 +2,7 @@
     $strFormat = [
         'date' => 'Y-m-d',
         'time' => 'TH:i',
-        'datetime' => 'Y-m-d\TH:i'
+        'datetime-local' => 'Y-m-d\TH:i'
     ]
 @endphp
 
@@ -15,7 +15,7 @@
     <input
        type="{{ $format ?? 'datetime-local' }}"
        id="datetimepicker-{{ $name }}" class="form-control datetimepicker {{ $input_class_name ?? '' }}"
-       name="{{ $name }}" value="{{ isset($placeholder) ? date( $strFormat[$format ?? 'datetime'], $placeholder): '' }}"
+       name="{{ $name }}" value="{{ isset($placeholder) ? date( $strFormat[$format ?? 'datetime-local'], $placeholder): '' }}"
        {{ isset($not_required) && $not_required ? '' : 'required' }}
     />
 </div>

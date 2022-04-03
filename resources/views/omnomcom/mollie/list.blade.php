@@ -33,7 +33,9 @@
                             <form method="get">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input class="form-control user-search" name="user_id" required/>
+                                        <div class="form-group autocomplete">
+                                            <input class="form-control user-search" name="user_id" required/>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="submit" class="btn btn-success" value="Search">

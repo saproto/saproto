@@ -13,11 +13,11 @@
         </div>
 
         <div class="card-body">
-            <div class="form-group">
+            <div class="form-group autocomplete">
                 <label for="user">User(s):</label>
-                <input class="form-control user-search" id="user" name="user[]" multiple required>
+                <input class="form-control user-search" id="user" name="user[]" data-label="User(s):" multiple required>
             </div>
-            <div class="form-group">
+            <div class="form-group autocomplete">
                 <label for="product">Product(s):</label>
                 <input class="form-control product-search" id="product" name="product[]" multiple required>
             </div>

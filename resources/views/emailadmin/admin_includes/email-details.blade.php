@@ -135,8 +135,10 @@
                         @endif
 
                         <div class="form-group">
-                            <input class="form-control event-search" id="eventSelect" name="eventSelect[]"
-                                   {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple>
+                            <div class="form-group autocomplete">
+                                <input class="form-control event-search" id="eventSelect" name="eventSelect[]"
+                                       {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple>
+                            </div>
                         </div>
 
                         <div class="radio">

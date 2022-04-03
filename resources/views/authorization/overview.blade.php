@@ -94,7 +94,9 @@
 
                                     <div class="card-footer">
 
-                                        <input class="form-control user-search" name="user"/>
+                                        <div class="form-group autocomplete">
+                                            <input class="form-control user-search" name="user"/>
+                                        </div>
 
                                         <input type="submit" class="btn btn-success btn-block mt-3" value="Grant">
 

@@ -28,7 +28,7 @@
                                    placeholder="Fancy photo" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group autocomplete">
                             <label for="user">Credits:</label>
                             <input class="form-control user-search" id="user" name="user"/>
                         </div>

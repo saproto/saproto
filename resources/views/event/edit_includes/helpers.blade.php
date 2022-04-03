@@ -12,7 +12,7 @@
 
                 {!! csrf_field() !!}
 
-                <div class="form-group">
+                <div class="form-group autocomplete">
                     <input class="form-control committee-search" name="committee" required>
                 </div>
 

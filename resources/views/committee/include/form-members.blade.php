@@ -13,8 +13,10 @@
             <div class="card-body">
 
                 <div class="form-group">
-                    <label>Member</label>
-                    <input class="form-control user-search" name="user_id" required/>
+                    <div class="form-group autocomplete">
+                        <label>Member</label>
+                        <input class="form-control user-search" name="user_id" required/>
+                    </div>
                     <input type="hidden" name="committee_id" value="{{ $committee->id }}">
                 </div>
 

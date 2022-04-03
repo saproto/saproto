@@ -89,7 +89,8 @@ export default class SearchComplete {
 
                         this.el.value = ''
                         this.searchResults.innerHTML = ''
-                        // In case only one selection is allowed
+
+                    // Else only one selection is allowed
                     } else {
                         // set the hidden input value
                         this.input.value = item.id
@@ -102,9 +103,9 @@ export default class SearchComplete {
                 })
                 this.searchResults.append(option)
             })
-            // Log and return error to user
         })
         .catch((err) => {
+            // Log and return error to user
             this.searchResults.innerHTML = '<span class="text-danger"> there was an error</span>'
             console.error(err)
         })

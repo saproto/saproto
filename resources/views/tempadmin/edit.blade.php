@@ -24,30 +24,27 @@
 
                     <div class="card-body">
 
-                        <div class="form-group">
-                            <label for="user-id">User:</label>
-                            @if($new)
-                                <div class="input-group w-100">
-                                    <input id="user-id" class="form-control user-search" name="user_id" required />
-                                </div>
-                            @else
-                                <div class="input-group">
-                                    <strong>{{ $item->user->name }}</strong>
-                                </div>
-                            @endif
-                        </div>
+                        @if($new)
+                            <div class="form-group autocomplete">
+                                <label for="user-id">User:</label>
+                                <input id="user-id" class="form-control user-search" name="user_id" required />
+                            </div>
+                        @else
+                            <div class="input-group">
+                                <label for="user-id">User:&nbsp;</label>
+                                <strong>{{ $item->user->name }}</strong>
+                            </div>
+                        @endif
 
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'start_at',
                             'label' => 'Start at:',
-                            'format' => 'datetime',
                             'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
                         ])
 
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'end_at',
                             'label' => 'End at:',
-                            'format' => 'datetime',
                             'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)
                         ])
 

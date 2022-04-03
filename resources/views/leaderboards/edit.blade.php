@@ -24,7 +24,7 @@
 
                     <div class="card-body">
 
-                        <div class="form-group">
+                        <div class="form-group autocomplete">
                             <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
                             <input class="form-control committee-search" id="organisation" name="committee" value=value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}" required>
                         </div>
@@ -158,7 +158,9 @@
 
                                 <div class="row">
                                     <div class="col-9">
-                                        <input class="form-control user-search" name="user_id" required/>
+                                        <div class="form-group autocomplete">
+                                            <input class="form-control user-search" name="user_id" required/>
+                                        </div>
                                     </div>
                                     <div class="col-3">
                                         <button class="btn btn-outline-primary btn-block" type="submit">

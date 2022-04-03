@@ -57,7 +57,9 @@
 
                         <div class="row mb-3">
                             <div class="col-9">
-                                <input class="form-control user-search" name="user_id" required/>
+                                <div class="form-group autocomplete">
+                                    <input class="form-control user-search" name="user_id" required/>
+                                </div>
                             </div>
                             <div class="col-3">
                                 <button class="btn btn-outline-primary btn-block" type="submit">

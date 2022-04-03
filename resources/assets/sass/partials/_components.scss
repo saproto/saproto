@@ -368,51 +368,58 @@ a.badge {
   }
 }
 
-.user-search, .event-search, .product-search, .committee-search {
-  & ~ .selected-items > .selected-item {
-    &:before {
-      content: '⨯';
-      margin-right: 3px;
-    }
-    &:hover {
-      &:before { color: $danger; }
-      cursor: pointer;
-      background-color: mix($white, $success, 10%) !important;
-    }
-  }
+.form-group.autocomplete {
+  position: relative;
 
-  & ~ .search-results {
-    display: none;
-    z-index: 1;
-    position: absolute;
-    transform: translateX(-15px);
-    max-height: 200px;
-    max-width: calc(100vw - 20px);
-    overflow-y: auto;
-    background-color: $dark;
+  .user-search, .event-search, .product-search, .committee-search {
+    & ~ .selected-items > .selected-item {
+      &:before {
+        content: '⨯';
+        margin-right: 3px;
+      }
 
-    &:not(:disabled):hover {
-      display: block;
-    }
-
-    option, span {
-      padding-left: 7px;
-      padding-right: 7px;
-      overflow-x: hidden;
-    }
-
-    option {
       &:hover {
-        background-color: $info;
+        &:before {
+          color: $danger;
+        }
+
         cursor: pointer;
+        background-color: mix($white, $success, 10%) !important;
       }
     }
-  }
 
-  &:not(:disabled) {
-    &:focus, &:active {
-      & + .search-results {
+    & ~ .search-results {
+      display: none;
+      z-index: 1;
+      position: absolute;
+      max-height: 200px;
+      max-width: calc(100vw - 20px);
+      overflow-y: auto;
+      background-color: $light;
+
+      &:not(:disabled):hover {
         display: block;
+      }
+
+      option, span {
+        padding-left: 7px;
+        padding-right: 7px;
+        overflow-x: hidden;
+      }
+
+      option {
+        &:hover {
+          background-color: $info;
+          cursor: pointer;
+        }
+      }
+    }
+
+    &:not(:disabled) {
+      &:focus, &:active {
+        & + .search-results {
+          display: block;
+        }
       }
     }
   }
@@ -537,14 +544,6 @@ a.card {
 .cursor-default { cursor: default; }
 .pointer-events-none { pointer-events: none}
 
-//Select2
-.select2-dropdown {
-  border: 1px solid rgba(0,0,0,.125) !important;
-}
-
-.select2-container {
-  width: 100% !important;
-}
 
 //Signature pad
 #signature-pad {

@@ -33,7 +33,7 @@
                                 ])
                             </div>
                             <div class="col-md-6 col-sm-12">
-                                <div class="form-group">
+                                <div class="form-group autocomplete">
                                     <label for="event">Link to event:</label>
                                     <input id="event" class="form-control event-search" name="event"/>
                                 </div>
