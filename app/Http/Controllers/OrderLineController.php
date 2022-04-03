@@ -84,7 +84,7 @@ class OrderLineController extends Controller
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
             })->whereDate('created_at', ($date ? Carbon::parse($date) : Carbon::today()));
         } else {
-            $orderlines = OrderLine::whereDate('created_at', ($date ? Carbon::parse($date): Carbon::today()));
+            $orderlines = OrderLine::whereDate('created_at', ($date ? Carbon::parse($date) : Carbon::today()));
         }
 
         if ($date != null) {
