@@ -9,7 +9,7 @@
         @foreach(Auth::user()->achieved() as $achievedMent)
             @if($achievedMent->id==$achievement->id)
             <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-               data-toggle="tooltip" data-placement="top" title="You have achieved this!"></i>
+               data-bs-toggle="tooltip" data-bs-placement="top" title="You have achieved this!"></i>
             @endif
         @endforeach
 
