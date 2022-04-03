@@ -215,7 +215,7 @@
                 if (barcode === undefined) throw new Error("Can't find barcode")
                 let request = unscan ? unscanRequest : scanRequest
                 request(barcode)
-                .then( () => {
+                .then(_ => {
                     console.log('Scanned barcode ' + barcode)
                     let link = document.createElement('a')
                     link.href = '#ticket-collapse-{{ $ticket->id }}'
@@ -226,7 +226,7 @@
                     parent.append(link)
                     setEventListener(link, !unscan)
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.error(err)
                     window.alert("Couldn't register scan.")
                 })

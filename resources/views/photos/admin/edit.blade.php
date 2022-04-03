@@ -272,7 +272,7 @@
                 for (const file of files) {
                     if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
                         let fr = new FileReader()
-                        fr.onload = async () => {
+                        fr.onload = async _ => {
                             file.id = fileId++
                             fileQueue.push(file)
                             await uploadFiles(fileQueue)

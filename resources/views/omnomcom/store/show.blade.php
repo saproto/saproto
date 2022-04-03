@@ -266,12 +266,12 @@
                     }
                 }
 
-                server.onopen = () => {
+                server.onopen = _ => {
                     status.classList.remove('inactive')
                     status.innerHTML = 'RFID Service: Connected'
                 }
 
-                server.onclose = () => {
+                server.onclose = _ => {
                     status.classList.add('inactive')
                     status.innerHTML = 'RFID Service: Disconnected'
                     setTimeout(establishNfcConnection, 5000)
@@ -336,7 +336,7 @@
                     const qrLink = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token
                     element.innerHTML = 'Scan this QR code<br><br><img src="' +  qrImg + '" width="200px" height="200px"><br><br>or go to<br><strong>' + qrLink + '</strong>'
                     authToken = data.auth_token
-                    const qrAuthInterval = setInterval(() => {
+                    const qrAuthInterval = setInterval(_ => {
                         if (modalStatus == null) return clearInterval(qrAuthInterval)
                         get('{{ route('qr::approved') }}', { code: authToken })
                         .then(_ => {
@@ -426,7 +426,7 @@
                         modals.forEach(el => el.hide())
                         modals['idlewarning-modal'].show()
 
-                        setTimeout(() => { if (idleWarning) window.location.reload() }, 10000)
+                        setTimeout(_ => { if (idleWarning) window.location.reload() }, 10000)
                     }
                 }
             }

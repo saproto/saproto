@@ -37,7 +37,7 @@ export default class SearchComplete {
         el.addEventListener('keyup', this.search)
     }
 
-    search = () => {
+    search = _ => {
         this.searchResults.innerHTML = ''
 
         // Search input must be at least 3 characters
@@ -46,7 +46,7 @@ export default class SearchComplete {
 
         // Get search results
         get( this.route,{q: this.el.value})
-        .then((data) => {
+        .then(data => {
 
             // Check if there are any results
             if (data.length === 0) return this.searchResults.innerHTML = '<span>no results</span>'
@@ -55,7 +55,7 @@ export default class SearchComplete {
             // Sort data if sorter is defined
             if (this.sorter === 'function') data.sort(this.sorter)
 
-            data.forEach((item) => {
+            data.forEach(item => {
                 // For each result create an option in the search results container
                 let option = document.createElement('option')
                 if (typeof this.optionTemplate === 'function') this.optionTemplate(option, item)
@@ -104,7 +104,7 @@ export default class SearchComplete {
                 this.searchResults.append(option)
             })
         })
-        .catch((err) => {
+        .catch(err => {
             // Log and return error to user
             this.searchResults.innerHTML = '<span class="text-danger"> there was an error</span>'
             console.error(err)

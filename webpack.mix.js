@@ -30,7 +30,7 @@ mix .webpackConfig({ devtool: "inline-source-map" })
     })
 
 //Compile all theme SCSS
-glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach((fileName,) => {
+glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach(fileName => {
     let src = paths.styles.src+fileName
     let dest = paths.styles.dst+'application-'+fileName.replace('scss', 'css')
     mix .sass(src, dest, {
