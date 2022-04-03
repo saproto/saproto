@@ -270,7 +270,7 @@
                 <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 me-2 float-end">
                     {{ csrf_field() }}
                     <div class="input-group">
-                        <input class="form-control bg-white"
+                        <input class="form-control bg-white text-black"
                                placeholder="Search" type="search" name="query" style="max-width: 125px;">
                         <button type="submit" class="input-group-text btn btn-info">
                             <i class="fas fa-search"></i>
