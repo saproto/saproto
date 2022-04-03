@@ -59,7 +59,6 @@
                                        data-bs-toggle="popover"
                                        data-bs-placement="right"
                                        data-bs-trigger="focus"
-                                       title="{{ $url->description }}"
                                        data-bs-content="{{ $url->target }}"
                                        class="btn badge bg-info">
                                         <i class="fas fa-link text-white"></i>

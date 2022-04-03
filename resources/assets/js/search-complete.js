@@ -22,7 +22,7 @@ export default class SearchComplete {
 
         // Selected item container
         this.selected = document.createElement('div')
-        this.selected.className = 'selected-items form-control bg-dark border-top-0 p-1 d-none'
+        this.selected.className = 'selected-items form-control border-top-0 p-1 d-none'
 
         // Selected item template
         this.selectedItem = document.createElement('span')

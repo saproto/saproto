@@ -20,7 +20,7 @@ window.addEventListener('load', _ => {
     })
 })
 
-// Find CSRF token in de page meta tags
+// Find CSRF token in page meta tags
 const token = document.head.querySelector('meta[name="csrf-token"]')
 if (token === undefined) console.error('X-CSRF token could not be found!')
 
@@ -49,7 +49,7 @@ global.post = (url, params = {}, options = {}) => request('POST', url, params, o
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-if (tooltipTriggerList.length) tooltipTriggerList.forEach(el => new Tooltip(el))
+if (tooltipTriggerList.length) tooltipTriggerList.forEach(el => new Tooltip(el, {container: el.parentNode, boundary: document.body}))
 
 // Enable popover elements
 import { Popover } from 'bootstrap'
