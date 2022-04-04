@@ -49,7 +49,7 @@ const request = (method, url, params, options) => {
 
     }
     const result = fetch(url, options)
-    if (options.parse !== undefined && options.parse === false) return result
+    if (!result.ok||options.parse !== undefined && options.parse === false) return result
     else return result.then(res => res.json())
 }
 

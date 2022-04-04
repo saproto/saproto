@@ -291,11 +291,11 @@
                 toggleRunning()
                 await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {form:true})
                 .then(data => {
-                    console.log(data)
-                    document.getElementById('photo-view').innerHTML+=data
-                    document.getElementById('error-bar').classList.add('d-none')
-                    document.querySelector('#error-bar ul').innerHTML = ''
-                    toggleRunning()
+                    if(!data.ok) throw 'Something went wrong with the upload!'
+                        document.getElementById('photo-view').innerHTML += data
+                        document.getElementById('error-bar').classList.add('d-none')
+                        document.querySelector('#error-bar ul').innerHTML = ''
+                        toggleRunning()
                 })
                 .catch(err => {
                     console.error(err)
