@@ -611,11 +611,11 @@ ul.pagination {
 #omnomcom {
   .btn-category {
     min-width: 190px;
-    transform: translate(20px, 0);
-
-    &.inactive {
-      opacity: 0.6;
-      transform: translate(0, 0);
+    opacity: 0.6;
+    transform: translate(0, 0);
+    &.active {
+      opacity: 1.0;
+      transform: translate(20px, 0);
     }
   }
 

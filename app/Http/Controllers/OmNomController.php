@@ -22,46 +22,74 @@ class OmNomController extends Controller
 {
     /**
      * @param Request $request
-     * @param null $store
+     * @param null $store_slug
      * @return RedirectResponse|View
      */
-    public function display(Request $request, $store = null)
+    public function display(Request $request, $store_slug = null)
     {
-        $stores = config('omnomcom.stores');
-
-        if (array_key_exists($store, $stores)) {
-            $store_data = $stores[$store];
-
-            if (! in_array($request->ip(), $store_data->addresses) && (! Auth::check() || ! Auth::user()->can($store_data->roles))) {
-                abort(403);
-            }
-
-            $categories = [];
-
-            foreach ($store_data->categories as $category) {
-                $cat = ProductCategory::find($category);
-                if ($cat) {
-                    $prods = $cat->products();
-                    $categories[] = (object) [
-                        'category' => $cat,
-                        'products' => $prods,
-                    ];
-                }
-            }
-
-            if ($store == 'tipcie') {
-                $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get()->reject(function ($user, $index) {
-                    return $user->member->is_pending || $user->member->is_pet;
-                });
-            } else {
-                $minors = collect([]);
-            }
-
-            return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store_data, 'storeslug' => $store, 'minors' => $minors]);
-        } else {
+        if (! array_key_exists($store_slug, config('omnomcom.stores'))) {
             Session::flash('flash_message', 'This store does not exist. Please check the URL.');
             return Redirect::route('homepage');
         }
+
+        $store = config('omnomcom.stores')[$store_slug];
+
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+            abort(403);
+        }
+
+        $categories = $this->getCategories($store);
+
+        if ($store->name == 'TIPCie') {
+            $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get()->reject(function ($user, $index) {
+                return $user->member->is_pending || $user->member->is_pet;
+            });
+        } else {
+            $minors = collect([]);
+        }
+
+        return view('omnomcom.store.show', ['categories' => $categories, 'store' => $store, 'storeslug' => $store_slug, 'minors' => $minors]);
+    }
+
+    /** @return View */
+    public function choose()
+    {
+        return view('omnomcom.choose');
+    }
+
+    /** @return View */
+    public function miniSite()
+    {
+        return view('omnomcom.minisite');
+    }
+
+    /**
+     * @param Request $request
+     * @return string
+     */
+    public function stock(Request $request)
+    {
+        if (! array_key_exists($request->store, config('omnomcom.stores'))) {
+            abort(404);
+        }
+
+        $store = config('omnomcom.stores')[$request->store];
+        $categories = $this->getCategories($store);
+
+        $products = [];
+        foreach($categories as $category) {
+            /** @var Product $product */
+            foreach($category->products as $product) {
+                if ($product->isVisible()) {
+                    if($product->image) {
+                        $product->image_url = $product->image->generateImagePath(100, null);
+                    }
+                    $products[] = $product;
+                }
+            }
+        }
+
+        return json_encode($products);
     }
 
     /**
@@ -243,15 +271,19 @@ class OmNomController extends Controller
         }
     }
 
-    /** @return View */
-    public function choose()
+    private function getCategories($store)
     {
-        return view('omnomcom.choose');
-    }
-
-    /** @return View */
-    public function miniSite()
-    {
-        return view('omnomcom.minisite');
+        $categories = [];
+        foreach ($store->categories as $category) {
+            $cat = ProductCategory::find($category);
+            if ($cat) {
+                $prods = $cat->products();
+                $categories[] = (object) [
+                    'category' => $cat,
+                    'products' => $prods,
+                ];
+            }
+        }
+        return $categories;
     }
 }

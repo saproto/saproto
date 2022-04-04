@@ -99,6 +99,11 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('product', ['as' => 'product', 'uses' => 'SearchController@getProductSearch']);
     });
 
+    /* Routes related to OmNomCom */
+    Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::', 'middleware' => ['web', 'auth']], function () {
+        Route::get('stock', ['as' => 'stock', 'uses' => 'OmNomController@stock']);
+    });
+
     /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
 });

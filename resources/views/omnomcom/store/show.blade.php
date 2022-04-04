@@ -35,7 +35,7 @@
                 @php($bg_image = 'images/omnomcom/cookiemonster.png')
                 @foreach(config('omnomcom.cookiemonsters') as $cookiemonster)
                     @if(date('U') > strtotime($cookiemonster->start) && date('U') < strtotime($cookiemonster->end))
-                       @php($bg_image = 'images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png')
+                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png")
                        @break
                     @endif
                 @endforeach
@@ -91,18 +91,16 @@
             let stock = [];
             let price = [];
 
-            @foreach($categories as $category)
-                @foreach($category->products as $product)
-                    @if($product->isVisible())
-                        @if($product->image)
-                            images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
-                        @endif
-                        cart[{{ $product->id }}] = 0;
-                        stock[{{ $product->id }}] = {{ $product->stock }};
-                        price[{{ $product->id }}] = {{ $product->price }};
-                    @endif
-                @endforeach
-            @endforeach
+            get(config.routes.api_omnomcom_stock, {store: "{{ $storeslug }}"})
+                .then(data => {
+                    data.forEach(product => {
+                        const id = product.id
+                        images[id] = product.image ? product.image_url : ''
+                        cart[id] = 0
+                        stock[id] = product.stock
+                        price[id] = product.price
+                    })
+                })
 
             /* Register button handlers */
             document.getElementById('reload-button').addEventListener('click', _ => {
@@ -112,8 +110,8 @@
             const categoryBtnList = Array.from(document.getElementsByClassName('btn-category'))
             categoryBtnList.forEach(el => {
                 el.addEventListener('click', _ => {
-                    Array.from(el.parent.childNodes).forEach(el => el.classList.add('inactive'))
-                    el.classList.remove('inactive')
+                    Array.from(document.querySelectorAll('#category-nav > .active')).forEach(el => el.classList.remove('active'))
+                    el.classList.add('active')
                     const categoryViewList = Array.from(document.getElementsByClassName('category-view'))
                     const id = el.getAttribute('data-id')
                     categoryViewList.forEach(el => {
@@ -132,20 +130,21 @@
                             let selected = Math.floor(Math.random() * data.length)
                             if (stock[data[selected]] < 1)
                                 return el.dispatchEvent(new Event('click'))
-                            const product = document.querySelector(`.product[data-id=${data[selected]}]`)
+                            const product = document.querySelector(`.product[data-id="${data[selected]}"]`)
                             product.dispatchEvent(new Event('click'))
                         } else {
                             modals['outofstock-modal'].show()
                         }
                     } else {
                         const id = el.getAttribute('data-id')
-                        if (stock[id] <= 0) {
+                        const s = stock[id]
+                        if (s <= 0) {
                             modals['outofstock-modal'].show()
                         } else {
                             cart[id]++
                             stock[id]--
-                            const s = stock[id]
-                            document.querySelector(`.product[data-id=${id}] .product-stock`).innerHTML = s + ' x'
+                            if (s < 1000)
+                                document.querySelector(`[data-id="${id}"] .product-stock`).innerHTML = s + ' x'
                             update()
                         }
                     }
@@ -158,7 +157,7 @@
                     cart[id]--
                     stock[id]++
                     const s = stock[id]
-                    document.querySelector(`.product[data-id=${id}] .product-stock`).innerHTML = s + ' x'
+                    document.querySelector(`.product[data-id="${id}"] .product-stock`).innerHTML = s + ' x'
                     update()
                 }
             })
@@ -203,7 +202,7 @@
             }
 
             function finishPurchase(display_message = null) {
-                modals.forEach(el => el.hide())
+                Array.from(modals).forEach(el => el.hide())
                 if (display_message) document.getElementById('finished-modal-message').innerHTML = display_message
                 document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
                 modals['finished-modal'].show()
@@ -217,14 +216,15 @@
                 const cartEl = document.getElementById('cart')
                 cartEl.innerHTML = ''
                 let anythingInCart = false
-                const orderTotal = cart.reduce((total, id) => {
+                const orderTotal = cart.reduce((total, amount, id) => {
+                    if (amount === 0) return total
                     anythingInCart = true
                     cartEl.innerHTML +=
-                        '<div class="cart-product" data-id="' + id + '">' +
+                        `<div class="cart-product" data-id="${id}">` +
                             '<div class="cart-product-image">' +
-                                '<div class="cart-product-image-inner" style="background-image: url(' + images[id] + ');"></div>' +
+                                `<div class="cart-product-image-inner" style="background-image: url(${images[id]});"></div>` +
                             '</div>' +
-                            '<div class="cart-product-count">' + cart[id] + 'x </div>' +
+                            `<div class="cart-product-count">${amount}x</div>` +
                         '</div>'
                     return total + price[id] * cart[id]
                 })
@@ -237,8 +237,11 @@
                 let lists = document.getElementsByClassName('random')
                 for (let i = 0; i < lists.length; i++) {
                     let count = 0
-                    let products = lists[i].parent.children
+                    let products = Array.from(lists[i].parentNode.children)
                     products.splice(products.indexOf(lists[i]), 1)
+                    products.forEach(el => {
+                        if (stock[el.getAttribute('data-id')] > 0) count++
+                    })
                     for (let j = 0; j < products.length; j++) {
                         if (stock[products[j].getAttribute('data-id')] > 0) count++
                     }
@@ -258,7 +261,7 @@
                     status.innerHTML = 'RFID Service: Connecting...'
                     server = new WebSocket('ws://localhost:3000', 'nfc')
                 } catch (error) {
-                    if (error.message.indexOf('insecure') !== -1) {
+                    if (error.message.split('/\s+/').contains('insecure')) {
                         status.classList.add('inactive')
                         status.innerHTML = 'RFID Service: Not Supported'
                     } else {
@@ -284,7 +287,7 @@
                     if (modalStatus === 'badcard') return
 
                     if (data === '') {
-                        modals.forEach(el => el.hide())
+                        Array.from(modals).forEach(el => el.hide())
                         modals['badcard-modal'].show()
                         modalStatus = 'badcard'
                         return
@@ -421,9 +424,9 @@
                     let anyThingInCart = false
                     for (let id in cart) if (cart[id] > 0) anyThingInCart = true
 
-                    if (anyThingInCart && modals.every(el => el._isShown())) {
+                    if (anyThingInCart && Array.from(modals).every(el => el._isShown())) {
                         idleWarning = true
-                        modals.forEach(el => el.hide())
+                        Array.from(modals).forEach(el => el.hide())
                         modals['idlewarning-modal'].show()
 
                         setTimeout(_ => { if (idleWarning) window.location.reload() }, 10000)
