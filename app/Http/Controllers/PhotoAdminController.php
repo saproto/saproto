@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -85,22 +86,34 @@ class PhotoAdminController extends Controller
     /**
      * @param Request $request
      * @param int $id
-     * @return View
+     * @return false|string
      * @throws FileNotFoundException
      */
     public function upload(Request $request, $id)
     {
-        $album = PhotoAlbum::find($id);
-        $response = 'ERROR';
-        if ($request->has('file') && ! $album->published) {
+        $album = PhotoAlbum::findOrFail($id);
+
+        if (!$request->hasFile('file')){return response()->json([
+            'message'=>"photo not found in request!",
+        ], 404);
+        }
+        else if ($album->published){return response()->json([
+            'message'=>"album already published! Unpublish to add more photos!",
+        ], 500);
+        }
+            try{
             $uploadFile = $request->file('file');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id);
+            $response= json_encode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
 
-            $response = view('website.layouts.macros.selectablephoto', ['photo' => $photo]);
-        }
-
+            }catch (Exception $e) {
+                return response()->json([
+                    'message'=>$e,
+                ], 500);
+            }
         return $response;
+
     }
 
     /**

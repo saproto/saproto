@@ -289,10 +289,10 @@
                 let formData = new FormData()
                 formData.append('file', file)
                 toggleRunning()
-                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData)
+                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {form:true})
                 .then(data => {
-                    if (data === 'ERROR') return uploadError(file)
-                    document.getElementById('photo-view').innerHTML += res.data
+                    console.log(data)
+                    document.getElementById('photo-view').innerHTML+=data
                     document.getElementById('error-bar').classList.add('d-none')
                     document.querySelector('#error-bar ul').innerHTML = ''
                     toggleRunning()
