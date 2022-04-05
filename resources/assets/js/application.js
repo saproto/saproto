@@ -4,6 +4,8 @@ window.moment = require('moment/moment')
 window.Quagga = require('quagga')
 require('./countdown-timer')
 
+import './broto'
+
 // Execute theme JavaScript
 window[config.theme]?.()
 
