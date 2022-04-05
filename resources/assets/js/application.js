@@ -41,12 +41,25 @@ const request = (method, url, params, options) => {
         options.credentials = "same-origin"
     }
     const result = fetch(url, options)
-    if (!result.ok || options.parse !== undefined && options.parse === false) return result
-    else return result.then(res => res.json())
+    return result.then(response => {
+        if (!response.ok || (options.parse !== undefined && options.parse === false)) return response
+        return response.json()
+    })
 }
 
 global.get = (url, params = {}, options = {}) => request('GET', url, params, options)
 global.post = (url, params = {}, options = {}) => request('POST', url, params, options)
+
+// Method to debounce function calls
+window.debounce = (callback, timeout = 300) => {
+    let timer
+    return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(_ => {
+            callback.apply(this, args)
+        }, timeout)
+    }
+}
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
@@ -105,7 +118,6 @@ if(document.querySelectorAll('.swiper').length) {
         }
     })
 }
-
 
 // Enable EasyMDE markdown fields
 import EasyMDE from 'easymde'
