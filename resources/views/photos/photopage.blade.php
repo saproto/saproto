@@ -19,12 +19,8 @@
                         <i class="fas fa-images me-3"></i> {{ $photo->album_name }}
                     </a>
 
-                    @if ($photo->previous != null)
+                    @if ($photo->previous != null && $photo->previous != $photo->id)
                         <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark me-3">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
-                    @else
-                        <a class="btn btn-dark me-3" disabled>
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
@@ -48,13 +44,9 @@
                         </a>
                     @endif
 
-                    @if($photo->next != null)
+                    @if($photo->next != null && $photo->next != $photo->id)
                         <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
-                            <i class="fas fa-arrow-end"></i>
-                        </a>
-                    @else
-                        <a class="btn btn-dark" disabled>
-                            <i class="fas fa-arrow-end"></i>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif
 
