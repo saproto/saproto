@@ -289,17 +289,19 @@
                 let formData = new FormData()
                 formData.append('file', file)
                 toggleRunning()
-                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {form:true})
-                .then(data => {
-                    if(!data.ok) throw 'Something went wrong with the upload!'
+                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {parse:false})
+                    .then(response=>{
+                        if(!response.ok) throw 'Something went wrong with the upload!'
+                        return response.text();
+                    }).then(function(data) {
                         document.getElementById('photo-view').innerHTML += data
                         document.getElementById('error-bar').classList.add('d-none')
                         document.querySelector('#error-bar ul').innerHTML = ''
                         toggleRunning()
-                })
+                    })
                 .catch(err => {
                     console.error(err)
-                    uploadError(file)
+                    uploadError(file, err)
                     toggleRunning()
                 })
             }
@@ -311,9 +313,9 @@
             loader.classList.toggle('d-none')
         }
 
-        function uploadError(file) {
+        function uploadError(file, err) {
             document.getElementById('error-bar').classList.remove('d-none')
-            document.querySelector('#error-bar ul').innerHTML += `<li> ${file.name} </li>`
+            document.querySelector('#error-bar ul').innerHTML += `<li> ${file.name}<small><i>${err}</i></small> </li>`
         }
     </script>
 
