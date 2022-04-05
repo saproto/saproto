@@ -22,33 +22,26 @@ window.addEventListener('load', _ => {
 
 // Find CSRF token in page meta tags
 const token = document.head.querySelector('meta[name="csrf-token"]')
-if (token === undefined) console.error('X-CSRF token could not be found!')
+if (token === undefined) console.error("X-CSRF token could not be found!")
 
 // Global wrapper methods for the native fetch api
 const request = (method, url, params, options) => {
     options.method = method
-    if ('GET' === method) {
-        url += '?' + (new URLSearchParams(params)).toString()
-    }
-    else {
-        options.headers = {
-            "X-Requested-With": "XMLHttpRequest",
-            'X-CSRF-TOKEN': token.content
+    options.headers = options.headers ?? {}
+    if (method === 'GET') {
+        url += `?${(new URLSearchParams(params))}`
+    } else {
+        if(!(params instanceof FormData)){
+            options.headers["Content-Type"] = "application/json"
+            params = JSON.stringify(params)
         }
-        if(params instanceof FormData) {
-            options.body = params
-        }
-        else{
-            options.headers = {
-                "Content-Type": "application/json",
-                ...options.headers,
-            }
-            options.body = JSON.stringify(params)
-        }
+        options.body = params
+        options.headers["X-Requested-With"] = "XMLHttpRequest"
+        options.headers["X-CSRF-TOKEN"] = token.content
         options.credentials = "same-origin"
     }
     const result = fetch(url, options)
-    if (!result.ok||options.parse !== undefined && options.parse === false) return result
+    if (!result.ok || options.parse !== undefined && options.parse === false) return result
     else return result.then(res => res.json())
 }
 
