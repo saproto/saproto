@@ -29,24 +29,23 @@ const request = (method, url, params, options) => {
     options.method = method
     if ('GET' === method) {
         url += '?' + (new URLSearchParams(params)).toString()
-    } else {
-        if((options.form !== undefined && options.form === false)){
+    }
+    else {
+        options.headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            'X-CSRF-TOKEN': token.content
+        }
+        if(params instanceof FormData) {
+            options.body = params
+        }
+        else{
             options.headers = {
                 "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-                'X-CSRF-TOKEN': token.content
+                ...options.headers,
             }
             options.body = JSON.stringify(params)
         }
-        else {
-            options.headers = {
-                "X-Requested-With": "XMLHttpRequest",
-                'X-CSRF-TOKEN': token.content
-            }
-            options.body = params
-        }
         options.credentials = "same-origin"
-
     }
     const result = fetch(url, options)
     if (!result.ok||options.parse !== undefined && options.parse === false) return result
