@@ -28,10 +28,13 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                    data-toggle="tooltip" data-placement="top" title="This is a featured activity!"></i>
             @endif
             @if($event->activity && Auth::check())
-                @if($event->activity->isParticipating(Auth::user()))
-                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                       data-toggle="tooltip" data-placement="top" title="You are participating!"></i>
-                @endif
+                    @if(in_array(Auth::user()->id,$event->activity->backupUsers()->pluck("users.id")->toArray()))
+                        <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
+                    @else
+                        <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
+                    @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw" style="color: red;" aria-hidden="true"
                        data-toggle="tooltip" data-placement="top" title="You are helping!"></i>
