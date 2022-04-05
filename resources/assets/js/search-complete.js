@@ -1,47 +1,53 @@
 export default class SearchComplete {
     constructor(el, route, optionTemplate, selectedTemplate, sorter) {
         this.el = el
+        this.name = el.name
+        this.placeholder = el.value
+        this.required = el.required
+        this.id = el.id
         this.route = route
         this.optionTemplate = optionTemplate
         this.selectedTemplate = selectedTemplate
         this.sorter = sorter
         this.multiple = el.hasAttribute('multiple')
 
-        this.resultsContainer = this.createResultsContainer(el.id)
-        this.inputElement = this.createInputElement(el.name, el.value)
-        this.selectedContainer = this.createSelectedContainer(el.id)
+        this.resultsContainer = this.createResultsContainer()
+        this.inputElement = this.createInputElement()
+        this.selectedContainer = this.createSelectedContainer()
         this.selectedElement = this.createSelectedElement()
 
         el.name = ''
         el.value = el.placeholder
+        el.required = false
 
         el.parentNode.append(this.resultsContainer)
         if (this.multiple) el.parentNode.append(this.selectedContainer)
         else el.parentNode.append(this.inputElement)
 
         this.search()
-        el.addEventListener('keyup', this.search.bind(this))
+        el.addEventListener('keyup', debounce(this.search.bind(this), 500))
     }
 
-    createInputElement(name, value) {
+    createInputElement() {
         let input = document.createElement('input')
-        input.type = 'hidden'
-        input.name = name
-        input.value = value
+        input.className = 'd-none'
+        input.name = this.name
+        input.value = this.value
+        input.required = this.required
         return input
     }
 
-    createResultsContainer(id) {
+    createResultsContainer() {
         let resultsContainer = document.createElement('div')
         resultsContainer.className = 'search-results form-control p-0'
-        resultsContainer.id = id + '-search-results'
+        resultsContainer.id = this.id + '-search-results'
         return resultsContainer
     }
 
-    createSelectedContainer(id) {
+    createSelectedContainer() {
         let selectedContainer = document.createElement('div')
         selectedContainer.className = 'selected-items form-control border-top-0 p-1 d-none'
-        selectedContainer.id = id + '-selected-items'
+        selectedContainer.id = this.id + '-selected-items'
         return selectedContainer
     }
 
@@ -52,15 +58,15 @@ export default class SearchComplete {
     }
 
     createOptionElement(item) {
-        let option = document.createElement('option')
-        if (typeof this.optionTemplate === 'function') this.optionTemplate(option, item)
-        else option.innerHTML = item.name
-        option.addEventListener('click', _ => {
+        let optionElement = document.createElement('option')
+        if (typeof this.optionTemplate === 'function') this.optionTemplate(optionElement, item)
+        else optionElement.innerHTML = item.name
+        optionElement.addEventListener('click', _ => {
             if (this.multiple) this.appendSelected(item)
             else this.setSelected(item)
             this.el.dispatchEvent(new Event('keyup'))
         })
-        this.resultsContainer.append(option)
+        this.resultsContainer.append(optionElement)
     }
 
     setSelected(item) {
@@ -74,7 +80,7 @@ export default class SearchComplete {
         this.selectedContainer.classList.remove('d-none')
         this.el.required = false
 
-        let newSelectedItem = this.selectedElement.cloneNode()
+        let newSelectedItem = this.createSelectedElement()
         newSelectedItem.innerHTML = this.selectedTemplate?.(item) ?? item.id
         newSelectedItem.addEventListener('click', _ => {
             newSelectedItem.remove()
@@ -84,7 +90,7 @@ export default class SearchComplete {
             }
         })
 
-        let multipleInput = this.inputElement.cloneNode()
+        let multipleInput = this.createInputElement()
         multipleInput.value = item.id
 
         newSelectedItem.append(multipleInput)

@@ -490,40 +490,6 @@ a.card {
   color: #222;
 }
 
-.fa-pulse {
-  display: inline-block;
-  -moz-animation: pulse 2s infinite linear;
-  -o-animation: pulse 2s infinite linear;
-  -webkit-animation: pulse 2s infinite linear;
-  animation: pulse 2s infinite linear;
-}
-
-@-webkit-keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@-moz-keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@-o-keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@-ms-keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
 // Helpers
 .ellipsis {
   white-space: nowrap;
@@ -554,7 +520,6 @@ a.card {
 .cursor-pointer { cursor: pointer; }
 .cursor-default { cursor: default; }
 .pointer-events-none { pointer-events: none}
-
 
 //Signature pad
 #signature-pad {

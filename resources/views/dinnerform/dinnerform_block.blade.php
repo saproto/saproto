@@ -11,7 +11,7 @@
                     </div>
                 @else
                     <div class="btn btn-info btn-block mb-3 ">
-                        <i class="fas fa-history fa-fw fa-pulse me-2" aria-hidden="true"></i>
+                        <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                         <span class="proto-countdown" data-countdown-start="{{ $dinnerform->end->timestamp }}" data-countdown-text-counting="Closes in {}" data-countdown-text-finished="Food is on its way!">
                             Counting down...
                         </span>

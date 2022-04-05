@@ -2,7 +2,9 @@
 window.SignaturePad = require('signature_pad')
 window.moment = require('moment/moment')
 window.Quagga = require('quagga')
-require('./countdown-timer')
+
+import './countdown-timer'
+import './broto'
 
 // Execute theme JavaScript
 window[config.theme]?.()
@@ -41,12 +43,30 @@ const request = (method, url, params, options) => {
         options.credentials = "same-origin"
     }
     const result = fetch(url, options)
-    if (options.parse !== undefined && options.parse === false) return result
-    else return result.then(res => res.json())
+    return result.then(response => {
+        if (!response.ok || (options.parse !== undefined && options.parse === false)) return response
+        return response.json()
+    })
 }
 
 global.get = (url, params = {}, options = {}) => request('GET', url, params, options)
 global.post = (url, params = {}, options = {}) => request('POST', url, params, options)
+
+// Method to debounce function calls
+window.debounce = (callback, timeout = 300) => {
+    let timer
+    return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(_ => {
+            callback.apply(this, args)
+        }, timeout)
+    }
+}
+
+// Get online Discord users
+get("https://discordapp.com/api/guilds/"+config.discord_server_id+"/widget.json")
+.then(data => { document.getElementById("discord__online").innerHTML = data.presence_count })
+.catch(data => { document.getElementById("discord__online").innerHTML = "..." })
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
@@ -105,7 +125,6 @@ if(document.querySelectorAll('.swiper').length) {
         }
     })
 }
-
 
 // Enable EasyMDE markdown fields
 import EasyMDE from 'easymde'
