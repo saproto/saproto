@@ -41,7 +41,7 @@ const request = (method, url, params, options) => {
         options.credentials = "same-origin"
     }
     const result = fetch(url, options)
-    if (!result.ok || options.parse !== undefined && options.parse === false) return result
+    if (options.parse !== undefined && options.parse === false) return result
     else return result.then(res => res.json())
 }
 
