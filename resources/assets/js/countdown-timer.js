@@ -11,30 +11,30 @@ function updateCountdown(el) {
 }
 
 function updateCountdownGetTimeString(delta) {
-    const seconds = Math.floor((delta / 1000) % 60);
-    const minutes = Math.floor((delta / 1000 / 60) % 60);
-    const hours = Math.floor((delta / (1000 * 60 * 60)) % 24);
-    const days = Math.floor(delta / (1000 * 60 * 60 * 24));
+    const seconds = Math.floor((delta / 1000) % 60)
+    const minutes = Math.floor((delta / 1000 / 60) % 60)
+    const hours = Math.floor((delta / (1000 * 60 * 60)) % 24)
+    const days = Math.floor(delta / (1000 * 60 * 60 * 24))
 
     let timestring;
 
     if (days > 1)
-        timestring = days + ' days';
+        timestring = days + ' days'
     else if (days === 1)
-        timestring = '1 day';
+        timestring = '1 day'
     else if (hours > 0 || minutes > 0)
-        timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+        timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2)
     else
-        timestring = seconds + ' seconds';
+        timestring = seconds + ' seconds'
 
-    return timestring;
+    return timestring
 
 }
 
 function pad(n, width, z) {
-    z = z || '0';
-    n = n + '';
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    z = z || '0'
+    n = n + ''
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
 }
 
 window.initializeCountdowns = function() {

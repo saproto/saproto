@@ -2,8 +2,8 @@
 window.SignaturePad = require('signature_pad')
 window.moment = require('moment/moment')
 window.Quagga = require('quagga')
-require('./countdown-timer')
 
+import './countdown-timer'
 import './broto'
 
 // Execute theme JavaScript

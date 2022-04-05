@@ -10,7 +10,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
 
             @if(isset($countdown) && $countdown)
                 <div class="btn btn-info btn-block mb-3 ">
-                    <i class="fas fa-history fa-fw fa-pulse me-2" aria-hidden="true"></i>
+                    <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                     <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
                         Counting down...
                     </span>

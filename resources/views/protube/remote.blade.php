@@ -832,7 +832,7 @@
                 $('#protube__remote__ytSearch_form').bind('submit', function (e) {
                     e.preventDefault();
                     remote.emit("search", encodeURIComponent($("#protube__remote__ytSearch").val()));
-                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px; width: 100%;\"><i class=\"fas fa-spinner fa-pulse fa-fw\"></i><br />\n" +
+                    $("#protube__remote__searchResults_row").html("<div style=\"text-align: center; font-size: 24px; margin: 25px; width: 100%;\"><i class=\"fas fa-spinner fa-spin fa-fw\"></i><br />\n" +
                         "Loading...</div>");
                     window.scrollTo(0, 0);
                 });
