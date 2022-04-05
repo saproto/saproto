@@ -63,6 +63,11 @@ window.debounce = (callback, timeout = 300) => {
     }
 }
 
+// Get online Discord users
+get("https://discordapp.com/api/guilds/"+config.discord_server_id+"/widget.json")
+.then(data => { document.getElementById("discord__online").innerHTML = data.presence_count })
+.catch(data => { document.getElementById("discord__online").innerHTML = "..." })
+
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
