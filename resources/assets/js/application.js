@@ -15,9 +15,7 @@ window.addEventListener('load', _ => {
     let formList = Array.from(document.getElementsByTagName("form"))
     formList.forEach(form => {
         form.addEventListener('submit', e => {
-            e.preventDefault()
             e.target.onsubmit = _ => false
-            e.target.submit()
         }, { once: true })
     })
 })
