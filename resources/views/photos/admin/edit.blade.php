@@ -315,7 +315,7 @@
 
         function uploadError(file, err) {
             document.getElementById('error-bar').classList.remove('d-none')
-            document.querySelector('#error-bar ul').innerHTML += `<li> ${file.name}<small><i>${err}</i></small> </li>`
+            document.querySelector('#error-bar ul').innerHTML += `<li> ${file.name} <small><i>${err}</i></small> </li>`
         }
     </script>
 
