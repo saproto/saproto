@@ -17,7 +17,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center m-4">
-                {{-- Content inserted by JavaScript --}}
+                <span class="modal-status">{{-- Content inserted by JavaScript --}}</span>
             </div>
         </div>
     </div>

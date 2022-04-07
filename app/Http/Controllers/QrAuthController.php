@@ -25,7 +25,7 @@ class QrAuthController extends Controller
             abort(404);
         }
 
-        return response(DNS2D::getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
+        return response((new DNS2D)->getBarcodeSVG(route('qr::dialog', $qrAuthRequest->qr_token), 'QRCODE'))->header('Content-Type', 'image/svg+xml');
     }
 
     /**

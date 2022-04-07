@@ -706,9 +706,14 @@ ul.pagination {
     top: -20px;
   }
 
+  #cart-overflow {
+    @extend .cart-product;
+    z-index: 2;
+  }
+
   .cart-product {
-    position: relative;
-    float: left;
+    position: absolute;
+    transition: left 500ms;
     width: 90px;
     height: 90px;
     margin-top: 10px;
@@ -738,19 +743,15 @@ ul.pagination {
 
     &-count {
       position: absolute;
-
-      right: -10px;
-      bottom: -10px;
-
+      min-width: 45px;
+      height: 45px;
+      right: -15px;
+      bottom: -15px;
       padding: 10px;
-
       font-weight: bold;
-
-      color: #333;
-
-      box-shadow: 0 0 20px -5px #000;
-
-      background-color: #26ADE4;
+      color: $white;
+      text-align: center;
+      background-color: darken($omnomcom, 10%);
     }
   }
 
@@ -760,7 +761,7 @@ ul.pagination {
       transform: translate(0, 0);
       opacity: 1;
 
-      &.inactive {
+      &:disabled {
         transform: translate(200px, 0);
         opacity: 0;
       }
