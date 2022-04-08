@@ -107,7 +107,7 @@ class OmNomController extends Controller
         if (array_key_exists($store_slug, $stores)) {
             $store = $stores[$store_slug];
             if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->can($store->roles)) {
-                $result->message = "You are not authorized to do this.";
+                $result->message = 'You are not authorized to do this.';
             }
         } else {
             $result->message = "This store doesn't exist.";
@@ -118,13 +118,13 @@ class OmNomController extends Controller
                 $auth_method = sprintf('omnomcom_rfid_%s', $request->input('credentials'));
                 $card = RfidCard::where('card_id', $request->input('credentials'))->first();
                 if (! $card) {
-                    $result->message = "Unknown card.";
+                    $result->message = 'Unknown card.';
                     return json_encode($result);
                 }
                 $card->touch();
                 $user = $card->user;
                 if (! $user) {
-                    $result->message = "Unknown user.";
+                    $result->message = 'Unknown user.';
                     return json_encode($result);
                 }
                 break;
@@ -133,7 +133,7 @@ class OmNomController extends Controller
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 $auth_method = sprintf('omnomcom_qr_%u', $qrAuthRequest->id);
                 if (! $qrAuthRequest) {
-                    $result->message = "Invalid authentication token.";
+                    $result->message = 'Invalid authentication token.';
                     return json_encode($result);
                 }
 
@@ -145,12 +145,12 @@ class OmNomController extends Controller
                 break;
 
             default:
-                $result->message = "Invalid credential type.";
+                $result->message = 'Invalid credential type.';
                 break;
         }
 
         if (! $user->is_member) {
-            $result->message = "Only members can use the OmNomCom.";
+            $result->message = 'Only members can use the OmNomCom.';
             return json_encode($result);
         }
 
@@ -163,12 +163,12 @@ class OmNomController extends Controller
         $payedCard = $request->input('bank_card');
 
         if ($payedCash == 'true' && ! $store->cash_allowed) {
-            $result->message = "You cannot use cash in this store.";
+            $result->message = 'You cannot use cash in this store.';
             return json_encode($result);
         }
 
         if ($payedCard == 'true' && ! $store->bank_card_allowed) {
-            $result->message = "You cannot use a bank card in this store.";
+            $result->message = 'You cannot use a bank card in this store.';
             return json_encode($result);
         }
 
@@ -182,15 +182,15 @@ class OmNomController extends Controller
                     return json_encode($result);
                 }
                 if (! $product->isVisible()) {
-                    $result->message = "You tried to buy a product that is not available!";
+                    $result->message = 'You tried to buy a product that is not available!';
                     return json_encode($result);
                 }
                 if ($product->stock < $amount) {
-                    $result->message = "You tried to buy more of a product than was in stock!";
+                    $result->message = 'You tried to buy more of a product than was in stock!';
                     return json_encode($result);
                 }
                 if ($product->is_alcoholic && $user->age() < 18) {
-                    $result->message = "You tried to buy alcohol, youngster!";
+                    $result->message = 'You tried to buy alcohol, youngster!';
                     return json_encode($result);
                 }
                 if ($product->is_alcoholic && $store->alcohol_time_constraint && ! (date('Hi') > str_replace(':', '', config('omnomcom.alcohol-start')) || date('Hi') < str_replace(':', '', config('omnomcom.alcohol-end')))) {
