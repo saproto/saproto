@@ -2,9 +2,9 @@ export default class SearchComplete {
     constructor(el, route, optionTemplate, selectedTemplate, sorter) {
         this.el = el
         this.name = el.name
-        this.placeholder = el.value
+        this.value = el.value
         this.required = el.required
-        this.id = el.id
+        this.id = el.id === '' ? el.name : el.id
         this.route = route
         this.optionTemplate = optionTemplate
         this.selectedTemplate = selectedTemplate
@@ -30,7 +30,7 @@ export default class SearchComplete {
 
     createInputElement() {
         let input = document.createElement('input')
-        input.className = 'd-none'
+        input.type = 'hidden'
         input.name = this.name
         input.value = this.value
         input.required = this.required
@@ -66,14 +66,14 @@ export default class SearchComplete {
             else this.setSelected(item)
             this.el.dispatchEvent(new Event('keyup'))
         })
-        this.resultsContainer.append(optionElement)
+        return optionElement
     }
 
     setSelected(item) {
         this.inputElement.value = item.id
         this.el.value = this.selectedTemplate?.(item) ?? item.name ?? item.id
         this.resultsContainer.innerHTML = ''
-        this.resultsContainer.append(option)
+        this.resultsContainer.append(this.createOptionElement(item))
     }
 
     appendSelected(item) {
@@ -111,7 +111,7 @@ export default class SearchComplete {
             if (data.length === 0) return this.resultsContainer.innerHTML = '<span>no results</span>'
             else this.resultsContainer.innerHTML = ''
             if (this.sorter === 'function') data.sort(this.sorter)
-            data.forEach(item => this.createOptionElement(item))
+            data.forEach(item => this.resultsContainer.append(this.createOptionElement(item)))
         })
         .catch(err => {
             this.resultsContainer.innerHTML = '<span class="text-danger">there was an error!</span>'
