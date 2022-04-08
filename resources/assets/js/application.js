@@ -1,9 +1,10 @@
 // Vendors
-window.SignaturePad = require('signature_pad')
-window.moment = require('moment/moment')
-window.Quagga = require('quagga')
+global.SignaturePad = require('signature_pad')
+global.moment = require('moment/moment')
+global.Quagga = require('quagga')
 
 import './countdown-timer'
+import './utilities'
 import './broto'
 
 // Execute theme JavaScript
@@ -19,47 +20,6 @@ window.addEventListener('load', _ => {
         }, { once: true })
     })
 })
-
-// Find CSRF token in page meta tags
-const token = document.head.querySelector('meta[name="csrf-token"]')
-if (token === undefined) console.error("X-CSRF token could not be found!")
-
-// Global wrapper methods for the native fetch api
-const request = (method, url, params, options) => {
-    options.method = method
-    options.headers = options.headers ?? {}
-    if (method === 'GET') {
-        url += `?${(new URLSearchParams(params))}`
-    } else {
-        if(!(params instanceof FormData)){
-            options.headers["Content-Type"] = "application/json"
-            params = JSON.stringify(params)
-        }
-        options.body = params
-        options.headers["X-Requested-With"] = "XMLHttpRequest"
-        options.headers["X-CSRF-TOKEN"] = token.content
-        options.credentials = "same-origin"
-    }
-    const result = fetch(url, options)
-    return result.then(response => {
-        if (!response.ok || (options.parse !== undefined && options.parse === false)) return response
-        return response.json()
-    })
-}
-
-global.get = (url, params = {}, options = {}) => request('GET', url, params, options)
-global.post = (url, params = {}, options = {}) => request('POST', url, params, options)
-
-// Method to debounce function calls
-window.debounce = (callback, timeout = 300) => {
-    let timer
-    return (...args) => {
-        clearTimeout(timer)
-        timer = setTimeout(_ => {
-            callback.apply(this, args)
-        }, timeout)
-    }
-}
 
 // Get online Discord users
 const discordOnlineCount = document.getElementById("discord__online")
@@ -102,7 +62,7 @@ if (customFileInputList.length) {
     })
 }
 
-// Initialise Swiper
+// Enable Swiper with default settings
 import Swiper, { Autoplay, Navigation } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/autoplay'
