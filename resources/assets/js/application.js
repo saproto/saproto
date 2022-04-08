@@ -56,7 +56,7 @@ if (customFileInputList.length) {
         el.addEventListener('change', _ => {
             let fileName = this.value.split('\\').pop()
             let label = this.nextElementSibling
-            label.classList.add( 'selected')
+            label.classList.add('selected')
             label.innerHTML = fileName
         })
     })
@@ -172,6 +172,7 @@ userSearchList.forEach(el => new SearchComplete(
     el,
     config.routes.api_search_user,
     (option, item) => {
+        option.className = item.is_member ? '' : 'text-muted'
         option.innerHTML = `#${item.id} ${item.name}`
     },
     item => { return item.name }
