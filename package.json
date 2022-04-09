@@ -42,7 +42,7 @@
     "fontawesome-iconpicker": "~3.2.0",
     "jquery": "^3.6.0",
     "js-cookie": "~2.2.1",
-    "moment": "~2.24.0",
+    "moment": "~2.29.2",
     "moment-timezone": "^0.5.31",
     "popper.js": "^1.16.1",
     "quagga": "^0.12.1",
