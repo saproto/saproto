@@ -120,6 +120,13 @@
                 {{ $event->activity->users->count() }} participants
             </div>
 
+            @if($event->activity->hide_participants)
+                <div class="card-header text-center bg-warning text-white">
+                    <strong>The participants for this activity are hidden!</strong> <i class="fas fa-ghost"></i>
+                </div>
+            @endif()
+
+            @if(!$event->activity->hide_participants || $event->isEventAdmin(Auth::user()) || Auth::user()->can('board') || Auth::user()->can("finadmin"))
             <div class="card-body">
 
                 @include('event.display_includes.render_participant_list', [
@@ -128,6 +135,7 @@
                 ])
 
             </div>
+            @endif
 
             <div class="card-footer">
 
