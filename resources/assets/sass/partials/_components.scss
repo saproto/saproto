@@ -382,26 +382,41 @@ a.badge {
 .form-group.autocomplete {
   position: relative;
 
-  .user-search, .event-search, .product-search, .committee-search {
-    & ~ .selected-items > .selected-item {
-      &:before {
-        content: '⨯';
-        margin-right: 3px;
-      }
+  .search-field {
+    & ~ .selected-items {
+      @extend .form-control;
+      padding: $spacer * .25;
+      display: none;
+      border-top: 0;
 
-      &:hover {
+      .selected-item {
+        @extend .badge;
+        padding-left: $spacer * .25;
+        margin: $spacer * .5 $spacer * .25;
+        background-color: $success;
+        display: inline-block;
+
         &:before {
-          color: $danger;
+          content: '⨯';
+          margin-right: 3px;
         }
 
-        cursor: pointer;
-        background-color: mix($white, $success, 10%) !important;
+        &:hover {
+          &:before {
+            color: $danger;
+          }
+
+          cursor: pointer;
+          background-color: mix($white, $success, 10%) !important;
+        }
       }
     }
 
     & ~ .search-results {
+      @extend .form-control;
       display: none;
       z-index: 1;
+      padding: 0;
       position: absolute;
       max-height: 200px;
       max-width: calc(100vw - 20px);

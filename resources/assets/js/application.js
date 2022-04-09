@@ -166,55 +166,45 @@ collapseList.map(el => {
 })
 
 // Enable search autocomplete fields
-import SearchComplete from './search-complete'
+import SearchField from './search-field'
 const userSearchList = Array.from(document.querySelectorAll('.user-search'))
-userSearchList.forEach(el => new SearchComplete(
-    el,
-    config.routes.api_search_user,
-    (option, item) => {
-        option.className = item.is_member ? '' : 'text-muted'
-        option.innerHTML = `#${item.id} ${item.name}`
-    },
-    item => { return item.name }
-))
+userSearchList.forEach(el => new SearchField(el, config.routes.api_search_user, {
+    optionTemplate: (el, item) => {
+        el.className = item.is_member ? '' : 'text-muted'
+        el.innerHTML = `#${item.id} ${item.name}`
+    }
+}))
 
 const eventSearchList = Array.from(document.querySelectorAll('.event-search'))
-eventSearchList.forEach(el => new SearchComplete(
-    el,
-    config.routes.api_search_event,
-    (option, item) => {
-        option.className = item.is_future ? '' : 'text-muted'
-        option.innerHTML = `${item.title} (${item.formatted_date.simple})`
+eventSearchList.forEach(el => new SearchField(el, config.routes.api_search_event, {
+    optionTemplate: (el, item) => {
+        el.className = item.is_future ? '' : 'text-muted'
+        el.innerHTML = `${item.title} (${item.formatted_date.simple})`
     },
-    item => { return item.title },
-    (a, b) => {
+    selectedTemplate: item => item.title,
+    sorter: (a, b) => {
         if (a.start < b.start) return 1
         else if (a.start > b.start) return -1
         else return 0
     }
-))
+}))
 
 const productSearchList = Array.from(document.querySelectorAll('.product-search'))
-productSearchList.forEach(el => new SearchComplete(
-    el,
-    config.routes.api_search_product,
-    (option, item) => {
-        option.className = item.is_visible ? '' : 'text-muted'
-        option.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
+productSearchList.forEach(el => new SearchField(el, config.routes.api_search_product, {
+    optionTemplate: (el, item) => {
+        el.className = item.is_visible ? '' : 'text-muted'
+        el.innerHTML = `${item.name} (€${item.price.toFixed(2)}; ${item.stock} in stock)`
     },
-    item => { return item.name + (el.multiple ? ' (€' + item.price.toFixed(2) + ')' : '') },
-    (a, b) => {
+    selectedTemplate: item => item.name + (el.multiple ? ` (€${item.price.toFixed(2)})` : ''),
+    sorter: (a, b) => {
         if (a.is_visible === 0 && b.is_visible === 1) return 1
         else if (a.is_visible === 1 && b.is_visible === 0) return -1
         else return 0
     }
-))
+}))
 
 const committeeSearchList = Array.from(document.querySelectorAll('.committee-search'))
-committeeSearchList.forEach(el => new SearchComplete(
-    el,
-    config.routes.api_search_committee,
-))
+committeeSearchList.forEach(el => new SearchField(el, config.routes.api_search_committee))
 
 // Matomo Analytics
 const _paq = _paq || [];
