@@ -1,45 +1,72 @@
-function updateCountdown(el) {
-    return function () {
-        if (!el.classList.contains('proto-countdown')) return
-        const start = new Date(el.getAttribute('data-countdown-start') * 1000)
-        const countdown_text = el.getAttribute('data-countdown-text-counting')
-        const finished_text = el.getAttribute('data-countdown-text-finished')
-        const delta = start.getTime() - (new Date()).getTime()
-        const deltaText = updateCountdownGetTimeString(delta)
-        el.innerHTML = delta < 0 ? finished_text : countdown_text.replace("{}", deltaText)
+import BaseComponent from "bootstrap/js/src/base-component"
+
+/**
+ * ------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------
+ */
+
+const NAME = 'countdown-timer'
+
+/**
+ * ------------------------------------------------------------------------
+ * Class Definition
+ * ------------------------------------------------------------------------
+ */
+
+class CountdownTimer extends BaseComponent {
+    constructor(element) {
+        super(element)
+
+        this._config = this._getConfig()
+        this._start = (new Date(this._config.start * 1000)).getTime()
+        setInterval(this._update.bind(this), 1000)
+    }
+
+    // Getters
+
+    static get NAME() {
+        return NAME
+    }
+
+    // Private
+
+    _getConfig() {
+        const data = this._element.dataset
+        let attributes = {}
+        Object.keys(data).map(key => {
+            let pureKey = key.replace(/^countdown/, '')
+            pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length)
+            attributes[pureKey] = data[key]
+        })
+        return attributes
+    }
+
+    _getTimeString(delta) {
+        const seconds = Math.floor((delta / 1000) % 60)
+        const minutes = Math.floor((delta / 1000 / 60) % 60)
+        const hours = Math.floor((delta / (1000 * 60 * 60)) % 24)
+        const days = Math.floor(delta / (1000 * 60 * 60 * 24))
+
+        let string
+        if (days > 1) string = days + ' days'
+        else if (days === 1) string = '1 day'
+        else if (hours > 0 || minutes > 0) string = `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`
+        else string = seconds + ' seconds'
+        return string
+    }
+
+    _update() {
+        const current = (new Date()).getTime()
+        const delta = this._start - current
+        this._element.innerHTML = delta < 0 ? this._config.textFinished : this._config.textCounting.replace("{}", this._getTimeString(delta))
     }
 }
 
-function updateCountdownGetTimeString(delta) {
-    const seconds = Math.floor((delta / 1000) % 60)
-    const minutes = Math.floor((delta / 1000 / 60) % 60)
-    const hours = Math.floor((delta / (1000 * 60 * 60)) % 24)
-    const days = Math.floor(delta / (1000 * 60 * 60 * 24))
-
-    let timestring;
-
-    if (days > 1)
-        timestring = days + ' days'
-    else if (days === 1)
-        timestring = '1 day'
-    else if (hours > 0 || minutes > 0)
-        timestring = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2)
-    else
-        timestring = seconds + ' seconds'
-
-    return timestring
-
-}
-
-function pad(n, width, z) {
+function pad(n, w, z) {
     z = z || '0'
     n = n + ''
-    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n
+    return n.length >= w ? n : new Array(w - n.length + 1).join(z) + n
 }
 
-window.initializeCountdowns = function() {
-    const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
-    countdownList.forEach(el => { setInterval(updateCountdown(el), 1000) })
-}
-
-initializeCountdowns()
+export default CountdownTimer
