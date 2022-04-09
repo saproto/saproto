@@ -125,6 +125,7 @@ class PhotoManager extends Model
         }
 
         $data->id = $photo_id;
+        $data->albumPage = $photo->getAlbumPageNumber(24);
 
         return $data;
     }

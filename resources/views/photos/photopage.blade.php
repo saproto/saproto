@@ -73,9 +73,7 @@
 @endsection
 
 @push('javascript')
-
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
         document.querySelector('main').addEventListener('keydown', e => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
                 e.preventDefault();
@@ -103,21 +101,17 @@
                 @endif
             }
         })
-
     </script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        (function (window, location) {
-            history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
-            history.pushState(null, document.title, location.pathname);
+        history.replaceState(null, document.title, location.pathname+"#!/history")
+        history.pushState(null, document.title, location.pathname)
 
-            window.addEventListener("popstate", _ => {
-                if (location.hash === "#!/stealingyourhistory") {
-                    history.replaceState(null, document.title, location.pathname);
-                    setTimeout(_ => { location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."#photo_".$photo->id }}") }, 0)
-                }
-            }, false)
-        }(window, location))
+        window.addEventListener("popstate", function() {
+            if(location.hash === "#!/history") {
+                history.replaceState(null, document.title, location.pathname)
+                setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->albumPage }}"), 10)
+            }
+        }, false)
     </script>
-
 @endpush

@@ -57,7 +57,10 @@
                         </p>
 
                         <input class="form-control" type="password" name="password" placeholder="Your current password.">
-
+                        <br>
+                        <p>
+                            <strong>Note:</strong> If you still have open payments, you <strong>cannot</strong> close your account! You will first have to pay off your expenses.
+                        </p>
                     </div>
 
                     <div class="modal-footer">
@@ -65,9 +68,16 @@
                             <button type="button" class="btn btn-default" data-bs-dismiss="modal">
                                 Keep my account.
                             </button>
+                            @if(Auth::user()->hasUnpaidOrderlines())
+                            <button type="submit" class="btn btn-danger">
+                                Pay off my unpaid orderlines!
+                            </button>
+                            @else
+
                             <button type="submit" class="btn btn-danger" onclick="return confirm('Are you REALLY sure?');">
                                 YES! Delete my account!
                             </button>
+                            @endif
                     </div>
 
                 </div>
