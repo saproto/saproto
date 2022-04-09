@@ -38,3 +38,5 @@ global.debounce = (callback, timeout = 300) => {
         }, timeout)
     }
 }
+
+global.preventSubmitBounce = e => e.target.onsubmit = _ => false

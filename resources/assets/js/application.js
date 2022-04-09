@@ -12,14 +12,8 @@ window[config.theme]?.()
 
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
-window.addEventListener('load', _ => {
-    let formList = Array.from(document.getElementsByTagName("form"))
-    formList.forEach(form => {
-        form.addEventListener('submit', e => {
-            e.target.onsubmit = _ => false
-        }, { once: true })
-    })
-})
+let formList = Array.from(document.getElementsByTagName("form"))
+formList.forEach(form => form.addEventListener('submit', preventSubmitBounce, { once: true }))
 
 // Get online Discord users
 const discordOnlineCount = document.getElementById("discord__online")

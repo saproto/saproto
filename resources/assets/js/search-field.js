@@ -1,6 +1,6 @@
-import BaseComponent from "bootstrap/js/src/base-component";
-import Manipulator from "bootstrap/js/src/dom/manipulator";
-import { typeCheckConfig } from "bootstrap/js/src/util";
+import BaseComponent from "bootstrap/js/src/base-component"
+import Manipulator from "bootstrap/js/src/dom/manipulator"
+import { typeCheckConfig } from "bootstrap/js/src/util"
 
 /**
  * ------------------------------------------------------------------------
@@ -43,6 +43,7 @@ class SearchField extends BaseComponent {
         this._name = this._element.name
         this._id = this._element.id ?? this._element.name
         this._multiple = this._element.multiple
+        this._required = this._element.required
 
         this._initializeSearchField()
     }
@@ -81,22 +82,38 @@ class SearchField extends BaseComponent {
 
     _initializeSearchField() {
         this._resultsContainer = this._createResultsContainer()
+        this._invalidMessage = this._createInvalidMessage()
+        this._selectedContainer = this._createSelectedContainer()
         this._inputElement = this._createInputElement()
         this._inputElement.value = this._element.value
 
         this._element.parentNode.append(this._resultsContainer)
-        if (this._multiple) {
-            this._selectedContainer = this._createSelectedContainer()
-            this._element.parentNode.append(this._selectedContainer)
-        } else {
-            this._element.parentNode.append(this._inputElement)
-        }
+        this._element.parentNode.append(this._invalidMessage)
+        if (this._multiple) this._element.parentNode.append(this._selectedContainer)
+        else this._element.parentNode.append(this._inputElement)
 
         this._element.classList.add(CLASS_NAME_SEARCH_FIELD)
         this._element.name = ''
         this._element.value = this._element.placeholder
+        this._element.required = false
 
-        this._element.addEventListener('keyup', debounce(this._search.bind(this), 500))
+        this._element.form.removeEventListener('submit', preventSubmitBounce)
+        this._element.form.addEventListener('submit', this._checkRequired.bind(this))
+        this._element.onkeyup = debounce(this._search.bind(this))
+    }
+
+    _checkRequired(e) {
+        const selectedAny = this._selectedContainer.children.length !== 0 || this._inputElement.value !== ''
+        if (!this._required || selectedAny) return true
+        this._invalidMessage.style.display = 'block'
+        e.preventDefault()
+    }
+
+    _createInvalidMessage() {
+        let el = document.createElement('div')
+        el.classList.add('invalid-feedback')
+        el.innerHTML = 'Please select an option!'
+        return el
     }
 
     _createResultsContainer() {
@@ -180,6 +197,8 @@ class SearchField extends BaseComponent {
 
         if (this._element.value.length < 3) return this._setResults('<span>type at least 3 characters</span>')
         this._setResults('<span>searching...</span>')
+
+        this._invalidMessage.style.display = 'none'
 
         get( this._route,{q: this._element.value})
         .then(data => {
