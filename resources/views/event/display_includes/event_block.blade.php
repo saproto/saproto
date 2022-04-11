@@ -28,7 +28,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                    data-toggle="tooltip" data-placement="top" title="This is a featured activity!"></i>
             @endif
             @if($event->activity && Auth::check())
-                    @if(in_array(Auth::user()->id,$event->activity->backupUsers()->pluck("users.id")->toArray()))
+                    @if($event->activity->isOnBackupList(Auth::user()))
                         <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
                            data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
                     @else
