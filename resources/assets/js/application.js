@@ -200,6 +200,11 @@ productSearchList.forEach(el => new SearchField(el, config.routes.api_search_pro
 const committeeSearchList = Array.from(document.querySelectorAll('.committee-search'))
 committeeSearchList.forEach(el => new SearchField(el, config.routes.api_search_committee))
 
+// Enable countdown timers
+import CountdownTimer from "./countdown-timer"
+const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
+countdownList.forEach(el => new CountdownTimer(el))
+
 // Matomo Analytics
 const _paq = _paq || [];
 _paq.push(['trackPageView']);

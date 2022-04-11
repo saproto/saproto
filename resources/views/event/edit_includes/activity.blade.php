@@ -92,11 +92,17 @@
                         <input type="number" class="form-control" id="participants"
                                name="participants" min="-1" required
                                value="{{ ($event->activity ? $event->activity->participants : '') }}">
-
                     </div>
 
-                </div>
-
+                        <div class="checkbox col-6">
+                            <label>
+                                <input type="checkbox" name="hide_participants"
+                                        {{ ($event->activity && $event->activity->hide_participants ? 'checked' : '') }}>
+                                        Hide participants.
+                                        <i class="fas fa-question-circle me-2" data-toggle="tooltip" data-placement="top" data-html="true" title="This will hide who participates in this event for members!"></i>
+                            </label>
+                        </div>
+                    </div>
             </div>
 
             <div class="card-footer">

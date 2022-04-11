@@ -1,6 +1,6 @@
-import BaseComponent from "bootstrap/js/src/base-component";
-import Manipulator from "bootstrap/js/src/dom/manipulator";
-import { typeCheckConfig } from "bootstrap/js/src/util";
+import BaseComponent from "bootstrap/js/src/base-component"
+import Manipulator from "bootstrap/js/src/dom/manipulator"
+import { typeCheckConfig } from "bootstrap/js/src/util"
 
 /**
  * ------------------------------------------------------------------------
@@ -83,17 +83,14 @@ class SearchField extends BaseComponent {
     _initializeSearchField() {
         this._resultsContainer = this._createResultsContainer()
         this._invalidMessage = this._createInvalidMessage()
+        this._selectedContainer = this._createSelectedContainer()
+        this._inputElement = this._createInputElement()
+        this._inputElement.value = this._element.value
+
         this._element.parentNode.append(this._resultsContainer)
         this._element.parentNode.append(this._invalidMessage)
-
-        if (this._multiple) {
-            this._selectedContainer = this._createSelectedContainer()
-            this._element.parentNode.append(this._selectedContainer)
-        } else {
-            this._inputElement = this._createInputElement()
-            this._inputElement.value = this._element.value
-            this._element.parentNode.append(this._inputElement)
-        }
+        if (this._multiple) this._element.parentNode.append(this._selectedContainer)
+        else this._element.parentNode.append(this._inputElement)
 
         this._element.classList.add(CLASS_NAME_SEARCH_FIELD)
         this._element.name = ''
@@ -106,7 +103,8 @@ class SearchField extends BaseComponent {
     }
 
     _checkRequired(e) {
-        if (this._required && this._selectedContainer.children.length !== 0) return true
+        const selectedAny = this._selectedContainer.children.length !== 0 || this._inputElement.value !== ''
+        if (!this._required || selectedAny) return true
         this._invalidMessage.style.display = 'block'
         e.preventDefault()
     }
