@@ -191,8 +191,8 @@ class Activity extends Validatable
         return $this->getParticipation($user) !== null;
     }
 
-    public function isOnBackupList($user){
-        return in_array($user->id,$this->backupUsers()->pluck("users.id")->toArray());
+    public function isOnBackupList($user) {
+        return in_array($user->id,$this->backupUsers()->pluck('users.id')->toArray());
     }
 
     /**
