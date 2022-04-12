@@ -38,10 +38,10 @@
                             </a>
                         @endif
 
-                        <button type="submit" class="btn btn-success float-end ms-3">Submit</button>
+                        <button type="submit" class="btn btn-success float-right ml-3">Submit</button>
 
                         <a href="{{ route("omnomcom::categories::list") }}"
-                           class="btn btn-default float-end">Cancel</a>
+                           class="btn btn-default float-right">Cancel</a>
 
                     </div>
 
@@ -58,7 +58,7 @@
                             <li class="list-group-item">
                                 {{ $product->name }}
                                 <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
-                                    <i class="fa fa-edit float-end"></i>
+                                    <i class="fa fa-edit float-right"></i>
                                 </a>
                             </li>
                         @endforeach

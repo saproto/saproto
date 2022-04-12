@@ -4,7 +4,7 @@
 
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-star fa-fw me-2"></i> Featured events
+        <i class="fas fa-star fa-fw mr-2"></i> Featured events
     </div>
     <div class="card-body">
 
@@ -24,7 +24,7 @@
 
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-calendar-alt fa-fw me-2"></i> Upcoming events
+        <i class="fas fa-calendar-alt fa-fw mr-2"></i> Upcoming events
     </div>
     <div class="card-body">
 

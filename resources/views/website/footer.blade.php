@@ -30,7 +30,7 @@
                    href="mailto:board@proto.utwente.nl">board@proto.utwente.nl</a>
             </div>
 
-            <div class="col-3 d-none d-lg-block text-end">
+            <div class="col-3 d-none d-lg-block" style="text-align: right;">
                 <a class="text-white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
                     Facebook&nbsp;&nbsp;<i class="fab fa-fw fa-facebook" aria-hidden="true"></i></a><br>
                 <a class="text-white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
@@ -44,7 +44,7 @@
                 </a>
             </div>
 
-            <div class="col-lg-3 col-md-5 d-none d-md-block text-end">
+            <div class="col-lg-3 col-md-5 d-none d-md-block" style="text-align: right;">
                 <img src="{{ asset('images/logo/inverse.png') }}" height="120px">
             </div>
 

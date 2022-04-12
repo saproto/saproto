@@ -57,7 +57,7 @@
                                         <a class="btn btn-danger"
                                            onclick="return confirm('Are you sure you want to delete {{ $display->name }}?');"
                                            href="{{ route('protube::display::delete', ['id' => $display->id]) }}" role="button">
-                                            <i class="fas fa-trash me-2"></i> Delete
+                                            <i class="fas fa-trash mr-2"></i> Delete
                                         </a>
                                         <button class="btn btn-success" type="submit"
                                                 href="{{ route('protube::display::update', ['id' => $display->id]) }}"
@@ -91,7 +91,7 @@
                             </td>
                             <td>
                                 <button type="submit" class="btn btn-success" role="button">
-                                    <i class="fas fa-save me-2" aria-hidden="true"></i> Save
+                                    <i class="fas fa-save mr-2" aria-hidden="true"></i> Save
                                 </button>
                             </td>
 

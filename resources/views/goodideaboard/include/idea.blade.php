@@ -1,15 +1,18 @@
-<div class="goodidea card mb-3 h-100">
+<div class="card mb-3 h-100">
 
     <div class="card-header bg-dark text-white">
 
-        <span data-id="{{ $idea->id }}">
-            <span class="votes d-inline-block">{{ $idea->voteScore() }}</span>
-            <i class="upvote fa-thumbs-up {{ $idea->userVote(Auth::user()) == 1 ? "fas" : "far" }}"></i>
-            <i class="downvote fa-thumbs-down {{ $idea->userVote(Auth::user()) == -1 ? "fas" : "far" }}"></i>
+
+        <span>
+            <span data-id="{{ $idea->id }}">{{ $idea->voteScore() }}</span>
+            <a data-id="{{ $idea->id }}"
+               class="gi_upvote fa-thumbs-up {{ $idea->userVote(Auth::user()) == 1 ? "fas" : "far" }}"></a>
+            <a data-id="{{ $idea->id }}"
+               class="gi_downvote fa-thumbs-down {{ $idea->userVote(Auth::user()) == -1 ? "fas" : "far" }}"></a>
         </span>
 
         @if (Auth::user()->can("board") || Auth::user()->id == $idea->user->id)
-            <a href="{{ route('goodideas::delete', ['id' => $idea->id]) }}" class="float-end ms-3"><i
+            <a href="{{ route('goodideas::delete', ['id' => $idea->id]) }}" class="float-right ml-3"><i
                         class="fas fa-trash-alt text-white"></i></a>
         @endif
 
@@ -19,16 +22,17 @@
 
         {!! $idea->idea !!}
 
+
     </div>
 
-    <div class="card-footer ps-0">
+    <div class="card-footer pl-0">
 
-        <div class="text-muted text-end mt-2">
+        <div class="text-muted text-right mt-2">
             <em>
                 <sub>
-                    @can('board')
+                    @if(Auth::user()->can('board'))
                         By {{ $idea->user->name }}
-                    @endcan
+                    @endif
                      -- {{ $idea->created_at->format("j M Y, H:i") }}
                 </sub>
             </em>

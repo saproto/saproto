@@ -22,7 +22,7 @@
                                     <p>
                                         &nbsp;
                                     </p>
-                                    <p class="text-center">
+                                    <p style="text-align: center">
                                         <strong>
                                             There are currently no news articles.
                                         </strong>

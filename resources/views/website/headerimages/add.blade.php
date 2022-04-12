@@ -23,21 +23,21 @@
                     <div class="card-body">
 
                         <div class="form-group">
-                            <label for="title">Image title:</label>
+                            <label for="name">Image title:</label>
                             <input type="text" class="form-control" id="title" name="title"
                                    placeholder="Fancy photo" required>
                         </div>
 
-                        <div class="form-group autocomplete">
-                            <label for="user">Credits:</label>
-                            <input class="form-control user-search" id="user" name="user"/>
+                        <div class="form-group">
+                            <label for="name">Credits:</label>
+                            <select class="form-control user-search" id="user" name="user"></select>
                         </div>
 
                         <div class="form-group">
                             <label for="name">Image:</label>
                             <div class="custom-file">
-                                <input id="image" type="file" class="form-control" name="image" required>
-                                <label for="image" class="form-label">Choose file</label>
+                                <input type="file" class="custom-file-input" name="image" required>
+                                <label class="custom-file-label">Choose file</label>
                             </div>
                         </div>
 
@@ -45,7 +45,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">
+                        <button type="submit" class="btn btn-success float-right">
                             Submit
                         </button>
 

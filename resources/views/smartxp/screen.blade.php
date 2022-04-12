@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
     <meta http-equiv="refresh" content="3600">
-    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
@@ -15,10 +14,7 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    <style>
-        .h-33 { height: 33.33%; }
-        .h-66 { height: 66.66%; }
-        .green { color: #c1ff00; }
+    <style type="text/css">
 
         html, body, #container {
             position: absolute;
@@ -26,25 +22,51 @@
             left: 0;
             right: 0;
             bottom: 0;
+
+            font-family: Lato, sans-serif;
+
             padding: 15px 10px;
             margin: 0;
+
             background-color: #333;
+        }
+
+        .green {
+            color: #c1ff00;
+        }
+
+        .box-partial {
+            padding: 20px 0;
+        }
+
+        .box-partial:nth-child(1) {
+            padding-top: 0;
+        }
+
+        .box-partial:nth-last-child(1) {
+            padding-bottom: 0;
         }
 
         .box {
             position: relative;
+
             background-color: rgba(0, 0, 0, 0.5);
             border-bottom: 5px solid #c1ff00;
             box-shadow: 0 0 20px -7px #000;
+
             border-radius: .25rem;
+
             overflow: hidden;
         }
 
         .box-header {
             font-size: 30px;
             font-weight: bold;
+
             color: #fff;
+
             text-align: center;
+
             padding: 15px 0;
             margin: 0 40px;
             border-bottom: 2px solid #fff;
@@ -52,12 +74,9 @@
 
         .box-header.small {
             font-size: 20px;
-            margin: 0 10px;
-        }
 
-        .box-partial { padding: 20px 0; }
-        .box-partial:nth-child(1) { padding-top: 0; }
-        .box-partial:nth-last-child(1) { padding-bottom: 0; }
+            margin: 0px 10px;
+        }
 
         .notice {
             text-align: center;
@@ -68,61 +87,104 @@
         }
 
         #time {
+            position: absolute;
+
+            top: 0;
+            left: 15px;
+
             height: 70px;
             line-height: 50px;
+
             padding: 5px 0;
-            margin: 0 40px;
+
             font-weight: bold;
+
             border-bottom: 0;
+
             color: #fff;
             font-size: 35px;
+            width: 230px;
+
             overflow: visible;
         }
 
         #ticker {
             position: absolute;
+
             bottom: 0;
             left: 0;
+
             height: 5px;
             width: 100%;
+
             border-radius: .25rem;
+
             background-color: #c1ff00;
         }
 
-        .activity:nth-child(even) { background-color: rgba(255, 255, 255, 0.05); }
-        .activity.past { opacity: 0.5; }
-        .activity.current { color: #c1ff00; }
-        span.current { color: #c1ff00; font-weight: bold; }
         .activity {
             width: 100%;
+
             color: #fff;
+
             text-align: left;
+
             padding: 20px 40px;
+
             font-size: 20px;
+
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .busentry:nth-child(1) { padding-top: 10px; }
-        .busentry:nth-child(even) { background-color: rgba(255, 255, 255, 0.1); }
+        .activity:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .activity.past {
+            opacity: 0.5;
+        }
+
+        .activity.current {
+            color: #c1ff00;
+        }
+
+        span.current {
+            color: #c1ff00;
+            font-weight: bold;
+        }
+
         .busentry {
             padding: 5px 10px 5px 10px;
             color: #fff;
+
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .busentry:nth-child(1) {
+            padding-top: 10px;
+        }
+
+        .busentry:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         #protube {
             position: relative;
+
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+
             border-bottom: none;
         }
 
-        #protube.inactive { background-image: url('{{ route('api::fishcam') }}') !important; }
+        #protube.inactive {
+            background-image: url('{{ route('api::fishcam') }}') !important;
+        }
 
         #protube-title {
             white-space: nowrap;
@@ -134,29 +196,33 @@
 
         #protube-ticker {
             position: absolute;
+
             bottom: 0;
             left: 0;
+
             height: 5px;
             width: 100%;
+
             background-color: #c1ff00;
         }
+
     </style>
 
 </head>
 
 <body>
 
-<div id="container" class="row row-eq-height h-100">
+<div id="container" class="row row-eq-height" style="height: 100%;">
 
     <div class="col-md-4">
 
-        <div class="box-partial h-100">
+        <div class="box-partial" style="height: 100%;">
 
-            <div class="box h-100">
+            <div class="box" style="height: 100%;">
 
                 <div class="box-header">
 
-                    <i class="fas fa-calendar-alt fa-fw me-2"></i>
+                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
                     Timetable
 
                 </div>
@@ -175,7 +241,7 @@
 
     <div class="col-md-4">
 
-        <div class="box-partial text-center h-33">
+        <div class="box-partial" style="height: 33.33%; text-align: center;">
 
             <div id="time" class="box">
                 <div id="clock">
@@ -186,13 +252,13 @@
 
             <br>
 
-            <img src="{{ asset('images/logo/inverse.png') }}" class="h-75"/>
+            <img src="{{ asset('images/logo/inverse.png') }}" style="max-width: 100%; max-height: 100%;"/>
 
         </div>
 
-        <div class="box-partial h-33">
+        <div class="box-partial" style="height: 33.33%;">
 
-            <div id="protube" class="box inactive h-100">
+            <div id="protube" class="box inactive" style="height: 100%;">
 
                 <div id="protube-title" class="box-header">
                     Connecting to ProTube...
@@ -204,12 +270,12 @@
 
         </div>
 
-        <div class="box-partial h-33">
+        <div class="box-partial" style="height: 33.33%;">
 
-            <div id="protopeners" class="box h-100">
+            <div id="protopeners" class="box" style="height: 100%;">
 
                 <div class="box-header small">
-                    <i class="fas fa-door-closed fa-fw me-2" id="protopolis-fa"></i>
+                    <i class="fas fa-door-closed fa-fw mr-2" id="protopolis-fa"></i>
                     Protopolis
                 </div>
 
@@ -223,13 +289,13 @@
 
     <div class="col-md-4">
 
-        <div class="box-partial h-66">
+        <div class="box-partial" style="height: 66.66%;">
 
-            <div class="box h-100">
+            <div class="box" style="height: 100%;">
 
                 <div class="box-header">
 
-                    <i class="fas fa-calendar-alt fa-fw me-2"></i>
+                    <i class="fas fa-calendar-alt fa-fw mr-2"></i>
                     Activities
 
                 </div>
@@ -244,16 +310,16 @@
 
         </div>
 
-        <div class="box-partial h-33">
+        <div class="box-partial" style="height: 33.33%;">
 
-            <div class="box h-100">
+            <div class="box" style="height: 100%;">
 
                 <div class="row px-4">
 
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            <i class="fas fa-bus fa-fw me-1"></i>
+                            <i class="fas fa-bus fa-fw mr-1"></i>
                             Westerbegraafplaats
                         </div>
 
@@ -266,7 +332,7 @@
                     <div class="col-md-6">
 
                         <div class="box-header small">
-                            <i class="fas fa-bus fa-fw me-1"></i>
+                            <i class="fas fa-bus fa-fw mr-1"></i>
                             Langenkampweg
                         </div>
 
@@ -292,119 +358,128 @@
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
     function updateClock() {
-        let now = moment()
-        document.getElementById("clock").innerHTML = '<i class="fas fa-clock fa-fw me-2"></i>' + now.format('HH:mm:ss')
-        document.getElementById("ticker").style.width = ((now.format('s.SSS') / 60) * 100) + "%"
+        let now = moment();
+        $("#clock").html('<i class="fas fa-clock fa-fw mr-2"></i>' + now.format('HH:mm:ss'));
+        $("#ticker").css("width", ((now.format('s.SSS') / 60) * 100) + "%");
     }
 
     setInterval(updateClock, 10);
 
     function updateTimetable() {
-        const timetable = document.getElementById("timetable")
-
-        get('{{ route('api::screen::timetable') }}')
-        .then(data => {
-            if (data.length > 0) {
-                timetable.innerHTML = ''
-                let count = 0
-                for (let i in data) {
-                    if (!data[i].over) {
-                        let start = moment.unix(data[i].start)
-                        let end = moment.unix(data[i].end)
-                        let time = start.format("HH:mm") + ' - ' + end.format("HH:mm")
-                        let title = data[i].title
-                        let displayTime = '<i class="fas fa-clock fa-fw me-1"></i>' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i>' + data[i].place + '</span>'
-                        timetable.innerHTML +=
-                            '<div class="activity">' +
-                                (data[i].studyShort ? '<span class="float-end ms-2">' + '<i class="fas fa-graduation-cap fa-fw me-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
+        $.ajax({
+            url: '{{ route('api::screen::timetable') }}',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#timetable").html('');
+                    let count = 0;
+                    for (i in data) {
+                        if (!data[i].over) {
+                            let start = moment.unix(data[i].start);
+                            let end = moment.unix(data[i].end);
+                            let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+                            let title = data[i].title;
+                            let displayTime = '<i class="fas fa-clock fa-fw mr-1"></i>' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i>' + data[i].place + '</span>';
+                            $("#timetable").append('<div class="activity">' +
+                                (data[i].studyShort ? '<span class="float-right ml-2">' + '<i class="fas fa-graduation-cap fa-fw mr-2"></i>' + data[i].studyShort + ' ' + (data[i].year ? 'Year ' + data[i].year : '') + '</span> ' : null) +
                                 '<strong>' + data[i].type + '</strong><br>' +
-                                '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span><br>' +
-                                displayTime +
-                            '</div>'
-                        count++
+                                '<span class="' + (data[i].current ? "current" : "") + '">' + title + '</span>' +
+                                '<br>' +
+                                displayTime + '' +
+                                '</div>'
+                            );
+                            count++;
+                        }
                     }
+                    if (count === 0) {
+                        $("#timetable").html('<div class="notice">No more lectures today!</div>');
+                    }
+                } else {
+                    $("#timetable").html('<div class="notice">No lectures today!</div>');
                 }
-                if (count === 0) {
-                    timetable.innerHTML = '<div class="notice">No more lectures today!</div>'
-                }
-            } else {
-                timetable.innerHTML = '<div class="notice">No lectures today!</div>'
+                setTimeout(updateTimetable, 60000);
+            },
+            error: function () {
+                $("#timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
+                setTimeout(updateTimetable, 5000);
             }
-            setTimeout(updateTimetable, 60000);
-        })
-        .catch(err => {
-            console.error(err)
-            timetable.innerHTML = '<div class="notice">Lectures could not be found...</div>'
-            setTimeout(updateTimetable, 5000);
         })
     }
 
     updateTimetable();
 
     function updateActivities() {
-        get('{{ route('api::events::upcoming', ['limit' => 3]) }}')
-        .then(data => {
-            if (data.length > 0) {
-                document.getElementById("activities").innerHTML = '';
-                for (let i in data) {
-                        let start = moment.unix(data[i].start)
-                        let end = moment.unix(data[i].end)
-                        let time
-                        if (start.format('DD-MM') === end.format('DD-MM')) {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm")
-                        } else {
-                            time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm")
+        $.ajax({
+            url: '{{ route('api::events::upcoming', ['limit' => 3]) }}',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#activities").html('');
+                    for (let i in data) {
+                            let start = moment.unix(data[i].start);
+                            let end = moment.unix(data[i].end);
+                            let time;
+                            if (start.format('DD-MM') === end.format('DD-MM')) {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("HH:mm");
+                            } else {
+                                time = start.format("DD-MM, HH:mm") + ' - ' + end.format("DD-MM, HH:mm");
+                            }
+                            $("#activities").append('<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw mr-1"></i> ' + time + ' <span class="float-right"><i class="fas fa-map-marker-alt fa-fw mr-1"></i> ' + data[i].location + '</span></div>');
                         }
-                        document.getElementById("activities").innerHTML += '<div class="activity ' + (data[i].current ? "current" : (data[i].over ? "past" : "")) + '"><strong>' + data[i].title + '</strong><br><i class="fas fa-clock fa-fw me-1"></i> ' + time + ' <span class="float-end"><i class="fas fa-map-marker-alt fa-fw me-1"></i> ' + data[i].location + '</span></div>'
                     }
+                 else {
+                    $("#activities").html('<div class="notice">No upcoming activities!</div>');
                 }
-             else {
-                document.getElementById("activities").innerHTML = '<div class="notice">No upcoming activities!</div>'
+                setTimeout(updateActivities, 60000);
+            },
+            error: function () {
+                $("#activities").html('<div class="notice">Something went wrong during retrieval...</div>');
+                setTimeout(updateActivities, 5000);
             }
-            setTimeout(updateActivities, 60000)
-        })
-        .catch(err => {
-            console.error(err)
-            document.getElementById("activities").innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-            setTimeout(updateActivities, 5000)
         })
     }
 
     updateActivities();
 
     function updateBuses() {
-        updateBus(43110270, 43110270, 'businfo-langen');
-        updateBus(43005640, 43005630, 'businfo-wester');
+        updateBus(43110270, 43110270, '#businfo-langen');
+        updateBus(43005640, 43005630, '#businfo-wester');
     }
 
-    function updateBus(stop, stop_other_side, id) {
-        const element = document.getElementById(id)
-        get("{{urldecode(route('api::screen::bus'))}}", { tpc_id: stop, tpc_id_other: stop_other_side })
-        .then(data => {
-            let combinedBusses= {}
-            for (const [key, value] of Object.entries(data)) {
-                Object.assign(combinedBusses, value.Passes)
-            }
-            if (Object.keys(combinedBusses).length > 0) {
-                element.innerHTML = ''
-                Object.entries(combinedBusses).sort(function(a,b) {
-                    return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
-                });
+    function updateBus(stop, stop_other_side, element) {
+        $.ajax({
+            url: "{{urldecode(route('api::screen::bus'))}}",
+            data:{
+                'tpc_id':stop,
+                'tpc_id_other':stop_other_side,
+            },
 
-                for (const [key, value] of Object.entries(combinedBusses).slice(0,4)) {
-                    let colorLate = (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) / 1000 * 60 > 1) ? '#ff0000' : '#c1ff00';
-                    let drivingColor = value.TripStopStatus === "DRIVING" ? '#c1ff00' : '#fff'
-                    if (value.TripStopStatus !== "ARRIVED") {
-                        element.innerHTML += '<div class="busentry">' + `<span style=color:${colorLate}>` + new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0, 5) + '</span>' + ' ' + value.TransportType + ' ' + value.LinePublicNumber + ` ` + `<span style="color: ${drivingColor};">` + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>'
-                    }
+            success: function (data) {
+                let combinedBusses= {};
+                for (const [key, value] of Object.entries(data)) {
+                    Object.assign(combinedBusses, value.Passes)
                 }
-            } else {
-                element.innerHTML = '<div class="notice">No buses!</div>'
+                if (Object.keys(combinedBusses).length > 0) {
+                    $(element).html('');
+                    Object.entries(combinedBusses).sort(function(a,b) {
+                        return ((new Date(a[1].ExpectedArrivalTime).valueOf()) - (new Date(b[1].ExpectedArrivalTime).valueOf()));
+                    });
+
+                    for (const [key, value] of Object.entries(combinedBusses).slice(0,4)) {
+                        let colorLate = (Math.abs(new Date(value.ExpectedArrivalTime) - new Date(value.TargetArrivalTime)) / 1000 * 60 > 1) ? '#ff0000' : '#c1ff00';
+                        let drivingColor = value.TripStopStatus === "DRIVING" ? '#c1ff00' : '#fff'
+                        if (value.TripStopStatus != "ARRIVED") {
+                            $(element).append('<div class="busentry">' + `<span style=color:${colorLate}>` + new Date(value.ExpectedArrivalTime).toISOString().substr(11, 8).substr(0, 5) + '</span>' + ' ' + value.TransportType + ' ' + value.LinePublicNumber + ` ` + `<span style="color: ${drivingColor};">` + value.TripStopStatus + '</span><br>Towards ' + value.DestinationName50 + '</div>')
+                        }
+                    }
+                } else {
+                    $(element).html('<div class="notice">No buses!</div>');
+                }
+            },
+
+            error: function (data) {
+                $(element).html('<div class="notice">Something went wrong during retrieval...</div>');
             }
-        })
-        .catch(err => {
-            console.error(err)
-            element.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
         })
     }
 
@@ -412,47 +487,110 @@
     setInterval(updateBuses, 60000);
 
     function updateProtopeners() {
-        const timetable = document.getElementById("protopeners-timetable")
-        const protopolisFa = document.getElementById('protopolis-fa')
+        $.ajax({
+            url: '{{ route('api::screen::timetable::protopeners') }}',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#protopeners-timetable").html('');
+                    let open = false;
+                    let count = 0;
+                    for (let i in data) {
+                        if (data[i].over) {
+                            continue;
+                        } else if (data[i].current) {
+                            open = true;
+                        }
+                        count++;
 
-        get('{{ route('api::screen::timetable::protopeners') }}')
-        .then(data => {
-            if (data.length > 0) {
-                document.getElementById("protopeners-timetable").innerHTML = ''
-                let open = false, count = 0
-                for (let i in data) {
-                    if (data[i].over) continue
-                    else if (data[i].current) open = true
-                    let start = moment.unix(data[i].start);
-                    let end = moment.unix(data[i].end);
-                    let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
-                    document.getElementById("protopeners-timetable").innerHTML +=
-                        '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
-                        '   <div class="float-start">' + time + '</div>' +
-                        '   <div class="float-end"><strong>' + data[i].title + '</strong></div>' +
-                        '</div>'
-                    count++
-                }
-                if (open) {
-                    protopolisFa.classList.add('fa-door-open green')
-                    protopolisFa.classList.remove('fa-door-closed')
+                        let start = moment.unix(data[i].start);
+                        let end = moment.unix(data[i].end);
+                        let time = start.format("HH:mm") + ' - ' + end.format("HH:mm");
+
+                        $("#protopeners-timetable").append('' +
+                            '<div class="activity ' + (data[i].current ? "current" : "") + '">' +
+                            '<div class="float-left">' + time + '</div>' +
+                            '<div class="float-right"><strong>' + data[i].title + '</strong></div>' +
+                            '</div>');
+                    }
+                    if (open) {
+                        $("#protopolis-fa").addClass('fa-door-open green').removeClass('fa-door-closed');
+                    } else {
+                        $("#protopolis-fa").removeClass('fa-door-open green').addClass('fa-door-closed');
+                    }
+                    if (count === 0) {
+                        $("#protopeners-timetable").html('<div class="notice">Protopolis closed for today!</div>');
+                    }
                 } else {
-                    protopolisFa.classList.remove('fa-door-open green')
-                    protopolisFa.classList.add('fa-door-closed')
+                    $("#protopeners-timetable").html('<div class="notice">Protopolis closed today!</div>');
                 }
-                if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
-            } else {
-                timetable.innerHTML = '<div class="notice">Protopolis closed today!</div>'
+                setTimeout(updateProtopeners, 60000);
+            },
+            error: function () {
+                $("#protopeners-timetable").html('<div class="notice">Something went wrong during retrieval...</div>');
+                setTimeout(updateProtopeners, 5000);
             }
-            setTimeout(updateProtopeners, 60000)
-        })
-        .catch(_ => {
-            timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
-            setTimeout(updateProtopeners, 5000)
         })
     }
 
-    updateProtopeners()
+    updateProtopeners();
+
+    // ProTube
+    let screen = io('{!! config('herbert.server') !!}/protube-screen');
+    let nowplaying;
+
+    screen.on("connect", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").removeClass('active').html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
+    screen.on("progress", function (data) {
+
+        let progress = parseInt(data);
+        $("#protube-ticker").css("width", (data.duration / progress) + "%");
+
+    });
+
+    screen.on("ytInfo", function (data) {
+
+        nowplaying = data;
+        if (typeof data.title == "undefined") {
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ProTube Idle');
+            $("#protube-ticker").css("width", "100%");
+            $("#protube").addClass('inactive').css("background-image", "auto");
+        } else {
+            let url = "url('https://i.ytimg.com/vi/" + data.id + "/hqdefault.jpg')";
+            $("#protube-ticker").css("width", "0%");
+            $("#protube-title").html('<i class="fab fa-youtube fa-fw mr-2"></i> ' + data.title);
+            $("#protube").removeClass('inactive').css("background-image", url);
+        }
+
+    });
+
+    screen.on("disconnect", function () {
+
+        $("#protube-title").html("Connection lost");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
+    screen.on("reconnect", function () {
+
+        screen.emit("screenReady");
+
+        $("#protube-title").html("ProTube connected");
+        $("#protube-ticker").css("width", "100%");
+        $("#protube").addClass('inactive').css("background-image", "auto");
+
+    });
+
+
 </script>
 
 </body>

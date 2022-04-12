@@ -1,5 +1,41 @@
 @extends('website.layouts.redesign.generic')
 
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let mySwiper = new Swiper.default('.swiper-container', {
+            @if( count($companies) > 1 )
+            loop: true,
+            slidesPerView: 2,
+            @else
+            slidesPerView: 1,
+            @endif
+            spaceBetween: 10,
+
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+
+            breakpoints: {
+                1200: {
+                    @if( count($companies) >= 4 )
+                    loop: true,
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                    @else
+                    slidesPerView: "<?= count($companies) ?>",
+                    spaceBetween: 50,
+                    watchOverflow: true,
+                    @endif
+                }
+            }
+        })
+    </script>
+
+@endpush
+
 @section('page-title')
     Homepage
 @endsection
@@ -10,20 +46,17 @@
 
         <div class="col-xl-9 col-md-6 col-sm-12">
 
-            <div class="card text-white mb-3 border-0"
-                 style="
-                    @if($header)
-                        background-image: url({{ $header->image->generateImagePath(1500, 400) }});
-                        background-size: cover; background-position: center center;
-                        text-shadow: 0 0 10px #000;
-                        height: 250px;
-                    @else
-                        background-color: var(--bs-primary);
-                        height: 150px !important;
-                    @endif
-            ">
+            <div class="card text-white mb-3 border-0" style="height: 250px;
+            @if($header)
+                    background-image: url({{ $header->image->generateImagePath(1500, 400) }});
+                    background-size: cover; background-position: center center;
+                    text-shadow: 0 0 10px #000;
+            @else
+                    background-color: var(--primary);
+                    height: 150px !important;
+            @endif">
                 @if($header && $header->user)
-                    <small class="ellipsis text-end pe-3 pt-2">
+                    <small class="ellipsis text-right pr-3 pt-2">
                         @if (Auth::check() && Auth::user()->is_member && $header->user->member)
                             Photo by <a href="{{ route('user::profile', ['id' => $header->user->getPublicId()]) }}"
                                         class="text-white">
@@ -33,11 +66,11 @@
                         @endif
                     </small>
                 @endif
-                <div class="card-body text-start d-flex align-items-end">
-                    <h2 class="card-text ellipsis px-1" style="font-size: 30px">
+                <div class="card-body" style="text-align: left; vertical-align: bottom; font-size: 30px; display: flex;">
+                    <p class="card-text ellipsis px-1" style="align-self: flex-end;">
                         @section('greeting')
                         @show
-                    </h2>
+                    </p>
                 </div>
             </div>
 
@@ -45,16 +78,14 @@
 
                 <div class="card mb-3">
                     <div class="card-body pb-0 pt-1 position-relative">
-                        <div class="swiper row mb-1" style="height:70px">
+                        <div class="row mb-1 swiper-container" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
                                     @if($company->image)
                                         <div class="swiper-slide justify-content-center align-items-center d-flex">
                                             <a href="{{ route('companies::show', ['id' => $company->id]) }}">
                                                 <img class="company-{{strtolower($company->name)}}"
-                                                     src="{{ $company->image->generateImagePath(null, 50) }}"
-                                                     alt="logo of {{ $company->name }}"
-                                                />
+                                                     src="{{ $company->image->generateImagePath(null, 50) }}"/>
                                             </a>
                                         </div>
                                     @endif
@@ -78,7 +109,7 @@
 
                     <div class="card mb-3">
                         <div class="card-header bg-dark text-white">
-                            <i class="fab fa-youtube fa-fw me-2"></i> Recent videos
+                            <i class="fab fa-youtube fa-fw mr-2"></i> Recent videos
                         </div>
                         <div class="card-body">
 

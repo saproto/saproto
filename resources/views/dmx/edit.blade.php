@@ -98,7 +98,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-right">Submit</button>
 
                         <a href="{{ route("dmx::index") }}" class="btn btn-default">
                             Cancel

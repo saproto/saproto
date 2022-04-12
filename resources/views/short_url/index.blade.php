@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge bg-info float-end" href="{{ route('short_url::edit', ['id' => 'new']) }}">
+                    <a class="badge badge-info float-right" href="{{ route('short_url::edit', ['id' => 'new']) }}">
                         Create Short URL</a>
                 </div>
 
@@ -39,9 +39,9 @@
 
                             <tr>
 
-                                <td class="ps-2">
+                                <td class="pl-2">
                                     <a href="{{ route('short_url::delete', ['id' => $url->id]) }}"
-                                       class="fa fa-trash-alt text-danger me-2"></a>
+                                       class="fa fa-trash-alt text-danger mr-2"></a>
                                     <a href="{{ route('short_url::edit', ['id' => $url->id]) }}"
                                        class="fa fa-pencil-alt text-success"></a>
                                 </td>
@@ -56,11 +56,12 @@
                                 </td>
                                 <td class="text-center">
                                     <button
-                                       data-bs-toggle="popover"
-                                       data-bs-placement="right"
-                                       data-bs-trigger="focus"
-                                       data-bs-content="{{ $url->target }}"
-                                       class="btn badge bg-info">
+                                       data-toggle="popover"
+                                       data-placement="right"
+                                       data-trigger="focus"
+                                       data-title="{{ $url->description }}"
+                                       data-content="{{ $url->target }}"
+                                       class="btn badge badge-info">
                                         <i class="fas fa-link text-white"></i>
                                     </button>
                                 </td>

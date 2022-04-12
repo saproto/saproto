@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('omnomcom::withdrawal::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('omnomcom::withdrawal::add') }}" class="badge badge-info float-right">
                         Create a new withdrawal.
                     </a>
                 </div>
@@ -79,7 +79,7 @@
 
                 @else
 
-                    <p class="text-center">
+                    <p style="text-align: center;">
                         There are no withdrawals.
                     </p>
 

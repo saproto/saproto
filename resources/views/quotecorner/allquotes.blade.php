@@ -1,6 +1,6 @@
 <div class="card mb-3">
 
-    <div class="card-header pb-0 overflow-auto">
+    <div class="card-header pb-0" style="overflow-x: auto;">
         {{ $data->links() }}
     </div>
 

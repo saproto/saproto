@@ -6,10 +6,9 @@
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <meta name='viewport' content='initial-scale=1, maximum-scale=1, user-scalable=no'/>
-        <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
         <link rel='shortcut icon' href='{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}'/>
-        <link rel='stylesheet' href='{{ mix('/css/application-dark.css') }}'>
+        <link rel='stylesheet' href='{{ mix('/assets/application-dark.css') }}'>
 
         <style>
             * { box-sizing: border-box; }
@@ -35,7 +34,7 @@
                 @php($bg_image = 'images/omnomcom/cookiemonster.png')
                 @foreach(config('omnomcom.cookiemonsters') as $cookiemonster)
                     @if(date('U') > strtotime($cookiemonster->start) && date('U') < strtotime($cookiemonster->end))
-                       @php($bg_image = "images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png")
+                       @php($bg_image = 'images/omnomcom/cookiemonster_seasonal/$cookiemonster->name.png')
                        @break
                     @endif
                 @endforeach
@@ -47,405 +46,447 @@
         </style>
     </head>
 
-    <body>
+    <body id='omnomcom'>
 
-        <div id="display-fullscreen" class="modal" tabindex="-1">
-            <div class="modal-dialog-centered mx-auto">
-                <div class="modal-content">
-                    <div class="modal-header text-center">
-                        <h5 class="modal-title w-100">Please display OmNomCom in fullscreen!</h5>
-                    </div>
-                    <div class="modal-body d-flex justify-content-center pb-0">
-                        <img src="{{ asset('images/omnomcom/cookiemonster_seasonal/pixels.png') }}" alt="cookie monster">
-                    </div>
-                </div>
-            </div>
+        <div class='d-flex px-2'>
+            @include('omnomcom.store.includes.categories')
+
+            @include('omnomcom.store.includes.product_overview')
         </div>
 
-        <div id="omnomcom">
-
-            <div class='d-flex ps-2'>
-                @include('omnomcom.store.includes.categories')
-
-                @include('omnomcom.store.includes.product_overview')
-            </div>
-
-            @include('omnomcom.store.includes.controls')
-
-        </div>
+        @include('omnomcom.store.includes.controls')
 
         @include('omnomcom.store.includes.modals')
 
         @include('website.layouts.assets.javascripts')
+        @stack('javascript')
 
         <script type='text/javascript' nonce='{{ csp_nonce() }}'>
-            let actionStatus
-            let purchaseProcessing
-            let cartOverflowVisible = true
-            let cartOverflowFirstClosed = false
-            let cartOverflowMinimum = 4
-            const server = establishNfcConnection()
+            let modal_status = null;
+            let purchase_processing = null;
+            let rfid_link_card = null;
+            let cash = false;
+            let bank_card = false;
 
-            let images = []
-            let cart = []
-            let stock = []
-            let price = []
+            /*
+             Loading the necessary data.
+             */
 
-            initializeOmNomCom()
+            let images = [];
+            let cart = [];
+            let stock = [];
+            let price = [];
 
-            async function initializeOmNomCom() {
-                await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
-                        .then(data => {
-                            data.forEach(product => {
-                                const id = product.id
-                                images[id] = product.image_url ?? ''
-                                cart[id] = 0
-                                stock[id] = product.stock
-                                price[id] = product.price
-                            })
-                        })
+            @foreach($categories as $category)
+                @foreach($category->products as $product)
+                    @if($product->isVisible())
+                        @if($product->image)
+                            images[{{ $product->id }}] = '{!! $product->image->generateImagePath(100, null) !!}';
+                        @endif
+                        cart[{{ $product->id }}] = 0;
+                        stock[{{ $product->id }}] = {{ $product->stock }};
+                        price[{{ $product->id }}] = {{ $product->price }};
+                    @endif
+                @endforeach
+            @endforeach
 
-                const categoryBtnList = Array.from(document.getElementsByClassName('btn-category'))
-                categoryBtnList.forEach(el => {
-                    el.addEventListener('click', _ => {
-                        Array.from(document.querySelectorAll('#category-nav > .active')).forEach(el => el.classList.remove('active'))
-                        el.classList.add('active')
-                        const categoryViewList = Array.from(document.getElementsByClassName('category-view'))
-                        const id = el.getAttribute('data-id')
-                        categoryViewList.forEach(el => {
-                            if (el.getAttribute('data-id') !== id) el.classList.add('inactive')
-                            else el.classList.remove('inactive')
-                        })
-                    })
-                })
+            /*
+             Registering button handlers
+            */
 
-                const productList = Array.from(document.getElementsByClassName('product'))
-                productList.forEach(el => {
-                    el.addEventListener('click', _ => {
-                        if (el.classList.contains('random')) {
-                            if (el.getAttribute('data-stock') > 0) {
-                                let data = el.getAttribute('data-list').split(',')
-                                let selected = Math.floor(Math.random() * data.length)
-                                if (stock[data[selected]] < 1)
-                                    return el.dispatchEvent(new Event('click'))
-                                const product = document.querySelector(`[data-id="${data[selected]}"]`)
-                                product.dispatchEvent(new Event('click'))
-                            } else {
-                                modals['outofstock-modal'].show()
-                            }
-                        } else {
-                            const id = el.getAttribute('data-id')
-                            const s = stock[id]
-                            if (s <= 0) {
-                                modals['outofstock-modal'].show()
-                            } else {
-                                cart[id]++
-                                stock[id]--
-                                update('add')
-                            }
+            $('#reload-button').on('click', function () {
+                window.location.reload();
+            });
+
+            $('.btn-category').on('click', function (e) {
+                $(this).removeClass('inactive');
+                $(this).siblings().addClass('inactive');
+                $('.category-view').addClass('inactive');
+                $('.category-view[data-id=' + $(this).attr('data-id') + ']').removeClass('inactive');
+            });
+
+            $('.product').on('click', function () {
+                if ($(this).hasClass('random')) {
+                    if ($(this).attr('data-stock') > 0) {
+                        let list = $(this).attr('data-list');
+                        let data = list.split('','');
+                        let selected = Math.floor(Math.random() * data.length);
+                        if (stock[data[selected]] < 1) {
+                            $(this).trigger('click');
+                            return;
                         }
-                    })
-                })
+                        $(this).siblings("div.product[data-id=" + data[selected] + "]").first().click();
+                    } else {
+                        $('#outofstock-modal').modal('show');
+                    }
+                } else {
+                    if (stock[$(this).attr('data-id')] <= 0) {
+                        $('#outofstock-modal').modal('show');
+                    } else {
+                        cart[$(this).attr('data-id')]++;
+                        stock[$(this).attr('data-id')]--;
+                        let s = stock[$(this).attr('data-id')];
+                        $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+                        update();
+                    }
+                }
+            });
 
-                document.getElementById('cart').addEventListener('click', e => {
-                    if(e.target.classList.contains('cart-product')) {
-                        const id = e.target.getAttribute('data-id')
-                        cart[id]--
-                        stock[id]++
-                        update('remove')
-                    } else if (e.target.id === 'cart-overflow') {
-                        if (cartOverflowVisible === true) {
-                            cartOverflowVisible = false
-                            Array.from(document.getElementsByClassName('cart-product')).forEach(el => el.style.left = '0')
+            $('#cart').on('click', '.cart-product', function () {
+                cart[$(this).attr('data-id')]--;
+                stock[$(this).attr('data-id')]++;
+                let s = stock[$(this).attr('data-id')];
+                $('.product[data-id=' + $(this).attr('data-id') + '] .product-stock').html(s + ' x');
+                update();
+            });
+
+            $('#purchase-button').on('click', function () {
+                $('#rfid-modal .modal-status').html("<span style='color: orange;'>Working on your purchase...<span>");
+                purchase(null, 'account');
+            });
+
+            /*
+             Purchase logic.
+             */
+
+            function purchase(credential, type) {
+                if (purchase_processing != null) return;
+                else purchase_processing = true;
+
+                $.ajax({
+                    url: '{{ route('omnomcom::store::buy', ['store' => $storeslug]) }}',
+                    method: 'post',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        credentialtype: type,
+                        credentials: (type !== 'account' ? credential : {
+                            username: $('#purchase-username').val(),
+                            password: $('#purchase-password').val()
+                        }),
+                        cash: {{ ($store->cash_allowed ? 'cash' : 'false') }},
+                        bank_card: {{ ($store->bank_card_allowed ? 'bank_card' : 'false') }},
+                        cart: cart_to_object(cart)
+                    },
+                    dataType: 'html',
+                    success: function (data) {
+                        data = JSON.parse(data);
+
+                        if (data.status === 'OK') {
+                            if (!data.hasOwnProperty('message')) finishPurchase();
+                            else finishPurchase(data.message);
                         } else {
-                            cartOverflowVisible = true
-                            Array.from(document.getElementsByClassName('cart-product')).forEach((el, i) => el.style.left = `${(i + 1) * 110}px`)
+                            $('#purchase-modal .modal-status').html(data.message);
+                            purchase_processing = null;
+                        }
+                    },
+                    error: function (xhr, status) {
+                        purchase_processing = null;
+                        if (xhr.status === 503) {
+                            $('#purchase-modal .modal-status').html('The website is currently in maintenance. Please try again in 30 seconds.');
+                        } else {
+                            $('#purchase-modal .modal-status').html('There is something wrong with the website, call someone to help!');
                         }
                     }
-                })
-
-                /* Modal handlers */
-                document.getElementById('rfid').addEventListener('click', _ => {
-                    actionStatus = 'rfid'
-                    modals['rfid-modal'].show()
-                    document.querySelector('#rfid-modal .modal-body').innerHTML = '<h1>Please present your RFID card</h1>'
-                })
-
-                document.getElementById('purchase').addEventListener('click', _ => purchaseInitiate(
-                    false, false,
-                    'Payment of €' + document.getElementById('total').innerHTML + ' for purchases in Omnomcom',
-                    'Complete purchase using your <i class="fas fa-cookie-bite"></i> OmNomCom bill.'
-                ))
-
-                const cashCompleted = document.getElementById('purchase-cash-initiate')
-                if(cashCompleted) {
-                    cashCompleted.addEventListener('click', _ => purchaseInitiate(
-                        true, false,
-                        'Cashier payment for cash purchases in Omnomcom',
-                        'Complete purchase as cashier, payed with cash.'
-                    ))
-                }
-
-                const cardCompleted = document.getElementById('purchase-bank-card-initiate')
-                if(cardCompleted) {
-                    cardCompleted.addEventListener('click', _ => purchaseInitiate(
-                        false, true,
-                        'Cashier payment for bank card purchases in Omnomcom',
-                        'Complete purchase as cashier, payed with bank card.'
-                    ))
-                }
-            }
-
-            function anythingInCart() {
-                for (let id in cart) if (cart[id] > 0) return true
-                return false
-            }
-
-            function cart_to_object(cart) {
-                let object_cart = {}
-                for (let product in cart)
-                    if (cart[product] > 0) object_cart[product] = cart[product]
-                return object_cart
-            }
-
-            function purchaseInitiate(payedCash, payedCard, message, title) {
-                modals['purchase-modal'].show()
-                if (!document.querySelector('#purchase-modal .qrAuth img')) {
-                    doQrAuth(
-                        document.querySelector('#purchase-modal .qrAuth'),
-                        message,
-                        purchase
-                    )
-                }
-                actionStatus = 'purchase'
-                document.querySelector('#purchase-modal .modal-status').innerHTML = '<span class="modal-status">Authenticate using the QR code above.</span>'
-                document.querySelector('#purchase-modal h1').innerHTML = title
-                if (payedCard) document.getElementById('purchase-bank-card').classList.add('modal-toggle-true')
-            }
-
-            function purchase(credentials, type) {
-                if (purchaseProcessing != null) return
-                else purchaseProcessing = true
-
-                post(
-                    '{{ route('omnomcom::store::buy', ['store' => $store_slug]) }}', {
-                        credential_type: type,
-                        credentials: credentials,
-                        cash: {{ ($store->cash_allowed ? 'true' : 'false') }},
-                        bank_card: {{ ($store->bank_card_allowed ? 'true' : 'false') }},
-                        cart: cart_to_object(cart)
-                    })
-                    .then(data => {
-                        if (data.status === 'OK') {
-                            finishPurchase(data.message)
-                        } else {
-                            purchaseInitiate(
-                                false, false,
-                                'Payment of €' + document.getElementById('total').innerHTML + ' for purchases in Omnomcom',
-                                'Complete purchase using your <i class="fas fa-cookie-bite"></i> OmNomCom bill.'
-                            )
-                            modals['purchase-modal'].show()
-                            document.querySelector('#purchase-modal .modal-status').innerHTML = `<span class="badge bg-danger text-white">${data.message}</span>`
-                            purchaseProcessing = null
-                        }
-                    })
-                    .catch(err => {
-                        const status = document.querySelector('#purchase-modal .modal-status')
-                        purchaseProcessing = null
-                        if (err.status === 503) status.innerHTML = 'The website is currently in maintenance. Please try again in 30 seconds.'
-                        else status.innerHTML = 'There is something wrong with the website, call someone to help!'
-                    })
-            }
-
-            function doQrAuth(element, description, onComplete) {
-                let authToken = null
-                post('{{ route('qr::generate') }}', { description: description })
-                    .then(data => {
-                        const qrImg = "{{ route('qr::code', '') }}" + '/' + data.qr_token
-                        const qrLink = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token
-                        element.innerHTML = 'Scan this QR code<br><br><img alt="QR code" class="bg-white p-2" src="' +  qrImg +
-                            '" width="200px" height="200px"><br><br>or go to<br><strong>' + qrLink + '</strong>'
-                        authToken = data.auth_token
-                        const qrAuthInterval = setInterval(_ => {
-                            if (actionStatus == null) return clearInterval(qrAuthInterval)
-                            get('{{ route('qr::approved') }}', { code: authToken })
-                                .then(approved => {
-                                    if (approved) {
-                                        element.innerHTML = 'Successfully authenticated :)'
-                                        clearInterval(qrAuthInterval)
-                                        onComplete(authToken, 'qr')
-                                    }
-                                })
-                        }, 1000)
-                    })
+                });
             }
 
             function finishPurchase(display_message = null) {
-                Object.values(modals).forEach(modal => modal.hide())
-                if (display_message) document.getElementById('finished-modal-message').innerHTML = `<span>${display_message}</span>`
-                document.getElementById('finished-modal-continue').addEventListener('click', _ => window.location.reload())
-                modals['finished-modal'].show()
-                const movie = document.getElementById('purchase-movie')
-                movie.addEventListener('ended', _ => window.location.reload())
-                movie.play()
+                $('#finished-modal').siblings().modal('hide')
+                if (display_message) $('#finished-modal-message').html(display_message);
+                $('#finished-modal-continue').on('click', () => window.location.reload());
+                $('#finished-modal').modal({ backdrop: 'static', keyboard: false, show: true});
+                let movie = $('#purchase-movie');
+                movie.on('ended', () => window.location.reload());
+                movie.trigger('play');
             }
 
-            function createCartElement(index, id, amount, image) {
-                return `<div class="cart-product stretched-link" data-id="${id}" style="left: ${cartOverflowVisible * index * 110}px">` +
-                            '<div class="cart-product-image">' +
-                                `<div class="cart-product-image-inner" style="background-image: url(${image});"></div>` +
-                            '</div>' +
-                            `<div class="cart-product-count">${amount}x</div>` +
-                        '</div>'
-            }
+            /*
+             Cart logic.
+             */
 
-            async function update(context=null) {
-                const cartEl = document.getElementById('cart')
-
-                Array.from(document.getElementsByClassName('cart-product')).forEach(el => el.parentNode.removeChild(el))
-
-                let uniqueItems = 0
-                let totalItems = 0
-                let orderTotal = 0
-
-                await cart.forEach((amount, id) => {
-                    if (amount === 0) return
-                    uniqueItems += 1
-                    totalItems += amount
-                    orderTotal += price[id] * cart[id]
-                    cartEl.innerHTML += createCartElement(uniqueItems, id, amount, images[id])
-                })
-
-                document.querySelector('#cart-overflow .cart-product-count').innerHTML = totalItems + " x"
-                if (uniqueItems === cartOverflowMinimum && !cartOverflowFirstClosed && context !== 'remove') {
-                    cartOverflowVisible = false
-                    cartOverflowFirstClosed = true
-                    Array.from(document.getElementsByClassName('cart-product')).forEach(el => el.style.left = '0')
+            function update() {
+                $('#cart').html('');
+                let anythingincart = false;
+                let ordertotal = 0;
+                for (let id in cart) {
+                    if (cart[id] > 0) {
+                        ordertotal += price[id] * cart[id];
+                        anythingincart = true;
+                        $('#cart').append(
+                            "<div class='cart-product' data-id='" + id + "'>" +
+                                "<div class='cart-product-image'>" +
+                                    "<div class='cart-product-image-inner' style='background-image: url('" + images[id] + "');></div>" +
+                                "</div>" +
+                                "<div class='cart-product-count'>" + cart[id] + "x </div>" +
+                            "</div>"
+                        );
+                    }
                 }
+                if (anythingincart) {
+                    $('#purchase').removeClass('inactive');
+                    $('#purchase-cash-initiate').removeClass('inactive');
+                    $('#purchase-bank-card-initiate').removeClass('inactive');
+                } else {
+                    $('#purchase').addClass('inactive');
+                    $('#purchase-cash-initiate').addClass('inactive');
+                    $('#purchase-bank-card-initiate').addClass('inactive');
+                }
+                $('#total').html(ordertotal.toFixed(2));
 
-                stock.forEach((amount, id) => {
-                    if (amount < 1000 )
-                        document.querySelector(`[data-id="${id}"] .product-stock`).innerHTML = amount + ' x'
-                })
-
-                const purchaseEls = Array.from(document.getElementsByClassName('purchase-button'))
-                if (anythingInCart()) purchaseEls.forEach(el => el.disabled = false)
-                else purchaseEls.forEach(el => el.disabled = true)
-                document.getElementById('total').innerHTML = orderTotal.toFixed(2)
-
-                let lists = document.getElementsByClassName('random')
+                let lists = $('.random');
                 for (let i = 0; i < lists.length; i++) {
-                    let count = 0
-                    let products = Array.from(lists[i].parentNode.children)
-                    products.splice(products.indexOf(lists[i]), 1)
-                    products.forEach(el => { if (stock[el.getAttribute('data-id')] > 0) count++ })
-                    lists[i].setAttribute('data-stock', count.toString())
+                    let count = 0;
+                    let products = $(lists[i]).siblings();
+                    for (let j = 0; j < products.length; j++) {
+                        if (stock[$(products[j]).attr('data-id')] > 0) count++;
+                    }
+                    $(lists[i]).attr('data-stock', count);
                 }
             }
+
+            /*
+             RFID scanner integration
+             */
+
+            let server;
+
+            establishNfcConnection();
 
             function establishNfcConnection() {
-                const status = document.getElementById('status')
-                let server
-
                 try {
-                    status.classList.add('inactive')
-                    status.innerHTML = 'RFID Service: Connecting...'
-                    server = new WebSocket('ws://localhost:3000', 'nfc')
-                } catch (error) {
-                    if (error.message.split('/\s+/').contains('insecure')) {
-                        status.classList.add('inactive')
-                        status.innerHTML = 'RFID Service: Not Supported'
+                    $('#status').addClass('inactive').html('RFID Service: Connecting...');
+                    server = new WebSocket('ws://localhost:3000', 'nfc');
+                } catch (err) {
+                    if (err.message.indexOf('insecure') !== -1) {
+                        $('#status').addClass('inactive').html('RFID Service: Not Supported');
+                        return;
                     } else {
-                        console.error('Unexpected error: ' + error.message)
+                        console.log('Unexpected error:', err.message);
                     }
                 }
 
-                server.onopen = _ => {
-                    status.classList.remove('inactive')
-                    status.innerHTML = 'RFID Service: Connected'
-                }
+                server.onopen = function () {
+                    $('#status').removeClass('inactive').html('RFID Service: Connected');
+                };
 
-                server.onclose = _ => {
-                    status.classList.add('inactive')
-                    status.innerHTML = 'RFID Service: Disconnected'
-                    setTimeout(establishNfcConnection, 5000)
-                }
+                server.onclose = function () {
+                    $('#status').addClass('inactive').html('RFID Service: Disconnected');
+                    setTimeout(establishNfcConnection, 5000);
+                };
 
-                server.onmessage = raw => {
-                    let data = JSON.parse(raw.data).uid
-                    console.log('Received card input: ' + data)
+                server.onmessage = function (raw) {
+                    let data = JSON.parse(raw.data).uid;
+                    console.log('Received card input: ' + data);
+
+                    if (modal_status === 'badcard') {
+                        return;
+                    }
 
                     if (data === '') {
-                        Object.values(modals).forEach(el => el.hide())
-                        modals['badcard-modal'].show()
-                        actionStatus = 'badcard'
-                        return
+                        $('.modal').modal('hide');
+                        $('#badcard-modal').modal('show');
+                        modal_status = 'badcard';
+                        return;
                     }
 
-                    modals['badcard-modal'].hide()
+                    $('#badcard-modal').modal('hide');
 
-                    if (actionStatus === 'rfid') {
-                        const rfidLinkCard = data
-                        document.querySelector('#rfid-modal .modal-body').innerHTML =
-                            '<div class="qrAuth">Loading QR authentication...</div>' +
-                            '<hr>' +
-                            '<span class="modal-status">Authenticate using the QR code above to link RFID card.</span>'
-                        doQrAuth(
-                            document.querySelector('#rfid-modal .qrAuth'),
-                            'Link RFID card to account',
-                            (auth_token, credentialtype) => {
-                                post(
-                                    '{{ route('omnomcom::store::rfidadd') }}',
-                                    {
-                                        card: rfidLinkCard,
+                    if (modal_status === 'rfid') {
+
+                        if (rfid_link_card == null) {
+                            rfid_link_card = data;
+                            $('#rfid-modal .modal-body').html(
+                                "<div class='qrAuth'>Loading QR authentication...</div>\n" +
+                                "\n" +
+                                "        <hr>\n" +
+                                "\n" +
+                                "<span class='modal-status''>\n" +
+                                "   Authenticate using the QR code above to link RFID card.\n" +
+                                "</span>"
+                            );
+                            doQrAuth($('#rfid-modal .qrAuth'), 'Link RFID card to account', function (auth_token, credentialtype) {
+                                $.ajax({
+                                    url: '{{ route('omnomcom::store::rfidadd') }}',
+                                    method: 'post',
+                                    data: {
+                                        _token: '{{ csrf_token() }}',
+                                        card: rfid_link_card,
                                         credentialtype: credentialtype,
                                         credentials: auth_token,
+                                    },
+                                    dataType: 'html',
+                                    success: function (data) {
+                                        $('#rfid-modal .modal-status').html(data);
                                     }
-                                )
-                                    .then(data => document.querySelector('#rfid-modal .modal-status').innerHTML =
-                                        '<span class="' + (data.ok ? 'primary' : 'danger') + '">' + data.text + '</span>')
-                            }
-                        )
-                    } else if (actionStatus === 'purchase') {
-                        purchase(data, 'card')
+                                });
+                            });
+                        }
+
+                    } else if (modal_status === 'purchase') {
+                        purchase(data, 'card');
                     } else {
-                        if (anythingInCart()) purchase(data, 'card')
-                        else modals['emptycart-modal'].show()
+                        let anythingincart = false;
+                        for (let id in cart) {
+                            if (cart[id] > 0) {
+                                anythingincart = true;
+                            }
+                        }
+                        if (anythingincart) {
+                            purchase(data, 'card');
+                        } else {
+                            $('#emptycart-modal').modal('show');
+                        }
                     }
                 }
-
-                return server
             }
 
-            /* Handle idle timeout */
-            let idleTime = 0
-            let idleWarning = false
+            function doQrAuth(element, description, onComplete) {
+                let auth_token = null;
 
-            setInterval(_ => {
-                idleTime = idleTime + 1
+                $.ajax({
+                    url: '{{ route('qr::generate') }}',
+                    method: 'post',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        description: description
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        let qr_img = "{{ route('qr::code', '') }}" + '/' + data.qr_token;
+                        let qr_link = "{{ route('qr::dialog', '') }}" + '/' + data.qr_token;
+                        element.html("Scan this QR code<br><br><img src='" +  qr_img + "' width='200px' height='200px'><br><br>or go to<br><strong>" + qr_link + '</strong>');
+                        auth_token = data.auth_token;
+
+                        let qrAuthInterval = setInterval(function () {
+                            // Stop checking if the modal has been dismissed.
+                            if (modal_status == null) {
+                                clearInterval(qrAuthInterval);
+                                return;
+                            }
+
+                            $.ajax({
+                                url: '{{ route('qr::approved') }}',
+                                method: 'get',
+                                data: {
+                                    _token: '{{ csrf_token() }}',
+                                    code: auth_token
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data) {
+                                        element.html('Successfully authenticated :)');
+                                        clearInterval(qrAuthInterval);
+                                        onComplete(auth_token, 'qr');
+                                    }
+                                }
+                            });
+                        }, 1000);
+                    }
+                });
+
+            }
+
+            /*
+             Modal handlers
+             */
+
+            $('#rfid').on('click', function () {
+                rfid_link_card = null;
+                modal_status = 'rfid';
+                $('#rfid-modal').modal('show')
+                $('#rfid-modal .modal-body').html('<h1>Please present your RFID card</h1>');
+            });
+
+            $('#purchase').on('click', function () {
+                $('#purchase-modal').modal('show');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Payment of €' + $('#total').html() + ' for purchases in Omnomcom', purchase);
+
+                $('#purchase-modal h1').html("Complete purchase using your <i class='fas fa-cookie-bite'></i> OmNomCom bill.");
+                cash = false;
+                bank_card = false;
+                modal_status = 'purchase';
+            });
+
+            $('#purchase-cash-initiate').on('click', function () {
+                $('#purchase-modal').modal('show');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Cashier payment for cash purchases in Omnomcom', purchase);
+
+                $('#purchase-modal h1').html('Complete purchase as cashier, payed with cash.');
+                cash = true;
+                bank_card = false;
+                modal_status = 'purchase';
+            });
+
+            $('#purchase-bank-card-initiate').on('click', function () {
+                $('#purchase-modal').modal('show')
+                $('#purchase-bank-card').addClass('modal-toggle-true');
+                doQrAuth($('#purchase-modal .qrAuth'), 'Cashier payment for bank card purchases in Omnomcom', purchase);
+
+                $('#purchase-modal h1').html('Complete purchase as cashier, payed with bank card.');
+                cash = false;
+                bank_card = true;
+                modal_status = 'purchase';
+            });
+
+
+            /*
+             Handle idle timeout
+             */
+
+            let idleTime = 0;
+            let idleWarning = false;
+
+            $(function () {
+                //Increment the idle time counter every minute.
+                setInterval(timerIncrement, 1000); // 1 second
+
+                //Zero the idle timer on mouse movement.
+                $(this).on('mousemove', function (e) {
+                    idleTime = 0;
+                    idleWarning = false;
+                });
+                $(this).on('keydown', function (e) {
+                    idleTime = 0;
+                    idleWarning = false;
+                });
+            });
+
+            // Called each minute
+            function timerIncrement() {
+                idleTime = idleTime + 1;
 
                 if (idleTime > 60 && !idleWarning) {
-                    if (anythingInCart() && Array.from(modals).every(el => el._isShown())) {
-                        idleWarning = true
-                        Object.values(modals).forEach(el => el.hide())
-                        modals['idlewarning-modal'].show()
+                    let anythingincart = false;
 
-                        setTimeout(_ => { if (idleWarning) window.location.reload() }, 10000)
+                    for (let id in cart) {
+                        if (cart[id] > 0) {
+                            anythingincart = true;
+                        }
+                    }
+
+                    if (anythingincart && !$('.modal').data('bs.modal')?._isShown) {
+                        idleWarning = true;
+                        $('.modal').modal('hide');
+                        $('#idlewarning-modal').modal('show');
+
+                        setTimeout(function () {
+                            if (idleWarning) window.location.reload();
+                        }, 10000);
                     }
                 }
-            }, 1000)
+            }
 
-            // Reset idle timer on mouse movement.
-            document.body.addEventListener('mousemove', _ => {
-                idleTime = 0
-                idleWarning = false
-            })
+            function cart_to_object(cart) {
+                let object_cart = {};
 
-            // Reset idle timer on keydown
-            document.body.addEventListener('keydown', _ => {
-                idleTime = 0
-                idleWarning = false
-            })
+                for (let product_id in cart) {
+                    if (cart[product_id] > 0) {
+                        object_cart[product_id] = cart[product_id]
+                    }
+                }
+
+                return object_cart;
+            }
         </script>
     </body>
 </html>

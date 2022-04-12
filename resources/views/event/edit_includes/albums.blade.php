@@ -19,10 +19,10 @@
                 @endif
 
                 @foreach($event->albums as $album)
-                    <span class="badge bg-primary">
+                    <span class="badge badge-primary">
                     {{ $album->name }} <a
                                 href="{{ route('event::unlinkalbum', ['album'=>$album->id]) }}">
-                            <i class="fas fa-times ms-2 text-white"></i>
+                            <i class="fas fa-times ml-2 text-white"></i>
                         </a>
                     </span>
                 @endforeach

@@ -15,7 +15,7 @@ class RfidCardController extends Controller
 {
     /**
      * @param Request $request
-     * @return array This method returns raw HTML and is intended to be used via AJAX!
+     * @return string This method returns raw HTML and is intended to be used via AJAX!
      * @throws Exception
      */
     public function store(Request $request)
@@ -24,33 +24,33 @@ class RfidCardController extends Controller
             case 'qr':
                 $qrAuthRequest = QrAuthRequest::where('auth_token', $request->input('credentials'))->first();
                 if (! $qrAuthRequest) {
-                    return ['ok' => false, 'text' => 'Invalid authentication token.'];
+                    return "<span style='color: red;'>Invalid authentication token.</span>";
                 }
                 $user = $qrAuthRequest->authUser();
                 if (! $user) {
-                    return ['ok' => false, 'text' => "QR authentication hasn't been completed."];
+                    return "<span style='color: red;'>QR authentication hasn't been completed.</span>";
                 }
                 break;
 
             default:
-                return ['ok' => false, 'text' => 'Invalid credential type.'];
+                return "<span style='color: red;'>Invalid credential type.</span>";
         }
 
         if (! $user->is_member) {
-            return ['ok' => false, 'text' => 'You must be a member to use the OmNomCom.'];
+            return "<span style='color: red;'>You must be a member to use the OmNomCom.</span>";
         }
 
         $uid = $request->input('card');
         if (strlen($uid) == 0) {
-            return ['ok' => false, 'text' => 'Empty card UID provided. Did you scan your card properly?'];
+            return "<span style='color: red;'>Empty card UID provided. Did you scan your card properly?</span>";
         }
 
         $card = RfidCard::where('card_id', $uid)->first();
         if ($card) {
             if ($card->user->id == $user->id) {
-                return ['ok' => false, 'text' => 'This card is already registered to you!'];
+                return "<span style='color: red;'>This card is already registered to you!</span>";
             } else {
-                return ['ok' => false, 'text' => 'This card is already registered to someone.'];
+                return "<span style='color: red;'>This card is already registered to someone.</span>";
             }
         } else {
             $card = RfidCard::create([
@@ -59,7 +59,7 @@ class RfidCardController extends Controller
             ]);
             $card->save();
 
-            return ['ok' => true, 'text' => 'This card has been successfully registered to '.$user->name];
+            return "<span style='color: green;'>This card has been successfully registered to ".$user->name.'.</span>';
         }
     }
 

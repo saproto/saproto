@@ -77,14 +77,14 @@
                         <hr>
 
                         <div class="custom-file">
-                            <input id="image" type="file" class="form-control" name="image">
-                            <label class="form-label" for="image">Upload a new image</label>
+                            <input type="file" class="custom-file-input" name="image">
+                            <label class="custom-file-label" for="customFile">Upload a new image</label>
                         </div>
 
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">
+                        <button type="submit" class="btn btn-success float-right">
                             Submit
                         </button>
 

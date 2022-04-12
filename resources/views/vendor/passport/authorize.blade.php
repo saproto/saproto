@@ -8,9 +8,12 @@
 
     <p>
         <strong>{{ $client->name }}</strong>
+
     </p>
 
-    <p> requests full access your account </p>
+    <p>
+        requests full access your account
+    </p>
 
     <p>
         <strong>{{ Auth::user()->name }}</strong><br>
@@ -24,7 +27,9 @@
 
         <input type="hidden" name="state" value="{{ $request->state }}">
         <input type="hidden" name="client_id" value="{{ $client->id }}">
-        <button type="submit" class="btn btn-success btn-block mt-2">Give access</button>
+        <p>
+            <button type="submit" class="btn btn-success" style="width: 100%;">Give access</button>
+        </p>
     </form>
 
     <p>
@@ -37,7 +42,9 @@
 
         <input type="hidden" name="state" value="{{ $request->state }}">
         <input type="hidden" name="client_id" value="{{ $client->id }}">
-        <button class="btn btn-danger btn-block mt-2">Deny access</button>
+        <p>
+            <button class="btn btn-danger" style="width: 100%;">Deny access</button>
+        </p>
     </form>
 
 @endsection

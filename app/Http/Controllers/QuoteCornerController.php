@@ -102,7 +102,10 @@ class QuoteCornerController extends Controller
      */
     public function destroy($id)
     {
-        $quote = Quote::findOrFail($id);
+        $quote = Quote::find($id);
+        if ($quote == null) {
+            abort(404, "Quote $id not found.");
+        }
         QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
         Session::flash('flash_message', 'Quote deleted.');
@@ -112,6 +115,7 @@ class QuoteCornerController extends Controller
 
     /**
      * @param int $id
+     * @return RedirectResponse
      * @throws Exception
      */
     public function toggleLike($id)
@@ -127,5 +131,7 @@ class QuoteCornerController extends Controller
             $relation = new QuoteLike($new);
             $relation->save();
         }
+
+        return Redirect::back();
     }
 }

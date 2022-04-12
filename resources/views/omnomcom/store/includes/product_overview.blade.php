@@ -1,4 +1,4 @@
-<div id="product-nav" class="col-10">
+<div id="product-nav" class="col-xl-10">
 
     @foreach($categories as $category)
 

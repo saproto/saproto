@@ -13,7 +13,9 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    <style>
+    @include('website.layouts.assets.customcss')
+
+    <style type="text/css">
 
         html, body, #slideshow, #fullpagetext, .slide, #protologo {
             position: absolute;
@@ -61,17 +63,17 @@
 
 </head>
 
-<body class="d-block">
+<body style="display: block;">
 
-<div id="fullpagetext" class="opacity-0">
-
-</div>
-
-<div id="slideshow" class="opacity-0">
+<div id="fullpagetext" style="opacity: 0;">
 
 </div>
 
-<div id="yt-player" class="opacity-0">
+<div id="slideshow" style="opacity: 0;">
+
+</div>
+
+<div id="yt-player" style="opacity: 0;">
 
 </div>
 
@@ -79,13 +81,15 @@
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-    let campaigns = []
-    let currentCampaign = 0
-    let previousWasVideo = false
-    let youtubePlayer
+    let campaigns = [];
+    let currentcampaign = 0;
+
+    let previousWasVideo = false;
+
+    let player;
 
     function onYouTubeIframeAPIReady() {
-         youtubePlayer = new YT.Player('yt-player', {
+        player = new YT.Player('yt-player', {
             height: window.innerHeight,
             width: window.innerWidth,
             events: {
@@ -99,80 +103,99 @@
         });
     }
 
-    async function updateCampaigns() {
-        await get('{{ route("api::screen::narrowcasting") }}').then(data => campaigns = data)
+    function updateCampaigns() {
+
+        $.ajax({
+            url: '{{ route("api::screen::narrowcasting") }}',
+            dateType: 'json',
+            success: function (data) {
+                campaigns = data;
+            }
+        });
+
     }
 
     function onPlayerReady(event) {
-        event.target.mute()
-        event.target.playVideo()
+        event.target.mute();
+        event.target.playVideo();
     }
 
     function updateSlide() {
-        const text = document.getElementById('fullpagetext')
-        const slides = document.getElementById('slideshow')
-        const player = document.getElementById('yt-player')
 
         if (campaigns.length === 0) {
-            text.innerHTML = "There are no messages to display. :)"
-            text.classList.remove('opacity-0')
-            slides.classList.add('opacity-0')
-            setTimeout(updateSlide, 1000)
-        } else {
-            text.innerHTML = 'Starting slideshow... :)'
-            text.classList.add('opacity-0')
-            slides.classList.remove('opacity-0')
-            slides.classList.add('old')
 
-            if (currentCampaign >= campaigns.length) { currentCampaign = 0 }
-            const campaign = campaigns[currentCampaign]
+            $("#fullpagetext").html("There are no messages to display. :)").css("opacity", 1);
+            $("#slideshow").css("opacity", 0);
+            setTimeout(updateSlide, 1000);
+
+        } else {
+
+            $("#fullpagetext").html("Starting slideshow... :)").css("opacity", 0);
+            $("#slideshow").css("opacity", 1);
+
+            $(".slide").addClass('old');
+
+            let campaign;
+            if (currentcampaign >= campaigns.length) {
+                currentcampaign = 0;
+            }
+            campaign = campaigns[currentcampaign];
 
             if (campaign.hasOwnProperty('image')) {
+
                 if (previousWasVideo) {
-                    player.classList.remove('opacity-0')
-                    slides.classList.add('opacity-0')
+                    $("#slideshow").css("opacity", 1);
+                    $("#yt-player").css("opacity", 0);
                 }
 
-                slides.innerHTML += '<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaign.image + ');"></div>'
+                $("#slideshow").append('<div id="slide-' + campaign.id + '" class="slide new" style="background-image: url(' + campaign.image + ');"></div>');
 
                 setTimeout(updateSlide, campaign.slide_duration * 1000);
                 setTimeout(showSlide, 0);
                 setTimeout(clearSlides, 2000);
 
                 previousWasVideo = false;
+
             } else {
-                youtubePlayer.loadVideoById(campaign.video, "highres");
-                youtubePlayer.playVideo();
+
+                player.loadVideoById(campaign.video, "highres");
+                player.playVideo();
 
                 if (!previousWasVideo) {
-                    slides.classList.add('opacity-0')
-                    player.classList.remove('opacity-0')
+                    $("#slideshow").css("opacity", 0);
+                    $("#yt-player").css("opacity", 1);
                 }
 
-                setTimeout(updateSlide, (campaign.slide_duration - 1) * 1000)
-                setTimeout(clearSlides, 2000)
+                setTimeout(updateSlide, (campaign.slide_duration - 1) * 1000);
+                setTimeout(clearSlides, 2000);
 
-                previousWasVideo = true
+                previousWasVideo = true;
+
             }
-            currentCampaign++
+
+            currentcampaign++;
+
         }
+
     }
 
     function showSlide() {
-        const newSlides = Array.from(document.querySelectorAll('.slide.new'))
-        newSlides.forEach(el => el.classList.remove('new'))
+        $(".slide.new").removeClass('new');
     }
 
     function clearSlides() {
-        const oldSlides = Array.from(document.querySelectorAll('.slide.old'))
-        oldSlides.forEach(el => el.remove())
+        $(".slide.old").remove();
     }
 
+    $(function () {
 
-    updateCampaigns()
-    setInterval(updateCampaigns, 10 * 1000)
+        updateCampaigns();
+        setInterval(updateCampaigns, 10 * 1000);
 
-    updateSlide()
+        updateSlide();
+
+    });
+
 </script>
 
 <script type="text/javascript" src="https://www.youtube.com/iframe_api" nonce="{{ csp_nonce() }}"></script>

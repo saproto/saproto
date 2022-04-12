@@ -1,6 +1,6 @@
 @if(isset($newAchievements) && count($newAchievements)>0)
 
-    <div class="modal fade" id="new-achievement-modal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="newAchievementModal" tabindex="-1" role="dialog"
          aria-labelledby="newAchievementModalLabel">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content bg-dark text-white">
@@ -15,9 +15,8 @@
             </div>
         </div>
     </div>
-    @push('javascript')
+
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        modals['new-achievement-modal'].show()
+        $('#newAchievementModal').modal('show');
     </script>
-    @endpush
 @endif

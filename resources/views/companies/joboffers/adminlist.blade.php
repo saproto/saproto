@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('joboffers::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('joboffers::add') }}" class="badge badge-info float-right">
                         Create a new job offer.
                     </a>
                 </div>
@@ -27,7 +27,7 @@
 
                         <td>Company</td>
                         <td>Title</td>
-                        <td class="text-end">Control</td>
+                        <td></td>
 
                     </tr>
 
@@ -41,9 +41,9 @@
                             <td>{{ $joboffer->title}}</td>
 
 
-                            <td class="text-end">
+                            <td>
                                 <a href="{{ route('joboffers::edit', ['id' => $joboffer->id]) }}">
-                                    <i class="fas fa-edit me-2 fa-fw"></i>
+                                    <i class="fas fa-edit mr-2 fa-fw"></i>
                                 </a>
                                 <a href="{{ route('joboffers::delete', ['id' => $joboffer->id]) }}">
                                     <i class="fas fa-trash text-danger fa-fw"></i>

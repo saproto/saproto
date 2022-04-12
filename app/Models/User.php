@@ -7,22 +7,23 @@ use DateTime;
 use Eloquent;
 use Exception;
 use Hash;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Solitweb\DirectAdmin\DirectAdmin;
-use Spatie\Permission\Traits\HasRoles;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
  * User Model.
@@ -127,12 +128,13 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User whereWebsite($value)
  * @mixin Eloquent
  */
-class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
+    use Authenticatable;
     use CanResetPassword;
     use SoftDeletes;
     use HasApiTokens;
-    use HasRoles;
+    use EntrustUserTrait { EntrustUserTrait::restore as private entrustRestore; }
 
     protected $table = 'users';
 
@@ -193,6 +195,17 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function helperReminderSubscriptions()
     {
         return $this->belongsTo('Proto\Models\HelperReminder');
+    }
+
+    public function restore()
+    {
+        $this->entrustRestore();
+    }
+
+    /** @return BelongsToMany|Role[] */
+    public function roles()
+    {
+        return $this->belongsToMany('Proto\Models\Role', 'role_user');
     }
 
     /** @return BelongsToMany|Committee[] */

@@ -53,21 +53,30 @@
                 <div class="col-md-6">
 
                     <div class="row align-items-end mb-6">
-
                         <div class="col-md-6">
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'start',
-                                'label' => 'Dinnerform start:',
-                                'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->timestamp : null
-                            ])
+
+                            <div class="form-group">
+                                <label for="dinnerform_start">dinnerform start:</label>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'start',
+                                    'format' => 'datetime',
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->timestamp : null
+                                ])
+                            </div>
+
                         </div>
 
                         <div class="col-md-6">
-                            @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'end',
-                                'label' => 'Dinnerform end:',
-                                'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->timestamp : null
-                            ])
+
+                            <div class="form-group">
+                                <label for="dinnerform_end">dinnerform end:</label>
+                                @include('website.layouts.macros.datetimepicker',[
+                                    'name' => 'end',
+                                    'format' => 'datetime',
+                                    'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->timestamp : null
+                                ])
+                            </div>
+
                         </div>
 
                     </div>
@@ -77,12 +86,12 @@
             </div>
 
         </div>
-        <div class="card-footer">
+        <div class="card-footer border-bottom">
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($dinnerformCurrent)
                 <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
-                   class="btn btn-danger ms-4">Delete</a>
+                   class="btn btn-danger ml-4">Delete</a>
             @endif
         </div>
 

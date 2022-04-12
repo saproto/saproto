@@ -8,8 +8,8 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Permission;
 use Proto\Models\PasswordEntry;
+use Proto\Models\Permission;
 use Redirect;
 
 class PasswordController extends Controller

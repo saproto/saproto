@@ -5,11 +5,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Set membership type</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to change the membership type of {{ $user->name }}?</p>
-                    <span class="me-1">Membership type:</span>
+                    <span class="mr-1">Membership type:</span>
                         <select class="form-select px-2 py-1" aria-label="Membership types" name="type">
                         <option>Regular member</option>
                         <option {{ $user->member->is_honorary ? 'selected' : '' }} value="honorary">Honorary member</option>
@@ -19,7 +21,7 @@
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Set membership type</button>
                 </div>
             </div>

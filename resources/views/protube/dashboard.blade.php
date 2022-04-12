@@ -11,7 +11,7 @@
         <div class="col-md-4">
 
             <div class="btn text-center btn-block mb-3">
-                <i class="fas fa-bolt me-3"></i>
+                <i class="fas fa-bolt mr-3"></i>
                 ProTube is developed with
                 <span class="text-danger"><i class="fab fa-youtube fa-fw"></i> YouTube</span> and
                 <span class="text-primary"><i class="fab fa-spotify fa-fw"></i> Spotify</span>.
@@ -44,11 +44,13 @@
                         history.
                     </p>
                     @if($user->keep_protube_history)
-                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-danger btn-block">
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-danger"
+                           style="width: 100%;">
                             Stop keeping my ProTube history.
                         </a>
                     @else
-                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-primary btn-block">
+                        <a href="{{ route('protube::togglehistory') }}" class="btn btn-outline-primary"
+                           style="width: 100%;">
                             Start keeping my ProTube history.
                         </a>
                     @endif
@@ -63,12 +65,10 @@
                             them. This action is irreversible.
                         </p>
 
-                        <a id="clear-history" href="{{ route('protube::clearhistory') }}" class="btn btn-outline-danger btn-block">
+                        <a href="{{ route('protube::clearhistory') }}" class="btn btn-outline-danger"
+                           onclick="return confirm('Are you sure?');" style="width: 100%;">
                             Clear my ProTube history.
                         </a>
-                        <script nonce="{{ csp_nonce() }}">
-                            document.getElementById('clear-history').addEventListener('click', _ => confirm('Are you sure?'))
-                        </script>
 
                     @endif
 

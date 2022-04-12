@@ -1,5 +1,5 @@
 <div class="card mb-3">
-    <div class="card-header bg-dark text-white"><i class="fas fa-images fa-fw me-2"></i> Recent photo albums</div>
+    <div class="card-header bg-dark text-white"><i class="fas fa-images fa-fw mr-2"></i> Recent photo albums</div>
     <div class="card-body">
 
         @foreach(\Proto\Models\PhotoManager::getAlbums($n) as $key => $album)

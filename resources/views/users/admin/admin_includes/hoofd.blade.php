@@ -5,7 +5,9 @@
     </div>
 
     <div class="card-body p-5 text-center">
-        <img src="{{ $user->generatePhotoPath(800, 800) }}" class="rounded-circle mw-100">
+
+        <img src="{{ $user->generatePhotoPath(800, 800) }}" class="rounded-circle" style="max-width: 100%;">
+
     </div>
 
 </div>

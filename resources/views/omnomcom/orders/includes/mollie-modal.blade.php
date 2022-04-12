@@ -3,7 +3,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="exampleModalLongTitle">Pay outstanding balance</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body text-justify">
                 <p>
@@ -32,13 +34,15 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&euro;</span>
                                 </div>
-                                <input class="form-control float-start" type="number" name="cap"
+                                <input type="text" class="form-control float-left" type="number" name="cap"
                                        value="{{ ceil($next_withdrawal) }}">
-                                <span class="input-group-text">.00</span>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-3">
-                            <button type="button" class="btn btn-default btn-block" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">
                                 Close
                             </button>
                         </div>

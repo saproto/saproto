@@ -2,8 +2,8 @@
     {{ csrf_field() }}
     <div class="row">
         <div class="col-md-4">
-            <div id="user-select" class="form-group autocomplete">
-                <input class="form-control user-search" name="user_id" required/>
+            <div id="user-select">
+                <select class="user-search form-control" name="user_id" required></select>
             </div>
         </div>
         <div class="col-md-6">

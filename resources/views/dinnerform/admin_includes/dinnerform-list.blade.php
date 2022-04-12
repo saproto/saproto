@@ -42,9 +42,9 @@
                             </a>
                         @endif
                     </td>
-                    <td class="text-start align-middle">
+                    <td class="text-left align-middle">
                         <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
-                            <i class="fas fa-edit me-2"></i>
+                            <i class="fas fa-edit mr-2"></i>
                         </a>
                         <a onclick="return confirm('Remove dinnerform from \'{{ $dinnerform->start }}\' at \'{{ $dinnerform->restaurant }}\'?');"
                            href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}">

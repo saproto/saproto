@@ -15,7 +15,7 @@
                 @if(date('d-m-Y', strtotime($orderline->created_at)) != $current_date)
                     <?php $current_date = date('d-m-Y', strtotime($orderline->created_at)); ?>
                     <tr class="bg-dark text-white mt-3">
-                        <td class="text-end">
+                        <td class="text-right">
                             <i class="fas fa-calendar-alt"></i>
                         </td>
                         <td colspan="3">
@@ -25,11 +25,11 @@
                 @endif
 
                 <tr>
-                    <td class="text-end">
+                    <td class="text-right">
                         &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
-                        <span class="text-muted me-2">{{ $orderline->units }}x</span>
+                        <span class="text-muted mr-2">{{ $orderline->units }}x</span>
                         {{ $orderline->product->name }}
                         @if ($orderline->description)
                             <br><span class="text-muted"><em>{{ $orderline->description }}</em></span>

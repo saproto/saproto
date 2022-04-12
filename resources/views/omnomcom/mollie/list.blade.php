@@ -33,9 +33,7 @@
                             <form method="get">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group autocomplete">
-                                            <input class="form-control user-search" name="user_id" required/>
-                                        </div>
+                                        <select class="form-control user-search" name="user_id" required></select>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="submit" class="btn btn-success" value="Search">
@@ -64,7 +62,7 @@
                         @foreach($transactions as $transaction)
 
                             <tr>
-                                <td class="text-end">
+                                <td class="text-right">
                                     <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
                                         #{{$transaction->id}}
                                     </a>
@@ -132,7 +130,7 @@
                         <thead>
                         <tr class="bg-dark text-white">
                             <td>Month</td>
-                            <td class="text-end">Total</td>
+                            <td class="text-right">Total</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -148,7 +146,7 @@
                                         <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
                                     </a>
                                 </td>
-                                <td class="text-end">
+                                <td class="text-right">
                                     @if ($total > 0)
                                         <span class="label label-success">
                                              &euro; {{ number_format($total,2) }}

@@ -24,34 +24,41 @@
 
                     <div class="card-body">
 
-                        @if($new)
-                            <div class="form-group autocomplete">
-                                <label for="user-id">User:</label>
-                                <input id="user-id" class="form-control user-search" name="user_id" required />
-                            </div>
-                        @else
-                            <div class="input-group">
-                                <label for="user-id">User:&nbsp;</label>
-                                <strong>{{ $item->user->name }}</strong>
-                            </div>
-                        @endif
+                        <div class="form-group">
+                            <label for="menuname">User:</label>
+                            @if($new)
+                                <div class="input-group" style="width: 100%;">
+                                    <select class="form-control user-search" name="user_id" required></select>
+                                </div>
+                            @else
+                                <div class="input-group">
+                                    <strong>{{ $item->user->name }}</strong>
+                                </div>
+                            @endif
+                        </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'start_at',
-                            'label' => 'Start at:',
-                            'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
-                        ])
+                        <div class="form-group">
+                            <label for="url">Start at:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'start_at',
+                                'format' => 'datetime',
+                                'placeholder' => $new ? strtotime(Carbon::now()) : strtotime($item->start_at)
+                            ])
+                        </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'end_at',
-                            'label' => 'End at:',
-                            'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)
-                        ])
+                        <div class="form-group">
+                            <label for="url">End at:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'end_at',
+                                'format' => 'datetime',
+                                'placeholder' => $new ? strtotime(Carbon::now()->endOfDay()) : strtotime($item->end_at)
+                            ])
+                        </div>
 
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-right">Submit</button>
                         <a href="{{ route("tempadmin::index") }}" class="btn btn-default">Cancel</a>
                     </div>
 

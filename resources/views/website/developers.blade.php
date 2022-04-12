@@ -14,21 +14,21 @@
                 <div class="col-md-4 mb-3">
                     <a class="btn btn-warning btn-block"
                        href="https://wiki.proto.utwente.nl/ict/services">
-                        <i class="fas fa-info-circle me-2"></i>
+                        <i class="fas fa-info-circle mr-2"></i>
                         Manuals
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a class="btn btn-info btn-block"
                        href="https://wiki.proto.utwente.nl/ict/issues">
-                        <i class="fas fa-graduation-cap me-2"></i>
+                        <i class="fas fa-graduation-cap mr-2"></i>
                         Learn how to report errors!
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a class="btn btn-success btn-block"
                        href="https://wiki.proto.utwente.nl/ict/issues">
-                        <i class="fas fa-question-circle me-2"></i>
+                        <i class="fas fa-question-circle mr-2"></i>
                         Answers to frequent questions
                     </a>
                 </div>

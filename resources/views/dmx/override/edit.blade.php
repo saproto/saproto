@@ -63,17 +63,20 @@
 
                         <hr>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'start',
-                            'label' => 'Override start:',
-                            'placeholder' => $override ? $override->start : strtotime(Carbon::now())
-                        ])
+                        <div class="form-group">
+                            <label for="start">Override start:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'start',
+                                'format' => 'datetime',
+                                'placeholder' => $override ? $override->start : strtotime(Carbon::now())
+                            ])
+                        </div>
 
                         <div class="form-group">
                             <label for="end">Override end:</label>
                             @include('website.layouts.macros.datetimepicker', [
                                 'name' => 'end',
-                                'label' => 'Override end:',
+                                'format' => 'datetime',
                                 'placeholder' => $override ? $override->end : strtotime(Carbon::now()->endOfDay())
                             ])
                         </div>
@@ -82,7 +85,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-right">Submit</button>
 
                         <a href="{{ route("dmx::override::index") }}" class="btn btn-default">
                             Cancel

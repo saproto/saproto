@@ -17,7 +17,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-title">
-                                <span class="badge bg-dark text-white float-end">
+                                <span class="badge badge-dark text-white float-right">
                                     #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>{{ $purchase->ticket->product->name }}</strong>
@@ -46,7 +46,7 @@
 
             @if($has_unpaid_tickets)
                 <div class="card-footer text-center">
-                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw me-2"></i> Attention!</strong><br>
+                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw mr-2"></i> Attention!</strong><br>
                     You have unpaid tickets. You need to pay for your tickets before you can download and use them.
                     Unpaid tickets will be invalidated if payment takes too long.
                 </div>
@@ -82,7 +82,8 @@
 
                     @foreach($event->tickets as $ticket)
 
-                        <div class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}">
+                        <div class="card mb-3"
+                             style="opacity: {{ ($ticket->isAvailable(Auth::user()) ? '1' : '0.5') }};">
 
                             <div class="card-body">
 
@@ -90,9 +91,9 @@
 
                                     @if ($ticket->is_prepaid)
                                         <?php $has_prepay_tickets = true; ?>
-                                        <span class="badge bg-danger float-end">Pre-Paid</span>
+                                        <span class="badge badge-danger float-right">Pre-Paid</span>
                                     @else
-                                        <span class="badge bg-info float-end">Withdrawal</span>
+                                        <span class="badge badge-info float-right">Withdrawal</span>
                                     @endif
 
                                     <strong>{{ $ticket->product->name }}</strong>
@@ -103,7 +104,7 @@
                                 <p class="card-text">
 
                                     @if ($ticket->isAvailable(Auth::user()))
-                                        <span class="badge bg-info float-end">
+                                        <span class="badge badge-info float-right">
                                     {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                             available
                                     </span>
@@ -150,8 +151,8 @@
             <div class="card-footer">
 
                 <button type="submit" class="btn btn-success btn-block"
-                       onclick="return confirm('You are about to buy €'+total+' worth of tickets. Are you sure?')">
-                    Total: <strong>&euro;<span id="ticket-total" class="me-3">0.00</span></strong> Finish purchase!
+                       onclick="return confirm('You are about to buy €'+total.toFixed(2)+' worth of tickets. Are you sure?')">
+                    Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
                 </button>
 
             </div>
@@ -162,13 +163,22 @@
     </form>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const selectList = Array.from(document.getElementsByClassName('ticket-select'))
-        selectList.forEach(ticket => ticket.addEventListener('change', updateOrderTotal))
+        var total=0
+        //attach eventlistener to all tickets
+        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', updateOrderTotal))
 
         function updateOrderTotal() {
-            const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
-            document.getElementById('ticket-total').innerHTML = total
+                total=0;
+                //get all tickets
+                var tickets = document.querySelectorAll(".ticket-select");
+                for (var i = 0; i < tickets.length; i++) {
+                    //add all the ticket indexes times the price of that ticket to the total
+                    total+=parseInt(tickets[i].options[tickets[i].selectedIndex].value)*tickets[i].getAttribute('data-price');
+                }
+            //update the button (span) text
+            document.getElementById('ticket-total').innerHTML=total;
         }
+
     </script>
 
 @endif

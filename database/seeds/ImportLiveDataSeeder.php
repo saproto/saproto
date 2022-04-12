@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
+use Proto\Models\Role;
 use Proto\Models\User;
 
 class ImportLiveDataSeeder extends Seeder
@@ -13,7 +14,6 @@ class ImportLiveDataSeeder extends Seeder
      * This seeder imports some non-sensitive data from the live environment to make your development environment more 'real'.
      *
      * @return void
-     * @throws Exception
      */
     public function run()
     {
@@ -49,34 +49,67 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's import all data we can from the live environment.
         $tables = [
-            ['name' => 'accounts'],
-            ['name' => 'achievement'],
-            ['name' => 'activities'],
-            ['name' => 'committees'],
-            ['name' => 'committees_activities'],
-            ['name' => 'companies'],
-            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
-            ['name' => 'mailinglists'],
-            ['name' => 'menuitems'],
-            ['name' => 'products'],
-            ['name' => 'products_categories'],
-            ['name' => 'product_categories'],
-            ['name' => 'tickets'],
+            [
+                'tableName' => 'accounts',
+            ],
+            [
+                'tableName' => 'achievement',
+            ],
+            [
+                'tableName' => 'activities',
+            ],
+            [
+                'tableName' => 'committees',
+            ],
+            [
+                'tableName' => 'committees_activities',
+            ],
+            [
+                'tableName' => 'events',
+                'exclude' => ['formatted_date', 'is_future'],
+            ],
+            [
+                'tableName' => 'mailinglists',
+            ],
+            [
+                'tableName' => 'menuitems',
+            ],
+            [
+                'tableName' => 'permissions',
+            ],
+            [
+                'tableName' => 'permission_role',
+            ],
+            [
+                'tableName' => 'products',
+            ],
+            [
+                'tableName' => 'products_categories',
+            ],
+            [
+                'tableName' => 'product_categories',
+            ],
+            [
+                'tableName' => 'roles',
+            ],
+            [
+                'tableName' => 'tickets',
+            ],
         ];
 
         foreach ($tables as $table) {
-            echo 'Importing table '.$table['name'].PHP_EOL;
-            $data = (array) self::getDataFromExportApi($table['name']);
+            echo 'Importing table '.$table['tableName'].PHP_EOL;
+            $data = (array) self::getDataFromExportApi($table['tableName']);
             foreach ($data as $entry) {
                 $entry = (array) $entry;
 
-                if (array_key_exists('excluded_columns', $table)) {
-                    foreach ($table['excluded_columns'] as $column) {
-                        unset($entry[$column]);
+                if (isset($table['exclude'])) {
+                    foreach ($table['exclude'] as $exclude) {
+                        unset($entry[$exclude]);
                     }
                 }
 
-                DB::table($table['name'])->insert($entry);
+                DB::table($table['tableName'])->insert($entry);
             }
         }
 
@@ -84,13 +117,13 @@ class ImportLiveDataSeeder extends Seeder
 
         // Now let's add our user account so that they can access everything.
 
-        $root = Committee::where('slug', config('proto.rootcommittee'))->first();
+        $rootcommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
         CommitteeMembership::create([
             'user_id' => $newUser->id,
-            'committee_id' => $root->id,
+            'committee_id' => $rootcommittee->id,
             'role' => 'Automatically Added',
         ]);
-        $newUser->assignRole('sysadmin');
+        $newUser->attachRole(Role::where('name', '=', 'sysadmin')->first());
 
         echo 'Your new user now has admin rights.'.PHP_EOL;
     }
