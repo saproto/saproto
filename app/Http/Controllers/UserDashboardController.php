@@ -341,7 +341,7 @@ class UserDashboardController extends Controller
         $form->writeHTML(view('users.admin.membershipform_pdf', ['user' => $user, 'signature' => $request->input('signature')]));
 
         $file = new StorageEntry();
-        $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
+        $file->createFromData($form->output('membership_form_user_'.$user->id.'.pdf', 'S'), 'application/pdf', 'membership_form_user_'.$user->id.'.pdf');
 
         $member->membershipForm()->associate($file);
         $member->save();

@@ -115,19 +115,20 @@
     </script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        (function (window, location) {
-            history.replaceState(null, document.title, location.pathname + "#!/stealingyourhistory");
+        (function(window, location) {
+            history.replaceState(null, document.title, location.pathname+"#!/history");
             history.pushState(null, document.title, location.pathname);
 
-            window.addEventListener("popstate", function () {
-                if (location.hash === "#!/stealingyourhistory") {
+            window.addEventListener("popstate", function() {
+                if(location.hash === "#!/history") {
                     history.replaceState(null, document.title, location.pathname);
-                    setTimeout(function () {
-                        location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."#photo_".$photo->id }}");
-                    }, 0);
+                    setTimeout(function(){
+                        location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->albumPage }}");
+                    },10);
                 }
             }, false);
         }(window, location));
+
     </script>
 
 @endpush

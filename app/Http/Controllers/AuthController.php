@@ -233,6 +233,11 @@ class AuthController extends Controller
         $password = $request->input('password');
         $auth_check = self::verifyCredentials($user->email, $password);
 
+        if ($user->hasUnpaidOrderlines()) {
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you have open payments!');
+            return Redirect::route('omnomcom::orders::list');
+        }
+
         if ($auth_check == null || $auth_check->id != $user->id) {
             $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
             return Redirect::back();

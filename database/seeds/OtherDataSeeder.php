@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Address;
@@ -66,6 +67,16 @@ class OtherDataSeeder extends Seeder
                 'user_id' => array_random($users),
             ]);
             echo 'Creating '.$index.'/'.$n." orderlines\r";
+        }
+
+        // Create AchievementOwnership
+        $n = 200;
+
+        foreach (range(1, $n) as $index) {
+            factory(AchievementOwnership::class)->create([
+                'user_id' => array_random($users),
+            ]);
+            echo 'Creating '.$index.'/'.$n." achievement ownerships\r";
         }
 
         echo PHP_EOL;
