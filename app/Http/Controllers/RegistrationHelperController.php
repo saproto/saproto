@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Proto\Models\User;
 
 class RegistrationHelperController extends Controller
@@ -12,7 +13,7 @@ class RegistrationHelperController extends Controller
      * Display a list of pending members.
      *
      * @param Request $request
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(Request $request)
     {
@@ -36,14 +37,14 @@ class RegistrationHelperController extends Controller
 
         $users = $users->paginate(20);
 
-        return view('users.admin.registrationhelper.overview', ['users' => $users, 'query' => $search]);
+        return view('users.admin.registration_helper.overview', ['users' => $users, 'query' => $search]);
     }
 
     /**
      * Show the user details for registration helper.
      *
      * @param $id
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function details($id)
     {
@@ -52,6 +53,6 @@ class RegistrationHelperController extends Controller
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 
-        return view('users.admin.registrationhelper.details', ['user' => $user, 'memberships' => $memberships]);
+        return view('users.admin.registration_helper.details', ['user' => $user, 'memberships' => $memberships]);
     }
 }

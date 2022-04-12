@@ -12,8 +12,8 @@
 
                 {!! csrf_field() !!}
 
-                <div class="form-group">
-                    <select class="form-control committee-search" name="committee" required></select>
+                <div class="form-group autocomplete">
+                    <input class="form-control committee-search" name="committee" required>
                 </div>
 
                 <div class="row">
@@ -22,14 +22,12 @@
                         <div class="input-group mb-3">
                             <input type="number" class="form-control" name="amount" placeholder="15"
                                    min="1" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">people</span>
-                            </div>
+                            <span class="input-group-text" id="basic-addon2">people</span>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <input type="submit" class="btn btn-success pull-right" value="Add">
+                        <input type="submit" class="btn btn-success float-end" value="Add">
                     </div>
 
                 </div>
@@ -76,9 +74,7 @@
                                     </div>
                                     <input type="number" class="form-control" name="amount" min="1" required
                                            value="{{ $committee->pivot->amount }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="basic-addon2">people</span>
-                                    </div>
+                                    <span class="input-group-text" id="basic-addon2">people</span>
                                 </div>
 
                             </div>

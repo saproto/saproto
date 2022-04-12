@@ -1,6 +1,6 @@
 @if (!$user->is_member)
 
-    <button type="submit" class="btn btn-outline-danger btn-block mb-3" data-toggle="modal" data-target="#modal-user-delete">
+    <button type="submit" class="btn btn-outline-danger btn-block mb-3" data-bs-toggle="modal" data-bs-target="#modal-user-delete">
         Close your Proto account
     </button>
 
@@ -15,9 +15,7 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Close account for {{ $user->name }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <div class="modal-body">
@@ -67,7 +65,7 @@
 
                     <div class="modal-footer">
                             {!! csrf_field() !!}
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">
                                 Keep my account.
                             </button>
                             @if(Auth::user()->hasUnpaidOrderlines())

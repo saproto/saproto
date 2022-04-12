@@ -1,9 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
+<html lang="en">
 <head>
     <title>Photo Slideshow</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <style type="text/css">
+    <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,900,900italic,300italic,300,100italic,100');
 
         body, html {
@@ -106,119 +106,93 @@
 
     @include('website.layouts.assets.javascripts')
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let slideInterval;
-
-        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-
-        $(function () {
-            startSlideshow();
-        });
-
-        function startSlideshow() {
-            $.ajax({
-                url: '{{ route("api::photos::albums") }}',
-                dataType: 'json',
-                success: function (data) {
-                    $('#albums').html('');
-                    $(data).each(function () {
-                        let album_date = new Date(this.date_taken * 1000);
-                        $('#albums').append('<option value="' + this.id + '">' + this.name + ' (' + MONTH_NAMES[album_date.getMonth()] + ' ' + album_date.getFullYear() + ')</option>')
-                    });
-
-                    displayRandomAlbum();
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                    alert('Error');
-                }
-            });
-
-            $('#albums').on('bind', 'change', function () {
-                displayAlbum($(this).val());
-            });
-        }
-
-        function displayRandomAlbum() {
-            let random = $('#albums > option:nth-child(' + Math.round(Math.random() * $('#albums > option').length) + ')').val();
-            displayAlbum(random);
-        }
-
-        function displayAlbum(id) {
-            $('#slideshow').addClass('loading').html('');
-            $.ajax({
-                url: '{{ route("api::photos::albumList", ['id' => null]) }}/' + id,
-                dataType: 'json',
-                success: function (data) {
-
-                    $('#slideshow').removeClass('loading');
-
-                    $('#albums > option').each(function () {
-                        $(this).removeAttr('selected');
-                        if ($(this).attr('value') == id) {
-                            $(this).attr('selected', 'selected');
-                            $('#title').html($(this).html());
-                        }
-                    });
-
-                    $(data.photos).each(function () {
-                        $('#slideshow').append('<div style="background-image:url(' + this.url + ');"></div>');
-                    });
-
-                    prepareSlideshow();
-                    clearInterval(slideInterval);
-                    slideInterval = setInterval(slide, 7500);
-
-                }
-            });
-        }
-
-        function prepareSlideshow() {
-            $('#slideshow > div:first-child').addClass('active');
-
-            let z = 1;
-            $('#slideshow > div').each(function () {
-                $(this).css({
-                    zIndex: z
-                });
-                z++;
-            });
-
-        }
-
-        function slide() {
-            let next = $('#slideshow > div.active').next();
-            $('#slideshow > div.active').removeClass('active');
-
-            if (next.length > 0) {
-                setTimeout(function () {
-                    $(next).addClass('active');
-                }, 300);
-            } else {
-                displayRandomAlbum();
-            }
-        }
-    </script>
-
 </head>
 <body>
 
-<div id="slideshow" class="loading">
+    <div id="slideshow" class="loading"></div>
 
-</div>
+    <div id="title">Loading...</div>
 
-<div id="title">Loading...</div>
+    <div id="controls">
+        <select id="albums">
+            <option>Loading...</option>
+        </select>
+    </div>
 
-<div id="controls">
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let slideInterval
 
-    <select id="albums">
-        <option>Loading...</option>
-    </select>
+        const albumEl = document.getElementById('albums')
+        const albumOptionList = Array.from(document.querySelectorAll('#albums > option'))
+        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"]
 
-</div>
+        startSlideshow()
+
+        function startSlideshow() {
+            get('{{ route("api::photos::albums") }}')
+            .then(data => {
+                albumEl.innerHTML = ''
+                for (const album of data) {
+                    const albumDate = new Date(album['date_taken'] * 1000)
+                    album.innerHTML += `<option value="${album.id}">${album.name} (${MONTH_NAMES[albumDate.getMonth()]} ${albumDate.getFullYear()})</option>`
+                }
+                displayRandomAlbum()
+            })
+            .catch(err => { console.error(err) })
+            albumEl.addEventListener('change', _ => { displayAlbum(albumEl.value) })
+        }
+
+        function displayRandomAlbum() {
+            if (albumOptionList.length > 1) {
+                let i = Math.round(Math.random() * albumOptionList.length)
+                let random = document.querySelector(`#albums > option:nth-child(${i})`).value
+                displayAlbum(random)
+            } else {
+                console.warn('There are no images to display')
+            }
+        }
+
+        function displayAlbum(id) {
+            const slideshow = document.getElementById('slideshow')
+            slideshow.classList.add('loading')
+            slideshow.innerHTML = ''
+
+            get('{{ route("api::photos::albumList") }}/' + id)
+            .then(data => {
+                slideshow.classList.remove('loading')
+                albumOptionList.forEach(el => {
+                    el.removeAttribute('selected')
+                    if (el.value === id) {
+                        el.selected = true
+                        document.getElementById('title').innerHTML = el.innerHTML
+                    }
+                })
+
+                data['photos'].forEach(el => {
+                    slideshow.innerHTML += '<div style="background-image:url(' + el.url + ');"></div>'
+                })
+
+                prepareSlideshow()
+                clearInterval(slideInterval)
+                slideInterval = setInterval(slide, 7500)
+            })
+        }
+
+        function prepareSlideshow() {
+            document.querySelector('#slideshow > div:first-child').classList.add('active')
+            const slides = Array.from(document.querySelectorAll('#slideshow > div'))
+            slides.forEach(el => {el.style.zIndex = this.z++}, {z: 1})
+        }
+
+        function slide() {
+            const active = document.querySelector('#slideshow > div.active')
+            const next = active.nextSibling
+            active.classList.remove('active')
+            if (next.length > 0) setTimeout(function () { next.classList.add('active') }, 300)
+            else displayRandomAlbum()
+        }
+    </script>
 
 </body>
 </html>

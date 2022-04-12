@@ -3,7 +3,6 @@
 namespace Proto\Handlers\Events;
 
 use Proto\Models\Committee;
-use Proto\Models\Role;
 
 class AuthLoginEventHandler
 {
@@ -20,7 +19,7 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param  Events $event
+     * @param $event
      * @return void
      */
     public function handle($event)
@@ -28,71 +27,25 @@ class AuthLoginEventHandler
         $user = $event->user;
         $user->generateNewToken();
 
-        // We will grant the user all roles to which he is entitled!
-        $rootCommittee = Committee::where('slug', config('proto.rootcommittee'))->first();
-        $boardCommittee = Committee::find(config('proto.committee')['board']);
-        $omnomcom = Committee::find(config('proto.committee')['omnomcom']);
-        $tipcie = Committee::find(config('proto.committee')['tipcie']);
-        $drafters = Committee::find(config('proto.committee')['drafters']);
-        $protography = Committee::find(config('proto.committee')['protography']);
+        // We will grant the user all roles to which they are entitled to!
+        $committees = [
+            ['committee' => Committee::where('slug', config('proto.rootcommittee'))->first(), 'permission' => 'protube', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['board']), 'permission' => 'board', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['omnomcom']), 'permission' => 'omnomcom', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['tipcie']), 'permission' => 'tipcie', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['drafters']), 'permission' => 'drafters', 'nda' => false],
+            ['committee' => Committee::find(config('proto.committee')['protography']), 'permission' => 'protography', 'nda' => false],
+        ];
 
-        if ($user->isInCommittee($rootCommittee) && $user->signed_nda) {
-            if (! $user->hasRole('protube')) {
-                $user->attachRole(Role::where('name', '=', 'protube')->first());
-            }
-        } else {
-            if ($user->hasRole('protube')) {
-                $user->detachRole(Role::where('name', '=', 'protube')->first());
-            }
-        }
-
-        if ($user->isInCommittee($boardCommittee) && $user->signed_nda) {
-            if (! $user->hasRole('board')) {
-                $user->attachRole(Role::where('name', '=', 'board')->first());
-            }
-        } else {
-            if ($user->hasRole('board')) {
-                $user->detachRole(Role::where('name', '=', 'board')->first());
-            }
-        }
-
-        if ($user->isInCommittee($omnomcom) && $user->signed_nda) {
-            if (! $user->hasRole('omnomcom')) {
-                $user->attachRole(Role::where('name', '=', 'omnomcom')->first());
-            }
-        } else {
-            if ($user->hasRole('omnomcom')) {
-                $user->detachRole(Role::where('name', '=', 'omnomcom')->first());
-            }
-        }
-
-        if ($user->isInCommittee($tipcie) && $user->signed_nda) {
-            if (! $user->hasRole('tipcie')) {
-                $user->attachRole(Role::where('name', '=', 'tipcie')->first());
-            }
-        } else {
-            if ($user->hasRole('tipcie')) {
-                $user->detachRole(Role::where('name', '=', 'tipcie')->first());
-            }
-        }
-
-        if ($user->isInCommittee($drafters)) {
-            if (! $user->hasRole('drafters')) {
-                $user->attachRole(Role::where('name', '=', 'drafters')->first());
-            }
-        } else {
-            if ($user->hasRole('drafters')) {
-                $user->detachRole(Role::where('name', '=', 'drafters')->first());
-            }
-        }
-
-        if ($user->isInCommittee($protography)) {
-            if (! $user->hasRole('protography')) {
-                $user->attachRole(Role::where('name', '=', 'protography')->first());
-            }
-        } else {
-            if ($user->hasRole('protography')) {
-                $user->detachRole(Role::where('name', '=', 'protography')->first());
+        foreach($committees as $committee) {
+            if ($user->isInCommittee($committee['committee']) && ($user->signed_nda and $committee['nda'])) {
+                if (! $user->hasRole($committee['permission'])) {
+                    $user->assignRole($committee['permission']);
+                }
+            } else {
+                if ($user->hasRole($committee['permission'])) {
+                    $user->removeRole($committee['permission']);
+                }
             }
         }
     }

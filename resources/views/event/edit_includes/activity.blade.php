@@ -25,42 +25,27 @@
                 <div class="row">
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signup_start">Sign-up start:</label>
-                            @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'registration_start',
-                                'format' => 'datetime',
-                                'placeholder' => $event->activity ? $event->activity->registration_start : null
-                            ])
-                        </div>
-
+                        @include('website.layouts.macros.datetimepicker',[
+                            'name' => 'registration_start',
+                            'label' => 'Sign-up start:',
+                            'placeholder' => $event->activity ? $event->activity->registration_start : null
+                        ])
                     </div>
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signup_end">Sign-up end:</label>
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'registration_end',
-                                'format' => 'datetime',
+                                'label' => 'Sign-up end:',
                                 'placeholder' => $event->activity ? $event->activity->registration_end : null
                             ])
-                        </div>
-
                     </div>
 
                     <div class="col-md-6">
-
-                        <div class="form-group">
-                            <label for="signout_end">Sign-out end:</label>
-                            @include('website.layouts.macros.datetimepicker',[
-                                'name' => 'deregistration_end',
-                                'format' => 'datetime',
-                                'placeholder' => $event->activity ? $event->activity->deregistration_end : null
-                            ])
-                        </div>
-
+                        @include('website.layouts.macros.datetimepicker',[
+                            'name' => 'deregistration_end',
+                            'label' => 'Sign-out end:',
+                            'placeholder' => $event->activity ? $event->activity->deregistration_end : null
+                        ])
                     </div>
 
                     <div class="col-md-6">
@@ -81,7 +66,7 @@
                     <div class="col-md-6">
 
                         <label for="no_show_fee">
-                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-html="true"
                                title="Input only the additional no show fee."></i>
                             No show fee:
                         </label>
@@ -100,7 +85,7 @@
                     <div class="col-md-6">
 
                         <label for="participants">
-                            <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-html="true"
                                title="Use -1 for unlimited.<br>Use 0 for helpers only."></i>
                             Participant limit:
                         </label>
@@ -114,7 +99,7 @@
                                 <input type="checkbox" name="hide_participants"
                                         {{ ($event->activity && $event->activity->hide_participants ? 'checked' : '') }}>
                                         Hide participants.
-                                        <i class="fas fa-question-circle mr-2" data-toggle="tooltip" data-placement="top" data-html="true" title="This will hide who participates in this event for members!"></i>
+                                        <i class="fas fa-question-circle me-2" data-toggle="tooltip" data-placement="top" data-html="true" title="This will hide who participates in this event for members!"></i>
                             </label>
                         </div>
                     </div>

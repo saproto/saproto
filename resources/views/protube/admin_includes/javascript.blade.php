@@ -96,7 +96,7 @@
 
                     $("#nowPlaying").show().html("").append(generateResult(data, {'type': 'nowPlaying'}))
                         .append('<hr><div class="row">' +
-                            '<div class="col-3 text-right">' +
+                            '<div class="col-3 text-end">' +
                             '<strong id="current_time">0:00</strong>' +
                             '</div>' +
                             '<div class="col-6">' +
@@ -164,7 +164,7 @@
             $('#searchForm').on('bind', 'submit', function (e) {
                 e.preventDefault();
                 admin.emit("search", $("#searchBox").val());
-                $("#searchResults > div").html("<p class='text-center card-text'><i class='fas fa-spinner fa-spin mr-2'></i> Searching...</p>");
+                $("#searchResults > div").html("<p class='text-center card-text'><i class='fas fa-spinner fa-spin me-2'></i> Searching...</p>");
             });
 
             admin.on("searchResults", function (data) {
@@ -314,7 +314,7 @@
                 '<div class="col-9">';
 
             if (opts.type === 'queue') {
-                result = result + '<div class="float-right" style="font-size: 1.15rem;">' +
+                result = result + '<div class="float-end" style="font-size: 1.15rem;">' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('down') >= 0 ? 'fa-caret-square-down down' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('veto') >= 0 ? 'fa-minus-square veto' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +
                     '<i class="fas fa-fw ' + (opts.controls.indexOf('up') >= 0 ? 'fa-caret-square-up up' : 'text-muted') + '" data-index="' + opts.i + '"></i>' +

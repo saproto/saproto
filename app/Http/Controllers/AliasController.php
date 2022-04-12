@@ -49,7 +49,6 @@ class AliasController extends Controller
             $alias->save();
 
             $request->session()->flash('flash_message', 'Destination added to alias.');
-            return Redirect::route('alias::index');
         } elseif ($request->input('user') != '') {
             /** @var User $user */
             $user = User::findOrFail($request->input('user'));
@@ -60,11 +59,10 @@ class AliasController extends Controller
             $alias->save();
 
             $request->session()->flash('flash_message', 'User added to alias.');
-            return Redirect::route('alias::index');
         } else {
             $request->session()->flash('flash_message', 'No action performed.');
-            return Redirect::route('alias::index');
         }
+        return Redirect::route('alias::index');
     }
 
     /**

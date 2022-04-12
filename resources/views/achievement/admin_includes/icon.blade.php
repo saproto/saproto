@@ -11,15 +11,11 @@
 
         <div class="card-body">
 
-            <div class="form-group">
-                <label data-placement="inline" class="icp icp-auto"
-                       data-selected="{{  $achievement->fa_icon }}"></label>
-                <input type="hidden" name="fa_icon" id="icon" value="{{ $achievement->fa_icon }}">
-            </div>
-
-        </div>
-
-        <div class="card-footer">
+            @include('website.layouts.macros.iconpicker', [
+                'name' => 'fa_icon',
+                'placeholder' => isset($achievement) ? $achievement->fa_icon : null,
+                'label' => 'Achievement icon:'
+            ])
 
             <button type="submit" class="btn btn-success btn-block">
                 Save icon
@@ -30,14 +26,3 @@
     </div>
 
 </form>
-
-
-
-@push('javascript')
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $('.icp-auto').iconpicker();
-        $('.icp').on('iconpickerSelected', function (e) {
-            $('#icon').val(e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue));
-        });
-    </script>
-@endpush

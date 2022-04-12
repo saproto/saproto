@@ -8,8 +8,8 @@
 
         @foreach($available_months as $year => $months)
 
-            <li class="list-group-item" data-toggle="collapse" style="cursor: pointer;"
-                data-target="#omnomcom-years-{{ $year }}">
+            <li class="list-group-item cursor-pointer" data-bs-toggle="collapse"
+                data-bs-target="#omnomcom-years-{{ $year }}">
                 <strong>{{ $year }}</strong>
             </li>
             <div id="omnomcom-years-{{ $year }}" class="collapse {{ $year == date('Y') ? 'show' : null }}" data-parent="#omnomcom-years-accordion">

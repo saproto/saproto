@@ -21,49 +21,48 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $(function() {
-            $('.gi_upvote').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, 1, e.target);
-            });
+        const upvoteList = Array.from(document.getElementsByClassName('upvote'))
+        upvoteList.forEach(el => {
+            el.addEventListener('click', e => {
+                const id = e.target.parentElement.getAttribute('data-id')
+                if (id) sendVote(id, 1)
+            })
+        })
 
-            $('.gi_downvote').on('click', function(e) {
-                let id = $(e.target).attr('data-id');
-                if(id) sendVote(id, -1, e.target);
-            });
+        const downvoteList = Array.from(document.getElementsByClassName('downvote'))
+        downvoteList.forEach(el => {
+            el.addEventListener('click', e => {
+                const id = e.target.parentElement.getAttribute('data-id')
+                if(id) sendVote(id, -1)
+            })
+        })
 
-            function sendVote(id, voteValue, target) {
-                let data = new FormData();
-                data.append('id', id);
-                data.append('voteValue', voteValue);
-                data.append('_token', '{{ csrf_token() }}');
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('goodideas::vote') }}',
-                    data: data,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        $(`span[data-id='${id}']`).html(response.voteScore);
-                        switch(response.userVote) {
-                            case 1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('fas').removeClass('far');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('far').removeClass('fas');
-                                break;
-                            case -1:
-                                $(`a[data-id='${id}'].gi_upvote`).addClass('far').removeClass('fas');
-                                $(`a[data-id='${id}'].gi_downvote`).addClass('fas').removeClass('far');
-                                break;
-                            case 0:
-                                $(`a[data-id='${id}']`).addClass('far').removeClass('fas');
-                        }
-                    },
-                    error: function() {
-                        window.alert('Something went wrong voting the idea. Please try again.');
+        function sendVote(id, voteValue) {
+            post('{{ route('goodideas::vote') }}', { id: id, voteValue: voteValue })
+            .then(data => {
+                document.querySelectorAll(`[data-id='${id}']`).forEach(el => {
+                    const votes = el.querySelector('.votes')
+                    const upvote = el.querySelector('.upvote')
+                    const downvote = el.querySelector('.downvote')
+                    votes.innerHTML = data.voteScore
+                    switch(data.userVote) {
+                        case 1:
+                            upvote.classList.replace('far', 'fas')
+                            downvote.classList.replace('fas', 'far')
+                            break
+                        case -1:
+                            upvote.classList.replace('fas', 'far')
+                            downvote.classList.replace('far', 'fas')
+                            break
+                        case 0:
+                            votes.classList.replace('fas', 'far')
                     }
                 })
-            }
-        });
+            })
+            .catch(err => {
+                console.error(err)
+                window.alert('Something went wrong voting the idea. Please try again.')
+            })
+        }
     </script>
 @endpush
