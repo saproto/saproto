@@ -100,8 +100,8 @@ class MollieController extends Controller
         }
 
         $transaction = self::createPaymentForOrderlines($orderlines, $selected_method);
-
-        return Redirect::to($transaction->payment_url);
+        
+        return Redirect::away($transaction->payment_url);
     }
 
     /**
@@ -259,19 +259,23 @@ class MollieController extends Controller
         ]);
 
         $total = number_format($total, 2, '.', '');
+        $properties = [
+            'amount' => [
+                'currency' => 'EUR',
+                'value' => strval($total),
+            ],
+            'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
+            'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
+            'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
+        ];
+
+        if(config('omnomcom.mollie')['has_webhook']) {
+            $properties['webhookUrl'] = route('webhook::mollie', ['id' => $transaction->id]);
+        }
 
         $mollie = Mollie::api()
             ->payments()
-            ->create([
-                'amount' => [
-                    'currency' => 'EUR',
-                    'value' => strval($total),
-                ],
-                'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
-                'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
-                'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
-                'webhookUrl' => route('webhook::mollie', ['id' => $transaction->id]),
-            ]);
+            ->create($properties);
 
         $transaction->mollie_id = $mollie->id;
         $transaction->amount = $mollie->amount->value;
