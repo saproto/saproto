@@ -70,7 +70,7 @@
 
                     <div class="card-footer">
 
-                        <input type="submit" value="Save" class="btn btn-success float-right">
+                        <input type="submit" value="Save" class="btn btn-success float-end">
 
                         <a href="{{ route('passwordstore::index') }}" class="btn btn-default">
                             Cancel

@@ -36,7 +36,7 @@
                                 </th>
                                 @foreach($permissions as $permission)
                                     <td width="{{ $width }}%">
-                        <span style="opacity: {{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '1' : '0.2' }};">
+                        <span class="{{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '' : 'opacity-25' }}">
                             {{ $permission->name }}
                         </span>
                                     </td>
@@ -68,8 +68,8 @@
 
                             <div class="card mb-2">
 
-                                <div class="card-header bg-info text-white" style="cursor: pointer;"
-                                     data-toggle="collapse" data-target="#role-accordion-{{ $role->id }}">
+                                <div class="card-header bg-info text-white cursor-pointer"
+                                     data-bs-toggle="collapse" data-bs-target="#role-accordion-{{ $role->id }}">
                                     {{ $role->name }}
                                 </div>
 
@@ -81,8 +81,8 @@
 
                                             @include('users.includes.usercard', [
                                                 'user' => $user,
-                                                'subtitle' => sprintf('<div class="badge badge-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
-                                                    <a href="%s"><div class="badge badge-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
+                                                'subtitle' => sprintf('<div class="badge bg-%s text-white"><i class="fas fa-fw %s"></i> NDA</div>
+                                                    <a href="%s"><div class="badge bg-warning"><i class="fas fa-fw fa-undo"></i> Revoke</div></a>',
                                                     $user->signed_nda ? 'primary' : 'danger',
                                                     $user->signed_nda ? 'fa-user-shield' : 'fa-user-times',
                                                     route("authorization::revoke", ['id' => $role->id, 'user' => $user->id]))
@@ -94,7 +94,9 @@
 
                                     <div class="card-footer">
 
-                                        <select class="form-control user-search" name="user"></select>
+                                        <div class="form-group autocomplete">
+                                            <input class="form-control user-search" name="user"/>
+                                        </div>
 
                                         <input type="submit" class="btn btn-success btn-block mt-3" value="Grant">
 

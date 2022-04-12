@@ -10,6 +10,19 @@ $grey-dark: #212121;
 $dark: $grey-medium;
 $light: $grey-medium;
 
+$theme-colors: (
+        "primary": $primary,
+        "secondary": $secondary,
+        "brand-primary": $brand-primary,
+        "success": $success,
+        "info": $info,
+        "warning": $warning,
+        "danger": $danger,
+        "omnomcom": $omnomcom,
+        "dark": $dark,
+        "light": $light
+);
+
 //body
 $body-bg: $grey-light;
 $body-color: #fff;
@@ -20,9 +33,11 @@ $modal-content-bg: $grey-medium;
 //table
 $table-color: #fff;
 $table-border-color: $grey-light;
+table > tbody { border-top-color: $grey-light !important; }
 
 //list group
 $list-group-bg: $grey-medium;
+$list-group-color: #fff;
 
 //input
 $input-group-addon-border-color: $grey-light;
@@ -65,6 +80,7 @@ $pagination-hover-bg: $grey-medium;
 $pagination-hover-border-color: $grey-dark;
 $pagination-disabled-bg: $grey-medium;
 $pagination-disabled-border-color: $grey-light;
+$pagination-focus-bg: $grey-medium;
 
 $popover-bg: $grey-medium;
 $popover-header-bg: $grey-dark;
@@ -96,30 +112,32 @@ hr {
   color: #fff;
 }
 
-//select2
-.select2-dropdown {
-  background-color: $grey-dark;
-  border: 1px solid rgba(0,0,0,.125);
+//input
+.form-control[readonly] {
+  background-color: inherit;
+  @extend .text-muted
 }
 
 //buttons
-.btn.btn-outline-dark {
-  color: #fff;
-  border-color: #aaa;
-}
+.btn {
+  &-outline-dark {
+    color: #fff;
+    border-color: #aaa;
+    &:hover { background: $info; }
+  }
 
-.btn.btn-outline-dark:hover {
-  background: $info;
-}
+  &.lamp {
+    &On:hover {
+      background: $primary;
+      border-color: $primary;
+    }
+    &Off:hover {
+      background: $warning;
+      border-color: $warning;
+    }
+  }
 
-.btn.lampOn:hover {
-  background: $primary;
-  border-color: $primary;
-}
-
-.btn.lampOff:hover {
-  background: $warning;
-  border-color: $warning;
+  &-close { @extend .btn-close-white }
 }
 
 //modals
@@ -142,11 +160,11 @@ hr {
 }
 
 .editor-toolbar.disabled-for-preview button {
-    @extend .bg-dark
+    @extend .bg-dark;
 }
 
 //datetimepicker
-.bootstrap-datetimepicker-widget.dropdown-menu { background-color: $grey-dark !important; }
+.datetimepicker::-webkit-calendar-picker-indicator { background-color: #f1f1f1; }
 
 //custom file labels
 .custom-file-label::after {
@@ -159,7 +177,7 @@ hr {
 }
 
 //font-awesome icon picker
-.iconpicker .iconpicker-items {
+.iconpicker-dropdown ul {
   background-color: $grey-medium !important;
 }
 

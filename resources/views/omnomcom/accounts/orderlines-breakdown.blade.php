@@ -30,7 +30,7 @@
 
                     @foreach($accounts as $key => $account)
 
-                        <tr data-toggle="collapse" data-target=".collapse-{{ $key }}" style="cursor: pointer;">
+                        <tr class="cursor-pointer" data-bs-toggle="collapse" data-bs-target=".collapse-{{ $key }}">
                             <th>{{ $key }}</th>
                             <td>{{ $account->name }}</td>
                             <td>&euro; {{ number_format($account->total, 2) }}</td>
@@ -51,7 +51,7 @@
 
                         <tr>
                             <td></td>
-                            <td class="text-right">Total</td>
+                            <td class="text-end">Total</td>
                             <td class="font-weight-bold">
                                 &euro; {{ number_format($total, 2) }}
                             </td>

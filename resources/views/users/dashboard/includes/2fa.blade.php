@@ -36,13 +36,13 @@
 
         @if($user->tfa_totp_key)
 
-            <div data-toggle="modal" data-target="#totp-modal-disable" class="btn btn-outline-danger btn-block">
+            <div data-bs-toggle="modal" data-bs-target="#totp-modal-disable" class="btn btn-outline-danger btn-block">
                 Disable two-factor authentication
             </div>
 
         @else
 
-            <div data-toggle="modal" data-target="#totp-modal" class="btn btn-outline-info btn-block">
+            <div data-bs-toggle="modal" data-bs-target="#totp-modal" class="btn btn-outline-info btn-block">
                 Configure Two-Factor Authentication
             </div>
 

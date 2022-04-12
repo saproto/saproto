@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div id="news-admin" class="row justify-content-center">
 
         <div class="col-md-6">
 
@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('news::add') }}" class="badge badge-info float-right">
+                    <a href="{{ route('news::add') }}" class="badge bg-info float-end">
                         Create a new news item.
                     </a>
                 </div>
@@ -39,15 +39,19 @@
 
                             <tr>
 
-                                <td style="overflow-wrap: break-word; max-width: 160px">{{ $newsitem->title }}</td>
-                                <td>@if($newsitem->isPublished()) <span class="text-primary">{{ $newsitem->published_at }}</span> @else <span class="text-muted">{{ $newsitem->published_at }}</span> @endif</td>
-                                <td>
+                                <td class="title">{{ $newsitem->title }}</td>
+                                <td class="published-at">
+                                    <span class="text-{{ $newsitem->isPublished() ? 'primary' : 'muted' }}">
+                                        {{ $newsitem->published_at }}
+                                    </span>
+                                </td>
+                                <td class="controls">
                                     <a href="{{ route('news::show', ['id' => $newsitem->id]) }}">
-                                        <i class="fas fa-link mr-2"></i>
+                                        <i class="fas fa-link me-2"></i>
                                     </a>
 
                                     <a href="{{ route('news::edit', ['id' => $newsitem->id]) }}">
-                                        <i class="fas fa-edit mr-2"></i>
+                                        <i class="fas fa-edit me-2"></i>
                                     </a>
 
                                     <a href="{{ route('news::delete', ['id' => $newsitem->id]) }}" onclick="return confirm('Are you sure?')">

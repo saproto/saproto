@@ -40,23 +40,17 @@
                             ])
                         </div>
 
-                        <div class="form-group">
-                            <label for="campaign_end">Start:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'display_from',
-                                'format' => 'datetime',
-                                'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'display_from',
+                            'label' => 'Start:',
+                            'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
+                        ])
 
-                        <div class="form-group">
-                            <label for="campaign_end">End:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'display_till',
-                                'format' => 'datetime',
-                                'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'display_till',
+                            'label' => 'End:',
+                            'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )
+                        ])
 
                         <hr>
 
@@ -98,8 +92,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Announcement style:</label>
-                            <select name="show_style" class="form-control">
+                            <label for="show-style">Announcement style:</label>
+                            <select id="show-style" name="show_style" class="form-control">
                                 <option value="0" {{ ($announcement != null && $announcement->show_style == 0 ? 'selected' : '') }}>
                                     Primary (Green)
                                 </option>
@@ -193,10 +187,11 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success pull-right" style="margin-left: 15px;">Submit
+                        <button type="submit" class="btn btn-success float-end ms-4">
+                            Submit
                         </button>
 
-                        <a href="{{ route("announcement::index") }}" class="btn btn-default pull-right">Back</a>
+                        <a href="{{ route("announcement::index") }}" class="btn btn-default pull-end">Back</a>
 
                     </div>
 

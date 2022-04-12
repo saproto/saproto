@@ -15,9 +15,11 @@
                 @if($company->image)
                     <div class="card-header text-center">
                         <div class="align-items-center row " style="height: 200px;">
-                            <div class="col" style="display: block;">
+                            <div class="col d-block">
                                 <img src="{{ $company->image->generateImagePath(null, null) }}"
-                                     style="max-width: 70%; max-height: 160px;">
+                                     style="max-width: 70%; max-height: 160px;"
+                                     alt="logo of {{ $company->name }}"
+                                />
                             </div>
                         </div>
                     </div>

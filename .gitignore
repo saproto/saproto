@@ -9,7 +9,6 @@
 
 # Local files
 /personal
-/resources/views/website/custom.scss
 
 # IDE files
 /.idea
@@ -23,7 +22,8 @@ _ide_helper.php
 composer.phar
 
 # Generated files
-/public/assets
+/public/css
+/public/js
 /public/fonts
 /public/mix-manifest.json
 

@@ -36,7 +36,7 @@
 
                 </div>
 
-                <a href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
+                <a href="/" class="card-footer text-muted text-center text-decoration-none">
                     Go back to homepage.
                 </a>
 
@@ -49,15 +49,3 @@
     </div>
 
 @endsection
-
-@push('stylesheet')
-
-    <style>
-
-        #footer {
-            display: none;
-        }
-
-    </style>
-
-@endpush

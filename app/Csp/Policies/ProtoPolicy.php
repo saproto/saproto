@@ -28,6 +28,8 @@ class ProtoPolicy extends Policy
                     'https://www.youtube.com/iframe_api',
                     'https://s.ytimg.com',
                     'https://www.google.com/recaptcha/api.js',
+                    'https://kit.fontawesome.com/63e98a7060.js',
+                    'https://ka-f.fontawesome.com/',
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
@@ -54,6 +56,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'data:',
                     'https://fonts.gstatic.com',
+                    'https://ka-f.fontawesome.com/',
                 ])
                 ->addDirective(Directive::CONNECT, [
                     Keyword::SELF,
@@ -66,6 +69,8 @@ class ProtoPolicy extends Policy
                     'https://discordapp.com/api/guilds/600338792766767289/widget.json',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.aff',
                     'https://cdn.jsdelivr.net/codemirror.spell-checker/latest/en_US.dic',
+                    'https://ka-f.fontawesome.com/',
+                    'https://api.fontawesome.com/',
                 ]);
         } catch (InvalidValueSet | InvalidDirective $e) {
             captureException($e);

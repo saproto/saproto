@@ -66,7 +66,7 @@
 
                                 <tr>
 
-                                    <td class="text-right">
+                                    <td class="text-end">
                                         @if($password->username == null)
                                             <i class="fas fa-sticky-note" aria-hidden="true"></i>
                                         @else
@@ -88,7 +88,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($password->username != null)
-                                            <i class="fas fa-user mr-1"></i>
+                                            <i class="fas fa-user me-1"></i>
                                             <a class="passwordmanager__copy" href="#" copyTarget="user_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
                                             </a>
@@ -98,7 +98,7 @@
                                     </td>
                                     <td class="text-center">
                                         @if($password->password != null)
-                                            <i class="fas fa-key mr-1"></i>
+                                            <i class="fas fa-key me-1"></i>
                                             <a class="passwordmanager__copy" href="#"
                                                copyTarget="pass_{{ $i }}">
                                                 <i class="fas fa-clipboard"></i>
@@ -110,8 +110,8 @@
 
                                     <td class="text-center">
                                         @if($password->note)
-                                            <span class="passwordmanager__shownote" data-toggle="modal"
-                                                  data-target="#passwordmodal-{{ $password->id }}">
+                                            <span class="passwordmanager__shownote" data-bs-toggle="modal"
+                                                  data-bs-target="#passwordmodal-{{ $password->id }}">
                                             <i class="fas fa-sticky-note"></i>
                                         </span>
                                         @endif
@@ -123,7 +123,7 @@
 
                                     <td>
                                         <a href="{{ route("passwordstore::edit", ['id' => $password->id]) }}">
-                                            <i class="fas fa-edit mr-2"></i>
+                                            <i class="fas fa-edit me-2"></i>
                                         </a>
                                         <a href="{{ route("passwordstore::delete", ['id' => $password->id]) }}">
                                             <i class="fas fa-trash text-danger"></i>
@@ -165,9 +165,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">{{ $password->description }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <textarea class="form-control" rows="15"
@@ -186,10 +184,12 @@
 @push('javascript')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $(".passwordmanager__copy").on('click', function () {
-            //copyToClipboard($("#" + $(this).attr("copyTarget")));
-            copyToClipboard(document.getElementById($(this).attr("copyTarget")));
-        });
+        const copyBtnList = document.getElementsByClassName(".passwordmanager__copy")
+        copyBtnList.forEach(el => {
+            el.addEventListener('click', e => {
+                copyToClipboard(document.getElementById(e.target.getAttribute("copyTarget")));
+            })
+        })
 
         function copyToClipboard(elem) {
             // create hidden text element, if it doesn't already exist

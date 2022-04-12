@@ -11,17 +11,17 @@
             </li>
 
             @if($user->is_member)
-                <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#removeMembership">
+                <a href="#" class="list-group-item text-danger" data-bs-toggle="modal" data-bs-target="#removeMembership">
                     End membership
                 </a>
-                <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#setMembershipType">
+                <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
                 <a href="{{ route('membercard::download', ['id' => $user->id]) }}" target="_blank"
                    class="list-group-item">
                     Preview membership card
                 </a>
-                <a href="javascript:void();" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
+                <a href="#" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
                     Print membership card<br>
                     @if($user->member->card_printed_on)
                         (Last printed: {{ $user->member->card_printed_on }})
@@ -29,7 +29,7 @@
                         (Never printed before)
                     @endif
                 </a>
-                <a href="javascript:void();" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
+                <a href="#" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
                     Print opener overlay
                 </a>
             @else
@@ -41,7 +41,7 @@
                         <i class="fas fa-check-circle text-success"></i>
                         Has complete profile
                     </li>
-                    <a href="javascript:void();" class="list-group-item text-warning" data-toggle="modal" data-target="#addMembership">
+                    <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#addMembership">
                         Make member
                     </a>
                 @else
@@ -89,11 +89,11 @@
                                 </td>
                                 <td class="text-center">
                                     @if($user->member->membershipForm)
-                                        <a class="ml-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
+                                        <a class="ms-2" href="{{ route('memberform::download::signed', ['id' => $user->member->membership_form_id]) }}">
                                             <i class="fas fa-download"></i>
                                         </a>
                                     @else
-                                        <i class="fa fa-file-alt" data-toggle="tooltip" data-placement="top" title="No digital membership form, check the physical archive."></i>
+                                        <i class="fa fa-file-alt" data-bs-toggle="tooltip" data-bs-placement="top" title="No digital membership form, check the physical archive."></i>
                                     @endif
                                 </td>
                             </tr>
@@ -130,10 +130,10 @@
                                     @if($membership->membershipForm)
                                         <td>
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
-                                                <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
+                                                <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
-                                                <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                                <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     @endif
@@ -175,10 +175,10 @@
                                 @if($membership->membershipForm)
                                     <td>
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
-                                            <i class="fas fa-download fa-fw mr-2 text-info" aria-hidden="true"></i>
+                                            <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="javascript:void();" data-toggle="modal" data-target="#removeMemberForm" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
-                                            <i class="fas fa-trash fa-fw mr-2 text-danger" aria-hidden="true"></i>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
+                                            <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                 @endif
@@ -193,3 +193,35 @@
     </div>
 
 </div>
+
+@push('javascript')
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+
+        function req(e, url) {
+            get(url, { 'id': e.target.getAttribute('data-id') })
+            .then(data => {
+                if (data.includes('Exception')) throw data
+                alert(data)
+            })
+            .catch(err => {
+                console.error(err)
+                alert("Something went wrong while requesting the print.")
+            })
+        }
+
+        document.getElementById('print-card').addEventListener('click', e => {
+            if (confirm('please confirm you want to print a membership card.')) {
+                req(e, '{{ route('membercard::print') }}')
+            }
+        })
+
+        document.getElementById('print-card-overlay').addEventListener('click', e => {
+            if (confirm("Please confirm you have the right member card loaded.")) {
+                req(e, '{{ route('membercard::printoverlay') }}')
+            }
+        })
+
+    </script>
+
+@endpush

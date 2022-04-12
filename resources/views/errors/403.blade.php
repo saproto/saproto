@@ -8,6 +8,10 @@
 
 @section('page-body')
 
-    You are not allowed to access this page.
+    @if($exception->getMessage() == null)
+        You are not allowed to access this page.
+    @else
+        {{ $exception->getMessage() }}
+    @endif
 
 @endsection

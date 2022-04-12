@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
         Society memberships
@@ -42,7 +42,7 @@
 
 @if (count($pastsocieties) > 0)
 
-    <div class="card mt-3 mb-3">
+    <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
             Past committee memberships
