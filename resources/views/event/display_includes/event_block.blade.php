@@ -27,11 +27,14 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                 <i class="fas fa-star fa-fw text-gold" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This is a featured activity!"></i>
             @endif
-            @if($event->activity && Auth::check())
-                @if($event->activity->isParticipating(Auth::user()))
-                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
-                @endif
+            @if($event->activity && Auth::check() && $event->activity->isParticipating(Auth::user()))
+                    @if($event->activity->isOnBackupList(Auth::user()))
+                        <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
+                    @else
+                        <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
+                    @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
