@@ -131,15 +131,13 @@ return [
     |--------------------------------------------------------------------------
     |
     | Defines various configuration options for the Mollie integration.
-    | Free methods will not have any fees when use_fees is true, to exclude use the
-    | ids as in the mollie api.
+    |
     */
 
     'mollie' => [
+        'fixed_fee' => .3,
+        'variable_fee' => .02,
         'fee_id' => 887,
-        'free_methods' => ['creditcard'],
-        'use_fees' => false,
-        'has_webhook' => ! (getenv('APP_ENV') === 'local'),
     ],
 
     /*

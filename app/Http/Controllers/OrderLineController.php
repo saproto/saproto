@@ -22,54 +22,47 @@ class OrderLineController extends Controller
      * @param null $date
      * @return View
      */
-    public function index($date = null)
+    public function index($selected_month = null)
     {
         $user = Auth::user();
 
-        $next_withdrawal = $orderlines = OrderLine::where('user_id', $user->id)
-            ->whereNull('payed_with_cash')
-            ->whereNull('payed_with_bank_card')
-            ->whereNull('payed_with_mollie')
-            ->whereNull('payed_with_withdrawal')
-            ->sum('total_price');
+        $next_withdrawal = OrderLine::where('user_id', $user->id)->whereNull('payed_with_cash')->whereNull('payed_with_bank_card')->whereNull('payed_with_mollie')->whereNull('payed_with_withdrawal')->sum('total_price');
 
-        $orderlines = OrderLine::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->groupBy(function ($date) {
-                return Carbon::parse($date->created_at)->format('Y-m');
-            });
-
-        if ($date != null) {
-            $selected_month = $date;
+        if ($selected_month == null) {
+            $this_month = Carbon::now()->startOfMonth();
+            $next_month = Carbon::now()->startOfMonth()->addMonth(1);
         } else {
-            $selected_month = date('Y-m');
+            $this_month = Carbon::createFromDate($selected_month)->startOfMonth();
+            $next_month = Carbon::createFromDate($selected_month)->startOfMonth()->addMonth(1);
         }
 
-        $available_months = $orderlines->keys()->groupBy(function ($date) {
-            return Carbon::parse($date)->format('Y');
+        $orderlines = OrderLine::where('user_id', $user->id)->where('created_at', '>=', $this_month)->where('created_at', '<', $next_month)->orderBy('created_at', 'desc')->get();
+        $total = $orderlines->sum('total_price');
+
+        $grouped_orderlines = $orderlines->groupBy(function ($orderline_date) {
+            return Carbon::parse($orderline_date->created_at)->format('Y-m');
         });
 
-        $total = 0;
-        if ($orderlines->has($selected_month)) {
-            $selected_orders = $orderlines[Carbon::parse($date)->format('Y-m')];
-            foreach ($selected_orders as $orderline) {
-                if ($orderline->total_price > 0) {
-                    $total += $orderline->total_price;
-                }
+        $available_months_collection = OrderLine::selectRaw('MONTH(created_at) month, YEAR(created_at) year')->where('user_id', $user->id)->groupBy('month')->orderBy('year', 'desc')->orderBy('month', 'desc')->get();
+
+        $available_months = [];
+
+        foreach ($available_months_collection as $month) {
+            if (! array_key_exists($month->year, $available_months)) {
+                $available_months[$month->year] = [];
             }
+            $available_months[$month->year][] = $month->month;
         }
 
-        $payment_methods = MollieController::getPaymentMethods();
+        $current_orderlines = $grouped_orderlines->has($this_month->format('Y-m')) ? $grouped_orderlines[$this_month->format('Y-m')] : null;
+
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
-            'selected_month' => $selected_month,
-            'orderlines' => $orderlines->has($selected_month) ? $orderlines[$selected_month] : [],
+            'selected_month' => $this_month,
+            'orderlines' => $current_orderlines,
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
-            'methods' => $payment_methods,
-            'use_fees' => config('omnomcom.mollie')['use_fees'],
         ]);
     }
 
@@ -84,37 +77,25 @@ class OrderLineController extends Controller
             return Redirect::route('omnomcom::orders::adminlist', ['date' => $request->get('date')]);
         }
 
-        $date = $date ? $date : date('Y-m-d');
+        $date = ($date ? $date : date('Y-m-d'));
 
         if (Auth::user()->can('alfred')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
                 $query->where('account_id', '=', config('omnomcom.alfred-account'));
-            })->where(
-                'created_at',
-                '>=',
-                $date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')
-            );
+            })->where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
         } else {
-            $orderlines = OrderLine::where(
-                'created_at',
-                '>=',
-                $date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')
-            );
+            $orderlines = OrderLine::where('created_at', '>=', ($date ? Carbon::parse($date)->format('Y-m-d H:i:s') : Carbon::today()->format('Y-m-d H:i:s')));
         }
 
         if ($date != null) {
-            $orderlines = $orderlines->where(
-                'created_at',
-                '<=',
-                Carbon::parse($date.' 23:59:59')->format('Y-m-d H:i:s')
-            );
+            $orderlines = $orderlines->where('created_at', '<=', Carbon::parse($date.' 23:59:59')->format('Y-m-d H:i:s'));
         }
 
         $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
-            'orderlines' => $orderlines ? $orderlines : [],
+            'orderlines' => ($orderlines ? $orderlines : []),
         ]);
     }
 
@@ -128,20 +109,9 @@ class OrderLineController extends Controller
             /** @var Product $product */
             $product = Product::findOrFail($request->input('product')[$i]);
             $user = User::findOrFail($request->input('user')[$i]);
-            $price =
-                $request->input('price')[$i] != ''
-                    ? floatval(str_replace(',', '.', $request->input('price')[$i]))
-                    : $product->price;
+            $price = ($request->input('price')[$i] != '' ? floatval(str_replace(',', '.', $request->input('price')[$i])) : $product->price);
             $units = $request->input('units')[$i];
-            $product->buyForUser(
-                $user,
-                $units,
-                $price * $units,
-                null,
-                null,
-                $request->input('description'),
-                sprintf('bulk_add_by_%u', Auth::user()->id)
-            );
+            $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'), sprintf('bulk_add_by_%u', Auth::user()->id));
         }
 
         $request->session()->flash('flash_message', 'Your manual orders have been added.');
@@ -208,18 +178,10 @@ class OrderLineController extends Controller
         if ($request->has('start') && $request->has('end')) {
             $start = date('Y-m-d H:i:s', strtotime($request->start));
             $end = date('Y-m-d H:i:s', strtotime($request->end));
-            $total_cash = DB::table('orderlines')
-                ->where('created_at', '>', $start)
-                ->where('created_at', '<', $end)
-                ->whereNotNull('payed_with_cash')
-                ->select(DB::raw('SUM(total_price) as total'))
-                ->get()[0]->total;
-            $total_card = DB::table('orderlines')
-                ->where('created_at', '>', $start)
-                ->where('created_at', '<', $end)
-                ->whereNotNull('payed_with_bank_card')
-                ->select(DB::raw('SUM(total_price) as total'))
-                ->get()[0]->total;
+            $total_cash = DB::table('orderlines')->where('created_at', '>', $start)->where('created_at', '<', $end)
+                ->whereNotNull('payed_with_cash')->select(DB::raw('SUM(total_price) as total'))->get()[0]->total;
+            $total_card = DB::table('orderlines')->where('created_at', '>', $start)->where('created_at', '<', $end)
+                ->whereNotNull('payed_with_bank_card')->select(DB::raw('SUM(total_price) as total'))->get()[0]->total;
 
             return view('omnomcom.statistics.payments', [
                 'start' => $request->start,
@@ -228,9 +190,7 @@ class OrderLineController extends Controller
                 'total_card' => $total_card,
             ]);
         } else {
-            return view('omnomcom.statistics.date-select', [
-                'select_text' => 'Select a time range over which to calculate payment totals.',
-            ]);
+            return view('omnomcom.statistics.date-select', ['select_text' => 'Select a time range over which to calculate payment totals.']);
         }
     }
 }

@@ -35,8 +35,8 @@
                             <br><span class="text-muted"><em>{{ $orderline->description }}</em></span>
                         @endif
                     </td>
-                    <td width=80 class="text-right">{!! $orderline->generateHistoryStatus() !!}</td>
-                    <td class="pl-4">{{ date('H:i:s', strtotime($orderline->created_at)) }}</td>
+                    <td>{!! $orderline->generateHistoryStatus() !!}</td>
+                    <td>{{ date('H:i:s', strtotime($orderline->created_at)) }}</td>
                 </tr>
 
             @endforeach

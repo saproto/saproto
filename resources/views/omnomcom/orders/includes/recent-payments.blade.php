@@ -13,7 +13,7 @@
                     <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                     </a>
-                    @if($withdrawal->getFailedWithdrawal($user) || $withdrawal->id == 'temp')
+                    @if($withdrawal->getFailedWithdrawal($user))
                         <i class="fas fa-times text-danger ml-2"></i>
                     @endif
                     <span class="float-right">
@@ -50,19 +50,12 @@
 
         <ul class="list-group list-group-flush">
 
-            @foreach($user->mollieTransactions->sortByDesc(['created_at']) as $transaction)
+            @foreach($user->mollieTransactions as $transaction)
                 <li class="list-group-item">
-                    @if($transaction->mollie_id != 'temp')
                     <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
                         {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
-                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "open" ? '<i class="fas fa-spinner ml-2 text-normal"></i>' : "" !!}
-                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
-                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "paid" ? '<i class="fas fa-check ml-2 text-success"></i>' : "" !!}
-                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "unknown" ? '<i class="fas fa-question ml-2 text-normal"></i>' : "" !!}
+                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
                     </a>
-                    @else
-                        <span>This payment is corrupt, please contact board</span>
-                    @endif
                     <span class="float-right">&euro;{{ number_format($transaction->amount, 2, '.', ',') }}</span>
                 </li>
             @endforeach

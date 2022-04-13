@@ -56,9 +56,7 @@ class MollieTransaction extends Model
     /** @return MollieTransaction */
     public function transaction()
     {
-        return Mollie::api()
-            ->payments()
-            ->get($this->mollie_id);
+        return Mollie::api()->payments()->get($this->mollie_id);
     }
 
     /**
@@ -69,13 +67,7 @@ class MollieTransaction extends Model
     {
         if ($status == 'open' || $status == 'pending' || $status == 'draft') {
             return 'open';
-        } elseif (
-            $status == 'expired' ||
-            $status == 'canceled' ||
-            $status == 'failed' ||
-            $status == 'charged_back' ||
-            $status == 'refunded'
-        ) {
+        } elseif ($status == 'expired' || $status == 'cancelled' || $status == 'failed' || $status == 'charged_back' || $status == 'refunded') {
             return 'failed';
         } elseif ($status == 'paid' || $status == 'paidout') {
             return 'paid';
@@ -96,17 +88,12 @@ class MollieTransaction extends Model
      */
     public function updateFromWebhook()
     {
-        $mollie = Mollie::api()
-            ->payments()
-            ->get($this->mollie_id);
-        
+        $mollie = Mollie::api()->payments()->get($this->mollie_id);
 
         $new_status = self::translateStatus($mollie->status);
 
         $this->status = $mollie->status;
-        if ($new_status != 'open'){
-            $this->payment_url = $mollie->getCheckoutUrl();
-        }
+        $this->payment_url = $mollie->getCheckoutUrl();
 
         $this->save();
 
@@ -124,11 +111,7 @@ class MollieTransaction extends Model
                  * - The ticket should be a pre-paid ticket.
                  * - The ticket should not already been paid for. This would indicate someone charging back their payment. If this is the case someone should still pay.
                  */
-                if (
-                    $orderline->product->ticket &&
-                    $orderline->product->ticket->is_prepaid &&
-                    $orderline->ticketPurchase->payment_complete == false
-                ) {
+                if ($orderline->product->ticket && $orderline->product->ticket->is_prepaid && $orderline->ticketPurchase->payment_complete == false) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
                     }
@@ -141,7 +124,9 @@ class MollieTransaction extends Model
                 $orderline->payed_with_mollie = null;
                 $orderline->save();
             }
-        } elseif ($new_status == 'paid') {
+        }
+
+        if ($new_status == 'paid') {
             foreach ($this->orderlines as $orderline) {
                 if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
                     $orderline->ticketPurchase->payment_complete = true;

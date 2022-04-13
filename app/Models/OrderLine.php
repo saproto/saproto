@@ -92,19 +92,16 @@ class OrderLine extends Model
         return $this->hasOne('Proto\Models\TicketPurchase', 'orderline_id');
     }
 
-   /** @return bool */
-   public function isPayed()
-   {
-       $mollie_payment = false;
-       if ($this->payed_with_mollie !== null) {
-           $mollie_payment = $this->molliePayment->translatedStatus();
-       }
-       return $this->total_price == 0 ||
-           $this->payed_with_cash !== null ||
-           $this->payed_with_withdrawal !== null ||
-           $mollie_payment == 'paid' ||
-           $this->payed_with_bank_card !== null;
-   }
+    /** @return bool */
+    public function isPayed()
+    {
+        return
+            $this->total_price == 0 ||
+            $this->payed_with_cash !== null ||
+            $this->payed_with_mollie !== null ||
+            $this->payed_with_withdrawal !== null ||
+            $this->payed_with_bank_card !== null;
+    }
 
     /** @return bool */
     public function canBeDeleted()
@@ -112,50 +109,25 @@ class OrderLine extends Model
         return $this->total_price == 0 || ! $this->isPayed();
     }
 
-     /** @return string */
-     public function generateHistoryStatus()
-     {
-         if ($this->payed_with_withdrawal !== null) {
-             return "Withdrawal <a href='".
-                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
-                 "'>#".
-                 $this->payed_with_withdrawal.
-                 '</a>';
-         } elseif ($this->payed_with_cash !== null) {
-             return 'Cash';
-         } elseif ($this->payed_with_bank_card !== null) {
-             return 'Bank Card';
-         } elseif ($this->payed_with_mollie !== null) {
-             switch ($this->molliePayment->translatedStatus()) {
-                 case 'paid':
-                     return '<i class="fas fa-check ml-2 text-success"></i>'." - <a href='".
-                         route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                         "'>#".
-                         $this->payed_with_mollie.
-                         '</a>';
-                 case 'failed':
-                     return '<i class="fas fa-times ml-2 text-danger"></i>'." - <a href='".
-                         route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                         "'>#".
-                         $this->payed_with_mollie.
-                         '</a>';
-                 case 'open':
-                     return '<i class="fas fa-spinner ml-2 text-normal"></i>'." - <a href='".
-                         route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                         "'>#".
-                         $this->payed_with_mollie.
-                         '</a>';
-                 default:
-                     return '<i class="fas fa-question ml-2 text-normal"></i>'." - <a href='".
-                         route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie]).
-                         "'>#".
-                         $this->payed_with_mollie.
-                         '</a>';
-             }
-         } elseif ($this->total_price == 0) {
-             return 'Free!';
-         } else {
-             return 'Unpaid';
-         }
-     }
- }
+    /** @return string */
+    public function generateHistoryStatus()
+    {
+        if ($this->isPayed()) {
+            if ($this->payed_with_withdrawal !== null) {
+                return "Withdrawal <a href='".route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal])."'>#".$this->payed_with_withdrawal.'</a>';
+            } elseif ($this->payed_with_cash !== null) {
+                return 'Cash';
+            } elseif ($this->payed_with_bank_card !== null) {
+                return 'Bank Card';
+            } elseif ($this->payed_with_mollie !== null) {
+                return "Mollie <a href='".route('omnomcom::mollie::status', ['id' => $this->payed_with_mollie])."'>#".$this->payed_with_mollie.'</a>';
+            } elseif ($this->total_price == 0) {
+                return 'Free!';
+            } else {
+                return 'Dunnow 🤷🏽';
+            }
+        } else {
+            return 'Unpaid';
+        }
+    }
+}
