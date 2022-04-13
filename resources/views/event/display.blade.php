@@ -31,7 +31,8 @@
             <div class="col-md-4">
 
                 @include('event.display_includes.tickets', [
-                    'event' => $event
+                    'event' => $event,
+                    'payment_methods' => $payment_methods
                 ])
 
                 @include('event.display_includes.participation', [
