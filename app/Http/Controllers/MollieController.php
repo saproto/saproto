@@ -27,7 +27,7 @@ class MollieController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $request->user_id ? User::findOrFail($request->get('user_id')) : null;
+        $user = $request->input('user_id') ? User::findOrFail($request->input('user_id')) : null;
 
         $transactions = MollieTransaction::query()
             ->when($user, function ($query, $user) {
@@ -43,11 +43,11 @@ class MollieController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function pay(Request $request): RedirectResponse
+    public function pay(Request $request)
     {
-        $cap = intval($request->cap);
+        $cap = intval($request->input('cap'));
         $total = 0;
-        $requested_method = $request->method;
+        $requested_method = $request->input('method');
         $selected_method = null;
         $use_fees = config('omnomcom.mollie')['use_fees'];
         $available_methods = $use_fees ? self::getPaymentMethods() : null;
@@ -114,7 +114,7 @@ class MollieController extends Controller
         /** @var MollieTransaction $transaction */
         $transaction = MollieTransaction::findOrFail($id);
         if ($transaction->user->id != Auth::id() && ! Auth::user()->can('board')) {
-            abort(403, 'You are unauthorized to view this transcation.');
+            abort(403, 'You are unauthorized to view this transaction.');
         }
         $transaction = $transaction->updateFromWebhook();
 
@@ -158,10 +158,9 @@ class MollieController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function receive($id): RedirectResponse
+    public function receive($id)
     {
         $transaction = MollieTransaction::findOrFail($id);
-        // $transaction = $transaction->updateFromWebhook();
 
         $flash_message = 'Unknown error';
         if ($transaction->user_id == Auth::id()) {

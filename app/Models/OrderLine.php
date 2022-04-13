@@ -103,7 +103,6 @@ class OrderLine extends Model
            $this->payed_with_cash !== null ||
            $this->payed_with_withdrawal !== null ||
            $mollie_payment == 'paid' ||
-           //MollieTransaction::translatedStatus($this->payed_with_mollie == 'paid') ||
            $this->payed_with_bank_card !== null;
    }
 
@@ -116,7 +115,6 @@ class OrderLine extends Model
      /** @return string */
      public function generateHistoryStatus()
      {
-         // if ($this->isPayed()) {
          if ($this->payed_with_withdrawal !== null) {
              return "Withdrawal <a href='".
                  route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
@@ -159,8 +157,5 @@ class OrderLine extends Model
          } else {
              return 'Unpaid';
          }
-         // } else {
-         // return 'Unpaid';
-         // }
      }
  }

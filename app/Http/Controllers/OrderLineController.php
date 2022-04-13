@@ -61,7 +61,6 @@ class OrderLineController extends Controller
         }
 
         $payment_methods = MollieController::getPaymentMethods();
-        // dd($payment_methods);
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
             'available_months' => $available_months,
