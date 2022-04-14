@@ -19,7 +19,7 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::DEFAULT, Keyword::SELF)
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
-                    'https://www.mollie.com/checkout/'
+                    'https://www.mollie.com/checkout/',
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
