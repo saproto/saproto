@@ -86,13 +86,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
             @if($event->activity && $event->activity->users->count()>0)
                <br>
                <span>
-                   @if($event->activity->isFull())
-                       <i class="fas fa-user-alt fa-fw" style="color: orange;" aria-hidden="true"></i>
-                       Full!
-                   @else
                     <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
                     {{$event->activity->users->count()}}
-                   @endif
                 </span>
             @endif
 
