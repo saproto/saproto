@@ -1,8 +1,9 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
-/* @var $factory Closure */
+/* @var $factory Factory */
 $factory->define(
     Proto\Models\AchievementOwnership::class,
     function (Faker $faker, $attr) {

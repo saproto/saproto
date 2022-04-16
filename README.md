@@ -73,12 +73,12 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-If you are in WSL, you might run into some permission issues. You can use the commands bellow to change the permissions of the troublesome directories.
+If you are on WSL, you might run into some permission issues. While still inside the docker container, you can use the commands bellow to change the permissions of the troublesome directories.
 ```
-sudo chown -R www-data:www-data storage
-sudo chown -R www-data:www-data bootstrap/cache 
-sudo chmod -R 755 storage
-sudo chmod -R 755 bootstrap/cache
+chown -R www-data:www-data storage
+chown -R www-data:www-data bootstrap/cache
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
 ```
 
 When you have finished the setup and Docker the following port will be exposed on localhost.
