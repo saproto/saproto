@@ -53,7 +53,7 @@
     "intervention/image": "2.*",
     "intervention/imagecache": "2.*",
     "jwilsson/spotify-web-api-php": "1.12.*",
-    "laravel/framework": "^7.0",
+    "laravel/framework": "^7.30",
     "laravel/helpers": "1.*",
     "laravelcollective/html": "6.*",
     "laravel/passport": "9.3.*",
