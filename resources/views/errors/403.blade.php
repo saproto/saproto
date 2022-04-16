@@ -8,7 +8,7 @@
 
 @section('page-body')
 
-    @if($exception->getMessage() == null)
+    @if(! isset($exception))
         You are not allowed to access this page.
     @else
         {{ $exception->getMessage() }}
