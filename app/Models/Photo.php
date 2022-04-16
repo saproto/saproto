@@ -112,7 +112,7 @@ class Photo extends Model
     }
 
     /** @return string */
-    public function thumb()
+    public function thumbnail()
     {
         return $this->file()->generateImagePath(400, 400);
     }

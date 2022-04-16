@@ -66,7 +66,7 @@ class FileController extends Controller
             } else {
                 $image->make($storage['local']['root'].'/'.$entry->filename);
             }
-        });
+        },87600);
     }
 
     /**
