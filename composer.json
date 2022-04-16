@@ -84,13 +84,6 @@
     "friendsofphp/php-cs-fixer": "^3.0.0",
     "laravel/tinker": "^2.6"
   },
-  "extra": {
-    "laravel": {
-      "dont-discover": [
-        "barryvdh/laravel-ide-helper"
-      ]
-    }
-  },
   "autoload": {
     "classmap": [
       "database"
@@ -106,7 +99,11 @@
     "pre-update-cmd": [
       "php artisan clear-compiled"
     ],
-    "post-update-cmd": [],
+    "post-update-cmd": [
+      "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+      "php artisan ide-helper:generate",
+      "php artisan ide-helper:meta"
+    ],
     "fix": [
       "php-cs-fixer fix --verbose"
     ],
