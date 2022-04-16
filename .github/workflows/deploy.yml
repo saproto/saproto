@@ -31,7 +31,7 @@ jobs:
           php-version: ${{ env.PHP_VERSION }}
 
       - name: 📥 Install back-end dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
       - name: 🔍 Get Node version
         id: nvm
