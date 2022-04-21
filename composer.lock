@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2030a463ca2091dc5c884b614df70aac",
+    "content-hash": "c959e4ef9ac2434d067437fa53d925ad",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -3059,16 +3059,16 @@
         },
         {
             "name": "league/mime-type-detection",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/mime-type-detection.git",
-                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7"
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/3e4a35d756eedc67096f30240a68a3149120dae7",
-                "reference": "3e4a35d756eedc67096f30240a68a3149120dae7",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
                 "shasum": ""
             },
             "require": {
@@ -3099,7 +3099,7 @@
             "description": "Mime-type detection for Flysystem",
             "support": {
                 "issues": "https://github.com/thephpleague/mime-type-detection/issues",
-                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.10.0"
+                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.11.0"
             },
             "funding": [
                 {
@@ -3111,7 +3111,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-11T12:49:04+00:00"
+            "time": "2022-04-17T13:12:02+00:00"
         },
         {
             "name": "league/oauth1-client",
@@ -3656,16 +3656,16 @@
         },
         {
             "name": "mollie/mollie-api-php",
-            "version": "v2.42.0",
+            "version": "v2.42.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mollie/mollie-api-php.git",
-                "reference": "1d3ba6a8c345140f23f52facc4267ece12395b11"
+                "reference": "1ced5854c98af5cffca09b1093156ebdac277285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/1d3ba6a8c345140f23f52facc4267ece12395b11",
-                "reference": "1d3ba6a8c345140f23f52facc4267ece12395b11",
+                "url": "https://api.github.com/repos/mollie/mollie-api-php/zipball/1ced5854c98af5cffca09b1093156ebdac277285",
+                "reference": "1ced5854c98af5cffca09b1093156ebdac277285",
                 "shasum": ""
             },
             "require": {
@@ -3742,9 +3742,9 @@
             ],
             "support": {
                 "issues": "https://github.com/mollie/mollie-api-php/issues",
-                "source": "https://github.com/mollie/mollie-api-php/tree/v2.42.0"
+                "source": "https://github.com/mollie/mollie-api-php/tree/v2.42.1"
             },
-            "time": "2022-04-05T05:53:07+00:00"
+            "time": "2022-04-21T11:21:14+00:00"
         },
         {
             "name": "monolog/monolog",
