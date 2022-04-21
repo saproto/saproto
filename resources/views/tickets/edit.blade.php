@@ -24,27 +24,42 @@
 
                         {!! csrf_field() !!}
 
-                        <div class="form-group autocomplete">
+                        <div class="form-group">
                             <label for="product">Product:</label>
-                            <input class="form-control product-search" id="product" name="product" placeholder="{{ $ticket ? $ticket->product->name : '' }}" value="{{ $ticket ? $ticket->product->id : '' }}" {{ $ticket ? '' : 'required' }}>
+                            @if($ticket)
+                                &nbsp; <i>{{ $ticket->product->name }}</i>
+                            @endif
+                            <select class="form-control product-search" id="product"
+                                    name="product" {{ $ticket ? '' : 'required' }}></select>
                         </div>
 
-                        <div class="form-group autocomplete">
+                        <div class="form-group">
                             <label for="event">Event:</label>
-                            <input class="form-control event-search" id="event" name="event" placeholder="{{ $ticket ? $ticket->event->title : '' }}" value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
+                            @if($ticket)
+                                &nbsp; <i>{{ $ticket->event->title }}
+                                    ({{ $ticket->event->getFormattedDateAttribute()->simple }})</i>
+                            @endif
+                            <select class="form-control event-search" id="event"
+                                    name="event" {{ $ticket ? '' : 'required' }}></select>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'available_from',
-                            'label' => 'Available from:',
-                            'placeholder' => $ticket ? $ticket->available_from : null
-                        ])
+                        <div class="form-group">
+                            <label for="available_from">Available from:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'available_from',
+                                'format' => 'datetime',
+                                'placeholder' => $ticket ? $ticket->available_from : null
+                            ])
+                        </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'available_to',
-                            'label' => 'Available to:',
-                            'placeholder' => $ticket ? $ticket->available_to : null
-                        ])
+                        <div class="form-group">
+                            <label for="available_to">Available to:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'available_to',
+                                'format' => 'datetime',
+                                'placeholder' => $ticket ? $ticket->available_to : null
+                            ])
+                        </div>
 
                         <div class="checkbox">
                             <label>
@@ -66,7 +81,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">Submit</button>
+                        <button type="submit" class="btn btn-success float-right">Submit</button>
 
                         <a href="{{ route("tickets::list") }}" class="btn btn-default">Cancel</a>
 

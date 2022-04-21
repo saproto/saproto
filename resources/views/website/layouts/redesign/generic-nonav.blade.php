@@ -2,7 +2,7 @@
 
 @section('body')
 
-    <main role="main" class="container-fluid pt-3 border-top border-4 border-primary">
+    <main role="main" class="container-fluid pt-3" style="border-top: 10px solid var(--primary);">
 
         @include('website.announcements')
 

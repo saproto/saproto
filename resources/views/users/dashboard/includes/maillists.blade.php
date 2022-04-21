@@ -22,18 +22,18 @@
                 @foreach(Proto\Models\EmailList::all() as $i => $list)
 
                     <div class="card border">
-                        <div class="card-header border-bottom-0 cursor-pointer" data-bs-toggle="collapse"
-                             data-bs-target="#email__collapse__{{ $list->id }}">
+                        <div class="card-header border-bottom-0" data-toggle="collapse"
+                             data-target="#email__collapse__{{ $list->id }}" style="cursor: pointer;">
                             {{ $list->name }}
 
                             @if($list->isSubscribed($user))
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"
-                                   class="badge bg-danger float-end">Unsubscribe</a>
+                                   class="badge badge-danger float-right">Unsubscribe</a>
                             @elseif(!$list->is_member_only || $user->member)
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"
-                                   class="badge bg-info float-end">Subscribe</a>
+                                   class="badge badge-info float-right">Subscribe</a>
                             @else
-                                <span class="badge bg-dark float-end">Members only</span>
+                                <span class="badge badge-dark float-right">Members only</span>
                             @endif
                         </div>
 

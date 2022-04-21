@@ -10,16 +10,20 @@
 
         {!! csrf_field() !!}
 
-        <p>Please enter your e-mail address.</p>
+        <p>
+            Please enter your e-mail address.
+        </p>
 
-        <div class="form-group mb-2">
+        <div class="form-group">
             <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}"
                    placeholder="garrus.vakarian@example.com">
         </div>
 
-        <button type="submit" class="btn btn-success btn-block">
-            What is my username?
-        </button>
+        <p>
+            <button type="submit" class="btn btn-success" style="width: 100%;">
+                What is my username?
+            </button>
+        </p>
 
     </form>
 

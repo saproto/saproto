@@ -15,7 +15,7 @@
 
         </div>
 
-        <div class="col-md-8 col-md-4">
+        <div class="col-md-8 col-md-pull-4">
 
             @include('quotecorner.allquotes')
 
@@ -29,31 +29,34 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        likeBtnList = Array.from(document.getElementsByClassName('qq_like'))
-        likeBtnList.forEach(el => {
-            el.addEventListener('click', _ => {
-                const id = el.getAttribute('data-id')
-                if (id === undefined) return
+        $(".qq_like i").on('click', function (event) {
 
-               get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id))
-                .then(_ => {
-                    const icon = el.children[0]
-                    const likes = el.children[1]
-                    if (icon.classList.contains('fas')) {
-                        likes.innerHTML = `${parseInt(likes.innerHTML) - 1}`
-                        icon.classList.replace('fas', 'far')
+            let id = $(event.target).parent().attr('data-id');
+
+            if (id === undefined) { return; }
+
+            $.ajax({
+                type: "GET",
+                url: '{{ route('quotes::like', ['id' => 'qid']) }}'.replace('qid', id),
+                success: function () {
+
+                    if ($(event.target).hasClass('fas')) {
+                        $(event.target).next().html(parseInt($(event.target).next().html())-1);
+                    } else {
+                        $(event.target).next().html(parseInt($(event.target).next().html())+1);
                     }
-                    else {
-                        likes.innerHTML = `${parseInt(likes.innerHTML) + 1}`
-                        icon.classList.replace('far', 'fas')
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                    window.alert('Something went wrong liking the quote. Please try again.')
-                })
-            })
-        })
+
+                    $(event.target).toggleClass('fas').toggleClass('far');
+
+                },
+                error: function () {
+
+                    window.alert('Something went wrong liking the quote. Please try again.');
+
+                }
+            });
+
+        });
 
     </script>
 

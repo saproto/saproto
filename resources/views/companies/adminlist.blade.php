@@ -6,7 +6,7 @@
 
 @section('container')
 
-    <div id="companies-admin" class="row justify-content-center">
+    <div class="row justify-content-center">
 
         <div class="col-md-8">
 
@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('companies::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('companies::add') }}" class="badge badge-info float-right">
                         Create a new company.
                     </a>
                 </div>
@@ -41,30 +41,30 @@
 
                             <tr>
 
-                                <td class="name">{{ $company->name }}</td>
-                                <td class="url"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
-                                <td class="on-carreer-page">{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
-                                <td class="in-logo-bar">{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
+                                <td style="overflow-wrap: break-word; max-width: 130px">{{ $company->name }}</td>
+                                <td style="overflow-wrap: break-word; max-width: 220px"><a href="{{ $company->url }}" target="_blank">{{ $company->url }}</a></td>
+                                <td>{{ $company->on_carreer_page ? 'Yes' : 'No' }}</td>
+                                <td>{{ $company->in_logo_bar ? 'Yes' : 'No' }}</td>
                                 <td>
 
                                     <a href="{{ route('companies::edit', ['id' => $company->id]) }}">
-                                        <i class="fas fa-edit me-2 fa-fw"></i>
+                                        <i class="fas fa-edit mr-2 fa-fw"></i>
                                     </a>
 
                                     <a href="{{ route('companies::delete', ['id' => $company->id]) }}"
                                        onclick="return confirm('Are you sure you want to delete this company?')">
-                                        <i class="fas fa-trash me-2 fa-fw text-danger"></i>
+                                        <i class="fas fa-trash mr-2 fa-fw text-danger"></i>
                                     </a>
 
                                     @if($company->sort > 0)
                                         <a href="{{ route('companies::orderUp', ['id' => $company->id]) }}">
-                                            <i class="fas fa-arrow-up me-2 fa-fw text-info"></i>
+                                            <i class="fas fa-arrow-up mr-2 fa-fw text-info"></i>
                                         </a>
                                     @endif
 
                                     @if($company->sort != $companies->count())
                                         <a href="{{ route('companies::orderDown', ['id' => $company->id]) }}">
-                                            <i class="fas fa-arrow-down me-2 fa-fw text-info"></i>
+                                            <i class="fas fa-arrow-down mr-2 fa-fw text-info"></i>
                                         </a>
                                     @endif
 

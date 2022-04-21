@@ -10,10 +10,10 @@
 
             @foreach($achievement->currentOwners(false) as $user)
 
-                <div class="badge bg-primary">
+                <div class="badge badge-primary">
                     <a href="{{ route("user::profile", ['id'=>$user->getPublicId()]) }}" class="text-white">{{ $user->name }}</a>
                     <a href="{{ route('achievement::take', ['id' => $achievement->id, 'user' => $user->id]) }}" class="text-white">
-                        <i class="fas fa-times ms-2"></i>
+                        <i class="fas fa-times ml-2"></i>
                     </a>
                 </div>
 
@@ -36,9 +36,7 @@
 
             {!! csrf_field() !!}
 
-            <div class="form-group autocomplete">
-                <input class="form-control user-search" name="user-id"/>
-            </div>
+            <select class="form-control user-search" name="user-id"></select>
 
             <button type="submit" class="mt-3 btn btn-success btn-block">
                 Award

@@ -1,5 +1,5 @@
-<a class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#orderline-modal" href="#">
-    Add orderline wizard. <span class="ms-3">🧙</span>
+<a class="btn btn-success btn-block mb-3" data-toggle="modal" data-target="#orderlinemodal" href="javascript:void();">
+    Add orderline wizard. <span class="ml-3">🧙</span>
 </a>
 
 <form method="post" action="{{ route('omnomcom::orders::add') }}">
@@ -13,13 +13,13 @@
         </div>
 
         <div class="card-body">
-            <div class="form-group autocomplete">
-                <label for="user">User(s):</label>
-                <input class="form-control user-search" id="user" name="user[]" data-label="User(s):" multiple required>
+            <div class="form-group">
+                <label for="date">User(s):</label>
+                <select class="form-control user-search" id="user" name="user[]" multiple required></select>
             </div>
-            <div class="form-group autocomplete">
-                <label for="product">Product(s):</label>
-                <input class="form-control product-search" id="product" name="product[]" multiple required>
+            <div class="form-group">
+                <label for="date">Product(s):</label>
+                <select class="form-control product-search" id="product" name="product[]" multiple required></select>
             </div>
         </div>
 
@@ -28,6 +28,10 @@
         </div>
 
     </div>
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        $('.form-control').select2({width: 'resolve'});
+    </script>
 
 
 </form>

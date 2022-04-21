@@ -12,8 +12,8 @@
             @foreach($leaderboards as $leaderboard)
                 <div class="card mb-2">
 
-                    <div class="card-header" data-bs-toggle="collapse"
-                         data-bs-target="#collapse-leaderboard-{{ $leaderboard->id }}">
+                    <div class="card-header" data-toggle="collapse"
+                         data-target="#collapse-leaderboard-{{ $leaderboard->id }}">
                         <i class="fa {{ $leaderboard->icon }}"></i> {{ $leaderboard->name }} Leaderboard
                     </div>
 
@@ -35,12 +35,12 @@
                                 <tbody>
                                     @foreach($leaderboard->entries->sortByDesc('points') as $entry)
                                         <tr>
-                                            <td class="ps-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
+                                            <td class="pl-3 place-{{ $loop->index+1 }}" style="max-width: 50px">
                                                 <i class="fas fa-sm fa-fw {{ $loop->index == 0 ? 'fa-crown' : 'fa-hashtag' }}"></i>
                                                 {{ $loop->index+1 }}
                                             </td>
                                             <td>{{ $entry->user->name }}</td>
-                                            <td class="pe-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
+                                            <td class="pr-4"><i class="fa {{ $leaderboard->icon }}"></i> {{ $entry->points }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

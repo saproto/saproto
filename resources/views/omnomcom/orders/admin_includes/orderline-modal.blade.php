@@ -1,24 +1,28 @@
-<div id="orderline-modal" class="modal fade vh-100" tabindex="-1" role="dialog">
+<!-- Add order modal! //-->
+
+<div id="orderlinemodal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
 
         <form method="post" action="{{ route('omnomcom::orders::addbulk') }}">
 
             {!! csrf_field() !!}
 
-            <div class="modal-content" style="height:calc(100vh - 80px)">
+            <div class="modal-content">
 
                 <div class="modal-header">
                     <h5 class="modal-title">Add orderlines</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
 
-                <div id="orderline-rows" class="modal-body overflow-auto">
+                <div class="modal-body">
 
-                    <div class="row orderline-row">
+                    <div class="row orderlinerow">
 
-                        <div class="col-lg-3">
+                        <div class="col-md-3">
 
-                            <select name="user[]" class="form-control orderline-user">
+                            <select name="user[]" class="form-control orderlineuser">
                                 {{ $members = Proto\Models\User::orderBy('name', 'asc')->has('member')->get()->reject(function($user, $index) { return $user->member->is_pending == true; }) }}
                                 @foreach($members as $member)
                                     <option value="{{ $member->id }}">{{ $member->name }} (#{{ $member->id }})</option>
@@ -27,9 +31,9 @@
 
                         </div>
 
-                        <div class="col-lg-3">
+                        <div class="col-md-3">
 
-                            <select name="product[]" class="form-control orderline-product">
+                            <select name="product[]" class="form-control orderlineproduct">
                                 @foreach(Proto\Models\Product::where('is_visible', true)->orderBy('name', 'asc')->get() as $product)
                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}">{{ $product->name }}
                                         (&euro;{{ $product->price }}, #{{ $product->id }})
@@ -39,30 +43,32 @@
 
                         </div>
 
-                        <div class="col-lg-2">
+                        <div class="col-md-2">
 
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control orderline-units" name="units[]" value="1">
-                                <span class="input-group-text">x</span>
+                                <input type="number" class="form-control orderlineunits" name="units[]" value="1">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">x</span>
+                                </div>
                             </div>
 
                         </div>
 
-                        <div class="col-lg-2">
+                        <div class="col-md-2">
 
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&euro;</span>
                                 </div>
-                                <input type="number" step="0.01" class="form-control orderline-price" name="price[]"
+                                <input type="number" step="0.01" class="form-control orderlineprice" name="price[]"
                                        placeholder="0.00">
                             </div>
 
                         </div>
 
-                        <div class="col-lg-2">
+                        <div class="col-md-2">
 
-                            <button type="button" class="btn btn-danger w-100 orderline-delete-row" disabled>
+                            <button type="button" class="btn btn-danger orderlinedeleterow" style="width: 100%;">
                                 <i class="fas fa-minus-circle"></i>
                             </button>
 
@@ -72,30 +78,30 @@
 
                 </div>
 
-                <div class="card-footer">
+                <div class="card-footer border-bottom">
                     <div class="row">
-                        <div class="col-md-2 offset-md-8 text-end">Total price:</div>
-                        <div class="col-md-2" id="total-price">&euro; 0.00</div>
+                        <div class="col-md-2 offset-md-8 text-right">Total price:</div>
+                        <div class="col-md-2" id="totalprice">&euro; 0.00</div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
 
-                    <div class="col-7">
+                    <div class="col-md-6">
                         <input type="text" class="form-control" name="description"
                                placeholder="Optional additional information.">
                     </div>
                     <div class="col-2">
-                        <button id="orderline-add-row" class="btn btn-outline-success btn-block">
+                        <button id="orderlineaddrow" class="btn btn-outline-success btn-block">
                             <i class="fas fa-plus-circle"></i>
                         </button>
                     </div>
-                    <div class="col-1">
-                        <button class="btn btn-outline-default btn-block" data-bs-dismiss="modal">
+                    <div class="col-2">
+                        <button class="btn btn-outline-default btn-block" data-dismiss="modal">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <button type="submit" class="btn btn-success btn-block">
                             <i class="fas fa-shopping-cart"></i>
                         </button>
@@ -114,40 +120,53 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
-        document.getElementById('orderline-add-row').addEventListener('click', e => {
-            e.preventDefault()
+        $('#orderlineaddrow').on('click', function (e) {
+            e.preventDefault();
 
-            const prevRow = Array.from(document.getElementsByClassName('orderline-row')).pop()
-            const newRow = prevRow.cloneNode(true)
-            document.getElementById('orderline-rows').append(newRow)
+            let oldrow = $('.orderlinerow').last();
 
-            const deleteBtn = newRow.querySelector('.orderline-delete-row')
-            deleteBtn.addEventListener('click', e => {
-                newRow.remove()
-                calculateTotalPrice()
-            })
-            deleteBtn.disabled = false
+            $('#orderlinemodal .modal-body').append(oldrow.wrap('<p/>').parent().html());
+            oldrow.unwrap();
 
-            calculateTotalPrice()
-        })
+            $(".orderlineuser:eq(-1)").val($(".orderlineuser:eq(-2)").val());
+            $(".orderlineproduct:eq(-1)").val($(".orderlineproduct:eq(-2)").val());
+            $(".orderlineunits:eq(-1)").val($(".orderlineunits:eq(-2)").val());
+            $(".orderlineprice:eq(-1)").val($(".orderlineprice:eq(-2)").val());
 
-        document.getElementById('orderline-modal').addEventListener('change', _ => { calculateTotalPrice() })
+            calculateTotalPrice();
+        });
+
+        $('div').on('delegate', '.orderlinedeleterow', 'click', function () {
+            if ($('.orderlinerow').length <= 1) {
+                return;
+            }
+            $(this).parents('.orderlinerow').remove();
+            calculateTotalPrice();
+        });
 
         function calculateTotalPrice() {
-            const rows = Array.from(document.getElementsByClassName('orderline-row'))
-            const totalPrice = rows.reduce((total, el) => {
-                let currentPrice
-                const product = el.querySelector('.orderline-product option:checked')
-                const productPrice = el.querySelector('.orderline-price')
-                const units = el.querySelector('.orderline-units').value
-                if (productPrice.value === '') currentPrice = product.getAttribute('data-price')
-                else currentPrice = productPrice.value
-                return total + currentPrice * units
-            }, 0)
-            document.getElementById('total-price').innerHTML = "&euro; " + totalPrice.toFixed(2)
+            let totalPrice = 0;
+
+            $(".orderlinerow").each(function() {
+                let currentPrice;
+
+                if($(this).find(".orderlineprice").val() === '') {
+                    currentPrice = $(this).find(".orderlineproduct").find(":selected").data('price');
+                }else{
+                    currentPrice = $(this).find(".orderlineprice").val();
+                }
+
+                totalPrice += (currentPrice * $(this).find(".orderlineunits").val());
+            });
+
+            $("#totalprice").html("&euro; " + totalPrice.toFixed(2));
         }
 
-        calculateTotalPrice()
+        $('#orderlinemodal').on('change', 'input, select', function() {
+            calculateTotalPrice();
+        });
+
+        calculateTotalPrice();
 
     </script>
 

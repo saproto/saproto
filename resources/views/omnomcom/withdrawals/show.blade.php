@@ -20,7 +20,7 @@
                         @yield('page-title')
                     </div>
 
-                    <table class="table table-sm table-borderless ms-3">
+                    <table class="table table-sm table-borderless ml-3">
 
                         <tbody>
                         <tr>
@@ -48,11 +48,11 @@
                     </table>
 
                     <div class="card-body">
+                        <label>Change date:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'date',
-                            'label' => 'Change date:',
-                            'placeholder' => strtotime($withdrawal->date),
-                            'format' => 'date'
+                            'format' => 'date',
+                            'placeholder' => strtotime($withdrawal->date)
                         ])
                     </div>
 

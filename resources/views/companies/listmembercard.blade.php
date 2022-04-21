@@ -15,7 +15,7 @@
                 <div class="card h-100">
                     <div class="card-header text-center">
                         <div class="align-items-center row " style="height: 120px;">
-                            <div class="col d-block">
+                            <div class="col" style="display: block;">
                                 @if($company->image)
                                     <img src="{{ $company->image->generateImagePath(null, null) }}"
                                          style="max-width: 70%; max-height: 100px;">

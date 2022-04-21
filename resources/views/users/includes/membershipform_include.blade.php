@@ -29,9 +29,6 @@
     <li><b>{{ $address->zipcode }} {{ $address->city }}</b></li>
     <li><b>{{ $address->country }}</b></li>
 </ul>
-
 <p>
-    For the administration of the association, the undersigned promises to make sure that during their membership, the
-    association always has a valid e-mail address and phone number on which the undersigned can be contacted, as well as
-    at least one physical address of the undersigned.
+    For the administration of the association, the undersigned promises to make sure that during their membership, the association always has a valid e-mail address and phone number on which the undersigned can be contacted, as well as at least one physical address of the undersigned.
 </p>

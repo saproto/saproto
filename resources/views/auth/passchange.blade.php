@@ -16,7 +16,7 @@
         </p>
 
         <p>
-            <a class="btn btn-default btn-block" href="{{ route('login::resetpass') }}">
+            <a class="btn btn-default" href="{{ route('login::resetpass') }}" style="width: 100%;">
                 Forgot your password?
             </a>
         </p>
@@ -34,7 +34,7 @@
         </p>
 
         <p>
-            <button type="submit" class="btn btn-success btn-block">
+            <button type="submit" class="btn btn-success" style="width: 100%;">
                 Change password for {{ Auth::user()->calling_name }}
             </button>
         </p>
@@ -44,7 +44,7 @@
         </p>
 
         <p>
-            <a href="https://tap.utwente.nl/tap/" class="btn btn-default btn-block" target="_blank">
+            <a href="https://tap.utwente.nl/tap/" class="btn btn-default" style="width: 100%;" target="_blank">
                 Change your UTwente password
             </a>
         </p>

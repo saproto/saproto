@@ -14,9 +14,9 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge bg-info float-end" href="{{ route('narrowcasting::add') }}">
+                    <a class="badge badge-info float-right" href="{{ route('narrowcasting::add') }}">
                         Create a new campaign.</a>
-                    <a class="badge bg-danger float-end me-2" href="{{ route('narrowcasting::clear') }}">
+                    <a class="badge badge-danger float-right mr-2" href="{{ route('narrowcasting::clear') }}">
                         Delete all past campaigns.</a>
                 </div>
 
@@ -62,7 +62,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('narrowcasting::edit', ['id' => $message->id]) }}">
-                                        <i class="fas fa-edit me-2" aria-hidden="true"></i>
+                                        <i class="fas fa-edit mr-2" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{ route('narrowcasting::delete', ['id' => $message->id]) }}">
                                         <i class="fas fa-trash text-danger" aria-hidden="true"></i>

@@ -32,14 +32,16 @@
 
                         <hr>
 
+                        <label for="date">Start date:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'start',
-                            'label' => 'Start date:',
+                            'format' => 'datetime'
                         ])
 
+                        <label for="name">End date:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'end',
-                            'label' => 'End date:',
+                            'format' => 'datetime'
                         ])
 
                     </div>

@@ -5,10 +5,10 @@ namespace Proto\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Permission;
+use Proto\Models\Permission;
+use Proto\Models\Role;
 use Proto\Models\User;
 use Redirect;
-use Role;
 
 class AuthorizationController extends Controller
 {

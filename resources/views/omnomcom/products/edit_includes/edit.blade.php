@@ -69,7 +69,7 @@
 
                     <label for="supplier_collo">
                         Collo size
-                        <span data-bs-toggle="tooltip" data-bs-placement="top"
+                        <span data-toggle="tooltip" data-placement="top"
                               title="The amount of units in a package when bought. (e.g.: there are 24 cans in a tray)">(?)</span>
                         :
                     </label>
@@ -188,8 +188,8 @@
             <hr>
 
             <div class="custom-file">
-                <input type="file" class="form-control" id="image" name="image">
-                <label class="form-label" for="image">Update product image</label>
+                <input type="file" class="custom-file-input" id="image" name="image">
+                <label class="custom-file-label" for="customFile">Update product image</label>
             </div>
 
         </div>
@@ -205,12 +205,12 @@
                 </a>
             @endif
 
-            <button type="submit" class="btn btn-success float-end ms-3">Submit</button>
+            <button type="submit" class="btn btn-success float-right ml-3">Submit</button>
 
-            <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-end">Cancel</a>
+            <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-right">Cancel</a>
 
             @if ($product && $product->ticket)
-                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-end">
+                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-right">
                     Go to event ticket
                 </a>
             @endif

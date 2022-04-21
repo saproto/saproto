@@ -21,7 +21,7 @@
                    placeholder="Password">
         </div>
 
-        <button type="submit" class="btn btn-success btn-block">
+        <button type="submit" class="btn btn-success" style="width: 100%;">
             Synchronize password for {{ Auth::user()->calling_name }}
         </button>
 

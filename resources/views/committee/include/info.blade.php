@@ -35,13 +35,13 @@
                     </div>
                 @endif
 
-                @can('board')
+                @if(Auth::user()->can('board'))
                     <div class="col-4">
                         <a href="{{ route("committee::edit", ["id" => $committee->id]) }}" class="btn btn-primary btn-block">
                             <i class="fas fa-edit fa-fw"></i> Edit
                         </a>
                     </div>
-                @endcan
+                @endif
 
             </div>
 

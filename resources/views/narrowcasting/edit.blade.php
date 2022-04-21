@@ -31,17 +31,23 @@
                                    required>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'campaign_start',
-                            'label' => 'Campaign start:',
-                            'placeholder' => $item ? $item->campaign_start : date('U')
-                        ])
+                        <div class="form-group">
+                            <label for="campaign_start">Campaign start:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'campaign_start',
+                                'format' => 'datetime',
+                                'placeholder' => $item ? $item->campaign_start : date('U')
+                            ])
+                        </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'campaign_end',
-                            'label' => 'Campaign end:',
-                            'placeholder' => $item ? $item->campaign_end : null
-                        ])
+                        <div class="form-group">
+                            <label for="campaign_end">Campaign end:</label>
+                            @include('website.layouts.macros.datetimepicker', [
+                                'name' => 'campaign_end',
+                                'format' => 'datetime',
+                                'placeholder' => $item ? $item->campaign_end : null
+                            ])
+                        </div>
 
                         <div class="form-group">
                             <label for="slide_duration">Slide duration in seconds:</label>
@@ -68,7 +74,7 @@
 
                                 <div class="col-md-6">
                                     <img src="https://i.ytimg.com/vi/{{ $item->youtube_id }}/hqdefault.jpg"
-                                         class="w-100">
+                                         style="width: 100%">
                                 </div>
                                 <div class="col-md-6">
                                     <strong><a href="https://youtu.be/{{ $item->youtube_id }}"
@@ -82,8 +88,8 @@
                         @else
 
                             <div class="custom-file mb-3">
-                                <input id="image" type="file" class="form-control" name="image">
-                                <label class="form-label">Upload an image</label>
+                                <input type="file" class="custom-file-input" name="image">
+                                <label class="custom-file-label">Upload an image</label>
                             </div>
 
                             <p>
@@ -93,7 +99,7 @@
                             @if($item && $item->image)
 
                                 <label>Current image:</label>
-                                <img src="{!! $item->image->generateImagePath(500, null) !!}" class="w-100">
+                                <img src="{!! $item->image->generateImagePath(500, null) !!}" style="width: 100%">
 
                             @endif
 
@@ -103,7 +109,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end">
+                        <button type="submit" class="btn btn-success float-right">
                             Submit
                         </button>
 

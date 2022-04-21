@@ -8,7 +8,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-3">
 
             <form method="post" action="{{ route("minisites::isalfredthere::admin") }}">
 
@@ -36,7 +36,7 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_1"
-                                   value="there" required {{ $status->status == 'there' ? 'checked' : '' }}>
+                                   value="there" onchange="toggleAlfredSelectDiv()" required {{ $status->status == 'there' ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_1">
                                 I'm there!
                             </label>
@@ -44,7 +44,7 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_2"
-                                   value="away" required  {{ $status->status == 'away' ? 'checked' : '' }}>
+                                   value="away" onchange="toggleAlfredSelectDiv()" required  {{ $status->status == 'away' ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_2">
                                 I'll be back in a while!
                             </label>
@@ -52,24 +52,31 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_3"
-                                   value="unknown" required {{ $status->status == 'unknown' ? 'checked' : '' }}>
+                                   value="unknown" onchange="toggleAlfredSelectDiv()" required {{ $status->status == 'unknown' ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_3">
                                 I'd like to reset my whereabouts!
                             </label>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker',[
-                            'name' => 'back',
-                            'label' => "I'll be back around:",
-                            'placeholder' => $status->status == 'away' ? $status->backunix : strtotime('tomorrow 09:00'),
-                            'form_class_name' => $status->status == 'away' ? '' : 'd-none'
-                        ])
+                        <div id="alfred_date_select" style="{{ $status->status == 'away' ? '' : 'display: none;' }}">
+
+                            <hr>
+
+                            I'll be back around:
+
+                            @include('website.layouts.macros.datetimepicker',[
+                                'name' => 'back',
+                                'format' => 'datetime',
+                                'placeholder' => $status->status == 'away' ? strtotime($status->back) : strtotime('tomorrow 09:00')
+                            ])
+
+                        </div>
 
                     </div>
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-end ms-3">Save!</button>
+                        <button type="submit" class="btn btn-success float-right ml-3">Save!</button>
 
                     </div>
 
@@ -82,21 +89,16 @@
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const dateSelect = document.getElementById('datetimepicker-back-form')
-        const dateBack = document.getElementById('datetimepicker-back')
-
-        const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
-        radioList.forEach(el => {
-            el.addEventListener('change', _ => {
-                if (el.checked && el.value === 'away') {
-                        dateSelect.classList.remove('d-none')
-                        dateBack.required = true
-                } else {
-                    dateSelect.classList.add('d-none')
-                    dateBack.required = false
-                }
-            })
-        })
+        function toggleAlfredSelectDiv() {
+            let status = $('.where_is_alfred input[type="radio"]:checked').val();
+            if (status === 'away') {
+                $("#alfred_date_select").show();
+                $("#datetimepicker-back").prop('required', true);
+            } else {
+                $("#alfred_date_select").hide();
+                $("#datetimepicker-back").prop('required', false);
+            }
+        }
     </script>
 
 @endsection

@@ -29,7 +29,7 @@
                         </p>
 
                         <input type="button" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }} btn-block" data-toggle="modal"
-                               data-bs-target="#sendnewsletter"
+                               data-target="#sendnewsletter"
                                value="{{ (Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? 'Send the weekly newsletter!': 'Newsletter already sent this week!') }}"
                                {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? '' : 'disabled' }} />
 
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-end">Save text</button>
+                        <button type="submit" class="btn btn-success pull-right">Save text</button>
                         <a class="btn btn-default" target="_blank"
                            href="{{ route("newsletter::preview") }}">
                             Preview
@@ -87,7 +87,7 @@
 
                         @foreach($events as $event)
 
-                            <tr class="{{ $event->include_in_newsletter ? '' : 'opacity-50' }}">
+                            <tr style="opacity: {{ ($event->include_in_newsletter ? '1' : '0.4') }};">
 
                                 <td>{{ $event->title }}</td>
                                 <td>{{ $event->generateTimespanText('l j F, H:i', 'H:i', '-') }}</td>
@@ -128,7 +128,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Send the newsletter?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -144,7 +146,7 @@
                 <div class="modal-footer">
                     <form method="post" action="{{ route('newsletter::send') }}">
                         {!! csrf_field() !!}
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn {{ Proto\Models\Newsletter::lastSentMoreThanWeekAgo() ? "btn-success" : "btn-danger" }}">Send</button>
                     </form>
                 </div>

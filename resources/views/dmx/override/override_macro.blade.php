@@ -1,4 +1,4 @@
-<tr class="{{ $override->active() ? '' : 'opacity-50' }}">
+<tr style="{{ $override->active() ? '' : 'opacity: 0.5;' }}">
 
     <td>
         @foreach($override->getFixtures() as $fixture)
@@ -6,22 +6,22 @@
         @endforeach
     </td>
     <td>
-        <span class="text-danger">
-            <i class="fas fa-tint" aria-hidden="true"></i>
-            {{ $override->red() }}
-        </span>
+                                    <span style="color: red;">
+                                        <i class="fas fa-tint" aria-hidden="true"></i>
+                                        {{ $override->red() }}
+                                    </span>
     </td>
     <td>
-        <span class="text-primary">
-            <i class="fas fa-tint" aria-hidden="true"></i>
-            {{ $override->green() }}
-        </span>
+                                    <span style="color: green;">
+                                        <i class="fas fa-tint" aria-hidden="true"></i>
+                                        {{ $override->green() }}
+                                    </span>
     </td>
     <td>
-        <span class="text-info">
-            <i class="fas fa-tint" aria-hidden="true"></i>
-            {{ $override->blue() }}
-        </span>
+                                    <span style="color: blue;">
+                                        <i class="fas fa-tint" aria-hidden="true"></i>
+                                        {{ $override->blue() }}
+                                    </span>
     </td>
     <td>
         <i class="fas fa-sun" aria-hidden="true"></i>
@@ -32,7 +32,7 @@
         End: {{ date('l F j Y, H:i', $override->end) }}
     </td>
     <td>
-        <a class="btn btn-xs btn-default me-2"
+        <a class="btn btn-xs btn-default mr-2"
            href="{{ route('dmx::override::edit', ['id' => $override->id]) }}">
             <i class="fas fa-edit"></i>
         </a>

@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('achievement::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('achievement::add') }}" class="badge badge-info float-right">
                         Create a new achievement.
                     </a>
                 </div>
@@ -51,9 +51,9 @@
                             <td>{{ count($achievement->currentOwners(true)) }}</td>
                             <td>{{ $achievement->desc }}</td>
                             <td>{{ $achievement->tier }}</td>
-                            <td class="text-end">
+                            <td class="text-right">
                                 <a href="{{ route('achievement::manage', ['id' => $achievement->id]) }}">
-                                    <i class="fas fa-edit me-2"></i>
+                                    <i class="fas fa-edit mr-2"></i>
                                 </a>
                                 <a href="{{ route('achievement::delete', ['id' => $achievement->id]) }}">
                                     <i class="fas fa-trash text-danger"></i>

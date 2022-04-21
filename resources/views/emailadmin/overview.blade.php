@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     E-mail lists
-                    <a href="{{ route('email::list::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('email::list::add') }}" class="badge badge-info float-right">
                         Create new list.
                     </a>
                 </div>
@@ -65,7 +65,7 @@
                             <td>{{ $list->users->count() }}</td>
                             <td>
                                 <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
-                                    <i class="fas fa-edit me-2"></i>
+                                    <i class="fas fa-edit mr-2"></i>
                                 </a>
                                 <a onclick="return confirm('Delete e-mail list {{ $list->name }}?');"
                                    href="{{ route('email::list::delete', ['id' => $list->id]) }}">
@@ -90,7 +90,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     Emails
-                    <a href="{{ route('email::add') }}" class="badge bg-info float-end">Compose email.</a>
+                    <a href="{{ route('email::add') }}" class="badge badge-info float-right">Compose email.</a>
                 </div>
 
                 <table class="table table-sm table-hover">
@@ -111,7 +111,7 @@
 
                     @foreach($emails as $email)
 
-                        <tr class="{{ $email->sent ? 'opacity-50' : '' }}">
+                        <tr style="{{ ($email->sent ? 'opacity: 0.5;' : '') }}">
 
                             <td>{{ $email->description }}</td>
                             <td>
@@ -152,16 +152,16 @@
                             </td>
                             <td>
                                 <a href="{{ route('email::show', ['id' => $email->id]) }}">
-                                    <i class="fas fa-eye me-2 text-info"></i>
+                                    <i class="fas fa-eye mr-2 text-info"></i>
                                 </a>
                                 @if (!$email->sent)
                                     <a onclick="return confirm('You sure you want to delete this e-mail?')"
                                        href="{{ route('email::delete', ['id' => $email->id]) }}">
-                                        <i class="fas fa-trash text-danger me-2"></i>
+                                        <i class="fas fa-trash text-danger mr-2"></i>
                                     </a>
                                     @if (!$email->ready)
                                         <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
-                                            <i class="fas fa-paper-plane text-warning me-2"></i>
+                                            <i class="fas fa-paper-plane text-warning mr-2"></i>
                                         </a>
                                         <a href="{{ route('email::edit', ['id' => $email->id]) }}">
                                             <i class="fas fa-edit"></i>

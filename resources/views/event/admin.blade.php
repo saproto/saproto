@@ -73,18 +73,18 @@
 
                             <div class="card mb-3">
 
-                                <div class="card-header bg-dark text-white cursor-pointer"
-                                     data-bs-toggle="collapse" data-bs-target="#ticket-collapse-{{ $ticket->id }}">
+                                <div class="card-header bg-dark text-white" style="cursor: pointer;"
+                                     data-toggle="collapse" data-target="#ticket__collapse__{{ $ticket->id }}">
                                     Ticket <strong>{{ $ticket->product->name }}</strong>
-                                    <span class="badge bg-primary float-end">
+                                    <span class="badge badge-primary float-right">
                                         {{ $ticket->sold() }} sold / {{ $ticket->product->stock }} available
                                     </span>
-                                    <span class="badge bg-info float-end me-4">
+                                    <span class="badge badge-info float-right" style="margin-right: 10px;">
                                         &euro;{{ number_format($ticket->turnover(), 2) }}
                                     </span>
                                 </div>
 
-                                <div class="collapse" id="ticket-collapse-{{ $ticket->id }}">
+                                <div class="collapse" id="ticket__collapse__{{ $ticket->id }}">
 
                                     <div class="card-body">
 
@@ -103,9 +103,9 @@
                                                     <th>Price</th>
                                                     <th>Date of Purchase</th>
                                                     <th>Ticket Scanned</th>
-                                                    @can('board')
+                                                    @if (Auth::user()->can('board'))
                                                         <th></th>
-                                                    @endcan
+                                                    @endif
                                                 </tr>
                                                 </thead>
 
@@ -116,11 +116,11 @@
                                                         <td>{{ $purchase->user->name }}</td>
                                                         <td>
                                                             @if($purchase->user->age() >= 18)
-                                                                <span class="badge bg-success">
+                                                                <span class="badge badge-success">
                                                                 <i class="fas fa-check" aria-hidden="true"></i> 18+
                                                             </span>
                                                             @else
-                                                                <span class="badge bg-danger">
+                                                                <span class="badge badge-danger">
                                                                 <i class="fas fa-exclamation-triangle"
                                                                    aria-hidden="true"></i> 18-
                                                             </span>
@@ -129,13 +129,13 @@
                                                         @if($event->shouldShowDietInfo())
                                                             <td>
                                                                 @if ($purchase->user->hasDiet())
-                                                                    <span class="badge bg-danger">
+                                                                    <span class="badge badge-danger">
                                                                     <i class="fas fa-exclamation-triangle"
                                                                        aria-hidden="true"></i>
                                                                 </span>
                                                                 @else
                                                                     <span class="label label-success">
-                                                                    <i class="badge bg-check" aria-hidden="true"></i>
+                                                                    <i class="badge badge-check" aria-hidden="true"></i>
                                                                 </span>
                                                                 @endif
                                                             </td>
@@ -143,26 +143,34 @@
                                                         <td>
                                                             &euro;{{ number_format($purchase->orderline->total_price, 2) }}</td>
                                                         <td>{{ $purchase->created_at }}</td>
-                                                        <td class="events-scanned">
-                                                            <a data-id="{{ $purchase->barcode }}" class="{{ $purchase->scanned ? 'unscan' : 'scan' }} dontprint" href="#">
-                                                                {{ $purchase->scanned ? 'Unscan' : 'Scan Manually' }}
-                                                            </a>
+                                                        <td class="events__scanned">
+                                                            @if ($purchase->scanned === null)
+                                                                <a data-id="{{ $purchase->barcode }}"
+                                                                   class="events__scannedButton dontprint" href="#">
+                                                                    Scan Manually
+                                                                </a>
+                                                            @else
+                                                                {{ $purchase->scanned }} /
+                                                                <a href="{{ route('tickets::unscan', ['barcode' => $purchase->barcode]) }}">
+                                                                    Unscan
+                                                                </a>
+                                                            @endif
                                                         </td>
-                                                        @can('board')
+                                                        @if (Auth::user()->can('board'))
                                                             <td class="dontprint">
                                                                 @if($purchase->scanned)
                                                                     Used
                                                                 @elseif($purchase->orderline->isPayed())
                                                                     Paid
                                                                 @else
-                                                                    <a class="badge bg-danger"
+                                                                    <a class="badge badge-danger"
                                                                        href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
                                                                        onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
                                                                         Delete
                                                                     </a>
                                                                 @endif
                                                             </td>
-                                                        @endcan
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                                 </tbody>
@@ -199,39 +207,27 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const scanList = Array.from(document.getElementsByClassName("scan"))
-        const unscanList = Array.from(document.getElementsByClassName("unscan"))
-        scanList.forEach(el => setEventListener(el, false))
-        unscanList.forEach(el => setEventListener(el, true))
 
-        const scanRequest = barcode => get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode })
-        const unscanRequest = barcode => get('{{ route('tickets::unscan') }}/' + barcode,)
+        $(".events__scannedButton").on('click', function (event) {
+            event.preventDefault();
+            var barcode = $(this).attr('data-id');
+            var parent = $(this).parent();
+            if (barcode === undefined) throw new Error("Can\'t find barcode");
+            $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
+            $.ajax({
+                type: "GET",
+                url: '{!! route('api::scan', ['event' => $event->id]) !!}',
+                data: {'barcode': barcode},
+                success: function () {
+                    console.log('Scanned barcode ' + barcode);
+                    parent.html(new Date().toISOString().substring(0, 19).replace('T', ' ') + " / <a href='{{ route('tickets::unscan') }}/" + barcode + "'>Unscan</a>");
+                },
+                error: function () {
+                    window.alert('Couldn\'t register scan.');
+                }
+            });
+        });
 
-        function setEventListener(el, unscan) {
-            el.addEventListener('click', e => {
-                e.preventDefault()
-                let barcode = e.target.getAttribute('data-id')
-                let parent = e.target.parentElement
-                if (barcode === undefined) throw new Error("Can't find barcode")
-                let request = unscan ? unscanRequest : scanRequest
-                request(barcode)
-                .then(_ => {
-                    console.log('Scanned barcode ' + barcode)
-                    let link = document.createElement('a')
-                    link.href = '#ticket-collapse-{{ $ticket->id }}'
-                    link.setAttribute('data-id', barcode)
-                    link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
-                    link.className = unscan ? 'scan dontprint' : 'unscan dontprint'
-                    parent.innerHTML = ''
-                    parent.append(link)
-                    setEventListener(link, !unscan)
-                })
-                .catch(err => {
-                    console.error(err)
-                    window.alert("Couldn't register scan.")
-                })
-            })
-        }
     </script>
 
 @endpush

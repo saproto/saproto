@@ -6,46 +6,44 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let signatureAlert = $('#signature-alert');
+        let canvas = document.getElementById('signature-pad');
+        let signaturePad = new SignaturePad.default(canvas);
 
-        const signatureAlert = document.getElementById('signature-alert')
-        const canvas = document.getElementById('signature-pad')
-        const signaturePad = new SignaturePad.default(canvas)
-
-        window.onresize = resizeCanvas
-        resizeCanvas()
+        window.onresize = resizeCanvas;
+        resizeCanvas();
 
         function resizeCanvas() {
             // When zoomed out to less than 100%, for some very strange reason,
             // some browsers report devicePixelRatio as less than 1
             // and only part of the canvas is cleared then.
-            const ratio = Math.max(window.devicePixelRatio || 1, 1)
-            canvas.width = canvas.offsetWidth * ratio
-            canvas.height = canvas.offsetHeight * ratio
-            canvas.getContext("2d").scale(ratio, ratio)
-            signaturePad.clear()
+            let ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
         }
 
-        document.getElementById('clear').addEventListener('click', _ => {
-            signaturePad.clear()
-        })
+        $('#clear').on('click', function() {
+            signaturePad.clear();
+        });
 
-        document.getElementById('signature-form').addEventListener('submit', e => {
+        $('#signature-form').on('submit', function(e) {
             if (signaturePad.isEmpty()) {
-                e.preventDefault()
-                signatureAlert.classList.remove('d-none')
+                e.preventDefault();
+                signatureAlert.removeClass('d-none');
             } else {
-                document.getElementById('signature').value = signaturePad.toDataURL('image/png')
+                $('#signature').val(signaturePad.toDataURL('image/png'));
             }
-        })
-
+        });
     </script>
 @endpush
 
 @section('container')
 
-    <div id="membership-contract" class="row justify-content-center">
+    <div class="row justify-content-center">
 
-        <div class="col-lg-6 col-md-7">
+        <div class="col-lg-6 col-md-7" style="max-width: 600px">
 
                 <div class="card mb-3">
 

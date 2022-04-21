@@ -10,14 +10,13 @@
 
             @include('website.layouts.macros.datetimepicker',[
                 'name' => 'date',
-                'format' => 'date',
-                'placeholder' => $date ? strtotime($date) : strtotime(date('Y-m-d'))
+                'placeholder' => $date && $date != null ? strtotime($date) : strtotime(date('Y-m-d'))
             ])
 
         </div>
 
         <div class="card-footer">
-            <input type="submit" class="btn btn-success btn-block mb-2" value="Get orders">
+            <input type="submit" class="btn btn-success btn-block" value="Get orders">
             <a href="{{ route('omnomcom::orders::adminlist') }}" class="btn btn-success btn-block">Today</a>
         </div>
 

@@ -20,7 +20,7 @@
                         'url' => route('photo::album::list', ['id' => $album->id]) ,
                         'img' => $album->thumb(),
                         'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
-                        $album->private ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>' : null,
+                        $album->private ? '<i class="fas fa-eye-slash mr-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
                         $album->name),
                         'photo_pop' => true,
                         'height' => 150
@@ -38,7 +38,7 @@
         </div>
 
         <div class="card-footer text-center">
-            <i class="fas fa-shield-alt fa-fw me-3"></i>
+            <i class="fas fa-shield-alt fa-fw mr-3"></i>
             If there is a photo that you would like removed, please contact
             <a href="mailto:photos&#64;{{ config('proto.emaildomain') }}">
                 photos&#64;{{ config('proto.emaildomain') }}.

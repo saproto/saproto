@@ -3,7 +3,6 @@
 namespace Proto\Console\Commands;
 
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Console\Command;
 use Proto\Models\Member;
 
@@ -36,8 +35,7 @@ class MemberCleanup extends Command
     /**
      * Execute the console command.
      *
-     * @return int
-     * @throws Exception
+     * @return mixed
      */
     public function handle()
     {

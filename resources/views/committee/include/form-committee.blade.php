@@ -25,7 +25,9 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="slug" name="slug"
                            placeholder="awesome" value="{{ (!$new ? $committee->slug : "") }}">
-                    <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
+                    <div class="input-group-append">
+                        <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
+                    </div>
                 </div>
 
             </div>
@@ -97,7 +99,7 @@
             </a>
             &nbsp;
 
-            <button type="submit" class="btn btn-success float-end">
+            <button type="submit" class="btn btn-success float-right">
                 Save
             </button>
 

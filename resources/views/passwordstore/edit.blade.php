@@ -31,12 +31,12 @@
 
                         <label>Authorized users:</label>
                         <select name="permission_id" class="form-control mb-3" required>
-                            @foreach(Permission::all() as $permission)
-                                @can($permission->name)
+                            @foreach(Proto\Models\Permission::all() as $permission)
+                                @if(Auth::user()->can($permission->name))
                                     <option value="{{ $permission->id }}" {{ ($password && $permission->id == $password->permission_id ? 'selected' : '') }}>
                                         {{ $permission->display_name }}
                                     </option>
-                                @endcan
+                                @endif
                             @endforeach
                         </select>
 
@@ -70,7 +70,7 @@
 
                     <div class="card-footer">
 
-                        <input type="submit" value="Save" class="btn btn-success float-end">
+                        <input type="submit" value="Save" class="btn btn-success float-right">
 
                         <a href="{{ route('passwordstore::index') }}" class="btn btn-default">
                             Cancel

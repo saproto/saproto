@@ -13,7 +13,7 @@
             <div class="row">
 
                 <div class="col-5 d-flex align-items-center">
-                    <h5 class="text-center">This is you <i class="far fa-hand-point-right ms-2"></i></h5>
+                    <h5 class="text-center">This is you <i class="far fa-hand-point-right ml-2"></i></h5>
                 </div>
 
                 <div class="col-7 text-center">
@@ -29,10 +29,15 @@
             <div class="row">
                 <div class="col-9">
                     <div class="input-group">
-                        <input id="profile-pic" name="image" type="file" class="form-control">
-                        <button type="submit" class="btn btn-outline-info">
-                            <i class="fas fa-file-upload"></i>
-                        </button>
+                        <div class="custom-file">
+                            <input name="image" type="file" class="custom-file-input">
+                            <label class="custom-file-label">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-info" type="button">
+                                <i class="fas fa-file-upload"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="col-3">

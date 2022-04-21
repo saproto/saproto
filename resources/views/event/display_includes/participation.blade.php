@@ -45,7 +45,7 @@
             </li>
 
             @if ($event->activity->no_show_fee > 0)
-                <a href="#" class="list-group-item bg-info text-white" data-bs-toggle="modal" data-bs-target="#noshow-modal">
+                <a href="#" class="list-group-item bg-info text-white" data-toggle="modal" data-target="#noshow-modal">
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Not showing up can cost you
                     &euro;{{ number_format($event->activity->no_show_fee + $event->activity->price, 2, '.', ',') }}
                 </a>
@@ -149,9 +149,7 @@
 
                         <div class="row mb-3">
                             <div class="col-9">
-                                <div class="form-group autocomplete">
-                                    <input class="form-control user-search" name="user_id" required/>
-                                </div>
+                                <select class="form-control user-search" name="user_id" required></select>
                             </div>
                             <div class="col-3">
                                 <button class="btn btn-outline-primary btn-block" type="submit">
@@ -222,7 +220,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">No show fee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
 

@@ -17,7 +17,7 @@
 
         </div>
 
-        <div class="col-md-9 col-md-3">
+        <div class="col-md-9 col-md-pull-3">
 
             @include('omnomcom.orders.admin_includes.history')
 

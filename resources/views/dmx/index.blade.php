@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('dmx::add') }}" class="badge bg-info float-end">
+                    <a href="{{ route('dmx::add') }}" class="badge badge-info float-right">
                         Create a new fixture.
                     </a>
                 </div>
@@ -55,7 +55,7 @@
                                 <td>{{ $fixture->channel_end }}</td>
                                 <td>
                                     @if(count($fixture->getChannels('red')) > 0)
-                                        <span class="text-danger">
+                                        <span style="color: red;">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('red')->pluck('id')->toArray()) }}
                                         </span>
@@ -63,7 +63,7 @@
                                 </td>
                                 <td>
                                     @if(count($fixture->getChannels('green')) > 0)
-                                        <span class="text-primary">
+                                        <span style="color: green;">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('green')->pluck('id')->toArray()) }}
                                         </span>
@@ -71,7 +71,7 @@
                                 </td>
                                 <td>
                                     @if(count($fixture->getChannels('blue')) > 0)
-                                        <span class="text-info">
+                                        <span style="color: blue;">
                                             <i class="fas fa-tint" aria-hidden="true"></i>
                                             {{ implode(", ", $fixture->getChannels('blue')->pluck('id')->toArray()) }}
                                         </span>
@@ -85,7 +85,7 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('dmx::edit', ['id' => $fixture->id]) }}">
-                                        <i class="fas fa-edit me-2" aria-hidden="true"></i>
+                                        <i class="fas fa-edit mr-2" aria-hidden="true"></i>
                                     </a>
                                     <a href="{{ route('dmx::delete', ['id' => $fixture->id]) }}">
                                         <i class="fas fa-trash text-danger" aria-hidden="true"></i>
