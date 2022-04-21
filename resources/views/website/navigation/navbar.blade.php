@@ -335,7 +335,7 @@
                 @else
 
                     <form class="form-inline mt-2 mt-md-0">
-                        <a class="btn btn-outline-light me-5" href="{{ route('login::register') }}">
+                        <a class="btn btn-outline-light me-2" href="{{ route('login::register') }}">
                             <i class="fas fa-user-plus me-2"></i> Register
                         </a>
                         <a class="btn btn-light" href="{{ route('login::show') }}">
