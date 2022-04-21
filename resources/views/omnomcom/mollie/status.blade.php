@@ -33,9 +33,8 @@
                         <th>Status</th>
                         <td>
                             @if(Proto\Models\MollieTransaction::translateStatus($mollie->status) == 'open')
-                                <span class="label label-default">{{ $mollie->status }}</span>
-                                <a href="{{$mollie->links->paymentUrl}}">
-                                    <span class="label label-success">Continue Payment</span>
+                                <a href="{{ $transaction->payment_url }}">
+                                    <span class="label label-success">{{ $mollie->status }} - Continue Payment</span>
                                 </a>
                             @elseif(Proto\Models\MollieTransaction::translateStatus($mollie->status) == 'paid')
                                 <span class="label label-success">{{ $mollie->status }}</span>
@@ -84,7 +83,7 @@
 
                 <div class="card-footer">
 
-                    <a href="#" onclick="javascript:history.go(-1)" class="btn btn-default btn-block">Go Back</a>
+                    <a href="{{ url()->previous() }}" class="btn btn-default btn-block">Go Back</a>
 
                 </div>
 
