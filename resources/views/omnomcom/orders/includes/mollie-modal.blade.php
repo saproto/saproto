@@ -8,31 +8,42 @@
             <div class="modal-body text-justify">
                 <p>
                     Using this service you can pay your outstanding balance using our external payment
-                    provider Mollie. Using Mollie you can pay your outstanding balance using iDeal,
-                    CreditCard, Bitcoin and various German and Belgian payment providers.
+                    provider Mollie. Using Mollie you can pay your outstanding balance using
+                        @foreach ($methods as $method)
+                            {{ $method->description.($loop->last ? "." : ", ") }}
+                        @endforeach
                 </p>
-                <p>
-                    <strong>Important!</strong> Using this service you will incur a transaction fee on top
-                    of your outstanding balance. This transaction fee is
-                    €{{ number_format(config('omnomcom.mollie')['fixed_fee'], 2) }} per transaction
-                    plus {{ number_format(config('omnomcom.mollie')['variable_fee']*100, 2) }}% of the total
-                    transaction. This transaction will appear in your OmNomCom history after payment.
-                </p>
+                @if($use_fees)
+                    <p>
+                        <strong>Important!</strong> Using this service you will incur a transaction fee on top
+                        of your outstanding balance for some methods. This transaction will appear in your OmNomCom history after payment.
+                        Hover on a payment method's icon to see the transaction fee.
+                    </p>
+                @endif
                 <p>
                     If you wish to pay only a part of your outstanding balance, please use the field below
                     to indicate the maximum amount you would like to pay.
                 </p>
             </div>
-            <div class="modal-footer">
-                <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
-                    {!! csrf_field() !!}
+            <form method="post" action="{{ route('omnomcom::mollie::pay') }}">
+                {!! csrf_field() !!}
+                @if ($use_fees)
+                    <div class="modal-body text-left container">
+                        Available payment methods
+                        <div class="row justify-content-around btn-group-toggle mb-2" data-toggle="buttons">
+                            @include('omnomcom.mollie.list-all-payment-methods')
+                        </div>
+                    </div>
+                @endif
+
+                <div class="modal-footer">
                     <div class="row">
                         <div class="col-6">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&euro;</span>
                                 </div>
-                                <input class="form-control float-start" type="number" name="cap"
+                                <input class="form-control float-left" type="number" name="cap"
                                        value="{{ ceil($next_withdrawal) }}">
                                 <span class="input-group-text">.00</span>
                             </div>
@@ -46,8 +57,8 @@
                             <button type="submit" class="btn btn-primary btn-block">Pay</button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

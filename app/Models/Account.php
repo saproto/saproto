@@ -39,7 +39,7 @@ class Account extends Model
     }
 
     /**
-     * @param Orderline $orderlines
+     * @param Collection $orderlines
      * @return Account[]
      */
     public static function generateAccountOverviewFromOrderlines($orderlines)

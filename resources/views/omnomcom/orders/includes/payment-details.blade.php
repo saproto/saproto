@@ -41,11 +41,9 @@
     @if($next_withdrawal > 0)
 
         <div class="card-footer">
-            <!-- Disabled because of mollie issues and so users don't get charged the mollie fee, see: https://github.com/saproto/saproto/issues/1414
-            <a href="#" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
+            <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
                 Pay now
             </a>
-            -->
         </div>
 
     @elseif($next_withdrawal < 0)
