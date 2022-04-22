@@ -8,11 +8,12 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * @throws Exception
      */
     public function run()
     {
-        if (getenv('APP_ENV') !== 'local') {
-            return 'You cannot seed your database outside the development environment.';
+        if (App::environment('production')) {
+            throw new Exception('You cannot seed your database outside the development environment.');
         }
 
         echo 'Starting database seeding.'.PHP_EOL;
