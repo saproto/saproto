@@ -29,22 +29,22 @@ class AuthLoginEventHandler
 
         // We will grant the user all roles to which they are entitled to!
         $committees = [
-            ['committee' => Committee::where('slug', config('proto.rootcommittee'))->first(), 'permission' => 'protube', 'nda' => true],
-            ['committee' => Committee::find(config('proto.committee')['board']), 'permission' => 'board', 'nda' => true],
-            ['committee' => Committee::find(config('proto.committee')['omnomcom']), 'permission' => 'omnomcom', 'nda' => true],
-            ['committee' => Committee::find(config('proto.committee')['tipcie']), 'permission' => 'tipcie', 'nda' => true],
-            ['committee' => Committee::find(config('proto.committee')['drafters']), 'permission' => 'drafters', 'nda' => false],
-            ['committee' => Committee::find(config('proto.committee')['protography']), 'permission' => 'protography', 'nda' => false],
+            ['committee' => Committee::where('slug', config('proto.rootcommittee'))->first(), 'role' => 'protube', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['board']), 'role' => 'board', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['omnomcom']), 'role' => 'omnomcom', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['tipcie']), 'role' => 'tipcie', 'nda' => true],
+            ['committee' => Committee::find(config('proto.committee')['drafters']), 'role' => 'drafters', 'nda' => false],
+            ['committee' => Committee::find(config('proto.committee')['protography']), 'role' => 'protography', 'nda' => false],
         ];
 
         foreach($committees as $committee) {
-            if ($user->isInCommittee($committee['committee']) && ($user->signed_nda and $committee['nda'])) {
-                if (! $user->hasRole($committee['permission'])) {
-                    $user->assignRole($committee['permission']);
+            if ($user->isInCommittee($committee['committee']) && (! $committee['nda'] or $user->signed_nda)) {
+                if (! $user->hasRole($committee['role'])) {
+                    $user->assignRole($committee['role']);
                 }
             } else {
-                if ($user->hasRole($committee['permission'])) {
-                    $user->removeRole($committee['permission']);
+                if ($user->hasRole($committee['role'])) {
+                    $user->removeRole($committee['role']);
                 }
             }
         }
