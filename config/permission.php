@@ -108,6 +108,11 @@ return [
             'description' => 'Can upload photos',
             'permissions' => 'protography',
         ],
+        'registration-helper' => (object) [
+            'display_name' => 'Registration Helper',
+            'description' => 'Can help register members',
+            'permissions' => ['registermembers'],
+        ],
     ],
 
     'models' => [

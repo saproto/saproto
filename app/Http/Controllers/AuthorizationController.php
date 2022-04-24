@@ -38,9 +38,14 @@ class AuthorizationController extends Controller
         /** @var User $user */
         $user = User::findOrFail($request->user);
 
-        $user->roles()->attach($role->id);
+        if ($user->hasRole($role)) {
+            $request->session()->flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
+            return Redirect::back();
+        }
 
-        $request->session()->flash('flash_message', $user->name.' has been granted <strong>'.$role->name.'</strong>.');
+        $user->assignRole($role);
+
+        $request->session()->flash('flash_message', $user->name.' has been granted role: <strong>'.$role->name.'</strong>.');
         return Redirect::back();
     }
 
@@ -61,7 +66,7 @@ class AuthorizationController extends Controller
         $role = Role::findOrFail($id);
         /** @var User $user */
         $user = User::findOrFail($userId);
-        $user->roles()->detach($role->id);
+        $user->removeRole($role);
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.

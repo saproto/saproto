@@ -8,7 +8,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-6">
+        <div class="col-xl-6">
 
             <div class="card mb-3">
 
@@ -16,29 +16,29 @@
                     @yield('page-title')
                 </div>
 
-                <div class="card-body" style="overflow-x: scroll; overflow-y: hidden;">
-                    <table class="table table-hover table-sm">
-
-                        <?php $width = 100 / (count($permissions) + 1) ?>
+                <div class="card-body overflow-auto">
+                    <table class="table table-bordered table-sm">
 
                         <thead>
                         <tr class="bg-dark text-white">
-                            <td>Role</td>
-                            <td colspan="{{ count($permissions) }}">Permissions</td>
+                            <th></th>
+                            @foreach($permissions as $permission)
+                                <th class="text-end align-middle py-2" style="writing-mode: vertical-lr">{{ $permission->name }}</th>
+                            @endforeach
                         </tr>
                         </thead>
 
                         <tbody>
                         @foreach($roles as $role)
                             <tr>
-                                <th width="{{ $width }}%">
+                                <th class="text-end px-2">
                                     {{ $role->name }}
                                 </th>
                                 @foreach($permissions as $permission)
-                                    <td width="{{ $width }}%">
-                        <span class="{{ DB::table('permission_role')->wherePermissionId($permission->id)->whereRoleId($role->id)->count() > 0 ? '' : 'opacity-25' }}">
-                            {{ $permission->name }}
-                        </span>
+                                    <td class="text-center">
+                                        <span class="{{ $role->hasPermissionTo($permission) ? '' : 'opacity-25' }}">
+                                            {{ $role->hasPermissionTo($permission) ? 'x' : 'o'  }}
+                                        </span>
                                     </td>
                                 @endforeach
                             </tr>
@@ -52,7 +52,7 @@
 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-xl-3">
 
             <div class="card mb-3">
 
