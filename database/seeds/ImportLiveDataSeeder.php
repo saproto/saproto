@@ -15,8 +15,10 @@ class ImportLiveDataSeeder extends Seeder
      * @return void
      * @throws Exception
      */
-    public function run()
+    public function run($password)
     {
+        echo "\e[33mSeeding:\e[0m   \e[1mImportDataSeeder\e[0m".PHP_EOL;
+        $seeder_start = microtime(true);
 
         // First let's create our user.
         $userData = (array) self::getDataFromExportApi('user');
@@ -35,17 +37,13 @@ class ImportLiveDataSeeder extends Seeder
 
         $newUser = User::create($userData);
         $newUser->save();
-
-        $newPassword = str_random(16);
-        $newUser->setPassword($newPassword);
+        $newUser->setPassword($password);
 
         if ($memberData) {
             $newMember = Member::create($memberData);
             $newMember->user_id = 1;
             $newMember->save();
         }
-
-        echo 'Your new user has been created with your own log-in details password: '.$newPassword.PHP_EOL;
 
         // Now let's import all data we can from the live environment.
         $tables = [
@@ -65,7 +63,8 @@ class ImportLiveDataSeeder extends Seeder
         ];
 
         foreach ($tables as $table) {
-            echo 'Importing table '.$table['name'].PHP_EOL;
+            echo "\e[33mImporting:\e[0m ".$table['name'].PHP_EOL;
+            $time_start = microtime(true);
             $data = (array) self::getDataFromExportApi($table['name']);
             foreach ($data as $entry) {
                 $entry = (array) $entry;
@@ -78,9 +77,9 @@ class ImportLiveDataSeeder extends Seeder
 
                 DB::table($table['name'])->insert($entry);
             }
+            $time_end = microtime(true);
+            echo "\e[32mImported:\e[0m  ".$table['name'].' ('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
         }
-
-        echo 'All data has been imported.'.PHP_EOL;
 
         // Now let's add our user account so that they can access everything.
 
@@ -92,7 +91,8 @@ class ImportLiveDataSeeder extends Seeder
         ]);
         $newUser->assignRole('sysadmin');
 
-        echo 'Your new user now has admin rights.'.PHP_EOL;
+        $seeder_end = microtime(true);
+        echo "\e[32mSeeded:\e[0m    \e[1mImportDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
     }
 
     public static function getDataFromExportApi($table)
