@@ -57,7 +57,7 @@ class OtherDataSeeder extends Seeder
         }
 
         $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n." users ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' users '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create arrays of member user ids
         $users = User::whereHas('member', function ($q) {
@@ -76,7 +76,7 @@ class OtherDataSeeder extends Seeder
         }
 
         $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n." orderlines ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' orderlines '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create AchievementOwnership
         $n = 200;
@@ -90,7 +90,7 @@ class OtherDataSeeder extends Seeder
         }
 
         $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n." achievement ownerships ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' achievement ownerships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create committee participations
         $n = 50;
@@ -107,7 +107,7 @@ class OtherDataSeeder extends Seeder
         }
 
         $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n." committee memberships ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' committee memberships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create activity participations
         echo "\e[33mCreating:\e[0m  activity participations".PHP_EOL;
