@@ -74,7 +74,7 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        document.querySelector('main').addEventListener('keydown', e => {
+        document.addEventListener('keydown', e => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
                 e.preventDefault();
 
