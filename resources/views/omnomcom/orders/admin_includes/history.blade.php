@@ -17,16 +17,16 @@
                         <span class="text-muted">{{ $orderline->id }}</span>
                         @if($orderline->canBeDeleted())
                             <a href="{{ route('omnomcom::orders::delete', ['id' => $orderline->id]) }}"
-                               onclick="javascript:return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
-                                <i class="fas fa-trash ml-3 text-danger" aria-hidden="true"></i>
+                               onclick="return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
+                                <i class="fas fa-trash ms-3 text-danger" aria-hidden="true"></i>
                             </a>
                         @endif
                     </td>
-                    <td class="text-right" style="min-width:70px">
+                    <td class="text-end" style="min-width:70px">
                         &euro; {{ number_format($orderline->total_price, 2, '.', '') }}
                     </td>
                     <td>
-                        <span class="text-muted mr-2">{{ $orderline->units }}x</span>
+                        <span class="text-muted me-2">{{ $orderline->units }}x</span>
                     </td>
                     <td style="min-width:150px">
                         {{ $orderline->product->name }}

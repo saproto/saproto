@@ -11,17 +11,17 @@
 
         <div class="card-body">
 
-            <label>Name</label>
+            <label for="name">Name:</label>
             <input type="text" class="form-control mb-3" id="name" name="name" value="{{ $user->name }}" required>
 
-            <label>Calling name</label>
+            <label for="calling_name">Calling name:</label>
             <input type="text" class="form-control mb-3" id="calling_name" name="calling_name"
                    value="{{ $user->calling_name }}" required>
 
             @if($user->completed_profile)
-                <label>Birthday</label>
                 @include('website.layouts.macros.datetimepicker', [
                     'name' => 'birthdate',
+                    'label' => 'Birthday:',
                     'format' => 'date',
                     'placeholder' => strtotime($user->birthdate)
                 ])

@@ -24,8 +24,8 @@
         <div class="card-body">
 
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="image" name="image">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+                <input  type="file" class="form-control" id="image" name="image">
+                <label class=form-label for="image">Choose file</label>
             </div>
 
         </div>

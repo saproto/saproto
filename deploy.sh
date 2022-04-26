@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # First verify the checksum between uploaded and live code to see if deployment is necessary.
+echo "Verifying checksum"
 CURRENT_CHECKSUM=$(cat live/checksum.txt)
 if [ $? -ne 0 ]; then
   echo "No current checksum found. Assuming deployment is necessary."
@@ -25,12 +26,16 @@ rm -rf previous_build
 # Prepare new build
 echo "Unzipping new build..."
 unzip -q uploads/build.zip -d new_build
+
 echo "Shuffling files..."
 cp uploads/checksum.txt new_build
 cp environment/.env new_build
+
 echo "Symlinking storage..."
 ln -s /actual/path \
   /symlinked/path
+
+# Setup new build
 echo "Bringing down builds..."
 (cd new_build && php artisan down)
 (cd live && php artisan down)
@@ -39,7 +44,10 @@ echo "Rotating builds..."
 mv live previous_build
 mv new_build live
 
-echo "Bringing new live build up..."
-(cd live && php artisan migrate --force && php artisan up)
+echo "Migrating database..."
+(cd live && php artisan migrate --force && php artisan proto:syncroles)
+
+echo "Bringing up new live build..."
+(cd live && php artisan up)
 
 echo "Done!"

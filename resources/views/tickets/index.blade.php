@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a href="{{ route('tickets::add') }}" class="badge badge-info float-right">Create a new ticket.</a>
+                    <a href="{{ route('tickets::add') }}" class="badge bg-info float-end">Create a new ticket.</a>
                 </div>
 
                 <div class="table-responsive">
@@ -64,7 +64,7 @@
                                     <a href="{{ route('tickets::edit', ['id' => $ticket->id]) }}">
                                         <i class="fas fa-edit" aria-hidden="true"></i>
                                     </a>
-                                    <a class="text-danger ml-2" href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
+                                    <a class="text-danger ms-2" href="{{ route('tickets::delete', ['id' => $ticket->id]) }}">
                                         <i class="fas fa-trash" aria-hidden="true"></i>
                                     </a>
                                 </td>

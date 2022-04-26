@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL'),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -157,9 +157,7 @@ return [
         /*
          * External Service Providers
          */
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class,
         Illuminate\Mail\MailServiceProvider::class,
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -173,6 +171,7 @@ return [
         nickurt\PwnedPasswords\ServiceProvider::class,
         nickurt\PostcodeApi\ServiceProvider::class,
         Aacotroneo\Saml2\Saml2ServiceProvider::class,
+        Sentry\Laravel\ServiceProvider::class,
 
     ],
 
@@ -221,14 +220,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
-        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
 
-        'role' => Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission' => Zizaco\Entrust\Middleware\EntrustPermission::class,
-        'ability' => Zizaco\Entrust\Middleware\EntrustAbility::class,
+        'Role' => Spatie\Permission\Models\Role::class,
+        'Permission' => Spatie\Permission\Models\Permission::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
 

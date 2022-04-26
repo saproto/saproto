@@ -1,7 +1,7 @@
-<html>
+<html lang="en">
 <head>
-
-    <style type="text/css">
+    <title>S.A. Proto offline!</title>
+    <style>
 
         body {
             position: absolute;
@@ -30,9 +30,7 @@
 
 <body>
 
-<div id="message">
-
-</div>
+    <div id="message"></div>
 
 </body>
 </html>

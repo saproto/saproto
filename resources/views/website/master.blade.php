@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" style="position: relative; min-height: 100%;">
+<html lang="en" class="position-relative mh-100">
 
 <head>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <meta name="theme-color" content="#C1FF00">
 
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
-    <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto"
-          href="{{ route('search::opensearch') }}"/>
+    <link rel="search" type="application/opensearchdescription+xml" title="S.A. Proto" href="{{ route('search::opensearch') }}"/>
 
     <title>@if(config('app.env') != 'production') [{{ strtoupper(config('app.env')) }}] @endif S.A. Proto
         | @yield('page-title','Default Page Title')</title>
@@ -20,7 +20,6 @@
 
     @include('website.layouts.assets.stylesheets')
 
-    @include('website.layouts.assets.customcss')
     @stack('stylesheet')
 
     @section('opengraph')
@@ -35,26 +34,25 @@
 
 </head>
 
-<body class="template-{{ $viewName }}"
-      style="@section('body-style')@show">
+<body class="template-{{ $viewName }}">
 
 @yield('body')
 
+@include('discord.modal')
+
 @if(!App::isDownForMaintenance())
 
-@include('website.layouts.assets.javascripts')
-<!-- Page scripts -->
-@stack('javascript')
+    @include('website.layouts.macros.flashmessages')
 
-@include('website.layouts.macros.flashmessages')
+    @include('website.layouts.macros.achievement-popup')
 
-@include('website.layouts.macros.achievement-popup')
+    @include('website.layouts.macros.errormessages')
 
-@include('website.layouts.macros.errormessages')
+    @include('website.layouts.assets.javascripts')
+    <!-- Page scripts -->
+    @stack('javascript')
 
 @endif
-
-@include('discord.modal')
 
 </body>
 

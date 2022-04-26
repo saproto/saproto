@@ -17,7 +17,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <p class="card-title">
-                                <span class="badge badge-dark text-white float-right">
+                                <span class="badge bg-dark text-white float-end">
                                     #{{ str_pad($purchase->id, 5, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <strong>{{ $purchase->ticket->product->name }}</strong>
@@ -46,7 +46,7 @@
 
             @if($has_unpaid_tickets)
                 <div class="card-footer text-center">
-                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw mr-2"></i> Attention!</strong><br>
+                    <strong class="text-danger"><i class="fas fa-exclamation-triangle fa-fw me-2"></i> Attention!</strong><br>
                     You have unpaid tickets. You need to pay for your tickets before you can download and use them.
                     Unpaid tickets will be invalidated if payment takes too long.
                 </div>
@@ -61,7 +61,7 @@
         {!! csrf_field() !!}
 
         <div class="card mb-3">
-            
+
             @php
                 $has_prepay_tickets = false;
                 $tickets_available = 0;
@@ -85,23 +85,22 @@
 
                     @foreach($event->tickets as $ticket)
 
-                        <div class="card mb-3"
-                             style="opacity: {{ ($ticket->isAvailable(Auth::user()) ? '1' : '0.5') }};">
+                        <div class="card mb-3 {{ $ticket->isAvailable(Auth::user()) ? '' : 'opacity-50' }}">
 
                             <div class="card-body">
 
                                 <p class="card-title">
 
                                     @if ($ticket->is_prepaid)
-                                        @php 
+                                        @php
                                             $has_prepay_tickets = true;
                                         @endphp
-                                        <span class="badge badge-danger float-right">Pre-Paid</span>
+                                        <span class="badge bg-danger float-end">Pre-Paid</span>
                                     @else
-                                        @php 
+                                        @php
                                             $only_prepaid = false;
                                         @endphp
-                                        <span class="badge badge-info float-right">Withdrawal</span>
+                                        <span class="badge bg-info float-end">Withdrawal</span>
                                     @endif
 
                                     <strong>{{ $ticket->product->name }}</strong>
@@ -112,7 +111,7 @@
                                 <p class="card-text">
 
                                     @if ($ticket->isAvailable(Auth::user()))
-                                        <span class="badge badge-info float-right">
+                                        <span class="badge bg-info float-end">
                                     {{ $ticket->product->stock > config('proto.maxtickets') ? config('proto.maxtickets').'+' : $ticket->product->stock }}
                                             available
                                     </span>
@@ -160,12 +159,12 @@
 
             </div>
 
-            {{-- 5 cases (pp = prepaid, npp = not prepaid) 
+            {{-- 5 cases (pp = prepaid, npp = not prepaid)
                 1: pp, npp and fees
                 2: pp, npp and no fees
                 3: pp, and fees
                 4: pp and no fees
-                5: npp    
+                5: npp
             --}}
             @if(Auth::check() && $tickets_available > 0)
             <div class="card-footer">
@@ -195,45 +194,28 @@
 
     </form>
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        var total = 0;
-        
+    @push('javascript')
+        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+            const directPayButton = document.getElementById('directpay')
+            const feesButton = document.getElementById('feesbutton')
+            const selectList = Array.from(document.getElementsByClassName('ticket-select'))
+            let totalPrepaidSelected = 0;
+            selectList.forEach(ticket => ticket.addEventListener('change', _ => {
+                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
+                document.getElementById('ticket-total').innerHTML = total
 
-        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', updateOrderTotal))
-        function updateOrderTotal() {
-            total = 0;
-            $('.ticket-select').each(function () {
-                total += $(this).attr('data-price') * $(this).val();
-            });
-            $('#ticket-total').html(total.toFixed(2));
-        }
-
-    </script>
-
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        var totalPrepaidTicketsSelected = 0;
-
-        document.querySelectorAll(".ticket-select").forEach(ticket=>ticket.addEventListener('change', ticketSelectChange))
-
-        function selectedPrepaidTickets(){
-            document.getElementById('directpay').hidden = true;
-            document.getElementById('feesbutton').hidden = false;
-        }
-        function unselectedPrepaidTickets(){
-            document.getElementById('directpay').hidden = false;
-            document.getElementById('feesbutton').hidden = true;
-        }
-
-        function ticketSelectChange(){
-            if($(this).attr('prepaid') == true){
-                totalPrepaidTicketsSelected += $(this).val()-$(this).attr('previous-value');
-                $(this).attr('previous-value', $(this).val());
-            }
-            if (totalPrepaidTicketsSelected == 0){
-                unselectedPrepaidTickets();
-            } else if (totalPrepaidTicketsSelected > 0){
-                selectedPrepaidTickets();
-            }
-        }
-    </script>
+                if (ticket.getAttribute('prepaid') == true) {
+                    totalPrepaidSelected += ticket.value-ticket.getAttribute('previous-value')
+                    ticket.setAttribute('previous-value', ticket.value)
+                }
+                if (totalPrepaidSelected == 0) {
+                    directPayButton.hidden = true
+                    feesButton.hidden = false
+                } else if (totalPrepaidSelected > 0) {
+                    directPayButton.hidden = false
+                    feesButton.hidden = true
+                }
+            }))
+        </script>
+    @endpush
 @endif

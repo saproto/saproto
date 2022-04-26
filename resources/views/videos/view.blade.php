@@ -14,22 +14,22 @@
 
                 <div class="card-header bg-dark text-white">
 
-                    <a href="{{ route('video::index') }}" class="btn btn-info mr-2">
+                    <a href="{{ route('video::index') }}" class="btn btn-info me-2">
                         <i class="fas fa-arrow-left"></i>
                     </a>
 
                     <a href="{{ $video->getYouTubeUrl() }}" class="btn btn-danger" target="_blank">
-                        <i class="fab fa-youtube mr-2" aria-hidden="true"></i> {{ $video->youtube_title }} by {{ $video->youtube_user_name }}
+                        <i class="fab fa-youtube me-2" aria-hidden="true"></i> {{ $video->youtube_title }} by {{ $video->youtube_user_name }}
                     </a>
 
                     @if($video->event)
-                        <p style="text-align: right; float: right; color: #fff;">
+                        <p class="text-end float-end text-white">
 
 
                         </p>
 
-                        <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}" class="btn btn-info float-right">
-                            <i class="fas fa-calendar mr-2" aria-hidden="true"></i> {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
+                        <a href="{{ route('event::show',['id'=>$video->event->getPublicId()]) }}" class="btn btn-info float-end">
+                            <i class="fas fa-calendar me-2" aria-hidden="true"></i> {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
                         </a>
 
                     @endif
