@@ -5,7 +5,8 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Proto\Models\User;
 
-class AddSysadmin extends Command {
+class AddSysadmin extends Command
+{
     /**
      * The name and signature of the console command.
      *
