@@ -5,7 +5,8 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Proto\Models\User;
 
-class AddSysadmin extends Command {
+class AddSysadmin extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -37,7 +38,7 @@ class AddSysadmin extends Command {
     {
         $user_id = $this->argument('user_id');
         $user = User::find($user_id)->first();
-        if(!$user) {
+        if(! $user) {
             $this->error('User could not be found.');
             $this->exit();
         }
