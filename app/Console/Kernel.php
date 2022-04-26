@@ -39,6 +39,7 @@ class Kernel extends ConsoleKernel
         Commands\DirectAdminSync::class,
         Commands\SyncWikiAccounts::class,
         Commands\MemberCleanup::class,
+        Commands\AddSysadmin::class,
     ];
 
     /**
