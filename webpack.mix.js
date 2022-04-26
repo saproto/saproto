@@ -1,6 +1,5 @@
 const mix = require('laravel-mix')
 const glob = require('glob')
-require('laravel-mix-purgecss')
 
 const paths = {
     styles: {
@@ -36,7 +35,6 @@ glob.sync('!(*.example).scss', {cwd: paths.styles.src}).forEach(fileName => {
     mix .sass(src, dest, {
             sassOptions: { quietDeps: true } // Mute deprecation warnings because of Bootstrap 4
         })
-        .purgeCss()
 })
 
 // Compile all javascript

@@ -47,7 +47,6 @@
   "devDependencies": {
     "glob": "^7.1.6",
     "laravel-mix": "^6.*",
-    "laravel-mix-purgecss": "^6.0.0",
     "postcss": "^8.2.7",
     "postcss-discard-comments": "^4.0.2",
     "resolve-url-loader": "^3.1.2",
