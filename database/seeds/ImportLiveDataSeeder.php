@@ -32,6 +32,7 @@ class ImportLiveDataSeeder extends Seeder
         unset($userData['is_protube_admin']);
         unset($userData['use_dark_theme']);
         unset($userData['created_at']);
+        unset($userData['permissions']);
         unset($memberData['created_at']);
         $userData['id'] = 1;
 
