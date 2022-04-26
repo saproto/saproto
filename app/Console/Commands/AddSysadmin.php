@@ -35,8 +35,8 @@ class AddSysadmin extends Command {
      */
     public function handle()
     {
-        $user_id = $this->argument('user_id');
-        $user = User::find($user_id)->first();
+        $user_id = (int)$this->argument('user_id');
+        $user = User::find($user_id);
         if(!$user) {
             $this->error('User could not be found.');
             $this->exit();
