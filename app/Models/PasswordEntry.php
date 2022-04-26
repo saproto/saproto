@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Permission\Models\Permission;
 
 /**
  * Password Entry Model.
@@ -43,7 +44,7 @@ class PasswordEntry extends Model
     /** @return BelongsTo|Permission */
     public function permission()
     {
-        return $this->belongsTo('Proto\Models\Permission', 'permission_id');
+        return $this->belongsTo('Spatie\Permission\Models\Permission', 'permission_id');
     }
 
     /** @return bool */
