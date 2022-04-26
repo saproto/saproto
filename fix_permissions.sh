@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Starting fix...";
-
-chmod -R 755 .
-chmod -R 700 .env .git storage
+chown -R www-data:www-data storage
+chown -R www-data:www-data bootstrap/cache
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
 
 # Notify end
-echo "Done!";
+echo "Fixed directory permissions!";
