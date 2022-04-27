@@ -298,10 +298,14 @@ class MollieController extends Controller
     }
 
     /**
-     * @return object
+     * @return void|object
      */
-    public static function getPaymentMethods(): Collection
+    public static function getPaymentMethods()
     {
+        if (app()->environment('local')) {
+            return;
+        }
+
         $api_response = Mollie::api()
             ->methods()
             ->all([

@@ -44,9 +44,11 @@ class OrderLineController extends Controller
 
         $selected_month = $date ?? date('Y-m');
 
-        $available_months = $orderlines->keys()->groupBy(function ($date) {
-            return Carbon::parse($date)->format('Y');
-        });
+        $available_months = [];
+        foreach($orderlines->keys() as $month) {
+            $month = Carbon::parse($month);
+            $available_months[$month->year][] = $month->month;
+        }
 
         $total = 0;
         if ($orderlines->has($selected_month)) {
@@ -66,7 +68,7 @@ class OrderLineController extends Controller
             'orderlines' => $orderlines->has($selected_month) ? $orderlines[$selected_month] : [],
             'next_withdrawal' => $next_withdrawal,
             'total' => $total,
-            'methods' => $payment_methods,
+            'methods' => $payment_methods ?? [],
             'use_fees' => config('omnomcom.mollie')['use_fees'],
         ]);
     }
