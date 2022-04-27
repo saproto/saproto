@@ -4,7 +4,7 @@
 
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-star fa-fw mr-2"></i> Featured events
+        <i class="fas fa-star fa-fw me-2"></i> Featured events
     </div>
     <div class="card-body">
 
@@ -24,31 +24,35 @@
 
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-calendar-alt fa-fw mr-2"></i> Upcoming events
+        <i class="fas fa-calendar-alt fa-fw me-2"></i> Upcoming events
     </div>
     <div class="card-body">
 
-        @php($events = Proto\Models\Event::where('secret', false)->where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
+        @php($events = Proto\Models\Event::where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
 
         @if(count($events) > 0)
 
             @foreach($events as $key => $event)
 
-                @include('event.display_includes.event_block', ['event'=> $event])
+                @if(!$event->secret || (Auth::check() && ($event->activity && $event->activity->isParticipating(Auth::user()))))
 
-                <?php $week = date('W', $event->start); ?>
+                    @include('event.display_includes.event_block', ['event'=> $event])
 
-            @endforeach
+                    <?php $week = date('W', $event->start); ?>
 
-        @else
+               @endif
 
-            <p class="card-text text-center mt-2 mb-4">
-                We have no events coming up soon, sorry! 😟
-            </p>
+           @endforeach
 
-        @endif
+       @else
 
-        <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
+           <p class="card-text text-center mt-2 mb-4">
+               We have no events coming up soon, sorry! 😟
+           </p>
 
-    </div>
+       @endif
+
+       <a href="{{ route("event::list") }}" class="btn btn-info btn-block">Go to the calendar</a>
+
+   </div>
 </div>

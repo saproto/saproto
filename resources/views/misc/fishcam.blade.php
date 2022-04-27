@@ -8,35 +8,48 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-12" style="max-width: 640px; max-height: 480px;">
+        <div class="col-12" style="height: 480px;">
 
-            <div class="card mb-3">
+            <div id="fishcam-warning" class="card mb-3">
 
-                <div class="card-header bg-danger text-white fishcam-warning">
-                    <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i> Warning | Please don't
+            <div id="fishcam-warning" class="card mb-3">
+
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i> Warning | Please don't
                     load this stream over a mobile connection.
                 </div>
 
-                <img class="card-img-top card-img-bottom" style="display: none;" id="fishcam">
-
-                <div class="card-body fishcam-warning">
-
-                    <div class="card-text">
+                <div class="card-body">
+                    <p class="card-text">
                         The fishcam stream is of very high quality, and streams with roughly 0.5 MB/s. If you have a 1
-                        gigabyte
-                        data plan, you will use it up completely over the course of half an hour.
-                    </div>
-
+                        gigabyte data plan, you will use it up completely over the course of half an hour.
+                    </p>
                 </div>
 
-                <div class="card-footer fishcam-warning">
-
-                    <button href="#" id="fishcam__activate" class="btn btn-warning btn-block">
+                <div class="card-footer">
+                    <button href="#" id="fishcam-activate" class="btn btn-warning btn-block">
                         <i class="fas fa-fish mr-2"></i> I understand, start the fishcam anyway!
                     </button>
-
                 </div>
 
+            </div>
+
+            <div id="fishcam-unavailable" class="card mb-3 d-none">
+
+                <div class="card-header bg-danger text-white fishcam-warning">
+                    <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i> Whoops! | The fishcam is gone...
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text">
+                        Unfortunately the fishcam seems to be unavailable at the moment. Please let the board know and try again later!
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="fishcam" class="card mb-3 d-none">
+                <img class="card-img-top card-img-bottom d-none" id="fishcam-src">
             </div>
 
         </div>
@@ -47,14 +60,24 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        const fishcam = document.getElementById("fishcam")
+        const fishcamSrc = document.getElementById("fishcam-src")
+        const activate = document.getElementById("fishcam-activate")
+        const warning = document.getElementById("fishcam-warning")
+        const unavailable = document.getElementById("fishcam-unavailable")
 
-        $("#fishcam__activate").on('click', function () {
+        activate.addEventListener("click", () => {
+            fishcamSrc.src = '{{ route("api::fishcam") }}'
+            warning.classList.add("d-none")
+        })
 
-            $("#fishcam").attr('src', '{{ route("api::fishcam") }}').show();
-            $(".fishcam-warning").hide();
+        fishcamSrc.addEventListener("error", () => {
+            unavailable.classList.remove("d-none")
+        })
 
-        });
-
+        fishcamSrc.addEventListener("load", () => {
+            fishcam.classList.remove('d-none')
+        })
     </script>
 
 @endpush

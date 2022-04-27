@@ -2,6 +2,7 @@
 
 namespace Proto\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Proto\Models\MenuItem;
 
@@ -18,6 +19,14 @@ class AppServiceProvider extends ServiceProvider
             $menuItems = MenuItem::where('parent', null)->orderBy('order')->get();
             $view->with('menuItems', $menuItems);
         });
+        view()->composer('website.layouts.macros.achievement-popup', function ($view) {
+            if (Auth::check()) {
+                $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
+                $newAchievements = $newAchievementsQuery->get();
+                $newAchievementsQuery->update(['alerted' => true]);
+                $view->with('newAchievements', $newAchievements);
+            }
+        });
     }
 
     /**
@@ -27,8 +36,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->isLocal()) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
+
     }
 }

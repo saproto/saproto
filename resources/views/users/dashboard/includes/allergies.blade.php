@@ -19,7 +19,7 @@
 
     <div class="card-footer">
 
-        <div class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#diet-modal">
+        <div class="btn btn-outline-info btn-block" data-bs-toggle="modal" data-bs-target="#diet-modal">
             Update
         </div>
 
@@ -39,9 +39,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Update allergies and/or diet</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -67,7 +65,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-info">Save changes</button>
                 </div>
 

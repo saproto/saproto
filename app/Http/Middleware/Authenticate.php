@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 
-class Authenticate
+class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
     /**
      * The Guard implementation.

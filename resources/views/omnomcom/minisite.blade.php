@@ -4,7 +4,7 @@
 
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700' rel='stylesheet' type='text/css'>
 
-        <meta name="viewport" content="width=900px, user-scalable=no">
+        <meta name="viewport" content="width=900, user-scalable=no">
 
         <title>OmNomCom Inventory Viewer</title>
 
@@ -12,44 +12,13 @@
 
         <meta property="og:type" content="website"/>
         <meta property="og:title" content="OmNomCom Inventory Viewer"/>
-        <meta property="og:description"
-              content="The OmNomCom Inventory Viewer can tell you if your favourite nom is available in the Protopolis. Give it a try!"/>
+        <meta property="og:description" content="The OmNomCom Inventory Viewer can tell you if your favourite nom is available in the Protopolis. Give it a try!"/>
         <meta property="og:url" content="https://www.omnomcom.nl/"/>
         <meta property="og:image" content="{{ asset('images/subsites/omnomcom.jpg') }}"/>
 
         <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js" nonce="{{ csp_nonce() }}"></script>
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
-            $(function () {
-                $("#search_query").keyup(function () {
-                    let query = $("#search_query").val();
-                    if (query.length < 2) {
-                        $(".result").hide().removeClass("result_left");
-                    } else {
-                        $(".result").hide().removeClass("result_left");
-                        let c = 1;
-                        $("#results .result").each(function () {
-
-                            var name = $(this).find('.result_name').first().html().toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                            var category = $(this).find('.result_category').first().html().toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                            var querymod = query.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
-                            if (name.indexOf(querymod) > -1 || category.indexOf(querymod) > -1) {
-                                $(this).show();
-                                if (c % 2 == 1) {
-                                    $(this).addClass("result_left");
-                                }
-                                c++;
-                            }
-
-                        });
-                    }
-                });
-            });
-
-        </script>
-        <style type="text/css">
+        <style>
             html {
                 box-sizing: border-box;
                 font: 14px sans-serif;
@@ -63,6 +32,10 @@
                 font-size: 14px;
             }
 
+            .d-none {
+                display: none;
+            }
+
             .animate {
                 transition: all 0.5s;
                 -o-transition: all 0.5s;
@@ -72,10 +45,10 @@
 
             #mainscreen {
                 position: absolute;
-                top: 0px;
-                left: 0px;
-                right: 0px;
-                bottom: 0px;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
             }
 
             #mainscreen {
@@ -110,7 +83,6 @@
                 height: 200px;
                 margin-bottom: 20px;
                 float: left;
-                display: none;
                 font-weight: 400;
                 font-size: 25px;
             }
@@ -179,71 +151,75 @@
             }
         </style>
 
-        <!-- Matomo -->
-        <script type="text/javascript" nonce="{{ csp_nonce() }}">
-            let _paq = _paq || [];
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            (function () {
-                let u = "//{{ config('proto.analytics_url') }}/";
-                _paq.push(['setTrackerUrl', u + 'piwik.php']);
-                _paq.push(['setSiteId', '4']);
-                let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-                g.type = 'text/javascript';
-                g.async = true;
-                g.defer = true;
-                g.src = u + 'piwik.js';
-                s.parentNode.insertBefore(g, s);
-            })();
-        </script>
-        <!-- End Matomo Code -->
-
     </head>
     <body>
-    <div id="mainscreen" class="animate">
-        What would you like to eat?<br>
-        <input type="text" id="search_query">
-        <div id="results">
-            @foreach(Proto\Models\Product::where('is_visible', true)
-                    ->where(function ($query) {
-                        $query->where('is_visible_when_no_stock', true)
-                        ->orWhere('stock','>',0);
-                    })
-                    ->get() as $i => $product)
+        <div id="mainscreen" class="animate">
+            What would you like to eat?<br>
+            <input type="text" id="search_query" name="query">
 
-                @if(count(array_intersect($product->categories->pluck('id')->toArray(), config('omnomcom.stores')['protopolis']->categories)) > 0)
+            <div id="results">
+                @foreach(Proto\Models\Product::where('is_visible', true)
+                        ->where(function ($query) {
+                            $query->where('is_visible_when_no_stock', true)
+                            ->orWhere('stock','>',0);
+                        })
+                        ->get() as $i => $product)
 
-                    <div class='result {{ ($product->stock <= 0 ? 'unavailable' : '') }}'>
-                        <div class='result_image'
-                             @if($product->image)
-                             style='background-image:url("{{ $product->image->generateImagePath(400,null) }}")'
-                                @endif
-                        ></div>
-                        <div class='result_info'>
-                            <div class='result_name'>{{ $product->name }}</div>
-                            <div class='result_price'>
-                                <div class='result_title'>Price</div>
-                                <div class='result_data'>&euro;{{ number_format($product->price, 2, '.', ',') }}</div>
+                    @if(count(array_intersect($product->categories->pluck('id')->toArray(), config('omnomcom.stores')['protopolis']->categories)) > 0)
+
+                        <div class='result d-none {{ ($product->stock <= 0 ? 'unavailable' : '') }}'>
+                            <div class='result_image'
+                                 @if($product->image)
+                                 style='background-image:url("{{ $product->image->generateImagePath(400,null) }}")'
+                                    @endif
+                            ></div>
+                            <div class='result_info'>
+                                <div class='result_name'>{{ $product->name }}</div>
+                                <div class='result_price'>
+                                    <div class='result_title'>Price</div>
+                                    <div class='result_data'>&euro;{{ number_format($product->price, 2, '.', ',') }}</div>
+                                </div>
+                                <div class='result_amount'>
+                                    <div class='result_title'>Available</div>
+                                    <div class='result_data'>{{ $product->stock }}</div>
+                                </div>
+                                <div class='result_category'>{{ implode(", ", $product->categories->pluck('name')->toArray()) }}</div>
                             </div>
-                            <div class='result_amount'>
-                                <div class='result_title'>Available</div>
-                                <div class='result_data'>{{ $product->stock }}</div>
-                            </div>
-                            <div class='result_category'>{{ implode(", ", $product->categories->pluck('name')->toArray()) }}</div>
                         </div>
-                    </div>
 
-                @endif
+                    @endif
 
-            @endforeach
+                @endforeach
+            </div>
+
+            <a href="https://www.proto.utwente.nl/">
+                <img src="{{ asset('images/logo/inverse.png') }}" style="width: 400px;">
+            </a>
+
         </div>
 
-        <a href="https://www.proto.utwente.nl/">
-            <img src="{{ asset('images/logo/inverse.png') }}" style="width: 400px;">
-        </a>
-
-    </div>
+        <script type="text/javascript" nonce="{{ csp_nonce() }}">
+            const search = document.getElementById('search_query')
+            const results = Array.from(document.getElementsByClassName('result'))
+            search.addEventListener('keyup', _ => {
+                let query = search.value;
+                results.forEach(el => el.classList.replace('result_left', 'd-none'))
+                if (query.length > 2) {
+                    results.forEach(el => el.classList.replace('result_left', 'd-none'))
+                    let c = 1
+                    results.forEach(el => {
+                        let name = el.querySelector('.result_name').innerHTML.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')
+                        let category = el.querySelector('.result_category').innerHTML.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')
+                        let queryMod = query.toLowerCase().replace(/[^a-zA-Z0-9]/g, '')
+                        if (name.indexOf(queryMod) > -1 || category.indexOf(queryMod) > -1) {
+                            el.classList.remove('d-none')
+                            if ((c) % 2 === 1) el.classList.add('result_left')
+                            c++
+                        }
+                    })
+                }
+            })
+        </script>
 
     </body>
 </html>

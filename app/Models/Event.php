@@ -254,7 +254,9 @@ class Event extends Model
             $users = $users->merge($ticket->getUsers());
         }
         if ($this->activity) {
-            $users = $users->merge($this->activity->allUsers);
+            $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
+                return isset($a->pivot->committees_activities_id); // prefer helper participation registration
+            })->unique());
         }
         return $users->sort(function ($a, $b) {
             return strcmp($a->name, $b->name);

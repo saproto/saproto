@@ -1,23 +1,21 @@
-<input type="text" class="form-control datetimepicker-input" id="datetimepicker-{{ $name }}"
-       data-toggle="datetimepicker" data-target="#datetimepicker-{{ $name }}" name="{{ $name }}"
-       {!! isset($not_required) && $not_required == true ? null : 'required' !!}
-/>
+@php
+    $strFormat = [
+        'date' => 'Y-m-d',
+        'time' => 'TH:i',
+        'datetime-local' => 'Y-m-d\TH:i'
+    ]
+@endphp
 
-@push('javascript')
-
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $(function () {
-            $('#datetimepicker-{{ $name }}').datetimepicker({
-                format: '{{ isset($format) && $format == 'datetime' ? 'DD-MM-YYYY HH:mm' : 'DD-MM-YYYY' }}',
-                @isset($placeholder)
-                    @if(isset($format) && $format == 'datetime')
-                        defaultDate: moment('{{  date('n/j/Y H:i', $placeholder)}}'),
-                    @else
-                        defaultDate: moment('{{ date('n/j/Y', $placeholder) }}')
-                    @endif
-                @endisset
-            });
-        });
-    </script>
-
-@endpush
+<div id="datetimepicker-{{ $name }}-form" class="form-group {{ $form_class_name ?? '' }}">
+    @isset($label)
+        <label for="datetimepicker-{{ $name }}">
+            {{ $label }}
+        </label>
+    @endisset
+    <input
+       type="{{ $format ?? 'datetime-local' }}"
+       id="datetimepicker-{{ $name }}" class="form-control datetimepicker {{ $input_class_name ?? '' }}"
+       name="{{ $name }}" value="{{ isset($placeholder) ? date( $strFormat[$format ?? 'datetime-local'], $placeholder): '' }}"
+       {{ isset($not_required) && $not_required ? '' : 'required' }}
+    />
+</div>

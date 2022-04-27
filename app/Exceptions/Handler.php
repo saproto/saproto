@@ -15,9 +15,11 @@ use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\Exception\NotReadableException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -44,15 +46,14 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  Exception $e
+     * @param Throwable $e
      * @return void
-     * @throws Exception
+     * @throws Throwable
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
-        if (app()->bound('sentry') && $this->shouldReport($e) && App::environment('production')) {
-            $sentry = app('sentry');
-            $this->sentryID = $sentry->captureException($e);
+        if ($this->shouldReport($e) && app()->bound('sentry') && App::environment('production')) {
+            app('sentry')->captureException($e);
         }
 
         parent::report($e);
@@ -61,13 +62,17 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  Request $request
-     * @param  Exception $e
+     * @param Request $request
+     * @param Throwable $e
      * @return Response
-     * @throws Exception
+     * @throws Throwable
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
+        if ($e instanceof UnauthorizedException) {
+            return response()->view('errors.403');
+        }
+
         return parent::render($request, $e);
     }
 

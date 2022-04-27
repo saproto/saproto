@@ -24,13 +24,13 @@
 
                         <input type="hidden" name="verified" value="true">
 
-                        <p style="text-align: center;">
+                        <p class="text-center">
                             Please check that you've entered the information below correctly.
                         </p>
 
                         <hr>
 
-                        <p style="text-align: center;">
+                        <p class="text-center">
                             My date of birth is <strong>{{ date('F j, Y', strtotime($userdata['birthdate'])) }}</strong>
                             ({{ $age }}
                             years).

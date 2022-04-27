@@ -10,7 +10,7 @@
 
             <p class="card-text text-center">
                 You have issued us an authorisation for:<br>
-                <strong class="mr-5">{{ iban_to_human_format($user->bank->iban) }}</strong>{{ iban_to_human_format($user->bank->bic) }}
+                <strong class="me-5">{{ iban_to_human_format($user->bank->iban) }}</strong>{{ iban_to_human_format($user->bank->bic) }}
             </p>
 
             <table class="table table-borderless table-sm text-muted mb-0">
@@ -42,8 +42,8 @@
 
                 @if(!$user->is_member)
 
-                    <a class="btn btn-outline-danger w-50" data-toggle="modal"
-                            data-target="#bank-modal-cancel">
+                    <a class="btn btn-outline-danger w-50" data-bs-toggle="modal"
+                            data-bs-target="#bank-modal-cancel">
                         Cancel authorization
                     </a>
 
@@ -73,19 +73,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Cancel withdrawal authorisation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
                     @if($user->hasUnpaidOrderlines())
-                        <p style="color: red;">
+                        <p class="text-danger">
                             You have unpaid orderlines. You cannot revoke your authorization until you have settled all
-                            your
-                            purhcases with Proto. You can await the next withdrawal, or head over to your
-                            <a href="{{ route("omnomcom::orders::list") }}">purchase history</a> to pay manually via
-                            iDeal.
+                            your purchases with Proto. You can await the next withdrawal, or head over to your
+                            <a href="{{ route("omnomcom::orders::list") }}">purchase history</a> to pay manually via iDeal.
                         </p>
                         <hr>
                     @endif
@@ -111,7 +107,7 @@
                     <button type="submit" class="btn btn-danger w-50" {{ $user->hasUnpaidOrderlines() ? 'disabled' : '' }}>
                         Cancel my authorization
                     </button>
-                        <button type="button" class="btn btn-default w-50" data-dismiss="modal">
+                        <button type="button" class="btn btn-default w-50" data-bs-dismiss="modal">
                             Keep my authorization active
                         </button>
                     </div>

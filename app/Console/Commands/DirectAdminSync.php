@@ -35,7 +35,9 @@ class DirectAdminSync extends Command
         parent::__construct();
     }
 
-    /** Execute the console command. */
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
         $da = new DirectAdmin();
@@ -46,19 +48,17 @@ class DirectAdminSync extends Command
         $da->query('/CMD_API_EMAIL_FORWARDERS', [
             'domain' => getenv('DA_DOMAIN'),
         ]);
-
         $current = $da->fetch_parsed_body();
         $target = $this->constructForwarderList();
-        $patch = $this->constructPatchList($current, $target);
-        $forwarder_queries = $this->applyPatchList($patch);
+        $patch = $this->constructForwarderPatchList($current, $target);
+        $forwarder_queries = $this->applyForwarderPatchList($patch);
 
         // E-mail accounts
         $da->query('/CMD_API_POP', [
             'domain' => getenv('DA_DOMAIN'),
             'action' => 'list',
         ]);
-
-        $current = $da->fetch_parsed_body();
+        $current = $da->fetch_parsed_body()['list'];
         $target = $this->constructAccountList();
         $patch = $this->constructAccountPatchList($current, $target);
         $account_queries = $this->applyAccountPatchList($patch);
@@ -68,12 +68,17 @@ class DirectAdminSync extends Command
         $this->info('Done!');
     }
 
+    /**
+     * Generate the user, committee and manually defined mail forwarders.
+     *
+     * @return array
+     */
     private function constructForwarderList()
     {
         $data = [];
 
         // Constructing user forwarders.
-        $members = Member::get();
+        $members = Member::all();
         foreach ($members as $member) {
             $data[$member->proto_username] = [
                 $member->user->email,
@@ -116,11 +121,16 @@ class DirectAdminSync extends Command
         return $data;
     }
 
+    /**
+     * Generate the list of accounts for all members.
+     *
+     * @return array
+     */
     private function constructAccountList()
     {
         $data = [];
 
-        $members = Member::get();
+        $members = Member::all();
         foreach ($members as $member) {
             $data[] = $member->proto_username;
         }
@@ -132,7 +142,14 @@ class DirectAdminSync extends Command
         return $data;
     }
 
-    private function constructPatchList($current, $target)
+    /**
+     * Construct a patch list of forwarders from the target list.
+     *
+     * @param array $current The current list of forwarders
+     * @param array $target The target list of forwarders
+     * @return array A forwarders patch list containing an 'add', 'mod' and 'del' array
+     */
+    private function constructForwarderPatchList($current, $target)
     {
         $data = [
             'add' => [],
@@ -165,17 +182,16 @@ class DirectAdminSync extends Command
 
                 // Otherwise, we do not modify this alias.
             }
-            // The forwarder should not exist according to the target list. Remove the forwarder.
+            // Remove the forwarder because it does not exist according to the target list.
             else {
                 $data['del'][] = $alias;
             }
         }
 
-        // Now we check if we need to create any new forwarder.
+        // Now we check if we need to create any new forwarders.
         foreach ($target as $alias => $destination) {
-
-            // A forwarder does not yet exist...
             if (! array_key_exists($alias, $current)) {
+                // The forwarder does not yet exist...
                 $data['add'][$alias] = $destination;
             }
         }
@@ -183,35 +199,13 @@ class DirectAdminSync extends Command
         return $data;
     }
 
-    private function constructAccountPatchList($current, $target)
-    {
-        $data = [
-            'add' => [],
-            'del' => [],
-        ];
-
-        // For each current account, we check if it should exist against the target list.
-        foreach ($current as $account) {
-
-            // The account should not exist!
-            if (! in_array($account, $target)) {
-                $data['del'][] = $account;
-            }
-        }
-
-        // Now we check if we need to create any new accounts.
-        foreach ($target as $account) {
-
-            // The account should be created!
-            if (! in_array($account, $current)) {
-                $data['add'][] = $account;
-            }
-        }
-
-        return $data;
-    }
-
-    private function applyPatchList($patch)
+    /**
+     * Generate queries to apply the forwarders patch lists.
+     *
+     * @param array $patch The forwarders patch list containing a 'add' and 'del' array.
+     * @return array A list of queries to apply the forwarders patch
+     */
+    private function applyForwarderPatchList($patch)
     {
         $queries = [];
 
@@ -253,6 +247,47 @@ class DirectAdminSync extends Command
         return $queries;
     }
 
+    /**
+     * Construct a patch list of accounts from the target list.
+     *
+     * @param array $current The current list of accounts
+     * @param array $target The target list of accounts
+     * @return array An accounts patch list containing an 'add' and 'del' array
+     */
+    private function constructAccountPatchList($current, $target)
+    {
+        $data = [
+            'add' => [],
+            'del' => [],
+        ];
+
+        // For each current account, we check if it should exist against the target list.
+        foreach ($current as $account) {
+
+            // The account should not exist!
+            if (! in_array($account, $target)) {
+                $data['del'][] = $account;
+            }
+        }
+
+        // Now we check if we need to create any new accounts.
+        foreach ($target as $account) {
+
+            // The account should be created!
+            if (! in_array($account, $current)) {
+                $data['add'][] = $account;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Generate queries to apply the accounts patch lists.
+     *
+     * @param array $patch The accounts patch list containing a 'add' and 'del' array.
+     * @return array A list of queries to apply the accounts patch
+     */
     private function applyAccountPatchList($patch)
     {
         $queries = [];
@@ -287,6 +322,12 @@ class DirectAdminSync extends Command
         return $queries;
     }
 
+    /**
+     * Execute a list of DirectAdmin queries.
+     *
+     * @param DirectAdmin $da The DirectAdmin instance
+     * @param array $queries An array containing a 'cmd' and 'options' array
+     */
     private function executeQueries($da, $queries)
     {
         foreach ($queries as $i => $query) {
@@ -294,7 +335,7 @@ class DirectAdminSync extends Command
             $da->query($query['cmd'], $query['options']);
 
             $response = $da->fetch_parsed_body();
-            if ($response['error'] == 1) {
+            if (array_key_exists('error', $response) && $response['error'] == 1) {
                 $this->info('Error: '.$response['text'].', '.$response['details'].'!'.PHP_EOL);
             }
         }

@@ -8,15 +8,15 @@
 
         @foreach($available_months as $year => $months)
 
-            <li class="list-group-item" data-toggle="collapse" style="cursor: pointer;"
-                data-target="#omnomcom-years-{{ $year }}">
+            <li class="list-group-item cursor-pointer" data-bs-toggle="collapse"
+                data-bs-target="#omnomcom-years-{{ $year }}">
                 <strong>{{ $year }}</strong>
             </li>
             <div id="omnomcom-years-{{ $year }}" class="collapse {{ $year == date('Y') ? 'show' : null }}" data-parent="#omnomcom-years-accordion">
                 @foreach($months as $month)
-                    <a href="{{ route("omnomcom::orders::list", ['date' => $month]) }}"
+                    <a href="{{ route("omnomcom::orders::list", ['date' => $year.'-'. \Carbon\Carbon::create()->month($month)->format('m')]) }}"
                        class="list-group-item">
-                        {{ date('F Y', strtotime($month)) }}
+                        {{ \Carbon\Carbon::create()->month($month)->format('F').' '.$year }}
                     </a>
                 @endforeach
             </div>

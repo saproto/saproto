@@ -1,7 +1,7 @@
 <div class="card mb-3">
 
-    <div class="card-header bg-dark text-white"
-         style="cursor: pointer;" data-toggle="collapse" data-target="#committee_collapse_{{ $unique }}">
+    <div class="card-header bg-dark text-white cursor-pointer"
+         data-bs-toggle="collapse" data-bs-target="#committee_collapse_{{ $unique }}">
         {!! $title !!}
     </div>
 

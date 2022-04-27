@@ -3,20 +3,17 @@
 @section('body')
 
     <p>
-        Hey {{ $user->calling_name }},
+        Hi {{ $user->calling_name }},
     </p>
 
     <p>
-        We are writing you to congratulate you with your birthday! Because of the coronavirus, we cannot give you the
-        customary birthday cookie in Protopolis or the birthday pull at a Proto Drink. However, if we are able to do a
-        Proto Drink before the summer holidays, we would like to invite you to stop by and collect your free birthday
-        drink (one beer or one soda). We hope you have a great day!
+        Happy birthday! As you might know, Proto has been opened for a while, so you can now come get your birthday cookie again! Just hop by the Protopolis and ask a board member for your birthday cookie and we will be glad to help you out.
     </p>
 
-    <img src="{{ asset('images/emails/birthday.jpg') }}" style="width: 100%;">
+    <img alt="The board wishing you a happy birthday" src="{{ asset('images/emails/birthday.jpg') }}">
 
     <p>
-        Kind regards,
+        Have a great day,
         Board {{ config('proto.boardnumber') }}
     </p>
 

@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
+use Proto\Models\User;
 use Redirect;
 
 class TFAController extends Controller
@@ -15,7 +16,7 @@ class TFAController extends Controller
      * @param Google2FA $google2fa
      * @return RedirectResponse
      */
-    public function timebasedPost(Request $request, Google2FA $google2fa)
+    public function create(Request $request, Google2FA $google2fa)
     {
         $user = Auth::user();
         $code = $request->input('2facode');
@@ -37,7 +38,7 @@ class TFAController extends Controller
      * @param Google2FA $google2fa
      * @return RedirectResponse
      */
-    public function timebasedDelete(Request $request, Google2FA $google2fa)
+    public function destroy(Request $request, Google2FA $google2fa)
     {
         $user = Auth::user();
         $code = $request->input('2facode');
@@ -55,5 +56,14 @@ class TFAController extends Controller
 
         $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
         return Redirect::route('user::dashboard');
+    }
+
+    public function adminDestroy(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->tfa_totp_key = null;
+
+        $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
+        return Redirect::back();
     }
 }

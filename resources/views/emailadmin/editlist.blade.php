@@ -40,7 +40,7 @@
                         ])
                     </div>
 
-                    <div class="checkbox pull-left">
+                    <div class="checkbox float-start">
                         <label>
                             <input type="checkbox"
                                    name="is_member_only" {{ $list != null && $list->is_member_only ? 'checked="checked"' : '' }}>
@@ -52,7 +52,7 @@
 
                 <div class="card-footer">
 
-                    <button type="submit" class="btn btn-success float-right">Submit</button>
+                    <button type="submit" class="btn btn-success float-end">Submit</button>
 
                     <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
 

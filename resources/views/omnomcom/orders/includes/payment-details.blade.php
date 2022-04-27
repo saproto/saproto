@@ -41,12 +41,9 @@
     @if($next_withdrawal > 0)
 
         <div class="card-footer">
-
-            <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal"
-                    data-target="#mollie-modal">
+            <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
                 Pay now
             </a>
-
         </div>
 
     @elseif($next_withdrawal < 0)

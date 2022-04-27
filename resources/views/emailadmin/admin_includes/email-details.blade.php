@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label for="description">Internal description:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                               placeholder="A short descritpion that only the board can see."
+                               placeholder="A short description that only the board can see."
                                value="{{ $email->description ?? '' }}" required>
                     </div>
 
@@ -57,9 +57,7 @@
                         <label for="sender_address">Sender e-mail:</label>
                         <div class="input-group mb-3">
                             <input name="sender_address" type="text" class="form-control" placeholder="board" value="{{ $email->sender_address ?? '' }}" required>
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
-                            </div>
+                            <span class="input-group-text" id="basic-addon2">@ {{ config('proto.emaildomain') }}</span>
                         </div>
                     </div>
 
@@ -86,7 +84,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationMembers" required
+                                <input type="radio" name="destinationType" required
                                        value="members" {{ ($email && $email->to_member ? 'checked' : '') }}>
                                 All members
                             </label>
@@ -94,8 +92,7 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationActiveMembers"
-                                       required
+                                <input type="radio" name="destinationType" required
                                        value="active" {{ ($email && $email->to_active ? 'checked' : '') }}>
                                 All active members
                             </label>
@@ -103,7 +100,15 @@
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationEvent" required
+                                <input type="radio" name="destinationType" required
+                                       value="pending" {{ ($email && $email->to_pending ? 'checked' : '') }}>
+                                All pending members
+                            </label>
+                        </div>
+
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="destinationType" required
                                        value="event" {{ ($email && $email->to_event ? 'checked' : '') }}>
                                 These events:
                             </label>
@@ -115,13 +120,13 @@
                             </p>
 
                             <p>
-                            <ul class="list-group">
-                                @foreach($email->events as $event)
-                                    <li class="list-group-item">
-                                        {{ $event->title }} ({{ $event->formatted_date->simple }})
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <ul class="list-group">
+                                    @foreach($email->events as $event)
+                                        <li class="list-group-item">
+                                            {{ $event->title }} ({{ $event->formatted_date->simple }})
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </p>
 
                             <p>
@@ -129,12 +134,16 @@
                             </p>
                         @endif
 
-                        <select class="form-control event-search" id="eventSelect" name="eventSelect[]"
-                                {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple></select>
+                        <div class="form-group">
+                            <div class="form-group autocomplete">
+                                <input class="form-control event-search" id="eventSelect" name="eventSelect[]"
+                                       {{ ($email && $email->to_event ? '' : 'disabled="disabled"') }} multiple>
+                            </div>
+                        </div>
 
                         <div class="radio">
                             <label>
-                                <input type="radio" name="destinationType" id="destinationLists" required
+                                <input type="radio" name="destinationType" required
                                        value="lists" {{ ($email && $email->to_list ? 'checked' : '') }}>
                                 These e-mail lists:
                             </label>
@@ -158,16 +167,11 @@
                 </div>
 
                 <div class="col-md-6">
-
-                    <div class="form-group">
-                        <label for="time">Scheduled:</label>
-                        @include('website.layouts.macros.datetimepicker', [
-                            'name' => 'time',
-                            'format' => 'datetime',
-                            'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay())
-                        ])
-                    </div>
-
+                    @include('website.layouts.macros.datetimepicker', [
+                        'name' => 'time',
+                        'label' => 'Scheduled:',
+                        'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay())
+                    ])
                 </div>
 
             </div>
@@ -176,7 +180,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-success float-right">Save</button>
+            <button type="submit" class="btn btn-success float-end">Save</button>
 
             <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
 
@@ -185,3 +189,27 @@
     </div>
 
 </form>
+
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        const eventSelect = document.getElementById('eventSelect')
+        const listSelect = document.getElementById('listSelect')
+        const destinationSelectList = Array.from(document.getElementsByName('destinationType'))
+        const toggleList = {
+            'event': [false, true],
+            'members': [true, true],
+            'active': [true, true],
+            'pending': [true, true],
+            'lists': [true, false]
+        }
+
+        destinationSelectList.forEach(el => {
+            el.addEventListener('click', e => {
+                const toggle = toggleList[el.value]
+                eventSelect.disabled = toggle[0]
+                listSelect.disabled = toggle[1]
+            })
+        })
+    </script>
+
+@endpush

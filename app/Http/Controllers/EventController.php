@@ -74,7 +74,12 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::fromPublicId($id);
-        return view('event.display', ['event' => $event]);
+        $methods = [];
+        if (config('omnomcom.mollie.use_fees')){
+            $methods = MollieController::getPaymentMethods();
+        }
+
+        return view('event.display', ['event' => $event, 'payment_methods' => $methods]);
     }
 
     /** @return View */

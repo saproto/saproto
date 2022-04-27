@@ -15,7 +15,6 @@ use Proto\Models\Ticket;
 use Proto\Models\TicketPurchase;
 use Redirect;
 use Session;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TicketController extends Controller
 {
@@ -240,7 +239,7 @@ class TicketController extends Controller
 
     /**
      * @param int $id
-     * @return RedirectResponse|StreamedResponse
+     * @return string
      */
     public function download($id)
     {
@@ -253,7 +252,9 @@ class TicketController extends Controller
             return Redirect::back();
         }
 
-        return PDF::loadView('tickets.download', ['ticket' => $ticket])->setPaper('a4')->stream(sprintf('saproto-ticket-%s.pdf', $ticket->id));
+        $pdf = new PDF('P', 'A4', 'en');
+        $pdf->writeHTML(view('tickets.download', ['ticket' => $ticket]));
+        return $pdf->output(sprintf('saproto-ticket-%s.pdf', $ticket->id));
     }
 
     /**
@@ -303,6 +304,7 @@ class TicketController extends Controller
 
         $prepaid_tickets = [];
 
+        $total_cost = 0;
         foreach ($request->get('tickets') as $ticket_id => $amount) {
             $ticket = Ticket::find($ticket_id);
 
@@ -311,6 +313,7 @@ class TicketController extends Controller
 
                 if ($ticket->is_prepaid) {
                     $prepaid_tickets[] = $oid;
+                    $total_cost += $ticket->product->price;
                 }
 
                 $purchase = TicketPurchase::create([
@@ -325,6 +328,33 @@ class TicketController extends Controller
             }
         }
 
+        $payment_method = '';
+        if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
+            return Redirect::back()->with('flash_message', 'No payment method is selected!');
+        }
+
+        // check if total ticket cost is allowed at this payment_method and validate the selected method
+        if(config('omnomcom.mollie.use_fees') && count($prepaid_tickets) != 0){
+            $available_methods = MollieController::getPaymentMethods();
+            $requested_method = $request->get('method');
+            $payment_method = $available_methods->filter(function ($method) use ($requested_method) {
+                return $method->id === $requested_method;
+            });
+
+            if ($payment_method->count() === 0) {
+                return Redirect::back()->with('flash_message','The selected payment method is unavailable, please select a different method');
+            }
+            $payment_method = $payment_method->first();
+        
+            if (
+                $total_cost < floatval($payment_method->minimumAmount->value) ||
+                $total_cost > floatval($payment_method->maximumAmount->value)
+            ) {
+                return Redirect::back()->with('flash_message', 'You are unable to pay this amount with the selected method!');
+            }
+        }
+
+
         if (! $sold) {
             Session::flash('flash_message', "You didn't select any tickets to buy. Maybe buy some tickets?");
             return Redirect::back();
@@ -332,7 +362,7 @@ class TicketController extends Controller
 
         if (count($prepaid_tickets) > 0) {
             Session::put('prepaid_tickets', $event->id);
-            $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets);
+            $transaction = MollieController::createPaymentForOrderlines($prepaid_tickets, $payment_method);
 
             OrderLine::whereIn('id', $prepaid_tickets)->update(['payed_with_mollie' => $transaction->id]);
             return Redirect::to($transaction->payment_url);

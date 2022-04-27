@@ -276,7 +276,21 @@ class EmailController extends Controller
 
             case 'members':
                 $email->to_user = false;
+                $email->to_pending = false;
                 $email->to_member = true;
+                $email->to_active = false;
+
+                $email->to_list = false;
+                $email->to_event = false;
+
+                $email->lists()->sync([]);
+                $email->events()->sync([]);
+                break;
+
+            case 'pending':
+                $email->to_user = false;
+                $email->to_pending = true;
+                $email->to_member = false;
                 $email->to_active = false;
 
                 $email->to_list = false;
@@ -288,6 +302,7 @@ class EmailController extends Controller
 
             case 'active':
                 $email->to_user = false;
+                $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = true;
 
@@ -298,20 +313,9 @@ class EmailController extends Controller
                 $email->events()->sync([]);
                 break;
 
-            case 'lists':
-                $email->to_user = false;
-                $email->to_member = false;
-                $email->to_active = false;
-
-                $email->to_list = true;
-                $email->to_event = false;
-
-                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
-                $email->events()->sync([]);
-                break;
-
             case 'event':
                 $email->to_user = false;
+                $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = false;
 
@@ -324,8 +328,22 @@ class EmailController extends Controller
                 }
                 break;
 
+            case 'lists':
+                $email->to_user = false;
+                $email->to_pending = false;
+                $email->to_member = false;
+                $email->to_active = false;
+
+                $email->to_list = true;
+                $email->to_event = false;
+
+                $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
+                $email->events()->sync([]);
+                break;
+
             default:
                 $email->to_user = false;
+                $email->to_pending = false;
                 $email->to_member = false;
                 $email->to_active = false;
 

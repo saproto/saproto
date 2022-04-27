@@ -17,7 +17,7 @@
                     <div class="card h-100">
                         <div class="card-header text-center">
                             <div class="align-items-center row " style="height: 120px;">
-                                <div class="col" style="display: block;">
+                                <div class="col d-block">
                                     @if($company->image)
                                         <img src="{{ $company->image->generateImagePath(null, null) }}"
                                              style="max-width: 70%; max-height: 100px;">
@@ -39,7 +39,7 @@
                             <p class="card-text mt-3">This company is currently looking to fill these positions:</p>
                             <ul class="list-group">
                                 @foreach($company->joboffers as $joboffer)
-                                    <a href="{{ $joboffer->redirect_url ? $joboffer->redirect_url : route("joboffers::show", ['id' => $joboffer->id]) }}" class="list-group-item leftborder-info leftborder">
+                                    <a href="{{ $joboffer->redirect_url ?? route("joboffers::show", ['id' => $joboffer->id]) }}" class="list-group-item leftborder-info leftborder">
                                         {{ $joboffer->title }}
                                     </a>
                                 @endforeach

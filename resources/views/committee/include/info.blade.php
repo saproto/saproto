@@ -39,7 +39,7 @@
                     </div>
                 @endif
 
-                @if(Auth::user()->can('board'))
+                @can('board')
                     <div class="col-4">
                         @if($committee->trashed())
                             <a href="{{ route("committee::restore", ["id" => $committee->id]) }}" class="btn btn-warning btn-block">
@@ -51,7 +51,7 @@
                             </a>
                         @endif
                     </div>
-                @endif
+                @endcan
 
             </div>
 

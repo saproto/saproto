@@ -38,7 +38,7 @@
 
                         <tbody>
 
-                        @foreach($event->activity->allUsersSorted() as $user)
+                        @foreach($event->returnAllUsers() as $user)
                             <tr>
 
                                 <td>
@@ -46,7 +46,7 @@
                                         $participation = $user->pivot;
                                     @endphp
                                     <a href="{{ route('event::togglepresence', ['id' => $participation->id]) }}"
-                                       class="badge badge-{{ $participation->is_present ? 'success' : 'danger' }}">
+                                       class="badge bg-{{ $participation->is_present ? 'success' : 'danger' }}">
                                         {{ $participation->is_present ? 'Present' : 'Absent' }}
                                     </a>
                                 </td>
@@ -57,7 +57,7 @@
                                             $participation = $user->pivot;
                                         @endphp
                                         @if($participation->committees_activities_id !== null)
-                                            <span class="badge badge-success">helper</span>
+                                            <span class="badge bg-success">helper</span>
                                         @else
                                             participant
                                         @endif
@@ -71,11 +71,11 @@
                                 <td>
                                     @if($user->age() >= 18)
 
-                                        <span class="badge badge-success">
+                                        <span class="badge bg-success">
                             <i class="fas fa-check" aria-hidden="true"></i> 18+
                         </span>
                                     @else
-                                        <span class="badge badge-danger">
+                                        <span class="badge bg-danger">
                             <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> 18-
                         </span>
                                     @endif

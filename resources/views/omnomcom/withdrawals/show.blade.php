@@ -20,7 +20,7 @@
                         @yield('page-title')
                     </div>
 
-                    <table class="table table-sm table-borderless ml-3">
+                    <table class="table table-sm table-borderless ms-3">
 
                         <tbody>
                         <tr>
@@ -48,11 +48,11 @@
                     </table>
 
                     <div class="card-body">
-                        <label>Change date:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'date',
-                            'format' => 'date',
-                            'placeholder' => strtotime($withdrawal->date)
+                            'label' => 'Change date:',
+                            'placeholder' => strtotime($withdrawal->date),
+                            'format' => 'date'
                         ])
                     </div>
 
@@ -98,63 +98,73 @@
                     Users in this withdrawal
                 </div>
 
-                <table class="table table-sm table-hover">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
 
-                    <thead>
-                    <tr class="bg-dark text-white">
-                        <td>User</td>
-                        @if(!$withdrawal->closed)
-                            <td>Bank Account</td>
-                            <td>Authorization</td>
-                        @endif
-                        <td>#</td>
-                        <td>Sum</td>
-                        @if(!$withdrawal->closed)
-                            <td>Controls</td>
-                        @endif
-                    </tr>
-                    </thead>
-
-                    @foreach($withdrawal->totalsPerUser() as $data)
-
-                        <tr>
-                            <td>{{ $data->user->name }}</td>
+                        <thead>
+                        <tr class="bg-dark text-white">
+                            <td>User</td>
                             @if(!$withdrawal->closed)
-                                <td>
-                                    <strong>{{ $data->user->bank->iban }}</strong>
-                                    / {{ $data->user->bank->bic }}
-                                </td>
-                                <td>{{ $data->user->bank->machtigingid }}</td>
+                                <td>Bank Account</td>
+                                <td>Authorization</td>
                             @endif
-                            <td>{{ $data->count }}</td>
-                            <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
+                            <td>#</td>
+                            <td>Sum</td>
                             @if(!$withdrawal->closed)
-                                <td>
-                                    @if($withdrawal->getFailedWithdrawal($data->user))
-                                        Failed
-                                        <a onclick="return confirm('Are you sure? The user will NOT receive an e-mail about this?')"
-                                           href="{{ route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]) }}">
-                                            (Revert)
-                                        </a>
-                                    @else
-                                        <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
-                                            Remove
-                                        </a>
-
-                                        or
-
-                                        <a href="{{ route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
-                                           onclick="return confirm('You are about to mark the withdrawal for {{ $data->user->name }} as failed. They will receive an e-mail. Are you sure?');">
-                                            Mark Failed
-                                        </a>
-                                    @endif
-                                </td>
+                                <td>Controls</td>
                             @endif
                         </tr>
+                        </thead>
 
-                    @endforeach
+                        @foreach($withdrawal->totalsPerUser() as $data)
 
-                </table>
+                            <tr class="{{ !isset($data->user->bank) ? 'bg-warning' : '' }}">
+                                <td>{{ $data->user->name }}</td>
+                                @if(!$withdrawal->closed)
+                                    @isset($data->user->bank)
+                                        <td>
+                                            <strong>{{ $data->user->bank->iban }}</strong>
+                                            / {{ $data->user->bank->bic }}
+                                        </td>
+                                        <td>{{ $data->user->bank->machtigingid }}</td>
+                                    @else
+                                        <td>
+                                            <i class="fa fas fa-exclamation-triangle"></i>
+                                            <strong>This user no longer exists</strong>
+                                        </td>
+                                        <td></td>
+                                    @endisset
+                                @endif
+                                <td>{{ $data->count }}</td>
+                                <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
+                                @if(!$withdrawal->closed)
+                                    <td>
+                                        @if($withdrawal->getFailedWithdrawal($data->user))
+                                            Failed
+                                            <a onclick="return confirm('Are you sure? The user will NOT receive an e-mail about this?')"
+                                               href="{{ route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]) }}">
+                                                (Revert)
+                                            </a>
+                                        @else
+                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
+                                                Remove
+                                            </a>
+
+                                            or
+
+                                            <a href="{{ route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
+                                               onclick="return confirm('You are about to mark the withdrawal for {{ $data->user->name }} as failed. They will receive an e-mail. Are you sure?');">
+                                                Mark Failed
+                                            </a>
+                                        @endif
+                                    </td>
+                                @endif
+                            </tr>
+
+                        @endforeach
+
+                    </table>
+                </div>
 
             </div>
 

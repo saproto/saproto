@@ -21,66 +21,64 @@
 
             @if((isset($committee) && ! $protected) || Auth::user()->can('sysadmin'))
 
-            <div class="form-group">
-                <label for="slug">Committee e-mail alias</label>
+                <div class="form-group">
+                    <label for="slug">Committee e-mail alias</label>
 
-                <div class="input-group">
-                    <input type="text" class="form-control" id="slug" name="slug"
-                           placeholder="awesome" value="{{ isset($committee) ? $committee->slug : "" }}">
-                    <div class="input-group-append">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="slug" name="slug"
+                               placeholder="awesome" value="{{ isset($committee) ? $committee->slug : "" }}">
                         <span class="input-group-text">@ {{ config('proto.emaildomain') }}</span>
                     </div>
+
                 </div>
 
-            </div>
+                <div class="row">
+                    <div class="col-md-6">
 
-            <div class="row">
-                <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="is_society">Committee type</label>
+                            <select class="form-control" id="is_society" name="is_society">
+                                <option value="0" {{ isset($committee) && $committee->is_society ? '' : 'selected' }}>Committee
+                                </option>
+                                <option value="1" {{ isset($committee) && $committee->is_society ? 'selected' : '' }}>Society
+                                </option>
+                            </select>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="is_society">Committee type</label>
-                        <select class="form-control" id="is_society" name="is_society">
-                            <option value="0" {{ isset($committee) && $committee->is_society ? '' : 'selected' }}>Committee
-                            </option>
-                            <option value="1" {{ isset($committee) && $committee->is_society ? 'selected' : '' }}>Society
-                            </option>
-                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="public">Committee visibility</label>
+                            <select class="form-control" id="public" name="public">
+                                <option value="0" {{ isset($committee) && $committee->public ? '' : 'selected' }}>Admin only
+                                </option>
+                                <option value="1" {{ isset($committee) && $committee->public ? 'selected' : '' }}>Public
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label for="allow_anonymous_email">Enable anonymous e-mail</label>
+                            <select id="allow_anonymous_email" class="form-control" name="allow_anonymous_email">
+                                <option value="0" {{ isset($committee) && $committee->allow_anonymous_email ? '' : 'selected' }}>No
+                                </option>
+                                <option value="1" {{ isset($committee) && $committee->allow_anonymous_email ? 'selected' : '' }}>Yes
+                                </option>
+                            </select>
+                        </div>
+
                     </div>
 
                 </div>
-
-                <div class="col-md-6">
-
-                    <div class="form-group">
-                        <label for="public">Committee visibility</label>
-                        <select class="form-control" id="public" name="public">
-                            <option value="0" {{ isset($committee) && $committee->public ? '' : 'selected' }}>Admin only
-                            </option>
-                            <option value="1" {{ isset($committee) && $committee->public ? 'selected' : '' }}>Public
-                            </option>
-                        </select>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-12">
-
-                    <div class="form-group">
-                        <label for="allow_anonymous_email">Enable anonymous e-mail</label>
-                        <select id="allow_anonymous_email" class="form-control" name="allow_anonymous_email">
-                            <option value="0" {{ isset($committee) && $committee->allow_anonymous_email ? '' : 'selected' }}>No
-                            </option>
-                            <option value="1" {{ isset($committee) && $committee->allow_anonymous_email ? 'selected' : '' }}>Yes
-                            </option>
-                        </select>
-                    </div>
-
-                </div>
-
-            </div>
 
             @endif
 
@@ -103,7 +101,7 @@
             </a>
             &nbsp;
 
-            <button type="submit" class="btn btn-success float-right">
+            <button type="submit" class="btn btn-success float-end">
                 Save
             </button>
 

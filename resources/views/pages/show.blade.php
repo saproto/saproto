@@ -13,15 +13,15 @@
     <div class="card mb-3">
 
         @if($page->featuredImage)
-            <img class="card-img-top" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}" style="width: 100%;">
+            <img class="card-img-top w-100" alt="featured image" src="{{ $page->featuredImage->generateImagePath('1000', '200') }}">
         @endif
 
         <div class="card-header">
             <h3 class="card-title m-0">
                 @yield('page-title')
-                @if(Auth::check() && Auth::user()->can('board'))
-                    <a href="{{ route('page::edit', ['id'=>$page->id]) }}" class="btn btn-info py-1 float-right">edit <i class="fa fa-edit"></i></a>
-                @endif
+                @can('board')
+                    <a href="{{ route('page::edit', ['id'=>$page->id]) }}" class="btn btn-info py-1 float-end">edit <i class="fa fa-edit"></i></a>
+                @endcan
             </h3>
         </div>
 

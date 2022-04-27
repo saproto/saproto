@@ -6,24 +6,18 @@
 
 @if(Auth::check() && ($event->isEventAdmin(Auth::user()) || Auth::user()->can('board')))
 
-    <div class="row align-content-center mb-3" role="group">
-
+    <div class="row align-content-center mb-3">
         @if($event->isEventAdmin(Auth::user()))
-            <div class="col-6">
-                <a href="{{ route("event::admin", ['id'=>$event->id]) }}" class="btn btn-primary btn-block">
-                    Admin
-                </a>
-            </div>
+            <a href="{{ route("event::admin", ['id'=>$event->id]) }}" class="btn btn-primary float-start col mx-3">
+                Admin
+            </a>
         @endif
 
-        @if(Auth::user()->can('board'))
-            <div class="col-6">
-                <a href="{{ route("event::edit", ['id'=>$event->id]) }}" class="btn btn-info btn-block">
-                    Edit
-                </a>
-            </div>
-        @endif
-
+        @can('board')
+            <a href="{{ route("event::edit", ['id'=>$event->id]) }}" class="btn btn-info float-end col mx-3">
+                Edit
+            </a>
+        @endcan
     </div>
 
 @endif
@@ -34,10 +28,8 @@
         <img class="card-img-top" src="{{ $event->image->generateImagePath(800, 300) }}" width="100%">
     @endif
 
-    <div class="card-body">
-
+    <div class="card-header">
         <h5 class="card-title">@yield('page-title')</h5>
-
     </div>
 
     <ul class="list-group list-group-flush">
@@ -53,7 +45,7 @@
         @if($event->category)
             <li class="list-group-item">
                 <span><i class="fas fa-tag fa-fw"></i>Category:</span><br>
-                <span class="badge-pill badge-info px-3 mt-2 d-inline-block mw-100 ellipsis">
+                <span class="badge rounded-pill bg-info px-3 mt-2 d-inline-block mw-100 ellipsis">
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
                 </span>
             </li>
@@ -80,6 +72,20 @@
                 <i class="fas fa-fw fa-info-circle" aria-hidden="true"></i> This event is not organized by S.A. Proto
             </li>
         @endif
+        @if (!Auth::check())
+            <a href="{{route('becomeamember')}}" class="list-group-item bg-info text-white text-center">
+                <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                    To join this activity you need to be a member.
+                    <br> Become a a member by clicking on this message or log in.
+            </a>
+        @endif
+
+            @if (!Auth::check() && !isset($event->activity))
+                <a href="{{route('event::login', ['id' => $event->getPublicId()])}}" class="list-group-item bg-info text-white text-center">
+                    <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
+                    <i>Note: this event has a sign up! Make sure to put yourself on the list when logged in!</i>
+                </a>
+            @endif
 
     </ul>
 

@@ -25,6 +25,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $to_list
  * @property int $to_event
  * @property int $to_active
+ * @property int $to_pending
  * @property int|null $sent_to
  * @property int $sent
  * @property int $ready
@@ -84,6 +85,8 @@ class Email extends Model
             return 'users';
         } elseif ($this->to_member) {
             return 'members';
+        } elseif ($this->to_pending) {
+            return 'pending';
         } elseif ($this->to_active) {
             return 'active members';
         } elseif ($this->to_list) {
@@ -101,6 +104,10 @@ class Email extends Model
         } elseif ($this->to_member) {
             return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
                 return $user->member->is_pending == true;
+            });
+        } elseif ($this->to_pending) {
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user) {
+                return $user->member->is_pending == false;
             });
         } elseif ($this->to_active) {
             $user_ids = [];

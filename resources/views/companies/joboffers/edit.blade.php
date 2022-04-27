@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Offer information type</label>
+                            <label for="information_type_selector">Offer information type</label>
                             <select id="information_type_selector" class="form-control">
                                 <option value="" @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected @endif disabled>Select a type...
                                 </option>
@@ -62,7 +62,7 @@
                         </div>
 
                         <div id="information_type_url" class="form-group">
-                            <label for="title">Redirect URL</label>
+                            <label for="redirect_url">Redirect URL</label>
                             <input type="text" class="form-control" id="redirect_url" name="redirect_url"
                                    placeholder="https://example.com/apply" value="{{ $joboffer->redirect_url ?? '' }}">
                         </div>
@@ -81,7 +81,7 @@
 
                     <div class="card-footer">
                         <a class="btn btn-default" href="{{ route("joboffers::admin") }}">Cancel</a>
-                        <button type="submit" class="btn btn-success float-right">Save</button>
+                        <button type="submit" class="btn btn-success float-end">Save</button>
                     </div>
 
                 </div>
@@ -97,26 +97,37 @@
 @push('javascript')
 
     <script nonce="{{ csp_nonce() }}">
-        $(document).ready(updateInformationDisplay);
-        $('#information_type_selector').change(updateInformationDisplay);
+        const typeUrl = document.getElementById('information_type_url')
+        const redirectUrl = document.getElementById('redirect_url')
+        const typeDescription = document.getElementById('information_type_description')
+        const typeSelector = document.getElementById('information_type_selector')
+        const easymde = window.easyMDEFields['markdownfield-description']
+
+        updateInformationDisplay()
+        typeSelector.addEventListener('change', updateInformationDisplay)
 
         function updateInformationDisplay() {
-            $('#information_type_description, #information_type_url').removeClass('d-none');
-            switch($('#information_type_selector').val()) {
+            switch(typeSelector.value) {
                 case 'description':
-                    $('#information_type_url').addClass('d-none');
-                    $('#redirect_url').val('').removeAttr('required');
-                    break;
+                    typeDescription.classList.remove('d-none')
+                    typeUrl.classList.add('d-none')
+                    redirectUrl.value = ''
+                    redirectUrl.required = false
+                    break
                 case 'url':
-                    $('#information_type_description').addClass('d-none');
-                    $('#redirect_url').attr('required', 'true');
-                    simplemde.value('');
-                    break;
+                    typeDescription.classList.add('d-none')
+                    typeUrl.classList.remove('d-none')
+                    redirectUrl.required = true
+                    easymde.value('')
+                    break
                 default:
-                    $('#information_type_url, #information_type_description').addClass('d-none').find('input').val('');
-                    $('#information_type_selector').attr('required', 'true');
-                    simplemde.value('');
-                    break;
+                    typeUrl.classList.add('d-none')
+                    typeUrl.querySelector('input').value = ''
+                    typeDescription.classList.add('d-none')
+                    typeDescription.querySelectorAll('input').value = ''
+                    typeSelector.required = true
+                    easymde.value('')
+                    break
             }
         }
     </script>

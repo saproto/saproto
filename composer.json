@@ -42,42 +42,39 @@
   "type": "project",
   "require": {
     "aacotroneo/laravel-saml2": "2.1.*",
-    "abcaeffchen/sephpa": "~2.0.0-beta1",
+    "abcaeffchen/sephpa": "2.0.0-beta1",
     "alaouy/youtube": "2.1.*",
-    "barryvdh/laravel-snappy": "0.4.*",
     "doctrine/dbal": "2.*",
     "ext-curl": "*",
     "ext-json": "*",
-    "gghughunishvili/entrust": "^2.0",
     "globalcitizen/php-iban": "2.6.*",
     "graham-campbell/markdown": "13.1.*",
     "biscolab/laravel-recaptcha": "4.2.*",
-    "h4cc/wkhtmltopdf-amd64": "0.12.*",
-    "h4cc/wkhtmltoimage-amd64": "0.12.*",
     "intervention/image": "2.*",
     "intervention/imagecache": "2.*",
     "jwilsson/spotify-web-api-php": "1.12.*",
-    "knplabs/knp-snappy": "^1.0.0",
-    "laravel/framework": "^6.0",
+    "laravel/framework": "^7.30",
     "laravel/helpers": "1.*",
     "laravelcollective/html": "6.*",
     "laravel/passport": "9.3.*",
     "league/commonmark": "1.5.*",
     "league/oauth1-client": "1.7.*",
     "lisennk/laravel-slack-web-api": "0.1.*",
-    "milon/barcode": "6.*",
-    "mollie/laravel-mollie": "2.*",
+    "milon/barcode": "7.*",
+    "mollie/laravel-mollie": "2.15.0",
     "nesbot/carbon": "2.*",
     "nickurt/laravel-pwned-passwords": "1.*",
     "nickurt/laravel-postcodeapi": "1.15.*",
     "pragmarx/google2fa": "0.7.*",
     "swiftmailer/swiftmailer": "6.0.*",
-    "sentry/sentry-laravel": "1.2.*",
-    "vinkla/hashids": "7.*",
+    "sentry/sentry-laravel": "^2.6",
+    "vinkla/hashids": "^8.0",
     "willvincent/feeds": "2.*",
     "spatie/laravel-csp": "^2.6",
+    "spatie/laravel-permission": "^4.2.0",
     "ext-calendar": "*",
-    "solitweb/directadmin": "^3.0"
+    "solitweb/directadmin": "^3.0",
+    "spipu/html2pdf": "^5.2"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",
@@ -86,13 +83,6 @@
     "fakerphp/faker": "^1.13",
     "friendsofphp/php-cs-fixer": "^3.0.0",
     "laravel/tinker": "^2.6"
-  },
-  "extra": {
-    "laravel": {
-      "dont-discover": [
-        "barryvdh/laravel-ide-helper"
-      ]
-    }
   },
   "autoload": {
     "classmap": [
@@ -109,9 +99,13 @@
     "pre-update-cmd": [
       "php artisan clear-compiled"
     ],
-    "post-update-cmd": [],
-    "php-cs-fixer": [
-      "php-cs-fixer fix"
+    "post-update-cmd": [
+      "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+      "php artisan ide-helper:generate",
+      "php artisan ide-helper:meta"
+    ],
+    "fix": [
+      "php-cs-fixer fix --verbose"
     ],
     "ide-helper": [
       "php artisan cache:clear",

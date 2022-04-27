@@ -30,15 +30,13 @@
 
                         </p>
 
-                        <div class="form-group">
-                            <label for="date">Withdrawal date:</label>
-                            @php($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'date',
-                                'format' => 'date',
-                                'placeholder' => strtotime(Carbon::now()->day > 20 ? $wd->addMonth() : $wd)
-                            ])
-                        </div>
+                        @php($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'date',
+                            'label' => 'Withdrawal date:',
+                            'placeholder' => strtotime(Carbon::now()->day > 20 ? $wd->addMonth() : $wd),
+                            'format' => 'date'
+                        ])
 
                         <div class="form-group">
                             <label for="name">Maximum amount per user:</label>
@@ -47,9 +45,7 @@
                                     <span class="input-group-text">&euro;</span>
                                 </div>
                                 <input type="number" min="0" class="form-control" id="max" name="max">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">,<sup>00</sup></span>
-                                </div>
+                                <span class="input-group-text">,<sup>00</sup></span>
                             </div>
                         </div>
 
@@ -57,7 +53,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
                         <a href="{{ route("omnomcom::withdrawal::list") }}" class="btn btn-default">Cancel</a>
 

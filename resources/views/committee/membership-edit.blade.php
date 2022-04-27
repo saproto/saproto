@@ -48,23 +48,19 @@
                         <div class="row">
 
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label>Since</label>
-                                    @include('website.layouts.macros.datetimepicker', [
-                                        'name' => 'start',
-                                        'placeholder' => strtotime($membership->created_at)
-                                    ])
-                                </div>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'start',
+                                    'label' => 'Since',
+                                    'placeholder' => strtotime($membership->created_at)
+                                ])
                             </div>
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label>Till</label>
-                                    @include('website.layouts.macros.datetimepicker', [
-                                        'name' => 'end',
-                                        'placeholder' => ($membership->deleted_at == null ? null : strtotime($membership->deleted_at)),
-                                        'not_required' => true
-                                    ])
-                                </div>
+                                @include('website.layouts.macros.datetimepicker', [
+                                    'name' => 'end',
+                                    'label' => 'Until',
+                                    'placeholder' => ($membership->deleted_at == null ? null : strtotime($membership->deleted_at)),
+                                    'not_required' => true
+                                ])
                             </div>
 
                         </div>
@@ -73,16 +69,16 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-end">
                             Save
                         </button>
 
                         <a href="{{ route('committee::membership::delete', ["id" => $membership->id]) }}"
-                           class="btn btn-danger pull-right" style="margin-right: 15px;">
+                           class="btn btn-danger float-end me-4">
                             Was never a member
                         </a>
 
-                        <a href="javascript:history.go(-1);" class="btn btn-default float-right">
+                        <a href="javascript:history.go(-1);" class="btn btn-default float-end">
                             Cancel
                         </a>
 

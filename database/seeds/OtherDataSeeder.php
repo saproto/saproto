@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\Address;
@@ -9,9 +10,7 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
-use Proto\Models\MenuItem;
 use Proto\Models\OrderLine;
-use Proto\Models\Page;
 use Proto\Models\User;
 
 class OtherDataSeeder extends Seeder
@@ -25,36 +24,12 @@ class OtherDataSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        // Create parent menu items
-        MenuItem::create([
-            'menuname' => 'public pages',
-            'order' => 0,
-            'is_member_only' => 0,
-        ]);
-
-        MenuItem::create([
-            'menuname' => 'member pages',
-            'order' => 1,
-            'is_member_only' => 1,
-        ]);
-
-        // Create pages
-        $n = 10;
-        echo "Creating $n pages".PHP_EOL;
-        foreach (range(1, $n) as $index) {
-            $page = factory(Page::class)->create();
-
-            MenuItem::create([
-                'parent' => $page->is_member_only + 1,
-                'menuname' => $page->title,
-                'page_id' => $page->id,
-                'order' => $index + 1,
-                'is_member_only' => $page->is_member_only,
-            ]);
-        }
+        echo "\e[33mSeeding:\e[0m   \e[1mOtherDataSeeder\e[0m".PHP_EOL;
+        $seeder_start = microtime(true);
 
         // Create users
         $n = 100;
+        $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
             /** @var $user User */
@@ -78,10 +53,11 @@ class OtherDataSeeder extends Seeder
                 }
             }
 
-            echo 'Creating '.$index.'/'.$n." users\r";
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." users\r";
         }
 
-        echo PHP_EOL;
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' users '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create arrays of member user ids
         $users = User::whereHas('member', function ($q) {
@@ -90,18 +66,35 @@ class OtherDataSeeder extends Seeder
 
         // Create orderlines
         $n = 1000;
+        $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
             factory(Orderline::class)->create([
                 'user_id' => array_random($users),
             ]);
-            echo 'Creating '.$index.'/'.$n." orderlines\r";
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." orderlines\r";
         }
 
-        echo PHP_EOL;
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' orderlines '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
+        // Create AchievementOwnership
+        $n = 200;
+        $time_start = microtime(true);
+
+        foreach (range(1, $n) as $index) {
+            factory(AchievementOwnership::class)->create([
+                'user_id' => array_random($users),
+            ]);
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." achievement ownerships\r";
+        }
+
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' achievement ownerships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create committee participations
         $n = 50;
+        $time_start = microtime(true);
         $committees = Committee::all()->pluck('id')->toArray();
 
         foreach (range(1, $n) as $index) {
@@ -110,13 +103,15 @@ class OtherDataSeeder extends Seeder
                 'committee_id' => array_random($committees),
             ]);
 
-            echo 'Creating '.$index.'/'.$n." committee memberships\r";
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." committee memberships\r";
         }
 
-        echo PHP_EOL;
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' committee memberships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create activity participations
-        echo 'Creating activity participations'.PHP_EOL;
+        echo "\e[33mCreating:\e[0m  activity participations".PHP_EOL;
+        $time_start = microtime(true);
 
         foreach (Activity::orderBy('id', 'desc')->take(25)->get() as $activity) {
             if (! $activity->event) {
@@ -128,7 +123,7 @@ class OtherDataSeeder extends Seeder
 
             $offset = mt_rand(-15, 5);
             $max = ($activity->participants < 0 ? mt_rand(0, 50) : $activity->participants);
-            $p = ($max + $offset < 0 ? 0 : $max + $offset);
+            $p = (max($max + $offset, 0));
 
             $j = 0;
             for ($i = 0; $i < $p; $i++) {
@@ -147,10 +142,19 @@ class OtherDataSeeder extends Seeder
             }
         }
 
+        $time_end = microtime(true);
+        echo "\e[32mCreated:\e[0m   activity participations ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
         // Create newsletter text
-        echo 'Creating newsletter text'.PHP_EOL;
+        echo "\e[33mCreating:\e[0m  newsletter text".PHP_EOL;
+        $time_start = microtime(true);
         HashMapItem::create(['key' => 'newsletter_text', 'value' => $faker->text(400)]);
         HashMapItem::create(['key' => 'newsletter_text_updated', 'value' => date('U')]);
         HashMapItem::create(['key' => 'newsletter_last_sent', 'value' => date('U')]);
+        $time_end = microtime(true);
+        echo "\e[32mCreated:\e[0m   newsletter text ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
+        $seeder_end = microtime(true);
+        echo "\e[32mSeeded:\e[0m    \e[1mOtherDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
     }
 }
