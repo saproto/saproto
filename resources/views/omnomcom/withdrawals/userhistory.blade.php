@@ -16,7 +16,7 @@
 
                     @if($withdrawal->getFailedWithdrawal(Auth::user()))
                         <div class="alert alert-danger text-center">
-                            <i class="fas fa-times fa-fw mr-2" aria-hidden="true"></i> This withdrawal has failed.
+                            <i class="fas fa-times fa-fw me-2" aria-hidden="true"></i> This withdrawal has failed.
                         </div>
                     @endif
 

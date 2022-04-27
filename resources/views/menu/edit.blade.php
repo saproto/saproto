@@ -53,54 +53,57 @@
                         <div class="form-group">
                             <label for="page_id">Target page:</label>
                             <select class="form-control" name="page_id" id="page_id">
-                                <option @if($new) selected @endif disabled>Select a page...</option>
+                                <option {{ $new ? 'selected' : '' }} disabled>Select a page...</option>
                                 <option disabled>---</option>
-                                <option @if(!$new && $item->pageId == null) selected @endif value="0">Other URL</option>
+                                <option {{ !($new && isset($item->pageId)) ? 'selected' : '' }} value="0">Other URL</option>
                                 <option disabled>---</option>
                                 @foreach($pages as $page)
-                                    <option @if(!$new && $page->id == $item->pageId) selected
-                                            @endif value="{{ $page->id }}">{{ $page->title }}</option>
+                                    <option {{ !$new && $page->id == $item->pageId ? 'selected' : '' }} value="{{ $page->id }}">
+                                        {{ $page->title }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="form-group" @if($new || !$item->pageId == null) style="display: none;"
-                             @endif id="menu__otherUrl">
-                            <label for="url">Other URL:</label>
-                            <input type="text" class="form-control" id="url" name="url"
-                                   placeholder="http://www.proto.utwente.nl/" value="{{ $item->url ?? '' }}">
-                        </div>
+                        <div id="menu-other-url" class="{{$new || isset($item->pageId) ? 'd-none' : ''}}">
 
-                        <div class="form-group" @if($new || !$item->pageId == null) style="display: none;"
-                             @endif id="menu__otherUrlRoute">
-                            <label for="url">Existing Route:</label>
-                            <select class="form-control" id="route">
-                                <option disabled selected>Select a route...</option>
-                                @foreach($routes as $route)
-                                    @if (
-                                        $route->getName() &&
-                                        strpos($route->uri(), '{') === false &&
-                                        strpos(implode("|",$route->methods()), 'GET') >= 0
-                                    )
-                                        <?php
-                                        $url = 'https://' .
-                                            ($route->domain() == null ? config('app-proto.primary-domain') : $route->domain()) .
-                                            '/' .
-                                            ($route->uri() == '/' ? '' : $route->uri());
-                                        ?>
-                                        <option value="{{ $route->getName() }}">
-                                            {{ $url }}
-                                        </option>
-                                    @endif
-                                @endforeach
-                            </select>
+                            <div class="form-group">
+                                <label for="url">Other URL:</label>
+                                <input type="text" class="form-control" id="url" name="url"
+                                       placeholder="http://www.proto.utwente.nl/" value="{{ $item->url ?? '' }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="route">Existing Route:</label>
+                                <select class="form-control" id="route">
+                                    <option disabled selected>Select a route...</option>
+                                    @foreach($routes as $route)
+                                        @if (
+                                            $route->getName() &&
+                                            strpos($route->uri(), '{') === false &&
+                                            strpos(implode("|",$route->methods()), 'GET') >= 0
+                                        )
+                                            @php
+                                            $url = 'https://' .
+                                                ($route->domain() == null ? config('app-proto.primary-domain') : $route->domain()) .
+                                                '/' .
+                                                ($route->uri() == '/' ? '' : $route->uri());
+                                            @endphp
+                                            <option value="{{ $route->getName() }}">
+                                                {{ $url }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
 
                     </div>
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">Submit</button>
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
 
                         <a href="{{ route("menu::list") }}" class="btn btn-default">Cancel</a>
 
@@ -118,19 +121,15 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        $("#page_id").on('change', function () {
-            if ($(this).val() === 0) {
-                $("#menu__otherUrl").show(0);
-                $("#menu__otherUrlRoute").show(0);
-            } else {
-                $("#menu__otherUrl").hide(0);
-                $("#menu__otherUrlRoute").hide(0);
-            }
-        });
+        const otherUrlFields = document.getElementById('menu-other-url')
+        document.getElementById('page_id').addEventListener('change', e => {
+            if (e.target.value === '0') otherUrlFields.classList.remove('d-none')
+            else otherUrlFields.classList.add('d-none')
+        })
 
-        $("#route").on('change', function () {
-            $("#url").val("(route) " + $(this).val());
-        });
+        document.getElementById('route').addEventListener('change', e => {
+            document.getElementById('url').value = '(route)' + e.target.value
+        })
     </script>
 
 @endpush

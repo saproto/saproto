@@ -34,11 +34,11 @@
 
                         <hr>
 
-                        <label>Orderlines from:</label>
                         @include('website.layouts.macros.datetimepicker', [
                             'name' => 'date',
-                            'format' => 'date',
-                            'placeholder' => date('U')
+                            'label' => 'Orderlines from:',
+                            'placeholder' => date('U'),
+                            'format' => 'date'
                         ])
 
                     </div>
@@ -86,7 +86,7 @@
 
                 <div class="card-header">
                     Recorded PIN Transactions
-                    <span class="float-right">
+                    <span class="float-end">
                         &euro; {{ number_format($pinTotal, 2) }}
                     </span>
                 </div>

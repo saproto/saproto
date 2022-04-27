@@ -13,12 +13,12 @@
                     <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                     </a>
-                    @if($withdrawal->getFailedWithdrawal($user))
-                        <i class="fas fa-times text-danger ml-2"></i>
+                    @if($withdrawal->getFailedWithdrawal($user) || $withdrawal->id == 'temp')
+                        <i class="fas fa-times text-danger ms-2"></i>
                     @endif
-                    <span class="float-right">
-                                &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}
-                            </span>
+                    <span class="float-end">
+                        &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}
+                    </span>
                 </li>
             @endforeach
 
@@ -50,12 +50,24 @@
 
         <ul class="list-group list-group-flush">
 
-            @foreach($user->mollieTransactions as $transaction)
+            @foreach($user->mollieTransactions->sortByDesc(['created_at']) as $transaction)
                 <li class="list-group-item">
-                    <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
-                        {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
-                        {!! Proto\Models\MollieTransaction::translateStatus($transaction->status) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
-                    </a>
+                    @if($transaction->mollie_id != 'temp')
+                        @php
+                            $status = Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus())
+                        @endphp
+                        <a href="{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}">
+                            {{ date('d-m-Y H:i', strtotime($transaction->created_at)) }}
+                            <i class="fas ms-2
+                                {{ $status == "open" ? ' fa-spinner text-normal' : '' }}
+                                {{ $status == "failed" ? 'fa-times text-danger' : '' }}
+                                {{ $status == "paid" ? 'fa-check text-success' : '' }}
+                                {{ $status == "unknown" ? 'fa-question text-normal' : '' }}
+                            "></i>
+                        </a>
+                    @else
+                        <span>This payment is corrupt, please contact board</span>
+                    @endif
                     <span class="float-right">&euro;{{ number_format($transaction->amount, 2, '.', ',') }}</span>
                 </li>
             @endforeach

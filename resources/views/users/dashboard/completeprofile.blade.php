@@ -33,7 +33,7 @@
                                 <sup>Cannot be changed afterwards</sup>
                             </div>
                             <div class="col-6">
-                                <label>Phone</label>
+                                <label for="phone">Phone:</label>
                                 <input type="tel" class="form-control" id="phone" name="phone"
                                        placeholder="+31534894423" required>
                                 <sup>Can only be updated, not removed</sup>
@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-primary pull-right btn-block">Complete profile</button>
+                        <button type="submit" class="btn btn-outline-primary float-end btn-block">Complete profile</button>
                     </div>
 
                 </div>

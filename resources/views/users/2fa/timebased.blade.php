@@ -7,29 +7,25 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Time Based Two-Factor Authentication</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body text-center">
 
-                    <p style="text-align: center;">
+                    <p>
                         Scan the code below with your 2FA app and enter your code below to verify.
                     </p>
 
                     {!! csrf_field() !!}
 
-                    <p style="text-align: center;">
-                        <img src="{{ $tfa_qrcode }}">
-                    </p>
+                    <img src="{{ $tfa_qrcode }}">
 
-                    <p style="text-align: center; padding: 0 150px;">
+                    <p class="py-5">
                         <input class="form-control" name="2facode" placeholder="Your six digit code.">
                         <input type="hidden" name="2fakey" value="{{ $tfa_key }}">
                     </p>
 
-                    <p style="text-align: center;">
+                    <p>
                         You can also enter the below secret key manually.<br>
                         <strong>{{ $tfa_key }}</strong>
                     </p>
@@ -38,7 +34,7 @@
 
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success" value="Save">
-                    <a data-dismiss="modal" class="btn btn-default">Cancel</a>
+                    <a data-bs-dismiss="modal" class="btn btn-default">Cancel</a>
                 </div>
 
             </form>
@@ -56,20 +52,18 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="myModalLabel">Disable Time Based Two-Factor Authentication</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body text-center">
 
-                    <p style="text-align: center;">
+                    <p>
                         Enter a valid 2FA code from your app to disable 2FA.
                     </p>
 
                     {!! csrf_field() !!}
 
-                    <p style="text-align: center; padding: 0 150px;">
+                    <p class="py-5">
                         <input class="form-control" name="2facode" placeholder="Your six digit code.">
                     </p>
 
@@ -77,7 +71,7 @@
 
                 <div class="modal-footer">
                     <input type="submit" class="btn btn-success" value="Disable two-factor authentication">
-                    <a data-dismiss="modal" class="btn btn-default">Cancel</a>
+                    <a data-bs-dismiss="modal" class="btn btn-default">Cancel</a>
                 </div>
 
             </form>

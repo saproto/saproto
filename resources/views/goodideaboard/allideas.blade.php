@@ -2,11 +2,11 @@
 
     <div class="card-header bg-dark text-white">
         Good Ideas
-        @if (Auth::user()->can("board"))
-            <a href="{{ route('goodideas::deleteall') }}" class="float-right ml-3 btn btn-danger">
+        @can("board")
+            <a href="{{ route('goodideas::deleteall') }}" class="float-end ms-3 btn btn-danger">
                 <i class="fas fa-trash-alt text-white"></i> Delete all
             </a>
-        @endif
+        @endcan
     </div>
 
     <div class="card-body">

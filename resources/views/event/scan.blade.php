@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
@@ -20,14 +18,10 @@
     @include('website.layouts.assets.javascripts')
 
     <style type="text/css">
-
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         html {
             background-color: #555;
-
             font-family: Lato, sans-serif;
         }
 
@@ -62,14 +56,21 @@
             outline: none !important;
         }
 
-        .blinker {
-            animation: blinker 2s linear infinite;
+        .blink {
+            animation: blink 2s linear infinite;
         }
 
-        @keyframes blinker {
-            50% {
-                opacity: 0;
-            }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .fade-out-50 {
+            animation: fade-out-50 1s linear forwards;
+        }
+
+        @keyframes fade-out-50 {
+            from { opacity: 0.5; }
+            to { opacity: 0; }
         }
 
         #flash {
@@ -112,20 +113,17 @@
         .history tr:nth-child(even) {
             background-color: rgba(255, 255, 255, 0.1);
         }
-
     </style>
-
 </head>
 
 <body>
 <div id="video"></div>
 <div class="container-fluid">
-
     <p class="title">
         Ticket Scanner for {{ $event->title }}
     </p>
 
-    <p id="feedback-field" class="blinker">
+    <p id="feedback-field" class="blink">
         Searching barcode...
     </p>
 
@@ -145,155 +143,134 @@
 
         </tbody>
     </table>
-
 </div>
 
-<div id="flash">
-</div>
+<div id="flash"></div>
 
 @include('website.layouts.assets.javascripts')
 @stack('javascript')
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
+    const scannerField = document.getElementById("scanner-field")
+    const feedbackField = document.getElementById("feedback-field")
+    let prevRead = ''
 
-    let prevRead = "";
-
-    $(function () {
-        initializeCamera();
-    });
+    initializeCamera()
 
     function initializeCamera() {
         Quagga.init({
             inputStream: {
-                name: "Live",
-                type: "LiveStream",
+                name: 'Live',
+                type: 'LiveStream',
                 constraints: {
-                    facingMode: "environment"
+                    facingMode: 'environment'
                 },
-                target: document.querySelector('#video')
+                target: document.getElementById('video')
             },
             decoder: {
                 readers: ["codabar_reader"],
                 multiple: false
             }
-        }, function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log("Scanner intialized!");
-            Quagga.start();
-        });
-        Quagga.onDetected(function (data) {
-            const rawCode = data.codeResult.code;
-            const code = rawCode.substring(1, rawCode.length-1);
+        }, err => {
+            if (err) return console.error(err)
+            console.log("Scanner initialized!")
+            Quagga.start()
+        })
+
+        Quagga.onDetected(data => {
+            const rawCode = data.codeResult.code
+            const code = rawCode.substring(1, rawCode.length-1)
             if (code !== prevRead) {
-                scan(code);
-                prevRead = code;
-            }
-        });
-    }
-
-    function setStatus(s) {
-
-        switch (s) {
-
-            case "got":
-                $("#scanner-field").prop('disabled', true);
-                $("#feedback-field").addClass('blinker').html("Validating barcode...");
-                break;
-
-            case "error":
-                $("#scanner-field").prop('disabled', false);
-                $("#feedback-field").removeClass('blinker').html("Something went wrong. Try again!");
-                flash('#ff0000');
-                setTimeout(setStatus, 1000);
-                break;
-
-            case "ok":
-                $("#feedback-field").removeClass('blinker').html("Valid ticket!");
-                flash('#c1ff00');
-                setTimeout(setStatus, 1000);
-                break;
-
-            default:
-                $("#scanner-field").prop('disabled', false);
-                $("#feedback-field").addClass('blinker').html("Searching for barcode...");
-                break;
-
-        }
-
-    }
-
-    function flash(color) {
-        $("#flash").css('background-color', color).css("opacity", 0.5).show().fadeOut(1000);
-    }
-
-    function scan(barcode) {
-        if (barcode === "") return;
-
-        setStatus("got");
-
-        $.ajax({
-            url: '{{ route('api::scan', ['event' => $event->id]) }}',
-            data: {
-                'barcode': barcode
-            },
-            dataType: 'json',
-            success: function (data) {
-                parseReply(data);
-            },
-            error: function () {
-                setStatus('error');
+                scan(code)
+                prevRead = code
             }
         })
     }
 
-    function parseReply(data) {
-        switch (data.code) {
+    function setStatus(status) {
+        switch (status) {
+            case 'received':
+                scannerField.disabled = true
+                feedbackField.innerHTML = 'Validating barcode...'
+                break
+            case 'error':
+                scannerField.disabled = false
+                feedbackField.classList.remove('blink')
+                feedbackField.innerHTML = 'Something went wrong. Try again!'
+                flash('danger')
+                setTimeout(setStatus, 1000)
+                break
+            case 'ok':
+                feedbackField.classList.remove('blink')
+                feedbackField.innerHTML = 'Valid ticket!'
+                flash('primary')
+                setTimeout(setStatus, 1000)
+                break
+            default:
+                scannerField.disabled = false
+                feedbackField.classList.add('blink')
+                feedbackField.innerHTML = 'Searching for barcode...'
+                break
+        }
+    }
 
+    const flash = color => { document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50' }
+
+    function scan(barcode) {
+        if (barcode === '') return
+        setStatus('received')
+        get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode }, { parse: false })
+        .then(res => parseReply(res.json(), res.statusText, res.status))
+        .catch(err => {
+            console.error(err)
+            setStatus('error')
+        })
+    }
+
+    function parseReply(data, message, code) {
+        switch (code) {
             case 500:
-                flash('#ff0000');
-                $("#feedback-field").removeClass('blinker').html(data.message);
-                setTimeout(setStatus, 1000);
-                break;
-
+                flash('danger')
+                feedbackField.classList.remove('blink')
+                feedbackField.innerHTML = message
+                setTimeout(setStatus, 1000)
+                break
             case 403:
-                flash('orange');
-                $("#feedback-field").removeClass('blinker').html(data.message);
-                setTimeout(setStatus, 1000);
-                $("#history").prepend("<tr>" +
-                    "<td>" + data.data.id + "</td>" +
-                    "<td>" + data.data.user.name + "</td>" +
-                    "<td>" + data.data.ticket.product.name + "</td>" +
-                    "<td>" + timeNow() + "</td>" +
-                    "<td><span style='color: orange;'>Used on " + data.data.scanned + "</span></td>" +
-                    "</tr>");
-                break;
-
+                flash('warning')
+                feedbackField.classList.remove('blink')
+                feedbackField.innerHTML = message
+                setTimeout(setStatus, 1000)
+                document.getElementById('history').prepend(
+                    "<tr>" +
+                        "<td>" + data.id + "</td>" +
+                        "<td>" + data.user.name + "</td>" +
+                        "<td>" + data.ticket.product.name + "</td>" +
+                        "<td>" + timeNow() + "</td>" +
+                        "<td><span class='text-warning'>Used on " + data.scanned + "</span></td>" +
+                    "</tr>"
+                )
+                break
             case 200:
-                setStatus('ok');
-                $("#history").prepend("<tr>" +
-                    "<td>" + data.data.id + "</td>" +
-                    "<td>" + data.data.user.name + "</td>" +
-                    "<td>" + data.data.ticket.product.name + "</td>" +
-                    "<td>" + timeNow() + "</td>" +
-                    "<td><span style='color: #c1ff00;'>Valid</span></td>" +
-                    "</tr>");
-                break;
+                setStatus('ok')
+                document.getElementById('history').prepend(
+                    "<tr>" +
+                        "<td>" + data.id + "</td>" +
+                        "<td>" + data.user.name + "</td>" +
+                        "<td>" + data.ticket.product.name + "</td>" +
+                        "<td>" + timeNow() + "</td>" +
+                        "<td><span style='color: #c1ff00;'>Valid</span></td>" +
+                    "</tr>"
+                )
+                break
         }
     }
 
     function timeNow() {
-
-        let d = new Date();
-
-        return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
-
+        const d = new Date()
+        return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2)
     }
 
 </script>
 
 </body>
-
 </html>

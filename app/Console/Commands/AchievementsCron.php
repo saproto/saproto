@@ -69,6 +69,8 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->ForeverMember(), 38);
         $this->giveAchievement($this->GoodHuman(), 53);
         $this->giveAchievement($this->IAmNoodle(), 54);
+        $this->giveAchievement($this->nThActivity(1), 63);
+        $this->giveAchievement($this->nThActivity(100), 64);
         $this->giveAchievement($this->percentageActivities(25), 55);
         $this->giveAchievement($this->percentageActivities(75), 56);
         $this->giveAchievement($this->percentageActivities(100), 57);
@@ -516,6 +518,20 @@ class AchievementsCron extends Command
             }
         } else {
             $this->info('Its not the first of the month! Cancelling Big kid...');
+        }
+        return $selected;
+    }
+
+    private function nThActivity($activityAmount) {
+        $selected = [];
+        $users = User::all();
+        foreach ($users as $user) {
+            $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+            $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+            $CountEvents = Event::whereIn('id', $activities)->whereTime('end', '<', Carbon::now()->valueOf())->count();
+            if($CountEvents >= $activityAmount){
+                $selected[] = $user;
+            }
         }
         return $selected;
     }

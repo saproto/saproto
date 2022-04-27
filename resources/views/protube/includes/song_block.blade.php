@@ -3,7 +3,7 @@
         <p class="card-text ellipsis">
 
             <strong>
-                <i class="fas fa-music fa-fw mr-2"></i>
+                <i class="fas fa-music fa-fw me-2"></i>
                 @if(!empty($video->spotify_id ))
                     {{ $video->spotify_name }}
                 @else
@@ -39,7 +39,7 @@
 
                 <a href="{{ Proto\Models\PlayedVideo::generateYoutubeUrl($video->video_id) }}"
                    target="_blank" class="btn btn-xs btn-outline-danger btn-block btn-sm">
-                    <i class="fab fa-youtube fa-fw mr-2" aria-hidden="true"></i> Watch on YouTube
+                    <i class="fab fa-youtube fa-fw me-2" aria-hidden="true"></i> Watch on YouTube
                 </a>
 
             </div>
@@ -49,7 +49,7 @@
                 @if(!empty($video->spotify_id))
                     <a href="{{ Proto\Models\PlayedVideo::generateSpotifyUri($video->spotify_id) }}"
                        target="_blank" class="btn btn-xs btn-outline-primary btn-block btn-sm">
-                        <i class="fab fa-spotify fa-fw mr-2" aria-hidden="true"></i> Listen on Spotify
+                        <i class="fab fa-spotify fa-fw me-2" aria-hidden="true"></i> Listen on Spotify
                     </a>
                 @endif
 

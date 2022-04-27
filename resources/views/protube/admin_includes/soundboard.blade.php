@@ -1,7 +1,7 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-volume-up fa-fw mr-3"></i> Soundboard
+        <i class="fas fa-volume-up fa-fw me-3"></i> Soundboard
     </div>
 
     <div class="card-body">

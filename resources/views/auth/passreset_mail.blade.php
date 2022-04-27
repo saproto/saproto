@@ -14,25 +14,18 @@
             Please enter your e-mail address.
         </p>
 
-        <p>
-            <input id="email" type="email" name="email" class="form-control" value="{{ old('email') }}"
-                   placeholder="garrus.vakarian@example.com">
-        </p>
+        <input id="email" type="email" name="email" class="form-control mb-2" value="{{ old('email') }}"
+               placeholder="garrus.vakarian@example.com">
 
-        <p>
-            <button type="submit" class="btn btn-success" style="width: 100%;">
-                Send password reset link
-            </button>
-        </p>
+        <button type="submit" class="btn btn-success btn-block">
+            Send password reset link
+        </button>
 
         <hr>
 
-        <p>
-            <a class="btn btn-outline-secondary " href="https://tap.utwente.nl/tap/pwman/index.php" target="_blank"
-               style="width: 100%;">
-                Reset UTwente password
-            </a>
-        </p>
+        <a class="btn btn-outline-secondary btn-block" href="https://tap.utwente.nl/tap/pwman/index.php" target="_blank">
+            Reset UTwente password
+        </a>
 
     </form>
 

@@ -21,13 +21,11 @@
                           class="form-main">
                         {{ csrf_field() }}
                         <div class="input-group">
-                            <input type="text" class="form-control"
+                            <input class="form-control"
                                    placeholder="Search albums" type="search" name="query">
-                            <div class="input-group-append">
-                                <button type="submit" class="input-group-text btn btn-info">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
+                            <button type="submit" class="input-group-text btn btn-info">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -47,14 +45,11 @@
                             <label for="name">Album name:</label>
                             <input required type="text" id="name" name="name" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="date">Album date:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                    'name' => 'date',
-                                    'format' => 'date',
-                                    'placeholder' => strtotime(Carbon::now())
-                                ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'date',
+                            'label' => 'Album date:',
+                            'placeholder' => strtotime(Carbon::now())
+                        ])
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="private" name="private">
                             <label class="form-check-label" for="private">Private album</label>
@@ -92,7 +87,7 @@
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
-                                $album->private ? '<i class="fas fa-eye-slash mr-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
+                                $album->private ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>' : null,
                                 $album->name),
                                 'photo_pop' => true,
                                 'height' => 150
@@ -128,7 +123,7 @@
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
-                                $album->private ? '<i class="fas fa-eye-slash mr-1 text-info" data-toggle="tooltip" data-placement="top" title="This album contains photos only visible to members."></i>' : null,
+                                $album->private ? '<i class="fas fa-eye-slash me-1 text-info" data-bs-toggle="tooltip" data-bs-placement="top" title="This album contains photos only visible to members."></i>' : null,
                                 $album->name),
                                 'photo_pop' => true,
                                 'height' => 150

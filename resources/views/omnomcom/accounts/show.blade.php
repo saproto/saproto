@@ -38,21 +38,15 @@
 
                     <div class="card-body">
 
-                        <div class="form-group">
-                            <label for="start">Start</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'start',
-                                'format' => 'datetime'
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'start',
+                            'label' => 'Start'
+                        ])
 
-                        <div class="form-group">
-                            <label for="end">End</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'end',
-                                'format' => 'datetime'
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'end',
+                            'label' => 'End'
+                        ])
 
                     </div>
 
