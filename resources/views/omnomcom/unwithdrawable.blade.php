@@ -38,7 +38,7 @@
 
                     @foreach($users as $key => $user)
 
-                        <tr data-toggle="collapse" data-target=".collapse-{{ $key }}" style="cursor: pointer;">
+                        <tr class="cursor-pointer" data-bs-toggle="collapse" data-bs-target=".collapse-{{ $key }}">
                             <th>{{ $key }}</th>
                             <td>{{ $user->user->name }}</td>
                             <th>&euro; {{ number_format($user->total, 2) }}</th>

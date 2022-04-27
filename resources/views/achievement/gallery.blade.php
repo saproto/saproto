@@ -12,11 +12,10 @@
 
         @foreach(['common' => $common, 'uncommon' => $uncommon, 'rare' => $rare, 'epic' => $epic, 'legendary' => $legendary] as $tier => $achievements)
 
-            <div class="card mb-3 achievement-{{ $tier }}" name="achievement-{{ $tier }}">
+            <div class="card mb-3 achievement-{{ $tier }}" id="achievement-{{ $tier }}">
 
-                <div class="card-header text-white" data-toggle="collapse"
-                     data-target="#collapse-achievement-{{ $tier }}"
-                     style="cursor: pointer;">
+                <div class="card-header text-white cursor-pointer" data-bs-toggle="collapse"
+                     data-bs-target="#collapse-achievement-{{ $tier }}">
 
                     @for($i = 0; $i < 5; $i++)
                         @if ($i >= $achievements[0]->numberOfStars())
@@ -26,7 +25,7 @@
                         @endif
                     @endfor
 
-                    <span class="text-capitalize ml-3">
+                    <span class="text-capitalize ms-3">
                     <strong>{{ $tier }}</strong>
                 </span>
 
@@ -66,13 +65,3 @@
     </div>
 
 @endsection
-
-@push('stylesheet')
-
-    <style type="text/css">
-        #main {
-            overflow-x: hidden;
-        }
-    </style>
-
-@endpush

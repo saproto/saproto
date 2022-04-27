@@ -14,7 +14,7 @@
 
                 <div class="card-header bg-dark text-white mb-1">
                     @yield('page-title')
-                    <a class="badge badge-info float-right" href="{{ route('headerimage::add') }}">
+                    <a class="badge bg-info float-end" href="{{ route('headerimage::add') }}">
                         Add header image.</a>
                 </div>
 
@@ -44,7 +44,7 @@
                                 <em>{!! $image->user ? $image->user->name : 'None' !!}</em>
                             </td>
                             <td>
-                                <img src="{{ $image->image->generateImagePath(1500, 400) }}" class="rounded float-right" height="100px">
+                                <img src="{{ $image->image->generateImagePath(1500, 400) }}" class="rounded float-end" height="100px">
 
                             </td>
 

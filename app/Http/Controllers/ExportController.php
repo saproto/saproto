@@ -2,22 +2,23 @@
 
 namespace Proto\Http\Controllers;
 
+use Permission;
 use Proto\Models\Account;
 use Proto\Models\Achievement;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
+use Proto\Models\Company;
 use Proto\Models\EmailList;
 use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\MenuItem;
 use Proto\Models\Page;
-use Proto\Models\Permission;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\ProductCategoryEntry;
-use Proto\Models\Role;
 use Proto\Models\Ticket;
 use Proto\Models\User;
+use Role;
 
 class ExportController extends Controller
 {
@@ -64,6 +65,9 @@ class ExportController extends Controller
                 break;
             case 'committees_activities':
                 $data = HelpingCommittee::all();
+                break;
+            case 'companies':
+                $data = Company::all();
                 break;
             case 'events':
                 if ($user->can('admin')) {

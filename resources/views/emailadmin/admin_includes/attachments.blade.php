@@ -11,9 +11,11 @@
             <table class="table">
 
                 <thead>
-                <th>File</th>
-                <th>Size</th>
-                <th></th>
+                    <tr>
+                        <th>File</th>
+                        <th>Size</th>
+                        <th></th>
+                    </tr>
                 </thead>
 
                 @foreach($email->attachments as $attachment)
@@ -53,8 +55,8 @@
                 {{ csrf_field() }}
 
                 <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" name="attachment">
-                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <input type="file" id="attachment" class="form-control" name="attachment">
+                    <label class="form-label" for="attachment">Choose file</label>
                 </div>
 
                 <button type="submit" class="btn btn-success btn-block"

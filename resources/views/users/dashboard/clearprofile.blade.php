@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-primary pull-right">Yes, clear my profile</button>
+                        <button type="submit" class="btn btn-outline-primary float-end">Yes, clear my profile</button>
                     </div>
 
                 </div>

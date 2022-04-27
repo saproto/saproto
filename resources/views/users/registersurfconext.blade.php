@@ -18,7 +18,7 @@
                 Proto website, you can use this here.
             </p>
 
-            <p style="font-weight: bold;">
+            <p class="fw-bold">
                 Creating and having an account on the website does not make you a member of S.A. Proto and is free of
                 charge.
             </p>
@@ -57,7 +57,7 @@
         <hr>
 
             <p>
-                <a a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
+                <a href="https://wiki.proto.utwente.nl/ict/privacy/start?do=export_pdf"
                    target="_blank" class="btn btn-outline-secondary btn-block">
                     Privacy policy
                 </a>
@@ -72,7 +72,7 @@
 
             <hr>
 
-        <button type="submit" class="btn btn-success pull-right">Create my account</button>
+        <button type="submit" class="btn btn-success float-end">Create my account</button>
 
     </form>
 

@@ -8,7 +8,7 @@
         <div class="card-header bg-dark text-white">
             @yield('page-title')
             @if($achievement)
-                <span class="badge badge-info float-right">
+                <span class="badge bg-info float-end">
                     Obtained by {{ count($achievement->currentOwners(true)) }} members
                 </span>
             @endif
@@ -65,7 +65,7 @@
                 <label for="has_page">Can be achieved by visiting url</label>
             </div>
 
-            <div id="achieve_page_block" @if(!$achievement || !$achievement->has_page) style="display: none;" @endif>
+            <div id="achieve_page_block" class="d-none" @if(!$achievement || !$achievement->has_page) @endif>
 
                 <div class="form-group">
                     <label for="page_name">Achieve URL</label>
@@ -98,7 +98,7 @@
 
         <div class="card-footer">
 
-            <button type="submit" class="btn btn-success float-right">Submit</button>
+            <button type="submit" class="btn btn-success float-end">Submit</button>
 
             <a href="{{ route("achievement::list") }}" class="btn btn-default">Cancel</a>
 
@@ -110,15 +110,15 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        let pageBlock = $('#achieve_page_block');
-        $('#has_page').on('click', function() {
-            if($(this).is(':checked')) {
-                pageBlock.show();
-                pageBlock.find('input').attr('required', true);
+        let pageBlock = document.getElementById('achieve_page_block')
+        document.getElementById('has_page').addEventListener('click', e => {
+            if(e.target.checked) {
+                pageBlock.classList.remove('d-none')
+                pageBlock.querySelector('input').required = true
             } else {
-                pageBlock.hide();
-                pageBlock.find('input').attr('required', false);
+                pageBlock.classList.add('d-none')
+                pageBlock.querySelector('input').required = false
             }
-        });
+        })
     </script>
 @endpush

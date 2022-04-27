@@ -63,6 +63,7 @@ class ActivityController extends Controller
             'participants' => $request->participants,
             'price' => $newPrice,
             'no_show_fee' => $newNoShow,
+            'hide_participants'=>$request->has('hide_participants'),
         ];
 
         if (! $activity->validate($data)) {

@@ -101,13 +101,13 @@
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route('page::show', ['slug' => 'contact']) }}" class="btn btn-info btn-block mb-3">
-                <i class="fas fa-user mr-2" aria-hidden="true"></i> Contact
+                <i class="fas fa-user me-2" aria-hidden="true"></i> Contact
             </a>
         </div>
 
         <div class="col-md-12 col-xl-6">
             <a href="{{ route("event::list") }}" class="btn btn-info btn-block">
-                <i class="far fa-calendar-alt mr-2" aria-hidden="true"></i> Upcoming events
+                <i class="far fa-calendar-alt me-2" aria-hidden="true"></i> Upcoming events
             </a>
         </div>
 

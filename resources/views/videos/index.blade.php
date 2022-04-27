@@ -80,15 +80,15 @@
                                         {{  sprintf("%s (%s)",$video->event->title,date('d-m-Y', $video->event->start)) }}
                                     </a>
                                 @else
-                                    <i style="color: lightgray">none</i>
+                                    <i class="opacity-50">none</i>
                                 @endif
                             </td>
                             <td>
                                 <a href="{{ route('video::view', ['id' => $video->id]) }}">
-                                    <i class="fas fa-play mr-2"></i>
+                                    <i class="fas fa-play me-2"></i>
                                 </a>
                                 <a href="{{ route('video::admin::edit', ['id' => $video->id]) }}">
-                                    <i class="fas fa-edit mr-2"></i>
+                                    <i class="fas fa-edit me-2"></i>
                                 </a>
                                 <a onclick="return confirm('Delete this video: {{ $video->title }}?')"
                                    href="{{ route('video::admin::delete', ['id' => $video->id]) }}">

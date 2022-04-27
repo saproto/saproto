@@ -37,9 +37,9 @@
                         @endif
 
                         @if ($orderline->description)
-                            <span style="color: #ccc; font-size: 12px;">
-                                        <br>{{ $orderline->description }}
-                                    </span>
+                            <p>
+                                <br>{{ $orderline->description }}
+                            </p>
                         @endif
                     </td>
                     <td>{{ $orderline->units }}x</td>

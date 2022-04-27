@@ -33,7 +33,9 @@
                             <form method="get">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <select class="form-control user-search" name="user_id" required></select>
+                                        <div class="form-group autocomplete">
+                                            <input class="form-control user-search" name="user_id" required/>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="submit" class="btn btn-success" value="Search">
@@ -62,7 +64,7 @@
                         @foreach($transactions as $transaction)
 
                             <tr>
-                                <td class="text-right">
+                                <td class="text-end">
                                     <a href='{{ route('omnomcom::mollie::status', ['id' => $transaction->id]) }}'>
                                         #{{$transaction->id}}
                                     </a>
@@ -79,15 +81,11 @@
                                 </td>
 
                                 <td>
-                                    @if(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'open')
-                                        <span class="label label-default">{{ $transaction->status }}</span>
-                                    @elseif(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'paid')
-                                        <span class="label label-success">{{ $transaction->status }}</span>
-                                    @elseif(Proto\Models\MollieTransaction::translateStatus($transaction->status) == 'failed')
-                                        <span class="label label-danger">{{ $transaction->status }}</span>
-                                    @else
-                                        <span class="label label-warning">{{ $transaction->status }}</span>
-                                    @endif
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "open" ? '<i class="fas fa-spinner ml-2 text-normal"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "failed" ? '<i class="fas fa-times ml-2 text-danger"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "paid" ? '<i class="fas fa-check ml-2 text-success"></i>' : "" !!}
+                                    {!! Proto\Models\MollieTransaction::translateStatus($transaction->translatedStatus()) == "unknown" ? '<i class="fas fa-question ml-2 text-normal"></i>' : "" !!}
+                                    <span class="label label-default"> - {{ $transaction->status }}</span>
                                 </td>
 
                                 <td>
@@ -130,7 +128,7 @@
                         <thead>
                         <tr class="bg-dark text-white">
                             <td>Month</td>
-                            <td class="text-right">Total</td>
+                            <td class="text-end">Total</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -146,7 +144,7 @@
                                         <span class="gray">{{ date('F Y', strtotime(sprintf('-%s months', $m))) }}</span>
                                     </a>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-end">
                                     @if ($total > 0)
                                         <span class="label label-success">
                                              &euro; {{ number_format($total,2) }}

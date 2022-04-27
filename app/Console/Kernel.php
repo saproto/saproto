@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\GenerateRoles::class,
+        Commands\SyncRoles::class,
         Commands\TestEmail::class,
         Commands\MailAliasSync::class,
         Commands\EmailCron::class,
@@ -39,6 +39,7 @@ class Kernel extends ConsoleKernel
         Commands\DirectAdminSync::class,
         Commands\SyncWikiAccounts::class,
         Commands\MemberCleanup::class,
+        Commands\AddSysadmin::class,
     ];
 
     /**

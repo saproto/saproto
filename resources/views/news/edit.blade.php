@@ -30,14 +30,11 @@
                                    placeholder="Revolutionary new activity!" value="{{ $item->title ?? '' }}" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="event_start">Publish at:</label>
-                            @include('website.layouts.macros.datetimepicker', [
-                                'name' => 'published_at',
-                                'format' => 'datetime',
-                                'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
-                            ])
-                        </div>
+                        @include('website.layouts.macros.datetimepicker', [
+                            'name' => 'published_at',
+                            'label' => 'Publish at:',
+                            'placeholder' => $item ? strtotime($item->published_at) : strtotime(Carbon::now())
+                        ])
 
                         <div class="form-group">
                             <label for="editor">Content</label>
@@ -52,7 +49,7 @@
 
                     <div class="card-footer">
 
-                        <button type="submit" class="btn btn-success float-right">
+                        <button type="submit" class="btn btn-success float-end">
                             Submit
                         </button>
 
@@ -85,8 +82,8 @@
                         <div class="card-body">
 
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="image">
-                                <label class="custom-file-label">Upload featured image</label>
+                                <input id="featured-image" type="file" class="form-control" name="image">
+                                <label for="featured-image" class="form-label">Upload featured image</label>
                             </div>
 
                         </div>

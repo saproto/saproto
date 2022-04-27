@@ -3,7 +3,6 @@
 namespace Proto\Console\Commands;
 
 use Illuminate\Console\Command;
-use Proto\Models\Role;
 use Proto\Models\User;
 
 class MakeAdmin extends Command
@@ -44,7 +43,7 @@ class MakeAdmin extends Command
         $user = User::where('email', $this->argument('email'))->firstOrFail();
 
         if (! $user->hasRole('sysadmin')) {
-            $user->attachRole(Role::where('name', '=', 'sysadmin')->first());
+            $user->assignRole('sysadmin');
             $this->info('User '.$user->name.' now has sysadmin role.');
         } else {
             $this->info('User '.$user->name.' already had sysadmin role.');

@@ -28,26 +28,25 @@ This README is tailored to install on a Debian system. You may need to change co
 
 Before following the installation instructions, you need to have a working installation of `php`, `git`, `npm`, `composer`. Depending on your operating system and plans for your development environment, you need to either set up a webserver and database or install docker using the [instructions below](#running-with-docker). JetBrains [PhpStorm IDE](https://www.jetbrains.com/help/phpstorm/installation-guide.html) is strongly recommended for development on this project, especially with the laravel plugin for proper code completion and reverences.
 
-## Installation instructions
+If you want to run a development environment in Docker **(you most likely do)** you can start at the [Running with Docker](#running-with-docker) section below. If you want to install without Docker you can find the instructions in the section [Running without Docker](#running-without-docker).
 
-Installing the website on your own system should be quite simple. First you'll have to clone the repository somewhere on your system:
+## Running with Docker
+This repository can be run through Docker by using `docker compose`. The website can be run locally using the instructions below. For more information on installing and using Docker on your system check out their documentation at [docs.docker.com](https://docs.docker.com).
+
+### WSL2 vs. HyperV
+On Windows, Docker will now default to [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install). However, if you prefer to not use WSL, you can turn it off going to Settings > General and disable the option "Use the WSL 2 based engine". Be aware that in this case you need to have **Windows Educational or Pro** installed, because Docker uses the Hyper-V engine instead of WSL. Which needs to be activated in the Windows "optional features" settings page.
+
+To use WSL however you do need to install a distribution of your choice, such as Ubuntu, using `wsl --install -d <Distribution Name>`. Now you can continue the setup from within your WSL installation by starting your distribution using the command `wsl` and navigating to a directory inside your distribution. So, not a directory under `/mnt`, which are mounted from the Windows file system.
+
+### Download
+First you need to clone the repository somewhere on your system.
 
 ```
 git clone git@github.com:saproto/saproto.git
 ```
 
-If you want to run a development environment in Docker **(you most likely do)** you can now move on to the [Running with Docker](#running-with-docker) section below. If you want to install without Docker you can find the instructions in the section [Running without Docker](#running-without-docker).
-
-## Running with Docker
-
-This repository can be run through Docker by using `docker compose`. The website can be run locally using the instructions below. Be aware that as a Windows user you need to have either **Windows Educational or Pro** installed, because Docker uses the Hyper-V engine. 
-
-On Windows, Docker can also run using WSL 2. However, this is not recommended as the local server becomes very slow. On a new installation of Docker Desktop go to Settings>General and disable the option "Use the WSL 2 based engine".
-
-For more information on installing and using Docker check out their documentation at [docs.docker.com](https://docs.docker.com).
-
 ### Setup
-After cloning the repository and installing Docker the following instructions can be run in the terminal in the source folder of the project.
+After installing Docker and cloning the repository the following instructions can be run in the terminal in the source folder of the project.
 
 ##### Configuration
 Copy and rename `.env.docker.example` to `.env`.
@@ -56,10 +55,10 @@ Copy and rename `.env.docker.example` to `.env`.
 cp .env.docker.example .env
 ```
 
-After that open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of [your dashboard](https://www.proto.utwente.nl/user/dashboard) on the *live* Proto website.
+After that, open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of [your dashboard](https://www.proto.utwente.nl/user/dashboard) on the ***live*** Proto website.
 
 ##### Client-side dependencies
-First you'll need to run `npm install` to install all client-side dependencies.
+To install the client-side dependencies you'll need to run `npm install` to install all client-side dependencies.
 
 To compile the project assets (JS/CSS) run `npm run dev` to compile once or `npm run watch` to keep checking for changes to scripts or stylesheets.
 
@@ -74,22 +73,30 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-When you have finished the setup and Docker the following port will be exposed on localhost:
+If you are on WSL, you might run into some permission issues. While still inside the docker container, you can use the commands bellow to change the permissions of the troublesome directories.
+```
+chown -R www-data:www-data storage
+chown -R www-data:www-data bootstrap/cache
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
+```
+
+When you have finished the setup and Docker the following port will be exposed on localhost.
 
 - `8080` = Website
 - `8081` = PhpMyAdmin
 - `8082` = [Mailhog](https://github.com/mailhog/MailHog)
 
-You can sign in with the same Proto username you use on the *live* website and the password given to you during the database seeding. This user will have full admin rights on the local website.
+You can sign in with the same Proto username you use on the ***live*** website and the password given to you during the database seeding. This user will have full admin rights on the ***local*** website.
 
-### Handy commands
+### Useful commands
 
-##### Running
+##### Start server
 ```
 docker compose up -d
 ```
 
-##### Stopping
+##### Stop server
 ```
 docker compose stop
 ```
@@ -99,13 +106,18 @@ docker compose stop
 docker compose exec app /bin/bash
 ```
 
+##### Nuke your database *(run in container)*
+```
+php artisan migrate:fresh --seed
+```
+
 ### Debugging
 Xdebug has been added to the php runner in docker to aid you while debugging the website.
 Xdebug enables breakpoints and step debugging which can easily be controlled from your IDE.
 For this to work, you will have to set up your IDE correctly.
 
 #### PhpStorm Configuration
-To make the Xdebug server connect to PhpStorm you can follow the steps below:
+To make the Xdebug server connect to PhpStorm you can follow the steps below.
 1. Open the Settings menu by clicking File>Settings in the top right.
 2. Under the PHP menu, click on the Servers entry.
 3. Add a new server with the following parameters:
@@ -139,13 +151,23 @@ When using a browser extension this will be automatically taken care of.
 
 ## Running without Docker
 
+### Download
+First you need to clone the repository somewhere on your system.
+
+```
+git clone git@github.com:saproto/saproto.git
+```
+
+### Setup
+
+#### configuration
 In the repository you'll find a file called `.env.example`. Make a copy of this file called `.env`:
 
 ```
 cp .env.example .env
 ```
 
-This is the environment configuration. In this file you will establish your own database connection, e-mail credentials and whatnot. You will at least need to set the following options for your instance of the website to work:
+This is the environment configuration. In this file you will establish your own database connection, e-mail credentials and whatnot. You will at least need to set the following options for your instance of the website to work.
 
 * `APP_URL` is the URL (including https://, but **without** trailing slash) of your own website instance.
 * `PRIMARY_DOMAIN` and `FALLBACK_COOKIE_DOMAIN` is only the [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) domain part of `APP_URL`.
@@ -156,6 +178,7 @@ This is the environment configuration. In this file you will establish your own 
 
 You can skip all the other stuff (mailing API, Google API) until you need to work on the specific part of the website that uses them.
 
+##### Initial application setup
 Now we can initialize the project.
 
 ```
@@ -166,7 +189,7 @@ npm run dev
 php artisan key:generate
 ```
 
-After this is done we can install, and later update, our project using our own update utility:
+After this is done we can install, and later update, our project using our own update utility.
 
 ```
 ./update.sh
@@ -182,7 +205,7 @@ php artisan migrate:refresh --seed
 
 The database seeder copies some non-sensitive data from the live website, add your user account and display the randomly generated password in the console and finally adds more dummy users, orders and the likes. If you need more dummy data, feel free to improve the database seeder.
 
-Now you have set up your website correctly. The only thing that remains is pointing your web directory to the `public` directory of the website. This is where the front-facing controllers reside. The rest of the project is then shielded from public access. You could do this using symlinks. An example command on a webserver running DirectAdmin could look like this:
+Now you have set up your website correctly. The only thing that remains is pointing your web directory to the `public` directory of the website. This is where the front-facing controllers reside. The rest of the project is then shielded from public access. You could do this using symlinks. An example command on a webserver running DirectAdmin could look like this.
 ```
 ln -s /home/user/domains/example.saproto.nl/saproto/public /home/user/domains/example.saproto.nl/public_html
 ```

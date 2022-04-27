@@ -1,7 +1,7 @@
 <div class="card mb-3">
 
     <div class="card-header bg-dark text-white">
-        <i class="fas fa-user-friends fa-fw mr-3"></i> Clients
+        <i class="fas fa-user-friends fa-fw me-3"></i> Clients
     </div>
 
     <div class="card-body">

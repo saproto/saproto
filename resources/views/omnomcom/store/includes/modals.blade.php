@@ -1,4 +1,4 @@
-<div id="finished-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="finished-modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
             <div class="modal-body">
@@ -17,7 +17,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center m-4">
-                {{-- Content inserted by JavaScript --}}
+                <span class="modal-status">{{-- Content inserted by JavaScript --}}</span>
             </div>
         </div>
     </div>

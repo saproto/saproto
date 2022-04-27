@@ -46,7 +46,7 @@ class IsAlfredThereController extends Controller
         if ($new_status == 'there' || $new_status == 'unknown') {
             $status->value = $new_status;
         } elseif ($new_status == 'away') {
-            $status->value = $arrival_time;
+            $status->value = strtotime($arrival_time);
         }
         $status->save();
 
@@ -75,10 +75,10 @@ class IsAlfredThereController extends Controller
         if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
-        } elseif (preg_match('/^[0-9]{2}-[0-9]{2}-[0-9]{4}/', $status->value) === 1) {
+        } elseif (preg_match('/^[0-9]{10}/', $status->value) === 1) {
             $result->status = 'away';
-            $result->back = $status->value;
-            $result->backunix = strtotime($status->value);
+            $result->back = date('Y-m-d H:i', $status->value);
+            $result->backunix = $status->value;
             return $result;
         }
         $result->status = 'unknown';

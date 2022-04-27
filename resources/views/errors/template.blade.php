@@ -8,7 +8,7 @@
 
 @section('body')
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
 
         <div class="col-xl-4 col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-3 text-center">
 
@@ -36,7 +36,7 @@
 
                 </div>
 
-                <a href="/" style="text-decoration: none !important;" class="card-footer text-muted text-center">
+                <a href="/" class="card-footer text-muted text-center text-decoration-none">
                     Go back to homepage.
                 </a>
 
@@ -49,15 +49,3 @@
     </div>
 
 @endsection
-
-@push('stylesheet')
-
-    <style>
-
-        #footer {
-            display: none;
-        }
-
-    </style>
-
-@endpush

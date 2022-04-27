@@ -8,12 +8,14 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-12" style="max-width: 640px; max-height: 480px;">
+        <div class="col-12" style="height: 480px;">
 
             <div id="fishcam-warning" class="card mb-3">
 
-                <div class="card-header bg-danger text-white fishcam-warning">
-                    <i class="fas fa-exclamation-triangle mr-2" aria-hidden="true"></i> Warning | Please don't
+            <div id="fishcam-warning" class="card mb-3">
+
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i> Warning | Please don't
                     load this stream over a mobile connection.
                 </div>
 

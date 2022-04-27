@@ -22,37 +22,27 @@
 
                         <div class="row">
 
-                            <div class="col-md-3">
+                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
+                                    <div class="col-sm-auto">
+                                        @include('website.layouts.macros.datetimepicker',[
+                                            'name' => 'start',
+                                            'format' => 'date',
+                                            'placeholder' => $start
+                                        ])
+                                    </div>
+                                    <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
+                                    <div class="col-sm-auto mb-3">
+                                        @include('website.layouts.macros.datetimepicker',[
+                                            'name' => 'end',
+                                            'format' => 'date',
+                                            'placeholder' => $end
+                                        ])
+                                    </div>
 
-                                <div class="form-group">
-                                    @include('website.layouts.macros.datetimepicker',[
-                                        'name' => 'start',
-                                        'format' => 'date'
-                                    ])
-                                    <label for="signup_start">Query start</label>
-                                </div>
-
+                                    <div class="col-sm-auto">
+                                        <button type="submit" class="btn btn-success">Find activities!</button>
+                                    </div>
                             </div>
-
-                            <div class="col-md-3">
-
-                                <div class="form-group">
-                                    @include('website.layouts.macros.datetimepicker',[
-                                        'name' => 'end',
-                                        'format' => 'date'
-                                    ])
-                                    <label for="signup_start">Query end</label>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3">
-
-                                <input type="submit" class="btn btn-success btn-block" value="Get me some activities!">
-
-                            </div>
-
-                        </div>
 
                     </form>
 
@@ -104,7 +94,7 @@
                                         @foreach($event->activity->helpingCommitteeInstances as $helping_committee)
                                             <a href="{{ route('committee::show', ['id' => $helping_committee->committee->slug]) }}">
                                                 {{ $helping_committee->committee->name }}
-                                            </a>: {{ $helping_committee->getHelpingCount() }}<br>
+                                            </a>: {{ $helping_committee->helperCount() }}<br>
                                         @endforeach
                                     @else
                                         <span class="font-italic text-muted">not set</span>
