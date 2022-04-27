@@ -69,8 +69,8 @@ class AchievementsCron extends Command
         $this->giveAchievement($this->ForeverMember(), 38);
         $this->giveAchievement($this->GoodHuman(), 53);
         $this->giveAchievement($this->IAmNoodle(), 54);
-        $this->giveAchievement($this->nThActivity(1), 62);
-        $this->giveAchievement($this->nThActivity(100), 63);
+        $this->giveAchievement($this->nThActivity(1), 63);
+        $this->giveAchievement($this->nThActivity(100), 64);
 
         $this->info('Auto achievement gifting done!');
     }
