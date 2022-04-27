@@ -100,7 +100,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     });
 
     /* Routes related to OmNomCom */
-    Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::', 'middleware' => ['web', 'auth']], function () {
+    Route::group(['prefix' => 'omnomcom', 'as' => 'omnomcom::', 'middleware' => ['web']], function () {
         Route::get('stock', ['as' => 'stock', 'uses' => 'OmNomController@stock']);
     });
 

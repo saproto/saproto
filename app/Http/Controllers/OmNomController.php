@@ -74,6 +74,11 @@ class OmNomController extends Controller
         }
 
         $store = config('omnomcom.stores')[$request->store];
+
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+            abort(403);
+        }
+
         $categories = $this->getCategories($store);
 
         $products = [];
