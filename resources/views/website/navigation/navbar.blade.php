@@ -63,7 +63,7 @@
                             <ul class="dropdown-menu">
 
                                 @foreach(config('omnomcom.stores') as $name => $store)
-                                    @if(in_array(Request::ip(), $store->addresses) || Auth::user()->can($store->roles))
+                                    @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
                                         <a class="dropdown-item"
                                            href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
                                             Open store: {{ $store->name }}
