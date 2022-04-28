@@ -539,17 +539,21 @@ class AchievementsCron extends Command
     private function percentageActivities($percentage) {
         $selected = [];
             if (Carbon::now()->day == 1) {
-                $users = User::all();
-                foreach ($users as $user) {
-                    $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
-                    $activities = Activity::whereIn('id', $participated)->pluck('event_id');
-                    $CountEventsParticipated = Event::whereIn('id', $activities)->where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->count();
+                $possibleActivities = Event::where('end', '>', Carbon::now()->subMonth()->valueOf())->where('end', '<', Carbon::now()->valueOf())->where('secret', '=', '0')->has('activity')->count();
+                if ($possibleActivities >= 5) {
+                    $users = User::all();
+                    foreach ($users as $user) {
+                        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+                        $activities = Activity::whereIn('id', $participated)->pluck('event_id');
+                        $CountEventsParticipated = Event::whereIn('id', $activities)->where('end', '>', Carbon::now()->subMonth()->valueOf())->where('end', '<', Carbon::now()->valueOf())->where('secret', '=', '0')->count();
 
-                    $possibleActivities = Event::where('end','>',Carbon::now()->subMonth()->valueOf())->where('end','<',Carbon::now()->valueOf())->where('secret','=', '0')->has('activity')->count();
-
-                    if (floor($CountEventsParticipated / $possibleActivities * 100) >= $percentage) {
-                        $selected[] = $user;
+                        if (floor($CountEventsParticipated / $possibleActivities * 100) >= $percentage) {
+                            $selected[] = $user;
+                        }
                     }
+                }
+                else{
+                    $this->info('Not enough activities this month! cancelling participation trophee for '.$percentage.'% of activities attended!');
                 }
             }
             else {
