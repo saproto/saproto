@@ -75,7 +75,7 @@ class OmNomController extends Controller
 
         $store = config('omnomcom.stores')[$request->store];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
         }
 
@@ -111,7 +111,7 @@ class OmNomController extends Controller
 
         if (array_key_exists($store_slug, $stores)) {
             $store = $stores[$store_slug];
-            if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->can($store->roles)) {
+            if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->hasAnyPermission($store->roles)) {
                 $result->message = 'You are not authorized to do this.';
             }
         } else {
