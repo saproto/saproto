@@ -150,10 +150,7 @@ class TicketController extends Controller
             ];
         }
 
-        $unscan = false;
-        if ($request->has('unscan')) {
-            $unscan = true;
-        }
+        $unscan = $request->has('unscan');
 
         $event = Event::find($event);
         if ($event === null) {
