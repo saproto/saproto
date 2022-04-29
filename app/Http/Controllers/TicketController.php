@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use PDF;
+use phpDocumentor\Reflection\Types\True_;
 use Proto\Models\Event;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -149,6 +150,11 @@ class TicketController extends Controller
             ];
         }
 
+        $unscan = false;
+        if ($request->has('unscan')) {
+            $unscan = true;
+        }
+
         $event = Event::find($event);
         if ($event === null) {
             return [
@@ -178,10 +184,17 @@ class TicketController extends Controller
                     'data' => null,
                 ];
             }
-            if ($ticket->scanned !== null) {
+            if (!$unscan && $ticket->scanned !== null) {
                 return [
                     'code' => 403,
                     'message' => 'Ticket already used',
+                    'data' => $ticket,
+                ];
+            }
+            if($unscan  && $ticket->scanned == null) {
+                return [
+                    'code' => 403,
+                    'message' => 'Ticket has not been used yet',
                     'data' => $ticket,
                 ];
             }
@@ -193,6 +206,9 @@ class TicketController extends Controller
                 ];
             }
             $ticket->scanned = date('Y-m-d H:i:s');
+            if($unscan) {
+                $ticket->scanned = null;
+            }
             $ticket->save();
 
             return [
