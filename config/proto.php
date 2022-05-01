@@ -28,6 +28,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Database settings
+    |--------------------------------------------------------------------------
+    |
+    | All settings that are stored in the database and can be edited in the application
+    |
+    */
+
+    'settings' => [
+        'board' => [
+            'board_number' => ['type' => 'string', 'default' => 'XX.X'],
+            'secretary' => ['type' => 'string', 'default' => 'secretary'],
+            'treasurer' => ['type' => 'string', 'default' => 'treasurer'],
+            'internal' => ['type' => 'string', 'default' => 'internal'],
+        ],
+        'additional_mailboxes' => [
+            'mailboxes' => ['type' => 'list', 'default' => '["boardarchive"]'],
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Additional Mailboxes
     |--------------------------------------------------------------------------
     |

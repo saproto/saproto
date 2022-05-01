@@ -27,6 +27,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'HeaderImageController@destroy']);
     });
 
+    Route::group(['prefix' => 'settings', 'middleware' => ['auth', 'permission:sysadmin'], 'as' => 'settings::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'SettingsController@index']);
+        Route::post('update/{key}', ['as' => 'update', 'uses' => 'SettingsController@update']);
+    });
+
     /* Routes for the search function. */
     Route::get('search', ['as' => 'search', 'uses' => 'SearchController@search']);
     Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
