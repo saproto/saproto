@@ -27,7 +27,7 @@
             </div>
                 <div class="modal-body text-left container">
                     Available payment methods
-                    <div class="row justify-content-around btn-group-toggle mb-2" data-toggle="buttons">
+                    <div class="row justify-content-around btn-group-toggle mb-2" data-bs-toggle="buttons">
                             @include('omnomcom.mollie.list-all-payment-methods', [
                                 'methods' => $payment_methods,
                                 'use_fees' => true
