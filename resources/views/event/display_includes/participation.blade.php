@@ -112,7 +112,7 @@
 
     </div>
 
-    @if($event->activity->users->count() > 0)
+    @if($event->activity->users->count() > 0 || Auth::user()->can('board'))
 
         <div class="card mb-3">
 
