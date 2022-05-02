@@ -88,6 +88,9 @@
     "classmap": [
       "database"
     ],
+    "files": [
+      "app/Helpers/functions.php"
+    ],
     "psr-4": {
       "Proto\\": "app/"
     }
