@@ -176,7 +176,7 @@
                 {{-- fees and only prepaid (3) --}}
                 @elseif (config('omnomcom.mollie.use_fees') && $only_prepaid)
                     @include('event.display_includes.mollie-modal')
-                    <a href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
+                    <a href="javascript:void();" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#mollie-modal">
                         Get tickets now!
                     </a>
                 @else
@@ -184,7 +184,7 @@
                         Total: <strong>&euro;<span id="ticket-total" class="mr-3">0.00</span></strong> Finish purchase!
                     </button>
                     @include('event.display_includes.mollie-modal')
-                    <a hidden id="feesbutton" href="javascript:void();" class="btn btn-primary btn-block" data-toggle="modal" data-target="#mollie-modal">
+                    <a hidden id="feesbutton" href="javascript:void();" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#mollie-modal">
                         Get tickets now!
                     </a>
                 @endif

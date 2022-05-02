@@ -40,7 +40,7 @@
                 </a>
             @endif
             @isset($user->tfa_totp_key)
-                <a href="javascript:void();" class="list-group-item text-danger" data-toggle="modal" data-target="#disable2FA">
+                <a href="#" class="list-group-item text-danger" data-bs-toggle="modal" data-target="#disable2FA">
                     Disable 2FA
                 </a>
             @endisset
