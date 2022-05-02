@@ -25,8 +25,9 @@ class MenuController extends Controller
     public function create(Router $router)
     {
         $pages = Page::all();
-        $topMenuItems = MenuItem::where('parent', null)->orderBy('order')->get();
-        return view('menu.edit', ['item' => null, 'pages' => $pages, 'new' => true, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
+        $topMenuItems = MenuItem::where('parent')->orderBy('order')->get();
+
+        return view('menu.edit', ['item' => null, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
 
     /**
@@ -35,34 +36,16 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $menuItem = new MenuItem($request->all());
-
-        if ($request->has('is_member_only')) {
-            $menuItem->is_member_only = true;
-        } else {
-            $menuItem->is_member_only = false;
-        }
-
-        if ($request->page_id == 0) {
-            $menuItem->page_id = null;
-        }
-        if ($request->parent == 0) {
-            $menuItem->parent = null;
-        }
-
-        if ($menuItem->page_id) {
-            $menuItem->url = Page::find($menuItem->page_id)->getUrl();
-        }
-
+        $menuItem = new MenuItem();
+        $menuItem->menuname = $request->input('name');
+        $menuItem->parent = $request->input('parent') ?: null;
+        $menuItem->is_member_only = $request->has('is_member_only');
+        $menuItem->page_id = $request->input('page_id') ?: null;
+        $menuItem->url = $menuItem->page_id ? Page::find($menuItem->page_id)->getUrl() : $request->input('url');
         $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
-
-        if ($maxOrder) {
-            $menuItem->order = $maxOrder->order + 1;
-        } else {
-            $menuItem->order = 0;
-        }
-
+        $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
+
         $this->fixDuplicateMenuItemsOrder($menuItem->parent);
 
         return Redirect::route('menu::list');
@@ -79,7 +62,7 @@ class MenuController extends Controller
         $pages = Page::all();
         $topMenuItems = MenuItem::where('parent', null)->orderBy('order')->get();
 
-        return view('menu.edit', ['item' => $menuItem, 'pages' => $pages, 'new' => false, 'topMenuItems' => $topMenuItems, 'routes' => $router->getRoutes()->getRoutes()]);
+        return view('menu.edit', ['item' => $menuItem, 'pages' => $pages, 'topMenuItems' => $topMenuItems, 'routes' => $this->getAllRoutes($router)]);
     }
 
     /**
@@ -92,40 +75,17 @@ class MenuController extends Controller
         /** @var MenuItem $menuItem */
         $menuItem = MenuItem::findOrFail($id);
 
-        if ($request->parent != $menuItem->parent) {
+        if ($request->input('parent') != $menuItem->parent) {
             $oldparent = $menuItem->parent;
         }
 
-        $menuItem->menuname = $request->menuname;
-        $menuItem->url = $request->url;
-        $menuItem->page_id = $request->page_id;
-        $menuItem->parent = $request->parent;
-
-        if ($request->page_id == 0) {
-            $menuItem->page_id = null;
-        }
-        if ($request->parent == 0) {
-            $menuItem->parent = null;
-        }
-
+        $menuItem->menuname = $request->input('name');
+        $menuItem->parent = $request->input('parent') ?: null;
+        $menuItem->is_member_only = $request->has('is_member_only');
+        $menuItem->page_id = $request->input('page_id') ?: null;
+        $menuItem->url = $menuItem->page_id ? Page::find($menuItem->page_id)->getUrl() : $request->input('url');
         $maxOrder = MenuItem::where('parent', $menuItem->parent)->orderBy('order', 'DESC')->first();
-
-        if ($maxOrder) {
-            $menuItem->order = $maxOrder->order + 1;
-        } else {
-            $menuItem->order = 0;
-        }
-
-        if ($request->has('is_member_only')) {
-            $menuItem->is_member_only = true;
-        } else {
-            $menuItem->is_member_only = false;
-        }
-
-        if ($menuItem->page_id) {
-            $menuItem->url = Page::find($menuItem->page_id)->getUrl();
-        }
-
+        $menuItem->order = $maxOrder ? $maxOrder->order + 1 : 0;
         $menuItem->save();
 
         if (isset($oldparent)) {
@@ -233,5 +193,18 @@ class MenuController extends Controller
         $menuItem->delete();
 
         return Redirect::route('menu::list');
+    }
+
+    private function getAllRoutes($router)
+    {
+        $routes = $router->getRoutes()->getRoutesByMethod()['GET'];
+        return array_filter($routes, function ($route) {
+            return
+                $route->getName() &&
+                strpos($route->uri(), '{') === false &&
+                strpos($route->getName(), 'api::') === false &&
+                strpos($route->getName(), 'login::') === false &&
+                strpos($route->uri(), 'oauth') === false;
+        });
     }
 }
