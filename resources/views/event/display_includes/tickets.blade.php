@@ -141,9 +141,8 @@
                                             name="tickets[{{$ticket->id}}]"
                                             autocomplete="off"
                                             data-price="{{ $ticket->product->price }}"
-                                            prepaid={{ $ticket->is_prepaid }}
-                                            previous-value=0
-                                            onchange="updateOrderTotal();">
+                                            data-prepaid="{{ $ticket->is_prepaid }}"
+                                            data-previous-value="0">
                                         @for($i = 0; $i <= min(config('proto.maxtickets'), $ticket->product->stock); $i++)
                                             <option value="{{ $i }}">{{ $i }}x</option>
                                         @endfor
@@ -201,19 +200,19 @@
             const selectList = Array.from(document.getElementsByClassName('ticket-select'))
             let totalPrepaidSelected = 0;
             selectList.forEach(ticket => ticket.addEventListener('change', _ => {
-                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value).toFixed(2)
-                document.getElementById('ticket-total').innerHTML = total
+                const total = selectList.reduce((agg, el) => agg + el.getAttribute('data-price') * el.value, 0)
+                document.getElementById('ticket-total').innerHTML = total.toFixed(2)
 
-                if (ticket.getAttribute('prepaid') == true) {
+                if (ticket.getAttribute('data-prepaid') === true) {
                     totalPrepaidSelected += ticket.value-ticket.getAttribute('previous-value')
-                    ticket.setAttribute('previous-value', ticket.value)
+                    ticket.setAttribute('data-previous-value', ticket.value)
                 }
-                if (totalPrepaidSelected == 0) {
-                    directPayButton.hidden = true
-                    feesButton.hidden = false
+                if (totalPrepaidSelected === 0) {
+                    directPayButton?.setAttribute('hidden', '')
+                    feesButton?.removeAttribute('hidden')
                 } else if (totalPrepaidSelected > 0) {
-                    directPayButton.hidden = false
-                    feesButton.hidden = true
+                    directPayButton?.removeAttribute('hidden')
+                    feesButton?.setAttribute('hidden', '')
                 }
             }))
         </script>
