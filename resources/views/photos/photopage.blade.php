@@ -16,7 +16,7 @@
 
                     <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
                        class="btn btn-success float-start me-3">
-                        <i class="fas fa-images me-3"></i> {{ $photo->album_name }}
+                        <i class="fas fa-images me-2"></i> {{ $photo->album_name }}
                     </a>
 
                     @if ($photo->previous != null && $photo->previous != $photo->id)
