@@ -32,7 +32,7 @@ class MembershipRenew extends Mailable
     public function build()
     {
         return $this
-            ->from('secretary@proto.utwente.nl', config('proto.secretary').' (Secretary)')
+            ->from('secretary@proto.utwente.nl', setting('board', 'secretary').' (Secretary)')
             ->subject('Your membership of Proto is about to be renewed.')
             ->view('emails.membershiprenew');
     }

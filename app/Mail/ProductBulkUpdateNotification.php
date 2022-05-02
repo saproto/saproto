@@ -35,7 +35,7 @@ class ProductBulkUpdateNotification extends Mailable
     {
         return $this
             ->to('omnomcom@'.config('proto.emaildomain'), 'OmNomCom Committee')
-            ->to('treasurer@'.config('proto.emaildomain'), config('proto.treasurer'))
+            ->to('treasurer@'.config('proto.emaildomain'), setting('board', 'treasurer'))
             ->subject('OmNomCom bulk product stock update.')
             ->view('emails.omnomcom.bulkproductupdate');
     }

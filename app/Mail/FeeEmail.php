@@ -27,7 +27,7 @@ class FeeEmail extends Mailable
     public function build()
     {
         return $this
-            ->from('treasurer@proto.utwente.nl', config('proto.treasurer'))
+            ->from('treasurer@proto.utwente.nl', setting('board', 'treasurer'))
             ->subject('Information on your membership fee for S.A. Proto')
             ->view('emails.fee_for_users');
     }

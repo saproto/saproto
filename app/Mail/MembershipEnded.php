@@ -35,7 +35,7 @@ class MembershipEnded extends Mailable
     public function build()
     {
         return $this
-            ->from('secretary@proto.utwente.nl', config('proto.secretary').' (Secretary)')
+            ->from('secretary@proto.utwente.nl', setting('board', 'secretary').' (Secretary)')
             ->subject('Termination of your membership of Study Association Proto')
             ->view('emails.membershipend');
     }
