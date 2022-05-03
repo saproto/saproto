@@ -86,7 +86,7 @@ return [
         'tipcie' => (object) [
             'display_name' => 'TipCie',
             'description' => 'Can manage the TipCie store',
-            'permissions' => ['tipcie', 'drafters'],
+            'permissions' => ['tipcie', 'drafters', 'omnomcom'],
         ],
         'drafters' => (object) [
             'display_name' => 'Guild of Drafters',
