@@ -58,9 +58,9 @@ class DirectAdminSync extends Command
             'domain' => getenv('DA_DOMAIN'),
             'action' => 'list',
         ]);
-        $current = $da->fetch_parsed_body()['list'];
+        $current = $da->fetch_parsed_body();
         $target = $this->constructAccountList();
-        $patch = $this->constructAccountPatchList($current, $target);
+        $patch = $this->constructAccountPatchList($current['list'], $target);
         $account_queries = $this->applyAccountPatchList($patch);
 
         // Execute queries
