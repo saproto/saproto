@@ -52,7 +52,7 @@
 
                 </div>
 
-                <img class="card-img-bottom" src="{!! $photo->photo_url !!}">
+                <img class="card-img-bottom" src="{!! $photo->photo_url !!}" style="max-height: 70vh; object-fit:scale-down">
 
             </div>
 
