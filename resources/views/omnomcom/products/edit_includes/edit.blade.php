@@ -198,11 +198,13 @@
 
 
             @if($product)
-                <a class="btn btn-danger"
-                   onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
-                   href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">
-                    Delete
-                </a>
+                @include('website.layouts.macros.confirm-modal', [
+                   'action' => route('omnomcom::products::delete', ['id' => $product->id]),
+                   'classes' => 'btn btn-danger',
+                   'text' => 'Delete',
+                   'title' => 'Confirm Delete',
+                   'message' => "Are you sure you want to delete $product->name?",
+                ])
             @endif
 
             <button type="submit" class="btn btn-success float-end ms-3">Submit</button>

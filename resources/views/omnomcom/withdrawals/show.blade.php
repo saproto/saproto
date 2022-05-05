@@ -65,22 +65,31 @@
                             Generate XML
                         </a>
 
-                        <a href="{{ route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]) }}"
-                           class="btn btn-outline-warning btn-block"
-                           onclick="return confirm('This will send an e-mail to {{ $withdrawal->users()->count() }} users. Are you sure?');">
-                            E-mail Users
-                        </a>
+                        @include('website.layouts.macros.confirm-modal', [
+                           'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
+                           'classes' => 'btn btn-outline-warning btn-block',
+                           'text' => 'E-mail Users',
+                           'title' => 'Confirm Send',
+                           'message' => 'Are you sure you want to send an email to all '.$withdrawal->users()->count().' users associated with this withdrawal?',
+                           'confirm' => 'Send',
+                        ])
 
-                        <a href="{{ route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]) }}"
-                           class="btn btn-outline-danger btn-block"
-                           onclick="return confirm('After closing, you cannot change anything about this withdrawal. Are you sure?');">
-                            Close Withdrawal
-                        </a>
+                        @include('website.layouts.macros.confirm-modal', [
+                           'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
+                           'classes' => 'btn btn-outline-danger btn-block',
+                           'text' => 'Close Withdrawal',
+                           'title' => 'Confirm Close',
+                           'message' => 'Are you sure you want to close this withdrawal? After closing, you cannot change anything about this withdrawal anymore.',
+                           'confirm' => 'Close',
+                        ])
 
-                        <a href="{{ route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]) }}"
-                           class="btn btn-outline-danger btn-block" onclick="return confirm('Are you sure?');">
-                            Delete
-                        </a>
+                        @include('website.layouts.macros.confirm-modal', [
+                           'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
+                           'classes' => 'btn btn-outline-danger btn-block',
+                           'text' => 'Delete',
+                           'title' => 'Confirm Delete',
+                           'message' => 'Are you sure you want to delete this withdrawal?',
+                        ])
 
                     </div>
 
@@ -141,10 +150,13 @@
                                     <td>
                                         @if($withdrawal->getFailedWithdrawal($data->user))
                                             Failed
-                                            <a onclick="return confirm('Are you sure? The user will NOT receive an e-mail about this?')"
-                                               href="{{ route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]) }}">
-                                                (Revert)
-                                            </a>
+                                            @include('website.layouts.macros.confirm-modal', [
+                                               'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
+                                               'text' => '(Revert)',
+                                               'title' => 'Confirm Revert',
+                                               'message' => 'Are you sure you want to revert this withdrawal? The user will <b>NOT</b> automatically receive an e-mail about this!',
+                                               'confirm' => 'Revert',
+                                            ])
                                         @else
                                             <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
                                                 Remove
@@ -152,10 +164,12 @@
 
                                             or
 
-                                            <a href="{{ route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}"
-                                               onclick="return confirm('You are about to mark the withdrawal for {{ $data->user->name }} as failed. They will receive an e-mail. Are you sure?');">
-                                                Mark Failed
-                                            </a>
+                                            @include('website.layouts.macros.confirm-modal', [
+                                               'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
+                                               'text' => 'Mark Failed',
+                                               'title' => 'Confirm Marking Failed',
+                                               'message' => 'Are you sure you want to mark this withdrawal as for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
+                                            ])
                                         @endif
                                     </td>
                                 @endif

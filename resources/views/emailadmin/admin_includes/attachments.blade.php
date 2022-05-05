@@ -28,10 +28,13 @@
                             <i>{{ $attachment->getFileSize() }}</i>
                         </td>
                         <td>
-                            <a onclick="return confirm('You sure you want to delete this attachment?')"
-                               href="{{ route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]) }}">
-                                <i class="fas fa-trash text-danger"></i>
-                            </a>
+                            @include('website.layouts.macros.confirm-modal', [
+                                'action' => route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]),
+                                'text' => '<i class="fas fa-trash text-danger"></i>',
+                                'title' => 'Confirm Delete',
+                                'message' => "Are you sure you want to delete this attachment?",
+                                'confirm' => 'Delete',
+                            ])
                         </td>
                     </tr>
 
@@ -59,10 +62,14 @@
                     <label class="form-label" for="attachment">Choose file</label>
                 </div>
 
-                <button type="submit" class="btn btn-success btn-block"
-                        onclick="return confirm('Any unsaved changes to the e-mail will be discarded if you continue.')">
-                    Upload
-                </button>
+                @include('website.layouts.macros.confirm-modal', [
+                    'action' => route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]),
+                    'classes' => 'btn btn-success btn-block',
+                    'text' => 'Upload',
+                    'title' => 'Confirm Upload',
+                    'message' => "Any unsaved changes to the e-mail will be discarded if you upload an attachment. Are you sure you want to continue?",
+                    'confirm' => 'Upload',
+                ])
 
             </form>
 

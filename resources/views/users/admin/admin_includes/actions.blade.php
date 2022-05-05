@@ -40,10 +40,14 @@
                 </a>
             @endif
             @isset($user->tfa_totp_key)
-                <a href="#" class="list-group-item text-danger" data-bs-toggle="modal" data-target="#disable2FA">
-                    Disable 2FA
-                </a>
-            @endisset
+                @include('website.layouts.macros.confirm-modal', [
+                    'action' => route("user::2fa::admindelete", ['id'=>$user->id]),
+                    'classes' => 'list-group-item text-danger',
+                    'text' => 'Disable 2FA',
+                    'title' => 'Confirm Disabling 2FA',
+                    'message' => 'Are you sure you want to disable the two-factor authentication of {{ $user->name }}? <b>Only continue if you have their consent!</b>'
+                ])
+           @endisset
 
         </ul>
 
@@ -65,5 +69,3 @@
     </div>
 
 </div>
-
-@include('users.admin.admin_includes.disable2fa-modal')

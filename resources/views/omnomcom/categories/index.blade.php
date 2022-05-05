@@ -37,12 +37,15 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('omnomcom::categories::show', ['id' => $category->id]) }}">
-                                            <i class="fas fa-edit me-2" aria-hidden="true"></i>
+                                            <i class="fas fa-edit me-2"></i>
                                         </a>
-                                        <a onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
-                                           href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
-                                            <i class="fas fa-trash text-danger" aria-hidden="true"></i>
-                                        </a>
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route('omnomcom::categories::delete', ['id' => $category->id]),
+                                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete category $category->name",
+                                            'confirm' => 'Delete',
+                                        ])
                                     </td>
 
                                 </tr>

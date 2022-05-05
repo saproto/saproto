@@ -48,7 +48,12 @@
 
     @include('website.layouts.macros.errormessages')
 
+    <!-- Modals -->
+    @stack('modals')
+
+    <!-- Global scripts -->
     @include('website.layouts.assets.javascripts')
+
     <!-- Page scripts -->
     @stack('javascript')
 
