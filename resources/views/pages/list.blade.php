@@ -46,9 +46,13 @@
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
 
-                                <a href="{{ route('page::delete', ['id' => $page->id]) }}" onclick="return confirm('Are you sure?')">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+                                @include('website.layouts.macros.confirm-modal', [
+                                   'action' => route('page::delete', ['id' => $page->id]),
+                                   'text' => '<i class="fas fa-trash text-danger"></i>',
+                                   'title' => 'Confirm Delete',
+                                   'message' => 'Are you sure you want to delete this page?',
+                                   'confirm' => 'Delete',
+                                ])
                             </td>
 
                         </tr>

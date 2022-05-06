@@ -51,14 +51,15 @@
                                     <i class="fas fa-edit fa-fw me-2"></i>
                                 </a>
 
-                                <a href="{{ route('tempadmin::endId', ['id' => $tempadmin->id]) }}"
-                                   onclick="return confirm('Are you sure?')" role="button">
-                                    @if(Carbon::parse($tempadmin->start_at)->isFuture())
-                                        <i class="fas fa-trash fa-fw text-danger"></i>
-                                    @else
-                                        <i class="fas fa-hourglass-end text-danger fa-fw"></i>
-                                    @endif
-                                </a>
+                                @include('website.layouts.macros.confirm-modal', [
+                                   'action' => route('tempadmin::endId', ['id' => $tempadmin->id]),
+                                   'text' => Carbon::parse($tempadmin->start_at)->isFuture() ?
+                                               '<i class="fas fa-trash fa-fw text-danger"></i>' :
+                                               '<i class="fas fa-hourglass-end text-danger fa-fw"></i>',
+                                   'title' => 'Confirm End Rights',
+                                   'message' => 'Are you sure you want to end the temporary ProTube admin rights of '.$tempadmin->user->name.'?',
+                                   'confirm' => 'End Rights',
+                                ])
                             </td>
                         </tr>
 

@@ -11,9 +11,13 @@
             </li>
 
             @if($user->is_member)
-                <a href="#" class="list-group-item text-danger" data-bs-toggle="modal" data-bs-target="#removeMembership">
-                    End membership
-                </a>
+                @include('website.layouts.macros.confirm-modal', [
+                    'action' => route("user::member::remove", ['id'=>$user->id]),
+                    'method' => 'POST',
+                    'classes' => 'list-group-item text-danger',
+                    'text' => 'End membership',
+                    'message' => "Are you sure you want to end the membership of $user->name?"
+                ])
                 <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
@@ -132,9 +136,14 @@
                                             <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                                 <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                             </a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form" data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
-                                                <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
-                                            </a>
+                                            @include('website.layouts.macros.confirm-modal', [
+                                                'action' => route("memberform::delete", ['id' => $membership->membership_form_id]),
+                                                'classes' => 'text-danger',
+                                                'text' => '<i class="fas fa-trash fa-fw me-2 text-danger"></i>',
+                                                'title' => 'Confirm Delete',
+                                                'message' => "Are you sure you want to delete the signed membership form of <i>$user->name</i>? Only delete a signed membership form if the form is invalid or the user does not want to become a member.",
+                                                'confirm' => 'Delete',
+                                            ])
                                         </td>
                                     @endif
                                 </tr>
@@ -177,9 +186,15 @@
                                         <a href="{{ route('memberform::download::signed', ['id' => $membership->membership_form_id]) }}" class="text-decoration-none">
                                             <i class="fas fa-download fa-fw me-2 text-info" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#remove-member-form data-memberform-id="{{ $membership->membership_form_id }}" class="text-decoration-none">
-                                            <i class="fas fa-trash fa-fw me-2 text-danger" aria-hidden="true"></i>
-                                        </a>
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route("memberform::delete", ['id' => $membership->membership_form_id]),
+                                            'method' => 'POST',
+                                            'classes' => 'text-danger',
+                                            'text' => '<i class="fas fa-trash fa-fw me-2 text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete the signed membership form of <i>$user->name</i>? Only delete a signed membership form if the form is invalid or the user does not want to become a member.",
+                                            'confirm' => 'Delete',
+                                        ])
                                     </td>
                                 @endif
                             </tr>
@@ -193,35 +208,3 @@
     </div>
 
 </div>
-
-@push('javascript')
-
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-
-        function req(e, url) {
-            get(url, { 'id': e.target.getAttribute('data-id') })
-            .then(data => {
-                if (data.includes('Exception')) throw data
-                alert(data)
-            })
-            .catch(err => {
-                console.error(err)
-                alert("Something went wrong while requesting the print.")
-            })
-        }
-
-        document.getElementById('print-card').addEventListener('click', e => {
-            if (confirm('please confirm you want to print a membership card.')) {
-                req(e, '{{ route('membercard::print') }}')
-            }
-        })
-
-        document.getElementById('print-card-overlay').addEventListener('click', e => {
-            if (confirm("Please confirm you have the right member card loaded.")) {
-                req(e, '{{ route('membercard::printoverlay') }}')
-            }
-        })
-
-    </script>
-
-@endpush

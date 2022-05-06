@@ -155,11 +155,13 @@
                                                                 @elseif($purchase->orderline->isPayed())
                                                                     Paid
                                                                 @else
-                                                                    <a class="badge bg-danger"
-                                                                       href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
-                                                                       onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
-                                                                        Delete
-                                                                    </a>
+                                                                    @include('website.layouts.macros.confirm-modal', [
+                                                                        'action' => route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]),
+                                                                        'classes' => 'badge bg-danger',
+                                                                        'text' => 'Delete',
+                                                                        'title' => 'Confirm Delete',
+                                                                        'message' => "Are you sure you want to delete one ticket for ".$purchase->user->name.'?',
+                                                                    ])
                                                                 @endif
                                                             </td>
                                                         @endcan

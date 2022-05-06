@@ -37,17 +37,9 @@
     </div>
 
     <!-- Modal for adding membership to user -->
-    @include("users.admin.admin_includes.addmember-modal")
-
-    <!-- Modal for removing membership from user -->
-    @include("users.admin.admin_includes.removemember-modal")
-
-    <!-- Modal for removing signed membership contract -->
-    @include("users.admin.admin_includes.removememberform-modal")
+    @include('users.admin.admin_includes.addmember-modal')
 
     <!-- Modal for setting membership type -->
-    @if($user->is_member)
-        @include("users.admin.admin_includes.setmembershiptype-modal")
-    @endif
+    @includeWhen($user->is_member, 'users.admin.admin_includes.setmembershiptype-modal')
 
 @endsection

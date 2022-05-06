@@ -31,11 +31,13 @@
                     <div class="card-footer">
 
                         @if($category)
-                            <a class="btn btn-danger"
-                               onclick="return confirm('Remove category \'{{ $category->name }}\'?');"
-                               href="{{ route('omnomcom::categories::delete', ['id' => $category->id]) }}">
-                                Delete
-                            </a>
+                            @include('website.layouts.macros.confirm-modal', [
+                                'action' => route('omnomcom::categories::delete', ['id' => $category->id]),
+                                'classes' => 'btn btn-danger',
+                                'text' => 'Delete',
+                                'title' => 'Confirm Delete',
+                                'message' => "Are you sure you want to delete category $category->name",
+                            ])
                         @endif
 
                         <button type="submit" class="btn btn-success float-end ms-3">Submit</button>
