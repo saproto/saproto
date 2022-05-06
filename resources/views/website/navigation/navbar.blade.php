@@ -44,177 +44,180 @@
                         @endif
                     @endforeach
 
-                    @canany(['omnomcom', 'tipcie', 'drafters'])
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                OmNomCom
-                            </a>
+                    @auth
 
-                            <ul class="dropdown-menu">
-                                @foreach(config('omnomcom.stores') as $name => $store)
-                                    @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
-                                        <a class="dropdown-item" href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
-                                            Open store: {{ $store->name }}
-                                        </a>
-                                    @endif
-                                @endforeach
+                        @canany(['omnomcom', 'tipcie', 'drafters'])
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    OmNomCom
+                                </a>
 
-                                @can('omnomcom')
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::orders::adminlist") }}">Orders</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::products::list") }}">Products</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::categories::list") }}">Categories</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::products::statistics") }}">Sales statistics</a>
-                                @endcan
+                                <ul class="dropdown-menu">
+                                    @foreach(config('omnomcom.stores') as $name => $store)
+                                        @if(in_array(Request::ip(), $store->addresses) || Auth::user()->hasAnyPermission($store->roles))
+                                            <a class="dropdown-item" href="{{ route('omnomcom::store::show', ['store'=>$name]) }}">
+                                                Open store: {{ $store->name }}
+                                            </a>
+                                        @endif
+                                    @endforeach
 
-                                @can('tipcie')
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinner Forms</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie Order Overview</a>
-                                @endcan
-
-                                @cannot('board')
-                                    @canany(['tipcie', 'omnomcom'])
+                                    @can('omnomcom')
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::orders::adminlist") }}">Orders</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::products::list") }}">Products</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::categories::list") }}">Categories</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::generateorder") }}">Generate Supplier Order</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::products::statistics") }}">Sales statistics</a>
+                                    @endcan
+
+                                    @can('tipcie')
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinner Forms</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie Order Overview</a>
+                                    @endcan
+
+                                    @cannot('board')
+                                        @canany(['tipcie', 'omnomcom'])
+                                            <li role="separator" class="dropdown-divider"></li>
+                                            <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
+                                        @endcanany
+                                    @endcannot
+                                </ul>
+                            </li>
+                        @endcanany
+
+                        @canany(['board', 'finadmin', 'alfred'])
+                            <li id="admin-nav-item" class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+
+                                <ul class="dropdown-menu">
+                                    @can('board')
+                                        <a class="dropdown-item" href="{{ route("user::admin::list") }}">Users</a>
+                                        <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
+                                        <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URLs</a>
+                                        <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
+
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item disabled" href="{{ route("protube::admin") }}">ProTube Admin</a>
+                                        <a class="dropdown-item disabled" href="{{ route("tempadmin::index") }}">Temp ProTube Admin</a>
+
+                                        @can('sysadmin')
+                                            <li role="separator" class="dropdown-divider"></li>
+                                            <a class="dropdown-item" href="{{ route("protube::radio::index") }}">ProTube Radio Stations</a>
+                                            <a class="dropdown-item" href="{{ route("protube::display::index") }}">ProTube Displays</a>
+                                            <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">Soundboard Sounds</a>
+                                        @endcan
+
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
+                                        <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
+                                        <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
+
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
+                                        <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
+                                        <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
+                                        <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
+                                        <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
+                                    @endcan
+
+                                    @if(Auth::user()->hasAllPermissions(['board', 'finadmin']))
+                                        <li role="separator" class="dropdown-divider"></li>
+                                    @endif
+
+                                    @can('finadmin')
+                                        <a class="dropdown-item" href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
+                                        <a class="dropdown-item" href="{{ route("event::financial::list") }}">Activities</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a>
+                                        <a class="dropdown-item" href="{{ route("omnomcom::payments::statistics") }}">Cash & Card Payments</a>
+                                    @endcan
+
+                                    @canany(['alfred', 'board'])
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
+                                        <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
                                     @endcanany
-                                @endcannot
-                            </ul>
-                        </li>
-                    @endcanany
 
-                    @canany(['board', 'finadmin', 'alfred'])
-                        <li id="admin-nav-item" class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+                                    @canany(['alfred', 'sysadmin'])
+                                        <li role="separator" class="dropdown-divider"></li>
+                                        <a class="dropdown-item" href="{{ route("minisites::isalfredthere::admin") }}">Is Alfred There?</a>
+                                    @endcanany
+                                </ul>
+                            </li>
+                        @endcanany
 
-                            <ul class="dropdown-menu">
-                                @can('board')
-                                    <a class="dropdown-item" href="{{ route("user::admin::list") }}">Users</a>
-                                    <a class="dropdown-item" href="{{ route("tickets::list") }}">Tickets</a>
-                                    <a class="dropdown-item" href="{{ route("short_url::index") }}">Short URLs</a>
-                                    <a class="dropdown-item" href="{{ route("queries::index") }}">Queries</a>
+                        @can('board')
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">Site <span class="caret"></span></a>
+
+                                <ul class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
+                                    <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
+                                    <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
+                                    <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
+                                    <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
+                                    <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
+                                    <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
+                                    <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
+                                    <a class="dropdown-item" href="{{ route("newsletter::show") }}">Weekly Update</a>
 
                                     <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item disabled" href="{{ route("protube::admin") }}">ProTube Admin</a>
-                                    <a class="dropdown-item disabled" href="{{ route("tempadmin::index") }}">Temp ProTube Admin</a>
+                                    <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
+                                    <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
 
                                     @can('sysadmin')
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("protube::radio::index") }}">ProTube Radio Stations</a>
-                                        <a class="dropdown-item" href="{{ route("protube::display::index") }}">ProTube Displays</a>
-                                        <a class="dropdown-item" href="{{ route("protube::soundboard::index") }}">Soundboard Sounds</a>
+                                        <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
+                                        <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
+                                        <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
                                     @endcan
 
                                     <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
-                                    <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
-                                    <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
-
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>
-                                    <a class="dropdown-item" href="{{ route("companies::admin") }}">Companies</a>
-                                    <a class="dropdown-item" href="{{ route("joboffers::admin") }}">Job offers</a>
-                                    <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                    <a class="dropdown-item" href="{{ route("newsletter::show") }}">Newsletter</a>
-                                @endcan
-
-                                @if(Auth::user()->hasAllPermissions(['board', 'finadmin']))
-                                    <li role="separator" class="dropdown-divider"></li>
-                                @endif
-
-                                @can('finadmin')
-                                    <a class="dropdown-item" href="{{ route("omnomcom::accounts::list") }}">Accounts</a>
-                                    <a class="dropdown-item" href="{{ route("event::financial::list") }}">Activities</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::withdrawal::list") }}">Withdrawals</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::unwithdrawable") }}">Unwithdrawable</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::mollie::list") }}">Mollie Payments</a>
-                                    <a class="dropdown-item" href="{{ route("omnomcom::payments::statistics") }}">Cash & Card Payments</a>
-                                @endcan
-
-                                @canany(['alfred', 'board'])
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("dmx::index") }}">Fixtures</a>
-                                    <a class="dropdown-item" href="{{ route("dmx::override::index") }}">Override</a>
-                                @endcanany
-
-                                @canany(['alfred', 'sysadmin'])
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("minisites::isalfredthere::admin") }}">Is Alfred There?</a>
-                                @endcanany
-                            </ul>
-                        </li>
-                    @endcanany
-
-                    @can('board')
-                        <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                               aria-haspopup="true"
-                               aria-expanded="false">Site <span class="caret"></span></a>
-
-                            <ul class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route("menu::list") }}">Menu</a>
-                                <a class="dropdown-item" href="{{ route("video::admin::index") }}">Videos</a>
-                                <a class="dropdown-item" href="{{ route("page::list") }}">Pages</a>
-                                <a class="dropdown-item" href="{{ route("news::admin") }}">News</a>
-                                <a class="dropdown-item" href="{{ route("email::admin") }}">Email</a>
-                                <a class="dropdown-item" href="{{ route("achievement::list") }}">Achievements</a>
-                                <a class="dropdown-item" href="{{ route("leaderboards::admin") }}">Leaderboards</a>
-                                <a class="dropdown-item" href="{{ route("welcomeMessages::list") }}">Welcome Messages</a>
-                                <a class="dropdown-item" href="{{ route("newsletter::show") }}">Weekly Update</a>
-
-                                <li role="separator" class="dropdown-divider"></li>
-                                <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
-                                <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
-
-                                @can('sysadmin')
-                                    <li role="separator" class="dropdown-divider"></li>
-                                    <a class="dropdown-item" href="{{ route("alias::index") }}">Aliases</a>
-                                    <a class="dropdown-item" href="{{ route("announcement::index") }}">Announcements</a>
-                                    <a class="dropdown-item" href="{{ route("authorization::overview") }}">Authorization</a>
-                                @endcan
-
-                                <li role="separator" class="dropdown-divider"></li>
-                                <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
-                            </ul>
-                        </li>
-                    @endcanany
-
-                    @cannot('board')
-                        @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
-                            <li class="nav-item">
-                                <a class="nav-link disabled" href="{{ route("protube::admin") }}" role="button">ProTube Admin</a>
-                            </li>
-                        @endif
-
-                        @if(Auth::user()->hasAllPermissions(['protography', 'header-image']))
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                                   aria-haspopup="true" aria-expanded="false">Site <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
-                                    <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
+                                    <a class="dropdown-item" href="{{ route("passwordstore::index") }}">Password Store</a>
                                 </ul>
                             </li>
-                        @endif
+                        @endcanany
 
-                        @can('protograhy')
+                        @cannot('board')
+                            @if(Auth::user()->hasPermissionTo('protube') || Auth::user()->isTempadmin())
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button"
-                                       aria-haspopup="false" aria-expanded="false">Photo Admin</a>
+                                    <a class="nav-link disabled" href="{{ route("protube::admin") }}" role="button">ProTube Admin</a>
                                 </li>
+                            @endif
+
+                            @if(Auth::user()->hasAllPermissions(['protography', 'header-image']))
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false">Site <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <a class="dropdown-item" href="{{ route("headerimage::index") }}">Header Images</a>
+                                        <a class="dropdown-item" href="{{ route("photo::admin::index") }}">Photo Admin</a>
+                                    </ul>
+                                </li>
+                            @endif
+
+                            @can('protograhy')
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button"
+                                           aria-haspopup="false" aria-expanded="false">Photo Admin</a>
+                                    </li>
+                            @endcan
+
+                            @can('registermembers')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('user::registrationhelper::list')}}" role="button"
+                                       aria-haspopup="false" aria-expanded="false">Registration Helper</a>
+                                </li>
+                            @endcan
                         @endcan
 
-                        @can('registermembers')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('user::registrationhelper::list')}}" role="button"
-                                   aria-haspopup="false" aria-expanded="false">Registration Helper</a>
-                            </li>
-                        @endcan
-                    @endcan
-
+                    @endauth
                 </ul>
 
                 <form method="post" action="{{ route('search') }}" class="form-inline mt-2 mt-md-0 me-2 float-end">
