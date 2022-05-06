@@ -525,7 +525,7 @@ class AchievementsCron extends Command
         foreach ($users as $user) {
             $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
             $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
-            $CountEvents = Event::whereIn('id', $activities)->whereTime('end', '<', Carbon::now()->valueOf())->count();
+            $CountEvents = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->valueOf())->count();
             if($CountEvents >= $activityAmount){
                 $selected[] = $user;
             }
