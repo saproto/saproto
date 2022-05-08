@@ -6,6 +6,7 @@ use Carbon;
 use Eloquent;
 use File;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,16 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Photo model.
  *
  * @property int $id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  * @property int $file_id
  * @property int $album_id
  * @property int $date_taken
  * @property int $private
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read PhotoAlbum $album
  * @property-read StorageEntry $file
  * @property-read File $url
- * @property-read PhotoLikes[] $likes
+ * @property-read Collection|PhotoLikes[] $likes
  * @method static Builder|Photo whereAlbumId($value)
  * @method static Builder|Photo whereCreatedAt($value)
  * @method static Builder|Photo whereDateTaken($value)
@@ -32,6 +33,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|Photo whereId($value)
  * @method static Builder|Photo wherePrivate($value)
  * @method static Builder|Photo whereUpdatedAt($value)
+ * @method static Builder|Photo newModelQuery()
+ * @method static Builder|Photo newQuery()
+ * @method static Builder|Photo query()
  * @mixin Eloquent
  */
 class Photo extends Model
@@ -40,7 +44,7 @@ class Photo extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|PhotoAlbum[] */
+    /** @return BelongsTo */
     public function album()
     {
         return $this->belongsTo('Proto\Models\PhotoAlbum', 'album_id');
@@ -92,6 +96,10 @@ class Photo extends Model
         return $this->getAdjacentPhoto(false);
     }
 
+    /**
+     * @param int $paginateLimit
+     * @return false|float|int
+     */
     public function getAlbumPageNumber($paginateLimit)
     {
         $photoIndex = 1;
@@ -128,6 +136,7 @@ class Photo extends Model
         parent::boot();
 
         static::deleting(function ($photo) {
+            /* @var Photo $photo */
             $photo->file()->delete();
             if ($photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;

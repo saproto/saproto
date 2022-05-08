@@ -24,10 +24,10 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property-read Committee $committee
  * @property-read User $user
  * @method static bool|null forceDelete()
+ * @method static bool|null restore()
  * @method static QueryBuilder|CommitteeMembership onlyTrashed()
  * @method static QueryBuilder|CommitteeMembership withTrashed()
  * @method static QueryBuilder|CommitteeMembership withoutTrashed()
- * @method static bool|null restore()
  * @method static Builder|CommitteeMembership whereCommitteeId($value)
  * @method static Builder|CommitteeMembership whereCreatedAt($value)
  * @method static Builder|CommitteeMembership whereDeletedAt($value)
@@ -36,6 +36,9 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|CommitteeMembership whereRole($value)
  * @method static Builder|CommitteeMembership whereUpdatedAt($value)
  * @method static Builder|CommitteeMembership whereUserId($value)
+ * @method static Builder|CommitteeMembership newModelQuery()
+ * @method static Builder|CommitteeMembership newQuery()
+ * @method static Builder|CommitteeMembership query()
  * @mixin Eloquent
  */
 class CommitteeMembership extends Model
@@ -50,13 +53,13 @@ class CommitteeMembership extends Model
 
     protected $dates = ['deleted_at'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsTo|Committee */
+    /** @return BelongsTo */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');

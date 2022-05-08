@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video whereYoutubeTitle($value)
  * @method static Builder|Video whereYoutubeUserId($value)
  * @method static Builder|Video whereYoutubeUserName($value)
+ * @method static Builder|Video newModelQuery()
+ * @method static Builder|Video newQuery()
+ * @method static Builder|Video query()
  * @mixin Eloquent
  */
 class Video extends Model
@@ -43,7 +46,7 @@ class Video extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo|Event */
+    /** @return BelongsTo */
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event', 'event_id');

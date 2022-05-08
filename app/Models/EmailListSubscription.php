@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|EmailListSubscription whereListId($value)
  * @method static Builder|EmailListSubscription whereUpdatedAt($value)
  * @method static Builder|EmailListSubscription whereUserId($value)
+ * @method static Builder|EmailListSubscription newModelQuery()
+ * @method static Builder|EmailListSubscription newQuery()
+ * @method static Builder|EmailListSubscription query()
  * @mixin Eloquent
  */
 class EmailListSubscription extends Model
@@ -32,13 +35,13 @@ class EmailListSubscription extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasOne|User */
+    /** @return HasOne */
     public function user()
     {
         return $this->hasOne('Proto\Models\User');
     }
 
-    /** @return BelongsTo|EmailList */
+    /** @return BelongsTo */
     public function emaillist()
     {
         return $this->belongsTo('Proto\Models\EmailList', 'list_id');

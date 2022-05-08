@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $membercard_long
  * @property int $sort
  * @property-read StorageEntry $image
- * @property-read Collection|Joboffer[] $job_offers
+ * @property-read Collection|Joboffer[] $joboffers
  * @method static Builder|Company whereCreatedAt($value)
  * @method static Builder|Company whereDescription($value)
  * @method static Builder|Company whereExcerpt($value)
@@ -43,6 +43,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Company whereSort($value)
  * @method static Builder|Company whereUpdatedAt($value)
  * @method static Builder|Company whereUrl($value)
+ * @method static Builder|Company newModelQuery()
+ * @method static Builder|Company newQuery()
+ * @method static Builder|Company query()
  * @mixin Eloquent
  */
 class Company extends Model
@@ -51,13 +54,13 @@ class Company extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    /** @return HasMany|Joboffer[] */
+    /** @return HasMany */
     public function joboffers()
     {
         return $this->hasMany('Proto\Models\Joboffer', 'company_id');

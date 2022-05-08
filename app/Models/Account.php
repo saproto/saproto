@@ -24,6 +24,9 @@ use Illuminate\Support\Collection;
  * @method static Builder|Account whereId($value)
  * @method static Builder|Account whereName($value)
  * @method static Builder|Account whereUpdatedAt($value)
+ * @method static Builder|Account newModelQuery()
+ * @method static Builder|Account newQuery()
+ * @method static Builder|Account query()
  * @mixin Eloquent
  */
 class Account extends Model
@@ -32,7 +35,7 @@ class Account extends Model
 
     protected $guarded = ['id'];
 
-    /** @return hasMany|Product[] */
+    /** @return hasMany */
     public function products()
     {
         return $this->hasMany('Proto\Models\Product');
@@ -82,7 +85,7 @@ class Account extends Model
     /**
      * @param int $start
      * @param int $end
-     * @return Collection
+     * @return Collection|Orderline[]
      */
     public function generatePeriodAggregation($start, $end)
     {

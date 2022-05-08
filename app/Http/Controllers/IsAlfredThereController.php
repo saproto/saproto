@@ -53,7 +53,7 @@ class IsAlfredThereController extends Controller
         return Redirect::back();
     }
 
-    /** @return HashMapItem|null */
+    /** @property-read HashMapItem */
     public static function getAlfredsStatus()
     {
         $status = HashMapItem::where('key', self::$HashMapItemKey)->first();

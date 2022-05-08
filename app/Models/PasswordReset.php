@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PasswordReset whereEmail($value)
  * @method static Builder|PasswordReset whereToken($value)
  * @method static Builder|PasswordReset whereValidTo($value)
+ * @method static Builder|PasswordReset newModelQuery()
+ * @method static Builder|PasswordReset newQuery()
+ * @method static Builder|PasswordReset query()
  * @mixin Eloquent
  */
 class PasswordReset extends Model
@@ -27,7 +30,7 @@ class PasswordReset extends Model
 
     public $timestamps = false;
 
-    /** @return HasOne|User */
+    /** @return HasOne */
     public function user()
     {
         return $this->hasOne('Proto\Models\User', 'email', 'email');

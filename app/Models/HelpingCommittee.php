@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|HelpingCommittee whereId($value)
  * @method static Builder|HelpingCommittee whereNotificationSent($value)
  * @method static Builder|HelpingCommittee whereUpdatedAt($value)
+ * @method static Builder|HelpingCommittee newModelQuery()
+ * @method static Builder|HelpingCommittee newQuery()
+ * @method static Builder|HelpingCommittee query()
  * @mixin Eloquent
  */
 class HelpingCommittee extends Validatable
@@ -43,19 +46,19 @@ class HelpingCommittee extends Validatable
         'amount' => 'required|integer',
     ];
 
-    /** @return BelongsTo|Activity */
+    /** @return BelongsTo */
     public function activity()
     {
         return $this->belongsTo('Proto\Models\Activity');
     }
 
-    /** @return BelongsTo|Committee */
+    /** @return BelongsTo */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
         return $this

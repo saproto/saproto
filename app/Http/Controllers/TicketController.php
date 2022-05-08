@@ -139,6 +139,11 @@ class TicketController extends Controller
         return Redirect::back();
     }
 
+    /**
+     * @param int $event
+     * @param Request $request
+     * @return array
+     */
     public function scanApi($event, Request $request)
     {
         if (! $request->has('barcode')) {

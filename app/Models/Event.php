@@ -38,18 +38,15 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int|null $category_id
  * @property string|null $summary
  * @property int $include_in_newsletter
+ * @property-read object $formatted_date
+ * @property-read bool $is_future
  * @property-read Activity $activity
- * @property-read Collection|PhotoAlbum[] $albums
+ * @property-read StorageEntry|null $image
  * @property-read Committee|null $committee
  * @property-read EventCategory $category
- * @property-read mixed $formatted_date
- * @property-read mixed $is_future
- * @property-read StorageEntry|null $image
+ * @property-read Collection|PhotoAlbum[] $albums
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos
- * @property-read int|null $albums_count
- * @property-read int|null $tickets_count
- * @property-read int|null $videos_count
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|Event onlyTrashed()
  * @method static QueryBuilder|Event withTrashed()
@@ -110,43 +107,43 @@ class Event extends Model
         return self::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
-    /** @return BelongsTo|Committee */
+    /** @return BelongsTo */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry');
     }
 
-    /** @return HasOne|Activity */
+    /** @return HasOne */
     public function activity()
     {
         return $this->hasOne('Proto\Models\Activity');
     }
 
-    /** @return HasMany|Video[] */
+    /** @return HasMany */
     public function videos()
     {
         return $this->hasMany('Proto\Models\Video');
     }
 
-    /** @return HasMany|PhotoAlbum[] */
+    /** @return HasMany */
     public function albums()
     {
         return $this->hasMany('Proto\Models\PhotoAlbum', 'event_id');
     }
 
-    /** @return HasMany|Ticket[] */
+    /** @return HasMany */
     public function tickets()
     {
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
     }
 
-    /** @return BelongsTo|EventCategory */
+    /** @return BelongsTo */
     public function category()
     {
         return $this->BelongsTo('Proto\Models\EventCategory');

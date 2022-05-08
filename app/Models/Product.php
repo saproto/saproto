@@ -32,10 +32,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read FinancialAccount $account
- * @property-read Collection|ProductCategory[] $categories
  * @property-read StorageEntry|null $image
- * @property-read Collection|OrderLine[] $orderlines
  * @property-read Ticket $ticket
+ * @property-read Collection|ProductCategory[] $categories
+ * @property-read Collection|OrderLine[] $orderlines
  * @method static Builder|Product whereAccountId($value)
  * @method static Builder|Product whereCalories($value)
  * @method static Builder|Product whereCreatedAt($value)
@@ -52,6 +52,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|Product whereSupplierCollo($value)
  * @method static Builder|Product whereSupplierId($value)
  * @method static Builder|Product whereUpdatedAt($value)
+ * @method static Builder|Product newModelQuery()
+ * @method static Builder|Product newQuery()
+ * @method static Builder|Product query()
  * @mixin Eloquent
  */
 class Product extends Model
@@ -62,31 +65,31 @@ class Product extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    /** @return BelongsTo|FinancialAccount */
+    /** @return BelongsTo */
     public function account()
     {
         return $this->belongsTo('Proto\Models\FinancialAccount');
     }
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    /** @return BelongsToMany|ProductCategory */
+    /** @return BelongsToMany */
     public function categories()
     {
         return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
     }
 
-    /** @return HasOne|Ticket */
+    /** @return HasOne */
     public function ticket()
     {
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    /** @return HasMany|OrderLine[] */
+    /** @return HasMany */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');

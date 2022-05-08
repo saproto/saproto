@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Dinnerform whereStart($value)
  * @method static Builder|Dinnerform whereUpdatedAt($value)
  * @method static Builder|Dinnerform whereUrl($value)
+ * @method static Builder|Dinnerform newModelQuery()
+ * @method static Builder|Dinnerform newQuery()
+ * @method static Builder|Dinnerform query()
  * @mixin Eloquent
  */
 class Dinnerform extends Model

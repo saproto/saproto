@@ -30,6 +30,9 @@ use Proto\Http\Controllers\FileController;
  * @method static Builder|StorageEntry whereMime($value)
  * @method static Builder|StorageEntry whereOriginalFilename($value)
  * @method static Builder|StorageEntry whereUpdatedAt($value)
+ * @method static Builder|StorageEntry newModelQuery()
+ * @method static Builder|StorageEntry newQuery()
+ * @method static Builder|StorageEntry query()
  * @mixin Eloquent
  */
 class StorageEntry extends Model

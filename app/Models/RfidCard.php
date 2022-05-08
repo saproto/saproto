@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|RfidCard whereName($value)
  * @method static Builder|RfidCard whereUpdatedAt($value)
  * @method static Builder|RfidCard whereUserId($value)
+ * @method static Builder|RfidCard newModelQuery()
+ * @method static Builder|RfidCard newQuery()
+ * @method static Builder|RfidCard query()
  * @mixin Eloquent
  */
 class RfidCard extends Model
@@ -32,7 +35,7 @@ class RfidCard extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

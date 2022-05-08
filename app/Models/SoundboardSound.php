@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|SoundboardSound whereHidden($value)
  * @method static Builder|SoundboardSound whereId($value)
  * @method static Builder|SoundboardSound whereName($value)
+ * @method static Builder|SoundboardSound newModelQuery()
+ * @method static Builder|SoundboardSound newQuery()
+ * @method static Builder|SoundboardSound query()
  * @mixin Eloquent
  */
 class SoundboardSound extends Model
@@ -29,7 +32,7 @@ class SoundboardSound extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function file()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'file_id');

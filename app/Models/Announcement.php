@@ -51,6 +51,9 @@ use Illuminate\Support\Facades\Route;
  * @method static Builder|Announcement whereShowStyle($value)
  * @method static Builder|Announcement whereShowUsers($value)
  * @method static Builder|Announcement whereUpdatedAt($value)
+ * @method static Builder|Announcement newModelQuery()
+ * @method static Builder|Announcement newQuery()
+ * @method static Builder|Announcement query()
  * @mixin Eloquent
  */
 class Announcement extends Model

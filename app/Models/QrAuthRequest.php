@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|QrAuthRequest whereQrToken($value)
  * @method static Builder|QrAuthRequest whereUpdatedAt($value)
  * @method static Builder|QrAuthRequest whereUserId($value)
+ * @method static Builder|QrAuthRequest newModelQuery()
+ * @method static Builder|QrAuthRequest newQuery()
+ * @method static Builder|QrAuthRequest query()
  * @mixin Eloquent
  */
 class QrAuthRequest extends Model
@@ -35,6 +38,7 @@ class QrAuthRequest extends Model
 
     protected $guarded = ['id'];
 
+    /** @return bool */
     public function isApproved()
     {
         return $this->approved_at !== null;

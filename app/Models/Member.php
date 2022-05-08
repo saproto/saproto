@@ -17,21 +17,22 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property int $user_id
  * @property string|null $proto_username
  * @property string|null $membership_form_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property string|null $card_printed_on
  * @property int $is_lifelong
  * @property int $is_honorary
  * @property int $is_donor
  * @property string $is_pending
+ * @property int $is_pet
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property string|null $card_printed_on
- * @property-read StorageEntry|null $membershipForm
  * @property-read User $user
+ * @property-read StorageEntry|null $membershipForm
  * @method static bool|null forceDelete()
+ * @method static bool|null restore()
  * @method static QueryBuilder|Member onlyTrashed()
  * @method static QueryBuilder|Member withTrashed()
  * @method static QueryBuilder|Member withoutTrashed()
- * @method static bool|null restore()
  * @method static Builder|Member whereCardPrintedOn($value)
  * @method static Builder|Member whereCreatedAt($value)
  * @method static Builder|Member whereDeletedAt($value)
@@ -44,6 +45,11 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Member whereProtoUsername($value)
  * @method static Builder|Member whereUpdatedAt($value)
  * @method static Builder|Member whereUserId($value)
+ * @method static Builder|Member whereIsPending($value)
+ * @method static Builder|Member whereIsPet($value)
+ * @method static Builder|Member newModelQuery()
+ * @method static Builder|Member newQuery()
+ * @method static Builder|Member query()
  * @mixin Eloquent
  */
 class Member extends Model
@@ -56,13 +62,13 @@ class Member extends Model
 
     protected $dates = ['deleted_at'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function membershipForm()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'membership_form_id');
@@ -89,7 +95,7 @@ class Member extends Model
         return User::whereHas('member', function ($query) { $query->where('is_pending', false); })->count();
     }
 
-    /** @return Orderline */
+    /** @return OrderLine|null */
     public function getMembershipOrderline()
     {
         if (intval(date('n')) >= 9) {
@@ -98,7 +104,8 @@ class Member extends Model
             $year_start = intval(date('Y')) - 1;
         }
 
-        return OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))
+        return OrderLine::query()
+            ->whereIn('product_id', array_values(config('omnomcom.fee')))
             ->where('created_at', '>=', $year_start.'-09-01 00:00:01')
             ->where('user_id', '=', $this->user->id)
             ->first();

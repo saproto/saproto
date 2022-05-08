@@ -33,6 +33,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|TicketPurchase whereTicketId($value)
  * @method static Builder|TicketPurchase whereUpdatedAt($value)
  * @method static Builder|TicketPurchase whereUserId($value)
+ * @method static Builder|TicketPurchase newModelQuery()
+ * @method static Builder|TicketPurchase newQuery()
+ * @method static Builder|TicketPurchase query()
  * @mixin Eloquent
  */
 class TicketPurchase extends Model
@@ -41,19 +44,19 @@ class TicketPurchase extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|Ticket */
+    /** @return BelongsTo */
     public function ticket()
     {
         return $this->belongsTo('Proto\Models\Ticket', 'ticket_id');
     }
 
-    /** @return BelongsTo|OrderLine */
+    /** @return BelongsTo */
     public function orderline()
     {
         return $this->belongsTo('Proto\Models\OrderLine', 'orderline_id');
     }
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User', 'user_id')->withTrashed();

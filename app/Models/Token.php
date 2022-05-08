@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Token whereToken($value)
  * @method static Builder|Token whereUpdatedAt($value)
  * @method static Builder|Token whereUserId($value)
+ * @method static Builder|Token newModelQuery()
+ * @method static Builder|Token newQuery()
+ * @method static Builder|Token query()
  * @mixin Eloquent
  */
 class Token extends Model

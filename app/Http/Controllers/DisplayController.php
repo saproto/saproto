@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -66,7 +67,7 @@ class DisplayController extends Controller
     /**
      * Return a public list of radio stations for Herbert.
      *
-     * @return Display[]
+     * @return Collection|Display[]
      */
     public function api()
     {

@@ -58,6 +58,11 @@ class TFAController extends Controller
         return Redirect::route('user::dashboard');
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
     public function adminDestroy(Request $request, $id)
     {
         $user = User::findOrFail($id);

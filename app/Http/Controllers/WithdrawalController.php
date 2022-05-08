@@ -207,7 +207,6 @@ class WithdrawalController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {

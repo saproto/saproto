@@ -5,12 +5,17 @@ namespace Proto\Models;
 use Auth;
 use Eloquent;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use stdClass;
 
 /**
  * Photo Manager Model.
  *
+ * @method static Builder|PhotoManager newModelQuery()
+ * @method static Builder|PhotoManager newQuery()
+ * @method static Builder|PhotoManager query()
  * @mixin Eloquent
  */
 class PhotoManager extends Model
@@ -20,7 +25,7 @@ class PhotoManager extends Model
      * @param string|null $query
      * @param bool $unpublished
      * @param bool $no_thumb
-     * @return PhotoAlbum[]
+     * @return Collection|PhotoAlbum[]
      */
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {
@@ -110,7 +115,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;

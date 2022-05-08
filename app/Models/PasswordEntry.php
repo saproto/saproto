@@ -33,6 +33,9 @@ use Spatie\Permission\Models\Permission;
  * @method static Builder|PasswordEntry whereUpdatedAt($value)
  * @method static Builder|PasswordEntry whereUrl($value)
  * @method static Builder|PasswordEntry whereUsername($value)
+ * @method static Builder|PasswordEntry newModelQuery()
+ * @method static Builder|PasswordEntry newQuery()
+ * @method static Builder|PasswordEntry query()
  * @mixin Eloquent
  */
 class PasswordEntry extends Model
@@ -41,7 +44,7 @@ class PasswordEntry extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|Permission */
+    /** @return BelongsTo */
     public function permission()
     {
         return $this->belongsTo('Spatie\Permission\Models\Permission', 'permission_id');

@@ -239,7 +239,12 @@ class CommitteeController extends Controller
         return view('committee.membership-edit', ['membership' => $membership]);
     }
 
-    public function editMembership($id, Request $request)
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function editMembership(Request $request, $id)
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
         $membership->role = $request->role;

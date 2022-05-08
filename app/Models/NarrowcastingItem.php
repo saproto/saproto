@@ -34,6 +34,9 @@ use Youtube;
  * @method static Builder|NarrowcastingItem whereSlideDuration($value)
  * @method static Builder|NarrowcastingItem whereUpdatedAt($value)
  * @method static Builder|NarrowcastingItem whereYoutubeId($value)
+ * @method static Builder|NarrowcastingItem newModelQuery()
+ * @method static Builder|NarrowcastingItem newQuery()
+ * @method static Builder|NarrowcastingItem query()
  * @mixin Eloquent
  */
 class NarrowcastingItem extends Model
@@ -42,7 +45,7 @@ class NarrowcastingItem extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry');

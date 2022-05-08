@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|GoodIdea whereIdea($value)
  * @method static Builder|GoodIdea whereUpdatedAt($value)
  * @method static Builder|GoodIdea whereUserId($value)
+ * @method static Builder|GoodIdea newModelQuery()
+ * @method static Builder|GoodIdea newQuery()
+ * @method static Builder|GoodIdea query()
  * @mixin Eloquent
  */
 class GoodIdea extends Model
@@ -33,13 +36,13 @@ class GoodIdea extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return HasMany|GoodIdeaVote[] */
+    /** @return HasMany */
     public function votes()
     {
         return $this->hasMany('Proto\Models\GoodIdeaVote');

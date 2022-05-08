@@ -22,6 +22,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use Solitweb\DirectAdmin\DirectAdmin;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -63,32 +65,36 @@ use Spatie\Permission\Traits\HasRoles;
  * @property int $signed_nda
  * @property Carbon|null $deleted_at
  * @property string|null $personal_key
- * @property-read Collection|Achievement[] $achievements
- * @property-read Address $address
- * @property-read Bank $bank
- * @property-read Collection|Client[] $clients
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
  * @property-read bool $photo_preview
  * @property-read bool $signed_membership_form
- * @property-read mixed $welcome_message
- * @property-read HelperReminder $helperReminderSubscriptions
- * @property-read Collection|EmailList[] $lists
+ * @property-read string|null $welcome_message
+ * @property-read StorageEntry $photo
+ * @property-read Address $address
+ * @property-read Bank $bank
  * @property-read Member $member
+ * @property-read HelperReminder $helperReminderSubscriptions
+ * @property-read Collection|Achievement[] $achievements
+ * @property-read Collection|Client[] $clients
+ * @property-read Collection|EmailList[] $lists
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
- * @property-read StorageEntry|null $photo
  * @property-read Collection|PlayedVideo[] $playedVideos
  * @property-read Collection|Quote[] $quotes
  * @property-read Collection|RfidCard[] $rfid
- * @property-read Collection|Role[] $roles
  * @property-read Collection|Tempadmin[] $tempadmin
  * @property-read Collection|Token[] $tokens
+ * @property-read Collection|Committee[] $committees
+ * @property-read Collection|Role[] $roles
+ * @property-read Collection|Permission[] $permissions
+ * @property-read Collection|Committee[] $societies
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|User onlyTrashed()
  * @method static QueryBuilder|User withTrashed()
  * @method static QueryBuilder|User withoutTrashed()
+ * @method static Builder|User role($roles, $guard = null)
  * @method static Builder|User whereAddressVisible($value)
  * @method static Builder|User whereBirthdate($value)
  * @method static Builder|User whereCallingName($value)
@@ -125,6 +131,10 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User whereUtwenteDepartment($value)
  * @method static Builder|User whereUtwenteUsername($value)
  * @method static Builder|User whereWebsite($value)
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User permission($permissions)
+ * @method static Builder|User query()
  * @mixin Eloquent
  */
 class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
@@ -162,7 +172,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * **IMPORTANT!** IF YOU ADD ANY RELATION TO A USER IN ANOTHER MODEL, DON'T FORGET TO UPDATE THIS METHOD.
-     * @return bool whether or not the user is stale (not in use, can really be deleted safely).
+     * @return bool whether the user is stale (not in use, can really be deleted safely).
      */
     public function isStale()
     {
@@ -183,19 +193,19 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
-    /** @return BelongsTo|StorageEntry User's profile picture */
+    /** @return BelongsTo */
     public function photo()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    /** @return BelongsTo|HelperReminder */
+    /** @return BelongsTo */
     public function helperReminderSubscriptions()
     {
         return $this->belongsTo('Proto\Models\HelperReminder');
     }
 
-    /** @return BelongsToMany|Committee[] */
+    /** @return BelongsToMany */
     private function getGroups()
     {
         return $this->belongsToMany('Proto\Models\Committee', 'committees_users')
@@ -209,25 +219,25 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany|EmailList[] */
+    /** @return BelongsToMany */
     public function lists()
     {
         return $this->belongsToMany('Proto\Models\EmailList', 'users_mailinglists', 'user_id', 'list_id');
     }
 
-    /** @return BelongsToMany|Achievement[] */
+    /** @return BelongsToMany */
     public function achievements()
     {
         return $this->belongsToMany('Proto\Models\Achievement', 'achievements_users')->withPivot(['id'])->withTimestamps()->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsToMany|Committee[] */
+    /** @return BelongsToMany */
     public function committees()
     {
         return $this->getGroups()->where('is_society', false);
     }
 
-    /** @return BelongsToMany|Committee[] */
+    /** @return BelongsToMany */
     public function societies()
     {
         return $this->getGroups()->where('is_society', true);
@@ -239,55 +249,55 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->hasOne('Proto\Models\Member');
     }
 
-    /** @return HasOne|Bank */
+    /** @return HasOne */
     public function bank()
     {
         return $this->hasOne('Proto\Models\Bank');
     }
 
-    /** @return HasOne|Address */
+    /** @return HasOne */
     public function address()
     {
         return $this->hasOne('Proto\Models\Address');
     }
 
-    /** @return HasMany|OrderLine[] */
+    /** @return HasMany */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');
     }
 
-    /** @return HasMany|Tempadmin[] */
+    /** @return HasMany */
     public function tempadmin()
     {
         return $this->hasMany('Proto\Models\Tempadmin');
     }
 
-    /** @return HasMany|Quote[] */
+    /** @return HasMany */
     public function quotes()
     {
         return $this->hasMany('Proto\Models\Quote');
     }
 
-    /** @return HasMany|RfidCard[] */
+    /** @return HasMany */
     public function rfid()
     {
         return $this->hasMany('Proto\Models\RfidCard');
     }
 
-    /** @return HasMany|Token[] */
+    /** @return HasMany */
     public function tokens()
     {
         return $this->hasMany('Proto\Models\Token');
     }
 
-    /** @return HasMany|PlayedVideo[] */
+    /** @return HasMany */
     public function playedVideos()
     {
         return $this->hasMany('Proto\Models\PlayedVideo');
     }
 
-    /** @return HasMany|MollieTransaction[] */
+    /** @return HasMany */
     public function mollieTransactions()
     {
         return $this->hasMany('Proto\Models\MollieTransaction');
@@ -423,7 +433,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * @param int $limit
-     * @return WithDrawal[]
+     * @return Withdrawal[]
      */
     public function withdrawals($limit = 0)
     {
@@ -490,6 +500,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->tfa_totp_key !== null;
     }
 
+    /** @return void */
     public function generateNewPersonalKey()
     {
         $this->personal_key = str_random(64);
@@ -547,7 +558,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_alarm;
     }
 
-    /** @param $hours */
+    /** @param int|null $hours */
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);
@@ -561,6 +572,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->pref_calendar_relevant_only;
     }
 
+    /** @return void */
     public function toggleCalendarRelevantSetting()
     {
         $this->pref_calendar_relevant_only = ! $this->pref_calendar_relevant_only;

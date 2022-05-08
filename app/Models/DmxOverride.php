@@ -22,6 +22,9 @@ use Illuminate\Support\Collection;
  * @method static Builder|DmxOverride whereFixtures($value)
  * @method static Builder|DmxOverride whereId($value)
  * @method static Builder|DmxOverride whereStart($value)
+ * @method static Builder|DmxOverride newModelQuery()
+ * @method static Builder|DmxOverride newQuery()
+ * @method static Builder|DmxOverride query()
  * @mixin Eloquent
  */
 class DmxOverride extends Model

@@ -17,16 +17,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $user_id
  * @property int $is_present
  * @property int|null $committees_activities_id
+ * @property int $backup
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $backup
  * @property Carbon|null $deleted_at
  * @property-read Activity $activity
  * @property-read HelpingCommittee|null $help
  * @property-read User $user
  * @method static bool|null forceDelete()
- * @method static Builder|ActivityParticipation onlyTrashed()
  * @method static bool|null restore()
+ * @method static Builder|ActivityParticipation onlyTrashed()
  * @method static Builder|ActivityParticipation whereActivityId($value)
  * @method static Builder|ActivityParticipation whereBackup($value)
  * @method static Builder|ActivityParticipation whereCommitteesActivitiesId($value)
@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|ActivityParticipation whereUserId($value)
  * @method static Builder|ActivityParticipation withTrashed()
  * @method static Builder|ActivityParticipation withoutTrashed()
+ * @method static Builder|ActivityParticipation newModelQuery()
+ * @method static Builder|ActivityParticipation newQuery()
+ * @method static Builder|ActivityParticipation query()
  * @mixin Eloquent
  */
 class ActivityParticipation extends Model
@@ -50,13 +53,13 @@ class ActivityParticipation extends Model
 
     protected $dates = ['deleted_at'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsTo|Activity */
+    /** @return BelongsTo */
     public function activity()
     {
         return $this->belongsTo('Proto\Models\Activity');

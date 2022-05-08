@@ -28,6 +28,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Bank whereMachtigingid($value)
  * @method static Builder|Bank whereUpdatedAt($value)
  * @method static Builder|Bank whereUserId($value)
+ * @method static Builder|Bank newModelQuery()
+ * @method static Builder|Bank newQuery()
+ * @method static Builder|Bank query()
  * @mixin Eloquent
  */
 class Bank extends Model
@@ -36,7 +39,7 @@ class Bank extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();

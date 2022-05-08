@@ -13,21 +13,21 @@ use Session;
 
 class JobofferController extends Controller
 {
-    /** @return View  */
+    /** @return View */
     public function index()
     {
         $companies = Company::has('joboffers')->get();
         return view('companies.joboffers.list', ['companies' => $companies]);
     }
 
-    /** @return View  */
+    /** @return View */
     public function adminIndex()
     {
         $joboffers = Joboffer::all();
         return view('companies.joboffers.adminlist', ['joboffers' => $joboffers]);
     }
 
-    /** @return View  */
+    /** @return View */
     public function create()
     {
         $companies = Company::all();

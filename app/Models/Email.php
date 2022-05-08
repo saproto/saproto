@@ -53,6 +53,10 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Email whereToMember($value)
  * @method static Builder|Email whereToUser($value)
  * @method static Builder|Email whereUpdatedAt($value)
+ * @method static Builder|Email whereToPending($value)
+ * @method static Builder|Email newModelQuery()
+ * @method static Builder|Email newQuery()
+ * @method static Builder|Email query()
  * @mixin Eloquent
  */
 class Email extends Model
@@ -61,19 +65,19 @@ class Email extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany|EmailList[] */
+    /** @return BelongsToMany */
     public function lists()
     {
         return $this->belongsToMany('Proto\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
     }
 
-    /** @return BelongsToMany|Event[] */
+    /** @return BelongsToMany */
     public function events()
     {
         return $this->belongsToMany('Proto\Models\Event', 'emails_events', 'email_id', 'event_id');
     }
 
-    /** @return BelongsToMany|StorageEntry[] */
+    /** @return BelongsToMany */
     public function attachments()
     {
         return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');

@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Achievement wherePageName($value)
  * @method static Builder|Achievement whereTier($value)
  * @method static Builder|Achievement whereUpdatedAt($value)
+ * @method static Builder|Achievement newModelQuery()
+ * @method static Builder|Achievement newQuery()
+ * @method static Builder|Achievement query()
  * @mixin Eloquent
  */
 class Achievement extends Model
@@ -45,13 +48,13 @@ class Achievement extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'achievements_users');
     }
 
-    /** @return HasMany|AchievementOwnership[] */
+    /** @return HasMany */
     public function achievementOwnership()
     {
         return $this->hasMany('Proto\Models\AchievementOwnership');
