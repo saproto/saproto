@@ -233,7 +233,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $this->getGroups()->where('is_society', true);
     }
 
-    /** @return HasOne|Member */
+    /** @return HasOne */
     public function member()
     {
         return $this->hasOne('Proto\Models\Member');

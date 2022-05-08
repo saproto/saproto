@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Carbon;
 use DB;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -78,7 +79,10 @@ class Email extends Model
         return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
     }
 
-    /** @return string */
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function destinationForBody()
     {
         if ($this->to_user) {
@@ -93,6 +97,8 @@ class Email extends Model
             return 'list';
         } elseif ($this->to_event) {
             return 'event';
+        } else {
+            throw new Exception('Email has no destination');
         }
     }
 

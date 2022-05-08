@@ -154,7 +154,6 @@ class OmNomController extends Controller
             default:
                 $result->message = 'Invalid credential type.';
                 return json_encode($result);
-                break;
         }
 
         if (! $user->is_member) {

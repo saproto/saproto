@@ -136,8 +136,8 @@ class PhotoManager extends Model
      */
     public static function deleteAlbum($album_id)
     {
-        $album = PhotoAlbum::where('id', $album_id)->get()->first();
-        $photos = Photo::where('album_id', $album_id)->get();
+        $album = PhotoAlbum::find($album_id);
+        $photos = $album->items;
 
         foreach ($photos as $photo) {
             $photo->delete();

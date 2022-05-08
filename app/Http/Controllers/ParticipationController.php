@@ -123,7 +123,7 @@ class ParticipationController extends Controller
         $participation->fill($data);
         $participation->save();
 
-        $help_committee = ($request->has('helping_committee_id') ? $helping->committee->name : null);
+        $help_committee = ($helping->committee->name ?? null);
 
         Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $help_committee))->onQueue('high'));
 

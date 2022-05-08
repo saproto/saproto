@@ -24,7 +24,7 @@ class DevelopmentAccess
      *
      * @param Request $request
      * @param Closure $next
-     * @return mixed
+     * @return Closure
      */
     public function handle($request, $next)
     {
@@ -36,7 +36,7 @@ class DevelopmentAccess
 
         if ($this->clientNotAllowed()) {
             config(['app.debug' => false]);
-            return abort(403);
+            abort(403);
         }
 
         return $next($request);

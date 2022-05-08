@@ -18,7 +18,7 @@ class PageController extends Controller
 {
     /**
      * These slugs can't be used for pages, as they are used by the app.
-     * @var array
+     * @var string[]
      */
     protected $reservedSlugs = ['add', 'edit', 'delete'];
 
@@ -60,7 +60,7 @@ class PageController extends Controller
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
-        if (Page::where('slug', $page->slug)->get()->count() > 0) {
+        if (Page::where('slug', $page->slug)->exists()) {
             Session::flash('flash_message', 'This URL has already been used and can\'t be used again. Please choose a different URL.');
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
@@ -110,7 +110,7 @@ class PageController extends Controller
         /** @var Page $page */
         $page = Page::findOrFail($id);
 
-        if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->get()->count() > 0) {
+        if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->exists()) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
             return view('pages.edit', ['item' => $request, 'new' => false]);
         }

@@ -322,7 +322,7 @@ class EmailController extends Controller
                 $email->to_event = true;
 
                 $email->lists()->sync([]);
-                if (isset($events) && count($events) > 0) {
+                if (! empty($events)) {
                     $email->events()->sync($events);
                 }
                 break;

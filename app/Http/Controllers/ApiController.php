@@ -5,7 +5,6 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Input;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
@@ -113,7 +112,7 @@ class ApiController extends Controller
         }
 
         if ($request->has('callback')) {
-            return response()->json($response)->setCallback(Input::get('callback'));
+            return response()->json($response)->setCallback($request->input('callback'));
         } else {
             return response()->json($response);
         }

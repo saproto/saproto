@@ -137,6 +137,8 @@ class UserAdminController extends Controller
 
             return redirect()->route('user::admin::details', ['id' => $redirect_user]);
         }
+
+        return redirect()->back();
     }
 
     /**

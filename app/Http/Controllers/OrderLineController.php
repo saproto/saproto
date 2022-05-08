@@ -19,14 +19,14 @@ use Redirect;
 class OrderLineController extends Controller
 {
     /**
-     * @param null $date
+     * @param string $date
      * @return View
      */
     public function index($date = null)
     {
         $user = Auth::user();
 
-        $next_withdrawal = $orderlines = OrderLine::query()
+        $next_withdrawal = OrderLine::query()
             ->where('user_id', $user->id)
             ->whereNull('payed_with_cash')
             ->whereNull('payed_with_bank_card')
@@ -75,7 +75,7 @@ class OrderLineController extends Controller
 
     /**
      * @param Request $request
-     * @param null $date
+     * @param string $date
      * @return View|RedirectResponse
      */
     public function adminindex(Request $request, $date = null)
@@ -102,7 +102,7 @@ class OrderLineController extends Controller
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
-            'orderlines' => ($orderlines ?? []),
+            'orderlines' => $orderlines,
         ]);
     }
 

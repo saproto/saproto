@@ -457,22 +457,17 @@ class EventController extends Controller
     public function setReminder(Request $request)
     {
         $user = Auth::user();
-
         $hours = floatval($request->get('hours'));
 
         if ($request->has('delete') || $hours <= 0) {
             $user->setCalendarAlarm(null);
             Session::flash('flash_message', 'Reminder removed.');
-
-            return Redirect::back();
-        } elseif ($hours > 0) {
+        } else {
             $user->setCalendarAlarm($hours);
             Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
-
-            return Redirect::back();
-        } else {
-            return abort(500, 'Invalid request.');
         }
+
+        return Redirect::back();
     }
 
     /** @return RedirectResponse */
