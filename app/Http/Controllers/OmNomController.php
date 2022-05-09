@@ -231,7 +231,7 @@ class OmNomController extends Controller
             if(strlen($result->message) > 0) {
                 $result->message .= sprintf(' today, %s.', $user->calling_name);
             }
-            $soccerCards=0;
+            $soccerCards = 0;
             foreach ($cart as $id => $amount) {
                 $product = Product::find($id);
                 if($product) {
