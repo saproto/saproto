@@ -34,7 +34,7 @@ class OmNomController extends Controller
 
         $store = config('omnomcom.stores')[$store_slug];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
         }
 
