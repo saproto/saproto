@@ -514,7 +514,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
 
         /* Routes related to the TIPCie OmNomCom store. */
-        Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie|omnomcom'], 'as' => 'tipcie::'], function () {
+        Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie'], 'as' => 'tipcie::'], function () {
             Route::get('', ['as' => 'orderhistory', 'uses' => 'TIPCieController@orderIndex']);
         });
 
