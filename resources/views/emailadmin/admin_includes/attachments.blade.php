@@ -52,25 +52,21 @@
 
         <div class="card-footer">
 
-            <form method="post" enctype="multipart/form-data"
-                  action="{{ route('email::attachment::add', ['id'=>$email->id]) }}">
-
-                {{ csrf_field() }}
+            <form id="add_attachment" method="post" enctype="multipart/form-data" action="{{ route('email::attachment::add', ['id'=>$email->id]) }}">
+                @csrf
 
                 <div class="custom-file mb-3">
                     <input type="file" id="attachment" class="form-control" name="attachment">
-                    <label class="form-label" for="attachment">Choose file</label>
                 </div>
 
                 @include('website.layouts.macros.confirm-modal', [
-                    'action' => route('email::attachment::delete', ['id' => $email->id, 'file_id' => $attachment->id]),
+                    'form' => '#add_attachment',
                     'classes' => 'btn btn-success btn-block',
                     'text' => 'Upload',
                     'title' => 'Confirm Upload',
                     'message' => "Any unsaved changes to the e-mail will be discarded if you upload an attachment. Are you sure you want to continue?",
                     'confirm' => 'Upload',
                 ])
-
             </form>
 
         </div>

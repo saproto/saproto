@@ -1,6 +1,7 @@
 <a href="#"
-   class="confirm-modal-button {{ $classes ?? '' }}"
-   data-confirm-action="{{ $action }}"
+   class="confirm-modal-button {{ $classes ?? null }}"
+   data-form="{{ $form ?? null }}"
+   data-confirm-action="{{ $action ?? null }}"
    data-confirm-method="{{ $method ?? 'GET' }}"
    data-confirm-title="{{ $title ?? 'Confirm Action' }}"
    data-confirm-message="{{ $message ?? 'Are you sure?' }}"
@@ -41,8 +42,17 @@
                 modal.querySelector('.modal-title').innerHTML = el.getAttribute('data-confirm-title')
                 modal.querySelector('.modal-body').innerHTML = el.getAttribute('data-confirm-message')
                 modal.querySelector('.confirm-button').innerHTML = el.getAttribute('data-confirm-btn-text')
-                modal.querySelector('form').action = el.getAttribute('data-confirm-action')
-                modal.querySelector('form').method = el.getAttribute('data-confirm-method')
+
+                const form = el.getAttribute('data-form')
+                if(form) {
+                    modal.querySelector('.confirm-button').onclick = e => {
+                        e.preventDefault()
+                        document.querySelector(form).submit()
+                    }
+                } else {
+                    modal.querySelector('form').action = el.getAttribute('data-confirm-action')
+                    modal.querySelector('form').method = el.getAttribute('data-confirm-method')
+                }
             }))
         </script>
     @endpush
