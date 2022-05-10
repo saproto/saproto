@@ -16,13 +16,11 @@
     "CSS",
     "Grunt"
   ],
-  "author": "",
-  "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/saproto/saproto/issues"
   },
   "homepage": "https://github.com/saproto/saproto/tree/master/example",
-  "private": false,
+  "private": true,
   "scripts": {
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
