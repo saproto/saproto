@@ -42,7 +42,6 @@ class NarrowcastingController extends Controller
     {
         if (! $request->file('image') && ! $request->has('youtube_id')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
-
             return Redirect::back();
         }
 
@@ -66,13 +65,11 @@ class NarrowcastingController extends Controller
 
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
-
                 return Redirect::back();
             }
 
             if (! $video->status->embeddable) {
                 Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
-
                 return Redirect::back();
             }
 
@@ -135,7 +132,6 @@ class NarrowcastingController extends Controller
 
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
-
                 return Redirect::back();
             }
 
@@ -182,7 +178,6 @@ class NarrowcastingController extends Controller
         }
 
         Session::flash('flash_message', 'All finished campaigns have been deleted.');
-
         return Redirect::route('narrowcasting::list');
     }
 

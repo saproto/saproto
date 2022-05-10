@@ -29,7 +29,6 @@ class DisplayController extends Controller
     {
         Display::create($request->all());
         Session::flash('flash_message', 'Display added.');
-
         return Redirect::back();
     }
 

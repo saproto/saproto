@@ -92,7 +92,6 @@ class QuoteCornerController extends Controller
             ]);
         } else {
             Session::flash('flash_message', 'Quote added.');
-
             return Redirect::route('quotes::list');
         }
     }
@@ -108,7 +107,6 @@ class QuoteCornerController extends Controller
         QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
         Session::flash('flash_message', 'Quote deleted.');
-
         return Redirect::route('quotes::list');
     }
 

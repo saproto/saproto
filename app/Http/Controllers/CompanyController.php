@@ -26,7 +26,6 @@ class CompanyController extends Controller
             return view('companies.list', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
-
             return Redirect::back();
         }
     }
@@ -43,7 +42,6 @@ class CompanyController extends Controller
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
-
             return Redirect::back();
         }
     }
@@ -98,7 +96,6 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
-
         return Redirect::route('companies::admin');
     }
 
@@ -167,7 +164,6 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
-
         return Redirect::route('companies::admin');
     }
 

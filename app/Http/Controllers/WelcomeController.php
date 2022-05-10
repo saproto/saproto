@@ -55,7 +55,6 @@ class WelcomeController extends Controller
         }
         $message->delete();
         Session::flash('flash_message', 'Welcome Message removed');
-
         return Redirect::route('welcomeMessages::list');
     }
 }

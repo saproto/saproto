@@ -239,7 +239,6 @@ class EventController extends Controller
 
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
-
             return Redirect::back();
         }
 
@@ -269,7 +268,6 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
-
             return Redirect::back();
         }
 
@@ -286,7 +284,6 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
-
             return Redirect::back();
         }
 

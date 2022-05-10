@@ -133,8 +133,7 @@ class MollieController extends Controller
     public function monthly(Request $request, $month)
     {
         if (strtotime($month) === false) {
-            $request->session()->flash('flash_message', 'Invalid date: '.$month);
-
+            Session::flash('flash_message', 'Invalid date: '.$month);
             return Redirect::back();
         }
 
@@ -198,7 +197,6 @@ class MollieController extends Controller
                     break;
             }
             Session::flash('flash_message', $flash_message);
-
             return Redirect::route('event::show', ['id' => Event::findOrFail($event_id)->getPublicId()]);
         }
 

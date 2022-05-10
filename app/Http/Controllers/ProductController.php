@@ -15,6 +15,7 @@ use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\StorageEntry;
 use Redirect;
+use Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
@@ -90,7 +91,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        $request->session()->flash('flash_message', 'The new product has been created!');
+        Session::flash('flash_message', 'The new product has been created!');
         return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
     }
 
@@ -149,7 +150,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        $request->session()->flash('flash_message', 'The product has been updated.');
+        Session::flash('flash_message', 'The product has been updated.');
         return Redirect::route('omnomcom::products::edit', ['id' => $product->id]);
     }
 
@@ -197,8 +198,7 @@ class ProductController extends Controller
             $product->save();
         }
 
-        $request->session()->flash('flash_message', 'Done. Errors:<br>'.$errors);
-
+        Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
         Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
 
         return Redirect::back();
@@ -216,14 +216,13 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if ($product->orderlines->count() > 0) {
-            $request->session()->flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
-
+            Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
             return Redirect::back();
         }
 
         $product->delete();
 
-        $request->session()->flash('flash_message', 'The product has been deleted.');
+        Session::flash('flash_message', 'The product has been deleted.');
         return Redirect::route('omnomcom::products::list');
     }
 

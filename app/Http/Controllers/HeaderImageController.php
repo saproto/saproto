@@ -61,7 +61,6 @@ class HeaderImageController extends Controller
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
-
         return Redirect::route('headerimage::index');
     }
 }

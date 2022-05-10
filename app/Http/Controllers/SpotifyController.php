@@ -6,6 +6,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Proto\Models\HashMapItem;
 use Redirect;
+use Session;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -49,7 +50,7 @@ class SpotifyController extends Controller
             self::setSession($session);
             self::setApi($api);
 
-            $request->session()->flash('flash_message', 'Successfully saved Spotify credentials.');
+            Session::flash('flash_message', 'Successfully saved Spotify credentials.');
             return Redirect::route('homepage');
         }
     }

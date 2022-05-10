@@ -45,7 +45,6 @@ class BankController extends Controller
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
-
             return Redirect::back();
         }
 
@@ -96,7 +95,6 @@ class BankController extends Controller
         $bankdata = self::doVerifyIban($request->input('iban'), $request->input('bic'));
         if ($bankdata->status == false) {
             Session::flash('flash_message', $bankdata->message);
-
             return Redirect::back();
         }
 
@@ -111,7 +109,6 @@ class BankController extends Controller
         $bank->save();
 
         Session::flash('flash_message', 'New withdrawal authorization added.');
-
         return Redirect::route('user::dashboard');
     }
 
@@ -125,23 +122,19 @@ class BankController extends Controller
 
         if ($user->bank == null) {
             Session::flash('flash_message', "You don't have a bank authorization to revoke.");
-
             return Redirect::route('user::dashboard');
         }
         if ($user->is_member) {
             Session::flash('flash_message', 'As a member you cannot revoke your bank authorization. You can update it, though.');
-
             return Redirect::back();
         }
         if ($user->hasUnpaidOrderlines()) {
             Session::flash('flash_message', 'You cannot revoke your bank authorization while you still have unpaid orderlines.');
-
             return Redirect::back();
         }
         $user->bank->delete();
 
         Session::flash('flash_message', 'Deleted bank account.');
-
         return Redirect::route('user::dashboard');
     }
 

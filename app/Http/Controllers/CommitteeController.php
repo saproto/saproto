@@ -119,7 +119,6 @@ class CommitteeController extends Controller
         $committee->save();
 
         Session::flash('flash_message', 'Your new committee has been added!');
-
         return Redirect::route('committee::show', ['id' => $committee->getPublicId()]);
     }
 
@@ -149,7 +148,6 @@ class CommitteeController extends Controller
 
         if ($committee->slug == config('proto.rootcommittee') && $request->slug != $committee->slug) {
             Session::flash('flash_message', "This committee is protected. You cannot change it's e-mail alias.");
-
             return Redirect::back();
         }
 
@@ -158,7 +156,6 @@ class CommitteeController extends Controller
         $committee->save();
 
         Session::flash('flash_message', 'Changes have been saved.');
-
         return Redirect::route('committee::edit', ['new' => false, 'id' => $id]);
     }
 
@@ -210,13 +207,11 @@ class CommitteeController extends Controller
 
         if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
             Session::flash('flash_message', 'Ill-formatted start date.');
-
             return Redirect::back();
         }
 
         if ($request->end != '' && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
-
             return Redirect::back();
         } elseif ($request->end == '') {
             $membership->deleted_at = null;
@@ -235,7 +230,6 @@ class CommitteeController extends Controller
     public function editMembershipForm($id)
     {
         $membership = CommitteeMembership::withTrashed()->findOrFail($id);
-
         return view('committee.membership-edit', ['membership' => $membership]);
     }
 
@@ -252,20 +246,17 @@ class CommitteeController extends Controller
 
         if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
             Session::flash('flash_message', 'Ill-formatted start date.');
-
             return Redirect::back();
         }
 
         if ($request->end != '' && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
-
             return Redirect::back();
         } elseif ($request->end == '') {
             $membership->deleted_at = null;
         }
 
         $membership->save();
-
         return Redirect::route('committee::edit', ['id' => $membership->committee->id]);
     }
 
@@ -298,7 +289,6 @@ class CommitteeController extends Controller
 
         if (! $committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
-
             return Redirect::back();
         }
 
@@ -316,7 +306,6 @@ class CommitteeController extends Controller
 
         if (! $committee->allow_anonymous_email) {
             Session::flash('flash_message', 'This committee does not accept anonymous e-mail at this time.');
-
             return Redirect::back();
         }
 

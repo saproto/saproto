@@ -73,7 +73,6 @@ class TicketController extends Controller
     {
         if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
-
             return Redirect::back();
         }
 
@@ -108,7 +107,6 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         if ($ticket->purchases()->count() > 0) {
             Session::flash('flash_message', 'This ticket has already been sold, you cannot remove it!');
-
             return Redirect::back();
         }
         $ticket->delete();

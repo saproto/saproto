@@ -54,8 +54,7 @@ class WithdrawalController extends Controller
 
         $date = strtotime($request->input('date'));
         if ($date === false) {
-            $request->session()->flash('flash_message', 'Invalid date.');
-
+            Session::flash('flash_message', 'Invalid date.');
             return Redirect::back();
         }
 
@@ -180,22 +179,20 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
         $date = strtotime($request->input('date'));
         if ($date === false) {
-            $request->session()->flash('flash_message', 'Invalid date.');
-
+            Session::flash('flash_message', 'Invalid date.');
             return Redirect::back();
         }
 
         $withdrawal->date = date('Y-m-d', $date);
         $withdrawal->save();
 
-        $request->session()->flash('flash_message', 'Withdrawal updated.');
+        Session::flash('flash_message', 'Withdrawal updated.');
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
@@ -210,8 +207,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be deleted.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be deleted.');
             return Redirect::back();
         }
 
@@ -227,7 +223,7 @@ class WithdrawalController extends Controller
 
         $withdrawal->delete();
 
-        $request->session()->flash('flash_message', 'Withdrawal deleted.');
+        Session::flash('flash_message', 'Withdrawal deleted.');
         return Redirect::route('omnomcom::withdrawal::list');
     }
 
@@ -243,8 +239,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
@@ -256,7 +251,7 @@ class WithdrawalController extends Controller
             $orderline->save();
         }
 
-        $request->session()->flash('flash_message', 'Orderlines for '.$user->name.' removed from this withdrawal.');
+        Session::flash('flash_message', 'Orderlines for '.$user->name.' removed from this withdrawal.');
         return Redirect::back();
     }
 
@@ -272,7 +267,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
@@ -280,8 +275,7 @@ class WithdrawalController extends Controller
         $user = User::findOrFail($user_id);
 
         if (FailedWithdrawal::where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
-            $request->session()->flash('flash_message', 'This withdrawal has already been marked as failed.');
-
+            Session::flash('flash_message', 'This withdrawal has already been marked as failed.');
             return Redirect::back();
         }
 
@@ -310,7 +304,7 @@ class WithdrawalController extends Controller
 
         Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
 
-        $request->session()->flash('flash_message', 'Withdrawal for '.$user->name.' marked as failed. User e-mailed.');
+        Session::flash('flash_message', 'Withdrawal for '.$user->name.' marked as failed. User e-mailed.');
         return Redirect::back();
     }
 
@@ -378,8 +372,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
@@ -391,7 +384,7 @@ class WithdrawalController extends Controller
         $withdrawal->closed = true;
         $withdrawal->save();
 
-        $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
+        Session::flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
         return Redirect::back();
     }
 
@@ -419,8 +412,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
             return Redirect::back();
         }
 
@@ -428,8 +420,7 @@ class WithdrawalController extends Controller
             Mail::to($user)->queue((new OmnomcomWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
         }
 
-        $request->session()->flash('flash_message', 'All e-mails have been queued.');
-
+        Session::flash('flash_message', 'All e-mails have been queued.');
         return Redirect::back();
     }
 

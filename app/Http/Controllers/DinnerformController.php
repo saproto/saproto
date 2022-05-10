@@ -27,7 +27,6 @@ class DinnerformController extends Controller
             return Redirect::away($dinnerform->url);
         } else {
             Session::flash('flash_message', "Sorry, you can't order anymore, food is already on its way");
-
             return Redirect::route('homepage');
         }
     }

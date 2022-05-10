@@ -180,7 +180,6 @@ class PhotoAdminController extends Controller
 
         if (! count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
-
             return Redirect::back();
         }
 

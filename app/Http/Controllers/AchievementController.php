@@ -129,12 +129,10 @@ class AchievementController extends Controller
         $achievement = Achievement::findOrFail($id);
         if (count($achievement->users) > 0) {
             Session::flash('flash_message', "Achievement '".$achievement->name."' has users associated with it. You cannot remove it.");
-
             return Redirect::route('achievement::list');
         }
         $achievement->delete();
         Session::flash('flash_message', "Achievement '".$achievement->name."' has been removed.");
-
         return Redirect::route('achievement::list');
     }
 
@@ -147,14 +145,12 @@ class AchievementController extends Controller
         $user = Auth::user();
         if (! $user->is_member) {
             Session::flash('flash_message', 'You need to be a member to receive this achievement');
-
             return Redirect::back();
         }
 
         $achievement = Achievement::where('has_page', '=', true)->where('page_name', '=', $page_name)->firstOrFail();
         if ($achievement->is_archived) {
             Session::flash('flash_message', 'You can no longer earn this achievement');
-
             return Redirect::back();
         }
 
@@ -250,7 +246,6 @@ class AchievementController extends Controller
         $this->staticTakeAll($achievement_id);
         $achievement = Achievement::findOrFail($achievement_id);
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
-
         return Redirect::back();
     }
 
@@ -267,7 +262,6 @@ class AchievementController extends Controller
         $achievement->save();
 
         Session::flash('flash_message', 'Achievement Icon set');
-
         return Redirect::route('achievement::manage', ['id' => $id]);
     }
 
