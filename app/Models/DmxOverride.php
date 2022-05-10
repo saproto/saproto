@@ -53,31 +53,31 @@ class DmxOverride extends Model
         return self::where('end', '<', date('U'))->get()->sortByDesc('start');
     }
 
-    /** @return string[] */
+    /** @return array<int, int> */
     public function colorArray()
     {
         return array_map('intval', explode(',', $this->color));
     }
 
-    /** @return string */
+    /** @return int */
     public function red()
     {
         return $this->colorArray()[0];
     }
 
-    /** @return string */
+    /** @return int */
     public function green()
     {
         return $this->colorArray()[1];
     }
 
-    /** @return string */
+    /** @return int */
     public function blue()
     {
         return $this->colorArray()[2];
     }
 
-    /** @return string */
+    /** @return int */
     public function brightness()
     {
         return $this->colorArray()[3];
@@ -101,7 +101,7 @@ class DmxOverride extends Model
         return explode(',', $this->fixtures);
     }
 
-    /** @return Collection|DmxFixture[] */
+    /** @return Collection */
     public function getFixtures()
     {
         return DmxFixture::whereIn('id', $this->getFixtureIds())->get();
@@ -113,7 +113,7 @@ class DmxOverride extends Model
         return $this->active();
     }
 
-    /** @return string */
+    /** @return int */
     public function getWindowSizeAttribute()
     {
         return (int) $this->end - (int) $this->start;

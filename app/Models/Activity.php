@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
- * @property int $closed
- * @property int $hide_participants
  * @property string|null $comment
+ * @property bool $closed
+ * @property bool $hide_participants
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Account|null $closedAccount

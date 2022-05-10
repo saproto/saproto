@@ -52,7 +52,7 @@ class FileController extends Controller
         ];
 
         ini_set('memory_limit', '512M');
-        //cache the image for two months
+        /** @phpstan-ignore-next-line */
         return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
                 $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {

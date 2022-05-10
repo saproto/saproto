@@ -152,7 +152,7 @@ class StorageEntry extends Model
 
     /**
      * @param bool $human Defaults to true.
-     * @return string
+     * @return string|int
      */
     public function getFileSize($human = true)
     {

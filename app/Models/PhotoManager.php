@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Auth;
 use Eloquent;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -25,7 +26,7 @@ class PhotoManager extends Model
      * @param string|null $query
      * @param bool $unpublished
      * @param bool $no_thumb
-     * @return Collection|PhotoAlbum[]
+     * @return Collection|LengthAwarePaginator
      */
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {

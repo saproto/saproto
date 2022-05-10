@@ -21,16 +21,16 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $sender_name
  * @property string $sender_address
  * @property string $body
- * @property int $to_user
- * @property int $to_member
- * @property int $to_list
- * @property int $to_event
- * @property int $to_active
- * @property int $to_pending
  * @property int|null $sent_to
- * @property int $sent
- * @property int $ready
  * @property int $time
+ * @property bool $sent
+ * @property bool $ready
+ * @property bool $to_user
+ * @property bool $to_member
+ * @property bool $to_list
+ * @property bool $to_event
+ * @property bool $to_active
+ * @property bool $to_pending
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|StorageEntry[] $attachments

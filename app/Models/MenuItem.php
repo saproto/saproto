@@ -19,10 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $menuname
  * @property string|null $url
  * @property int|null $page_id
+ * @property int $order
+ * @property bool $is_member_only
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $order
- * @property int $is_member_only
  * @property-read Page|null $page
  * @property-read Collection|MenuItem[] $children
  * @method static Builder|MenuItem whereCreatedAt($value)

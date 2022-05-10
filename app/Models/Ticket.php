@@ -15,10 +15,10 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $event_id
  * @property int $product_id
- * @property int $members_only
  * @property int $available_from
  * @property int $available_to
- * @property int $is_prepaid
+ * @property bool $members_only
+ * @property bool $is_prepaid
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases

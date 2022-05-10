@@ -22,22 +22,22 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $id
  * @property string $title
  * @property string $description
- * @property int $is_external
  * @property int $start
  * @property int $end
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string $location
- * @property int $is_featured
- * @property int $involves_food
- * @property int $secret
- * @property int $force_calendar_sync
  * @property int|null $image_id
- * @property Carbon|null $deleted_at
  * @property int|null $committee_id
  * @property int|null $category_id
  * @property string|null $summary
- * @property int $include_in_newsletter
+ * @property string $location
+ * @property bool $is_featured
+ * @property bool $is_external
+ * @property bool $involves_food
+ * @property bool $secret
+ * @property bool $force_calendar_sync
+ * @property bool $include_in_newsletter
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read object $formatted_date
  * @property-read bool $is_future
  * @property-read Activity $activity

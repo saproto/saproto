@@ -186,7 +186,7 @@ class Committee extends Model
         return $events;
     }
 
-    /** @return Member[] */
+    /** @return array<string, array<string, array<int, CommitteeMembership>>> */
     public function allMembers()
     {
         $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];

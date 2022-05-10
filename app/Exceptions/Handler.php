@@ -3,7 +3,6 @@
 namespace Proto\Exceptions;
 
 use App;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -11,7 +10,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\Exception\NotReadableException;
@@ -64,7 +62,7 @@ class Handler extends ExceptionHandler
      *
      * @param Request $request
      * @param Throwable $e
-     * @return Response
+     * @return SymfonyResponse
      * @throws Throwable
      */
     public function render($request, Throwable $e)

@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $activity_id
  * @property int $user_id
- * @property int $is_present
  * @property int|null $committees_activities_id
- * @property int $backup
+ * @property bool $is_present
+ * @property bool $backup
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at

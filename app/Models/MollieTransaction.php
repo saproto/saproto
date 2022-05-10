@@ -130,7 +130,7 @@ class MollieTransaction extends Model
                 if (
                     $orderline->product->ticket &&
                     $orderline->product->ticket->is_prepaid &&
-                    $orderline->ticketPurchase->payment_complete == false
+                    ! $orderline->ticketPurchase->payment_complete
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();

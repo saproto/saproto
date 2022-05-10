@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property int $file_id
- * @property int $hidden
+ * @property bool $hidden
  * @property string $name
  * @property-read StorageEntry $file
  * @method static Builder|SoundboardSound whereFileId($value)

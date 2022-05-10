@@ -20,8 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $date_taken
  * @property int $thumb_id
  * @property int|null $event_id
- * @property int $private
- * @property int $published
+ * @property bool $private
+ * @property bool $published
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
@@ -66,7 +66,7 @@ class PhotoAlbum extends Model
         return $this->hasMany('Proto\Models\Photo', 'album_id');
     }
 
-    /** @return string */
+    /** @return string|null */
     public function thumb()
     {
         if ($this->thumb_id) {

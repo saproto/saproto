@@ -6,13 +6,13 @@ parameters:
     paths:
         - app
 
-    level: 2 # out of 9
+    level: 3 # out of 9
 
     ignoreErrors:
         # Weirdly cannot be found anywhere in the codebase...
         - '#LightSaml#'
         # Issue with the Auth facade (see https://github.com/nunomaduro/larastan/issues/506)
-        - '#Access to an undefined property Illuminate\\Contracts\\Auth\\Authenticatable::(.*)#'
+        - '#Illuminate\\Contracts\\Auth\\Authenticatable#'
         # Issue with pivot not seen as a property (see https://github.com/nunomaduro/larastan/issues/515)
         - '#Access to an undefined property Proto\\Models\\(.*)::\$pivot#'
         # Issue with the analysis of dynamic type object (see https://github.com/phpstan/phpstan/issues/928)

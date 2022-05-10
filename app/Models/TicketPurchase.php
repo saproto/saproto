@@ -16,10 +16,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $orderline_id
  * @property int $user_id
  * @property string $barcode
+ * @property bool $payment_complete
  * @property string|null $scanned
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $payment_complete
  * @property-read mixed $api_attributes
  * @property-read OrderLine $orderline
  * @property-read Ticket $ticket

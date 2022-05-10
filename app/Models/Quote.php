@@ -58,7 +58,7 @@ class Quote extends Model
         return $this->hasMany('Proto\Models\QuoteLike');
     }
 
-    /** @return User[] */
+    /** @return array<int, QuoteLike> */
     public function likes()
     {
         $users = [];

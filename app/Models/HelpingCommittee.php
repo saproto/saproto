@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $activity_id
  * @property int $committee_id
  * @property int $amount
- * @property int $notification_sent
+ * @property bool $notification_sent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Activity $activity

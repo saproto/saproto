@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Model;
 use Permission;
 use Proto\Models\Account;
 use Proto\Models\Achievement;
@@ -26,7 +25,7 @@ class ExportController extends Controller
     /**
      * @param array $table
      * @param string $personal_key
-     * @return Model[]|null
+     * @return mixed
      */
     public function export($table, $personal_key)
     {

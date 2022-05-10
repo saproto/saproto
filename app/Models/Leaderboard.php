@@ -16,10 +16,10 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $committee_id
  * @property string $name
- * @property int $featured
  * @property string $description
- * @property string|null $icon
  * @property string $points_name
+ * @property string|null $icon
+ * @property bool $featured
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Committee $committee

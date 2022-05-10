@@ -36,35 +36,35 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $password
  * @property string|null $remember_token
  * @property int|null $image_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  * @property string|null $birthdate
  * @property string|null $phone
  * @property string|null $diet
  * @property string|null $website
- * @property int $phone_visible
- * @property int $address_visible
- * @property int $receive_sms
- * @property int $keep_protube_history
- * @property int $show_birthday
- * @property int $show_achievements
- * @property int $profile_in_almanac
- * @property int $show_omnomcom_total
- * @property int $show_omnomcom_calories
- * @property int $keep_omnomcom_history
- * @property int $disable_omnomcom
  * @property string $theme
- * @property int|null $pref_calendar_alarm
- * @property int $pref_calendar_relevant_only
+ * @property bool $phone_visible
+ * @property bool $address_visible
+ * @property bool $receive_sms
+ * @property bool $keep_protube_history
+ * @property bool $show_birthday
+ * @property bool $show_achievements
+ * @property bool $profile_in_almanac
+ * @property bool $show_omnomcom_total
+ * @property bool $show_omnomcom_calories
+ * @property bool $keep_omnomcom_history
+ * @property bool $disable_omnomcom
+ * @property bool $did_study_create
+ * @property bool $did_study_itech
+ * @property bool $signed_nda
+ * @property bool $pref_calendar_relevant_only
+ * @property float|null $pref_calendar_alarm
  * @property string|null $utwente_username
  * @property string|null $edu_username
  * @property string|null $utwente_department
- * @property int $did_study_create
- * @property int $did_study_itech
  * @property string|null $tfa_totp_key
- * @property int $signed_nda
- * @property Carbon|null $deleted_at
  * @property string|null $personal_key
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property-read bool $completed_profile
  * @property-read bool $is_member
  * @property-read bool $is_protube_admin
@@ -544,7 +544,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return Member[] */
+    /** @return array<string, Collection<Member>> */
     public function getMemberships()
     {
         $memberships['pending'] = Member::withTrashed()->where('user_id', '=', $this->id)->where('deleted_at', '=', null)->where('is_pending', '=', true)->get();
@@ -552,13 +552,13 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         return $memberships;
     }
 
-    /** @return int|null */
+    /** @return float|null */
     public function getCalendarAlarm()
     {
         return $this->pref_calendar_alarm;
     }
 
-    /** @param int|null $hours */
+    /** @param float|null $hours */
     public function setCalendarAlarm($hours)
     {
         $hours = floatval($hours);
@@ -566,7 +566,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         $this->save();
     }
 
-    /** @return int */
+    /** @return bool */
     public function getCalendarRelevantSetting()
     {
         return $this->pref_calendar_relevant_only;

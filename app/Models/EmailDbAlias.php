@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $source
  * @property string $destination
  */
-
 class EmailDbAlias extends Model
 {
     public $connection = 'mysql-mail';

@@ -26,9 +26,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $preferred_stock
  * @property int $max_stock
  * @property int $supplier_collo
- * @property int $is_visible
- * @property int $is_alcoholic
- * @property int $is_visible_when_no_stock
+ * @property bool $is_visible
+ * @property bool $is_alcoholic
+ * @property bool $is_visible_when_no_stock
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read FinancialAccount $account

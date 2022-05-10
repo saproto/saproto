@@ -68,8 +68,6 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
-        $product->price = str_replace(',', '.', $request->price);
-        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -125,8 +123,6 @@ class ProductController extends Controller
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
-        $product->price = str_replace(',', '.', $request->price);
-        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();

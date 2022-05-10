@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
@@ -205,12 +206,12 @@ class CommitteeController extends Controller
         $membership->user_id = $request->user_id;
         $membership->committee_id = $request->committee_id;
 
-        if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+        if (($membership->created_at = Carbon::create($request->start)) === false) {
             Session::flash('flash_message', 'Ill-formatted start date.');
             return Redirect::back();
         }
 
-        if ($request->end != '' && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
             return Redirect::back();
         } elseif ($request->end == '') {
@@ -244,12 +245,12 @@ class CommitteeController extends Controller
         $membership->role = $request->role;
         $membership->edition = $request->edition;
 
-        if (($membership->created_at = date('Y-m-d H:i:s', strtotime($request->start))) === false) {
+        if (($membership->created_at = Carbon::create($request->start)) === false) {
             Session::flash('flash_message', 'Ill-formatted start date.');
             return Redirect::back();
         }
 
-        if ($request->end != '' && ($membership->deleted_at = date('Y-m-d H:i:s', strtotime($request->end))) === false) {
+        if ($request->end != '' && ($membership->deleted_at = Carbon::create($request->end)) === false) {
             Session::flash('flash_message', 'Ill-formatted end date.');
             return Redirect::back();
         } elseif ($request->end == '') {
@@ -275,7 +276,7 @@ class CommitteeController extends Controller
 
         $membership->forceDelete();
         HelperReminder::where('committee_id', $committee_id)->where('user_id', $membership->user->id)->delete();
-
+        
         return Redirect::route('committee::edit', ['id' => $committee_id]);
     }
 

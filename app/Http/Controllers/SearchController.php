@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -182,7 +183,7 @@ class SearchController extends Controller
      * @param class-string|Model $model
      * @param string $query
      * @param string[] $attributes
-     * @return array
+     * @return Collection<Model>|array
      */
     private function getGenericSearch($model, $query, $attributes)
     {

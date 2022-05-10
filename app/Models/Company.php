@@ -19,14 +19,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $excerpt
  * @property string $description
  * @property int $image_id
- * @property int $on_carreer_page
- * @property int $in_logo_bar
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property int $on_membercard
+ * @property int $sort
  * @property string|null $membercard_excerpt
  * @property string|null $membercard_long
- * @property int $sort
+ * @property bool $on_membercard
+ * @property bool $on_carreer_page
+ * @property bool $in_logo_bar
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read StorageEntry $image
  * @property-read Collection|Joboffer[] $joboffers
  * @method static Builder|Company whereCreatedAt($value)

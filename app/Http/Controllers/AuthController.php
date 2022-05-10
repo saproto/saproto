@@ -551,7 +551,8 @@ class AuthController extends Controller
      *
      * @param string $username Email address or Proto username.
      * @param string $password
-     * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
+     * @return User|null The user associated with the credentials, or null if no user could be found or credentials are invalid.
+     * @throws Exception
      */
     public static function verifyCredentials($username, $password)
     {
@@ -781,7 +782,7 @@ class AuthController extends Controller
                                 (new \LightSaml\Model\Assertion\SubjectConfirmationData())
                                     ->setInResponseTo($authnRequest->getId())
                                     ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
-                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /** @phpstan-ignore-line */
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /* @phpstan-ignore-line */
                             )
                     )
             )

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  */
-
 class EmailDbDomain extends Model
 {
     public $connection = 'mysql-mail';

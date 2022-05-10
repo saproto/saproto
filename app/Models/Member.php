@@ -18,11 +18,11 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string|null $proto_username
  * @property string|null $membership_form_id
  * @property string|null $card_printed_on
- * @property int $is_lifelong
- * @property int $is_honorary
- * @property int $is_donor
- * @property string $is_pending
- * @property int $is_pet
+ * @property bool $is_lifelong
+ * @property bool $is_honorary
+ * @property bool $is_donor
+ * @property bool $is_pending
+ * @property bool $is_pet
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at

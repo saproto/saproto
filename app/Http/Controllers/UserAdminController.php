@@ -162,7 +162,7 @@ class UserAdminController extends Controller
             $member->user()->associate($user);
         } else {
             $member = $user->member;
-            $member->created_at = Carbon::now()->toDateTimeString();
+            $member->created_at = Carbon::now();
             $member->is_pending = false;
         }
 

@@ -46,7 +46,7 @@ class IsAlfredThereController extends Controller
         if ($new_status == 'there' || $new_status == 'unknown') {
             $status->value = $new_status;
         } elseif ($new_status == 'away') {
-            $status->value = strtotime($arrival_time);
+            $status->value = (string) strtotime($arrival_time);
         }
         $status->save();
 

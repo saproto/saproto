@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * Account Model.
@@ -43,7 +44,7 @@ class Account extends Model
 
     /**
      * @param Collection $orderlines
-     * @return Account[]
+     * @return array<int, stdClass>
      */
     public static function generateAccountOverviewFromOrderlines($orderlines)
     {

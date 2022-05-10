@@ -15,9 +15,9 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property string $date
+ * @property bool $closed
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $closed
  * @property-read Collection|Orderline[] $orderlines
  * @method static Builder|Withdrawal whereClosed($value)
  * @method static Builder|Withdrawal whereCreatedAt($value)

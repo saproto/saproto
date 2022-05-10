@@ -50,17 +50,18 @@ class AchievementsCron extends Command
 
         // Get data that will be the same for every user.
         $first = [];
-        foreach(Product::where('is_visible') as $product) {
+        foreach(Product::where('is_visible')->get() as $product) {
+            /** @var OrderLine $orderline */
             $orderline = $product->orderlines()->first();
             $first[] = $orderline->user_id;
         }
 
-        $AmountOfSignupsThisMonth = Event::query()->
-                                    where([['start', '>', Carbon::now()->subMonth()->timestamp],
-                                            ['secret', '=', false],
-                                            ['end', '<', Carbon::now()->timestamp],
-                                        ])->whereHas('activity')
-                                        ->count();
+        $AmountOfSignupsThisMonth = Event::query()
+            ->whereHas('activity')
+            ->where('secret', false)
+            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->count();
 
         $youDandy = $this->categoryProducts([9]);
         $fourOClock = $this->categoryProducts([11, 15, 18, 19]);

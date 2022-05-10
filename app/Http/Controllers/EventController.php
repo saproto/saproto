@@ -661,7 +661,7 @@ class EventController extends Controller
     public function categoryDestroy($id)
     {
         $category = EventCategory::findOrFail($id);
-        $events = $category->events();
+        $events = $category->events;
         if ($events) {
             foreach ($events as $event) {
                 $event->category()->dissociate();

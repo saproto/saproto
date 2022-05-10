@@ -19,9 +19,9 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string $title
  * @property string $slug
  * @property string $content
- * @property int $is_member_only
  * @property int|null $featured_image_id
- * @property int $show_attachments
+ * @property bool $is_member_only
+ * @property bool $show_attachments
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at

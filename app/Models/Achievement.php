@@ -18,10 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $desc
  * @property string|null $fa_icon
  * @property string $tier
- * @property int $has_page
  * @property string|null $page_name
  * @property string|null $page_content
- * @property int $is_archived
+ * @property bool $has_page
+ * @property bool $is_archived
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|User[] $users

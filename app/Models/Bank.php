@@ -16,9 +16,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $iban
  * @property string $bic
  * @property string $machtigingid
+ * @property bool $is_first
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $is_first
  * @property-read User $user
  * @method static Builder|Bank whereBic($value)
  * @method static Builder|Bank whereCreatedAt($value)
