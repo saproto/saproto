@@ -44,10 +44,10 @@
                             <td></td>
                             <td>Description</td>
                             <td>Access</td>
-                            <td>URL</td>
-                            <td>User</td>
-                            <td>Pass</td>
-                            <td>Comment</td>
+                            <td class="text-center">URL</td>
+                            <td class="text-center">User</td>
+                            <td class="text-center">Pass</td>
+                            <td class="text-center">Comment</td>
                             <td>Age</td>
                             <td></td>
                             <td></td>
@@ -74,9 +74,8 @@
                                         @endif
                                     </td>
 
-                                    <td>
-                                        {{ $password->description }}
-                                    </td>
+                                    <td>{{ $password->description }}</td>
+
                                     <td>{{ $password->permission->display_name }}</td>
 
                                     <td class="text-center">
@@ -86,34 +85,29 @@
                                             </a>
                                         @endif
                                     </td>
+
                                     <td class="text-center">
                                         @if($password->username != null)
-                                            <i class="fas fa-user me-1"></i>
-                                            <a class="passwordmanager__copy" href="#" copyTarget="user_{{ $i }}">
-                                                <i class="fas fa-clipboard"></i>
+                                            <a class="passwordmanager__copy" data-copy="{{ Crypt::decrypt($password->username) }}">
+                                                <i class="fas fa-user me-1"></i>
                                             </a>
-                                            <input type="text" class="passwordmanager__hidden" id="user_{{ $i }}"
-                                                   value="{{ Crypt::decrypt($password->username) }}">
                                         @endif
                                     </td>
+
                                     <td class="text-center">
                                         @if($password->password != null)
-                                            <i class="fas fa-key me-1"></i>
-                                            <a class="passwordmanager__copy" href="#"
-                                               copyTarget="pass_{{ $i }}">
-                                                <i class="fas fa-clipboard"></i>
+                                            <a class="passwordmanager__copy" data-copy="{{ Crypt::decrypt($password->password) }}">
+                                                <i class="fas fa-key me-1"></i>
                                             </a>
-                                            <input type="text" class="passwordmanager__hidden" id="pass_{{ $i }}"
-                                                   value="{{ Crypt::decrypt($password->password) }}">
                                         @endif
                                     </td>
 
                                     <td class="text-center">
                                         @if($password->note)
-                                            <span class="passwordmanager__shownote" data-bs-toggle="modal"
+                                            <a class="passwordmanager__shownote" data-bs-toggle="modal"
                                                   data-bs-target="#passwordmodal-{{ $password->id }}">
-                                            <i class="fas fa-sticky-note"></i>
-                                        </span>
+                                                <i class="fas fa-sticky-note"></i>
+                                            </a>
                                         @endif
                                     </td>
 
@@ -168,8 +162,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <textarea class="form-control" rows="15"
-                                      readonly>{{ Crypt::decrypt($password->note) }}</textarea>
+                            <textarea class="form-control" rows="15" readonly>
+                                {{ Crypt::decrypt($password->note) }}
+                            </textarea>
                         </div>
                     </div>
                 </div>
@@ -184,63 +179,11 @@
 @push('javascript')
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        const copyBtnList = document.getElementsByClassName(".passwordmanager__copy")
-        copyBtnList.forEach(el => {
+        document.querySelectorAll(".passwordmanager__copy").forEach(el => {
             el.addEventListener('click', e => {
-                copyToClipboard(document.getElementById(e.target.getAttribute("copyTarget")));
+                navigator.clipboard.writeText(el.getAttribute("data-copy"))
             })
         })
-
-        function copyToClipboard(elem) {
-            // create hidden text element, if it doesn't already exist
-            let targetId = "_hiddenCopyText_";
-            let isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
-            let origSelectionStart, origSelectionEnd;
-            let target;
-            if (isInput) {
-                // can just use the original source element for the selection and copy
-                target = elem;
-                origSelectionStart = elem.selectionStart;
-                origSelectionEnd = elem.selectionEnd;
-            } else {
-                // must use a temporary form element for the selection and copy
-                target = document.getElementById(targetId);
-                if (!target) {
-                    target = document.createElement("textarea");
-                    target.style.position = "absolute";
-                    target.style.left = "-9999px";
-                    target.style.top = "0";
-                    target.id = targetId;
-                    document.body.appendChild(target);
-                }
-                target.textContent = elem.textContent;
-            }
-            // select the content
-            let currentFocus = document.activeElement;
-            target.focus();
-            target.setSelectionRange(0, target.value.length);
-
-            // copy the selection
-            let succeed;
-            try {
-                succeed = document.execCommand("copy");
-            } catch (e) {
-                succeed = false;
-            }
-            // restore original focus
-            if (currentFocus && typeof currentFocus.focus === "function") {
-                currentFocus.focus();
-            }
-
-            if (isInput) {
-                // restore prior selection
-                elem.setSelectionRange(origSelectionStart, origSelectionEnd);
-            } else {
-                // clear temporary content
-                target.textContent = "";
-            }
-            return succeed;
-        }
     </script>
 
 @endpush
