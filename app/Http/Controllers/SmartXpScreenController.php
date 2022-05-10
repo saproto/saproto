@@ -32,7 +32,7 @@ class SmartXpScreenController extends Controller
     }
 
     /**
-     * @param $stop
+     * @param Request $request
      * @return Response|JsonResponse
      */
     public function bus(Request $request)

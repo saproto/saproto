@@ -118,7 +118,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param $barcode
+     * @param string $barcode
      * @return RedirectResponse
      */
     public function scan($barcode)
@@ -312,7 +312,7 @@ class TicketController extends Controller
                 return Redirect::back();
             }
             if ($amount > $ticket->product->stock) {
-                Session::flash('flash_message', "You tried to buy $amount of ticket '".$ticket->product->name."', but only ".$ticket->product->title.' are available. Entire order cancelled.');
+                Session::flash('flash_message', "You tried to buy $amount of ticket '".$ticket->product->name."', but only ".$ticket->product->stock.' are available. Entire order cancelled.');
                 return Redirect::back();
             }
         }

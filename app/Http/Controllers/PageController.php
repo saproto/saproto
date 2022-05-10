@@ -72,7 +72,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param $slug
+     * @param string $slug
      * @return View
      */
     public function show($slug)
@@ -91,7 +91,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -102,7 +102,7 @@ class PageController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function update(Request $request, $id)
@@ -141,7 +141,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */

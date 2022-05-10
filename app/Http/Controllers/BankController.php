@@ -228,7 +228,7 @@ class BankController extends Controller
     }
 
     /**
-     * @param $iban
+     * @param string $iban
      * @return string|null
      */
     private static function getNlBicFromIban($iban)

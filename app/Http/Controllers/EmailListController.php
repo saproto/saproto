@@ -76,7 +76,7 @@ class EmailListController extends Controller
     }
 
     /**
-     * @param array $type
+     * @param string $type
      * @param User $user
      */
     public static function autoSubscribeToLists($type, $user)

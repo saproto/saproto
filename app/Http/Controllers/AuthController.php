@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Mail;
 use nickurt\PwnedPasswords\PwnedPasswords;
+use OneLogin\Saml2\AuthnRequest;
 use PragmaRX\Google2FA\Google2FA;
 use Proto\Mail\PasswordResetEmail;
 use Proto\Mail\PwnedPasswordNotification;
@@ -696,8 +697,8 @@ class AuthController extends Controller
      * The function expects an authenticated user for which to complete the SAML request.
      * This function assumes the user has already been authenticated one way or another.
      *
-     * @param $user User The (currently logged in) user to complete the SAML request for.
-     * @param $saml string The SAML data (deflated and encoded).
+     * @param User $user The (currently logged in) user to complete the SAML request for.
+     * @param string $saml The SAML data (deflated and encoded).
      * @return View|RedirectResponse
      */
     private static function handleSAMLRequest($user, $saml)
@@ -738,15 +739,15 @@ class AuthController extends Controller
      * Another static helper function to build a SAML response based on a user and a request.
      *
      * @param User $user The user to generate the SAML response for.
-     * @param $authnRequest The request to generate a SAML response for.
+     * @param AuthnRequest $authnRequest The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
     private static function buildSAMLResponse($user, $authnRequest)
     {
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
-        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience'];
-        $destination = $authnRequest->getAssertionConsumerServiceURL();
+        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience']; /** @phpstan-ignore-line */
+        $destination = $authnRequest->getAssertionConsumerServiceURL(); /** @phpstan-ignore-line */
         $issuer = config('saml-idp.idp.issuer');
 
         $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
@@ -781,7 +782,7 @@ class AuthController extends Controller
                                 (new \LightSaml\Model\Assertion\SubjectConfirmationData())
                                     ->setInResponseTo($authnRequest->getId())
                                     ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
-                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /** @phpstan-ignore-line */
                             )
                     )
             )
@@ -809,7 +810,7 @@ class AuthController extends Controller
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
                         'urn:mace:dir:attribute-def:givenName',
-                        $user->given_name
+                        $user->name
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
                         'urn:mace:dir:attribute-def:uid',

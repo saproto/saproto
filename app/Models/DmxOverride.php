@@ -95,7 +95,7 @@ class DmxOverride extends Model
         return date('U') > $this->end && date('U') < $this->end. 600;
     }
 
-    /** @return string */
+    /** @return false|string[] */
     public function getFixtureIds()
     {
         return explode(',', $this->fixtures);
@@ -116,6 +116,6 @@ class DmxOverride extends Model
     /** @return string */
     public function getWindowSizeAttribute()
     {
-        return $this->end - $this->start;
+        return (int) $this->end - (int) $this->start;
     }
 }

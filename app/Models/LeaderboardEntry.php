@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * Proto\Models\LeaderboardEntry
+ * Proto\Models\LeaderboardEntry.
  *
  * @property int $id
  * @property int $leaderboard_id

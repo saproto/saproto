@@ -41,7 +41,7 @@ class NewsletterController extends Controller
             'user' => Auth::user(),
             'list' => EmailList::find(config('proto.weeklynewsletter')),
             'events' => Event::getEventsForNewsletter(),
-            'text' => Newsletter::getText()->value,
+            'text' => Newsletter::text(),
         ]);
     }
 
@@ -67,7 +67,7 @@ class NewsletterController extends Controller
      */
     public function saveNewsletterText(Request $request)
     {
-        Newsletter::updateText($request->text);
+        Newsletter::setText($request->text);
 
         $request->session()->flash('flash_message', 'The newsletter text has been set.');
         return Redirect::back();

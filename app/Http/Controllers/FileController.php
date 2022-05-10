@@ -12,8 +12,8 @@ use Proto\Models\StorageEntry;
 class FileController extends Controller
 {
     /**
-     * @param $id
-     * @param $hash
+     * @param int $id
+     * @param string $hash
      * @return Response
      * @throws FileNotFoundException
      */

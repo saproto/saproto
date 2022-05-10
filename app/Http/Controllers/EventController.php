@@ -34,9 +34,10 @@ class EventController extends Controller
         $data = [[], [], []];
         $years = [];
 
+        /** @var Event $event */
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                if ((! $event->activity || ! $event->activity->secret) && $event->end > date('U')) {
+                if ((! $event->activity || ! $event->secret) && $event->end > date('U')) {
                     $delta = $event->start - date('U');
                     if ($delta < 3600 * 24 * 7) {
                         $data[0][] = $event;
@@ -129,7 +130,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -227,7 +228,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -250,7 +251,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function forceLogin($id)
@@ -259,7 +260,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function admin($id)
@@ -276,7 +277,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function scan($id)

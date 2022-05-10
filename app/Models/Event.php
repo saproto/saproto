@@ -98,7 +98,7 @@ class Event extends Model
     }
 
     /**
-     * @param $public_id
+     * @param string $public_id
      * @return Model
      */
     public static function fromPublicId($public_id)
@@ -244,7 +244,7 @@ class Event extends Model
     }
 
     /** @return SupportCollection */
-    public function returnAllUsers()
+    public function allUsers()
     {
         $users = collect([]);
         foreach ($this->tickets as $ticket) {
@@ -263,7 +263,7 @@ class Event extends Model
     /** @return string[] */
     public function getAllEmails()
     {
-        return $this->returnAllUsers()->pluck('email')->toArray();
+        return $this->allUsers()->pluck('email')->toArray();
     }
 
     /** @return bool */

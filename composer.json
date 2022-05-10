@@ -93,6 +93,17 @@
     }
   },
   "scripts": {
+    "fix": [
+      "php-cs-fixer fix --verbose"
+    ],
+    "ide-helper": [
+      "php artisan cache:clear",
+      "php artisan ide-helper:generate",
+      "php artisan ide-helper:meta"
+    ],
+    "analyse": [
+      "vendor/bin/phpstan analyse"
+    ],
     "post-install-cmd": [
       "php artisan clear-compiled"
     ],
@@ -101,14 +112,6 @@
     ],
     "post-update-cmd": [
       "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-      "php artisan ide-helper:generate",
-      "php artisan ide-helper:meta"
-    ],
-    "fix": [
-      "php-cs-fixer fix --verbose"
-    ],
-    "ide-helper": [
-      "php artisan cache:clear",
       "php artisan ide-helper:generate",
       "php artisan ide-helper:meta"
     ],

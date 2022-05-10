@@ -5,7 +5,7 @@ namespace Proto\Http\Controllers;
 class LdapController extends Controller
 {
     /**
-     * @param $query
+     * @param string $query
      * @param false $only_active
      * @return array
      */

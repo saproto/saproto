@@ -115,7 +115,7 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function showAccounts($id)
@@ -233,8 +233,8 @@ class WithdrawalController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @param $user_id
+     * @param int $id
+     * @param int $user_id
      * @return RedirectResponse
      */
     public static function deleteFrom(Request $request, $id, $user_id)

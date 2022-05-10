@@ -289,7 +289,7 @@ class CommitteeController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function showAnonMailForm($id)

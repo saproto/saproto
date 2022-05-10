@@ -90,7 +90,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return string JSON
      */
     public function apiShow($id)

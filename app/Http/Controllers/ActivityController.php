@@ -114,7 +114,7 @@ class ActivityController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function checklist($id)
@@ -185,7 +185,7 @@ class ActivityController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */

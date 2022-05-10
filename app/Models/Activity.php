@@ -82,27 +82,34 @@ class Activity extends Validatable
     /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
     /** @return BelongsToMany */
     public function presentUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('activities_users.is_present', true)->where('backup', false)->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('activities_users.is_present', true)
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
     /** @return BelongsToMany */
     public function allUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->where('backup', false)->withTimestamps();
-    }
-
-    /** @return Collection|User[] */
-    public function allUsersSorted()
-    {
-        return $this->allUsers->sort(function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
     /** @return BelongsToMany */

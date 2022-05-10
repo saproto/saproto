@@ -43,13 +43,13 @@ class RegistrationHelperController extends Controller
     /**
      * Show the user details for registration helper.
      *
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function details($id)
     {
         $user = User::whereHas('member', function ($q) {
-            $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay(1));
+            $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay());
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 

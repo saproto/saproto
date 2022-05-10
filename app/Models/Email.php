@@ -135,7 +135,7 @@ class Email extends Model
             $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event) {
-                    $user_ids = array_merge($user_ids, $event->returnAllUsers()->pluck('id')->toArray());
+                    $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
                 }
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();

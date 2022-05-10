@@ -4,6 +4,12 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Email Domain Alias Model.
+ *
+ * @property int $id
+ */
+
 class EmailDbDomain extends Model
 {
     public $connection = 'mysql-mail';

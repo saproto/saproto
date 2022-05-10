@@ -24,7 +24,7 @@ class SpotifyController extends Controller
             route('spotify::oauth')
         );
 
-        $api = new \SpotifyWebAPI\SpotifyWebAPI();
+        $api = new SpotifyWebAPI();
 
         if (! $request->has('code')) {
             $options = [
@@ -39,6 +39,7 @@ class SpotifyController extends Controller
             $session->requestAccessToken($request->get('code'));
             $api->setAccessToken($session->getAccessToken());
 
+            /** @phpstan-ignore-next-line  */
             $spotify_user = $api->me()->id;
             $right_user = config('app-proto.spotify-user');
             if ($spotify_user != $right_user) {

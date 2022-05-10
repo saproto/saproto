@@ -30,7 +30,7 @@ class ApiController extends Controller
     }
 
     /**
-     * @param $token
+     * @param string $token
      * @return false|string
      */
     public function protubeAdmin($token)

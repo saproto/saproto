@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
@@ -178,9 +179,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @param $model
-     * @param $query
-     * @param $attributes
+     * @param class-string|Model $model
+     * @param string $query
+     * @param string[] $attributes
      * @return array
      */
     private function getGenericSearch($model, $query, $attributes)
@@ -195,7 +196,8 @@ class SearchController extends Controller
             }
             $check_at_least_one_valid_term = true;
         }
-        if ($check_at_least_one_valid_term == false) {
+
+        if (! $check_at_least_one_valid_term) {
             return [];
         }
 

@@ -102,7 +102,7 @@ class AccountController extends Controller
      * Display aggregated results of sales. Per product to value that has been sold in the specified period.
      *
      * @param Request $request
-     * @param $account
+     * @param int $account
      * @return View
      */
     public function showAggregation(Request $request, $account)

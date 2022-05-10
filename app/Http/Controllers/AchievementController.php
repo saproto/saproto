@@ -119,7 +119,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -139,7 +139,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $page_name
+     * @param string $page_name
      * @return View|RedirectResponse
      */
     public function achieve($page_name)
@@ -181,7 +181,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
+     * @param int $achievement_id
      * @param Request $request
      * @return RedirectResponse
      */
@@ -216,8 +216,8 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
-     * @param $user_id
+     * @param int $achievement_id
+     * @param int $user_id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -241,7 +241,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
+     * @param int $achievement_id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -255,7 +255,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @param Request $request
      * @return RedirectResponse
      */

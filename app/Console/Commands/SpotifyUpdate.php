@@ -36,7 +36,7 @@ class SpotifyUpdate extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -74,7 +74,6 @@ class SpotifyUpdate extends Command
         $videos_to_search = [];
 
         $strip = [
-            //"  ",
             ' official', 'official ', 'original', 'optional',
             'video', 'cover', 'clip',
             ' - ', ' + ', '|', '(', ')', ':', '"', '.',
@@ -96,7 +95,6 @@ class SpotifyUpdate extends Command
                         '',
                         str_replace($strip, ' ', strtolower($video->video_title))
                     ),
-                    'count' => $video->count,
                 ];
             }
         }

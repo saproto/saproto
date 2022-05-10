@@ -7,7 +7,6 @@ use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Mail;
 use PDF;
@@ -18,6 +17,7 @@ use Proto\Models\Member;
 use Proto\Models\User;
 use Redirect;
 use Session;
+use Spatie\Permission\Models\Permission;
 
 class UserAdminController extends Controller
 {
@@ -110,6 +110,7 @@ class UserAdminController extends Controller
 
         if (! Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
+                /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
                     if (! Auth::user()->can($permission->name)) {
                         abort(403, 'You may not impersonate this person.');

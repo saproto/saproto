@@ -64,7 +64,7 @@ class RfidCardController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function edit($id)

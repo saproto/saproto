@@ -33,9 +33,9 @@ class HashMapItem extends Model
     public $timestamps = false;
 
     /**
-     * @param $query
+     * @param Builder $query
      * @param string $key
-     * @return mixed
+     * @return Builder
      */
     public function scopeKey($query, $key)
     {
@@ -43,9 +43,9 @@ class HashMapItem extends Model
     }
 
     /**
-     * @param $query
+     * @param Builder $query
      * @param string $subkey
-     * @return mixed
+     * @return Builder
      */
     public function scopeSubkey($query, $subkey)
     {

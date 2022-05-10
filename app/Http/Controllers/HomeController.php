@@ -25,7 +25,7 @@ class HomeController extends Controller
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get()->reject(function ($user, $index) {
             return $user->member->is_pending == true;
         });
-        $dinnerform = Dinnerform::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour(1))->first();
+        $dinnerform = Dinnerform::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour())->first();
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 

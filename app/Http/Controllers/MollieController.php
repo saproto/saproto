@@ -104,7 +104,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      * @throws Exception
      */
@@ -218,7 +218,7 @@ class MollieController extends Controller
     }
 
     /**
-     * @param $orderlines
+     * @param int[] $orderlines
      * @return MollieTransaction
      */
     public static function createPaymentForOrderlines($orderlines, $selected_method)

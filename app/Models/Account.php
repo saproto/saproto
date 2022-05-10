@@ -85,7 +85,7 @@ class Account extends Model
     /**
      * @param int $start
      * @param int $end
-     * @return Collection|Orderline[]
+     * @return Collection|OrderLine[]
      */
     public function generatePeriodAggregation($start, $end)
     {
