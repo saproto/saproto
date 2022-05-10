@@ -165,7 +165,7 @@
                                             or
 
                                             @include('website.layouts.macros.confirm-modal', [
-                                               'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
+                                               'action' => route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
                                                'text' => 'Mark Failed',
                                                'title' => 'Confirm Marking Failed',
                                                'message' => 'Are you sure you want to mark this withdrawal as for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
