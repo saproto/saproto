@@ -113,9 +113,11 @@ class OmNomController extends Controller
             $store = $stores[$store_slug];
             if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->hasAnyPermission($store->roles)) {
                 $result->message = 'You are not authorized to do this.';
+                return json_encode($result);
             }
         } else {
             $result->message = "This store doesn't exist.";
+            return json_encode($result);
         }
 
         switch ($request->input('credential_type')) {
@@ -151,6 +153,7 @@ class OmNomController extends Controller
 
             default:
                 $result->message = 'Invalid credential type.';
+                return json_encode($result);
                 break;
         }
 
@@ -167,12 +170,12 @@ class OmNomController extends Controller
         $payedCash = $request->input('cash');
         $payedCard = $request->input('bank_card');
 
-        if ($payedCash == 'true' && ! $store->cash_allowed) {
+        if ($payedCash && ! $store->cash_allowed) {
             $result->message = 'You cannot use cash in this store.';
             return json_encode($result);
         }
 
-        if ($payedCard == 'true' && ! $store->bank_card_allowed) {
+        if ($payedCard && ! $store->bank_card_allowed) {
             $result->message = 'You cannot use a bank card in this store.';
             return json_encode($result);
         }
