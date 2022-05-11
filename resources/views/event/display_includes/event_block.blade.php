@@ -79,20 +79,27 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
 
             @if($event->is_external)
                 <br>
-
                 <span>
                     <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
                     Not Organized by S.A. Proto
                 </span>
             @endif
-
-            @if($event->activity && $event->activity->users->count()>0)
-               <br>
-               <span>
+            <div class= "d-flex justify-content-between">
+            @if($event->activity)
+                @if($event->activity->users->count()>0)
+                <span>
                     <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
                     {{$event->activity->users->count()}}
                 </span>
+                @endif
+                @if($event->activity->canSubscribe())
+                    <span class="pull-right">
+                        <i class="fas fa-lock-open"></i>
+                        </span>
+                @endif
             @endif
+            </div>
+
 
         </div>
 
