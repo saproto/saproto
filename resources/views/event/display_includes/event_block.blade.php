@@ -93,7 +93,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                 </span>
                 @endif
                 @if($event->activity->canSubscribe())
-                    <span class="pull-right">
+                    <span>
                         <i class="fas fa-lock-open"></i>
                         </span>
                 @endif
