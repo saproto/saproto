@@ -84,8 +84,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                     Not Organized by S.A. Proto
                 </span>
             @endif
-            <div class= "d-flex justify-content-between">
             @if($event->activity)
+                <div class= "d-flex justify-content-between">
                 @if($event->activity->users->count()>0)
                 <span>
                     <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
@@ -97,8 +97,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                         <i class="fas fa-lock-open"></i>
                         </span>
                 @endif
+                </div>
             @endif
-            </div>
 
 
         </div>
