@@ -51,9 +51,11 @@
     </tr>
 </table>
 
-<center>
+<div style="text-align: center;">
+    <a href="{{route('homepage')}}">
     <img src="{{ asset('images/logo/regular.png') }}" style="width: 30%; max-width: 200px;"/>
-</center>
+    </a>
+</div>
 
 <br><br><br>
 

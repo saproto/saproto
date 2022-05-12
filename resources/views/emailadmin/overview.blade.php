@@ -137,7 +137,10 @@
                                 @elseif($email->to_list)
                                     list(s) {{ $email->getListName() }}
                                 @elseif($email->to_event)
-                                    event(s) {{ $email->getEventName() }}
+                                    event(s):
+                                    @foreach($email->events()->get() as $event)
+                                        {{$event->title}}.
+                                        @endforeach
                                 @endif
                             </td>
                             <td>
