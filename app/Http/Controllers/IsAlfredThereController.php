@@ -38,6 +38,7 @@ class IsAlfredThereController extends Controller
      */
     public function postAdminInterface(Request $request)
     {
+//        return $request;
         $text=self::getHasMapItem(self::$HashMapTextKey);
         $text->value = $request->input('is_alfred_there_text');
         $text->save();
@@ -46,9 +47,9 @@ class IsAlfredThereController extends Controller
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
-        if ($new_status == 'there' || $new_status == 'unknown') {
+        if ($new_status === 'there' || $new_status === 'unknown') {
             $status->value = $new_status;
-        } elseif ($new_status == 'away') {
+        } elseif ($new_status === 'away') {
             $status->value = strtotime($arrival_time);
         }
         $status->save();
@@ -72,9 +73,10 @@ class IsAlfredThereController extends Controller
     /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $status = self::getHasMapItem(self::$HashMapItemKey);
-
         $result = new stdClass();
+        $result->text=self::getHasMapItem(self::$HashMapTextKey)->value;
+
+        $status = self::getHasMapItem(self::$HashMapItemKey);
         if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
@@ -85,7 +87,6 @@ class IsAlfredThereController extends Controller
             return $result;
         }
         $result->status = 'unknown';
-        $result->text=self::getHasMapItem(self::$HashMapTextKey);
         return $result;
     }
 }

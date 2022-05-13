@@ -65,8 +65,8 @@
                             'form_class_name' => $status->status == 'away' ? '' : 'd-none'
                         ])
 
-                        <div id="alfredText" class="{{$status->status == 'away' ? '' : 'd-none'}}"><br>
-                        <input name="is_alfred_there_text" type="text" class="form-control" placeholder="additional message" value="<?php echo $result->text ?? ''; ?>">
+                        <div id="alfred-text" class="{{$status->status == 'away' ? '' : 'd-none'}}"><br>
+                        <input name="is_alfred_there_text" type="text" class="form-control" placeholder="additional message" value="{{$status->text}}">
                         </div>
 
                     </div>
@@ -88,7 +88,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const dateSelect = document.getElementById('datetimepicker-back-form')
         const dateBack = document.getElementById('datetimepicker-back')
-        const alfredText = document.getElementById('alfredText')
+        const alfredText = document.getElementById('alfred-text')
 
         const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
         radioList.forEach(el => {
