@@ -65,6 +65,10 @@
                             'form_class_name' => $status->status == 'away' ? '' : 'd-none'
                         ])
 
+                        <div id="alfredText" class="{{$status->status == 'away' ? '' : 'd-none'}}"><br>
+                        <input name="is_alfred_there_text" type="text" class="form-control" placeholder="additional message" value="<?php echo $result->text ?? ''; ?>">
+                        </div>
+
                     </div>
 
                     <div class="card-footer">
@@ -84,15 +88,18 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         const dateSelect = document.getElementById('datetimepicker-back-form')
         const dateBack = document.getElementById('datetimepicker-back')
+        const alfredText = document.getElementById('alfredText')
 
         const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
         radioList.forEach(el => {
             el.addEventListener('change', _ => {
                 if (el.checked && el.value === 'away') {
                         dateSelect.classList.remove('d-none')
+                        alfredText.classList.remove('d-none')
                         dateBack.required = true
                 } else {
                     dateSelect.classList.add('d-none')
+                    alfredText.classList.add('d-none')
                     dateBack.required = false
                 }
             })

@@ -12,7 +12,7 @@ use stdClass;
 class IsAlfredThereController extends Controller
 {
     public static $HashMapItemKey = 'is_alfred_there';
-
+    public static $HashMapTextKey = 'is_alfred_there_text';
     /** @return View */
     public function showMiniSite()
     {
@@ -38,8 +38,11 @@ class IsAlfredThereController extends Controller
      */
     public function postAdminInterface(Request $request)
     {
-        $status = self::getAlfredsStatus();
+        $text=self::getHasMapItem(self::$HashMapTextKey);
+        $text->value = $request->input('is_alfred_there_text');
+        $text->save();
 
+        $status = self::getHasMapItem(self::$HashMapItemKey);
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
@@ -54,23 +57,23 @@ class IsAlfredThereController extends Controller
     }
 
     /** @return HashMapItem|null */
-    public static function getAlfredsStatus()
+    public static function getHasMapItem($key)
     {
-        $status = HashMapItem::where('key', self::$HashMapItemKey)->first();
-        if ($status == null) {
-            $status = HashMapItem::create([
-                'key' => self::$HashMapItemKey,
-                'value' => 'unknown',
+        $item = HashMapItem::where('key', $key)->first();
+        if (!$item) {
+            $item = HashMapItem::create([
+                'key' => $key,
+                'value' => '',
             ]);
         }
-
-        return $status;
+        return $item;
     }
 
     /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $status = self::getAlfredsStatus();
+        $status = self::getHasMapItem(self::$HashMapItemKey);
+
         $result = new stdClass();
         if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
@@ -82,6 +85,7 @@ class IsAlfredThereController extends Controller
             return $result;
         }
         $result->status = 'unknown';
+        $result->text=self::getHasMapItem(self::$HashMapTextKey);
         return $result;
     }
 }
