@@ -17,7 +17,7 @@ class ManualEmail extends Mailable
     public $submitted_attachments;
     public $destination;
     public $user_id;
-    public $event_name;
+    public $events;
     public $email_id;
 
     /**
