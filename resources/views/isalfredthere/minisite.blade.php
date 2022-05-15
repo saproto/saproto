@@ -24,7 +24,7 @@
             <h1 id="alfred-text"></h1>
             <h1 class="mt-5 mb-5" id="alfred-emoji" style="font-size: 120px;"><i class="fas fa-circle-question"></i></h1>
 
-            <a href="{{route('homepage')}}">
+            <a href="//{{ config('app-proto.primary-domain') }}{{ route('homepage', [], false) }}">
                 <img src="{{ asset('images/logo/inverse.png') }}" alt="Proto logo" height="120px">
             </a>
 
@@ -55,7 +55,7 @@
             const text = document.getElementById('alfred-text')
             const time = document.getElementById('alfred-actualtime')
             const emoji = document.getElementById('alfred-emoji')
-            get("{{config('app-proto.primary-domain')}}{{route('api::isalfredthere', [], false)}}")
+            get("{{route('api::isalfredthere')}}")
             .then(data => {
                 console.log(data)
                 if(data.text.length>0) {
