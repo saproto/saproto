@@ -38,22 +38,20 @@ class IsAlfredThereController extends Controller
      */
     public function postAdminInterface(Request $request)
     {
-//        return $request;
         $text=self::getHasMapItem(self::$HashMapTextKey);
-        $text->value = $request->input('is_alfred_there_text');
-        $text->save();
-
         $status = self::getHasMapItem(self::$HashMapItemKey);
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
         if ($new_status === 'there' || $new_status === 'unknown') {
             $status->value = $new_status;
+            $text->value='';
         } elseif ($new_status === 'away') {
             $status->value = strtotime($arrival_time);
+            $text->value = $request->input('is_alfred_there_text');
         }
         $status->save();
-
+        $text->save();
         return Redirect::back();
     }
 
