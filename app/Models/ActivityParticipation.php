@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Activity $activity
+ * @property-read Activity|null $activity
  * @property-read HelpingCommittee|null $help
- * @property-read User $user
+ * @property-read User|null $user
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static Builder|ActivityParticipation onlyTrashed()

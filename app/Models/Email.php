@@ -131,12 +131,10 @@ class Email extends Model
                 $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
-        } elseif ($this->to_event != false) {
+        } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
-                if ($event) {
-                    $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
-                }
+                $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
@@ -169,11 +167,7 @@ class Email extends Model
             return '';
         } else {
             foreach ($this->events as $event) {
-                if ($event) {
-                    $events[] = $event->title;
-                } else {
-                    $events[] = 'Unknown Event';
-                }
+                $events[] = $event->title;
             }
         }
         return implode(', ', $events);

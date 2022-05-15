@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
+ * @property-read User|null $user
  * @method static Builder|Token whereCreatedAt($value)
  * @method static Builder|Token whereId($value)
  * @method static Builder|Token whereToken($value)

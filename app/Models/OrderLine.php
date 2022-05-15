@@ -28,9 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $cashier
+ * @property-read Product|null $product
  * @property-read MollieTransaction|null $molliePayment
- * @property-read Product $product
- * @property-read TicketPurchase $ticketPurchase
+ * @property-read TicketPurchase|null $ticketPurchase
  * @property-read User|null $user
  * @property-read Withdrawal|null $withdrawal
  * @method static Builder|OrderLine whereAuthenticatedBy($value)

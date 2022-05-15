@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $idea
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
+ * @property-read User|null $user
  * @property-read Collection|GoodIdeaVote[] $votes
  * @method static Builder|GoodIdea whereCreatedAt($value)
  * @method static Builder|GoodIdea whereId($value)
@@ -62,7 +62,7 @@ class GoodIdea extends Model
     {
         /** @var GoodIdeaVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();
-        if ($vote) {
+        if ($vote != null) {
             return $vote->vote;
         }
         return 0;

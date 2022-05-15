@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Permission;
 use Proto\Models\User;
@@ -71,7 +72,7 @@ class AuthorizationController extends Controller
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-        file_get_contents(config('herbert.server').'/adminCheck');
+        Http::get(config('herbert.server').'/adminCheck');
 
         Session::flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
         return Redirect::back();

@@ -31,9 +31,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool $is_visible_when_no_stock
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read FinancialAccount $account
+ * @property-read FinancialAccount|null $account
  * @property-read StorageEntry|null $image
- * @property-read Ticket $ticket
+ * @property-read Ticket|null $ticket
  * @property-read Collection|ProductCategory[] $categories
  * @property-read Collection|OrderLine[] $orderlines
  * @method static Builder|Product whereAccountId($value)

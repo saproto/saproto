@@ -71,11 +71,11 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read bool $photo_preview
  * @property-read bool $signed_membership_form
  * @property-read string|null $welcome_message
- * @property-read StorageEntry $photo
- * @property-read Address $address
- * @property-read Bank $bank
- * @property-read Member $member
- * @property-read HelperReminder $helperReminderSubscriptions
+ * @property-read StorageEntry|null $photo
+ * @property-read Address|null $address
+ * @property-read Bank|null $bank
+ * @property-read Member|null $member
+ * @property-read HelperReminder|null $helperReminderSubscriptions
  * @property-read Collection|Achievement[] $achievements
  * @property-read Collection|Client[] $clients
  * @property-read Collection|EmailList[] $lists
@@ -482,15 +482,14 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     }
 
     /**
-     * This method returns a guess of the system for whether or not this user is a first year student.
+     * This method returns a guess of the system for whether this user is a first year student.
      * Note that this is a _GUESS_. There is no way for us to know sure without manually setting a flag on each user.
-     * @return bool Whether or not the system thinks this is a first year.
-     * @throws Exception
+     * @return bool Whether the system thinks the user is a first year.
      */
     public function isFirstYear()
     {
         return $this->is_member
-            && Carbon::instance(new DateTime($this->member->created_at))->age < 1
+            && Carbon::createFromTimestamp($this->member->created_at)->age < 1
             && $this->did_study_create;
     }
 

@@ -17,17 +17,17 @@ use Illuminate\Support\Facades\Route;
  * @property string $content
  * @property string $display_from
  * @property string $display_till
- * @property int $show_guests
- * @property int $show_users
- * @property int $show_members
- * @property int $show_only_homepage
- * @property int $show_only_new
- * @property int $show_only_firstyear
- * @property int $show_only_active
- * @property int $show_as_popup
  * @property int $show_style
+ * @property bool $show_guests
+ * @property bool $show_users
+ * @property bool $show_members
+ * @property bool $show_only_homepage
+ * @property bool $show_only_new
+ * @property bool $show_only_firstyear
+ * @property bool $show_only_active
+ * @property bool $show_as_popup
  * @property bool $show_by_time
- * @property int $is_dismissable
+ * @property bool $is_dismissable
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $bootstrap_style
@@ -144,7 +144,7 @@ class Announcement extends Model
     }
 
     /**
-     * @param null $user
+     * @param null|User $user
      * @return bool
      */
     public function showForUser($user = null)

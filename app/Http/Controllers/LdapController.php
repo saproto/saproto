@@ -6,7 +6,7 @@ class LdapController extends Controller
 {
     /**
      * @param string $query
-     * @param false $only_active
+     * @param bool $only_active
      * @return array
      */
     public static function searchUtwente($query, $only_active = false)

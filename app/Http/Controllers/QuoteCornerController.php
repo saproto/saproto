@@ -33,7 +33,7 @@ class QuoteCornerController extends Controller
             $quotes = Quote::orderBy('created_at', 'desc')->get();
             foreach ($quotes as $quote) {
                 $quote->quote = str_replace('<br />', "\n", strip_tags($quote->quote, 'br'));
-                /** @phpstan-ignore-next-line  */
+                /* @phpstan-ignore-next-line  */
                 $quote->user_info = (object) [
                     'name' => $quote->user->name,
                     'photo' => $quote->user->photo_preview,

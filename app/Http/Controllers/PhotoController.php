@@ -41,7 +41,7 @@ class PhotoController extends Controller
     public function photo($id)
     {
         $photo = PhotoManager::getPhoto($id);
-        if ($photo) {
+        if ($photo != null) {
             return view('photos.photopage', ['photo' => $photo]);
         }
         abort(404, 'Photo not found.');

@@ -56,10 +56,10 @@ class Photo extends Model
         return $this->hasMany('Proto\Models\PhotoLikes');
     }
 
-    /** @return HasOne|StorageEntry */
-    private function file()
+    /** @return hasOne */
+    public function file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
     /**
@@ -122,13 +122,13 @@ class Photo extends Model
     /** @return string */
     public function thumbnail()
     {
-        return $this->file()->generateImagePath(400, 400);
+        return $this->file->generateImagePath(400, 400);
     }
 
     /** @return string */
     public function getUrlAttribute()
     {
-        return $this->file()->generatePath();
+        return $this->file->generatePath();
     }
 
     public static function boot()
@@ -137,7 +137,7 @@ class Photo extends Model
 
         static::deleting(function ($photo) {
             /* @var Photo $photo */
-            $photo->file()->delete();
+            $photo->file->delete();
             if ($photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;

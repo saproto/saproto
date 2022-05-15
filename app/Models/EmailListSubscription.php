@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read EmailList $emaillist
- * @property-read User $user
+ * @property-read EmailList|null $emaillist
+ * @property-read User|null $user
  * @method static Builder|EmailListSubscription whereCreatedAt($value)
  * @method static Builder|EmailListSubscription whereId($value)
  * @method static Builder|EmailListSubscription whereListId($value)

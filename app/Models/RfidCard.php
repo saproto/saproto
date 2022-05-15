@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User $user
+ * @property-read User|null $user
  * @method static Builder|RfidCard whereCardId($value)
  * @method static Builder|RfidCard whereCreatedAt($value)
  * @method static Builder|RfidCard whereId($value)

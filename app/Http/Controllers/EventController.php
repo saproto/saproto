@@ -414,16 +414,16 @@ class EventController extends Controller
                 'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
                 'description' => $event->description,
                 'start' => $event->start,
-                'organizing_committee' => ($event && $event->committee ? [
+                'organizing_committee' => ($event->committee ? [
                     'id' => $event->committee->id,
                     'name' => $event->committee->name,
                 ] : null),
-                'registration_start' => ($event && $event->activity ? $event->activity->registration_start : null),
-                'registration_end' => ($event && $event->activity ? $event->activity->registration_end : null),
-                'deregistration_end' => ($event && $event->activity ? $event->activity->deregistration_end : null),
-                'total_places' => ($event && $event->activity ? $event->activity->participants : null),
-                'available_places' => ($event && $event->activity ? $event->activity->freeSpots() : null),
-                'is_full' => ($event && $event->activity ? $event->activity->isFull() : null),
+                'registration_start' => ($event->activity ? $event->activity->registration_start : null),
+                'registration_end' => ($event->activity ? $event->activity->registration_end : null),
+                'deregistration_end' => ($event->activity ? $event->activity->deregistration_end : null),
+                'total_places' => ($event->activity ? $event->activity->participants : null),
+                'available_places' => ($event->activity ? $event->activity->freeSpots() : null),
+                'is_full' => ($event->activity ? $event->activity->isFull() : null),
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
@@ -588,7 +588,7 @@ class EventController extends Controller
                 $calendar .= 'BEGIN:VALARM'."\r\n".
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', $status ? sprintf('[%s] %s', $status, $event->title) : $event->title, date('l F j, H:i:s', $event->start))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
                     'END:VALARM'."\r\n";
             }
 

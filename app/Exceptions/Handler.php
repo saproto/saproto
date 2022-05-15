@@ -37,8 +37,6 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
     ];
 
-    private $sentryID;
-
     /**
      * Report or log an exception.
      *

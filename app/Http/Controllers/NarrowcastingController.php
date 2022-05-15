@@ -63,6 +63,7 @@ class NarrowcastingController extends Controller
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $video = Youtube::getVideoInfo($youtube_id);
 
+            /* @phpstan-ignore-next-line */
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
                 return Redirect::back();
@@ -90,13 +91,9 @@ class NarrowcastingController extends Controller
      */
     public function edit($id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
-        if ($narrowcasting) {
-            return view('narrowcasting.edit', ['item' => $narrowcasting]);
-        } else {
-            abort(404);
-        }
+        return view('narrowcasting.edit', ['item' => $narrowcasting]);
     }
 
     /**
@@ -107,11 +104,7 @@ class NarrowcastingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
-
-        if (! $narrowcasting) {
-            abort(404);
-        }
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
         $narrowcasting->name = $request->name;
         $narrowcasting->campaign_start = strtotime($request->campaign_start);
@@ -130,6 +123,7 @@ class NarrowcastingController extends Controller
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $video = Youtube::getVideoInfo($youtube_id);
 
+            /* @phpstan-ignore-next-line */
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
                 return Redirect::back();

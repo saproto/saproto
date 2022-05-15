@@ -146,7 +146,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status == 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
+                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }

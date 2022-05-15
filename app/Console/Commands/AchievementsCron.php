@@ -272,14 +272,13 @@ class AchievementsCron extends Command
 
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
-        $EventsParticipated = Event::query()->
-                                where([['start', '>', Carbon::now()->subMonth()->timestamp],
-                                        ['end', '<', Carbon::now()->timestamp],
-                                        ['secret', '=', false],
-                                ])->
-                                whereHas('activity')->
-                                whereIn('id', $activities)->
-                                count();
+        $EventsParticipated = Event::query()
+            ->whereHas('activity')
+            ->where('secret', false)
+            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->whereIn('id', $activities)
+            ->count();
         return floor($EventsParticipated / $possibleSignups * 100) >= $percentage;
     }
 

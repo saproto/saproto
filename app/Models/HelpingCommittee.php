@@ -19,9 +19,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property bool $notification_sent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Activity $activity
- * @property-read Committee $committee
- * @property-read Collection|User[] $users
+ * @property-read Activity|null $activity
+ * @property-read Committee|null $committee
+ * @property-read Collection|User[]|null $users
  * @method static Builder|HelpingCommittee whereActivityId($value)
  * @method static Builder|HelpingCommittee whereAmount($value)
  * @method static Builder|HelpingCommittee whereCommitteeId($value)

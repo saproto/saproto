@@ -23,7 +23,7 @@ use Spatie\Permission\Models\Permission;
  * @property string|null $note
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Permission $permission
+ * @property-read Permission|null $permission
  * @method static Builder|PasswordEntry whereCreatedAt($value)
  * @method static Builder|PasswordEntry whereDescription($value)
  * @method static Builder|PasswordEntry whereId($value)

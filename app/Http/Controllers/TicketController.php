@@ -163,10 +163,10 @@ class TicketController extends Controller
             ];
         }
 
-        /** @var TicketPurchase $ticket */
+        /** @var TicketPurchase|null $ticket */
         $ticket = TicketPurchase::where('barcode', $request->barcode)->first();
 
-        if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
+        if ($ticket != null && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             return [
                 'code' => 500,
                 'message' => 'Unauthorized to scan',
@@ -174,7 +174,7 @@ class TicketController extends Controller
             ];
         }
 
-        if ($ticket) {
+        if ($ticket != null) {
             $ticket->load('user', 'orderline', 'ticket', 'ticket.product');
             if ($ticket->ticket->event_id != $event->id) {
                 return [

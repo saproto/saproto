@@ -32,7 +32,7 @@ class SearchController extends Controller
             $presearch_users = $this->getGenericSearch(
                 User::class,
                 $term,
-                Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
+                Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
             );
             foreach ($presearch_users as $user) {
                 if ($user->is_member) {

@@ -48,10 +48,7 @@ class AchievementController extends Controller
     public function manage($id)
     {
         /** @var Achievement $achievement */
-        $achievement = Achievement::find($id);
-        if (! $achievement) {
-            abort(404);
-        }
+        $achievement = Achievement::findOrFail($id);
 
         return view('achievement.manage', ['achievement' => $achievement]);
     }
@@ -183,12 +180,9 @@ class AchievementController extends Controller
      */
     public function give($achievement_id, Request $request)
     {
-        /** @var Achievement $achievement */
-        $achievement = Achievement::find($achievement_id);
-        $user = User::find($request->get('user-id'));
-        if (! $user || ! $achievement) {
-            abort(404, 'User or achievement not found.');
-        }
+        $achievement = Achievement::findOrFail($achievement_id);
+        $user = User::findOrFail($request->get('user-id'));
+
         $achieved = $user->achieved();
         $hasAchievement = false;
         foreach ($achieved as $entry) {
@@ -219,12 +213,9 @@ class AchievementController extends Controller
      */
     public function take($achievement_id, $user_id)
     {
-        /** @var Achievement $achievement */
-        $achievement = Achievement::find($achievement_id);
-        $user = User::find($user_id);
-        if (! $user || ! $achievement) {
-            abort(404, 'User or achievement not found.');
-        }
+        $achievement = Achievement::findOrFail($achievement_id);
+        $user = User::findOrFail($user_id);
+
         $achieved = AchievementOwnership::all();
         foreach ($achieved as $entry) {
             if ($entry->achievement_id == $achievement_id && $entry->user_id == $user_id) {

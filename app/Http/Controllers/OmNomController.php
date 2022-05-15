@@ -7,6 +7,7 @@ use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
@@ -22,7 +23,7 @@ class OmNomController extends Controller
 {
     /**
      * @param Request $request
-     * @param null $store_slug
+     * @param string|null $store_slug
      * @return RedirectResponse|View
      */
     public function display(Request $request, $store_slug = null)
@@ -213,7 +214,7 @@ class OmNomController extends Controller
                 $product = Product::find($id);
                 $product->buyForUser($user, $amount, $amount * $product->price, $payedCash == 'true', $payedCard == 'true', null, $auth_method);
                 if ($product->id == config('omnomcom.protube-skip')) {
-                    file_get_contents(config('herbert.server').'/skip?secret='.config('herbert.secret'));
+                    Http::get(config('herbert.server').'/skip?secret='.config('herbert.secret'));
                 }
             }
         }

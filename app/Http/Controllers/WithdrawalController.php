@@ -429,6 +429,7 @@ class WithdrawalController extends Controller
     {
         $users = [];
 
+        /** @var OrderLine $orderline */
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
             if ($orderline->isPayed()) {
                 continue;

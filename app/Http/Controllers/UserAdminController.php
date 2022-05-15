@@ -152,19 +152,24 @@ class UserAdminController extends Controller
         /** @var User $user */
         $user = User::findOrFail($id);
 
-        if (! ($user->address && $user->bank)) {
+        if ($user->is_member) {
+            Session::flash('flash_message', 'This user is already a member!');
+            return Redirect::back();
+        }
+
+        if (! ($user->address == null && $user->bank == null)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
             return Redirect::back();
         }
 
-        if (! $user->member) {
+        if ($user->member == null) {
             $member = Member::create();
             $member->user()->associate($user);
-        } else {
-            $member = $user->member;
-            $member->created_at = Carbon::now();
-            $member->is_pending = false;
         }
+
+        $member = $user->member;
+        $member->created_at = Carbon::now();
+        $member->is_pending = false;
 
         $name = explode(' ', $user->name);
         if (count($name) > 1) {

@@ -40,10 +40,10 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property Carbon|null $deleted_at
  * @property-read object $formatted_date
  * @property-read bool $is_future
- * @property-read Activity $activity
+ * @property-read Activity|null $activity
  * @property-read StorageEntry|null $image
  * @property-read Committee|null $committee
- * @property-read EventCategory $category
+ * @property-read EventCategory|null $category
  * @property-read Collection|PhotoAlbum[] $albums
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos

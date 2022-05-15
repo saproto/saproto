@@ -2,9 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -21,11 +18,11 @@ class QueryController extends Controller
 
     /**
      * @param Request $request
-     * @return RedirectResponse|View
+     * @return View
      */
     public function activityOverview(Request $request)
     {
-        if (! $request->has('start') || ! $request->has('start')) {
+        if ($request->missing('start') || $request->missing('end')) {
             if (intval(date('n')) >= 9) {
                 $year_start = intval(date('Y'));
             } else {
@@ -51,7 +48,7 @@ class QueryController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|Factory|\Illuminate\Http\Response|RedirectResponse|View
+     * @return \Illuminate\Http\Response|View
      */
     public function membershipTotals(Request $request)
     {

@@ -72,10 +72,10 @@ class IsAlfredThereController extends Controller
     {
         $status = self::getAlfredsStatus();
         $result = new stdClass();
-        if ($status->value == 'there' ?? $status->value == 'unknown') {
+        if ($status->value == 'there' || $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
-        } elseif (preg_match('/^[0-9]{10}/', $status->value) === 1) {
+        } elseif (preg_match('/^\d{10}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = date('Y-m-d H:i', $status->value);
             $result->backunix = $status->value;

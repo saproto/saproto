@@ -8,6 +8,7 @@ use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
@@ -50,7 +51,7 @@ class TempAdminController extends Controller
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-        file_get_contents(config('herbert.server').'/adminCheck');
+        Http::get(config('herbert.server').'/adminCheck');
 
         return redirect()->back();
     }
@@ -73,7 +74,7 @@ class TempAdminController extends Controller
 
             // Call Herbert webhook to run check through all connected admins.
             // Will result in kick for users whose temporary admin powers were removed.
-            file_get_contents(config('herbert.server').'/adminCheck');
+            Http::get(config('herbert.server').'/adminCheck');
         }
 
         return redirect()->back();
