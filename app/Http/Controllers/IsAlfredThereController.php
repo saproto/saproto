@@ -13,6 +13,7 @@ class IsAlfredThereController extends Controller
 {
     public static $HashMapItemKey = 'is_alfred_there';
     public static $HashMapTextKey = 'is_alfred_there_text';
+
     /** @return View */
     public function showMiniSite()
     {
@@ -38,20 +39,20 @@ class IsAlfredThereController extends Controller
      */
     public function postAdminInterface(Request $request)
     {
-        $text=self::getOrCreateHasMapItem(self::$HashMapTextKey);
+        $text = self::getOrCreateHasMapItem(self::$HashMapTextKey);
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
         if ($new_status === 'there' || $new_status === 'unknown') {
             $status->value = $new_status;
-            $text->value='';
+            $text->value = '';
         } elseif ($new_status === 'away') {
             $status->value = strtotime($arrival_time);
             $text->value = $request->input('is_alfred_there_text');
         }elseif($new_status === 'text_only'){
             $text->value = $request->input('is_alfred_there_text');
-            $status->value='unknown';
+            $status->value = 'unknown';
         }
         $status->save();
         $text->save();
@@ -62,7 +63,7 @@ class IsAlfredThereController extends Controller
     public static function getOrCreateHasMapItem($key)
     {
         $item = HashMapItem::where('key', $key)->first();
-        if (!$item) {
+        if (! $item) {
             $item = HashMapItem::create([
                 'key' => $key,
                 'value' => '',
@@ -75,7 +76,7 @@ class IsAlfredThereController extends Controller
     public static function getAlfredsStatusObject()
     {
         $result = new stdClass();
-        $result->text=self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
+        $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
 
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
         if ($status->value == 'there' ?? $status->value == 'unknown') {
