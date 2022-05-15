@@ -58,14 +58,22 @@
                             </label>
                         </div>
 
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_4"
+                                   value="text_only" required {{ ($status->status == 'unknown' && !empty($status->text)) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="where_is_alfred_4">
+                                I would only like to display a message!
+                            </label>
+                        </div>
+
                         @include('website.layouts.macros.datetimepicker',[
                             'name' => 'back',
                             'label' => "I'll be back around:",
-                            'placeholder' => $status->status == 'away' ? $status->backunix : strtotime('tomorrow 09:00'),
+                            'placeholder' => $status->status == 'away' ? $status->backunix : strtotime('now +1 hour'),
                             'form_class_name' => $status->status == 'away' ? '' : 'd-none'
                         ])
 
-                        <div id="alfred-text" class="{{$status->status == 'away' ? '' : 'd-none'}}"><br>
+                        <div id="alfred-text" class="{{($status->status == 'away'||($status->status=='unknown'&&!empty($status->text))) ? '' : 'd-none'}}"><br>
                         <input name="is_alfred_there_text" type="text" class="form-control" placeholder="additional message" value="{{$status->text}}">
                         </div>
 
@@ -93,11 +101,20 @@
         const radioList = Array.from(document.querySelectorAll('.where_is_alfred input[type="radio"]'))
         radioList.forEach(el => {
             el.addEventListener('change', _ => {
+
                 if (el.checked && el.value === 'away') {
                         dateSelect.classList.remove('d-none')
                         alfredText.classList.remove('d-none')
+                        alfredText.querySelector('input').placeholder="Additional message"
                         dateBack.required = true
-                } else {
+                }
+                else if(el.checked && el.value === 'text_only'){
+                    alfredText.classList.remove('d-none')
+                    dateSelect.classList.add('d-none')
+                    alfredText.querySelector('input').placeholder="Message!"
+                    alfredText.required = true
+                }
+                else {
                     dateSelect.classList.add('d-none')
                     alfredText.classList.add('d-none')
                     dateBack.required = false
