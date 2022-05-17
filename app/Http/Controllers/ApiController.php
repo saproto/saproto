@@ -63,7 +63,7 @@ class ApiController extends Controller
         $user = Auth::user();
 
         if($user) {
-            response()->json([
+            return response()->json([
                 'authenticated' => true,
                 'name' => $user->calling_name,
                 'is_admin' => $user->can('protube') || $user->isTempadmin(),
