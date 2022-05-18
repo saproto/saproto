@@ -279,8 +279,6 @@ class AchievementsCron extends Command
                                 whereHas('activity')->
                                 whereIn('id', $activities)->
                                 count();
-        $this->info($EventsParticipated);
-        $this->info($possibleSignups);
         return (floor($EventsParticipated / $possibleSignups * 100) >= $percentage);
     }
 
