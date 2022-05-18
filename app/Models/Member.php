@@ -81,7 +81,12 @@ class Member extends Model
 
     public static function countPendingMembers()
     {
-        return self::where('is_pending', true)->count();
+        return User::whereHas('member', function ($query) { $query->where('is_pending', true); })->count();
+    }
+
+    public static function countValidMembers()
+    {
+        return User::whereHas('member', function ($query) { $query->where('is_pending', false); })->count();
     }
 
     /** @return Orderline */
