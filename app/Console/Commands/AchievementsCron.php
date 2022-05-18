@@ -54,6 +54,14 @@ class AchievementsCron extends Command
             $orderline = $product->orderlines()->first();
             $first[] = $orderline->user_id;
         }
+
+        $AmountOfSignupsThisMonth = Event::query()->
+                                    where([ ['start', '>', Carbon::now()->subMonth()->timestamp],
+                                            ['secret', '=', false],
+                                            ['end', '<', Carbon::now()->timestamp]
+                                        ])->whereHas('activity')
+                                        ->count();
+
         $youDandy = $this->categoryProducts([9]);
         $fourOClock = $this->categoryProducts([11, 15, 18, 19]);
         $bigKid = $this->categoryProducts([21]);
@@ -81,6 +89,9 @@ class AchievementsCron extends Command
             54 => function ($user) { return $this->nThProducts($user, [39], 100); }, // I Am Noodle
             63 => function ($user) { return $this->nThActivity($user, 1); }, // First Activity
             64 => function ($user) { return $this->nThActivity($user, 100); }, // Hundredth Activity
+            66 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 25,$AmountOfSignupsThisMonth); }, // 25% Participation Trophee
+            67 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 50,$AmountOfSignupsThisMonth); }, // 50% Participation Trophee
+            68 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 75,$AmountOfSignupsThisMonth); }, // 75% Participation Trophee
         ];
 
         // Check if the specified achievements actually exist.
@@ -244,6 +255,33 @@ class AchievementsCron extends Command
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
         $events = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
         return $events->count() >= $n;
+    }
+
+    /**
+     * Attended a certain percentage of signups in the last month.
+     *
+     * @param User $user
+     * @param int $percentage
+     * @param int $possibleSignups
+     * @return bool
+     */
+    private function percentageParticipation($user, $percentage, $possibleSignups){
+//        if ($this->notFirstOfMonth()) return false;
+        if ($possibleSignups<5) return false;
+
+        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+        $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+        $EventsParticipated = Event::query()->
+                                where([ ['start', '>', Carbon::now()->subMonth()->timestamp],
+                                        ['end', '<', Carbon::now()->timestamp],
+                                        ['secret', '=', false]
+                                ])->
+                                whereHas('activity')->
+                                whereIn('id', $activities)->
+                                count();
+        $this->info($EventsParticipated);
+        $this->info($possibleSignups);
+        return (floor($EventsParticipated / $possibleSignups * 100) >= $percentage);
     }
 
     /**
