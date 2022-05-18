@@ -172,7 +172,7 @@ class ParticipationController extends Controller
 
             $participation->delete();
 
-            if ($participation->backup == false) {
+            if ($participation->backup == false && $participation->activity->users()->count() < $participation->activity->participants) {
                 self::transferOneBackupUser($participation->activity);
             }
         } else {
