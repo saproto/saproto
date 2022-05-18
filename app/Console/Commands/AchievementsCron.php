@@ -266,7 +266,7 @@ class AchievementsCron extends Command
      * @return bool
      */
     private function percentageParticipation($user, $percentage, $possibleSignups) {
-//        if ($this->notFirstOfMonth()) return false;
+        if ($this->notFirstOfMonth()) return false;
         if ($possibleSignups < 5) return false;
 
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
