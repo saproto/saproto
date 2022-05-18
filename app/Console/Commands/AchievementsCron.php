@@ -56,9 +56,9 @@ class AchievementsCron extends Command
         }
 
         $AmountOfSignupsThisMonth = Event::query()->
-                                    where([ ['start', '>', Carbon::now()->subMonth()->timestamp],
+                                    where([['start', '>', Carbon::now()->subMonth()->timestamp],
                                             ['secret', '=', false],
-                                            ['end', '<', Carbon::now()->timestamp]
+                                            ['end', '<', Carbon::now()->timestamp],
                                         ])->whereHas('activity')
                                         ->count();
 
@@ -265,16 +265,16 @@ class AchievementsCron extends Command
      * @param int $possibleSignups
      * @return bool
      */
-    private function percentageParticipation($user, $percentage, $possibleSignups){
+    private function percentageParticipation($user, $percentage, $possibleSignups) {
 //        if ($this->notFirstOfMonth()) return false;
-        if ($possibleSignups<5) return false;
+        if ($possibleSignups < 5) return false;
 
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
         $EventsParticipated = Event::query()->
-                                where([ ['start', '>', Carbon::now()->subMonth()->timestamp],
+                                where([['start', '>', Carbon::now()->subMonth()->timestamp],
                                         ['end', '<', Carbon::now()->timestamp],
-                                        ['secret', '=', false]
+                                        ['secret', '=', false],
                                 ])->
                                 whereHas('activity')->
                                 whereIn('id', $activities)->
