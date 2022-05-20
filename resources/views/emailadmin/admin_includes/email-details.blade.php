@@ -141,10 +141,18 @@
                             </div>
                         </div>
 
+                        <div class="form-group {{ (($email && $email->to_event) ? '' : 'd-none') }}" id="backupDiv">
+                            <input type="checkbox" name="toBackup"
+                                    {{ ($email && $email->to_backup ? 'checked' : '') }}>
+                                    Send to backup users
+                                    <br><i><b>Note:</b>
+                                    Specify the recipient is not automatically enrolled in the activity!</i>
+                        </div>
+
                         <div class="radio">
                             <label>
                                 <input type="radio" name="destinationType" required
-                                       value="lists" {{ ($email && $email->to_list ? 'checked' : '') }}>
+                                       value="lists" {{ ($email && $email->to_list && $email->to_backup ? 'checked' : '') }}>
                                 These e-mail lists:
                             </label>
                         </div>
@@ -195,12 +203,13 @@
         const eventSelect = document.getElementById('eventSelect')
         const listSelect = document.getElementById('listSelect')
         const destinationSelectList = Array.from(document.getElementsByName('destinationType'))
+        const backupToggle=document.getElementById('backupDiv');
         const toggleList = {
-            'event': [false, true],
-            'members': [true, true],
-            'active': [true, true],
-            'pending': [true, true],
-            'lists': [true, false]
+            'event': [false, true, false],
+            'members': [true, true, true],
+            'active': [true, true, true],
+            'pending': [true, true, true],
+            'lists': [true, false, true]
         }
 
         destinationSelectList.forEach(el => {
@@ -208,6 +217,9 @@
                 const toggle = toggleList[el.value]
                 eventSelect.disabled = toggle[0]
                 listSelect.disabled = toggle[1]
+
+                if(toggle[2])backupToggle.classList.add('d-none')
+                else backupToggle.classList.remove('d-none')
             })
         })
     </script>

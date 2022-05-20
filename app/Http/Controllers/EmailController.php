@@ -51,7 +51,7 @@ class EmailController extends Controller
             'sender_name' => $request->input('sender_name'),
             'sender_address' => $request->input('sender_address'),
         ]);
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->has('toBackup'));
         $request->session()->flash('flash_message', 'Your e-mail has been saved.');
 
         return Redirect::route('email::admin');
@@ -123,7 +123,7 @@ class EmailController extends Controller
             'sender_address' => $request->input('sender_address'),
         ]);
 
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->input('toBackup'));
 
         $request->session()->flash('flash_message', 'Your e-mail has been saved.');
         return Redirect::route('email::admin');
@@ -269,7 +269,7 @@ class EmailController extends Controller
      * @param array $lists
      * @param array $events
      */
-    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [])
+    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup)
     {
         switch ($type) {
 
@@ -281,6 +281,7 @@ class EmailController extends Controller
 
                 $email->to_list = false;
                 $email->to_event = false;
+                $email->to_backup = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
@@ -294,6 +295,7 @@ class EmailController extends Controller
 
                 $email->to_list = false;
                 $email->to_event = false;
+                $email->to_backup = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
@@ -307,6 +309,7 @@ class EmailController extends Controller
 
                 $email->to_list = false;
                 $email->to_event = false;
+                $email->to_backup = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);
@@ -320,7 +323,7 @@ class EmailController extends Controller
 
                 $email->to_list = false;
                 $email->to_event = true;
-
+                $email->to_backup = $toBackup;
                 $email->lists()->sync([]);
                 if (isset($events) && count($events) > 0) {
                     $email->events()->sync($events);
@@ -335,6 +338,7 @@ class EmailController extends Controller
 
                 $email->to_list = true;
                 $email->to_event = false;
+                $email->to_backup = false;
 
                 $email->lists()->sync((gettype($lists) == 'array' ? $lists : []));
                 $email->events()->sync([]);
@@ -348,6 +352,7 @@ class EmailController extends Controller
 
                 $email->to_list = false;
                 $email->to_event = false;
+                $email->to_backup = false;
 
                 $email->lists()->sync([]);
                 $email->events()->sync([]);

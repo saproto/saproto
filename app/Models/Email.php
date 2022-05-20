@@ -26,6 +26,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $to_event
  * @property int $to_active
  * @property int $to_pending
+ * @property int $to_backup
  * @property int|null $sent_to
  * @property int $sent
  * @property int $ready
@@ -92,6 +93,9 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
+            if($this->to_backup){
+                return 'event with backup';
+            }
             return 'event';
         }
     }
@@ -121,11 +125,14 @@ class Email extends Model
                 $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
-        } elseif ($this->to_event != false) {
+        } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
                 if ($event) {
                     $user_ids = array_merge($user_ids, $event->returnAllUsers()->pluck('id')->toArray());
+                    if($this->to_backup && $event->activity){
+                        $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
+                    }
                 }
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
