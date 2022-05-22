@@ -127,8 +127,8 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param int $w
-     * @param int $h
+     * @param int|null $w
+     * @param int|null $h
      * @return string
      */
     public function generateImagePath($w, $h)
@@ -147,6 +147,7 @@ class StorageEntry extends Model
      */
     public function getBase64($w = null, $h = null)
     {
+        /* @phpstan-ignore-next-line */
         return base64_encode(FileController::makeImage($this, $w, $h));
     }
 

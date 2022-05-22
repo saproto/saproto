@@ -3,7 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
-use Carbon\Carbon;
+use Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;

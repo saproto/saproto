@@ -84,9 +84,9 @@ class Video extends Model
         } elseif ($interval->d > 0) {
             return sprintf('%s days', $interval->d);
         } elseif ($interval->h > 0) {
-            return sprintf('%s:%s:%s ', $interval->h, str_pad($interval->i, 2, '0', STR_PAD_LEFT), str_pad($interval->s, 2, '0', STR_PAD_LEFT));
+            return sprintf('%s:%s:%s ', $interval->h, str_pad(strval($interval->i), 2, '0', STR_PAD_LEFT), str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
         } elseif ($interval->i > 0) {
-            return sprintf('%s:%s ', $interval->i, str_pad($interval->s, 2, '0', STR_PAD_LEFT));
+            return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
         } else {
             return sprintf('%s seconds', $interval->s);
         }

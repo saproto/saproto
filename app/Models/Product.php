@@ -105,8 +105,8 @@ class Product extends Model
      * @param User $user
      * @param int $amount
      * @param float|null $total_price
-     * @param bool $withCash
-     * @param bool $withBankCard
+     * @param bool|null $withCash
+     * @param bool|null $withBankCard
      * @param string|null $description
      * @param string $auth_method
      * @return int OrderLine id

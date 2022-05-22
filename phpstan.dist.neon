@@ -6,7 +6,7 @@ parameters:
     paths:
         - app
 
-    level: 4 # out of 9
+    level: 5 # out of 9
 
     ignoreErrors:
         # Weirdly cannot be found anywhere in the codebase...

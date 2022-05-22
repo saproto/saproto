@@ -100,7 +100,7 @@ class ProtubeController extends Controller
 
     /**
      * @param int $limit
-     * @param string $since
+     * @param string|null $since
      * @param User|null $user
      * @return array
      */

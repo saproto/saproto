@@ -2,6 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
+use Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -77,7 +78,7 @@ class IsAlfredThereController extends Controller
             return $result;
         } elseif (preg_match('/^\d{10}/', $status->value) === 1) {
             $result->status = 'away';
-            $result->back = date('Y-m-d H:i', $status->value);
+            $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
             $result->backunix = $status->value;
             return $result;
         }

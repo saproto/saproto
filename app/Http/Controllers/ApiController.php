@@ -83,7 +83,7 @@ class ApiController extends Controller
         $playedVideo = new PlayedVideo();
         $user = User::findOrFail($request->user_id);
 
-        if ($user && $user->keep_protube_history) {
+        if ($user->keep_protube_history) {
             $playedVideo->user()->associate($user);
         }
 

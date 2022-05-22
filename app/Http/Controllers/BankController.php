@@ -217,7 +217,7 @@ class BankController extends Controller
      */
     public static function generateAuthorizationId($user)
     {
-        return 'PROTOX'.str_pad($user->id, 5, '0', STR_PAD_LEFT).'X'.str_pad(mt_rand(0, 99999), 5, '0');
+        return 'PROTOX'.str_pad(strval($user->id), 5, '0', STR_PAD_LEFT).'X'.str_pad(strval(mt_rand(0, 99999)), 5, '0');
     }
 
     /**

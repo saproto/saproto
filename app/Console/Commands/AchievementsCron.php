@@ -327,7 +327,7 @@ class AchievementsCron extends Command
     {
         $products = [];
         foreach($categories as $category) {
-            array_merge($products, ProductCategory::find($category)->products()->pluck('id')->toArray());
+            $products = array_merge($products, ProductCategory::find($category)->products()->pluck('id')->toArray());
         }
         return $products;
     }

@@ -258,10 +258,10 @@ class MollieController extends Controller
         $properties = [
             'amount' => [
                 'currency' => 'EUR',
-                'value' => strval($total),
+                'value' => $total,
             ],
             'method' => config('omnomcom.mollie')['use_fees'] ? $selected_method->id : null,
-            'description' => 'OmNomCom Settlement (€'.number_format($total, 2).')',
+            'description' => 'OmNomCom Settlement (€'.$total.')',
             'redirectUrl' => route('omnomcom::mollie::receive', ['id' => $transaction->id]),
         ];
 

@@ -3,7 +3,7 @@
 namespace Proto\Models;
 
 use Artisan;
-use Carbon\Carbon;
+use Carbon;
 use Eloquent;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
-use Carbon\Carbon;
+use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\User;

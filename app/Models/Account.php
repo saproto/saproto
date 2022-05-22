@@ -52,7 +52,7 @@ class Account extends Model
 
         foreach ($orderlines as $orderline) {
             // We sort by date, where a date goes from 6am - 6am.
-            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
+            $sortDate = $orderline->created_at->subHours(6)->toDateString();
 
             // Abbreviate variable names.
             $nr = $orderline->account_number;
@@ -101,7 +101,7 @@ class Account extends Model
             )
             ->groupby('orderlines.product_id')
             ->where('accounts.id', '=', $this->id)
-            ->where('orderlines.created_at', '>=', Carbon::parse($start)->format('Y-m-d H:i:s'))
-            ->where('orderlines.created_at', '<', Carbon::parse($end)->format('Y-m-d H:i:s'))->get();
+            ->where('orderlines.created_at', '>=', Carbon::parse(strval($start))->format('Y-m-d H:i:s'))
+            ->where('orderlines.created_at', '<', Carbon::parse(strval($end))->format('Y-m-d H:i:s'))->get();
     }
 }
