@@ -123,7 +123,7 @@ class EmailController extends Controller
             'sender_address' => $request->input('sender_address'),
         ]);
 
-        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->input('toBackup'));
+        $this->updateEmailDestination($email, $request->input('destinationType'), $request->input('listSelect'), $request->input('eventSelect'), $request->has('toBackup'));
 
         $request->session()->flash('flash_message', 'Your e-mail has been saved.');
         return Redirect::route('email::admin');
