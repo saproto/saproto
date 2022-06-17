@@ -31,7 +31,7 @@
                     'method' => 'POST',
                     'classes' => 'list-group-item',
                     'text' => 'Print membership card',
-                    'message' => "Do you want to print $user->name's card? <br> Card last printed on: ".($user->member->card_printed_on ? $user->member->card_printed_on : 'Never printed before')
+                    'message' => "Do you want to print $user->name's card? <br> Card last printed on: ".($user->member->card_printed_on ?? 'Never printed before' )
                 ])
 
                 @include('website.layouts.macros.confirm-modal', [
