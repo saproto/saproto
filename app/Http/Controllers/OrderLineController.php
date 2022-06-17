@@ -90,7 +90,7 @@ class OrderLineController extends Controller
         $orderlines = $orderlines->orderBy('created_at', 'desc')->paginate(20);
 
         return view('omnomcom.orders.adminhistory', [
-            'date' => Carbon::today()->format("d-m-Y"),
+            'date' => Carbon::today()->format('d-m-Y'),
             'orderlines' => ($orderlines ?? []),
             'user' =>null,
         ]);
@@ -102,7 +102,7 @@ class OrderLineController extends Controller
      */
     public function filterByDate(Request $request)
     {
-        $date=Carbon::parse($request->input('date'))->format("d-m-Y");
+        $date = Carbon::parse($request->input('date'))->format('d-m-Y');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
@@ -127,7 +127,7 @@ class OrderLineController extends Controller
      */
     public function filterByUser(Request $request)
     {
-        $user=$request->input('user');
+        $user = $request->input('user');
 
         if (Auth::user()->can('alfred') && ! Auth::user()->hasRole('sysadmin')) {
             $orderlines = OrderLine::whereHas('product', function ($query) {
