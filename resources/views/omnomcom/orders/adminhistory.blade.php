@@ -14,6 +14,8 @@
 
             @include('omnomcom.orders.admin_includes.pickdate')
 
+            @include('omnomcom.orders.admin_includes.pickuser')
+
 
         </div>
 
