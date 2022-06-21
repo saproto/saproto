@@ -753,7 +753,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('manage/{id}', ['as' => 'manage', 'uses' => 'AchievementController@manage']);
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'AchievementController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
-            Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+            Route::post('award/{id}', ['as' => 'award', 'uses' => 'AchievementController@award']);
+            Route::post('give', ['as' => 'give', 'uses' => 'AchievementController@give']);
             Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
             Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
             Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);
