@@ -178,7 +178,6 @@ class SearchController extends Controller
         return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
     }
 
-
     /**
      * @param Request $request
      * @return array

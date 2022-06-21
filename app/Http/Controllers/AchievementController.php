@@ -186,14 +186,14 @@ class AchievementController extends Controller
 
     public function give(Request $request)
     {
-        $achievement=Achievement::find($request->get('achievement-id'));
-        $userIds=$request->input('users');
-        $awarded="";
+        $achievement = Achievement::find($request->get('achievement-id'));
+        $userIds = $request->input('users');
+        $awarded = '';
         foreach ($userIds as $userId) {
-            $user=User::find($userId);
+            $user = User::find($userId);
             if($user) {
                 if($this->giveAchievement($achievement, $user)){
-                    $awarded=$awarded." ".$user->name.",";
+                    $awarded = $awarded.' '.$user->name.',';
                 }
             }
         }
@@ -204,8 +204,6 @@ class AchievementController extends Controller
         }
         return Redirect::back();
     }
-
-
 
     /**
      * @param $achievement_id
