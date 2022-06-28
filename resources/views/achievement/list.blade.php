@@ -72,7 +72,7 @@
 
         </div>
 
-        <div class="col-4">
+        <div class="col-md-auto">
     @include('achievement.admin_includes.awards-addone')
         </div>
     </div>
