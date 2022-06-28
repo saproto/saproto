@@ -47,6 +47,7 @@ class ProtoPolicy extends Policy
                 ])
                 ->addDirective(Directive::MEDIA, [
                     Keyword::SELF,
+                    '*',
                     'https://static.saproto.com',
                 ])
                 ->addDirective(Directive::FRAME, [
