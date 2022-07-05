@@ -9,17 +9,21 @@
         <ul class="list-group list-group-flush">
 
             @foreach($user->withdrawals(6) as $withdrawal)
-                <li class="list-group-item">
+                <div class="list-group-item d-flex justify-content-between">
+                    <div>
                     <a href="{{ route('omnomcom::mywithdrawal', ['id' => $withdrawal->id]) }}">
                         {{ date('d-m-Y', strtotime($withdrawal->date)) }}
                     </a>
+                    </div>
                     @if($withdrawal->getFailedWithdrawal($user) || $withdrawal->id == 'temp')
-                        <i class="fas fa-times text-danger ms-2"></i>
+                        <i class="fas fa-times text-danger mt-1"></i>
+                    @else
+                    <div>{{$withdrawal->closed?'Closed':'Pending'}}</div>
                     @endif
-                    <span class="float-end">
+                    <div>
                         &euro;{{ number_format($withdrawal->totalForUser($user), 2, '.', ',') }}
-                    </span>
-                </li>
+                    </div>
+                </div>
             @endforeach
 
         </ul>
