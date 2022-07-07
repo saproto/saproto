@@ -234,17 +234,6 @@ class OmNomController extends Controller
             if(strlen($result->message) > 0) {
                 $result->message .= sprintf(' today, %s.', $user->calling_name);
             }
-            $cartTotal = 0;
-            foreach ($cart as $id => $amount) {
-                $product = Product::find($id);
-                if($product) {
-                    $cartTotal += $product->price * $amount;
-                }
-            }
-            $soccerCards = floor($cartTotal / 0.5);
-            if($soccerCards > 0) {
-                $result->message .= sprintf('<br><br> You may take <strong>%s</strong> soccer card%s!', $soccerCards, $soccerCards > 1 ? 's' : '');
-            }
         }
 
         return json_encode($result);
