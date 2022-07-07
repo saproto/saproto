@@ -22,10 +22,14 @@
 
         <div class="col-xl-3 col-md-12">
 
-            <a href="{{ route('api::user::gdpr_export') }}" target="_blank" class="btn btn-outline-info btn-block mb-3 ellipsis"
-               onclick="return confirm('You are about to download all your personal data as a JSON file. This can take a few seconds. Continue?');">
-                <strong>Download all my personal information. (GDPR)</strong>
-            </a>
+            @include('website.layouts.macros.confirm-modal', [
+               'action' => route('api::user::gdpr_export'),
+               'classes' => 'btn btn-outline-info btn-block mb-3 ellipsis',
+               'text' => '<strong>Download all my personal information. (GDPR)</strong>',
+               'title' => 'Confirm Download',
+               'message' => 'You are about to download all your personal data collected by Proto as a JSON file. This can take a few seconds. Continue?',
+               'confirm' => 'Download',
+            ])
 
             @include('users.dashboard.includes.profilepic')
 

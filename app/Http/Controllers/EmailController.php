@@ -64,13 +64,12 @@ class EmailController extends Controller
     public function show($id)
     {
         $email = Email::findOrFail($id);
-
         return view('emails.manualemail', [
             'body' => $email->parseBodyFor(Auth::user()),
             'attachments' => $email->attachments,
             'destination' => $email->destinationForBody(),
             'user_id' => Auth::user()->id,
-            'event_name' => $email->getEventName(),
+            'events' => $email->events()->get(),
             'email_id' => $email->id,
         ]);
     }

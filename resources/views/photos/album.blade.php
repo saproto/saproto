@@ -16,8 +16,18 @@
 
     <div class="card mb-3">
 
-        <div class="card-header bg-dark text-white text-center">
-            {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
+        <div class="card-header bg-dark text-white text-end">
+            <a href="{{route("photo::albums")}}" class="btn btn-success float-start me-3">
+                <i class="fas fa-list"></i> <span class="d-none d-sm-inline">Album overview</span>
+            </a>
+            @can('protography')
+                <a href="{{route("photo::admin::edit", ['id' => $photos->album_id])}}" class="btn btn-success float-start me-3">
+                    <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit album</span>
+                </a>
+            @endcan
+            <div class="p-1 m-1 fw-bold">
+                {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
+            </div>
         </div>
 
         <div class="card-body">

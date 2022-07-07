@@ -90,10 +90,13 @@
                                 <a href="{{ route('video::admin::edit', ['id' => $video->id]) }}">
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
-                                <a onclick="return confirm('Delete this video: {{ $video->title }}?')"
-                                   href="{{ route('video::admin::delete', ['id' => $video->id]) }}">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+                                @include('website.layouts.macros.confirm-modal', [
+                                   'action' => route('video::admin::delete', ['id' => $video->id]),
+                                   'text' => '<i class="fas fa-trash text-danger"></i>',
+                                   'title' => 'Confirm Delete',
+                                   'message' => "Are you sure you want to delete this video: $video->title",
+                                   'confirm' => 'Delete',
+                                ])
                             </td>
                         </tr>
 

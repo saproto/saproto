@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <a class="btn btn-success btn-block"
-                       href="https://wiki.proto.utwente.nl/ict/issues">
+                       href="https://wiki.proto.utwente.nl/ict/frequent-problems">
                         <i class="fas fa-question-circle me-2"></i>
                         Answers to frequent questions
                     </a>

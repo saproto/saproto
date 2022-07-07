@@ -1,7 +1,11 @@
 <div class="card">
 
     <div class="card-header bg-dark text-white">
-        Orderlines on {{ $date }}
+        @if($date)
+            Orderlines on {{ $date }}
+        @elseif($user)
+            Orderlines for {{ $user }}
+        @endif
     </div>
 
     @if(count($orderlines) > 0)
@@ -16,10 +20,13 @@
                     <td>
                         <span class="text-muted">{{ $orderline->id }}</span>
                         @if($orderline->canBeDeleted())
-                            <a href="{{ route('omnomcom::orders::delete', ['id' => $orderline->id]) }}"
-                               onclick="return confirm('You are about to delete an orderline for {{  $orderline->user->name }}. Are you sure? ');">
-                                <i class="fas fa-trash ms-3 text-danger" aria-hidden="true"></i>
-                            </a>
+                            @include('website.layouts.macros.confirm-modal', [
+                                'action' => route('omnomcom::orders::delete', ['id' => $orderline->id]),
+                                'text' => '<i class="fas fa-trash text-danger ms-3"></i>',
+                                'title' => 'Confirm Delete',
+                                'message' => 'Are you sure you want to delete this orderline for '.$orderline->user->name.'?',
+                                'confirm' => 'Delete',
+                            ])
                         @endif
                     </td>
                     <td class="text-end" style="min-width:70px">
@@ -71,7 +78,7 @@
     @else
         <div class="card-body">
             <p class="text-center mt-3">
-                No orderlines for this date.
+                No orderlines for this {{($date?'date':'user')}}.
             </p>
         </div>
     @endif

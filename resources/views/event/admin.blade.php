@@ -155,11 +155,13 @@
                                                                 @elseif($purchase->orderline->isPayed())
                                                                     Paid
                                                                 @else
-                                                                    <a class="badge bg-danger"
-                                                                       href="{{ route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]) }}"
-                                                                       onclick="return confirm('Are you sure you want to delete on ticket for {{ $purchase->user->name }}?')">
-                                                                        Delete
-                                                                    </a>
+                                                                    @include('website.layouts.macros.confirm-modal', [
+                                                                        'action' => route('omnomcom::orders::delete', ['id'=>$purchase->orderline->id]),
+                                                                        'classes' => 'badge bg-danger',
+                                                                        'text' => 'Delete',
+                                                                        'title' => 'Confirm Delete',
+                                                                        'message' => "Are you sure you want to delete one ticket for ".$purchase->user->name.'?',
+                                                                    ])
                                                                 @endif
                                                             </td>
                                                         @endcan
@@ -204,8 +206,7 @@
         scanList.forEach(el => setEventListener(el, false))
         unscanList.forEach(el => setEventListener(el, true))
 
-        const scanRequest = barcode => get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode })
-        const unscanRequest = barcode => get('{{ route('tickets::unscan') }}/' + barcode,)
+        const scanRequest = (barcode, unscan) => get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode, ...(unscan && {unscan: true}) })
 
         function setEventListener(el, unscan) {
             el.addEventListener('click', e => {
@@ -213,12 +214,11 @@
                 let barcode = e.target.getAttribute('data-id')
                 let parent = e.target.parentElement
                 if (barcode === undefined) throw new Error("Can't find barcode")
-                let request = unscan ? unscanRequest : scanRequest
-                request(barcode)
+                scanRequest(barcode, unscan)
                 .then(_ => {
                     console.log('Scanned barcode ' + barcode)
                     let link = document.createElement('a')
-                    link.href = '#ticket-collapse-{{ $ticket->id }}'
+                    link.href = '#'
                     link.setAttribute('data-id', barcode)
                     link.innerHTML = unscan ? 'Scan Manually' : 'Unscan'
                     link.className = unscan ? 'scan dontprint' : 'unscan dontprint'

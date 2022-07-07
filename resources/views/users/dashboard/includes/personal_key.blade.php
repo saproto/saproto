@@ -19,10 +19,14 @@
 
     <div class="card-footer">
 
-        <a href="{{ route('user::personal_key::generate') }}" class="btn btn-outline-danger btn-block"
-           onclick="return confirm('Are you sure? This will invalidate any personal links including your personalized calendar.');">
-            Mine has been compromised, generate me a new one
-        </a>
+        @include('website.layouts.macros.confirm-modal', [
+           'action' => route('user::personal_key::generate'),
+           'classes' => 'btn btn-outline-danger btn-block',
+           'text' => 'Mine has been compromised, generate me a new one',
+           'title' => 'Confirm Regenerate',
+           'message' => 'Are you sure? This will invalidate any personal links including your personalized calendar.',
+           'confirm' => 'Regenerate',
+        ])
 
     </div>
 

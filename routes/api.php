@@ -85,6 +85,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     /* Routes related to the Protube API */
     Route::group(['prefix' => 'protube', 'as' => 'protube::', 'middleware' => ['web']], function () {
         Route::get('admin/{token}', ['as' => 'admin', 'uses' => 'ApiController@protubeAdmin']);
+        Route::get('userdetails', ['as' => 'userdetails', 'uses' => 'ApiController@protubeUserDetails']);
         Route::get('played', ['as' => 'played', 'uses' => 'ApiController@protubePlayed']);
         Route::get('radiostations', ['uses' => 'RadioController@api']);
         Route::get('displays', ['uses' => 'DisplayController@api']);

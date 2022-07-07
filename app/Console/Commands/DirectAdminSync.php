@@ -58,9 +58,9 @@ class DirectAdminSync extends Command
             'domain' => getenv('DA_DOMAIN'),
             'action' => 'list',
         ]);
-        $current = $da->fetch_parsed_body()['list'];
+        $current = $da->fetch_parsed_body();
         $target = $this->constructAccountList();
-        $patch = $this->constructAccountPatchList($current, $target);
+        $patch = $this->constructAccountPatchList($current['list'], $target);
         $account_queries = $this->applyAccountPatchList($patch);
 
         // Execute queries
@@ -80,9 +80,9 @@ class DirectAdminSync extends Command
         // Constructing user forwarders.
         $members = Member::all();
         foreach ($members as $member) {
-            $data[$member->proto_username] = [
-                $member->user->email,
-            ];
+            if ($member->proto_username) {
+                $data[$member->proto_username] = [$member->user->email];
+            }
         }
 
         // Constructing committee forwarders.
@@ -111,11 +111,7 @@ class DirectAdminSync extends Command
         // Constructing manual aliases.
         $aliases = Alias::all();
         foreach ($aliases as $alias) {
-            if ($alias->destination) {
-                $data[$alias->alias][] = $alias->destination;
-            } else {
-                $data[$alias->alias][] = $alias->user->email;
-            }
+            $data[$alias->alias][] = $alias->destination ?? $alias->user->email;
         }
 
         return $data;
@@ -132,7 +128,9 @@ class DirectAdminSync extends Command
 
         $members = Member::all();
         foreach ($members as $member) {
-            $data[] = $member->proto_username;
+            if ($member->proto_username) {
+                $data[] = $member->proto_username;
+            }
         }
 
         foreach (config('proto.additional_mailboxes') as $additional) {
@@ -159,6 +157,7 @@ class DirectAdminSync extends Command
 
         // For each current forwarder, we check if it should exist against the target list.
         foreach ($current as $alias => $destination) {
+            $alias = strtolower(str_replace('_', '.', $alias));
             $destination = explode(',', $destination);
 
             // It should exist, now we check if the forwarder needs to be rewritten.
@@ -190,6 +189,7 @@ class DirectAdminSync extends Command
 
         // Now we check if we need to create any new forwarders.
         foreach ($target as $alias => $destination) {
+            $alias = strtolower(str_replace('.', '_', $alias));
             if (! array_key_exists($alias, $current)) {
                 // The forwarder does not yet exist...
                 $data['add'][$alias] = $destination;

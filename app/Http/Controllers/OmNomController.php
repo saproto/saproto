@@ -34,7 +34,7 @@ class OmNomController extends Controller
 
         $store = config('omnomcom.stores')[$store_slug];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
         }
 
@@ -75,7 +75,7 @@ class OmNomController extends Controller
 
         $store = config('omnomcom.stores')[$request->store];
 
-        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->can($store->roles))) {
+        if (! in_array($request->ip(), $store->addresses) && (! Auth::check() || ! Auth::user()->hasAnyPermission($store->roles))) {
             abort(403);
         }
 
@@ -111,11 +111,13 @@ class OmNomController extends Controller
 
         if (array_key_exists($store_slug, $stores)) {
             $store = $stores[$store_slug];
-            if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->can($store->roles)) {
+            if (! in_array($request->ip(), $store->addresses) && ! Auth::user()->hasAnyPermission($store->roles)) {
                 $result->message = 'You are not authorized to do this.';
+                return json_encode($result);
             }
         } else {
             $result->message = "This store doesn't exist.";
+            return json_encode($result);
         }
 
         switch ($request->input('credential_type')) {
@@ -151,6 +153,7 @@ class OmNomController extends Controller
 
             default:
                 $result->message = 'Invalid credential type.';
+                return json_encode($result);
                 break;
         }
 
@@ -167,12 +170,12 @@ class OmNomController extends Controller
         $payedCash = $request->input('cash');
         $payedCard = $request->input('bank_card');
 
-        if ($payedCash == 'true' && ! $store->cash_allowed) {
+        if ($payedCash && ! $store->cash_allowed) {
             $result->message = 'You cannot use cash in this store.';
             return json_encode($result);
         }
 
-        if ($payedCard == 'true' && ! $store->bank_card_allowed) {
+        if ($payedCard && ! $store->bank_card_allowed) {
             $result->message = 'You cannot use a bank card in this store.';
             return json_encode($result);
         }
@@ -228,7 +231,20 @@ class OmNomController extends Controller
                 $result->message .= sprintf('bought a total of <strong>%s calories</strong>', Orderline::where('orderlines.user_id', $user->id)->where('orderlines.created_at', 'LIKE', sprintf('%s %%', date('Y-m-d')))->join('products', 'products.id', '=', 'orderlines.product_id')->sum(DB::raw('orderlines.units * products.calories')));
             }
 
-            $result->message .= sprintf(' today, %s.', $user->calling_name);
+            if(strlen($result->message) > 0) {
+                $result->message .= sprintf(' today, %s.', $user->calling_name);
+            }
+            $cartTotal = 0;
+            foreach ($cart as $id => $amount) {
+                $product = Product::find($id);
+                if($product) {
+                    $cartTotal += $product->price * $amount;
+                }
+            }
+            $soccerCards = floor($cartTotal / 0.5);
+            if($soccerCards > 0) {
+                $result->message .= sprintf('<br><br> You may take <strong>%s</strong> soccer card%s!', $soccerCards, $soccerCards > 1 ? 's' : '');
+            }
         }
 
         return json_encode($result);

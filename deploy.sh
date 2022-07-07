@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # First verify the checksum between uploaded and live code to see if deployment is necessary.
-echo "Verifying checksum"
+echo "Verifying checksum..."
 CURRENT_CHECKSUM=$(cat live/checksum.txt)
 if [ $? -ne 0 ]; then
   echo "No current checksum found. Assuming deployment is necessary."
@@ -20,7 +20,7 @@ if [ "$CURRENT_CHECKSUM" == "$NEW_CHECKSUM" ]; then
 fi
 
 # Clean-up
-echo "Removing old build"
+echo "Removing old build..."
 rm -rf previous_build
 
 # Prepare new build
@@ -45,7 +45,13 @@ mv live previous_build
 mv new_build live
 
 echo "Migrating database..."
-(cd live && php artisan migrate --force && php artisan proto:syncroles)
+(cd live && php artisan migrate --force)
+
+echo "Syncing permissions and roles..."
+(cd live && php artisan 'proto:syncroles')
+
+echo "clear laravel config"
+(cd live && php artisan 'config:clear')
 
 echo "Bringing up new live build..."
 (cd live && php artisan up)

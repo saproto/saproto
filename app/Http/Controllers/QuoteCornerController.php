@@ -116,16 +116,15 @@ class QuoteCornerController extends Controller
      */
     public function toggleLike($id)
     {
-        $quote = QuoteLike::where('quote_id', $id)->where('user_id', Auth::user()->id)->get();
-        if (count($quote) != 0) {
-            $quote[0]->delete();
+        $quote = QuoteLike::where('quote_id', $id)->where('user_id', Auth::user()->id)->first();
+        if ($quote) {
+            $quote->delete();
         } else {
-            $new = [
+            $like = new QuoteLike([
                 'user_id' => Auth::user()->id,
                 'quote_id' => $id,
-            ];
-            $relation = new QuoteLike($new);
-            $relation->save();
+            ]);
+            $like->save();
         }
     }
 }

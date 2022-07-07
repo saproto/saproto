@@ -38,14 +38,7 @@
                     <tr>
                         <td>All members</td>
                         <td></td>
-                        <td>{{ Proto\Models\Member::count() }}</td>
-                        <td></td>
-                    </tr>
-
-                    <tr>
-                        <td>All active members</td>
-                        <td></td>
-                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
+                        <td>{{ Proto\Models\Member::countValidMembers() }}</td>
                         <td></td>
                     </tr>
 
@@ -53,6 +46,13 @@
                         <td>All pending members</td>
                         <td></td>
                         <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>All active members</td>
+                        <td></td>
+                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
                         <td></td>
                     </tr>
 
@@ -67,10 +67,14 @@
                                 <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
                                     <i class="fas fa-edit me-2"></i>
                                 </a>
-                                <a onclick="return confirm('Delete e-mail list {{ $list->name }}?');"
-                                   href="{{ route('email::list::delete', ['id' => $list->id]) }}">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </a>
+
+                                @include('website.layouts.macros.confirm-modal', [
+                                    'action' => route('email::list::delete', ['id' => $list->id]),
+                                    'text' => '<i class="fas fa-trash text-danger"></i>',
+                                    'title' => 'Confirm Delete',
+                                    'message' => "Are you sure you want to delete e-mail list $list->name?",
+                                    'confirm' => 'Delete',
+                                ])
                             </td>
 
                         </tr>
@@ -133,7 +137,10 @@
                                 @elseif($email->to_list)
                                     list(s) {{ $email->getListName() }}
                                 @elseif($email->to_event)
-                                    event(s) {{ $email->getEventName() }}
+                                    event(s):
+                                    @foreach($email->events()->get() as $event)
+                                        {{$event->title}}.
+                                        @endforeach
                                 @endif
                             </td>
                             <td>
@@ -155,10 +162,13 @@
                                     <i class="fas fa-eye me-2 text-info"></i>
                                 </a>
                                 @if (!$email->sent)
-                                    <a onclick="return confirm('You sure you want to delete this e-mail?')"
-                                       href="{{ route('email::delete', ['id' => $email->id]) }}">
-                                        <i class="fas fa-trash text-danger me-2"></i>
-                                    </a>
+                                    @include('website.layouts.macros.confirm-modal', [
+                                        'action' => route('email::delete', ['id' => $email->id]),
+                                        'text' => '<i class="fas fa-trash text-danger me-2"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to delete this e-mail?",
+                                        'confirm' => 'Delete',
+                                    ])
                                     @if (!$email->ready)
                                         <a href="{{ route('email::toggleready', ['id' => $email->id]) }}">
                                             <i class="fas fa-paper-plane text-warning me-2"></i>

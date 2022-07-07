@@ -46,11 +46,12 @@
 
             <hr>
 
-            <a href="{{ route('achievement::takeAll', ['id' => $achievement->id]) }}"
-               class="btn btn-outline-danger btn-block"
-               onclick="javascript:return confirm('Are you sure?');">
-                Take from everyone.
-            </a>
+            @include('website.layouts.macros.confirm-modal', [
+                'action' => route('achievement::takeAll', ['id' => $achievement->id]),
+                'classes' => 'btn-outline-danger btn-block',
+                'text' => 'Take from everyone',
+                'message' => "Are you sure you want to take $achievement->name from everyone?",
+            ])
 
         </form>
 

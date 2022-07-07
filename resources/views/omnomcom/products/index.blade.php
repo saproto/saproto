@@ -121,10 +121,13 @@
                                     <a href="{{ route('omnomcom::products::edit', ['id' => $product->id]) }}">
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
-                                    <a onclick="return confirm('Remove product \'{{ $product->name }}\'?');"
-                                       href="{{ route('omnomcom::products::delete', ['id' => $product->id]) }}">
-                                        <i class="fas fa-trash text-danger"></i>
-                                    </a>
+                                    @include('website.layouts.macros.confirm-modal', [
+                                        'action' => route('omnomcom::products::delete', ['id' => $product->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to delete $product->name?",
+                                        'confirm' => 'Delete',
+                                    ])
                                 </td>
 
                             </tr>

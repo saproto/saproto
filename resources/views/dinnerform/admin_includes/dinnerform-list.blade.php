@@ -46,10 +46,14 @@
                         <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
                             <i class="fas fa-edit me-2"></i>
                         </a>
-                        <a onclick="return confirm('Remove dinnerform from \'{{ $dinnerform->start }}\' at \'{{ $dinnerform->restaurant }}\'?');"
-                           href="{{ route("dinnerform::delete", ['id' => $dinnerform->id]) }}">
-                            <i class="fas fa-trash text-danger"></i>
-                        </a>
+                        @include('website.layouts.macros.confirm-modal', [
+                            'action' => route("dinnerform::delete", ['id' => $dinnerform->id]),
+                            'text' => '<i class="fas fa-trash text-danger"></i>',
+                            'title' => 'Confirm Delete',
+                            'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
+                            'confirm' => 'Delete',
+
+                        ])
                     </td>
 
                 </tr>

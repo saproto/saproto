@@ -513,11 +513,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
 
             Route::get('history/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
-            Route::get('{date?}', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
+            Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
+
+            Route::group(['prefix' => 'filter', 'middleware' => ['permission:omnomcom'], 'as' => 'filter::'], function () {
+                Route::get('name/{name?}', ['as' => 'name', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@filterByUser']);
+                Route::get('date/{date?}', ['as' => 'date', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@filterByDate']);
+            });
         });
 
         /* Routes related to the TIPCie OmNomCom store. */
-        Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie|omnomcom'], 'as' => 'tipcie::'], function () {
+        Route::group(['prefix' => 'tipcie', 'middleware' => ['auth', 'permission:tipcie'], 'as' => 'tipcie::'], function () {
             Route::get('', ['as' => 'orderhistory', 'uses' => 'TIPCieController@orderIndex']);
         });
 

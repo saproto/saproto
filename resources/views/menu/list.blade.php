@@ -48,9 +48,13 @@
                                             <i class="fas fa-edit me-2 text-white"></i>
                                         </a>
 
-                                        <a href="{{ route('menu::delete', ['id' => $menuItem->id]) }}" onclick="return confirm('Are you sure?')">
-                                            <i class="fas fa-trash me-2 text-danger"></i>
-                                        </a>
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route('menu::delete', ['id' => $menuItem->id]),
+                                            'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
+                                            'title' => 'Confirm Delete',
+                                            'message' => 'Are you sure you want to delete this menu item?',
+                                            'confirm' => 'Delete',
+                                        ])
 
                                         @if(!$menuItem->isFirst())
                                             <a href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}">
@@ -77,9 +81,13 @@
                                                     <i class="fas fa-edit me-2"></i>
                                                 </a>
 
-                                                <a href="{{ route('menu::delete', ['id' => $childItem->id]) }}" onclick="return confirm('Are you sure?')">
-                                                    <i class="fas fa-trash me-2 text-danger"></i>
-                                                </a>
+                                                @include('website.layouts.macros.confirm-modal', [
+                                                    'action' => route('menu::delete', ['id' => $childItem->id]),
+                                                    'text' => '<i class="fas fa-trash me-2 text-danger"></i>',
+                                                    'title' => 'Confirm Delete',
+                                                    'message' => 'Are you sure you want to delete this menu item?',
+                                                    'confirm' => 'Delete',
+                                                ])
 
                                                 @if(!$childItem->isFirst())
                                                     <a href="{{ route('menu::orderUp', ['id' => $childItem->id]) }}">

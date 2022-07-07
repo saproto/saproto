@@ -99,7 +99,7 @@
                                 <input type="checkbox" name="hide_participants"
                                         {{ ($event->activity && $event->activity->hide_participants ? 'checked' : '') }}>
                                         Hide participants.
-                                        <i class="fas fa-question-circle me-2" data-toggle="tooltip" data-placement="top" data-html="true" title="This will hide who participates in this event for members!"></i>
+                                        <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>
                             </label>
                         </div>
                     </div>

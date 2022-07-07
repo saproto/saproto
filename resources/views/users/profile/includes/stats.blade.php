@@ -4,7 +4,7 @@
 
         <div class="text-center text-dark">
             <h3 class="mb-0">
-                User statistics <i class="fas fa-info-circle fa-fw mr-2" data-toggle="tooltip" data-placement="top" title="This info is only visible to you!"></i>
+                User statistics <i class="fas fa-info-circle fa-fw mr-2" data-bs-toggle="tooltip" data-bs-placement="top" title="This info is only visible to you!"></i>
             </h3>
             <i><small>Note: These statistics are not visible to other members!</small></i>
         </div>

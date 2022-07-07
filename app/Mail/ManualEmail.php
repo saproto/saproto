@@ -17,7 +17,7 @@ class ManualEmail extends Mailable
     public $submitted_attachments;
     public $destination;
     public $user_id;
-    public $event_name;
+    public $events;
     public $email_id;
 
     /**
@@ -25,7 +25,7 @@ class ManualEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($from, $subject, $body, $attachments, $destination, $user_id, $event_name, $email_id)
+    public function __construct($from, $subject, $body, $attachments, $destination, $user_id, $events, $email_id)
     {
         $this->from = $from;
         $this->subject = $subject;
@@ -33,7 +33,7 @@ class ManualEmail extends Mailable
         $this->submitted_attachments = $attachments;
         $this->destination = $destination;
         $this->user_id = $user_id;
-        $this->event_name = $event_name;
+        $this->events = $events;
         $this->email_id = $email_id;
     }
 

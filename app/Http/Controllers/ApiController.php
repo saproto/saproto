@@ -57,6 +57,23 @@ class ApiController extends Controller
         return json_encode($adminInfo);
     }
 
+    /** @return JsonResponse */
+    public function protubeUserDetails()
+    {
+        $user = Auth::user();
+
+        if($user) {
+            return response()->json([
+                'authenticated' => true,
+                'name' => $user->calling_name,
+                'is_admin' => $user->can('protube') || $user->isTempadmin(),
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return response()->json(['authenticated' => false]);
+    }
+
     /** @param Request $request */
     public function protubePlayed(Request $request)
     {
@@ -65,15 +82,10 @@ class ApiController extends Controller
         }
 
         $playedVideo = new PlayedVideo();
+        $user = User::findOrFail($request->user_id);
 
-        $token = Token::where('token', $request->token)->first();
-
-        if ($token) {
-            /** @var User $user */
-            $user = $token->user()->first();
-            if ($user->keep_protube_history) {
-                $playedVideo->user()->associate($user);
-            }
+        if ($user && $user->keep_protube_history) {
+            $playedVideo->user()->associate($user);
         }
 
         $playedVideo->video_id = $request->video_id;

@@ -35,7 +35,7 @@
                 const id = el.getAttribute('data-id')
                 if (id === undefined) return
 
-               get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id))
+               get('{{ route('quotes::like', ['id' => ':id']) }}'.replace(':id', id), null, {parse: false})
                 .then(_ => {
                     const icon = el.children[0]
                     const likes = el.children[1]

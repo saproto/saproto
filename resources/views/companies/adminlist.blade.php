@@ -51,10 +51,13 @@
                                         <i class="fas fa-edit me-2 fa-fw"></i>
                                     </a>
 
-                                    <a href="{{ route('companies::delete', ['id' => $company->id]) }}"
-                                       onclick="return confirm('Are you sure you want to delete this company?')">
-                                        <i class="fas fa-trash me-2 fa-fw text-danger"></i>
-                                    </a>
+                                    @include('website.layouts.macros.confirm-modal', [
+                                        'action' => route('companies::delete', ['id' => $company->id]),
+                                        'text' => '<i class="fas fa-trash me-2 fa-fw text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to delete $company->name?",
+                                        'confirm' => 'Delete',
+                                    ])
 
                                     @if($company->sort > 0)
                                         <a href="{{ route('companies::orderUp', ['id' => $company->id]) }}">

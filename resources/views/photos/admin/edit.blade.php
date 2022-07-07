@@ -33,10 +33,15 @@
                     </a>
                 @else
                     <span class="btn btn-warning text-white btn-block mb-3 cursor-default">
-                This album is not yet published, ask a Protography admin to publish it.
-            </span>
+                        This album is not yet published, ask a Protography admin to publish it.
+                    </span>
                 @endcan
             @endif
+
+            <a class="btn btn-info text-white btn-block mb-3"
+               href="{{ route('photo::album::list', ['id' => $photos->album_id]) }}">
+                Preview album
+            </a>
 
             <div class="card mb-3">
 
@@ -67,7 +72,7 @@
                         </div>
 
                         <div class="card-footer">
-                            <input type="submit" class="btn btn-success btn-block" value="Save">
+                            <input type="submit" class="btn btn-success btn-block mb-1" value="Save">
                             <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                 Delete Album
                             </button>

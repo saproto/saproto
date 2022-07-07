@@ -22,9 +22,10 @@
                 @foreach(Proto\Models\EmailList::all() as $i => $list)
 
                     <div class="card border">
-                        <div class="card-header border-bottom-0 cursor-pointer" data-bs-toggle="collapse"
-                             data-bs-target="#email__collapse__{{ $list->id }}">
-                            {{ $list->name }}
+                        <div class="card-header border-bottom-0 cursor-pointer">
+                            <span data-bs-toggle="collapse" data-bs-target="#email__collapse__{{ $list->id }}">
+                                <i class="fas fa-sm fa-fw fa-caret-down"></i> {{ $list->name }}
+                            </span>
 
                             @if($list->isSubscribed($user))
                                 <a href="{{ route('togglelist', ['id'=>$list->id]) }}"

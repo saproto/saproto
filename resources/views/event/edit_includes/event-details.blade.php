@@ -7,10 +7,10 @@
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Event details
-        </div>
+            <div class="p-1 m-1 fw-bold d-inline-block">Event details</div>
 
-        @include('event.edit_includes.buttonbar')
+            @include('event.edit_includes.buttonbar')
+        </div>
 
         <div class="card-body">
 
@@ -38,8 +38,8 @@
                             <div class="form-group autocomplete">
                                 <label for="organisation">Organisation:</label>
                                 <input class="form-control committee-search" id="organisation" name="committee"
-                                       placeholder="{{ $event && $event->committee ? $event->committee->name : '' }}"
-                                       value="{{ $event && $event->committee ? $event->committee->id : '' }}">
+                                       placeholder="{{ $event->committee->name ?? '' }}"
+                                       value="{{ $event->committee->id ?? '' }}">
                             </div>
                         </div>
 
@@ -187,7 +187,9 @@
 
         </div>
 
-        @include('event.edit_includes.buttonbar')
+        <div class="card-footer">
+            @include('event.edit_includes.buttonbar')
+        </div>
 
     </div>
 

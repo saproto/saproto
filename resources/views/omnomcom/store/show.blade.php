@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
     <head>
-        <title>OmNomCom Store</title>
+        <title>{{ config('app.env') != 'production' ? '['.strtoupper(config('app.env')).'] ' : '' }}OmNomCom Store</title>
 
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -84,6 +84,9 @@
             let cartOverflowVisible = true
             let cartOverflowFirstClosed = false
             let cartOverflowMinimum = 4
+            let payedCash = false
+            let payedCard = false
+
             const server = establishNfcConnection()
 
             let images = []
@@ -208,7 +211,7 @@
                 return object_cart
             }
 
-            function purchaseInitiate(payedCash, payedCard, message, title) {
+            function purchaseInitiate(_payedCash, _payedCard, message, title) {
                 modals['purchase-modal'].show()
                 if (!document.querySelector('#purchase-modal .qrAuth img')) {
                     doQrAuth(
@@ -221,6 +224,9 @@
                 document.querySelector('#purchase-modal .modal-status').innerHTML = '<span class="modal-status">Authenticate using the QR code above.</span>'
                 document.querySelector('#purchase-modal h1').innerHTML = title
                 if (payedCard) document.getElementById('purchase-bank-card').classList.add('modal-toggle-true')
+                payedCash = _payedCard
+                payedCard = _payedCard
+
             }
 
             function purchase(credentials, type) {
@@ -231,8 +237,8 @@
                     '{{ route('omnomcom::store::buy', ['store' => $store_slug]) }}', {
                         credential_type: type,
                         credentials: credentials,
-                        cash: {{ ($store->cash_allowed ? 'true' : 'false') }},
-                        bank_card: {{ ($store->bank_card_allowed ? 'true' : 'false') }},
+                        cash: payedCash && {{ $store->cash_allowed ? 'true' : 'false' }},
+                        bank_card: payedCard && {{ $store->bank_card_allowed ? 'true' : 'false' }},
                         cart: cart_to_object(cart)
                     })
                     .then(data => {
