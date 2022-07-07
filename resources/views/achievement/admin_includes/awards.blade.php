@@ -32,7 +32,7 @@
     <div class="card-footer">
 
         <form method="post"
-              action="{{ route("achievement::give", ['id' => $achievement->id]) }}">
+              action="{{ route("achievement::award", ['id' => $achievement->id]) }}">
 
             {!! csrf_field() !!}
 

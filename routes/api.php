@@ -98,6 +98,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('committee', ['as' => 'committee', 'uses' => 'SearchController@getCommitteeSearch']);
         Route::get('event', ['as' => 'event', 'uses' => 'SearchController@getEventSearch']);
         Route::get('product', ['as' => 'product', 'uses' => 'SearchController@getProductSearch']);
+        Route::get('achievement', ['as' => 'achievement', 'uses' => 'SearchController@getAchievementSearch']);
     });
 
     /* Routes related to OmNomCom */

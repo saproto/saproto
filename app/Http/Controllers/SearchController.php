@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
+use Proto\Models\Achievement;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\Page;
@@ -175,6 +176,17 @@ class SearchController extends Controller
         $search_attributes = ['id', 'name'];
 
         return $this->getGenericSearch(Product::class, $request->get('q'), $search_attributes);
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function getAchievementSearch(Request $request)
+    {
+        $search_attributes = ['id', 'name'];
+
+        return $this->getGenericSearch(Achievement::class, $request->get('q'), $search_attributes);
     }
 
     /**
