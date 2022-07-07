@@ -21,7 +21,7 @@
                     @if(Auth::user()->can('sysadmin'))
                     <div class="alert alert-danger text-center">
                         <p>This is a protected committee. Be careful when editing!</p>
-                        <small>This committee is referenced in the sourcecode of the website.</small>
+                        <small>This committee is referenced in the source code of the website.</small>
                     </div>
                     @else
                         <div class="alert alert-danger text-center">
