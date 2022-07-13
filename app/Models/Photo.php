@@ -18,6 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int $file_id
+ * @property int $large_file_id
+ * @property int $medium_file_id
+ * @property int $mobile_file_id
+ * @property int $tiny_file_id
  * @property int $album_id
  * @property int $date_taken
  * @property int $private
@@ -56,6 +60,30 @@ class Photo extends Model
     private function file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
+    }
+
+    /** @return HasOne|StorageEntry */
+    private function large_file()
+    {
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'large_file_id')->first();
+    }
+
+    /** @return HasOne|StorageEntry */
+    private function medium_file()
+    {
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'medium_file_id')->first();
+    }
+
+    /** @return HasOne|StorageEntry */
+    private function mobile_file()
+    {
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'mobile_file_id')->first();
+    }
+
+    /** @return HasOne|StorageEntry */
+    private function tiny_file()
+    {
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'tiny_file_id')->first();
     }
 
     /**
@@ -114,7 +142,7 @@ class Photo extends Model
     /** @return string */
     public function thumbnail()
     {
-        return $this->file()->generateImagePath(400, 400);
+        return $this->mobile_file()->generateImagePath();
     }
 
     /** @return string */

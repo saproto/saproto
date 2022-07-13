@@ -31,8 +31,9 @@ class FileController extends Controller
         $response = new Response($file, 200);
         $response->header('Content-Type', $entry->mime);
         $response->header('Cache-Control', 'max-age=86400, public');
-        $response->header('Content-Disposition', sprintf('attachment; filename="%s"', $entry->original_filename));
-
+        if($entry->original_filename) {
+            $response->header('Content-Disposition', sprintf('attachment; filename="%s"', $entry->original_filename));
+        }
         return $response;
     }
 

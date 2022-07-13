@@ -211,16 +211,40 @@ class PhotoAdminController extends Controller
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id)
     {
-        $path = 'photos/'.$album_id.'/';
+        $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
+        $large_photos_storage =  'photos/large_photos/'.$album_id.'/';
+        $medium_photos_storage =  'photos/medium_photos/'.$album_id.'/';
+        $mobile_photos_storage =  'photos/mobile_photos/'.$album_id.'/';
+        $tiny_photos_storage =  'photos/tiny_photos/'.$album_id.'/';
 
-        $file = new StorageEntry();
-        $file->createFromFile($uploaded_photo, $path);
-        $file->save();
+        $original_file = new StorageEntry();
+        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage);
+        $original_file->save();
+
+        $large_file = new StorageEntry();
+        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 860);
+        $large_file->save();
+
+        $medium_file = new StorageEntry();
+        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 640);
+        $medium_file->save();
+
+        $mobile_file = new StorageEntry();
+        $mobile_file->createFromPhoto($uploaded_photo, $mobile_photos_storage,420);
+        $mobile_file->save();
+
+        $tiny_file = new StorageEntry();
+        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20);
+        $tiny_file->save();
 
         $photo = new Photo();
         $photo->date_taken = $uploaded_photo->getCTime();
         $photo->album_id = $album_id;
-        $photo->file_id = $file->id;
+        $photo->file_id = $original_file->id;
+        $photo->large_file_id = $large_file->id;
+        $photo->medium_file_id = $medium_file->id;
+        $photo->mobile_file_id = $mobile_file->id;
+        $photo->tiny_file_id = $tiny_file->id;
         $photo->save();
 
         return $photo;

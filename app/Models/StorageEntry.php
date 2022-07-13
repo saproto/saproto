@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Proto\Http\Controllers\FileController;
 
 /**
@@ -71,10 +72,10 @@ class StorageEntry extends Model
     {
         $this->hash = $this->generateHash();
 
-        $this->filename = date('Y\/F\/d').'/'.$this->hash;
+        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
 
         if ($customPath) {
-            $this->filename = $customPath.$this->hash;
+            $this->filename = $customPath . $this->hash;
         }
 
         Storage::disk('local')->put($this->filename, File::get($file));
@@ -94,12 +95,12 @@ class StorageEntry extends Model
     public function createFromData($data, $mime, $name, $customPath = null)
     {
         $this->hash = $this->generateHash();
-        $this->filename = date('Y\/F\/d').'/'.$this->hash;
+        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
         $this->mime = $mime;
         $this->original_filename = $name;
 
         if ($customPath) {
-            $this->filename = $customPath.$this->hash;
+            $this->filename = $customPath . $this->hash;
         }
 
         Storage::disk('local')->put($this->filename, $data);
@@ -107,10 +108,37 @@ class StorageEntry extends Model
         $this->save();
     }
 
+    /**
+     * @param UploadedFile $file
+     * @param string|null $customPath
+     * @param int|null $customPath
+     */
+    public function createFromPhoto($file, $customPath = null, $width = null)
+    {
+        $this->hash = $this->generateHash();
+        $this->filename = date('Y\/F\/d') . '/' . $this->hash;
+        if ($customPath) {
+            $this->filename = $customPath . $this->hash;
+        }
+        $image = Image::make($file);
+
+        if ($width != null) {
+            $image->resize($width, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $image->stream('jpg', 85);
+        } else {
+            $image->stream();
+        }
+        $this->mime=$image->mime();
+        Storage::disk('local')->put($customPath.$this->hash, $image);
+        return back();
+    }
+
     /** @return string */
     private function generateHash()
     {
-        return sha1(date('U').mt_rand(1, intval(99999999999)));
+        return sha1(date('U') . mt_rand(1, intval(99999999999)));
     }
 
     /** @return string */
@@ -128,9 +156,9 @@ class StorageEntry extends Model
      * @param int $h
      * @return string
      */
-    public function generateImagePath($w, $h)
+    public function generateImagePath()
     {
-        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash, 'w' => $w, 'h' => $h]);
+        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash]);
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
@@ -156,13 +184,13 @@ class StorageEntry extends Model
         $size = File::size($this->generateLocalPath());
         if ($human) {
             if ($size < 1024) {
-                return $size.' bytes';
+                return $size . ' bytes';
             } elseif ($size < pow(1024, 2)) {
-                return round($size / pow(1024, 1), 1).' kilobytes';
+                return round($size / pow(1024, 1), 1) . ' kilobytes';
             } elseif ($size < pow(1024, 3)) {
-                return round($size / pow(1024, 2), 1).' megabytes';
+                return round($size / pow(1024, 2), 1) . ' megabytes';
             } else {
-                return round($size / pow(1024, 3), 1).' gigabytes';
+                return round($size / pow(1024, 3), 1) . ' gigabytes';
             }
         } else {
             return $size;
@@ -172,7 +200,7 @@ class StorageEntry extends Model
     /** @return string */
     public function generateLocalPath()
     {
-        return storage_path('app/'.$this->filename);
+        return storage_path('app/' . $this->filename);
     }
 
     /**
@@ -181,7 +209,7 @@ class StorageEntry extends Model
      */
     public function getFileHash($algo = 'md5')
     {
-        return $algo.': '.hash_file($algo, $this->generateLocalPath());
+        return $algo . ': ' . hash_file($algo, $this->generateLocalPath());
     }
 
     public static function boot()
