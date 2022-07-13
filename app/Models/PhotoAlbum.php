@@ -67,9 +67,20 @@ class PhotoAlbum extends Model
     public function thumb()
     {
         if ($this->thumb_id) {
-            return $this->thumbPhoto()->first()->thumbnail();
+            return $this->thumbPhoto()->first()->getSmallUrl();
         } else {
             return null;
         }
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($photoAlbum) {
+            $photos = $photoAlbum->items()
+                ->each(function($check) {
+                    $check->delete();
+                });
+        });
     }
 }

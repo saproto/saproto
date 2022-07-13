@@ -16,8 +16,8 @@ class AddMultipleFileIdsToPhotos extends Migration
         Schema::table('photos', function (Blueprint $table) {
             $table->integer('large_file_id')->after('file_id')->nullable();
             $table->integer('medium_file_id')->after('large_file_id')->nullable();
-            $table->integer('mobile_file_id')->after('medium_file_id')->nullable();
-            $table->integer('tiny_file_id')->after('mobile_file_id')->nullable();
+            $table->integer('small_file_id')->after('medium_file_id')->nullable();
+            $table->integer('tiny_file_id')->after('small_file_id')->nullable();
         });
     }
 
@@ -31,7 +31,7 @@ class AddMultipleFileIdsToPhotos extends Migration
         Schema::table('photos', function (Blueprint $table) {
             $table->dropColumn('large_file_id');
             $table->dropColumn('medium_file_id');
-            $table->dropColumn('mobile_file_id');
+            $table->dropColumn('small_file_id');
             $table->dropColumn('tiny_file_id');
         });
     }

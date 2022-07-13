@@ -16,24 +16,22 @@
 
                     <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
                        class="btn btn-success float-start me-3">
-                        <i class="fas fa-images me-2"></i> {{ $photo->album_name }}
+                        <i class="fas fa-images me-2"></i> {{ $photo->album->name }}
                     </a>
 
-                    @if ($photo->previous != null && $photo->previous != $photo->id)
-                        <a href="{{route("photo::view", ["id"=> $photo->previous])}}" class="btn btn-dark me-3">
+                    @if ($photo->getPreviousPhoto() != null && $photo->getPreviousPhoto()->id != $photo->id)
+                        <a href="{{route("photo::view", ["id"=> $photo->getPreviousPhoto()->id])}}" class="btn btn-dark me-3">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
 
-                    @if ($photo->liked == null)
-                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info me-3">
-                            <i class="far fa-heart"></i> {{ $photo->likes }}
-                        </a>
-                    @endif
-
-                    @if($photo->liked != null)
+                    @if (Auth::user() && $photo->likedByUser(Auth::user()->id))
                         <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info me-3">
-                            <i class="fas fa-heart"></i> {{ $photo->likes }}
+                            <i class="fas fa-heart"></i> {{ $photo->getLikes() }}
+                        </a>
+                    @elseif(Auth::user())
+                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info me-3">
+                            <i class="far fa-heart"></i> {{ $photo->getLikes() }}
                         </a>
                     @endif
 
@@ -44,15 +42,15 @@
                         </a>
                     @endif
 
-                    @if($photo->next != null && $photo->next != $photo->id)
-                        <a href="{{route("photo::view", ["id"=> $photo->next])}}" class="btn btn-dark">
+                    @if($photo->getNextPhoto() != null && $photo->getNextPhoto()->id != $photo->id)
+                        <a href="{{route("photo::view", ["id"=> $photo->getNextPhoto()->id])}}" class="btn btn-dark">
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif
 
                 </div>
 
-                <img class="card-img-bottom" src="{!! $photo->photo_url !!}" style="max-height: 70vh; object-fit:scale-down">
+                <img class="card-img-bottom" src="{!! $photo->getOriginalUrl() !!}" style="max-height: 70vh; object-fit:scale-down">
 
             </div>
 
@@ -79,14 +77,14 @@
                 e.preventDefault();
 
             switch(e.key) {
-                @if ($photo->previous != null)
+                @if ($photo->getPreviousPhoto() != null)
                 case 'ArrowLeft':
-                    window.location.href = '{{route("photo::view", ["id"=> $photo->previous])}}';
+                    window.location.href = '{{route("photo::view", ["id"=> $photo->getPreviousPhoto()->id])}}';
                     break;
                 @endif
-                @if ($photo->next != null)
+                @if ($photo->getNextPhoto() != null)
                 case 'ArrowRight':
-                    window.location.href = '{{route("photo::view", ["id"=> $photo->next])}}';
+                    window.location.href = '{{route("photo::view", ["id"=> $photo->getNextPhoto()->id])}}';
                     break;
                 @endif
                 @if (Auth::check())
@@ -110,7 +108,7 @@
         window.addEventListener("popstate", function() {
             if(location.hash === "#!/history") {
                 history.replaceState(null, document.title, location.pathname)
-                setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->albumPage }}"), 10)
+                setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->getAlbumPageNumber(24) }}"), 10)
             }
         }, false)
     </script>

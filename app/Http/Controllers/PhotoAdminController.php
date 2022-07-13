@@ -166,7 +166,8 @@ class PhotoAdminController extends Controller
      */
     public function delete($id)
     {
-        PhotoManager::deleteAlbum($id);
+        $album = PhotoAlbum::findOrFail($id);
+        $album->delete();
         return redirect(route('photo::admin::index'));
     }
 
@@ -214,7 +215,7 @@ class PhotoAdminController extends Controller
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
         $large_photos_storage =  'photos/large_photos/'.$album_id.'/';
         $medium_photos_storage =  'photos/medium_photos/'.$album_id.'/';
-        $mobile_photos_storage =  'photos/mobile_photos/'.$album_id.'/';
+        $small_photos_storage =  'photos/small_photos/'.$album_id.'/';
         $tiny_photos_storage =  'photos/tiny_photos/'.$album_id.'/';
 
         $original_file = new StorageEntry();
@@ -229,9 +230,9 @@ class PhotoAdminController extends Controller
         $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 640);
         $medium_file->save();
 
-        $mobile_file = new StorageEntry();
-        $mobile_file->createFromPhoto($uploaded_photo, $mobile_photos_storage,420);
-        $mobile_file->save();
+        $small_file = new StorageEntry();
+        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420);
+        $small_file->save();
 
         $tiny_file = new StorageEntry();
         $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20);
@@ -243,7 +244,7 @@ class PhotoAdminController extends Controller
         $photo->file_id = $original_file->id;
         $photo->large_file_id = $large_file->id;
         $photo->medium_file_id = $medium_file->id;
-        $photo->mobile_file_id = $mobile_file->id;
+        $photo->small_file_id = $small_file->id;
         $photo->tiny_file_id = $tiny_file->id;
         $photo->save();
 

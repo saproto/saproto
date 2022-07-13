@@ -6,6 +6,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Proto\Models\Photo;
 use Proto\Models\PhotoLikes;
 use Proto\Models\PhotoManager;
 use Redirect;
@@ -40,7 +41,7 @@ class PhotoController extends Controller
      */
     public function photo($id)
     {
-        $photo = PhotoManager::getPhoto($id);
+        $photo = Photo::findOrFail($id);
         if ($photo) {
             return view('photos.photopage', ['photo' => $photo]);
         }

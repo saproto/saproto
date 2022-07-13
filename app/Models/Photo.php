@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $file_id
  * @property int $large_file_id
  * @property int $medium_file_id
- * @property int $mobile_file_id
+ * @property int $small_file_id
  * @property int $tiny_file_id
  * @property int $album_id
  * @property int $date_taken
@@ -75,9 +75,9 @@ class Photo extends Model
     }
 
     /** @return HasOne|StorageEntry */
-    private function mobile_file()
+    private function small_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'mobile_file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'small_file_id')->first();
     }
 
     /** @return HasOne|StorageEntry */
@@ -120,6 +120,7 @@ class Photo extends Model
         return $this->getAdjacentPhoto(false);
     }
 
+    /** @return int */
     public function getAlbumPageNumber($paginateLimit)
     {
         $photoIndex = 1;
@@ -139,16 +140,34 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    /** @return string */
-    public function thumbnail()
-    {
-        return $this->mobile_file()->generateImagePath();
+    public function likedByUser($user_id){
+        return $this->likes()->where('user_id', $user_id)->count() > 0;
     }
 
     /** @return string */
-    public function getUrlAttribute()
+    public function getOriginalUrl()
     {
         return $this->file()->generatePath();
+    }
+    /** @return string */
+    public function getLargeUrl()
+    {
+        return $this->large_file()->generatePath();
+    }
+    /** @return string */
+    public function getMediumUrl()
+    {
+        return $this->medium_file()->generatePath();
+    }
+    /** @return string */
+    public function getSmallUrl()
+    {
+        return $this->small_file()->generatePath();
+    }
+    /** @return string */
+    public function getTinyUrl()
+    {
+        return $this->tiny_file()->generatePath();
     }
 
     public static function boot()
@@ -157,6 +176,10 @@ class Photo extends Model
 
         static::deleting(function ($photo) {
             $photo->file()->delete();
+            $photo->large_file()->delete();
+            $photo->medium_file()->delete();
+            $photo->small_file()->delete();
+            $photo->tiny_file()->delete();
             if ($photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;

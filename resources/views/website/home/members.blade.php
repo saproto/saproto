@@ -69,7 +69,7 @@
 
                             @include('website.layouts.macros.card-bg-image', [
                             'url' => $newsitem->url,
-                            'img' => $newsitem->featuredImage ? $newsitem->featuredImage->thumbnail() : null,
+                            'img' => $newsitem->featuredImage ? $newsitem->featuredImage->getSmallUrl() : null,
                             'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                             'leftborder' => 'info'
                             ])
