@@ -1,3 +1,14 @@
+<head>
+    <style>
+        img[data-src] {
+            filter: blur(0.3em);
+        }
+        img {
+            filter: blur(0em);
+            transition: filter 0.5s;
+        }
+    </style>
+</head>
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
@@ -8,7 +19,7 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-md-12 col-lg-10 col-xl-8">
+        <div class="col-auto">
 
             <div class="card mb-3">
 
@@ -49,9 +60,13 @@
                     @endif
 
                 </div>
-
-                <img class="card-img-bottom" src="{!! $photo->getOriginalUrl() !!}" style="max-height: 70vh; object-fit:scale-down">
-
+                @if($photo->mayViewPhoto(Auth::user()))
+                <img id="progressive-img" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"  data-src="{!!$photo->getOriginalUrl()!!}" style="height: 75vh; object-fit:contain">
+                @else
+                    <div class="d-flex justify-content-center mb-3 mt-3">
+                        This photo is only visible to members!
+                    </div>
+                @endif
             </div>
 
             <div class="card mb-3">
@@ -99,6 +114,14 @@
                 @endif
             }
         })
+    </script>
+
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        let image = document.getElementById('progressive-img');
+            image.setAttribute('src', image.getAttribute('data-src'));
+            image.onload = () => {
+                image.removeAttribute('data-src');
+            };
     </script>
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">

@@ -170,6 +170,14 @@ class Photo extends Model
         return $this->tiny_file()->generatePath();
     }
 
+    public function mayViewPhoto($user){
+        if(!$this->private)return True;
+        if($user){
+            return $user->member() !== null;
+        }
+        return false;
+    }
+
     public static function boot()
     {
         parent::boot();
