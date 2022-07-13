@@ -1,24 +1,24 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Edit {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
+    Edit {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
 @endsection
 
 @section('container')
 
-    @isset($photos->event)
+    @isset($album->event_id)
         <a class="btn btn-info btn-block mb-3"
-           href="{{ route('event::show', ['id'=>$photos->event->getPublicId()]) }}">
-            This album is linked to the event {{ $photos->event->title }}, click here to go to the event.
+           href="{{ route('event::show', ['id'=>$album->event->getPublicId()]) }}">
+            This album is linked to the event {{ $album->event->title }}, click here to go to the event.
         </a>
     @endisset
 
     <div class="row">
         <div class="col-lg-3">
-            @if($photos->published)
+            @if($album->published)
                 @can('publishalbums')
                     <a class="btn btn-warning text-white btn-block mb-3"
-                       href="{{ route('photo::admin::unpublish', ['id'=>$photos->album_id]) }}">
+                       href="{{ route('photo::admin::unpublish', ['id'=>$album->id]) }}">
                         This album is published so editing is limited, click here to unpublish the album.
                     </a>
                 @else
@@ -28,7 +28,8 @@
                 @endcan
             @else
                 @can('publishalbums')
-                    <a class="btn btn-danger text-white btn-block mb-3" href="{{ route('photo::admin::publish', ['id'=>$photos->album_id]) }}">
+                    <a class="btn btn-danger text-white btn-block mb-3"
+                       href="{{ route('photo::admin::publish', ['id'=>$album->id]) }}">
                         This album is not yet published, click here to publish the album.
                     </a>
                 @else
@@ -39,13 +40,13 @@
             @endif
 
             <a class="btn btn-info text-white btn-block mb-3"
-               href="{{ route('photo::album::list', ['id' => $photos->album_id]) }}">
+               href="{{ route('photo::album::list', ['id' => $album->id]) }}">
                 Preview album
             </a>
 
             <div class="card mb-3">
 
-                @if(Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && !$photos->published))
+                @if(Auth::user()->can('publishalbums') || (Auth::user()->can('protography') && !$album->published))
                     <div class="card-header bg-dark text-white text-center">
                         Edit album
                     </div>
@@ -56,24 +57,25 @@
                             <div class="form-group">
                                 <label for="album">Album name:</label>
                                 <input required type="text" id="album" name="album" class="form-control"
-                                       value="{{ $photos->album_title }}">
+                                       value="{{ $album->name }}">
                             </div>
                             @include('website.layouts.macros.datetimepicker', [
                                 'name' => 'date',
                                 'label' => 'Album date:',
-                                'placeholder' => date($photos->album_date),
+                                'placeholder' => date($album->date_taken),
                                 'format' => 'date'
                             ])
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="private"
-                                       name="private" {{ $photos->private ? "checked" : "" }}>
+                                       name="private" {{ $album->private ? "checked" : "" }}>
                                 <label class="form-check-label" for="private">Private album</label>
                             </div>
                         </div>
 
                         <div class="card-footer">
                             <input type="submit" class="btn btn-success btn-block mb-1" value="Save">
-                            <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                            <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal"
+                                    data-bs-target="#delete-modal">
                                 Delete Album
                             </button>
                         </div>
@@ -85,9 +87,9 @@
                     </div>
 
                     <div class="card-body">
-                        <b>Album name:</b> {{ $photos->album_title }}<br>
-                        <b>Album date:</b> {{ date('d-m-Y', $photos->album_date) }}<br>
-                        <b>Private album:</b> <i class="fa fa-{{ $photos->private ? "check" : "times"}}"></i>
+                        <b>Album name:</b> {{ $album->name }}<br>
+                        <b>Album date:</b> {{ date('d-m-Y', $album->date_taken) }}<br>
+                        <b>Private album:</b> <i class="fa fa-{{ $album->private ? "check" : "times"}}"></i>
                     </div>
                 @endif
             </div>
@@ -106,7 +108,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">
+                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $album->id]) }}">
                                 Delete Album
                             </a>
                         </div>
@@ -121,8 +123,9 @@
                     Thumbnail
                 </div>
 
-                @isset($photos->thumb)
-                    <div class="card-body" style="height: 300px; background: url({{ $photos->thumb }}) no-repeat center; background-size: cover;"></div>
+                @isset($album->thumbPhoto)
+                    <div class="card-body"
+                         style="height: 300px; background: url({{ $album->thumb() }}) no-repeat center; background-size: cover;"></div>
                 @else
                     <div class="card-body d-flex opacity-25" style="height: 300px;">
                         <div class="text-center m-auto">
@@ -141,19 +144,21 @@
                 <div class="card-header bg-dark text-white text-center">
                     Add photos
                 </div>
-                @if(!$photos->published)
+                @if(!$album->published)
                     <div class="card-body">
                         <div id="error-bar" class="alert alert-danger d-none" role="alert">
                             <p>The following files failed to upload:</p>
                             <ul></ul>
                         </div>
                         <div id="upload-view" class="row position-relative"></div>
-                        <div id="droparea" class="d-flex opacity-25 border border-2 border-light rounded-3" style="height: 200px">
+                        <div id="droparea" class="d-flex opacity-25 border border-2 border-light rounded-3"
+                             style="height: 200px">
                             <div id="droparea-content" class="text-center m-auto pointer-events-none">
                                 <i class="fa fa-images fa-5x mt-2"></i>
                                 <p>
                                     <span>Drop photos to upload</span>
-                                    <span id="droparea-loader" class="spinner-border spinner-border-sm ms-1 d-none" role="status"></span>
+                                    <span id="droparea-loader" class="spinner-border spinner-border-sm ms-1 d-none"
+                                          role="status"></span>
                                 </p>
                             </div>
                         </div>
@@ -168,47 +173,50 @@
 
 
             <div class="card mb-3">
-                <form method="POST" action="{{ route('photo::admin::action', ['id' => $photos->album_id]) }}">
+                <form method="POST" action="{{ route('photo::admin::action', ['id' => $album->id]) }}">
                     {{ csrf_field() }}
 
                     <div class="card-header bg-dark text-white text-center">
-                        {{ $photos->album_title }} ({{ date('M j, Y', $photos->album_date) }})
+                        {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
                     </div>
 
                     <div class="card-body">
-                        @if(!$photos->published || Auth::user()->can('publishalbums'))
+                        @if(!$album->published || Auth::user()->can('publishalbums'))
                             <div class="row">
                                 <div class="col-12 mb-4">
                                     <div class="btn-group" role="group" aria-label="Toolbar">
-                                        @php
-                                            $attr = $photos->published ?
-                                            'type=button data-bs-toggle=modal data-bs-target=#published-modal' :
-                                            'type=submit'
-                                        @endphp
-                                        <button {{ $attr }} name="action" value="remove" class="btn btn-danger">
+                                        <button {{ $album->published?'type=button data-bs-toggle=modal data-bs-target=#published-modal':'type=submit' }} name="action"
+                                                value="remove" class="btn btn-danger">
                                             <i class="fa fa-trash"></i> Remove
                                         </button>
-                                        <button {{ $attr }} name="action" value="thumbnail" class="btn btn-success">
+                                        <button {{ $album->published?'type=button data-bs-toggle=modal data-bs-target=#published-modal':'type=submit' }} name="action"
+                                                value="thumbnail" class="btn btn-success">
                                             <i class="fa fa-image"></i> Set thumbnail
                                         </button>
-                                        <button {{ $attr }} name="action" value="private" class="btn btn-warning">
+                                        <button {{ $album->published?'type=button data-bs-toggle=modal data-bs-target=#published-modal':'type=submit' }} name="action"
+                                                value="private" class="btn btn-warning">
                                             <i class="fa fa-eye"></i> Toggle private
                                         </button>
 
                                     </div>
 
-                                    <div class="modal fade" id="published-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal fade" id="published-modal" tabindex="-1" role="dialog"
+                                         aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">Perform action</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    This album has already been published. Are you sure you want perform this action?
+                                                    This album has already been published. Are you sure you want perform
+                                                    this action?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
                                                     <span id="confirm-button"></span>
                                                 </div>
                                             </div>
@@ -220,14 +228,11 @@
 
                         <div id="photo-view" class="row">
 
-                            @foreach($photos->photos as $key => $photo)
-
+                            @foreach($photos as $photo)
                                 @include('website.layouts.macros.selectablephoto', ['photo' => $photo])
-
                             @endforeach
 
                         </div>
-
                     </div>
                 </form>
 
@@ -294,21 +299,21 @@
                 let formData = new FormData()
                 formData.append('file', file)
                 toggleRunning()
-                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {parse:false})
-                    .then(response=>{
-                        if(!response.ok) throw 'Something went wrong with the upload!'
+                await post('{{ route('photo::admin::upload', ['id' => $album->id]) }}', formData, {parse: false})
+                    .then(response => {
+                        if (!response.ok) throw 'Something went wrong with the upload!'
                         return response.text();
-                    }).then(function(data) {
+                    }).then(function (data) {
                         document.getElementById('photo-view').innerHTML += data
                         document.getElementById('error-bar').classList.add('d-none')
                         document.querySelector('#error-bar ul').innerHTML = ''
                         toggleRunning()
                     })
-                .catch(err => {
-                    console.error(err)
-                    uploadError(file, err)
-                    toggleRunning()
-                })
+                    .catch(err => {
+                        console.error(err)
+                        uploadError(file, err)
+                        toggleRunning()
+                    })
             }
         }
 

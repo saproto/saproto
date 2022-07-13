@@ -7,8 +7,8 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Proto\Models\Photo;
+use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
-use Proto\Models\PhotoManager;
 use Redirect;
 
 class PhotoController extends Controller
@@ -16,7 +16,7 @@ class PhotoController extends Controller
     /** @return View */
     public function index()
     {
-        $albums = PhotoManager::getAlbums(24);
+        $albums = PhotoAlbum::orderBy('date_taken', 'desc')->paginate(24);
         return view('photos.list', ['albums' => $albums]);
     }
 
@@ -26,10 +26,11 @@ class PhotoController extends Controller
      */
     public function show($id)
     {
-        $photos = PhotoManager::getPhotos($id, 24);
+        $album = PhotoAlbum::findOrFail($id);
+        $photos = $album->items()->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->paginate(24);
 
         if ($photos) {
-            return view('photos.album', ['photos' => $photos]);
+            return view('photos.album', ['album' => $album, 'photos' => $photos]);
         }
 
         abort(404, 'Album not found.');
@@ -61,7 +62,6 @@ class PhotoController extends Controller
     public function likePhoto($photo_id)
     {
         $exist = PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
-
         if ($exist == null) {
             PhotoLikes::create([
                 'photo_id' => $photo_id,
@@ -83,10 +83,17 @@ class PhotoController extends Controller
         return Redirect::route('photo::view', ['id' => $photo_id]);
     }
 
+    public static function getAlbums($published = True)
+    {
+        $albums = PhotoAlbum::orderBy('date_taken', 'desc');
+        $albums = $albums->where('published', '=', $published);
+        return $albums->get();
+    }
+
     /** @return string JSON */
     public function apiIndex()
     {
-        $albums = PhotoManager::getAlbums();
+        $albums = PhotoAlbum::orderBy('date_taken', 'desc')->where('private', '=', false)->get();
         return json_encode($albums);
     }
 
@@ -94,9 +101,29 @@ class PhotoController extends Controller
      * @param $id
      * @return string JSON
      */
-    public function apiShow($id)
+
+    //kept for backwards compatibility
+    public static function apiShow($album_id)
     {
-        $photos = PhotoManager::getPhotos($id);
-        return json_encode($photos);
+        $album = PhotoAlbum::findOrFail($album_id);
+        $items = $album->items();
+
+        if (!(Auth::check() && Auth::user()->member() !== null)) {
+            $items = $items->where('private', '=', false);
+        }
+        $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get();
+        $data = new stdClass();
+        $data->album_id = $album_id;
+
+        $album = $album->first();
+        $data->album_title = $album->name;
+        $data->album_date = $album->date_taken;
+        $data->event = ($album->event ? $album->event : null);
+        $data->private = $album->private;
+        $data->published = $album->published;
+        $data->thumb = $album->thumb();
+        $data->photos = $items;
+
+        return json_encode($data);
     }
 }

@@ -11,7 +11,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
-use Proto\Models\PhotoManager;
 use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
@@ -21,7 +20,7 @@ class PhotoAdminController extends Controller
     /** @return View */
     public function index()
     {
-        return view('photos.admin.index', ['query' => '']);
+        return view('photos.admin.index');
     }
 
     /** @return View */
@@ -53,12 +52,12 @@ class PhotoAdminController extends Controller
      */
     public function edit($id)
     {
-        $photos = PhotoManager::getPhotos($id);
+        $album=PhotoAlbum::findOrFail($id);
+        $photos= $album->items()->get();
 
         if ($photos) {
-            return view('photos.admin.edit', ['photos' => $photos]);
+            return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos]);
         }
-
         abort(404);
     }
 

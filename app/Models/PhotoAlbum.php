@@ -52,7 +52,7 @@ class PhotoAlbum extends Model
     }
 
     /** @return HasOne|Photo */
-    private function thumbPhoto()
+    public function thumbPhoto()
     {
         return $this->hasOne('Proto\Models\Photo', 'id', 'thumb_id');
     }
@@ -71,6 +71,14 @@ class PhotoAlbum extends Model
         } else {
             return null;
         }
+    }
+
+    public function mayViewAlbum($user){
+        if(!$this->private)return True;
+        if($user){
+            return $user->member() !== null && $this->published||$user->can('protography');
+        }
+        return false;
     }
 
     public static function boot()

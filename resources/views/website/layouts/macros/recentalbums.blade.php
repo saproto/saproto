@@ -2,7 +2,7 @@
     <div class="card-header bg-dark text-white"><i class="fas fa-images fa-fw me-2"></i> Recent photo albums</div>
     <div class="card-body">
 
-        @foreach(\Proto\Models\PhotoManager::getAlbums($n) as $key => $album)
+        @foreach(\Proto\Http\Controllers\PhotoController::getAlbums(True)->take($n) as $key => $album)
 
             @include('website.layouts.macros.card-bg-image', [
             'url' => route('photo::album::list', ['id' => $album->id]) ,
