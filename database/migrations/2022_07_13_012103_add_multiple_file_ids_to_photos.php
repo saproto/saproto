@@ -16,12 +16,10 @@ class AddMultipleFileIdsToPhotos extends Migration
      *
      * @return void
      */
-
-
     public function up()
     {
         $output = new ConsoleOutput();
-        if(!Schema::hasColumn('photos', 'large_file_id')) {
+        if(! Schema::hasColumn('photos', 'large_file_id')) {
             Schema::table('photos', function (Blueprint $table) {
                 $table->integer('large_file_id')->after('file_id')->nullable();
                 $table->integer('medium_file_id')->after('large_file_id')->nullable();
@@ -29,47 +27,47 @@ class AddMultipleFileIdsToPhotos extends Migration
                 $table->integer('tiny_file_id')->after('small_file_id')->nullable();
             });
         }
-        $output->writeln("created schemas!");
+        $output->writeln('created schemas!');
         foreach(Photo::all() as $photo){
-            $oldPath =  Storage::disk('local')->path('photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+            $oldPath = Storage::disk('local')->path('photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
             $newPath = 'photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
-            $newPathFromRoot=Storage::disk('local')->path($newPath);
+            $newPathFromRoot = Storage::disk('local')->path($newPath);
 
-            if (!File::exists(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'))){
-                File::makeDirectory(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'), 0777, True);
+            if (! File::exists(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'))){
+                File::makeDirectory(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'), 0777, true);
             }
 
             if (File::copy($oldPath , $newPathFromRoot)) {
-                $photo->fileRelation->filename=$newPath;
+                $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
             }else{
-                $output->writeln("could not move ".$photo->fileRelation->filename);
+                $output->writeln('could not move '.$photo->fileRelation->filename);
             }
         }
-        $output->writeln("moved all photos! starting resizing");
+        $output->writeln('moved all photos! starting resizing');
 
         foreach (Photo::all() as $photo){
-            $path=Storage::disk('local')->path($photo->fileRelation->filename);
-            $large_photos_storage =  'photos/large_photos/'.$photo->album->id.'/';
-            $medium_photos_storage =  'photos/medium_photos/'.$photo->album->id.'/';
-            $small_photos_storage =  'photos/small_photos/'.$photo->album->id.'/';
-            $tiny_photos_storage =  'photos/tiny_photos/'.$photo->album->id.'/';
+            $path = Storage::disk('local')->path($photo->fileRelation->filename);
+            $large_photos_storage = 'photos/large_photos/'.$photo->album->id.'/';
+            $medium_photos_storage = 'photos/medium_photos/'.$photo->album->id.'/';
+            $small_photos_storage = 'photos/small_photos/'.$photo->album->id.'/';
+            $tiny_photos_storage = 'photos/tiny_photos/'.$photo->album->id.'/';
 
-            if (!File::exists(Storage::disk('local')->path($large_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($large_photos_storage), 0777, True);
-                $output->writeln("created the folder: ".Storage::disk('local')->path($large_photos_storage));
+            if (! File::exists(Storage::disk('local')->path($large_photos_storage))) {
+                File::makeDirectory(Storage::disk('local')->path($large_photos_storage), 0777, true);
+                $output->writeln('created the folder: '.Storage::disk('local')->path($large_photos_storage));
             }
-            if (!File::exists(Storage::disk('local')->path($medium_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($medium_photos_storage), 0777, True);
-                $output->writeln("created the folder: ".Storage::disk('local')->path($medium_photos_storage));
+            if (! File::exists(Storage::disk('local')->path($medium_photos_storage))) {
+                File::makeDirectory(Storage::disk('local')->path($medium_photos_storage), 0777, true);
+                $output->writeln('created the folder: '.Storage::disk('local')->path($medium_photos_storage));
             }
-            if (!File::exists(Storage::disk('local')->path($small_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($small_photos_storage), 0777, True);
-                $output->writeln("created the folder: ".Storage::disk('local')->path($small_photos_storage));
+            if (! File::exists(Storage::disk('local')->path($small_photos_storage))) {
+                File::makeDirectory(Storage::disk('local')->path($small_photos_storage), 0777, true);
+                $output->writeln('created the folder: '.Storage::disk('local')->path($small_photos_storage));
             }
-            if (!File::exists(Storage::disk('local')->path($tiny_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($tiny_photos_storage), 0777, True);
-                $output->writeln("created the folder: ".Storage::disk('local')->path($tiny_photos_storage));
+            if (! File::exists(Storage::disk('local')->path($tiny_photos_storage))) {
+                File::makeDirectory(Storage::disk('local')->path($tiny_photos_storage), 0777, true);
+                $output->writeln('created the folder: '.Storage::disk('local')->path($tiny_photos_storage));
             }
 
             $large_file = new StorageEntry();
@@ -94,7 +92,7 @@ class AddMultipleFileIdsToPhotos extends Migration
             $photo->tiny_file_id = $tiny_file->id;
             $photo->save();
         }
-        $output->writeln("resized all photos!");
+        $output->writeln('resized all photos!');
     }
 
     /**
@@ -105,34 +103,34 @@ class AddMultipleFileIdsToPhotos extends Migration
     public function down()
     {
         $output = new ConsoleOutput();
-        $output->writeln("starting moving all files back over");
+        $output->writeln('starting moving all files back over');
         foreach(Photo::all() as $photo){
-            $oldPath =  Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+            $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
             $newPath = 'photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
-            $newPathFromRoot=Storage::disk('local')->path($newPath);
+            $newPathFromRoot = Storage::disk('local')->path($newPath);
 
-            if (!File::exists(Storage::disk('local')->path('photos/'.$photo->album->id.'/'))){
-                File::makeDirectory(Storage::disk('local')->path('photos/'.$photo->album->id.'/'), 0777, True);
+            if (! File::exists(Storage::disk('local')->path('photos/'.$photo->album->id.'/'))){
+                File::makeDirectory(Storage::disk('local')->path('photos/'.$photo->album->id.'/'), 0777, true);
             }
 
             if (File::move($oldPath , $newPathFromRoot)) {
-                $photo->fileRelation->filename=$newPath;
+                $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
 
-                $large_photo=StorageEntry::find($photo->large_file_id);
+                $large_photo = StorageEntry::find($photo->large_file_id);
                 if($large_photo)$large_photo->delete();
 
-                $medium_photo=StorageEntry::find($photo->medium_file_id);
+                $medium_photo = StorageEntry::find($photo->medium_file_id);
                 if($medium_photo)$medium_photo->delete();
 
-                $small_photo=StorageEntry::find($photo->small_file_id);
+                $small_photo = StorageEntry::find($photo->small_file_id);
                 if($small_photo)$small_photo->delete();
 
-                $tiny_photo=StorageEntry::find($photo->tiny_file_id);
+                $tiny_photo = StorageEntry::find($photo->tiny_file_id);
                 if($tiny_photo)$tiny_photo->delete();
             }
         }
-        $output->writeln("dropping the columns!");
+        $output->writeln('dropping the columns!');
         if(Schema::hasColumn('photos', 'large_file_id')) {
             Schema::table('photos', function (Blueprint $table) {
                 $table->dropColumn('large_file_id');
@@ -141,7 +139,7 @@ class AddMultipleFileIdsToPhotos extends Migration
                 $table->dropColumn('tiny_file_id');
             });
         }
-        $output->writeln("deleting folders!");
+        $output->writeln('deleting folders!');
         File::deleteDirectory(Storage::disk('local')->path('photos/original_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/large_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/medium_photos/'));

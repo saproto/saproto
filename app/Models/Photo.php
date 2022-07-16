@@ -66,7 +66,7 @@ class Photo extends Model
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
     }
 
-    public function fileRelation(){
+    public function fileRelation() {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
@@ -99,7 +99,7 @@ class Photo extends Model
      * @param User $user
      * @return Photo
      */
-    private function getAdjacentPhoto($next = true, $user=null)
+    private function getAdjacentPhoto($next = true, $user = null)
     {
         if ($next) {
             $ord = 'ASC';
@@ -110,9 +110,9 @@ class Photo extends Model
         }
         $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken);
 
-        if($user==null || $user->member()==null) $result=$result->where('private', false);
+        if($user == null || $user->member() == null) $result = $result->where('private', false);
 
-        $result=$result->orderBy('date_taken', $ord)->orderBy('id', $ord);
+        $result = $result->orderBy('date_taken', $ord)->orderBy('id', $ord);
         if ($result->count() > 1) {
             return $result->where('id', $comp, $this->id)->first();
         }
@@ -151,7 +151,7 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    public function likedByUser($user_id){
+    public function likedByUser($user_id) {
         return $this->likes()->where('user_id', $user_id)->count() > 0;
     }
 
@@ -160,29 +160,33 @@ class Photo extends Model
     {
         return $this->file()->generatePath();
     }
+
     /** @return string */
     public function getLargeUrl()
     {
         return $this->large_file()->generatePath();
     }
+
     /** @return string */
     public function getMediumUrl()
     {
         return $this->medium_file()->generatePath();
     }
+
     /** @return string */
     public function getSmallUrl()
     {
         return $this->small_file()->generatePath();
     }
+
     /** @return string */
     public function getTinyUrl()
     {
         return $this->tiny_file()->generatePath();
     }
 
-    public function mayViewPhoto($user){
-        if(!$this->private)return True;
+    public function mayViewPhoto($user) {
+        if(! $this->private)return true;
         if($user){
             return $user->member() !== null;
         }

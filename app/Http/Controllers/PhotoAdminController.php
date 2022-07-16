@@ -52,8 +52,8 @@ class PhotoAdminController extends Controller
      */
     public function edit($id)
     {
-        $album=PhotoAlbum::findOrFail($id);
-        $photos= $album->items()->get();
+        $album = PhotoAlbum::findOrFail($id);
+        $photos = $album->items()->get();
 
         if ($photos) {
             return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos]);
@@ -212,10 +212,10 @@ class PhotoAdminController extends Controller
     private function createPhotoFromUpload($uploaded_photo, $album_id)
     {
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
-        $large_photos_storage =  'photos/large_photos/'.$album_id.'/';
-        $medium_photos_storage =  'photos/medium_photos/'.$album_id.'/';
-        $small_photos_storage =  'photos/small_photos/'.$album_id.'/';
-        $tiny_photos_storage =  'photos/tiny_photos/'.$album_id.'/';
+        $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
+        $medium_photos_storage = 'photos/medium_photos/'.$album_id.'/';
+        $small_photos_storage = 'photos/small_photos/'.$album_id.'/';
+        $tiny_photos_storage = 'photos/tiny_photos/'.$album_id.'/';
 
         $original_file = new StorageEntry();
         $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getFilename());

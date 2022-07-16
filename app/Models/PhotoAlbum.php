@@ -73,10 +73,10 @@ class PhotoAlbum extends Model
         }
     }
 
-    public function mayViewAlbum($user){
-        if(!$this->private)return True;
+    public function mayViewAlbum($user) {
+        if(! $this->private)return true;
         if($user){
-            return $user->member() !== null && $this->published||$user->can('protography');
+            return $user->member() !== null && $this->published || $user->can('protography');
         }
         return false;
     }
@@ -86,7 +86,7 @@ class PhotoAlbum extends Model
         parent::boot();
         static::deleting(function ($photoAlbum) {
             $photos = $photoAlbum->items()
-                ->each(function($check) {
+                ->each(function ($check) {
                     $check->delete();
                 });
         });

@@ -3,14 +3,11 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
-use Redirect;
 
 class PhotoController extends Controller
 {
@@ -60,7 +57,6 @@ class PhotoController extends Controller
      * @return JsonResponse
      * @param int $photo_id
      **/
-
     public function toggleLike($photo_id)
     {
         $photoLike = PhotoLikes::where('photo_id', $photo_id)->where('user_id', Auth::user()->id)->first();
@@ -76,7 +72,7 @@ class PhotoController extends Controller
         $photo = Photo::findOrFail($photo_id);
         return response()->json([
                 'likes' => $photo->getLikes() ?? 0,
-                'likedByUser' => $photo->likedByUser(Auth::user()->id)
+                'likedByUser' => $photo->likedByUser(Auth::user()->id),
             ]
         );
     }
@@ -85,7 +81,7 @@ class PhotoController extends Controller
      * @return PhotoAlbum
      * @param bool $published
      **/
-    public static function getAlbums($published = True)
+    public static function getAlbums($published = true)
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');
         $albums = $albums->where('published', '=', $published);
@@ -110,7 +106,7 @@ class PhotoController extends Controller
         $album = PhotoAlbum::findOrFail($album_id);
         $items = $album->items();
 
-        if (!(Auth::check() && Auth::user()->member() !== null)) {
+        if (! (Auth::check() && Auth::user()->member() !== null)) {
             $items = $items->where('private', '=', false);
         }
         $items = $items->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->get();
