@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Proto\Models\Photo;
@@ -56,33 +57,34 @@ class PhotoController extends Controller
     }
 
     /**
+     * @return JsonResponse
      * @param int $photo_id
-     * @return RedirectResponse
-     */
-    public function likePhoto($photo_id)
-    {
-        $exist = PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->count();
-        if ($exist == null) {
-            PhotoLikes::create([
-                'photo_id' => $photo_id,
-                'user_id' => Auth::user()->id,
-            ]);
-        }
+     **/
 
-        return Redirect::route('photo::view', ['id' => $photo_id]);
+    public function toggleLike($photo_id)
+    {
+        $photoLike = PhotoLikes::where('photo_id', $photo_id)->where('user_id', Auth::user()->id)->first();
+        if ($photoLike) {
+            $photoLike->delete();
+        } else {
+            $photoLike = new PhotoLikes([
+                'user_id' => Auth::user()->id,
+                'photo_id' => $photo_id,
+            ]);
+            $photoLike->save();
+        }
+        $photo = Photo::findOrFail($photo_id);
+        return response()->json([
+                'likes' => $photo->getLikes() ?? 0,
+                'likedByUser' => $photo->likedByUser(Auth::user()->id)
+            ]
+        );
     }
 
     /**
-     * @param int $photo_id
-     * @return RedirectResponse
-     * @throws Exception
-     */
-    public function dislikePhoto($photo_id)
-    {
-        PhotoLikes::where('user_id', Auth::user()->id)->where('photo_id', $photo_id)->delete();
-        return Redirect::route('photo::view', ['id' => $photo_id]);
-    }
-
+     * @return PhotoAlbum
+     * @param bool $published
+     **/
     public static function getAlbums($published = True)
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');

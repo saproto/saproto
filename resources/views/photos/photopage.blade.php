@@ -3,6 +3,7 @@
         img[data-src] {
             filter: blur(0.3em);
         }
+
         img {
             filter: blur(0em);
             transition: filter 0.5s;
@@ -30,25 +31,22 @@
                         <i class="fas fa-images me-2"></i> {{ $photo->album->name }}
                     </a>
 
-                    <a href="{{$photo->getOriginalUrl()}}" download
+                    <a id="download" href="{{$photo->getOriginalUrl()}}" download
                        class="btn btn-success float-start me-3">
                         <i class="fas fa-download me-2"></i> high-res
                     </a>
 
                     @if ($photo->getPreviousPhoto(Auth::user()) != null)
-                        <a href="{{route("photo::view", ["id"=> $photo->getPreviousPhoto(Auth::user())->id])}}" class="btn btn-dark me-3">
+                        <a href="{{route("photo::view", ["id"=> $photo->getPreviousPhoto(Auth::user())->id])}}"
+                           class="btn btn-dark me-3">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
 
-                    @if (Auth::user() && $photo->likedByUser(Auth::user()->id))
-                        <a href="{{route("photo::dislikes", ["id"=> $photo->id])}}" class="btn btn-info me-3">
-                            <i class="fas fa-heart"></i> {{ $photo->getLikes() }}
-                        </a>
-                    @elseif(Auth::user())
-                        <a href="{{route("photo::likes", ["id"=> $photo->id])}}" class="btn btn-outline-info me-3">
-                            <i class="far fa-heart"></i> {{ $photo->getLikes() }}
-                        </a>
+                    @if (Auth::user())
+                        <button id="likeBtn" class="btn btn-info me-3">
+                            <i class="{{$photo->likedByUser(Auth::user()->id)?'fas':'far'}} fa-heart"></i><span> {{ $photo->getLikes() }}</span>
+                        </button>
                     @endif
 
                     @if($photo->private)
@@ -59,14 +57,16 @@
                     @endif
 
                     @if($photo->getNextPhoto(Auth::user()) != null)
-                        <a href="{{route("photo::view", ["id"=> $photo->getNextPhoto(Auth::user())->id])}}" class="btn btn-dark">
+                        <a href="{{route("photo::view", ["id"=> $photo->getNextPhoto(Auth::user())->id])}}"
+                           class="btn btn-dark">
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif
 
                 </div>
                 @if($photo->mayViewPhoto(Auth::user()))
-                <img id="progressive-img" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"  data-src="{!!$photo->getLargeUrl()!!}" style="height: 75vh; object-fit:contain">
+                    <img id="progressive-img" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"
+                         data-src="{!!$photo->getLargeUrl()!!}" style="height: 75vh; object-fit:contain">
                 @else
                     <div class="d-flex justify-content-center mb-3 mt-3">
                         This photo is only visible to members!
@@ -92,11 +92,31 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        const likeBtn = document.getElementById('likeBtn');
+        if (likeBtn) {
+            likeBtn.addEventListener('click', _ => {
+                switchLike(likeBtn)
+            })
+        }
+        function switchLike(outputElement){
+            get('{{ route('photo::like', ['id' => $photo->id]) }}', null, {parse: true})
+                .then((data) => {
+                    const icon = outputElement.children[0]
+                    const likes = outputElement.children[1]
+                    data.likedByUser ? icon.classList.replace('far', 'fas') : icon.classList.replace('fas', 'far')
+                    likes.innerHTML = data.likes;
+                })
+                .catch(err => {
+                    console.error(err)
+                    window.alert('Something went wrong (dis)liking the photo. Please try again.')
+                })
+        }
+
         document.addEventListener('keydown', e => {
             if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key))
                 e.preventDefault();
 
-            switch(e.key) {
+            switch (e.key) {
                 @if ($photo->getPreviousPhoto(Auth::user()) != null)
                 case 'ArrowLeft':
                     window.location.href = '{{route("photo::view", ["id"=> $photo->getPreviousPhoto(Auth::user())->id])}}';
@@ -109,32 +129,28 @@
                 @endif
                 @if (Auth::check())
                 case 'ArrowUp':
-                    window.location.href = '{{route("photo::likes", ["id"=> $photo->id])}}';
+                    switchLike(likeBtn);
                     break;
                 @endif
                 @if (Auth::check())
                 case 'ArrowDown':
-                    window.location.href = '{{route("photo::dislikes", ["id"=> $photo->id])}}';
+                   document.getElementById('download').click();
                     break;
-                @endif
+                    @endif
             }
         })
-    </script>
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let image = document.getElementById('progressive-img');
-            image.setAttribute('src', image.getAttribute('data-src'));
-            image.onload = () => {
-                image.removeAttribute('data-src');
-            };
-    </script>
+        image.setAttribute('src', image.getAttribute('data-src'));
+        image.onload = () => {
+            image.removeAttribute('data-src');
+        };
 
-    <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        history.replaceState(null, document.title, location.pathname+"#!/history")
+        history.replaceState(null, document.title, location.pathname + "#!/history")
         history.pushState(null, document.title, location.pathname)
 
-        window.addEventListener("popstate", function() {
-            if(location.hash === "#!/history") {
+        window.addEventListener("popstate", function () {
+            if (location.hash === "#!/history") {
                 history.replaceState(null, document.title, location.pathname)
                 setTimeout(_ => location.replace("{{ route('photo::album::list', ['id' => $photo->album_id])."?page=".$photo->getAlbumPageNumber(24) }}"), 10)
             }
