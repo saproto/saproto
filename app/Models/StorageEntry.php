@@ -109,9 +109,9 @@ class StorageEntry extends Model
     }
 
     /**
-     * @param UploadedFile $file
+     * @param UploadedFile|String $file
      * @param string|null $customPath
-     * @param int|null $customPath
+     * @param int|null $width
      */
     public function createFromPhoto($file, $customPath = null, $width = null)
     {

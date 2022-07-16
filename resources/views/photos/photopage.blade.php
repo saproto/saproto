@@ -61,7 +61,7 @@
 
                 </div>
                 @if($photo->mayViewPhoto(Auth::user()))
-                <img id="progressive-img" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"  data-src="{!!$photo->getOriginalUrl()!!}" style="height: 75vh; object-fit:contain">
+                <img id="progressive-img" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"  data-src="{!!$photo->getLargeUrl()!!}" style="height: 75vh; object-fit:contain">
                 @else
                     <div class="d-flex justify-content-center mb-3 mt-3">
                         This photo is only visible to members!

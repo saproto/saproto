@@ -27,6 +27,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $private
  * @property-read PhotoAlbum $album
  * @property-read StorageEntry $file
+ * @property-read StorageEntry $large_file
+ * @property-read StorageEntry $medium_file
+ * @property-read StorageEntry $small_file
+ * @property-read StorageEntry $tiny_file
  * @property-read File $url
  * @property-read PhotoLikes[] $likes
  * @method static Builder|Photo whereAlbumId($value)
@@ -60,6 +64,10 @@ class Photo extends Model
     private function file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
+    }
+
+    public function fileRelation(){
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
     /** @return HasOne|StorageEntry */

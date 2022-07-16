@@ -305,8 +305,6 @@
                         return response.text();
                     }).then(function (data) {
                         document.getElementById('photo-view').innerHTML += data
-                        document.getElementById('error-bar').classList.add('d-none')
-                        document.querySelector('#error-bar ul').innerHTML = ''
                         toggleRunning()
                     })
                     .catch(err => {
