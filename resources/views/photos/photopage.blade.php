@@ -25,13 +25,18 @@
 
                 <div class="card-header bg-dark text-end">
 
-                    <a href="{{route("photo::album::list", ["id"=> $photo->album_id])}}"
+                    <a href="{{route("photo::album::list", ["id"=> $photo->album_id])."?page=".$photo->getAlbumPageNumber(24)}}"
                        class="btn btn-success float-start me-3">
                         <i class="fas fa-images me-2"></i> {{ $photo->album->name }}
                     </a>
 
-                    @if ($photo->getPreviousPhoto() != null && $photo->getPreviousPhoto()->id != $photo->id)
-                        <a href="{{route("photo::view", ["id"=> $photo->getPreviousPhoto()->id])}}" class="btn btn-dark me-3">
+                    <a href="{{$photo->getOriginalUrl()}}" download
+                       class="btn btn-success float-start me-3">
+                        <i class="fas fa-download me-2"></i> high-res
+                    </a>
+
+                    @if ($photo->getPreviousPhoto(Auth::user()) != null)
+                        <a href="{{route("photo::view", ["id"=> $photo->getPreviousPhoto(Auth::user())->id])}}" class="btn btn-dark me-3">
                             <i class="fas fa-arrow-left"></i>
                         </a>
                     @endif
@@ -53,8 +58,8 @@
                         </a>
                     @endif
 
-                    @if($photo->getNextPhoto() != null && $photo->getNextPhoto()->id != $photo->id)
-                        <a href="{{route("photo::view", ["id"=> $photo->getNextPhoto()->id])}}" class="btn btn-dark">
+                    @if($photo->getNextPhoto(Auth::user()) != null)
+                        <a href="{{route("photo::view", ["id"=> $photo->getNextPhoto(Auth::user())->id])}}" class="btn btn-dark">
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     @endif
@@ -92,14 +97,14 @@
                 e.preventDefault();
 
             switch(e.key) {
-                @if ($photo->getPreviousPhoto() != null)
+                @if ($photo->getPreviousPhoto(Auth::user()) != null)
                 case 'ArrowLeft':
-                    window.location.href = '{{route("photo::view", ["id"=> $photo->getPreviousPhoto()->id])}}';
+                    window.location.href = '{{route("photo::view", ["id"=> $photo->getPreviousPhoto(Auth::user())->id])}}';
                     break;
                 @endif
-                @if ($photo->getNextPhoto() != null)
+                @if ($photo->getNextPhoto(Auth::user()) != null)
                 case 'ArrowRight':
-                    window.location.href = '{{route("photo::view", ["id"=> $photo->getNextPhoto()->id])}}';
+                    window.location.href = '{{route("photo::view", ["id"=> $photo->getNextPhoto(Auth::user())->id])}}';
                     break;
                 @endif
                 @if (Auth::check())

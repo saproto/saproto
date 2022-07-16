@@ -112,8 +112,9 @@ class StorageEntry extends Model
      * @param UploadedFile|String $file
      * @param string|null $customPath
      * @param int|null $width
+     * @param string|null $original_name
      */
-    public function createFromPhoto($file, $customPath = null, $width = null)
+    public function createFromPhoto($file, $customPath = null, $width = null,$original_name=null)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d') . '/' . $this->hash;
@@ -126,10 +127,8 @@ class StorageEntry extends Model
             $image->resize($width, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $image->stream('jpg', 85);
-        } else {
-            $image->stream();
         }
+        $image->stream();
         $this->mime=$image->mime();
         Storage::disk('local')->put($customPath.$this->hash, $image);
         return back();

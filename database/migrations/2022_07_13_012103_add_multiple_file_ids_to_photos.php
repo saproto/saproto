@@ -73,19 +73,19 @@ class AddMultipleFileIdsToPhotos extends Migration
             }
 
             $large_file = new StorageEntry();
-            $large_file->createFromPhoto($path, $large_photos_storage, 860);
+            $large_file->createFromPhoto($path, $large_photos_storage, 860, $photo->fileRelation->original_filename);
             $large_file->save();
 
             $medium_file = new StorageEntry();
-            $medium_file->createFromPhoto($path, $medium_photos_storage, 640);
+            $medium_file->createFromPhoto($path, $medium_photos_storage, 640, $photo->fileRelation->original_filename);
             $medium_file->save();
 
             $small_file = new StorageEntry();
-            $small_file->createFromPhoto($path, $small_photos_storage,420);
+            $small_file->createFromPhoto($path, $small_photos_storage,420, $photo->fileRelation->original_filename);
             $small_file->save();
 
             $tiny_file = new StorageEntry();
-            $tiny_file->createFromPhoto($path, $tiny_photos_storage,20);
+            $tiny_file->createFromPhoto($path, $tiny_photos_storage,20, $photo->fileRelation->original_filename);
             $tiny_file->save();
 
             $photo->large_file_id = $large_file->id;

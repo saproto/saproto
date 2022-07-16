@@ -218,23 +218,23 @@ class PhotoAdminController extends Controller
         $tiny_photos_storage =  'photos/tiny_photos/'.$album_id.'/';
 
         $original_file = new StorageEntry();
-        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage);
+        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getFilename());
         $original_file->save();
 
         $large_file = new StorageEntry();
-        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 860);
+        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 860, $uploaded_photo->getFilename());
         $large_file->save();
 
         $medium_file = new StorageEntry();
-        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 640);
+        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 640, $uploaded_photo->getFilename());
         $medium_file->save();
 
         $small_file = new StorageEntry();
-        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420);
+        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getFilename());
         $small_file->save();
 
         $tiny_file = new StorageEntry();
-        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20);
+        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getFilename());
         $tiny_file->save();
 
         $photo = new Photo();

@@ -96,9 +96,10 @@ class Photo extends Model
 
     /**
      * @param bool $next
+     * @param User $user
      * @return Photo
      */
-    private function getAdjacentPhoto($next = true)
+    private function getAdjacentPhoto($next = true, $user=null)
     {
         if ($next) {
             $ord = 'ASC';
@@ -107,25 +108,27 @@ class Photo extends Model
             $ord = 'DESC';
             $comp = '<';
         }
+        $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken);
 
-        $result = self::where('album_id', $this->album_id)->where('date_taken', $comp.'=', $this->date_taken)->orderBy('date_taken', $ord)->orderBy('id', $ord);
+        if($user==null || $user->member()==null) $result=$result->where('private', false);
+
+        $result=$result->orderBy('date_taken', $ord)->orderBy('id', $ord);
         if ($result->count() > 1) {
             return $result->where('id', $comp, $this->id)->first();
         }
-
-        return $result->first();
+        return null;
     }
 
     /** @return Photo */
-    public function getNextPhoto()
+    public function getNextPhoto($user)
     {
-        return $this->getAdjacentPhoto();
+        return $this->getAdjacentPhoto(true, $user);
     }
 
     /** @return Photo */
-    public function getPreviousPhoto()
+    public function getPreviousPhoto($user)
     {
-        return $this->getAdjacentPhoto(false);
+        return $this->getAdjacentPhoto(false, $user);
     }
 
     /** @return int */

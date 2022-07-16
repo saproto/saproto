@@ -71,33 +71,6 @@ class FileController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param string $hash
-     * @param Request $request
-     * @return Response
-     */
-    public function getImage($id, $hash, Request $request)
-    {
-        /** @var StorageEntry $entry */
-        $entry = StorageEntry::findOrFail($id);
-
-        if ($hash != $entry->hash) {
-            abort(404);
-        }
-
-        $response = new Response($this->makeImage(
-            $entry,
-            ($request->has('w') ? $request->input('w') : null),
-            ($request->has('h') ? $request->input('h') : null)
-        ), 200);
-        $response->header('Content-Type', $entry->mime);
-        $response->header('Cache-Control', 'max-age=86400, public');
-        $response->header('Content-Disposition', sprintf('filename="%s"', $entry->original_filename));
-
-        return $response;
-    }
-
-    /**
      * @param string $printer
      * @param string $url
      * @param int $copies
