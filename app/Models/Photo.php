@@ -99,7 +99,7 @@ class Photo extends Model
      * @param User $user
      * @return Photo
      */
-    private function getAdjacentPhoto($next = true, $user = null)
+    public function getAdjacentPhoto($next = true, $user = null)
     {
         if ($next) {
             $ord = 'ASC';
@@ -151,8 +151,10 @@ class Photo extends Model
         return $this->likes()->count();
     }
 
-    public function likedByUser($user_id) {
-        return $this->likes()->where('user_id', $user_id)->count() > 0;
+    public function likedByUser($user) {
+        if($user){
+        return $this->likes()->where('user_id', $user)->count() > 0;
+        }return false;
     }
 
     /** @return string */

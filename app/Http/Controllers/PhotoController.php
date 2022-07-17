@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
@@ -41,10 +42,38 @@ class PhotoController extends Controller
     public function photo($id)
     {
         $photo = Photo::findOrFail($id);
-        if ($photo) {
-            return view('photos.photopage', ['photo' => $photo]);
+        return view('photos.photopage', ['photo' => $photo]);
+    }
+
+    /**
+     * @param int $id
+     * @param bool $next
+     * @return JsonResponse
+     */
+    private function getAdjacentPhoto($id, $next){
+        $photo=Photo::findOrFail($id);
+        $adjacent=$photo->getAdjacentPhoto($next, Auth::user());
+        if($adjacent) {
+            return response()->JSON([
+                'id' => $adjacent->id,
+                'originalUrl' => $adjacent->getOriginalUrl(),
+                'largeUrl' => $adjacent->getLargeUrl(),
+                'tinyUrl' => $adjacent->getTinyUrl(),
+                'albumUrl' => route("photo::album::list", ["id" => $photo->album_id]) . "?page=" . $photo->getAlbumPageNumber(24),
+                'likes'=>$adjacent->getLikes(),
+                'likedByUser'=>$adjacent->likedByUser(Auth::user()),
+                'hasNextPhoto'=>$adjacent->getAdjacentPhoto(true, Auth::user())!==null,
+                'hasPreviousPhoto'=>$adjacent->getAdjacentPhoto(false, Auth::user())!==null
+            ]);
         }
-        abort(404, 'Photo not found.');
+    }
+
+    public function getNextPhoto($id){
+        return $this->getAdjacentPhoto($id, true);
+    }
+
+    public function getPreviousPhoto($id){
+        return $this->getAdjacentPhoto($id, false);
     }
 
     /** @return View */
@@ -72,7 +101,7 @@ class PhotoController extends Controller
         $photo = Photo::findOrFail($photo_id);
         return response()->json([
                 'likes' => $photo->getLikes() ?? 0,
-                'likedByUser' => $photo->likedByUser(Auth::user()->id),
+                'likedByUser' => $photo->likedByUser(Auth::user()),
             ]
         );
     }
