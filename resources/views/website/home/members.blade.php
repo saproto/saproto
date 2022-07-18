@@ -26,7 +26,7 @@
                     <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinner Form</div>
                     <div class="card-body">
 
-                        @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform])
+                        @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
 
                     </div>
 

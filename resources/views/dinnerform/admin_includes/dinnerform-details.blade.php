@@ -42,10 +42,19 @@
                     <div class="row align-items-end mb-6">
                         <div class="col-md-12 mb-3">
 
-                            <label for="url">Url:</label>
+                            <label for="url">Restaurant website:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder='https://forms.gle/t2hDEnkNCLXNpvYTA'
+                                   placeholder='https://www.elat-roma.nl/'
                                    value="{{ $dinnerformCurrent->url ?? ''}}" required>
+                        </div>
+                    </div>
+                    <div class="row align-items-end mb-6">
+                        <div class="col-md-12 mb-3">
+
+                            <label value="url">Helper discount %:</label>
+                            <input type="value" class="form-control" id="discount" name="discount"
+                                   placeholder='15'
+                                   value="{{ $dinnerformCurrent->discount ?? ''}}" required>
                         </div>
                     </div>
                 </div>

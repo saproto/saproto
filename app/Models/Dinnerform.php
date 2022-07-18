@@ -6,6 +6,8 @@ use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Proto\Models\DinnerformOrderline;
 
 /**
  * Dinnerform Model.
@@ -56,5 +58,32 @@ class Dinnerform extends Model
     public function hasExpired()
     {
         return $this->end->addHours(1)->isPast();
+    }
+    /** @return HasMany|DinnerformOrderline[] */
+    public function orderLines()
+    {
+        return $this->hasMany('Proto\Models\DinnerformOrderline');
+    }
+
+    public function totalAmount(){
+        return $this->orderlines()->sum('price');
+    }
+
+    public function totalAmountwithHelperDiscount(){
+        if($this->discount) {
+            $totalWithoutHelpers = $this->orderlines()->where('helper', false)->sum('price');
+            $totalFromHelpers = $this->orderlines()->where('helper', true)->sum('price') / 100 * (100-$this->discount);
+            return $totalWithoutHelpers + $totalFromHelpers;
+        }else{
+         return $this->totalAmount();
+        }
+    }
+
+    public function amountOfOrders(){
+        return $this->orderlines()->count();
+    }
+
+    public function amountOfHelpers(){
+        return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
 }

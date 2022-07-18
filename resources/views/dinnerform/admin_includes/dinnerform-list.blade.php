@@ -14,6 +14,7 @@
             <td>Open</td>
             <td>Start</td>
             <td>End</td>
+            <td>Admin</td>
             <td>Controls</td>
             <td></td>
         </tr>
@@ -29,20 +30,28 @@
                     <td class="align-middle">
                         @if($dinnerform->isCurrent())
                             <i class="far fa-clock text-success"></i>
-                        @else
-                            <i class="fas fa-ban text-danger"></i>
+                        @elseif($dinnerform->closed)
+                            <i class="fas fa-close text-danger"></i>
+                            @else
+                            <i class="fas fa-ban text-warning"></i>
                         @endif
                     </td>
                     <td class="align-middle">{{ $dinnerform->start->format('Y m-d H:i') }}</td>
                     <td class="align-middle">{{ $dinnerform->end->format('Y m-d H:i') }}</td>
-                    <td class="align-middle">
+                    <td class="align-middle"><a class="btn btn-info" href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}">
+                                View orders
+                            </a></td>
+
                         @if($dinnerform->isCurrent())
+                        <td class="align-middle">
                             <a class="btn btn-warning" href="{{ route('dinnerform::close', ['id' => $dinnerform->id]) }}">
                                 close now
                             </a>
-                        @endif
                     </td>
+                        @endif
+
                     <td class="text-start align-middle">
+                        @if(!$dinnerform->closed)
                         <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
                             <i class="fas fa-edit me-2"></i>
                         </a>
@@ -54,6 +63,7 @@
                             'confirm' => 'Delete',
 
                         ])
+                        @endif
                     </td>
 
                 </tr>
