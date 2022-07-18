@@ -173,6 +173,6 @@ class DinnerformController extends Controller
         }
         $dinnerform->closed=true;
         $dinnerform->save();
-        return Redirect::route('homepage')->with('flash_message', 'All orderlines of '.$dinnerform->restaurant.' have been processed!');
+        return Redirect::route('dinnerform::add')->with('flash_message', 'All orderlines of '.$dinnerform->restaurant.' have been processed!');
     }
 }

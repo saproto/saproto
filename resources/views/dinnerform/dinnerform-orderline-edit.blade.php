@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group">
                            Where they a helper?
-                            <input class="form-check-inline" checked="{{$dinnerformOrderline->helper}}" id="helper" name="helper" type="checkbox">
+                            <input class="form-check-inline" {{$dinnerformOrderline->helper?'checked':''}} id="helper" name="helper" type="checkbox">
                         </div>
                     </div>
 
