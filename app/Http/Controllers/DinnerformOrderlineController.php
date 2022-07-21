@@ -11,9 +11,13 @@ use Session;
 class DinnerformOrderlineController extends Controller
 {
     public function store(Request $request, $id){
+        $dinnerform=Dinnerform::findOrFail($id);
         $order=$request->input('order');
         $amount=$request->input('price');
         $helper=$request->has('helper');
+        if($dinnerform->event->activity && $dinnerform->event->activity->isHelping(Auth::user())){
+            $helper=true;
+        }
         $dinnerOrderline=DinnerformOrderline::create([
             'description' => $order,
             'price' => $amount,

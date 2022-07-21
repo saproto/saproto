@@ -289,7 +289,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::',  'middleware' => ['auth']], function () {
         Route::group(['middleware' => ['permission:tipcie']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'DinnerformController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'DinnerformController@store']);

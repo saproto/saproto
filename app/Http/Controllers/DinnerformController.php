@@ -22,11 +22,11 @@ class DinnerformController extends Controller
      */
     public function show($id)
     {
+
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
         $previousOrders=DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
-
-            return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
+        return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
 
     }
 
@@ -60,6 +60,7 @@ class DinnerformController extends Controller
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
+            'event_id'=>$request->eventSelect!=''?$request->eventSelect:null
         ]);
 
         Session::flash('flash_message', "Your dinner form at '".$dinnerform->restaurant."' has been added.");
@@ -108,6 +109,7 @@ class DinnerformController extends Controller
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
+            'event_id'=>$request->eventSelect!=''?$request->eventSelect:null
         ]);
 
         if ($changed_important_details) {
@@ -133,9 +135,7 @@ class DinnerformController extends Controller
         }else{
             Session::flash('flash_message', "The dinner form is already closed and can not be deleted!");
         }
-
             return Redirect::route('dinnerform::add');
-
     }
 
     /**
@@ -166,7 +166,7 @@ class DinnerformController extends Controller
                 null,
                 null,
                 sprintf('Dinnerform from %s, ordered at '.$dinnerform->restaurant, date('d-m-Y', strtotime($dinnerform->end))),
-                sprintf('dinnerform_orderline_by_%u', Auth::user()->id)
+                sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
             $dinnerformOrderline->closed=true;
             $dinnerformOrderline->save();

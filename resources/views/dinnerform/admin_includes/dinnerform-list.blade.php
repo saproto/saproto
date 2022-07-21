@@ -59,9 +59,8 @@
                             'action' => route("dinnerform::delete", ['id' => $dinnerform->id]),
                             'text' => '<i class="fas fa-trash text-danger"></i>',
                             'title' => 'Confirm Delete',
-                            'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
+                            'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?<br><br> This will also delete all orderlines!",
                             'confirm' => 'Delete',
-
                         ])
                         @endif
                     </td>

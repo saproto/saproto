@@ -6,7 +6,9 @@ use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Proto\Models\DinnerformOrderline;
 
 /**
@@ -20,6 +22,7 @@ use Proto\Models\DinnerformOrderline;
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Event $event
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
  * @method static Builder|Dinnerform whereEnd($value)
@@ -65,6 +68,12 @@ class Dinnerform extends Model
         return $this->hasMany('Proto\Models\DinnerformOrderline');
     }
 
+    /** @return BelongsTo */
+    public function event()
+    {
+        return $this->belongsTo('Proto\Models\Event', 'event_id');
+    }
+
     public function totalAmount(){
         return $this->orderlines()->sum('price');
     }
@@ -86,4 +95,14 @@ class Dinnerform extends Model
     public function amountOfHelpers(){
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($dinnerform) {
+          foreach($dinnerform->orderLines()->get() as $dinnerOrderline){
+             $dinnerOrderline->delete();
+          }
+        });
+        }
 }

@@ -39,6 +39,7 @@
                     <td>Helper discount</td>
                     <td>Total with helper discount</td>
                     <td></td>
+                    <td></td>
                 </tr>
 
                 </thead>
@@ -65,6 +66,7 @@
                     <td>Order</td>
                     <td>Price</td>
                     <td>Helper</td>
+                    <td>Price with discount</td>
                     <td>Controls</td>
                     <td></td>
                 </tr>
@@ -87,6 +89,9 @@
                                  <i class="fas fa-check text-info" aria-hidden="true"></i>
                                 @endif
                             </td>
+                            <td>
+                                €{{$order->price()}}
+                            </td>
                             <td class="text-start align-middle">
                                 @if(!$order->closed)
                                 <a href="{{ route('dinnerform::orderline::edit', ['id' => $order->id]) }}">
@@ -107,7 +112,7 @@
                     @endforeach
                 @else
                     <tr>
-                        <td>There are no orderlines!</td>
+                        <td>There are no orderlines yet!</td>
                         <td></td>
                         <td></td>
                         <td></td>

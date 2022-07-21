@@ -25,6 +25,7 @@ class CreateDinnerOrderlineTable extends Migration
         });
 
         Schema::table('dinnerforms', function (Blueprint $table) {
+            $table->integer('event_id')->nullable();
             $table->integer('discount')->nullable();
             $table->boolean('closed');
         });
