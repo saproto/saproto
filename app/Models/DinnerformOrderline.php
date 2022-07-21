@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $price
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property boolean|null $helper
+ * @property bool|null $helper
  * @mixin Eloquent
  **/
 class DinnerformOrderline extends Model
@@ -39,9 +39,9 @@ class DinnerformOrderline extends Model
         return $this->belongsTo('Proto\Models\Dinnerform')->first();
     }
 
-    public function price(){
+    public function price() {
         if($this->helper && $this->dinnerform()->discount){
-            return $this->price/100*(100-$this->dinnerform()->discount);
+            return $this->price / 100 * (100 - $this->dinnerform()->discount);
         }
         return $this->price;
     }

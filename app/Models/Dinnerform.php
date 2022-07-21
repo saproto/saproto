@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Proto\Models\DinnerformOrderline;
 
 /**
  * Dinnerform Model.
@@ -62,6 +60,7 @@ class Dinnerform extends Model
     {
         return $this->end->addHours(1)->isPast();
     }
+
     /** @return HasMany|DinnerformOrderline[] */
     public function orderLines()
     {
@@ -74,25 +73,25 @@ class Dinnerform extends Model
         return $this->belongsTo('Proto\Models\Event', 'event_id');
     }
 
-    public function totalAmount(){
+    public function totalAmount() {
         return $this->orderlines()->sum('price');
     }
 
-    public function totalAmountwithHelperDiscount(){
+    public function totalAmountwithHelperDiscount() {
         if($this->discount) {
             $totalWithoutHelpers = $this->orderlines()->where('helper', false)->sum('price');
-            $totalFromHelpers = $this->orderlines()->where('helper', true)->sum('price') / 100 * (100-$this->discount);
+            $totalFromHelpers = $this->orderlines()->where('helper', true)->sum('price') / 100 * (100 - $this->discount);
             return $totalWithoutHelpers + $totalFromHelpers;
         }else{
          return $this->totalAmount();
         }
     }
 
-    public function amountOfOrders(){
+    public function amountOfOrders() {
         return $this->orderlines()->count();
     }
 
-    public function amountOfHelpers(){
+    public function amountOfHelpers() {
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
 

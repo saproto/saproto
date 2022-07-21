@@ -2,17 +2,16 @@
 
 namespace Proto\Http\Controllers;
 use Auth;
+use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 use Proto\Models\Dinnerform;
 use Proto\Models\DinnerformOrderline;
 use Proto\Models\Product;
 use Session;
-use Carbon;
 
 class DinnerformController extends Controller
 {
@@ -25,12 +24,12 @@ class DinnerformController extends Controller
 
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
-        $previousOrders=DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
+        $previousOrders = DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
         return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
 
     }
 
-    public function admin($id){
+    public function admin($id) {
         $dinnerform = Dinnerform::findOrFail($id);
         return view('dinnerform.admin', ['dinnerform'=>$dinnerform, 'orderList'=>$dinnerform->orderlines()->get()]);
     }
@@ -60,7 +59,7 @@ class DinnerformController extends Controller
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
-            'event_id'=>$request->eventSelect!=''?$request->eventSelect:null
+            'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
         ]);
 
         Session::flash('flash_message', "Your dinner form at '".$dinnerform->restaurant."' has been added.");
@@ -109,7 +108,7 @@ class DinnerformController extends Controller
             'start' => strtotime($request->start),
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
-            'event_id'=>$request->eventSelect!=''?$request->eventSelect:null
+            'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
         ]);
 
         if ($changed_important_details) {
@@ -129,11 +128,11 @@ class DinnerformController extends Controller
     public function destroy($id)
     {
         $dinnerform = Dinnerform::findOrFail($id);
-        if(!$dinnerform->closed){
+        if(! $dinnerform->closed){
             Session::flash('flash_message', "The dinner form for '".$dinnerform->restaurant."' has been deleted.");
             $dinnerform->delete();
         }else{
-            Session::flash('flash_message', "The dinner form is already closed and can not be deleted!");
+            Session::flash('flash_message', 'The dinner form is already closed and can not be deleted!');
         }
             return Redirect::route('dinnerform::add');
     }
@@ -153,9 +152,9 @@ class DinnerformController extends Controller
         return view('dinnerform.admin', ['dinnerform'=>$dinnerform, 'orderList'=>$dinnerform->orderlines()->get()]);
     }
 
-    public function process($id){
-        $dinnerform=Dinnerform::findOrFail($id);
-        $dinnerformOrderlines=$dinnerform->orderlines()->get();
+    public function process($id) {
+        $dinnerform = Dinnerform::findOrFail($id);
+        $dinnerformOrderlines = $dinnerform->orderlines()->get();
         $product = Product::findOrFail(config('omnomcom.dinnerform-product'));
 
         foreach($dinnerformOrderlines as $dinnerformOrderline){
@@ -168,10 +167,10 @@ class DinnerformController extends Controller
                 sprintf('Dinnerform from %s, ordered at '.$dinnerform->restaurant, date('d-m-Y', strtotime($dinnerform->end))),
                 sprintf('dinnerform_orderline_processed_by_%u', Auth::user()->id)
             );
-            $dinnerformOrderline->closed=true;
+            $dinnerformOrderline->closed = true;
             $dinnerformOrderline->save();
         }
-        $dinnerform->closed=true;
+        $dinnerform->closed = true;
         $dinnerform->save();
         return Redirect::route('dinnerform::add')->with('flash_message', 'All orderlines of '.$dinnerform->restaurant.' have been processed!');
     }
