@@ -28,7 +28,7 @@
         <img class="card-img-top" src="{{ $event->image->generateImagePath(800, 300) }}" width="100%">
     @endif
 
-    <div class="card-header">
+    <div class="card-header bg-light">
         <h5 class="card-title">@yield('page-title')</h5>
     </div>
 
