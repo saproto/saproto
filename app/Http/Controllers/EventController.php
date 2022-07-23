@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Proto\Models\Account;
 use Proto\Models\Activity;
@@ -95,22 +96,32 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = new Event();
-        $event->title = $request->title;
-        $event->start = strtotime($request->start);
-        $event->end = strtotime($request->end);
-        $event->location = $request->location;
-        $event->secret = $request->secret;
-        $event->description = $request->description;
-        $event->summary = $request->summary;
-        $event->is_featured = $request->has('is_featured');
-        $event->is_external = $request->has('is_external');
-        $event->force_calendar_sync = $request->has('force_calendar_sync');
+        Validator::make($request->all(), [
+            'title' => ['required'],
+            'start'=>['required','gte:end'],
+            'end'=>['required','lt:start'],
+            'location'=>['required'],
+            'secret'=>['required'],
+            'description'=>['required'],
+            'summary'=>['required'],
+            'image'=>['image']
+        ], [
+            'lt' => 'The Event cannot end before it starts!',
+            'gte' => 'The Event cannot start before it begins!'
+        ])->validate();
 
-        if ($event->end < $event->start) {
-            Session::flash('flash_message', 'You cannot let the event end before it starts.');
-            return Redirect::back();
-        }
+
+        $event = Event::create([
+        'title' => $request->title,
+        'start' => strtotime($request->start),
+        'end' => strtotime($request->end),
+        'location' => $request->location,
+        'secret' => $request->secret,
+        'description' => $request->description,
+        'summary' => $request->summary,
+        'is_featured' => $request->has('is_featured'),
+        'is_external' => $request->has('is_external'),
+        'force_calendar_sync' => $request->has('force_calendar_sync')]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();

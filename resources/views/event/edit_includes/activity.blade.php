@@ -28,7 +28,7 @@
                         @include('website.layouts.macros.datetimepicker',[
                             'name' => 'registration_start',
                             'label' => 'Sign-up start:',
-                            'placeholder' => $event->activity ? $event->activity->registration_start : null
+                            'placeholder' => old('registration_start')?strtotime(old('registration_start')):($event->activity ? $event->activity->registration_start : null)
                         ])
                     </div>
 
@@ -36,7 +36,7 @@
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'registration_end',
                                 'label' => 'Sign-up end:',
-                                'placeholder' => $event->activity ? $event->activity->registration_end : null
+                                'placeholder' => old('registration_end')?strtotime(old('registration_end')):($event->activity ? $event->activity->registration_end : null)
                             ])
                     </div>
 
@@ -44,7 +44,7 @@
                         @include('website.layouts.macros.datetimepicker',[
                             'name' => 'deregistration_end',
                             'label' => 'Sign-out end:',
-                            'placeholder' => $event->activity ? $event->activity->deregistration_end : null
+                            'placeholder' => old('registration_end')?strtotime(old('deregistration_end')):($event->activity ? $event->activity->deregistration_end : null)
                         ])
                     </div>
 
@@ -55,7 +55,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">&euro;</span>
                             </div>
-                            <input type="text" class="form-control" id="price" name="price"
+                            <input type="number" min="0" class="form-control" id="price" name="price"
                                    value="{{ ($event->activity ? $event->activity->price : '0') }}"
                                    placeholder="15"
                                    require>
@@ -74,8 +74,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">&euro;</span>
                             </div>
-                            <input type="text" class="form-control" id="no_show_fee" name="no_show_fee"
-                                   value="{{ ($event->activity ? $event->activity->no_show_fee : '0') }}"
+                            <input type="number" min="0" class="form-control" id="no_show_fee" name="no_show_fee"
+                                   value="{{ old('no_show_fee')??($event->activity ? $event->activity->no_show_fee : '0') }}"
                                    placeholder="15"
                                    required>
                         </div>
@@ -91,13 +91,13 @@
                         </label>
                         <input type="number" class="form-control" id="participants"
                                name="participants" min="-1" required
-                               value="{{ ($event->activity ? $event->activity->participants : '') }}">
+                               value="{{ old('participants')??($event->activity ? $event->activity->participants : '') }}">
                     </div>
 
                         <div class="checkbox col-6">
                             <label>
                                 <input type="checkbox" name="hide_participants"
-                                        {{ ($event->activity && $event->activity->hide_participants ? 'checked' : '') }}>
+                                        {{ ($request->exists('hide_participants')||$event->activity && $event->activity->hide_participants ? 'checked' : '') }}>
                                         Hide participants.
                                         <i class="fas fa-question-circle me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="This will hide who participates in this event for members!"></i>
                             </label>
