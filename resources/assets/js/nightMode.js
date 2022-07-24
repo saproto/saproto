@@ -7,8 +7,6 @@ window.nightMode = _ => {
     let canvas = document.createElement('CANVAS')
     let ctx = null
 
-    const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-
     class Star {
         constructor(canvasWidth, canvasHeight) {
             this.centerX = Math.random() * canvasWidth
@@ -72,14 +70,10 @@ window.nightMode = _ => {
     create()
 
     function update() {
-        // console.log('update!')
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         stars.forEach((star, index) => {
             star.update()
             star.draw(ctx)
-            if (index === 1) {
-                console.log(star.radius)
-            }
         })
         window.requestAnimationFrame(update);
     }
