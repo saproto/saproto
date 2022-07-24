@@ -114,7 +114,7 @@ class StorageEntry extends Model
      * @param int|null $width
      * @param string|null $original_name
      */
-    public function createFromPhoto($file, $customPath = null, $width = null,$original_name = null)
+    public function createFromPhoto($file, $customPath = null, $width = null,$original_name = null, $addWatermark=true)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -127,6 +127,22 @@ class StorageEntry extends Model
             $image->resize($width, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
+        }
+        if($addWatermark) {
+            $watermark = Image::make(public_path('images/logo/protcast.png'));
+            $watermark->text('foo', 0, 0, function($font) {
+                $font->size(24);
+                $font->color('#fff');
+                $font->align('center');
+                $font->valign('top');
+            });
+            $watermark->resize($image->width()/4, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $offset=floor($image->width()/30);
+            $xOffset=$image->width()-$watermark->width()-$offset;
+            $yOffset=$image->height()-$watermark->height()-$offset;
+            $image->insert($watermark, 'top-left', $xOffset, $yOffset);
         }
         $image->stream();
         $this->mime = $image->mime();
