@@ -57,8 +57,7 @@
                     @endif
 
                     <button id="nextBtn"
-                            class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}"
-                    ">
+                            class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}">
                     <i class="fas fa-arrow-right"></i>
                     </button>
 

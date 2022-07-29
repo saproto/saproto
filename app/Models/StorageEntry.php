@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Auth;
 use Carbon;
 use DB;
 use Eloquent;
@@ -113,8 +114,9 @@ class StorageEntry extends Model
      * @param string|null $customPath
      * @param int|null $width
      * @param string|null $original_name
+     * @param Image|null $watermark
      */
-    public function createFromPhoto($file, $customPath = null, $width = null,$original_name = null, $addWatermark=true)
+    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark= null)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -128,23 +130,17 @@ class StorageEntry extends Model
                 $constraint->aspectRatio();
             });
         }
-        if($addWatermark) {
-            $watermark = Image::make(public_path('images/logo/protcast.png'));
-            $watermark->text('foo', 0, 0, function($font) {
-                $font->size(24);
-                $font->color('#fff');
-                $font->align('center');
-                $font->valign('top');
-            });
-            $watermark->resize($image->width()/4, null, function ($constraint) {
+        if($watermark) {
+            $watermark->resize($image->width()/5, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
-            $offset=floor($image->width()/30);
-            $xOffset=$image->width()-$watermark->width()-$offset;
-            $yOffset=$image->height()-$watermark->height()-$offset;
-            $image->insert($watermark, 'top-left', $xOffset, $yOffset);
+
+            $offset=floor($image->width()/100*2.5);
+            $image->insert($watermark, 'bottom-right', $offset, 2*$offset);
         }
         $image->stream();
+
+        $this->original_filename = $original_name;
         $this->mime = $image->mime();
         Storage::disk('local')->put($customPath.$this->hash, $image);
         return back();
