@@ -2,7 +2,6 @@
 
 namespace Proto\Models;
 
-use Auth;
 use Carbon;
 use DB;
 use Eloquent;
@@ -116,7 +115,7 @@ class StorageEntry extends Model
      * @param string|null $original_name
      * @param Image|null $watermark
      */
-    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark= null)
+    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -131,12 +130,12 @@ class StorageEntry extends Model
             });
         }
         if($watermark) {
-            $watermark->resize($image->width()/5, null, function ($constraint) {
+            $watermark->resize($image->width() / 5, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
 
-            $offset=floor($image->width()/100*2.5);
-            $image->insert($watermark, 'bottom-right', $offset, 2*$offset);
+            $offset = floor($image->width() / 100 * 2.5);
+            $image->insert($watermark, 'bottom-right', $offset, 2 * $offset);
         }
         $image->stream();
 

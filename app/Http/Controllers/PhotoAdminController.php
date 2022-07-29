@@ -102,7 +102,7 @@ class PhotoAdminController extends Controller
         }
             try{
             $uploadFile = $request->file('file');
-            $addWaterMark=$request->has('addWaterMark');
+            $addWaterMark = $request->has('addWaterMark');
 
             $photo = $this->createPhotoFromUpload($uploadFile, $id, $addWaterMark);
             return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
@@ -211,7 +211,7 @@ class PhotoAdminController extends Controller
      * @return Photo
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark=false)
+    private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)
     {
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
         $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
@@ -219,7 +219,7 @@ class PhotoAdminController extends Controller
         $small_photos_storage = 'photos/small_photos/'.$album_id.'/';
         $tiny_photos_storage = 'photos/tiny_photos/'.$album_id.'/';
 
-        $watermark=null;
+        $watermark = null;
         if($addWatermark) {
             $watermark = Image::make(public_path('images/protography-watermark-template.png'));
             $watermark->text(strtoupper(Auth::user()->name), 267, 1443, function ($font) {
