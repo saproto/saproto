@@ -72,9 +72,9 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::find($id);
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
-        $album->private=$request->has('private');
+        $album->private = $request->has('private');
         foreach ($album->items as $photo){
-            $photo->private=$request->has('private');
+            $photo->private = $request->has('private');
             $photo->save();
         }
         $album->save();
@@ -212,7 +212,7 @@ class PhotoAdminController extends Controller
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)
     {
-        $album=PhotoAlbum::findOrFail($album_id);
+        $album = PhotoAlbum::findOrFail($album_id);
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
         $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
         $medium_photos_storage = 'photos/medium_photos/'.$album_id.'/';
@@ -257,7 +257,7 @@ class PhotoAdminController extends Controller
         $photo->medium_file_id = $medium_file->id;
         $photo->small_file_id = $small_file->id;
         $photo->tiny_file_id = $tiny_file->id;
-        $photo->private=$album->private;
+        $photo->private = $album->private;
         $photo->save();
 
         return $photo;

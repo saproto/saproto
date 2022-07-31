@@ -195,7 +195,7 @@ class Photo extends Model
         return false;
     }
 
-    public function makePublic(){
+    public function makePublic() {
         $this->file()->makePublic();
         $this->large_file()->makePublic();
         $this->medium_file()->makePublic();
@@ -203,7 +203,7 @@ class Photo extends Model
         $this->tiny_file()->makePublic();
     }
 
-    public function deletePublic(){
+    public function deletePublic() {
         $this->file()->deletePublic();
         $this->large_file()->deletePublic();
         $this->medium_file()->deletePublic();
