@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();
-                if(count($newAchievements)>0) {
+                if(count($newAchievements) > 0) {
                     $newAchievementsQuery->update(['alerted' => true]);
                     $view->with('newAchievements', $newAchievements);
                 }
