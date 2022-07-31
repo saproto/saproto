@@ -61,6 +61,7 @@ class PhotoController extends Controller
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
                 'likes'=>$adjacent->getLikes(),
                 'likedByUser'=>$adjacent->likedByUser(Auth::user()),
+                'private' => $adjacent->private,
                 'hasNextPhoto'=>$adjacent->getAdjacentPhoto(true, Auth::user()) !== null,
                 'hasPreviousPhoto'=>$adjacent->getAdjacentPhoto(false, Auth::user()) !== null,
             ]);

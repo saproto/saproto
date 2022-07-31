@@ -72,13 +72,12 @@ class PhotoAdminController extends Controller
         $album = PhotoAlbum::find($id);
         $album->name = $request->input('album');
         $album->date_taken = strtotime($request->input('date'));
-        if ($request->input('private')) {
-            $album->private = true;
-        } else {
-            $album->private = false;
+        $album->private=$request->has('private');
+        foreach ($album->items() as $photo){
+            $photo->private=$request->has('private');
+            $photo->save();
         }
         $album->save();
-
         return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
@@ -213,6 +212,7 @@ class PhotoAdminController extends Controller
      */
     private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)
     {
+        $album=PhotoAlbum::findOrFail($album_id);
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
         $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
         $medium_photos_storage = 'photos/medium_photos/'.$album_id.'/';
@@ -230,23 +230,23 @@ class PhotoAdminController extends Controller
         }
 
         $original_file = new StorageEntry();
-        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getClientOriginalName(), $watermark);
+        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
         $original_file->save();
 
         $large_file = new StorageEntry();
-        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 1080, $uploaded_photo->getClientOriginalName(), $watermark);
+        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 1080, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
         $large_file->save();
 
         $medium_file = new StorageEntry();
-        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 750, $uploaded_photo->getClientOriginalName(), $watermark);
+        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 750, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
         $medium_file->save();
 
         $small_file = new StorageEntry();
-        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getClientOriginalName(), $watermark);
+        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
         $small_file->save();
 
         $tiny_file = new StorageEntry();
-        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getClientOriginalName(), $watermark);
+        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
         $tiny_file->save();
 
         $photo = new Photo();
@@ -257,6 +257,7 @@ class PhotoAdminController extends Controller
         $photo->medium_file_id = $medium_file->id;
         $photo->small_file_id = $small_file->id;
         $photo->tiny_file_id = $tiny_file->id;
+        $photo->private=$album->private;
         $photo->save();
 
         return $photo;

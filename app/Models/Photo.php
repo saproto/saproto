@@ -153,7 +153,7 @@ class Photo extends Model
 
     public function likedByUser($user) {
         if($user){
-        return $this->likes()->where('user_id', $user)->count() > 0;
+        return $this->likes()->where('user_id', $user->id)->count() > 0;
         }return false;
     }
 
@@ -195,23 +195,31 @@ class Photo extends Model
         return false;
     }
 
+    public function makePublic(){
+        $this->file()->makePublic();
+        $this->large_file()->makePublic();
+        $this->medium_file()->makePublic();
+        $this->small_file()->makePublic();
+        $this->tiny_file()->makePublic();
+    }
+
+    public function deletePublic(){
+        $this->file()->deletePublic();
+        $this->large_file()->deletePublic();
+        $this->medium_file()->deletePublic();
+        $this->small_file()->deletePublic();
+        $this->tiny_file()->deletePublic();
+    }
+
     public static function boot()
     {
         parent::boot();
 
         static::updated(function ($photo) {
             if($photo->private){
-                $photo->file()->deletePublic();
-                $photo->large_file()->deletePublic();
-                $photo->medium_file()->deletePublic();
-                $photo->small_file()->deletePublic();
-                $photo->tiny_file()->deletePublic();
+                $photo->deletePublic();
             }else{
-                $photo->file()->makePublic();
-                $photo->large_file()->makePublic();
-                $photo->medium_file()->makePublic();
-                $photo->small_file()->makePublic();
-                $photo->tiny_file()->makePublic();
+                $photo->makePublic();
             }
         });
 
