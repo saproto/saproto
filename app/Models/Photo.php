@@ -199,6 +199,22 @@ class Photo extends Model
     {
         parent::boot();
 
+        static::updated(function($photo){
+            if($photo->private){
+                $photo->file()->deletePublic();
+                $photo->large_file()->deletePublic();
+                $photo->medium_file()->deletePublic();
+                $photo->small_file()->deletePublic();
+                $photo->tiny_file()->deletePublic();
+            }else{
+                $photo->file()->makePublic();
+                $photo->large_file()->makePublic();
+                $photo->medium_file()->makePublic();
+                $photo->small_file()->makePublic();
+                $photo->tiny_file()->makePublic();
+            }
+        });
+
         static::deleting(function ($photo) {
             $photo->file()->delete();
             $photo->large_file()->delete();

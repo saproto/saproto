@@ -7,7 +7,7 @@
 
         @if($committee->image)
 
-            <img class="card-img-top" src="{!! $committee->image->generateImagePath(700,300) !!}" width="100%">
+            <img class="card-img-top" src="{!! $committee->image->generatePath(700,300) !!}" width="100%">
 
             <div class="card-header bg-dark text-white">
                 Replace image

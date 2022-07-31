@@ -17,7 +17,7 @@
                         <div class="align-items-center row " style="height: 120px;">
                             <div class="col d-block">
                                 @if($company->image)
-                                    <img src="{{ $company->image->generateImagePath(null, null) }}"
+                                    <img src="{{ $company->image->generatePath(null, null) }}"
                                          style="max-width: 70%; max-height: 100px;">
                                 @endif
                             </div>

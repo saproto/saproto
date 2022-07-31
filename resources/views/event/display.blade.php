@@ -11,7 +11,7 @@
 @endsection
 
 @if($event->image)
-@section('og-image'){{ $event->image->generateImagePath(800,300) }}@endsection
+@section('og-image'){{ $event->image->generatePath(800,300) }}@endsection
 @endif
 
 @section('container')

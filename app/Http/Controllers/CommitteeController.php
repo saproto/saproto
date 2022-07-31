@@ -93,7 +93,7 @@ class CommitteeController extends Controller
                 'name' => $committee->name,
                 'description' => $committee->description,
                 'email' => sprintf('%s@%s', $committee->slug, config('proto.emaildomain')),
-                'photo' => $committee->image->generateImagePath(null, null),
+                'photo' => $committee->image->generatePath(),
                 'current_members' => $current_members,
             ];
         }

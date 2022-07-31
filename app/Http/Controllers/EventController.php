@@ -413,7 +413,7 @@ class EventController extends Controller
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
-                'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
+                'image' => ($event->image ? $event->image->generatePath() : null),
                 'description' => $event->description,
                 'start' => $event->start,
                 'organizing_committee' => ($event && $event->committee ? [

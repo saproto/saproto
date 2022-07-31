@@ -299,10 +299,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
      * @param int $h
      * @return string Path to a resized version of someone's profile picture.
      */
-    public function generatePhotoPath($w = 100, $h = 100)
+    public function generatePhotoPath()
     {
         if ($this->photo) {
-            return $this->photo->generateImagePath($w, $h);
+            return $this->photo->generatePath();
         } else {
             return asset('images/default-avatars/other.png');
         }

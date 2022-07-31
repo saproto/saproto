@@ -11,6 +11,20 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AddMultipleFileIdsToPhotos extends Migration
 {
+
+    public function ensureLocalDirectoryExists($directoryPath, $output){
+        if (! File::exists(Storage::disk('local')->path($directoryPath))){
+            File::makeDirectory(Storage::disk('local')->path($directoryPath), 0777, true);
+            $output->writeln('created the folder: '.$directoryPath);
+        }
+    }
+
+    public function ensurePublicDirectoryExists($directoryPath, $output){
+        if (! File::exists(Storage::disk('public_uploads')->path($directoryPath))){
+            File::makeDirectory(Storage::disk('public_uploads')->path($directoryPath), 0777, true);
+            $output->writeln('created the folder: '.$directoryPath);
+        }
+    }
     /**
      * Run the migrations.
      *
@@ -28,16 +42,17 @@ class AddMultipleFileIdsToPhotos extends Migration
             });
         }
         $output->writeln('created schemas!');
+
+//        first copy over all the new files before resizing
         foreach(Photo::all() as $photo){
-            $oldPath = Storage::disk('local')->path('photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
-            $newPath = 'photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
-            $newPathFromRoot = Storage::disk('local')->path($newPath);
+            $oldFolderPath = 'photos/'.$photo->album->id.'/';
+            $oldPath =$oldFolderPath.$photo->fileRelation->hash;
+            $newFolderPath='photos/original_photos/'.$photo->album->id.'/';
+            $newPath = $newFolderPath.$photo->fileRelation->hash;
 
-            if (! File::exists(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'))){
-                File::makeDirectory(Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'), 0777, true);
-            }
+            $this->ensureLocalDirectoryExists($newFolderPath, $output);
 
-            if (File::copy($oldPath , $newPathFromRoot)) {
+            if (File::copy(Storage::disk('local')->path($oldPath) , Storage::disk('local')->path($newPath))) {
                 $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
             }else{
@@ -46,44 +61,43 @@ class AddMultipleFileIdsToPhotos extends Migration
         }
         $output->writeln('moved all photos! starting resizing');
 
+//        resize all photos and copy the public photos to that directory
         foreach (Photo::all() as $photo){
             $path = Storage::disk('local')->path($photo->fileRelation->filename);
+            $original_photos_storage = 'photos/original_photos/'.$photo->album->id.'/';
             $large_photos_storage = 'photos/large_photos/'.$photo->album->id.'/';
             $medium_photos_storage = 'photos/medium_photos/'.$photo->album->id.'/';
             $small_photos_storage = 'photos/small_photos/'.$photo->album->id.'/';
             $tiny_photos_storage = 'photos/tiny_photos/'.$photo->album->id.'/';
 
-            if (! File::exists(Storage::disk('local')->path($large_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($large_photos_storage), 0777, true);
-                $output->writeln('created the folder: '.Storage::disk('local')->path($large_photos_storage));
-            }
-            if (! File::exists(Storage::disk('local')->path($medium_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($medium_photos_storage), 0777, true);
-                $output->writeln('created the folder: '.Storage::disk('local')->path($medium_photos_storage));
-            }
-            if (! File::exists(Storage::disk('local')->path($small_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($small_photos_storage), 0777, true);
-                $output->writeln('created the folder: '.Storage::disk('local')->path($small_photos_storage));
-            }
-            if (! File::exists(Storage::disk('local')->path($tiny_photos_storage))) {
-                File::makeDirectory(Storage::disk('local')->path($tiny_photos_storage), 0777, true);
-                $output->writeln('created the folder: '.Storage::disk('local')->path($tiny_photos_storage));
-            }
+            $this->ensureLocalDirectoryExists($large_photos_storage, $output);
+            $this->ensureLocalDirectoryExists($medium_photos_storage, $output);
+            $this->ensureLocalDirectoryExists($small_photos_storage, $output);
+            $this->ensureLocalDirectoryExists($tiny_photos_storage, $output);
 
+            $this->ensurePublicDirectoryExists($large_photos_storage, $output);
+            $this->ensurePublicDirectoryExists($medium_photos_storage, $output);
+            $this->ensurePublicDirectoryExists($small_photos_storage, $output);
+            $this->ensurePublicDirectoryExists($tiny_photos_storage, $output);
+
+            $this->ensurePublicDirectoryExists($original_photos_storage, $output);
+            File::copy($path,  Storage::disk('public_uploads')->path($original_photos_storage.$photo->fileRelation->hash));
+
+//          resize all photos to the 4 extra levels of quality
             $large_file = new StorageEntry();
-            $large_file->createFromPhoto($path, $large_photos_storage, 860, $photo->fileRelation->original_filename);
+            $large_file->createFromPhoto($path, $large_photos_storage, 860, $photo->fileRelation->original_filename, null, $photo->public);
             $large_file->save();
 
             $medium_file = new StorageEntry();
-            $medium_file->createFromPhoto($path, $medium_photos_storage, 640, $photo->fileRelation->original_filename);
+            $medium_file->createFromPhoto($path, $medium_photos_storage, 640, $photo->fileRelation->original_filename, null, $photo->public);
             $medium_file->save();
 
             $small_file = new StorageEntry();
-            $small_file->createFromPhoto($path, $small_photos_storage,420, $photo->fileRelation->original_filename);
+            $small_file->createFromPhoto($path, $small_photos_storage,420, $photo->fileRelation->original_filename, null, $photo->public);
             $small_file->save();
 
             $tiny_file = new StorageEntry();
-            $tiny_file->createFromPhoto($path, $tiny_photos_storage,20, $photo->fileRelation->original_filename);
+            $tiny_file->createFromPhoto($path, $tiny_photos_storage,20, $photo->fileRelation->original_filename, null, $photo->public);
             $tiny_file->save();
 
             $photo->large_file_id = $large_file->id;
@@ -109,11 +123,9 @@ class AddMultipleFileIdsToPhotos extends Migration
             $newPath = 'photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
             $newPathFromRoot = Storage::disk('local')->path($newPath);
 
-            if (! File::exists(Storage::disk('local')->path('photos/'.$photo->album->id.'/'))){
-                File::makeDirectory(Storage::disk('local')->path('photos/'.$photo->album->id.'/'), 0777, true);
-            }
+            $this->ensureLocalDirectoryExists('photos/'.$photo->album->id.'/', $output);
 
-            if (File::move($oldPath , $newPathFromRoot)) {
+            if (!File::exists($newPathFromRoot) && File::move($oldPath , $newPathFromRoot)) {
                 $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
 
@@ -140,6 +152,8 @@ class AddMultipleFileIdsToPhotos extends Migration
             });
         }
         $output->writeln('deleting folders!');
+        File::cleanDirectory(Storage::disk('public_uploads')->path('photos'));
+        File::deleteDirectory(Storage::disk('public_uploads')->path('photos'));
         File::deleteDirectory(Storage::disk('local')->path('photos/original_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/large_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/medium_photos/'));

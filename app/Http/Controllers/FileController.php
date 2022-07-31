@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Proto\Models\StorageEntry;
@@ -13,7 +14,7 @@ class FileController extends Controller
     /**
      * @param $id
      * @param $hash
-     * @return Response
+     * @return string|Response
      * @throws FileNotFoundException
      */
     public function get($id, $hash)

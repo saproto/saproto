@@ -115,7 +115,7 @@ class StorageEntry extends Model
      * @param string|null $original_name
      * @param Image|null $watermark
      */
-    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null)
+    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $public=true)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -141,7 +141,12 @@ class StorageEntry extends Model
 
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
-        Storage::disk('local')->put($customPath.$this->hash, $image);
+        Storage::disk('local')->put($customPath . $this->hash, $image);
+
+        if($public) {
+            Storage::disk('public_uploads')->put($customPath . $this->hash, $image);
+        }
+
         return back();
     }
 
@@ -154,21 +159,11 @@ class StorageEntry extends Model
     /** @return string */
     public function generatePath()
     {
-        $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
-        if (config('app-proto.assets-domain')) {
-            $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
+        if(File::exists(Storage::disk('public_uploads')->path($this->filename))){
+            $url = asset($this->filename);
+        }else {
+            $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
         }
-        return $url;
-    }
-
-    /**
-     * @param int $w
-     * @param int $h
-     * @return string
-     */
-    public function generateImagePath()
-    {
-        $url = route('image::get', ['id' => $this->id, 'hash' => $this->hash]);
         if (config('app-proto.assets-domain')) {
             $url = str_replace(config('app-proto.primary-domain'), config('app-proto.assets-domain'), $url);
         }
@@ -222,11 +217,32 @@ class StorageEntry extends Model
         return $algo.': '.hash_file($algo, $this->generateLocalPath());
     }
 
+    /**
+     * @return void
+     */
+    public function makePublic(){
+        if(!File::exists(Storage::disk('public_uploads')->path($this->filename))) {
+            File::copy(Storage::disk('local')->path($this->filename), Storage::disk('public_uploads')->path($this->filename));
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function deletePublic(){
+        if(File::exists(Storage::disk('public_uploads')->path($this->filename))) {
+            File::delete(Storage::disk('public_uploads')->path($this->filename));
+        }
+    }
+
     public static function boot()
     {
         parent::boot();
 
         static::deleting(function ($file) {
+            if(File::exists(Storage::disk('public_uploads')->path($file->filename))) {
+                Storage::disk('public_uploads')->delete($file->filename);
+            }
             Storage::disk('local')->delete($file->filename);
         });
     }

@@ -178,10 +178,19 @@
         })
 
         photoElement.onload = () => {
+            changeToLargeImage();
+        };
+
+        if(photoElement.complete){
+            changeToLargeImage();
+        }
+
+        function changeToLargeImage(){
             if (photoElement.hasAttribute('data-src')) {
                 photoElement.setAttribute('src', photoElement.getAttribute('data-src'));
                 photoElement.removeAttribute('data-src');
+                photoElement.style["-webkit-filter"] = "blur(0px)";
             }
-        };
+        }
     </script>
 @endpush

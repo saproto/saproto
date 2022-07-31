@@ -124,7 +124,7 @@
             <div class="card mb-3">
 
                 @if($committee->image)
-                    <img class="card-img-top w-100" src="{{ $committee->image->generateImagePath(800,300) }}">
+                    <img class="card-img-top w-100" src="{{ $committee->image->generatePath(800,300) }}">
                 @endif
 
                 <div class="card-body">
