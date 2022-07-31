@@ -84,11 +84,11 @@ class PhotoAlbum extends Model
     public static function boot()
     {
         parent::boot();
+
         static::deleting(function ($photoAlbum) {
-            $photos = $photoAlbum->items()
-                ->each(function ($check) {
-                    $check->delete();
-                });
+            foreach ($photoAlbum->items as $photo) {
+                $photo->delete();
+            }
         });
     }
 }

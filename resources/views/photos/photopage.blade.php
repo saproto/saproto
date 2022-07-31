@@ -49,12 +49,10 @@
                     </button>
 
 
-                    @if($photo->private)
-                        <a href="#" class="btn btn-info me-3" data-bs-toggle="tooltip"
+                        <button id="privateIcon" class="btn btn-info me-3 {{$photo->private?'' : 'd-none'}}" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="This photo is only visible to members.">
-                            <i class="fas fa-eye-slash"></i>
-                        </a>
-                    @endif
+                            <i class="fas fa-eye-slash p-1"></i>
+                        </button>
 
                     <button id="nextBtn"
                             class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}">
@@ -95,6 +93,7 @@
         const albumUrl = document.getElementById('albumUrl');
         const downloadUrl = document.getElementById('download');
         const nextBtn = document.getElementById('nextBtn');
+        const privateIcon = document.getElementById('privateIcon');
         const previousBtn = document.getElementById('previousBtn');
         const photoElement = document.getElementById('photo');
         likeBtn.addEventListener('click', _ => {
@@ -117,13 +116,15 @@
                         throw nextPhoto.message;
                     }
                     id = nextPhoto.id
+                    console.log(nextPhoto)
                     photoElement.setAttribute('data-src', nextPhoto.largeUrl)
                     photoElement.setAttribute('src', nextPhoto.tinyUrl)
                     const icon = likeBtn.children[0]
                     const likes = likeBtn.children[1]
                     nextPhoto.likedByUser ? icon.classList.replace('far', 'fas') : icon.classList.replace('fas', 'far')
+                    nextPhoto.private ? privateIcon.classList.remove('d-none') : privateIcon.classList.add('d-none')
                     nextPhoto.hasNextPhoto ? nextBtn.classList.remove('d-none') : nextBtn.classList.add('d-none');
-                    nextPhoto.hasPreviousPhoto ? previousBtn.classList.remove('d-none') : nextBtn.classList.add('d-none');
+                    nextPhoto.hasPreviousPhoto ? previousBtn.classList.remove('d-none') : previousBtn.classList.add('d-none');
                     likes.innerHTML = nextPhoto.likes;
                     albumUrl.href = nextPhoto.albumUrl;
                     downloadUrl.href = nextPhoto.originalUrl;
