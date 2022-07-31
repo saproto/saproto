@@ -11,20 +11,20 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AddMultipleFileIdsToPhotos extends Migration
 {
-
-    public function ensureLocalDirectoryExists($directoryPath, $output){
+    public function ensureLocalDirectoryExists($directoryPath, $output) {
         if (! File::exists(Storage::disk('local')->path($directoryPath))){
             File::makeDirectory(Storage::disk('local')->path($directoryPath), 0777, true);
             $output->writeln('created the folder: '.$directoryPath);
         }
     }
 
-    public function ensurePublicDirectoryExists($directoryPath, $output){
+    public function ensurePublicDirectoryExists($directoryPath, $output) {
         if (! File::exists(Storage::disk('public_uploads')->path($directoryPath))){
             File::makeDirectory(Storage::disk('public_uploads')->path($directoryPath), 0777, true);
             $output->writeln('created the folder: '.$directoryPath);
         }
     }
+
     /**
      * Run the migrations.
      *
@@ -46,8 +46,8 @@ class AddMultipleFileIdsToPhotos extends Migration
 //        first copy over all the new files before resizing
         foreach(Photo::all() as $photo){
             $oldFolderPath = 'photos/'.$photo->album->id.'/';
-            $oldPath =$oldFolderPath.$photo->fileRelation->hash;
-            $newFolderPath='photos/original_photos/'.$photo->album->id.'/';
+            $oldPath = $oldFolderPath.$photo->fileRelation->hash;
+            $newFolderPath = 'photos/original_photos/'.$photo->album->id.'/';
             $newPath = $newFolderPath.$photo->fileRelation->hash;
 
             $this->ensureLocalDirectoryExists($newFolderPath, $output);
@@ -125,7 +125,7 @@ class AddMultipleFileIdsToPhotos extends Migration
 
             $this->ensureLocalDirectoryExists('photos/'.$photo->album->id.'/', $output);
 
-            if (!File::exists($newPathFromRoot) && File::move($oldPath , $newPathFromRoot)) {
+            if (! File::exists($newPathFromRoot) && File::move($oldPath , $newPathFromRoot)) {
                 $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
 

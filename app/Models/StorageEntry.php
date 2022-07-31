@@ -115,7 +115,7 @@ class StorageEntry extends Model
      * @param string|null $original_name
      * @param Image|null $watermark
      */
-    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $public=true)
+    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $public = true)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -141,10 +141,10 @@ class StorageEntry extends Model
 
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
-        Storage::disk('local')->put($customPath . $this->hash, $image);
+        Storage::disk('local')->put($customPath.$this->hash, $image);
 
         if($public) {
-            Storage::disk('public_uploads')->put($customPath . $this->hash, $image);
+            Storage::disk('public_uploads')->put($customPath.$this->hash, $image);
         }
 
         return back();
@@ -220,8 +220,8 @@ class StorageEntry extends Model
     /**
      * @return void
      */
-    public function makePublic(){
-        if(!File::exists(Storage::disk('public_uploads')->path($this->filename))) {
+    public function makePublic() {
+        if(! File::exists(Storage::disk('public_uploads')->path($this->filename))) {
             File::copy(Storage::disk('local')->path($this->filename), Storage::disk('public_uploads')->path($this->filename));
         }
     }
@@ -229,7 +229,7 @@ class StorageEntry extends Model
     /**
      * @return void
      */
-    public function deletePublic(){
+    public function deletePublic() {
         if(File::exists(Storage::disk('public_uploads')->path($this->filename))) {
             File::delete(Storage::disk('public_uploads')->path($this->filename));
         }

@@ -4,7 +4,6 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Proto\Models\StorageEntry;

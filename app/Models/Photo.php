@@ -199,7 +199,7 @@ class Photo extends Model
     {
         parent::boot();
 
-        static::updated(function($photo){
+        static::updated(function ($photo) {
             if($photo->private){
                 $photo->file()->deletePublic();
                 $photo->large_file()->deletePublic();
