@@ -13,7 +13,7 @@ class FileController extends Controller
     /**
      * @param $id
      * @param $hash
-     * @return Response
+     * @return string|Response
      * @throws FileNotFoundException
      */
     public function get($id, $hash)

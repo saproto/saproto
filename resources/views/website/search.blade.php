@@ -115,7 +115,7 @@
 
                             @include('website.layouts.macros.card-bg-image', [
                                 'url' => route("page::show", ["slug" => $page->slug]),
-                                'img' => $page->featuredImage ? $page->featuredImage->generateImagePath(300, 200) : null,
+                                'img' => $page->featuredImage ? $page->featuredImage->generatePath(300, 200) : null,
                                 'photo_pop' => true,
                                 'html' => $page->title,
                                 'height' => 100,

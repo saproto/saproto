@@ -25,7 +25,7 @@
 <div class="card mb-3">
 
     @if($event->image)
-        <img class="card-img-top" src="{{ $event->image->generateImagePath(800, 300) }}" width="100%">
+        <img class="card-img-top" src="{{ $event->image->generatePath(800, 300) }}" width="100%">
     @endif
 
     <div class="card-header">

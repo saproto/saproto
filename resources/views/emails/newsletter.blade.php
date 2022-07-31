@@ -24,7 +24,7 @@
                     <td style="margin: 0; padding: 20px 40px; border: none;">
 
                         @if($event->image)
-                            <img src="{{ $event->image->generateImagePath(350,100) }}" style="width: 100%;"/>
+                            <img src="{{ $event->image->generatePath() }}" style="width: 100%;"/>
                         @endif
 
                         <p>

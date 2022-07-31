@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
+use Intervention\Image\Facades\Image;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\StorageEntry;
@@ -101,8 +102,9 @@ class PhotoAdminController extends Controller
         }
             try{
             $uploadFile = $request->file('file');
+            $addWaterMark = $request->has('addWaterMark');
 
-            $photo = $this->createPhotoFromUpload($uploadFile, $id);
+            $photo = $this->createPhotoFromUpload($uploadFile, $id, $addWaterMark);
             return html_entity_decode(view('website.layouts.macros.selectablephoto', ['photo' => $photo]));
             }catch (Exception $e) {
                 return response()->json([
@@ -209,7 +211,7 @@ class PhotoAdminController extends Controller
      * @return Photo
      * @throws FileNotFoundException
      */
-    private function createPhotoFromUpload($uploaded_photo, $album_id)
+    private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)
     {
         $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
         $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
@@ -217,24 +219,34 @@ class PhotoAdminController extends Controller
         $small_photos_storage = 'photos/small_photos/'.$album_id.'/';
         $tiny_photos_storage = 'photos/tiny_photos/'.$album_id.'/';
 
+        $watermark = null;
+        if($addWatermark) {
+            $watermark = Image::make(public_path('images/protography-watermark-template.png'));
+            $watermark->text(strtoupper(Auth::user()->name), 267, 1443, function ($font) {
+                $font->file((public_path('fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf')));
+                $font->size(180);
+                $font->valign('top');
+            });
+        }
+
         $original_file = new StorageEntry();
-        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getFilename());
+        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getClientOriginalName(), $watermark);
         $original_file->save();
 
         $large_file = new StorageEntry();
-        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 860, $uploaded_photo->getFilename());
+        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 1080, $uploaded_photo->getClientOriginalName(), $watermark);
         $large_file->save();
 
         $medium_file = new StorageEntry();
-        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 640, $uploaded_photo->getFilename());
+        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 750, $uploaded_photo->getClientOriginalName(), $watermark);
         $medium_file->save();
 
         $small_file = new StorageEntry();
-        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getFilename());
+        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getClientOriginalName(), $watermark);
         $small_file->save();
 
         $tiny_file = new StorageEntry();
-        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getFilename());
+        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getClientOriginalName(), $watermark);
         $tiny_file->save();
 
         $photo = new Photo();

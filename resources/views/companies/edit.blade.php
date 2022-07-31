@@ -27,7 +27,7 @@
                         @if($company && $company->image)
 
                             <div class="text-center">
-                                <img src="{!! $company->image->generateImagePath(500, null) !!}"
+                                <img src="{!! $company->image->generatePath(500, null) !!}"
                                      style="max-height: 100px;">
                             </div>
 

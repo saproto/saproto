@@ -57,8 +57,7 @@
                     @endif
 
                     <button id="nextBtn"
-                            class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}"
-                    ">
+                            class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}">
                     <i class="fas fa-arrow-right"></i>
                     </button>
 
@@ -179,10 +178,19 @@
         })
 
         photoElement.onload = () => {
+            changeToLargeImage();
+        };
+
+        if(photoElement.complete){
+            changeToLargeImage();
+        }
+
+        function changeToLargeImage(){
             if (photoElement.hasAttribute('data-src')) {
                 photoElement.setAttribute('src', photoElement.getAttribute('data-src'));
                 photoElement.removeAttribute('data-src');
+                photoElement.style["-webkit-filter"] = "blur(0px)";
             }
-        };
+        }
     </script>
 @endpush

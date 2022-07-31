@@ -13,7 +13,7 @@
             <div class="card text-white mb-3 border-0"
                  style="
                     @if($header)
-                        background-image: url({{ $header->image->generateImagePath(1500, 400) }});
+                        background-image: url({{ $header->image->generatePath(1500, 400) }});
                         background-size: cover; background-position: center center;
                         text-shadow: 0 0 10px #000;
                         height: 250px;
@@ -52,7 +52,7 @@
                                         <div class="swiper-slide justify-content-center align-items-center d-flex">
                                             <a href="{{ route('companies::show', ['id' => $company->id]) }}">
                                                 <img class="company-{{strtolower($company->name)}}"
-                                                     src="{{ $company->image->generateImagePath(null, 50) }}"
+                                                     src="{{ $company->image->generatePath(null, 50) }}"
                                                      alt="logo of {{ $company->name }}"
                                                 />
                                             </a>

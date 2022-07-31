@@ -155,7 +155,7 @@
                         <hr>
 
                         <h5>Current image:</h5>
-                        <img src="{!! $event->image->generateImagePath(800,300) !!}" class="w-100 border">
+                        <img src="{!! $event->image->generatePath(800,300) !!}" class="w-100 border">
 
                     @endif
 

@@ -10,6 +10,9 @@
 # Local files
 /personal
 
+#public faster photos
+/public/photos
+
 # IDE files
 /.idea
 

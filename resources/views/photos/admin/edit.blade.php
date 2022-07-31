@@ -141,9 +141,13 @@
         <div class="col-lg-9">
             <div class="card mb-3">
 
-                <div class="card-header bg-dark text-white text-center">
-                    Add photos
+                <div class="card-header bg-dark text-white">
+                    <div class="d-flex justify-content-between">
+                        <div class="">Add photos</div>
+                        <div class="text-muted fst-italic ml-auto">Automatic watermark?  <input type="checkbox" id="includeWaterMarkCheckBox" checked></div>
+                    </div>
                 </div>
+
                 @if(!$album->published)
                     <div class="card-body">
                         <div id="error-bar" class="alert alert-danger d-none" role="alert">
@@ -277,6 +281,8 @@
             dropArea.classList.add('opacity-25')
 
             let files = e.dataTransfer.files
+            const includeWaterMarkCheckBox= document.getElementById('includeWaterMarkCheckBox');
+            let addWaterMark=includeWaterMarkCheckBox.checked??false;
             if (files.length) {
                 let fileQueue = []
                 for (const file of files) {
@@ -285,7 +291,7 @@
                         fr.onload = async _ => {
                             file.id = fileId++
                             fileQueue.push(file)
-                            await uploadFiles(fileQueue)
+                            await uploadFiles(fileQueue, addWaterMark)
                         }
                         fr.readAsDataURL(file)
                     }
@@ -293,11 +299,12 @@
             }
         }
 
-        async function uploadFiles(fileQueue) {
+        async function uploadFiles(fileQueue, addWaterMark) {
             while (fileQueue.length) {
                 let file = fileQueue.shift()
                 let formData = new FormData()
                 formData.append('file', file)
+                if(addWaterMark)formData.append('addWaterMark', 'placeHolder')
                 toggleRunning()
                 await post('{{ route('photo::admin::upload', ['id' => $album->id]) }}', formData, {parse: false})
                     .then(response => {
