@@ -196,23 +196,21 @@ class Photo extends Model
     }
 
     public function makePublic() {
-        return(
-        $this->file()->makePublic()&&
-        $this->large_file()->makePublic()&&
-        $this->medium_file()->makePublic()&&
-        $this->small_file()->makePublic()&&
-        $this->tiny_file()->makePublic()
-    );
+        return
+        $this->file()->makePublic() &&
+        $this->large_file()->makePublic() &&
+        $this->medium_file()->makePublic() &&
+        $this->small_file()->makePublic() &&
+        $this->tiny_file()->makePublic();
     }
 
     public function makePrivate() {
-        return(
-        $this->file()->makePrivate()&&
-        $this->large_file()->makePrivate()&&
-        $this->medium_file()->makePrivate()&&
-        $this->small_file()->makePrivate()&&
-        $this->tiny_file()->makePrivate()
-    );
+        return
+        $this->file()->makePrivate() &&
+        $this->large_file()->makePrivate() &&
+        $this->medium_file()->makePrivate() &&
+        $this->small_file()->makePrivate() &&
+        $this->tiny_file()->makePrivate();
     }
 
     public static function boot()
@@ -221,12 +219,12 @@ class Photo extends Model
 
         static::updated(function ($photo) {
             if($photo->private){
-                if(!$photo->makePrivate()){
-                    $photo->private=false;
-                };
+                if(! $photo->makePrivate()){
+                    $photo->private = false;
+                }
             }else{
-                if(!$photo->makePublic()){
-                    $photo->private=true;
+                if(! $photo->makePublic()){
+                    $photo->private = true;
                 }
             }
         });

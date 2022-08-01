@@ -54,9 +54,9 @@ class AddMultipleFileIdsToPhotos extends Migration
             $this->ensurePublicDirectoryExists($newFolderPath, $output);
 
             if($photo->private){
-                $newStorageLocation= Storage::disk('local')->path($newPath);
+                $newStorageLocation = Storage::disk('local')->path($newPath);
             }else{
-                $newStorageLocation= Storage::disk('public')->path($newPath);
+                $newStorageLocation = Storage::disk('public')->path($newPath);
             }
 
             if (File::move(Storage::disk('local')->path($oldPath) ,$newStorageLocation)) {
@@ -71,9 +71,9 @@ class AddMultipleFileIdsToPhotos extends Migration
 //        resize all photos and copy the public photos to that directory
         foreach (Photo::all() as $photo){
             if($photo->private){
-                $path= Storage::disk('local')->path($photo->fileRelation->filename);
+                $path = Storage::disk('local')->path($photo->fileRelation->filename);
             }else{
-                $path= Storage::disk('public')->path($photo->fileRelation->filename);
+                $path = Storage::disk('public')->path($photo->fileRelation->filename);
             }
 
             $large_photos_storage = 'photos/large_photos/'.$photo->album->id.'/';
