@@ -141,10 +141,11 @@ class StorageEntry extends Model
 
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
-        Storage::disk('local')->put($customPath.$this->hash, $image);
 
         if($public) {
-            Storage::disk('public_uploads')->put($customPath.$this->hash, $image);
+            Storage::disk('public')->put($customPath.$this->hash, $image);
+        }else{
+            Storage::disk('local')->put($customPath.$this->hash, $image);
         }
 
         return back();
@@ -159,7 +160,7 @@ class StorageEntry extends Model
     /** @return string */
     public function generatePath()
     {
-        if(File::exists(Storage::disk('public_uploads')->path($this->filename))){
+        if(File::exists(Storage::disk('public')->path($this->filename))){
             $url = asset($this->filename);
         }else {
             $url = route('file::get', ['id' => $this->id, 'hash' => $this->hash]);
@@ -205,7 +206,10 @@ class StorageEntry extends Model
     /** @return string */
     public function generateLocalPath()
     {
-        return storage_path('app/'.$this->filename);
+        if(File::exists(Storage::disk('public')->path($this->filename))){
+            return Storage::disk('public')->path($this->filename);
+        }
+        return Storage::disk('local')->path($this->filename);
     }
 
     /**
@@ -218,21 +222,23 @@ class StorageEntry extends Model
     }
 
     /**
-     * @return void
+     * @return bool
      */
     public function makePublic() {
-        if(! File::exists(Storage::disk('public_uploads')->path($this->filename))) {
-            File::copy(Storage::disk('local')->path($this->filename), Storage::disk('public_uploads')->path($this->filename));
+        if(File::exists(Storage::disk('local')->path($this->filename))) {
+            File::move(Storage::disk('local')->path($this->filename), Storage::disk('public')->path($this->filename));
         }
+        return File::exists(Storage::disk('public')->path($this->filename));
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function deletePublic() {
-        if(File::exists(Storage::disk('public_uploads')->path($this->filename))) {
-            File::delete(Storage::disk('public_uploads')->path($this->filename));
+    public function makePrivate() {
+        if(File::exists(Storage::disk('public')->path($this->filename))) {
+            File::move(Storage::disk('public')->path($this->filename), Storage::disk('local')->path($this->filename));
         }
+        return File::exists(Storage::disk('local')->path($this->filename));
     }
 
     public static function boot()
@@ -240,10 +246,12 @@ class StorageEntry extends Model
         parent::boot();
 
         static::deleting(function ($file) {
-            if(File::exists(Storage::disk('public_uploads')->path($file->filename))) {
-                Storage::disk('public_uploads')->delete($file->filename);
+            if(File::exists(Storage::disk('public')->path($file->filename))) {
+                Storage::disk('public')->delete($file->filename);
             }
-            Storage::disk('local')->delete($file->filename);
+            if(File::exists(Storage::disk('local')->path($file->filename))) {
+                Storage::disk('local')->delete($file->filename);
+            }
         });
     }
 }

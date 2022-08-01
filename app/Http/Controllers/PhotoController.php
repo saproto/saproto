@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
@@ -107,9 +108,9 @@ class PhotoController extends Controller
     }
 
     /**
-     * @return PhotoAlbum
      * @param bool $published
-     **/
+     **@return Collection
+     */
     public static function getAlbums($published = true)
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');

@@ -19,8 +19,8 @@ class AddMultipleFileIdsToPhotos extends Migration
     }
 
     public function ensurePublicDirectoryExists($directoryPath, $output) {
-        if (! File::exists(Storage::disk('public_uploads')->path($directoryPath))){
-            File::makeDirectory(Storage::disk('public_uploads')->path($directoryPath), 0777, true);
+        if (! File::exists(Storage::disk('public')->path($directoryPath))){
+            File::makeDirectory(Storage::disk('public')->path($directoryPath), 0777, true);
             $output->writeln('created the folder: '.$directoryPath);
         }
     }
@@ -51,8 +51,15 @@ class AddMultipleFileIdsToPhotos extends Migration
             $newPath = $newFolderPath.$photo->fileRelation->hash;
 
             $this->ensureLocalDirectoryExists($newFolderPath, $output);
+            $this->ensurePublicDirectoryExists($newFolderPath, $output);
 
-            if (File::copy(Storage::disk('local')->path($oldPath) , Storage::disk('local')->path($newPath))) {
+            if($photo->private){
+                $newStorageLocation= Storage::disk('local')->path($newPath);
+            }else{
+                $newStorageLocation= Storage::disk('public')->path($newPath);
+            }
+
+            if (File::move(Storage::disk('local')->path($oldPath) ,$newStorageLocation)) {
                 $photo->fileRelation->filename = $newPath;
                 $photo->fileRelation->save();
             }else{
@@ -63,8 +70,12 @@ class AddMultipleFileIdsToPhotos extends Migration
 
 //        resize all photos and copy the public photos to that directory
         foreach (Photo::all() as $photo){
-            $path = Storage::disk('local')->path($photo->fileRelation->filename);
-            $original_photos_storage = 'photos/original_photos/'.$photo->album->id.'/';
+            if($photo->private){
+                $path= Storage::disk('local')->path($photo->fileRelation->filename);
+            }else{
+                $path= Storage::disk('public')->path($photo->fileRelation->filename);
+            }
+
             $large_photos_storage = 'photos/large_photos/'.$photo->album->id.'/';
             $medium_photos_storage = 'photos/medium_photos/'.$photo->album->id.'/';
             $small_photos_storage = 'photos/small_photos/'.$photo->album->id.'/';
@@ -79,9 +90,6 @@ class AddMultipleFileIdsToPhotos extends Migration
             $this->ensurePublicDirectoryExists($medium_photos_storage, $output);
             $this->ensurePublicDirectoryExists($small_photos_storage, $output);
             $this->ensurePublicDirectoryExists($tiny_photos_storage, $output);
-
-            $this->ensurePublicDirectoryExists($original_photos_storage, $output);
-            File::copy($path,  Storage::disk('public_uploads')->path($original_photos_storage.$photo->fileRelation->hash));
 
 //          resize all photos to the 4 extra levels of quality
             $large_file = new StorageEntry();
@@ -119,7 +127,12 @@ class AddMultipleFileIdsToPhotos extends Migration
         $output = new ConsoleOutput();
         $output->writeln('starting moving all files back over');
         foreach(Photo::all() as $photo){
-            $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+            if($photo->private){
+                $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+            }else{
+                $oldPath = Storage::disk('public')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+            }
+
             $newPath = 'photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
             $newPathFromRoot = Storage::disk('local')->path($newPath);
 
@@ -152,8 +165,8 @@ class AddMultipleFileIdsToPhotos extends Migration
             });
         }
         $output->writeln('deleting folders!');
-        File::cleanDirectory(Storage::disk('public_uploads')->path('photos'));
-        File::deleteDirectory(Storage::disk('public_uploads')->path('photos'));
+        File::cleanDirectory(Storage::disk('public')->path('photos'));
+        File::deleteDirectory(Storage::disk('public')->path('photos'));
         File::deleteDirectory(Storage::disk('local')->path('photos/original_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/large_photos/'));
         File::deleteDirectory(Storage::disk('local')->path('photos/medium_photos/'));
