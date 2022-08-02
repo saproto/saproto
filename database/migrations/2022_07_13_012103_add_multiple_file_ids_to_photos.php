@@ -45,7 +45,7 @@ class AddMultipleFileIdsToPhotos extends Migration
 
         foreach (Photo::all() as $photo) {
             $newPhoto=new Photo();
-            $newPhoto-> makePhoto($photo, $photo->fileRelation->filename, $photo->created_at, $photo->private, $pathInPhotos=null, $photo->album_id);
+            $newPhoto-> makePhoto($photo->fileRelation->generateLocalPath(), $photo->fileRelation->filename, $photo->created_at, $photo->private, $pathInPhotos=null, $photo->album_id);
             $newPhoto-> save();
             $photo -> delete();
         }

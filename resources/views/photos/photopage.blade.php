@@ -60,14 +60,13 @@
                     </button>
 
                 </div>
-                @if($photo->mayViewPhoto(Auth::user()))
-                    <img id="photo" class="card-img-bottom" src="{!!$photo->getTinyUrl()!!}"
-                         data-src="{!!$photo->getLargeUrl()!!}" style="height: 75vh; object-fit:contain">
-                @else
-                    <div class="d-flex justify-content-center mb-3 mt-3">
+                    <img id="photo" class="card-img-bottom {{$photo->mayViewPhoto(Auth::user())?'' : 'd-none'}}" src="{!!$photo->mayViewPhoto(Auth::user())?$photo->getTinyUrl():''!!}"
+                         data-src="{!!$photo->mayViewPhoto(Auth::user())?$photo->getLargeUrl():''!!}" style="height: 75vh; object-fit:contain">
+
+                <div id="nonMemberText" class="d-flex justify-content-center mb-3 mt-3 {{$photo->mayViewPhoto(Auth::user())? 'd-none':''}}">
                         This photo is only visible to members!
-                    </div>
-                @endif
+                </div>
+
             </div>
 
             <div class="card mb-3">
@@ -96,6 +95,7 @@
         const privateIcon = document.getElementById('privateIcon');
         const previousBtn = document.getElementById('previousBtn');
         const photoElement = document.getElementById('photo');
+        const nonMemberText = document.getElementById('nonMemberText');
         likeBtn.addEventListener('click', _ => {
             switchLike(likeBtn)
         })
@@ -119,6 +119,7 @@
                     console.log(nextPhoto)
                     photoElement.setAttribute('data-src', nextPhoto.largeUrl)
                     photoElement.setAttribute('src', nextPhoto.tinyUrl)
+                    photoElement.classList.remove('d-none');
                     const icon = likeBtn.children[0]
                     const likes = likeBtn.children[1]
                     nextPhoto.likedByUser ? icon.classList.replace('far', 'fas') : icon.classList.replace('fas', 'far')
@@ -128,6 +129,7 @@
                     likes.innerHTML = nextPhoto.likes;
                     albumUrl.href = nextPhoto.albumUrl;
                     downloadUrl.href = nextPhoto.originalUrl;
+                    nonMemberText.classList.add('d-none');
                     window.history.replaceState(document.title, '', id);
                 })
                 .catch(err => {

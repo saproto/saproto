@@ -111,7 +111,7 @@ class Photo extends Model
     }
 
     /** @return HasOne|StorageEntry */
-    private function file()
+    public function file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
     }
@@ -121,25 +121,25 @@ class Photo extends Model
     }
 
     /** @return HasOne|StorageEntry */
-    private function large_file()
+    public function large_file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'large_file_id')->first();
     }
 
     /** @return HasOne|StorageEntry */
-    private function medium_file()
+    public function medium_file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'medium_file_id')->first();
     }
 
     /** @return HasOne|StorageEntry */
-    private function small_file()
+    public function small_file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'small_file_id')->first();
     }
 
     /** @return HasOne|StorageEntry */
-    private function tiny_file()
+    public function tiny_file()
     {
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'tiny_file_id')->first();
     }
@@ -280,11 +280,11 @@ class Photo extends Model
         });
 
         static::deleting(function ($photo) {
-            $photo->file()->delete();
-            $photo->large_file()->delete();
-            $photo->medium_file()->delete();
-            $photo->small_file()->delete();
-            $photo->tiny_file()->delete();
+            if($photo->file())$photo->file()->delete();
+            if($photo->large_file())$photo->large_file()->delete();
+            if($photo->medium_file())$photo->medium_file()->delete();
+            if($photo->small_file())$photo->small_file()->delete();
+            if($photo->tiny_file())$photo->tiny_file()->delete();
             if ($photo->album && $photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;
