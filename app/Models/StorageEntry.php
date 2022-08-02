@@ -142,6 +142,13 @@ class StorageEntry extends Model
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
 
+        if(!File::exists(Storage::disk('local')->path($customPath))){
+            File::makeDirectory(Storage::disk('local')->path($customPath), 0777, true);
+        }
+        if(!File::exists(Storage::disk('public')->path($customPath))){
+            File::makeDirectory(Storage::disk('public')->path($customPath), 0777, true);
+        }
+
         if($private) {
             Storage::disk('local')->put($customPath.$this->hash, $image);
         }else{

@@ -285,7 +285,7 @@ class Photo extends Model
             $photo->medium_file()->delete();
             $photo->small_file()->delete();
             $photo->tiny_file()->delete();
-            if ($photo->id == $photo->album->thumb_id) {
+            if ($photo->album && $photo->id == $photo->album->thumb_id) {
                 $album = $photo->album;
                 $album->thumb_id = null;
                 $album->save();

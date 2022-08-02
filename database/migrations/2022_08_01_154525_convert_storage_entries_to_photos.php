@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Proto\Models\Committee;
+use Proto\Models\Company;
 use Proto\Models\Event;
 use Proto\Models\Photo;
 use Proto\Models\StorageEntry;
@@ -16,26 +17,37 @@ class ConvertStorageEntriesToPhotos extends Migration
         foreach($items as $item){
             $storageEntry=StorageEntry::find($item->photo_id);
             if($storageEntry){
-            $photo=new Photo();
-            $photo->makePhoto($storageEntry->generateLocalPath(), $storageEntry->original_filename, $storageEntry->created_at, false, $path);
-            $photo->save();
-            $item->photo_id=$photo->id;
-            $item->save();
-            $storageEntry->delete();
+                $photo=new Photo();
+                $photo->makePhoto($storageEntry->generateLocalPath(), $storageEntry->original_filename, $storageEntry->created_at, false, $path);
+                $photo->save();
+                $item->photo_id=$photo->id;
+                $item->save();
+                $storageEntry->delete();
             }
         }
     }
 
     private function moveBackPhotos($items){
         foreach($items as $item){
-            $photo=Photo::find($item->phpimage_id);
-            if($photo) {
-                $file = new StorageEntry();
-                $file->createFromData($photo->file->getBase64(), $photo->file->mime, $photo->file->filename);
-                $item->image_id = $file->id;
+            $photo=Photo::find($item->photo_id);
+            if($photo &&$photo->fileRelation()->first()) {
+                $originalFile=$photo->fileRelation()->first();
+                $newFolder=date('Y\/F\/d').'/';
+                if(!File::exists(Storage::disk('local')->path($newFolder))) {
+                    File::makeDirectory(Storage::disk('local')->path($newFolder), 0777, true);
+                }
+                $storageEntry=new StorageEntry();
+                $storageEntry->original_filename=$originalFile->original_filename;
+                $storageEntry->mime=$originalFile->mime;
+                $storageEntry->hash=$originalFile->hash;
+                $storageEntry->filename=$newFolder.$originalFile->hash;
+                $storageEntry->save();
+                File::move($originalFile->generateLocalPath(), Storage::disk('local')->path($newFolder.$storageEntry->hash));
+                $item->photo_id=$storageEntry->id;
+                $item->save();
                 $photo->delete();
+                }
             }
-        }
     }
     /**
      * Run the migrations.
@@ -63,10 +75,15 @@ class ConvertStorageEntriesToPhotos extends Migration
                 $table->renameColumn('image_id', 'photo_id');
             });
         }
+        if(Schema::hasColumn('events', 'image_id')) {
+            Schema::table('events', function (Blueprint $table) {
+                $table->renameColumn('image_id', 'photo_id');
+            });
+        }
 
         $this->moveOverPhotos(Event::all(),'event_photos');
         $this->moveOverPhotos(Committee::all(),'committee_photos');
-
+        $this->moveOverPhotos(Company::all(),'committee_photos');
         foreach(User::all() as $user){
             $storageEntry=StorageEntry::find($user->photo_id);
             if($storageEntry){
@@ -90,9 +107,15 @@ class ConvertStorageEntriesToPhotos extends Migration
      */
     public function down()
     {
-            Schema::table('photos', function (Blueprint $table) {
-                $table->integer('album_id')->change();
-            });
+
+        $this->moveBackPhotos(User::all());
+        $this->moveBackPhotos(Event::all());
+        $this->moveBackPhotos(Committee::all());
+        $this->moveBackPhotos(Company::all());
+
+        Schema::table('photos', function (Blueprint $table) {
+            $table->integer('album_id')->change();
+        });
 
         if(Schema::hasColumn('companies', 'photo_id')) {
             Schema::table('companies', function (Blueprint $table) {
@@ -111,9 +134,11 @@ class ConvertStorageEntriesToPhotos extends Migration
                 $table->renameColumn('photo_id', 'image_id');
             });
         }
-
-        $this->moveBackPhotos(User::all());
-        $this->moveBackPhotos(Event::all());
-        $this->moveBackPhotos(Committee::all());
+        if(Schema::hasColumn('events', 'photo_id')) {
+            Schema::table('events', function (Blueprint $table) {
+                $table->renameColumn('photo_id', 'image_id');
+            });
+        }
     }
 }
+
