@@ -80,7 +80,7 @@ class SoundboardController extends Controller
         foreach ($sounds as $sound) {
             $returnSounds[$sound->id] = new stdClass();
             $returnSounds[$sound->id]->name = $sound->name;
-            $returnSounds[$sound->id]->file = $sound->file->generatePath();
+            $returnSounds[$sound->id]->file = $sound->file->generateUrl();
         }
 
         return $returnSounds;

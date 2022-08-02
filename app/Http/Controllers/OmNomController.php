@@ -87,7 +87,7 @@ class OmNomController extends Controller
             foreach($category->products as $product) {
                 if ($product->isVisible()) {
                     if($product->image) {
-                        $product->image_url = $product->image->generatePath();
+                        $product->image_url = $product->image->generateUrl();
                     }
                     $products[] = $product;
                 }

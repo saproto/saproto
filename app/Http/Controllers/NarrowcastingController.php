@@ -200,7 +200,7 @@ class NarrowcastingController extends Controller
             } elseif ($item->image) {
                 $data[] = [
                     'slide_duration' => $item->slide_duration,
-                    'image' => $item->image->generatePath(),
+                    'image' => $item->image->generateUrl(),
                 ];
             }
         }

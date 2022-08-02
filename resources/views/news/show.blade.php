@@ -12,7 +12,7 @@
     <div class="card mb-3">
 
         @if($newsitem->featuredImage)
-            <img class="card-img-top" src="{{ $newsitem->featuredImage->generatePath() }}" width="1500" height="350">
+            <img class="card-img-top" src="{{ $newsitem->featuredImage->generateUrl() }}" width="1500" height="350">
         @endif
 
         <div class="card-body">

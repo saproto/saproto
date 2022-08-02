@@ -158,7 +158,7 @@ class StorageEntry extends Model
     }
 
     /** @return string */
-    public function generatePath()
+    public function generateUrl()
     {
         if(File::exists(Storage::disk('public')->path($this->filename))){
             $url = asset($this->filename);

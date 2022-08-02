@@ -210,31 +210,31 @@ class Photo extends Model
     /** @return string */
     public function getOriginalUrl()
     {
-        return $this->file()->generatePath();
+        return $this->file()->generateUrl();
     }
 
     /** @return string */
     public function getLargeUrl()
     {
-        return $this->large_file()->generatePath();
+        return $this->large_file()->generateUrl();
     }
 
     /** @return string */
     public function getMediumUrl()
     {
-        return $this->medium_file()->generatePath();
+        return $this->medium_file()->generateUrl();
     }
 
     /** @return string */
     public function getSmallUrl()
     {
-        return $this->small_file()->generatePath();
+        return $this->small_file()->generateUrl();
     }
 
     /** @return string */
     public function getTinyUrl()
     {
-        return $this->tiny_file()->generatePath();
+        return $this->tiny_file()->generateUrl();
     }
 
     public function mayViewPhoto($user) {

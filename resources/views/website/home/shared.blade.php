@@ -13,7 +13,7 @@
             <div class="card text-white mb-3 border-0"
                  style="
                     @if($header)
-                        background-image: url({{ $header->image->generatePath() }});
+                        background-image: url({{ $header->image->generateUrl() }});
                         background-size: cover; background-position: center center;
                         text-shadow: 0 0 10px #000;
                         height: 250px;
