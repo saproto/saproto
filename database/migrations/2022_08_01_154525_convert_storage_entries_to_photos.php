@@ -12,43 +12,43 @@ use Proto\Models\User;
 
 class ConvertStorageEntriesToPhotos extends Migration
 {
-
-    private function moveOverPhotos($items, $path){
+    private function moveOverPhotos($items, $path) {
         foreach($items as $item){
-            $storageEntry=StorageEntry::find($item->photo_id);
+            $storageEntry = StorageEntry::find($item->photo_id);
             if($storageEntry){
-                $photo=new Photo();
+                $photo = new Photo();
                 $photo->makePhoto($storageEntry->generateLocalPath(), $storageEntry->original_filename, $storageEntry->created_at, false, $path);
                 $photo->save();
-                $item->photo_id=$photo->id;
+                $item->photo_id = $photo->id;
                 $item->save();
                 $storageEntry->delete();
             }
         }
     }
 
-    private function moveBackPhotos($items){
+    private function moveBackPhotos($items) {
         foreach($items as $item){
-            $photo=Photo::find($item->photo_id);
-            if($photo &&$photo->fileRelation()->first()) {
-                $originalFile=$photo->fileRelation()->first();
-                $newFolder=date('Y\/F\/d').'/';
-                if(!File::exists(Storage::disk('local')->path($newFolder))) {
+            $photo = Photo::find($item->photo_id);
+            if($photo && $photo->fileRelation()->first()) {
+                $originalFile = $photo->fileRelation()->first();
+                $newFolder = date('Y\/F\/d').'/';
+                if(! File::exists(Storage::disk('local')->path($newFolder))) {
                     File::makeDirectory(Storage::disk('local')->path($newFolder), 0777, true);
                 }
-                $storageEntry=new StorageEntry();
-                $storageEntry->original_filename=$originalFile->original_filename;
-                $storageEntry->mime=$originalFile->mime;
-                $storageEntry->hash=$originalFile->hash;
-                $storageEntry->filename=$newFolder.$originalFile->hash;
+                $storageEntry = new StorageEntry();
+                $storageEntry->original_filename = $originalFile->original_filename;
+                $storageEntry->mime = $originalFile->mime;
+                $storageEntry->hash = $originalFile->hash;
+                $storageEntry->filename = $newFolder.$originalFile->hash;
                 $storageEntry->save();
                 File::move($originalFile->generateLocalPath(), Storage::disk('local')->path($newFolder.$storageEntry->hash));
-                $item->photo_id=$storageEntry->id;
+                $item->photo_id = $storageEntry->id;
                 $item->save();
                 $photo->delete();
                 }
             }
     }
+
     /**
      * Run the migrations.
      *
@@ -85,15 +85,15 @@ class ConvertStorageEntriesToPhotos extends Migration
         $this->moveOverPhotos(Committee::all(),'committee_photos');
         $this->moveOverPhotos(Company::all(),'committee_photos');
         foreach(User::all() as $user){
-            $storageEntry=StorageEntry::find($user->photo_id);
+            $storageEntry = StorageEntry::find($user->photo_id);
             if($storageEntry){
-                $photo=new Photo();
-                $img=Image::make($storageEntry->generateLocalPath());
-                $smallestSide=$img->width()<$img->height()?$img->width:$img->height();
+                $photo = new Photo();
+                $img = Image::make($storageEntry->generateLocalPath());
+                $smallestSide = $img->width() < $img->height() ? $img->width : $img->height();
                 $img->fit($smallestSide);
                 $photo->makePhoto($img, $storageEntry->original_filename, $storageEntry->created_at, false, 'profile_pictures');
                 $photo->save();
-                $user->photo_id=$photo->id;
+                $user->photo_id = $photo->id;
                 $user->save();
                 $storageEntry->delete();
             }

@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Proto\Models\Photo;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 
@@ -27,8 +26,8 @@ class ProfilePictureController extends Controller
         if ($image) {
             if (substr($image->getMimeType(), 0, 5) == 'image') {
                 $photo = new Photo();
-                $img=Image::make($image);
-                $smallestSide=$img->width()<$img->height()?$img->width:$img->height();
+                $img = Image::make($image);
+                $smallestSide = $img->width() < $img->height() ? $img->width : $img->height();
                 $img->fit($smallestSide);
                 $photo->makePhoto($img, $image->getClientOriginalName(), $image->getCTime(), false, 'profile_pictures');
                 $photo->save();

@@ -15,7 +15,6 @@ use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\HelperReminder;
 use Proto\Models\Photo;
-use Proto\Models\StorageEntry;
 use Proto\Models\User;
 use Redirect;
 use Session;
