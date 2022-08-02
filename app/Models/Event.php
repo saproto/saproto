@@ -32,7 +32,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $involves_food
  * @property int $secret
  * @property int $force_calendar_sync
- * @property int|null $image_id
+ * @property int|null $photo_id
  * @property Carbon|null $deleted_at
  * @property int|null $committee_id
  * @property int|null $category_id
@@ -44,7 +44,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read EventCategory $category
  * @property-read mixed $formatted_date
  * @property-read mixed $is_future
- * @property-read StorageEntry|null $image
+ * @property-read Photo|null $photo
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos
  * @property-read int|null $albums_count
@@ -88,7 +88,7 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'photo_id', 'deleted_at'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -116,10 +116,10 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsTo|StorageEntry */
-    public function image()
+    /** @return BelongsTo|Photo */
+    public function photo()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry');
+        return $this->belongsTo('Proto\Models\Photo');
     }
 
     /** @return HasOne|Activity */

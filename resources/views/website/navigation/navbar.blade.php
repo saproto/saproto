@@ -236,7 +236,7 @@
                                    role="button" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->calling_name }}
                                     <img id="profile-picture" class="rounded-circle ms-2" alt="your profile picture"
-                                         src="{{ Auth::user()->generatePhotoPath(100, 100) }}"/>
+                                         width="100px" height=""100px src="{{ Auth::user()->generateSmallPhotoPath() }}"/>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end mt-2">

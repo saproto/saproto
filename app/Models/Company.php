@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  * @property string $excerpt
  * @property string $description
- * @property int $image_id
+ * @property int $photo_id
  * @property int $on_carreer_page
  * @property int $in_logo_bar
  * @property Carbon|null $created_at
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string|null $membercard_excerpt
  * @property string|null $membercard_long
  * @property int $sort
- * @property-read StorageEntry $image
+ * @property-read Photo $photo
  * @property-read Collection|Joboffer[] $job_offers
  * @method static Builder|Company whereCreatedAt($value)
  * @method static Builder|Company whereDescription($value)
@@ -52,9 +52,9 @@ class Company extends Model
     protected $guarded = ['id'];
 
     /** @return BelongsTo|StorageEntry */
-    public function image()
+    public function photo()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('Proto\Models\Photo', 'photo_id');
     }
 
     /** @return HasMany|Joboffer[] */

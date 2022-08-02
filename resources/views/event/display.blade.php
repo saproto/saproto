@@ -10,8 +10,8 @@
     {{ $event->description }}
 @endsection
 
-@if($event->image)
-@section('og-image'){{ $event->image->generatePath(800,300) }}@endsection
+@if($event->photo)
+@section('og-image'){{ $event->photo->getMediumUrl() }}@endsection
 @endif
 
 @section('container')

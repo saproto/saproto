@@ -96,7 +96,7 @@
 
                         @if($item->featuredImage)
 
-                            <img src="{!! $item->featuredImage->generatePath(700,null) !!}" width="100%;"
+                            <img src="{!! $item->featuredImage->generatePath() !!}" width="100%;"
                                  class="card-img-top">
 
                         @endif
@@ -164,7 +164,7 @@
                                         <td>
                                             @if(substr($file->mime, 0, 5) == 'image')
                                                 <a class="pageEdit_insertImage" href="#"
-                                                   rel="{{ $file->generatePath(1000, null) }}">
+                                                   rel="{{ $file->generatePath() }}">
                                                     <i class="fas fa-image me-2 fa-fw"></i>
                                                 </a>
                                             @else

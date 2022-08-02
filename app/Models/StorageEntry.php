@@ -115,7 +115,7 @@ class StorageEntry extends Model
      * @param string|null $original_name
      * @param Image|null $watermark
      */
-    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $public = true)
+    public function createFromPhoto($file, $customPath = null, $width = null, $original_name = null, $watermark = null, $private = false)
     {
         $this->hash = $this->generateHash();
         $this->filename = date('Y\/F\/d').'/'.$this->hash;
@@ -142,10 +142,10 @@ class StorageEntry extends Model
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
 
-        if($public) {
-            Storage::disk('public')->put($customPath.$this->hash, $image);
-        }else{
+        if($private) {
             Storage::disk('local')->put($customPath.$this->hash, $image);
+        }else{
+            Storage::disk('public')->put($customPath.$this->hash, $image);
         }
 
         return back();

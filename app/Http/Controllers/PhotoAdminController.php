@@ -145,11 +145,10 @@ class PhotoAdminController extends Controller
                 case 'private':
                     foreach ($photos as $photoId => $photo) {
                         $photo = Photo::find($photoId);
-                        if ($album->published && $photo->private) {
-                            continue;
+                        if($photo&&!$album->published) {
+                            $photo->private = !$photo->private;
+                            $photo->save();
                         }
-                        $photo->private = ! $photo->private;
-                        $photo->save();
                     }
                     break;
             }
@@ -213,53 +212,9 @@ class PhotoAdminController extends Controller
     private function createPhotoFromUpload($uploaded_photo, $album_id, $addWatermark = false)
     {
         $album = PhotoAlbum::findOrFail($album_id);
-        $original_photo_storage = 'photos/original_photos/'.$album_id.'/';
-        $large_photos_storage = 'photos/large_photos/'.$album_id.'/';
-        $medium_photos_storage = 'photos/medium_photos/'.$album_id.'/';
-        $small_photos_storage = 'photos/small_photos/'.$album_id.'/';
-        $tiny_photos_storage = 'photos/tiny_photos/'.$album_id.'/';
-
-        $watermark = null;
-        if($addWatermark) {
-            $watermark = Image::make(public_path('images/protography-watermark-template.png'));
-            $watermark->text(strtoupper(Auth::user()->name), 267, 1443, function ($font) {
-                $font->file((public_path('fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf')));
-                $font->size(180);
-                $font->valign('top');
-            });
-        }
-
-        $original_file = new StorageEntry();
-        $original_file->createFromPhoto($uploaded_photo, $original_photo_storage, null, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
-        $original_file->save();
-
-        $large_file = new StorageEntry();
-        $large_file->createFromPhoto($uploaded_photo, $large_photos_storage, 1080, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
-        $large_file->save();
-
-        $medium_file = new StorageEntry();
-        $medium_file->createFromPhoto($uploaded_photo, $medium_photos_storage, 750, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
-        $medium_file->save();
-
-        $small_file = new StorageEntry();
-        $small_file->createFromPhoto($uploaded_photo, $small_photos_storage,420, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
-        $small_file->save();
-
-        $tiny_file = new StorageEntry();
-        $tiny_file->createFromPhoto($uploaded_photo, $tiny_photos_storage,20, $uploaded_photo->getClientOriginalName(), $watermark, $album->private);
-        $tiny_file->save();
-
         $photo = new Photo();
-        $photo->date_taken = $uploaded_photo->getCTime();
-        $photo->album_id = $album_id;
-        $photo->file_id = $original_file->id;
-        $photo->large_file_id = $large_file->id;
-        $photo->medium_file_id = $medium_file->id;
-        $photo->small_file_id = $small_file->id;
-        $photo->tiny_file_id = $tiny_file->id;
-        $photo->private = $album->private;
+        $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), $album->private, $album->id, $album->id, $addWatermark, Auth::user()->name);
         $photo->save();
-
         return $photo;
     }
 }

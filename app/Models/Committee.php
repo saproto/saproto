@@ -23,12 +23,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $public
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int|null $image_id
+ * @property int|null $photo_id
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address
  * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
- * @property-read StorageEntry|null $image
+ * @property-read Photo|null $photo
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
@@ -49,7 +49,7 @@ class Committee extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['image_id'];
+    protected $hidden = ['photo_id'];
 
     /** @return string */
     public function getPublicId()
@@ -78,10 +78,10 @@ class Committee extends Model
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsTo|StorageEntry */
-    public function image()
+    /** @return BelongsTo|Photo */
+    public function photo()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('Proto\Models\Photo', 'photo_id');
     }
 
     /** @return HasMany|Event[] */

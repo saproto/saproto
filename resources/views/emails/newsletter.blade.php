@@ -23,8 +23,8 @@
 
                     <td style="margin: 0; padding: 20px 40px; border: none;">
 
-                        @if($event->image)
-                            <img src="{{ $event->image->generatePath() }}" style="width: 100%;"/>
+                        @if($event->photo)
+                            <img src="{{ $event->photo->getLargeUrl() }}" style="width: 100%;"/>
                         @endif
 
                         <p>

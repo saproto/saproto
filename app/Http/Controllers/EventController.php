@@ -13,6 +13,7 @@ use Proto\Models\Activity;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\EventCategory;
+use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
@@ -113,9 +114,11 @@ class EventController extends Controller
         }
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
-            $file->createFromFile($request->file('image'));
-            $event->image()->associate($file);
+            $photo = new Photo();
+            $uploaded_photo=$request->file('image');
+            $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'event_photos');
+            $photo->save();
+            $event->photo()->associate($photo);
         }
 
         $committee = Committee::find($request->input('committee'));
@@ -168,11 +171,14 @@ class EventController extends Controller
         }
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
-            $file->createFromFile($request->file('image'));
-
-            $event->image()->associate($file);
+            $photo = new Photo();
+            $uploaded_photo=$request->file('image');
+            $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'event_photos');
+            $photo->save();
+            $event->photo()->associate($photo);
         }
+
+
 
         if ($request->has('committee')) {
             $committee = Committee::find($request->input('committee'));
@@ -413,7 +419,7 @@ class EventController extends Controller
             $data[] = (object) [
                 'id' => $event->id,
                 'title' => $event->title,
-                'image' => ($event->image ? $event->image->generatePath() : null),
+                'image' => ($event->photo ? $event->photo->getOriginalUrl() : null),
                 'description' => $event->description,
                 'start' => $event->start,
                 'organizing_committee' => ($event && $event->committee ? [

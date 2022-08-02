@@ -41,7 +41,7 @@
 
                             @include('website.layouts.macros.card-bg-image', [
                                         'url' => $newsitem->url,
-                                        'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generatePath(500,300) : null,
+                                        'img' => $newsitem->featuredImage ? $newsitem->featuredImage->generatePath() : null,
                                         'html' => sprintf('<strong>%s</strong><br>Published %s', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),
                                         'height' => '180',
                                         'photo_pop' => true

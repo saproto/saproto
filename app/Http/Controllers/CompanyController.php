@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Proto\Models\Company;
+use Proto\Models\Photo;
 use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
@@ -85,9 +86,11 @@ class CompanyController extends Controller
         $company->sort = Company::with('sort')->max('sort') + 1;
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
+            $uploaded_photo=$request->file('image');
+            $photo = new Photo();
+            $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'company_photos');
+            $photo->save();
+            $company->photo_id = $photo->id;
         }
 
         $company->save();
@@ -153,9 +156,11 @@ class CompanyController extends Controller
         $company->on_membercard = $request->has('on_membercard');
 
         if ($request->file('image')) {
-            $file = new StorageEntry();
-            $file->createFromFile($request->file('image'));
-            $company->image()->associate($file);
+            $photo = new Photo();
+            $uploaded_photo=$request->file('image');
+            $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'company_photos');
+            $photo->save();
+            $company->photo_id = $photo->id;
         }
 
         $company->save();

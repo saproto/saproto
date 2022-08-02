@@ -18,7 +18,7 @@
 
                     <div class="product-image bg-dark mb-2">
 
-                        <img src="{!! $product->image->generatePath(null, null) !!}">
+                        <img src="{!! $product->image->generatePath() !!}">
 
                     </div>
 

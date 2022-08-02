@@ -81,7 +81,7 @@
                 <div class="product col-3">
                     <div class="product-inner">
                         <div class="product-image user-image"
-                             style="background-image: url('{!! $user->generatePhotoPath(200, null) !!}');">
+                             style="background-image: url('{!! $user->generateSmallPhotoPath() !!}');">
                         </div>
                         <div class="product-details">
                             <div class="product-name">

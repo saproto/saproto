@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Intervention\Image\Facades\Image;
 
 /**
  * Photo model.
@@ -47,6 +48,55 @@ class Photo extends Model
     protected $table = 'photos';
 
     protected $guarded = ['id'];
+
+    public function makePhoto($photo, $original_name, $date_taken, $private=false, $pathInPhotos=null, $albumId=null, $addWatermark=false, $watermarkUserName=null)
+    {
+        $original_photo_storage = 'photos/original_photos/'.($albumId??$pathInPhotos).'/';
+        $large_photos_storage = 'photos/large_photos/'.($albumId??$pathInPhotos).'/';
+        $medium_photos_storage = 'photos/medium_photos/'.($albumId??$pathInPhotos).'/';
+        $small_photos_storage = 'photos/small_photos/'.($albumId??$pathInPhotos).'/';
+        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId??$pathInPhotos).'/';
+
+        $watermark = null;
+        if($addWatermark) {
+            $watermark = Image::make(public_path('images/protography-watermark-template.png'));
+            $watermark->text(strtoupper($watermarkUserName), 267, 1443, function ($font) {
+                $font->file((public_path('fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf')));
+                $font->size(180);
+                $font->valign('top');
+            });
+        }
+
+        $original_file = new StorageEntry();
+        $original_file->createFromPhoto($photo, $original_photo_storage, null, $original_name, $watermark, $private);
+        $original_file->save();
+
+        $large_file = new StorageEntry();
+        $large_file->createFromPhoto($photo, $large_photos_storage, 1080, $original_name, $watermark, $private);
+        $large_file->save();
+
+        $medium_file = new StorageEntry();
+        $medium_file->createFromPhoto($photo, $medium_photos_storage, 750, $original_name, $watermark, $private);
+        $medium_file->save();
+
+        $small_file = new StorageEntry();
+        $small_file->createFromPhoto($photo, $small_photos_storage,420, $original_name, $watermark, $private);
+        $small_file->save();
+
+        $tiny_file = new StorageEntry();
+        $tiny_file->createFromPhoto($photo, $tiny_photos_storage,50, $original_name, $watermark, $private);
+        $tiny_file->save();
+
+        $this->file_id = $original_file->id;
+        $this->large_file_id = $large_file->id;
+        $this->medium_file_id = $medium_file->id;
+        $this->small_file_id = $small_file->id;
+        $this->tiny_file_id = $tiny_file->id;
+        $this->private = $private;
+
+        $this->date_taken = $date_taken;
+        $this->album_id = $albumId;
+    }
 
     /** @return BelongsTo|PhotoAlbum[] */
     public function album()

@@ -30,7 +30,7 @@
                 <td style="margin: 0; padding: 20px 40px; border: none;">
 
                     @if($event->event->image)
-                        <img src="{{ $event->event->image->generatePath(350,100) }}" style="width: 100%;"/>
+                        <img src="{{ $event->event->photo->getSmallUrl() }}" style="width: 100%;"/>
                     @endif
 
                     <p>

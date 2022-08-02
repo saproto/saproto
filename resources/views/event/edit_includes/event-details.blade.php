@@ -150,12 +150,11 @@
 
                     </div>
 
-                    @if($event && $event->image)
+                    @if($event && $event->photo)
 
                         <hr>
-
                         <h5>Current image:</h5>
-                        <img src="{!! $event->image->generatePath(800,300) !!}" class="w-100 border">
+                        <img src="{!! $event->photo->getMediumUrl() !!}" class="w-100 border">
 
                     @endif
 

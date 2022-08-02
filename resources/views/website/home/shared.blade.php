@@ -13,7 +13,7 @@
             <div class="card text-white mb-3 border-0"
                  style="
                     @if($header)
-                        background-image: url({{ $header->image->generatePath(1500, 400) }});
+                        background-image: url({{ $header->image->generatePath() }});
                         background-size: cover; background-position: center center;
                         text-shadow: 0 0 10px #000;
                         height: 250px;
@@ -48,12 +48,13 @@
                         <div class="swiper row mb-1" style="height:70px">
                             <div class="swiper-wrapper">
                                 @foreach($companies as $i => $company)
-                                    @if($company->image)
+                                    @if($company->photo)
                                         <div class="swiper-slide justify-content-center align-items-center d-flex">
                                             <a href="{{ route('companies::show', ['id' => $company->id]) }}">
                                                 <img class="company-{{strtolower($company->name)}}"
-                                                     src="{{ $company->image->generatePath(null, 50) }}"
+                                                     src="{{ $company->photo->getSmallUrl() }}"
                                                      alt="logo of {{ $company->name }}"
+                                                     height="50px"
                                                 />
                                             </a>
                                         </div>

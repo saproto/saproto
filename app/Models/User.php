@@ -78,7 +78,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Member $member
  * @property-read Collection|MollieTransaction[] $mollieTransactions
  * @property-read Collection|OrderLine[] $orderlines
- * @property-read StorageEntry|null $photo
+ * @property-read Photo|null $photo
  * @property-read Collection|PlayedVideo[] $playedVideos
  * @property-read Collection|Quote[] $quotes
  * @property-read Collection|RfidCard[] $rfid
@@ -183,10 +183,10 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         );
     }
 
-    /** @return BelongsTo|StorageEntry User's profile picture */
+    /** @return BelongsTo|Photo User's profile picture */
     public function photo()
     {
-        return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+        return $this->belongsTo('Proto\Models\Photo', 'photo_id');
     }
 
     /** @return BelongsTo|HelperReminder */
@@ -295,18 +295,57 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
 
     /**
      * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
-     * @param int $w
-     * @param int $h
      * @return string Path to a resized version of someone's profile picture.
      */
-    public function generatePhotoPath()
+    public function generateTinyPhotoPath()
     {
         if ($this->photo) {
-            return $this->photo->generatePath();
+            return $this->photo->getTinyUrl();
         } else {
             return asset('images/default-avatars/other.png');
         }
     }
+
+    /**
+     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
+     * @return string Path to a resized version of someone's profile picture.
+     */
+    public function generateSmallPhotoPath()
+    {
+        if ($this->photo) {
+            return $this->photo->getSmallUrl();
+        } else {
+            return asset('images/default-avatars/other.png');
+        }
+    }
+
+    /**
+     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
+     * @return string Path to a resized version of someone's profile picture.
+     */
+    public function generateMediumPhotoPath()
+    {
+        if ($this->photo) {
+            return $this->photo->getMediumUrl();
+        } else {
+            return asset('images/default-avatars/other.png');
+        }
+    }
+
+    /**
+     * Use this method instead of $user->photo->generate to bypass the "no profile" problem.
+     * @return string Path to a resized version of someone's profile picture.
+     */
+    public function generateLargePhotoPath()
+    {
+        if ($this->photo) {
+            return $this->photo->getLargeUrl();
+        } else {
+            return asset('images/default-avatars/other.png');
+        }
+    }
+
+
 
     /**
      * @param string $password
@@ -589,12 +628,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     public function getIsProtubeAdminAttribute()
     {
         return $this->can('protube') || $this->isTempadmin();
-    }
-
-    /** @return string */
-    public function getPhotoPreviewAttribute()
-    {
-        return $this->generatePhotoPath();
     }
 
     /** @return string */

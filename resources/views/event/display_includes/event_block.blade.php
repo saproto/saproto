@@ -5,8 +5,8 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
     <a class="card mb-3 leftborder leftborder-info text-decoration-none"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
 
-        <div class="card-body event text-start {{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}"
-             style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generatePath(800,300)) : '' }} background-size: cover;">
+        <div class="card-body event text-start {{ $event->photo && (!isset($hide_photo) || !$hide_photo) ? sprintf('bg-img') : sprintf('no-img')}}"
+             style="{{ $event->photo && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->photo->getSmallUrl()) : '' }} background-size: cover;">
 
             @if(isset($countdown) && $countdown)
                 <div class="btn btn-info btn-block mb-3 ">

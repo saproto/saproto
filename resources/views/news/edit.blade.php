@@ -75,7 +75,7 @@
                     <div class="card mb-3">
 
                         @if($item->featuredImage)
-                            <img src="{!! $item->featuredImage->generatePath(700,null) !!}" width="100%;"
+                            <img src="{!! $item->featuredImage->generatePath() !!}" width="100%;"
                                  class="card-img-top">
                         @endif
 
