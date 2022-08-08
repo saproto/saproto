@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Activities;
 use Auth;
 use Carbon;
 use DB;
@@ -63,7 +62,7 @@ class OrderLineController extends Controller
             }
         }
 
-        $outstanding=Activity::whereHas('users', function (Builder $query) {
+        $outstanding = Activity::whereHas('users', function (Builder $query) {
             $query->where('user_id', Auth::user()->id);
         })->where('closed', false)->sum('price');
 
