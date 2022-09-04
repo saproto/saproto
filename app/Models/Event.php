@@ -88,7 +88,7 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -193,13 +193,13 @@ class Event extends Model
      */
     public function generateTimespanText($long_format, $short_format, $combiner)
     {
-        return date($long_format, $this->start).' '.$combiner.' '.(
+        return date($long_format, $this->start) . ' ' . $combiner . ' ' . (
             (($this->end - $this->start) < 3600 * 24)
                 ?
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-        );
+            );
     }
 
     /**
@@ -223,7 +223,7 @@ class Event extends Model
         if (date('U') > $this->end) {
             return false;
         }
-        if (! $this->activity) {
+        if (!$this->activity) {
             return false;
         }
         $eroHelping = HelpingCommittee::where('activity_id', $this->activity->id)
@@ -284,7 +284,7 @@ class Event extends Model
     /** @return object */
     public function getFormattedDateAttribute()
     {
-        return (object) [
+        return (object)[
             'simple' => date('M d, Y', $this->start),
             'year' => date('Y', $this->start),
             'month' => date('M Y', $this->start),
@@ -294,13 +294,22 @@ class Event extends Model
 
     public static function countEventsPerYear(int $year)
     {
-        $yearStart = strtotime('January 1, '.$year);
-        $yearEnd = strtotime('January 1, '.($year + 1));
+        $yearStart = strtotime('January 1, ' . $year);
+        $yearEnd = strtotime('January 1, ' . ($year + 1));
         $events = self::where('start', '>', $yearStart)->where('end', '<', $yearEnd);
-        if (! Auth::check() || ! Auth::user()->can('board')) {
+        if (!Auth::check() || !Auth::user()->can('board')) {
             $events = $events->where('secret', 0);
         }
 
         return $events->count();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updating(function ($event) {
+            $event->update_sequence = $event->update_sequence + 1;
+        });
     }
 }
