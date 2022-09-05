@@ -75,6 +75,7 @@
                                'action' => route('user::delete'),
                                'classes' => 'btn btn-danger',
                                'text' => 'Delete my account!',
+                               'method'=>'POST',
                                'title' => 'Confirm Delete',
                                'message' => 'Are you REALLY sure you want to permanently delete your account?',
                                'confirm' => 'YES! Delete my account!',
