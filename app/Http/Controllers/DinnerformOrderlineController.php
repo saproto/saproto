@@ -14,7 +14,7 @@ class DinnerformOrderlineController extends Controller
         $order = $request->input('order');
         $amount = $request->input('price');
         $helper = $request->has('helper');
-        if($dinnerform->event->activity && $dinnerform->event->activity->isHelping(Auth::user())){
+        if($dinnerform->event && $dinnerform->event->activity && $dinnerform->event->activity->isHelping(Auth::user())){
             $helper = true;
         }
         $dinnerOrderline = DinnerformOrderline::create([
