@@ -78,6 +78,8 @@
 
         @include('website.layouts.assets.javascripts')
 
+        @stack("javascript")
+
         <script type='text/javascript' nonce='{{ csp_nonce() }}'>
             let actionStatus
             let purchaseProcessing
