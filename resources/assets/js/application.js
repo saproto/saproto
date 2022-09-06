@@ -6,7 +6,7 @@ global.Quagga = require('quagga')
 import './countdown-timer'
 import './utilities'
 import './broto'
-
+import './nightMode'
 // Execute theme JavaScript
 window[config.theme]?.()
 
