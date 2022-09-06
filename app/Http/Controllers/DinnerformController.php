@@ -21,12 +21,10 @@ class DinnerformController extends Controller
      */
     public function show($id)
     {
-
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
         $previousOrders = DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
         return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
-
     }
 
     public function admin($id) {
