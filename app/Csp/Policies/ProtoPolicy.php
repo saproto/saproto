@@ -3,6 +3,7 @@
 namespace Proto\Csp\Policies;
 
 use function Sentry\captureException;
+
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
