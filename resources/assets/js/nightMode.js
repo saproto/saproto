@@ -70,14 +70,15 @@ window.nightMode = _ => {
     create()
 
     function update() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        stars.forEach((star, index) => {
-            star.update()
-            star.draw(ctx)
-        })
-        window.requestAnimationFrame(update);
+        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            stars.forEach((star, index) => {
+                star.update()
+                star.draw(ctx)
+            })
+            window.requestAnimationFrame(update);
+        }
     }
-
     window.requestAnimationFrame(update);
 }
 
