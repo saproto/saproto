@@ -41,8 +41,8 @@ class DinnerformOrderline extends Model
 
     public function price() {
         if($this->helper && $this->dinnerform()->discount){
-            $discounted= $this->price - $this->dinnerform()->discount;
-            if($discounted>0)return $discounted;
+            $discounted = $this->price - $this->dinnerform()->discount;
+            if($discounted > 0)return $discounted;
             return 0;
         }
 
