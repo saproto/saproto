@@ -212,14 +212,19 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')){
+            $request->session()->flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
+            return Redirect::back();
+        }
         /** @var Product $product */
         $product = Product::findOrFail($id);
 
         if ($product->orderlines->count() > 0) {
             $request->session()->flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
-
             return Redirect::back();
         }
+
+
 
         $product->delete();
 

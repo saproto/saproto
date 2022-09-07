@@ -6,6 +6,8 @@ use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Dinnerform Model.
@@ -14,10 +16,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $restaurant
  * @property string $description
  * @property string $url
+ * @property bool $closed
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Event $event
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
  * @method static Builder|Dinnerform whereEnd($value)
@@ -57,4 +61,50 @@ class Dinnerform extends Model
     {
         return $this->end->addHours(1)->isPast();
     }
+
+    /** @return HasMany|DinnerformOrderline[] */
+    public function orderLines()
+    {
+        return $this->hasMany('Proto\Models\DinnerformOrderline');
+    }
+
+    /** @return BelongsTo */
+    public function event()
+    {
+        return $this->belongsTo('Proto\Models\Event', 'event_id');
+    }
+
+    public function totalAmount() {
+        return $this->orderlines()->sum('price');
+    }
+
+    public function totalAmountwithHelperDiscount() {
+        if($this->discount) {
+            $total = 0;
+            foreach($this->orderlines()->get() as $dinnerOrderline){
+                $total += $dinnerOrderline->price();
+            }
+            return $total;
+        }else{
+         return $this->totalAmount();
+        }
+    }
+
+    public function amountOfOrders() {
+        return $this->orderlines()->count();
+    }
+
+    public function amountOfHelpers() {
+        return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($dinnerform) {
+          foreach($dinnerform->orderLines()->get() as $dinnerOrderline){
+             $dinnerOrderline->delete();
+          }
+        });
+        }
 }

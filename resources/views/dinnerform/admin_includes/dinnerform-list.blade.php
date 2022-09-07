@@ -4,73 +4,84 @@
         Dinnerform overview
     </div>
 
-    <table class="table table-sm">
+    <div class="table-responsive">
 
-        <thead>
+        <table class="table table-sm">
 
-        <tr class="bg-dark text-white">
-
-            <td>Restaurant</td>
-            <td>Open</td>
-            <td>Start</td>
-            <td>End</td>
-            <td>Controls</td>
-            <td></td>
-        </tr>
-
-        </thead>
-        <tbody>
-
-        @if(count($dinnerformList) > 0)
-            @foreach($dinnerformList as $dinnerform)
-                <tr>
-
-                    <td class="align-middle">{{ $dinnerform->restaurant }} <span class="text-muted">(#{{ $dinnerform->id }})</span></td>
-                    <td class="align-middle">
-                        @if($dinnerform->isCurrent())
-                            <i class="far fa-clock text-success"></i>
-                        @else
-                            <i class="fas fa-ban text-danger"></i>
-                        @endif
-                    </td>
-                    <td class="align-middle">{{ $dinnerform->start->format('Y m-d H:i') }}</td>
-                    <td class="align-middle">{{ $dinnerform->end->format('Y m-d H:i') }}</td>
-                    <td class="align-middle">
-                        @if($dinnerform->isCurrent())
-                            <a class="btn btn-warning" href="{{ route('dinnerform::close', ['id' => $dinnerform->id]) }}">
-                                close now
-                            </a>
-                        @endif
-                    </td>
-                    <td class="text-start align-middle">
-                        <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
-                            <i class="fas fa-edit me-2"></i>
-                        </a>
-                        @include('website.layouts.macros.confirm-modal', [
-                            'action' => route("dinnerform::delete", ['id' => $dinnerform->id]),
-                            'text' => '<i class="fas fa-trash text-danger"></i>',
-                            'title' => 'Confirm Delete',
-                            'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
-                            'confirm' => 'Delete',
-
-                        ])
-                    </td>
-
+            <thead>
+                <tr class="bg-dark text-white">
+                    <th></th>
+                    <th>Restaurant</th>
+                    <th class="text-center">Status</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th class="text-center">Admin</th>
+                    <th class="text-center">Controls</th>
                 </tr>
-            @endforeach
-        @else
-            <tr>
-                <td>There are no dinnerforms available.</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        @endif
+            </thead>
 
-        </tbody>
+            <tbody>
+                @if(count($dinnerformList) > 0)
+                    @foreach($dinnerformList as $dinnerform)
+                        <tr class="align-middle">
+                            <td class="text-muted">#{{ $dinnerform->id }}</td>
+                            <td>{{ $dinnerform->restaurant }}</td>
+                            <td class="text-center">
+                                @if($dinnerform->isCurrent())
+                                    <i class="far fa-clock text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Open"></i>
+                                @elseif($dinnerform->closed)
+                                    <i class="fas fa-check text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Processed"></i>
+                                @else
+                                    <i class="fas fa-ban text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Closed"></i>
+                                @endif
+                            </td>
+                            <td>{{ $dinnerform->start->format('Y m-d H:i') }}</td>
+                            <td>{{ $dinnerform->end->format('Y m-d H:i') }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-info badge" href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}">
+                                    View orders
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @if(!$dinnerform->closed)
+                                    @if($dinnerform->isCurrent())
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route("dinnerform::close", ['id' => $dinnerform->id]),
+                                            'text' => '<i class="fas fa-ban text-warning me-2"></i>',
+                                            'title' => 'Confirm Close',
+                                            'message' => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
+                                            'confirm' => 'Close',
+                                        ])
+                                    @endif
+                                    <a href="{{ route('dinnerform::edit', ['id' => $dinnerform->id]) }}">
+                                        <i class="fas fa-edit me-2"></i>
+                                    </a>
+                                    @include('website.layouts.macros.confirm-modal', [
+                                        'action' => route("dinnerform::delete", ['id' => $dinnerform->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?<br><br> This will also delete all orderlines!",
+                                        'confirm' => 'Delete',
+                                    ])
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td>There are no dinnerforms available.</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endif
+            </tbody>
 
-    </table>
+        </table>
+
+    </div>
+
 </div>
 
