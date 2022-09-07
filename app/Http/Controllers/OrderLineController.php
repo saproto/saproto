@@ -37,6 +37,7 @@ class OrderLineController extends Controller
         $orderlines = OrderLine::query()
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
+            ->with('product')
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->created_at)->format('Y-m');
