@@ -79,9 +79,11 @@ class Dinnerform extends Model
 
     public function totalAmountwithHelperDiscount() {
         if($this->discount) {
-            $totalWithoutHelpers = $this->orderlines()->where('helper', false)->sum('price');
-            $totalFromHelpers = $this->orderlines()->where('helper', true)->sum('price') / 100 * (100 - $this->discount);
-            return $totalWithoutHelpers + $totalFromHelpers;
+            $total=0;
+            foreach($this->orderlines()->get() as $dinnerOrderline){
+                $total+=$dinnerOrderline->price();
+            }
+            return $total;
         }else{
          return $this->totalAmount();
         }

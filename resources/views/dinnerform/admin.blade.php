@@ -54,7 +54,7 @@
                     {{$dinnerform->amountOfHelpers()}}
                 </td>
             <td class="align-middle">
-                {{$dinnerform->discount}}%
+                €{{$dinnerform->discount}}
             </td>
                 <td class="align-middle">
                     €{{$dinnerform->totalAmountwithHelperDiscount()}}
