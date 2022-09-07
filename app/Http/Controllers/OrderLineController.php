@@ -6,9 +6,11 @@ use Auth;
 use Carbon;
 use DB;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Proto\Models\Activity;
 use Proto\Models\FailedWithdrawal;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
@@ -61,6 +63,11 @@ class OrderLineController extends Controller
             }
         }
 
+        $outstanding = Activity::whereHas('users', function (Builder $query) {
+            $query->where('user_id', Auth::user()->id);
+        })->where('closed', false)->sum('price');
+
+
         $payment_methods = MollieController::getPaymentMethods();
         return view('omnomcom.orders.myhistory', [
             'user' => $user,
@@ -71,6 +78,7 @@ class OrderLineController extends Controller
             'total' => $total,
             'methods' => $payment_methods ?? [],
             'use_fees' => config('omnomcom.mollie')['use_fees'],
+            'outstanding' => $outstanding,
         ]);
     }
 
