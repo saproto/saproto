@@ -83,7 +83,9 @@
                     <div class="row align-items-end mb-6">
                         <div class="col-md-12 mb-3 mt-3 form-group autocomplete">
                             <label value="url">Event:</label>
-                            <input class="form-control event-search" id="eventSelect" name="eventSelect" value="{{$dinnerformCurrent?$dinnerformCurrent->event_id:''}}" placeholder="{{($dinnerformCurrent&&$dinnerformCurrent->event->activity)?$dinnerformCurrent->event->title:''}}">
+                            <input class="form-control event-search" id="eventSelect" name="eventSelect"
+                                   value="{{$dinnerformCurrent?$dinnerformCurrent->event_id:''}}"
+                                   placeholder="{{($dinnerformCurrent && $dinnerformCurrent->event && $dinnerformCurrent->event->activity)?$dinnerformCurrent->event->title:''}}">
                         </div>
                     </div>
 

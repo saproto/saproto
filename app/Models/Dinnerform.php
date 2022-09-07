@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $restaurant
  * @property string $description
  * @property string $url
+ * @property boolean $closed
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
