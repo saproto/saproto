@@ -390,7 +390,15 @@
                         return
                     }
 
+                    if (data.startsWith('08')) {
+                        Object.values(modals).forEach(el => el.hide())
+                        modals['randcard-modal'].show()
+                        actionStatus = 'badcard'
+                        return
+                    }
+
                     modals['badcard-modal'].hide()
+                    modals['randcard-modal'].hide()
 
                     if (actionStatus === 'rfid') {
                         const rfidLinkCard = data
