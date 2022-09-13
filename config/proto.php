@@ -123,7 +123,7 @@ return [
     |
     */
 
-    'google-timetable-id' => 'rtd50enlsplm3enp0fds670khglrsqmm@import.calendar.google.com',
+    'google-timetable-id' => 'ip06160tfgu953pt7t6hrqemr6f6ou7l@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -134,7 +134,7 @@ return [
     |
     */
 
-    'smartxp-google-timetable-id' => 'dgri3lct14aq5ujencd64iikti7n237k@import.calendar.google.com',
+    'smartxp-google-timetable-id' => 'jf5coo8stv8ju2jiukg8t0alakuu3ifo@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
