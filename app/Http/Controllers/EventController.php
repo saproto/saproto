@@ -8,6 +8,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
@@ -93,24 +94,19 @@ class EventController extends Controller
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $event = new Event();
-        $event->title = $request->title;
-        $event->start = strtotime($request->start);
-        $event->end = strtotime($request->end);
-        $event->location = $request->location;
-        $event->secret = $request->secret;
-        $event->description = $request->description;
-        $event->summary = $request->summary;
-        $event->is_featured = $request->has('is_featured');
-        $event->is_external = $request->has('is_external');
-        $event->force_calendar_sync = $request->has('force_calendar_sync');
-
-        if ($event->end < $event->start) {
-            Session::flash('flash_message', 'You cannot let the event end before it starts.');
-            return Redirect::back();
-        }
+        $event = Event::create([
+        'title' => $request->title,
+        'start' => strtotime($request->start),
+        'end' => strtotime($request->end),
+        'location' => $request->location,
+        'secret' => $request->secret,
+        'description' => $request->description,
+        'summary' => $request->summary,
+        'is_featured' => $request->has('is_featured'),
+        'is_external' => $request->has('is_external'),
+        'force_calendar_sync' => $request->has('force_calendar_sync'), ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -145,7 +141,7 @@ class EventController extends Controller
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(StoreEventRequest $request, $id)
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);

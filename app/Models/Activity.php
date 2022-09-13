@@ -57,8 +57,8 @@ class Activity extends Validatable
 
     protected $rules = [
         'registration_start' => 'required|integer',
-        'registration_end' => 'required|integer',
-        'deregistration_end' => 'required|integer',
+        'registration_end' => 'required|integer|lt:registration_start',
+        'deregistration_end' => 'required|integer|lt:registration_start',
         'participants' => 'integer',
         'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
     ];
