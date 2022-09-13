@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Auth;
 use Illuminate\Http\Request;
 use PDF;
 use Proto\Models\User;
