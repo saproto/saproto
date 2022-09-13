@@ -70,7 +70,9 @@ class AuthorizationController extends Controller
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-        file_get_contents(config('herbert.server').'/adminCheck');
+        
+        //        disabled because protube is down
+        //        file_get_contents(config('herbert.server').'/adminCheck');
 
         $request->session()->flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
         return Redirect::back();
