@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $machtigingid
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $is_first
  * @property-read User $user
  * @method static Builder|Bank whereBic($value)
  * @method static Builder|Bank whereCreatedAt($value)
