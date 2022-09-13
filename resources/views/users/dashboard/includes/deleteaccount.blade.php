@@ -4,7 +4,7 @@
         Close your Proto account
     </button>
 
-    <form action="{{route('user::delete')}}">
+    <form action="{{route('user::delete')}}" method="POST">
     <div id="modal-user-delete" class="modal fade" tabindex="-1" role="dialog">
 
         <div class="modal-dialog">
