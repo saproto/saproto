@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
@@ -94,23 +95,8 @@ class EventController extends Controller
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        Validator::make($request->all(), [
-            'title' => ['required'],
-            'start'=>['required','gte:end'],
-            'end'=>['required','lt:start'],
-            'location'=>['required'],
-            'secret'=>['required'],
-            'description'=>['required'],
-            'summary'=>['required'],
-            'image'=>['image']
-        ], [
-            'lt' => 'The Event cannot end before it starts!',
-            'gte' => 'The Event cannot start before it begins!'
-        ])->validate();
-
-
         $event = Event::create([
         'title' => $request->title,
         'start' => strtotime($request->start),
@@ -156,7 +142,7 @@ class EventController extends Controller
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(StoreEventRequest $request, $id)
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
