@@ -16,10 +16,6 @@ class MemberCardController extends Controller
      */
     public function download(Request $request, $id)
     {
-        if ((! Auth::check() || ! Auth::user()->can('board')) && $request->ip() != config('app-proto.printer-host')) {
-            abort(403);
-        }
-
         /** @var User $user */
         $user = User::findOrFail($id);
 
