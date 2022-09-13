@@ -3,7 +3,6 @@
 namespace Proto\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Validator;
 
 class StoreEventRequest extends FormRequest
 {
@@ -26,17 +25,17 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'title' => ['required'],
-            'start'=>['required','gte:end'],
+            'start'=>['required', 'gte:end'],
             'location'=>['required'],
             'secret'=>['required'],
             'description'=>['required'],
             'summary'=>['required'],
-            'image'=>['image']
+            'image'=>['image'],
         ];
     }
 
-    public function messages(){
+    public function messages() {
         return [
-            'gte' => 'The Event cannot end before it begins!'];
+            'gte' => 'The Event cannot end before it begins!', ];
     }
 }

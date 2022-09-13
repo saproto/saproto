@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
@@ -107,7 +106,7 @@ class EventController extends Controller
         'summary' => $request->summary,
         'is_featured' => $request->has('is_featured'),
         'is_external' => $request->has('is_external'),
-        'force_calendar_sync' => $request->has('force_calendar_sync')]);
+        'force_calendar_sync' => $request->has('force_calendar_sync'), ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
