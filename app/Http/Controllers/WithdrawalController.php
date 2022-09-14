@@ -385,7 +385,9 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            $user->bank->save();
+            if($user->bank) {
+                $user->bank->save();
+            }
         }
 
         $withdrawal->closed = true;
