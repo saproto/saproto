@@ -380,14 +380,7 @@ class WithdrawalController extends Controller
 
         if ($withdrawal->closed) {
             $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
             return Redirect::back();
-        }
-
-        foreach ($withdrawal->users() as $user) {
-            if($user->bank) {
-                $user->bank->save();
-            }
         }
 
         $withdrawal->closed = true;
