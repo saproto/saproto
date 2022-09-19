@@ -59,7 +59,7 @@ class DinnerformOrderlineController extends Controller
         $dinnerOrderline->update([
             'description' => $order,
             'price' => $amount,
-            'user_id'=>Auth::user()->id,
+            'user_id'=>$dinnerOrderline->user_id,
             'helper'=>$helper,
         ]);
         $dinnerOrderline->save();
