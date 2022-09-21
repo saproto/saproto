@@ -358,7 +358,7 @@
                 try {
                     status.classList.add('inactive')
                     status.innerHTML = 'RFID Service: Connecting...'
-                    server = new WebSocket('ws://localhost:3000', 'nfc')
+                    server = new WebSocket('ws://localhost:3000')
                 } catch (error) {
                     if (error.message.split('/\s+/').contains('insecure')) {
                         status.classList.add('inactive')
