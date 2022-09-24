@@ -32,11 +32,11 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $data = [[], [], []];
-        $data[0]=Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '<=', strtotime('+1 week'))->get();
-        $data[1]=Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 week'))->where('start', '<=', strtotime('+1 month'))->get();
-        $data[2]=Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 month'))->get();
+        $data[0] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '<=', strtotime('+1 week'))->get();
+        $data[1] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 week'))->where('start', '<=', strtotime('+1 month'))->get();
+        $data[2] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 month'))->get();
         $category = EventCategory::find($request->category);
-        $years=collect(DB::select("SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))"))->pluck('start');
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
         if (Auth::check()) {
             $reminder = Auth::user()->getCalendarAlarm();
@@ -183,8 +183,8 @@ class EventController extends Controller
      */
     public function archive(Request $request, $year)
     {
-        $years=collect(DB::select("SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))"))->pluck('start');
-        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59') )->with('activity')->get();
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
+        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
         $category = EventCategory::find($request->category);
 
         $months = [];
