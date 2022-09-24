@@ -183,23 +183,18 @@ class EventController extends Controller
      */
     public function archive(Request $request, $year)
     {
-        $events = Event::orderBy('start')->get();
+        $years=collect(DB::select("SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))"))->pluck('start');
+        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59') )->with('activity')->get();
         $category = EventCategory::find($request->category);
 
         $months = [];
-        $years = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                if ($event->start > strtotime($year.'-01-01 00:00:01') && $event->end < strtotime($year.'-12-31 23:59:59')) {
                     $months[intval(date('n', $event->start))][] = $event;
-                }
-                if (! in_array(date('Y', $event->start), $years)) {
-                    $years[] = date('Y', $event->start);
-                }
             }
         }
 
