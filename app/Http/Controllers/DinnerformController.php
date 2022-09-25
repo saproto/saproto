@@ -24,6 +24,10 @@ class DinnerformController extends Controller
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
         $previousOrders = DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
+        if (! $dinnerform->isCurrent() && count($previousOrders) == 0) {
+            Session::flash('flash_message', 'This dinnerform is closed and you do not made any orders.');
+            return Redirect::back();
+        }
         return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
     }
 
