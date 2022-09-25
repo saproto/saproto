@@ -58,6 +58,7 @@ class DinnerformController extends Controller
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
             'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
+            'visible_home_page'=>$request->has('homepage'),
         ]);
 
         Session::flash('flash_message', "Your dinner form at '".$dinnerform->restaurant."' has been added.");
@@ -107,6 +108,7 @@ class DinnerformController extends Controller
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
             'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
+            'visible_home_page'=>$request->has('homepage'),
         ]);
 
         if ($changed_important_details) {

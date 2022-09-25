@@ -25,14 +25,14 @@ class HomeController extends Controller
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get()->reject(function ($user, $index) {
             return $user->member->is_pending == true;
         });
-        $dinnerform = Dinnerform::where('closed', false)->where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour())->first();
+        $dinnerforms = Dinnerform::where('closed', false)->where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour())->where('visible_home_page', true)->orderBy('end')->get();
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 
         if (Auth::check() && Auth::user()->is_member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
             return view('website.home.members', ['companies' => $companies, 'message' => $message,
-                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerform' => $dinnerform, 'header' => $header, 'videos' => $videos, ]);
+                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, ]);
         } else {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }

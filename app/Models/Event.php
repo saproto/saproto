@@ -146,6 +146,12 @@ class Event extends Model
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
     }
 
+    /** @return HasMany|Dinnerform[] */
+    public function dinnerforms()
+    {
+        return $this->hasMany('Proto\Models\Dinnerform', 'event_id');
+    }
+
     /** @return BelongsTo|EventCategory */
     public function category()
     {
