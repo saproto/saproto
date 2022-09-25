@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
@@ -30,28 +31,12 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $events = Event::orderBy('start')->get();
-        $category = EventCategory::find($request->category);
         $data = [[], [], []];
-        $years = [];
-
-        foreach ($events as $event) {
-            if (! $category || $category == $event->category) {
-                if ((! $event->activity || ! $event->activity->secret) && $event->end > date('U')) {
-                    $delta = $event->start - date('U');
-                    if ($delta < 3600 * 24 * 7) {
-                        $data[0][] = $event;
-                    } elseif ($delta < 3600 * 24 * 21) {
-                        $data[1][] = $event;
-                    } else {
-                        $data[2][] = $event;
-                    }
-                }
-            }
-            if (! in_array(date('Y', $event->start), $years)) {
-                $years[] = date('Y', $event->start);
-            }
-        }
+        $data[0] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '<=', strtotime('+1 week'))->get();
+        $data[1] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 week'))->where('start', '<=', strtotime('+1 month'))->get();
+        $data[2] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 month'))->get();
+        $category = EventCategory::find($request->category);
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
         if (Auth::check()) {
             $reminder = Auth::user()->getCalendarAlarm();
@@ -60,7 +45,6 @@ class EventController extends Controller
         }
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
-
         return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
     }
 
@@ -199,23 +183,18 @@ class EventController extends Controller
      */
     public function archive(Request $request, $year)
     {
-        $events = Event::orderBy('start')->get();
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
+        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
         $category = EventCategory::find($request->category);
 
         $months = [];
-        $years = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                if ($event->start > strtotime($year.'-01-01 00:00:01') && $event->end < strtotime($year.'-12-31 23:59:59')) {
                     $months[intval(date('n', $event->start))][] = $event;
-                }
-                if (! in_array(date('Y', $event->start), $years)) {
-                    $years[] = date('Y', $event->start);
-                }
             }
         }
 
