@@ -19,7 +19,7 @@
 
         <div class="col-xl-4 col-md-12">
 
-            @if($dinnerforms)
+            @if(count($dinnerforms)>0)
 
                 <div class="card mb-3">
 
