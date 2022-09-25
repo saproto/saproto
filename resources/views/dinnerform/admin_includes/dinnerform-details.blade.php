@@ -91,15 +91,12 @@
 
 
                     <div class="col-md-12 mb-3">
-
-                        <label for="restaurant">Visible on the homepage?  </label>
                         <input type="checkbox" class="form-check-input" id="homepage" name="homepage"
-
                                @if($dinnerformCurrent&&$dinnerformCurrent->visible_home_page||!$dinnerformCurrent)
-                                       checked
-                               @endif
+                                   checked
+                                @endif
                         />
-
+                        <label for="homepage">Visible on the homepage?  </label>
                     </div>
                 </div>
 
