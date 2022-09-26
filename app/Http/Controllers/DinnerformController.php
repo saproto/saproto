@@ -24,6 +24,10 @@ class DinnerformController extends Controller
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
         $previousOrders = DinnerformOrderline::where('user_id',Auth::user()->id)->where('dinnerform_id', $dinnerform->id)->get();
+        if (! $dinnerform->isCurrent() && count($previousOrders) == 0) {
+            Session::flash('flash_message', 'This dinnerform is closed and you have not made any orders.');
+            return Redirect::back();
+        }
         return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
     }
 
@@ -58,6 +62,7 @@ class DinnerformController extends Controller
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
             'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
+            'visible_home_page'=>$request->has('homepage'),
         ]);
 
         Session::flash('flash_message', "Your dinner form at '".$dinnerform->restaurant."' has been added.");
@@ -107,6 +112,7 @@ class DinnerformController extends Controller
             'end' => strtotime($request->end),
             'discount'=>$request->discount,
             'event_id'=>$request->eventSelect != '' ? $request->eventSelect : null,
+            'visible_home_page'=>$request->has('homepage'),
         ]);
 
         if ($changed_important_details) {

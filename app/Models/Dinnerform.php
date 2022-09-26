@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $description
  * @property string $url
  * @property bool $closed
+ * @property bool $visible_home_page
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
