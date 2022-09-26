@@ -44,7 +44,7 @@
 
                             <label for="url">Restaurant website:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder='https://www.elat-roma.nl/'
+                                   placeholder='www.elat-roma.nl/'
                                    value="{{ $dinnerformCurrent->url ?? ''}}" required>
                         </div>
                     </div>

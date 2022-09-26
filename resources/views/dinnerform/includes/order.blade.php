@@ -40,7 +40,7 @@
                             <p class="card-text bg-info text-light text-center rounded">
                                 <i>
                                     You are registered as a helper on this event and will receive the helper
-                                    discount of {{$dinnerform->discount}}% off your order!
+                                    discount of €{{$dinnerform->discount}} off your order!
                                 </i>
                             </p>
                         @else
