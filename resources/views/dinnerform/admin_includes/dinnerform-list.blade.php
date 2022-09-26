@@ -12,6 +12,7 @@
                 <tr class="bg-dark text-white">
                     <th></th>
                     <th>Restaurant</th>
+                    <th>Event</th>
                     <th class="text-center">Status</th>
                     <th>Start</th>
                     <th>End</th>
@@ -26,6 +27,11 @@
                         <tr class="align-middle">
                             <td class="text-muted">#{{ $dinnerform->id }}</td>
                             <td>{{ $dinnerform->restaurant }}</td>
+                            <td>
+                                @isset($dinnerform->event)
+                                    <a href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}">{{ $dinnerform->event->title}}</a>
+                                @endisset
+                            </td>
                             <td class="text-center">
                                 @if($dinnerform->isCurrent())
                                     <i class="far fa-clock text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Open"></i>
