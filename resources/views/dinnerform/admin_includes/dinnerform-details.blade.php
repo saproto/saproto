@@ -89,6 +89,15 @@
                         </div>
                     </div>
 
+
+                    <div class="col-md-12 mb-3">
+                        <input type="checkbox" class="form-check-input" id="homepage" name="homepage"
+                               @if($dinnerformCurrent&&$dinnerformCurrent->visible_home_page||!$dinnerformCurrent)
+                                   checked
+                                @endif
+                        />
+                        <label for="homepage">Visible on the homepage?  </label>
+                    </div>
                 </div>
 
             </div>
