@@ -1,4 +1,6 @@
 window.nightMode = _ => {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) return;
+
     window.addEventListener('resize', (event) => {
         create()
     });
@@ -70,7 +72,6 @@ window.nightMode = _ => {
     create()
 
     function update() {
-        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             stars.forEach((star, index) => {
                 star.update()
@@ -78,7 +79,6 @@ window.nightMode = _ => {
             })
             window.requestAnimationFrame(update);
         }
-    }
     window.requestAnimationFrame(update);
 }
 
