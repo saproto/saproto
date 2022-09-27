@@ -203,7 +203,6 @@ class ParticipationController extends Controller
     /**
      * @param int $participation_id
      * @param Request $request
-     * @return RedirectResponse
      */
     public function togglePresence($participation_id, Request $request)
     {
@@ -217,7 +216,7 @@ class ParticipationController extends Controller
         $participation->is_present = ! $participation->is_present;
         $participation->save();
 
-        return Redirect::back();
+        return true;
     }
 
     /** @param Activity $activity */
