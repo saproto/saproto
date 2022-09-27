@@ -25,11 +25,7 @@ class MemberCardController extends Controller
         $card = new PDF('L', [86, 54], 'en');
         $card->writeHTML(view('users.membercard.membercard', ['user' => $user, 'overlayonly' => $request->has('overlayonly')]));
 
-        if ($request->ip() != config('app-proto.printer-host')) {
-            return $card->output();
-        } else {
-            return $card->output('D');
-        }
+        return $card->output();
     }
 
     public function startPrint(Request $request)
