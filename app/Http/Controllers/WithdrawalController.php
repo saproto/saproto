@@ -6,7 +6,6 @@ use AbcAeffchen\SepaUtilities\SepaUtilities;
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\Sephpa\SephpaInputException;
 use Auth;
-use Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -128,38 +127,6 @@ class WithdrawalController extends Controller
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->where('orderlines.payed_with_withdrawal', $withdrawal->id)
             ->get();
-
-        $accounts = [];
-
-        foreach ($orderlines as $orderline) {
-            // We sort by date, where a date goes from 6am - 6am.
-            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
-
-            // Shorthand variable names.
-            $nr = $orderline->account_number;
-
-            // Add account to dataset if not existing yet.
-            if (! isset($accounts[$nr])) {
-                $accounts[$nr] = (object) [
-                    'byDate' => [],
-                    'name' => $orderline->name,
-                    'total' => 0,
-                ];
-            }
-
-            // Add orderline to total account price.
-            $accounts[$nr]->total += $orderline->total_price;
-
-            // Add date to account data if not existing yet.
-            if (! isset($accounts[$nr]->byDate[$sortDate])) {
-                $accounts[$nr]->byDate[$sortDate] = 0;
-            }
-
-            // Add orderline to account-on-date total.
-            $accounts[$nr]->byDate[$sortDate] += $orderline->total_price;
-        }
-
-        ksort($accounts);
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),

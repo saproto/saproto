@@ -53,17 +53,10 @@ class QueryController extends Controller
     public function membershipTotals(Request $request)
     {
         // Get a list of all CreaTe students.
-        $ldap_students = LdapController::searchUtwente('|(department=*B-CREA*)(department=*M-ITECH*)');
-
-        $names = [];
-        $emails = [];
-        $usernames = [];
-
-        foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname.' '.$student->sn);
-            $emails[] = strtolower($student->userprincipalname);
-            $usernames[] = $student->uid;
-        }
+        $students = LdapController::searchStudents();
+        $names = $students['names'];
+        $emails = $students['emails'];
+        $usernames = $students['usernames'];
 
         $count_total = 0;
         $count_primary = 0;

@@ -39,12 +39,13 @@ class FeeCron extends Command
 
     /**
      * Execute the console command.
+     *
+     * @return int
      */
     public function handle()
     {
         if (intval(date('n')) == 8 || intval(date('n')) == 9) {
             $this->info('We don\'t charge membership fees in August or September.');
-            return;
         }
 
         if (intval(date('n')) >= 9) {
@@ -53,17 +54,10 @@ class FeeCron extends Command
             $yearstart = intval(date('Y')) - 1;
         }
 
-        $ldap_students = LdapController::searchUtwente('|(department=*B-CREA*)(department=*M-ITECH*)');
-
-        $names = [];
-        $emails = [];
-        $usernames = [];
-
-        foreach ($ldap_students as $student) {
-            $names[] = strtolower($student->givenname.' '.$student->sn);
-            $emails[] = strtolower($student->userprincipalname);
-            $usernames[] = $student->uid;
-        }
+        $students = LdapController::searchStudents();
+        $names = $students['names'];
+        $emails = $students['emails'];
+        $usernames = $students['usernames'];
 
         $already_paid = OrderLine::whereIn('product_id', array_values(config('omnomcom.fee')))->where('created_at', '>=', $yearstart.'-09-01 00:00:01')->get()->pluck('user_id')->toArray();
 
@@ -122,5 +116,6 @@ class FeeCron extends Command
         }
 
         $this->info('Charged '.$charged->count.' of '.Member::count().' members their fee.');
+        return 0;
     }
 }
