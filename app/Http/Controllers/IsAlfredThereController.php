@@ -13,6 +13,7 @@ use stdClass;
 class IsAlfredThereController extends Controller
 {
     public static $HashMapItemKey = 'is_alfred_there';
+    public static $HashMapTextKey = 'is_alfred_there_text';
 
     /** @return View */
     public function showMiniSite()
@@ -39,40 +40,46 @@ class IsAlfredThereController extends Controller
      */
     public function postAdminInterface(Request $request)
     {
-        $status = self::getAlfredsStatus();
-
+        $text = self::getOrCreateHasMapItem(self::$HashMapTextKey);
+        $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
         $new_status = $request->input('where_is_alfred');
         $arrival_time = $request->input('back');
 
-        if ($new_status == 'there' || $new_status == 'unknown') {
+        if ($new_status === 'there' || $new_status === 'unknown') {
             $status->value = $new_status;
-        } elseif ($new_status == 'away') {
-            $status->value = (string) strtotime($arrival_time);
+            $text->value = '';
+        } elseif ($new_status === 'away') {
+            $status->value = $arrival_time;
+            $text->value = $request->input('is_alfred_there_text');
+        }elseif($new_status === 'text_only'){
+            $text->value = $request->input('is_alfred_there_text');
+            $status->value = 'unknown';
         }
         $status->save();
-
+        $text->save();
         return Redirect::back();
     }
 
     /** @return HashMapItem */
-    public static function getAlfredsStatus()
+    public static function getOrCreateHasMapItem($key)
     {
-        $status = HashMapItem::where('key', self::$HashMapItemKey)->first();
-        if ($status == null) {
-            $status = HashMapItem::create([
-                'key' => self::$HashMapItemKey,
-                'value' => 'unknown',
+        $item = HashMapItem::where('key', $key)->first();
+        if (! $item) {
+            $item = HashMapItem::create([
+                'key' => $key,
+                'value' => '',
             ]);
         }
-
-        return $status;
+        return $item;
     }
 
     /** @return stdClass */
     public static function getAlfredsStatusObject()
     {
-        $status = self::getAlfredsStatus();
         $result = new stdClass();
+        $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
+
+        $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
         if ($status->value == 'there' || $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;

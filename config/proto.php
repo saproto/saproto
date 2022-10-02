@@ -123,7 +123,7 @@ return [
     |
     */
 
-    'google-timetable-id' => 'rtd50enlsplm3enp0fds670khglrsqmm@import.calendar.google.com',
+    'google-timetable-id' => 'ip06160tfgu953pt7t6hrqemr6f6ou7l@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -134,7 +134,7 @@ return [
     |
     */
 
-    'smartxp-google-timetable-id' => 'dgri3lct14aq5ujencd64iikti7n237k@import.calendar.google.com',
+    'smartxp-google-timetable-id' => 'jf5coo8stv8ju2jiukg8t0alakuu3ifo@import.calendar.google.com',
 
     /*
     |--------------------------------------------------------------------------
@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'internal' => 'Ellis Dijkstra',
+    'internal' => 'Sterre Kuijper',
 
     /*
     |--------------------------------------------------------------------------
@@ -167,7 +167,7 @@ return [
     |
     */
 
-    'treasurer' => 'Martijn van Ooijen',
+    'treasurer' => 'Ben Ligthart',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,7 +178,7 @@ return [
     |
     */
 
-    'secretary' => 'Ellis Dijkstra',
+    'secretary' => 'Max Liebe',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,7 +189,7 @@ return [
     |
     */
 
-    'boardnumber' => '11.0',
+    'boardnumber' => '12.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -296,6 +296,7 @@ return [
         1 => 'dark',
         2 => 'rainbowbarf',
         3 => 'broto',
+        4 => 'nightMode',
     ],
 
     // Analytics URL

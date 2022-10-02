@@ -151,20 +151,7 @@ class AchievementController extends Controller
             return Redirect::back();
         }
 
-        $achieved = $user->achieved();
-        $hasAchievement = false;
-        foreach ($achieved as $entry) {
-            if ($entry->id == $achievement->id) {
-                $hasAchievement = true;
-            }
-        }
-        if (! $hasAchievement) {
-            $new = [
-                'user_id' => $user->id,
-                'achievement_id' => $achievement->id,
-            ];
-            $relation = new AchievementOwnership($new);
-            $relation->save();
+        if($this->giveAchievement($achievement, $user)){
             Session::flash('flash_message', "You have earned the achievement: '$achievement->name'");
         } else {
             Session::flash('flash_message', 'You have already earned this achievement');
@@ -178,30 +165,37 @@ class AchievementController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function give($achievement_id, Request $request)
+    public function award($achievement_id, Request $request)
     {
         $achievement = Achievement::findOrFail($achievement_id);
         $user = User::findOrFail($request->get('user-id'));
 
-        $achieved = $user->achieved();
-        $hasAchievement = false;
-        foreach ($achieved as $entry) {
-            if ($entry->id == $achievement->id) {
-                $hasAchievement = true;
-            }
-        }
-        if (! $hasAchievement) {
-            $new = [
-                'user_id' => $user->id,
-                'achievement_id' => $achievement->id,
-            ];
-            $relation = new AchievementOwnership($new);
-            $relation->save();
+        if($this->giveAchievement($achievement, $user)){
             Session::flash('flash_message', "Achievement $achievement->name has been given to $user->name.");
         } else {
-            Session::flash('flash_message', 'This user already has this achievement');
+            Session::flash('flash_message', "$user->name already has this achievement");
         }
+        return Redirect::back();
+    }
 
+    public function give(Request $request)
+    {
+        $achievement = Achievement::find($request->get('achievement-id'));
+        $userIds = $request->input('users');
+        $awarded = '';
+        foreach ($userIds as $userId) {
+            $user = User::find($userId);
+            if($user) {
+                if($this->giveAchievement($achievement, $user)){
+                    $awarded = $awarded.' '.$user->name.',';
+                }
+            }
+        }
+        if($awarded){
+            Session::flash('flash_message', "Achievement $achievement->name has been newly given to:".$awarded);
+        }else{
+            Session::flash('flash_message', "Achievement $achievement->name had already been achieved by all users!");
+        }
         return Redirect::back();
     }
 
@@ -268,5 +262,25 @@ class AchievementController extends Controller
                 $entry->delete();
             }
         }
+    }
+
+    private function giveAchievement($achievement, $user)
+    {
+        $achieved = $user->achieved();
+        $hasAchievement = false;
+        foreach ($achieved as $entry) {
+            if ($entry->id == $achievement->id) {
+                $hasAchievement = true;
+            }
+        }
+        if (! $hasAchievement) {
+            $relation = new AchievementOwnership([
+                'user_id' => $user->id,
+                'achievement_id' => $achievement->id,
+            ]);
+            $relation->save();
+            return true;
+        }
+        return false;
     }
 }

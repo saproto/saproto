@@ -376,11 +376,6 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
-        foreach ($withdrawal->users() as $user) {
-            $user->bank->is_first = false;
-            $user->bank->save();
-        }
-
         $withdrawal->closed = true;
         $withdrawal->save();
 

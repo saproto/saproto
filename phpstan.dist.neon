@@ -20,5 +20,7 @@ parameters:
         # Issue with the analysis of dynamic object type (see https://github.com/phpstan/phpstan/issues/928)
         - '#Access to an undefined property object::(.*)#'
         - '#Cannot access property (.*) on array\|object.#'
+        # Issue with SephpaInputException not being a subtype of Throwable
+        - '#AbcAeffchen\\Sephpa\\SephpaInputException#'
 
     checkMissingIterableValueType: false

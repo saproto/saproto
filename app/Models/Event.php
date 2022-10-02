@@ -85,7 +85,7 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -143,6 +143,12 @@ class Event extends Model
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
     }
 
+    /** @return HasMany */
+    public function dinnerforms()
+    {
+        return $this->hasMany('Proto\Models\Dinnerform', 'event_id');
+    }
+
     /** @return BelongsTo */
     public function category()
     {
@@ -161,13 +167,21 @@ class Event extends Model
     /** @return Collection|TicketPurchase[] */
     public function getTicketPurchasesFor(User $user)
     {
-        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->pluck('id'))->get();
+        return TicketPurchase::query()
+            ->where('user_id', $user->id)
+            ->whereIn('ticket_id', $this->tickets->pluck('id'))
+            ->get();
     }
 
     /** @return Collection|Event[] */
     public static function getEventsForNewsletter()
     {
-        return self::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
+        return self::query()
+            ->where('include_in_newsletter', true)
+            ->where('secret', false)
+            ->where('start', '>', date('U'))
+            ->orderBy('start')
+            ->get();
     }
 
     /** @return bool */
@@ -196,7 +210,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-        );
+            );
     }
 
     /**
@@ -223,12 +237,14 @@ class Event extends Model
         if (! $this->activity) {
             return false;
         }
-        $eroHelping = HelpingCommittee::where('activity_id', $this->activity->id)
+        $eroHelping = HelpingCommittee::query()
+            ->where('activity_id', $this->activity->id)
             ->where('committee_id', config('proto.committee')['ero'])->first();
         if ($eroHelping) {
-            return ActivityParticipation::where('activity_id', $this->activity->id)
-                    ->where('committees_activities_id', $eroHelping->id)
-                    ->where('user_id', $user->id)->count() > 0;
+            return ActivityParticipation::query()
+                ->where('activity_id', $this->activity->id)
+                ->where('committees_activities_id', $eroHelping->id)
+                ->where('user_id', $user->id)->count() > 0;
         } else {
             return false;
         }
@@ -299,5 +315,14 @@ class Event extends Model
         }
 
         return $events->count();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updating(function ($event) {
+            $event->update_sequence = $event->update_sequence + 1;
+        });
     }
 }

@@ -83,7 +83,8 @@
     "fakerphp/faker": "^1.13",
     "friendsofphp/php-cs-fixer": "^3.0.0",
     "laravel/tinker": "^2.6",
-    "nunomaduro/larastan": "^1.0"
+    "nunomaduro/larastan": "^1.0",
+    "itsgoingd/clockwork": "^5.1"
   },
   "autoload": {
     "classmap": [

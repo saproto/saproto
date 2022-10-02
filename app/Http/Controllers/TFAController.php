@@ -67,6 +67,7 @@ class TFAController extends Controller
     {
         $user = User::findOrFail($id);
         $user->tfa_totp_key = null;
+        $user->save();
 
         Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
         return Redirect::back();

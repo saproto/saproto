@@ -4,6 +4,7 @@
         Close your Proto account
     </button>
 
+    <form action="{{route('user::delete')}}" method="POST">
     <div id="modal-user-delete" class="modal fade" tabindex="-1" role="dialog">
 
         <div class="modal-dialog">
@@ -57,6 +58,7 @@
                     <br>
                     <p>
                         <strong>Note:</strong> If you still have open payments, you <strong>cannot</strong> close your account! You will first have to pay off your expenses.
+                        <br>If there are any withdrawals still on <u>pending</u> you will not be able to close your account until the withdrawal is <u>closed</u>!
                     </p>
                 </div>
 
@@ -70,14 +72,9 @@
                                 Pay off unpaid orderlines!
                             </button>
                         @else
-                            @include('website.layouts.macros.confirm-modal', [
-                               'action' => route('user::delete'),
-                               'classes' => 'btn btn-danger',
-                               'text' => 'Delete my account!',
-                               'title' => 'Confirm Delete',
-                               'message' => 'Are you REALLY sure you want to permanently delete your account?',
-                               'confirm' => 'YES! Delete my account!',
-                            ])
+                        <button type="submit" class="btn btn-danger">
+                            Close my account!
+                        </button>
                         @endif
                 </div>
 
@@ -86,5 +83,6 @@
         </div>
 
     </div>
+    </form>
 
 @endif

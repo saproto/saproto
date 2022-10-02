@@ -66,14 +66,8 @@ class MenuItem extends Model
             } catch (Exception $e) {
                 return '#';
             }
-        } elseif ($this->page_id == null) {
+        } else{
             return $this->url;
-        } else {
-            $page = Page::find($this->page_id);
-            if ($page) {
-                return $page->getUrl();
-            }
-            return '#';
         }
     }
 

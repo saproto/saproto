@@ -7,7 +7,9 @@ use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
 use Proto\Models\Activity;
 use Proto\Models\Committee;
@@ -29,29 +31,25 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $events = Event::orderBy('start')->get();
-        $category = EventCategory::find($request->category);
         $data = [[], [], []];
-        $years = [];
-
-        /** @var Event $event */
-        foreach ($events as $event) {
-            if (! $category || $category == $event->category) {
-                if ((! $event->activity || ! $event->secret) && $event->end > date('U')) {
-                    $delta = $event->start - date('U');
-                    if ($delta < 3600 * 24 * 7) {
-                        $data[0][] = $event;
-                    } elseif ($delta < 3600 * 24 * 21) {
-                        $data[1][] = $event;
-                    } else {
-                        $data[2][] = $event;
-                    }
-                }
-            }
-            if (! in_array(date('Y', $event->start), $years)) {
-                $years[] = date('Y', $event->start);
-            }
-        }
+        $data[0] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '<=', strtotime('+1 week'))
+            ->get();
+        $data[1] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '>', strtotime('+1 week'))
+            ->where('start', '<=', strtotime('+1 month'))
+            ->get();
+        $data[2] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '>', strtotime('+1 month'))
+            ->get();
+        $category = EventCategory::find($request->input('category'));
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
         if (Auth::check()) {
             $reminder = Auth::user()->getCalendarAlarm();
@@ -60,7 +58,6 @@ class EventController extends Controller
         }
 
         $calendar_url = route('ical::calendar', ['personal_key' => (Auth::check() ? Auth::user()->getPersonalKey() : null)]);
-
         return view('event.calendar', ['events' => $data, 'years' => $years, 'ical_url' => $calendar_url, 'reminder' => $reminder, 'cur_category' => $category]);
     }
 
@@ -90,28 +87,23 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $event = new Event();
-        $event->title = $request->title;
-        $event->start = strtotime($request->start);
-        $event->end = strtotime($request->end);
-        $event->location = $request->location;
-        $event->secret = $request->secret;
-        $event->description = $request->description;
-        $event->summary = $request->summary;
-        $event->is_featured = $request->has('is_featured');
-        $event->is_external = $request->has('is_external');
-        $event->force_calendar_sync = $request->has('force_calendar_sync');
-
-        if ($event->end < $event->start) {
-            Session::flash('flash_message', 'You cannot let the event end before it starts.');
-            return Redirect::back();
-        }
+        $event = Event::create([
+        'title' => $request->title,
+        'start' => strtotime($request->start),
+        'end' => strtotime($request->end),
+        'location' => $request->location,
+        'secret' => $request->secret,
+        'description' => $request->description,
+        'summary' => $request->summary,
+        'is_featured' => $request->has('is_featured'),
+        'is_external' => $request->has('is_external'),
+        'force_calendar_sync' => $request->has('force_calendar_sync'), ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -141,12 +133,12 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @param int $id
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
-    public function update(Request $request, $id)
+    public function update(StoreEventRequest $request, $id)
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
@@ -204,23 +196,18 @@ class EventController extends Controller
      */
     public function archive(Request $request, $year)
     {
-        $events = Event::orderBy('start')->get();
+        $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
+        $events = Event::orderBy('start')->where('start', '>', strtotime($year.'-01-01 00:00:01'))->where('start', '<',strtotime($year.'-12-31 23:59:59'))->with('activity')->get();
         $category = EventCategory::find($request->category);
 
         $months = [];
-        $years = [];
         for ($i = 1; $i <= 12; $i++) {
             $months[$i] = [];
         }
 
         foreach ($events as $event) {
             if (! $category || $category == $event->category) {
-                if ($event->start > strtotime($year.'-01-01 00:00:01') && $event->end < strtotime($year.'-12-31 23:59:59')) {
                     $months[intval(date('n', $event->start))][] = $event;
-                }
-                if (! in_array(date('Y', $event->start), $years)) {
-                    $years[] = date('Y', $event->start);
-                }
             }
         }
 
@@ -582,7 +569,9 @@ class EventController extends Controller
                     'ORGANIZER;CN=%s:MAILTO:%s',
                     ($event->committee ? $event->committee->name : 'S.A. Proto'),
                     ($event->committee ? $event->committee->email_address : 'board@proto.utwente.nl')
-                )."\r\n";
+                )."\r\n".
+                sprintf('LAST_UPDATED:%s', gmdate('Ymd\THis\Z', strtotime($event->updated_at)))."\r\n".
+                sprintf('SEQUENCE:%s', $event->update_sequence)."\r\n";
 
             if ($reminder && $status) {
                 $calendar .= 'BEGIN:VALARM'."\r\n".

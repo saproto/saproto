@@ -24,6 +24,7 @@ class PasswordController extends Controller
     /**
      * @param Request $request
      * @return RedirectResponse
+     * @throws Exception
      */
     public function postAuth(Request $request)
     {

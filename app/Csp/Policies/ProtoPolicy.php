@@ -3,6 +3,7 @@
 namespace Proto\Csp\Policies;
 
 use function Sentry\captureException;
+
 use Spatie\Csp\Directive;
 use Spatie\Csp\Exceptions\InvalidDirective;
 use Spatie\Csp\Exceptions\InvalidValueSet;
@@ -48,6 +49,7 @@ class ProtoPolicy extends Policy
                 ])
                 ->addDirective(Directive::MEDIA, [
                     Keyword::SELF,
+                    '*',
                     'https://static.saproto.com',
                 ])
                 ->addDirective(Directive::FRAME, [
