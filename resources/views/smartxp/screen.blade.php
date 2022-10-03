@@ -29,6 +29,7 @@
             padding: 15px 10px;
             margin: 0;
             background-color: #333;
+            overflow: hidden;
         }
 
         .box {
@@ -308,6 +309,7 @@
                 timetable.innerHTML = ''
                 let count = 0
                 for (let i in data) {
+                    if(count>=4)return
                     if (!data[i].over) {
                         let start = moment.unix(data[i].start)
                         let end = moment.unix(data[i].end)
