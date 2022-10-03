@@ -434,11 +434,11 @@
                     count++
                 }
                 if (open) {
-                    protopolisFa.classList.add('fa-door-open green')
-                    protopolisFa.classList.remove('fa-door-closed')
+                    protopolisFa.classList.add('green')
+                    protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
                 } else {
-                    protopolisFa.classList.remove('fa-door-open green')
-                    protopolisFa.classList.add('fa-door-closed')
+                    protopolisFa.classList.remove('green')
+                    protopolisFa.classList.replace('fa-door-open', 'fa-door-closed')
                 }
                 if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
             } else {
