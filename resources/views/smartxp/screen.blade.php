@@ -446,7 +446,8 @@
             }
             setTimeout(updateProtopeners, 60000)
         })
-        .catch(_ => {
+        .catch(err => {
+            console.error(err)
             timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
             setTimeout(updateProtopeners, 5000)
         })
