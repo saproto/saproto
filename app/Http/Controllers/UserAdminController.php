@@ -122,7 +122,7 @@ class UserAdminController extends Controller
         Session::put('impersonator', Auth::user()->id);
         Auth::login($user);
 
-        return redirect('/');
+        return Redirect::route('homepage');
     }
 
     /** @return RedirectResponse */
@@ -136,10 +136,10 @@ class UserAdminController extends Controller
 
             Auth::login($impersonator);
 
-            return redirect()->route('user::admin::details', ['id' => $redirect_user]);
+            return Redirect::route('user::admin::details', ['id' => $redirect_user]);
         }
 
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -212,7 +212,7 @@ class UserAdminController extends Controller
         // Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -233,7 +233,7 @@ class UserAdminController extends Controller
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
         Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -258,7 +258,7 @@ class UserAdminController extends Controller
         $member->save();
 
         Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -277,7 +277,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -292,7 +292,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -307,7 +307,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -322,7 +322,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**

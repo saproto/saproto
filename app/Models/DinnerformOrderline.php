@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property bool|null $helper
+ * @property-read User $user
+ * @property-read Dinnerform $dinnerform
  * @mixin Eloquent
  **/
 class DinnerformOrderline extends Model
@@ -27,24 +29,23 @@ class DinnerformOrderline extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
-        return $this->belongsTo('Proto\Models\User')->withTrashed()->first();
+        return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /**
-     * @return BelongsTo|Dinnerform
-     */
+    /** @return BelongsTo */
     public function dinnerform()
     {
-        return $this->belongsTo('Proto\Models\Dinnerform')->first();
+        return $this->belongsTo('Proto\Models\Dinnerform');
     }
 
+    /** @return float Price of orderline - possible discount */
     public function getPriceAttribute() {
         $price = $this->attributes['price'];
-        if($this->helper && $this->dinnerform()->discount){
-            $discounted = $price - $this->dinnerform()->discount;
+        if($this->helper && $this->dinnerform->discount){
+            $discounted = $price - $this->dinnerform->discount;
             if($discounted > 0)return $discounted;
             return 0;
         }

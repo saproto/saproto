@@ -44,7 +44,7 @@ class PhotoAdminController extends Controller
         }
         $album->save();
 
-        return redirect(route('photo::admin::edit', ['id' => $album->id]));
+        return Redirect::route('photo::admin::edit', ['id' => $album->id]);
     }
 
     /**
@@ -55,11 +55,11 @@ class PhotoAdminController extends Controller
     {
         $photos = PhotoManager::getPhotos($id);
 
-        if ($photos) {
-            return view('photos.admin.edit', ['photos' => $photos]);
+        if ($photos == null) {
+            abort(404);
         }
 
-        abort(404);
+        return view('photos.admin.edit', ['photos' => $photos]);
     }
 
     /**
@@ -79,7 +79,7 @@ class PhotoAdminController extends Controller
         }
         $album->save();
 
-        return redirect(route('photo::admin::edit', ['id' => $id]));
+        return Redirect::route('photo::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -156,7 +156,7 @@ class PhotoAdminController extends Controller
             $album->save();
         }
 
-        return redirect(route('photo::admin::edit', ['id' => $id]));
+        return Redirect::route('photo::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -167,7 +167,7 @@ class PhotoAdminController extends Controller
     public function delete($id)
     {
         PhotoManager::deleteAlbum($id);
-        return redirect(route('photo::admin::index'));
+        return Redirect::route('photo::admin::index');
     }
 
     /**
@@ -186,7 +186,7 @@ class PhotoAdminController extends Controller
         $album->published = true;
         $album->save();
 
-        return redirect(route('photo::admin::edit', ['id' => $id]));
+        return Redirect::route('photo::admin::edit', ['id' => $id]);
     }
 
     /**
@@ -199,7 +199,7 @@ class PhotoAdminController extends Controller
         $album->published = false;
         $album->save();
 
-        return redirect(route('photo::admin::edit', ['id' => $id]));
+        return Redirect::route('photo::admin::edit', ['id' => $id]);
     }
 
     /**

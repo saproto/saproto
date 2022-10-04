@@ -65,6 +65,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = Product::create($request->except('image', 'product_categories'));
+        $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
@@ -120,6 +121,7 @@ class ProductController extends Controller
         /** @var Product $product */
         $product = Product::findOrFail($id);
         $product->fill($request->except('image', 'product_categories'));
+        $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
@@ -209,7 +211,7 @@ class ProductController extends Controller
     public function destroy(Request $request, $id)
     {
         if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')){
-            $request->session()->flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
+            Session::flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
             return Redirect::back();
         }
         /** @var Product $product */

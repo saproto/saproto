@@ -149,11 +149,7 @@ class NarrowcastingController extends Controller
      */
     public function destroy($id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
-
-        if (! $narrowcasting) {
-            abort(404);
-        }
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been deleted.");
         $narrowcasting->delete();

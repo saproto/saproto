@@ -75,8 +75,8 @@
                     @if(count($orderList) > 0)
                         @foreach($orderList as $order)
                             <tr>
-                                <td class="align-middle">{{ $order->user()->name }}
-                                    <span class="text-muted"> {{ $order->user()->id }}</span>
+                                <td class="align-middle">{{ $order->user->name }}
+                                    <span class="text-muted"> {{ $order->user->id }}</span>
                                 </td>
                                 <td class="align-middle">{{ $order->description }}</td>
                                 <td class="align-middle"> €{{ $order->price }} </td>

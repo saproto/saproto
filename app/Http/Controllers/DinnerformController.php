@@ -34,6 +34,7 @@ class DinnerformController extends Controller
         return view('dinnerform.order', ['dinnerform'=>$dinnerform, 'previousOrders'=>$previousOrders]);
     }
 
+    /** @return View */
     public function admin($id) {
         $dinnerform = Dinnerform::findOrFail($id);
         return view('dinnerform.admin', ['dinnerform'=>$dinnerform, 'orderList'=>$dinnerform->orderlines()->get()]);
@@ -80,7 +81,8 @@ class DinnerformController extends Controller
     {
         $dinnerformCurrent = Dinnerform::findOrFail($id);
         if ($dinnerformCurrent->closed) {
-            return Redirect::back()->with('flash_message', 'You can not update a closed dinnerform!');
+            Session::flash('flash_message', 'You can not update a closed dinnerform!');
+            return Redirect::back();
         }
         $dinnerformList = Dinnerform::all()->sortByDesc('end');
         return view('dinnerform.list', ['dinnerformCurrent' => $dinnerformCurrent, 'dinnerformList' => $dinnerformList]);
@@ -95,14 +97,16 @@ class DinnerformController extends Controller
     {
 
         if ($request->end < $request->start) {
-            return Redirect::back()->with('flash_message', 'You cannot let the dinnerform close before it opens.');
+            Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
+            return Redirect::back();
         }
 
         /** @var Dinnerform $dinnerform */
         $dinnerform = Dinnerform::findOrFail($id);
 
         if ($dinnerform->closed) {
-            return Redirect::back()->with('flash_message', 'You can not update a closed dinnerform!');
+            Session::flash('flash_message', 'You can not update a closed dinnerform!');
+            return Redirect::back();
         }
 
         $changed_important_details = $dinnerform->start->timestamp != strtotime($request->start) || $dinnerform->end->timestamp != strtotime($request->end) || $dinnerform->restaurant != $request->restaurant;
@@ -166,7 +170,7 @@ class DinnerformController extends Controller
 
         foreach($dinnerformOrderlines as $dinnerformOrderline){
             $product->buyForUser(
-                $dinnerformOrderline->user(),
+                $dinnerformOrderline->user,
                 1,
                 $dinnerformOrderline->price,
                 null,

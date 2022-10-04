@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Redirect;
 
 class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
@@ -29,7 +30,7 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->route('login::show');
+                return Redirect::route('login::show');
             }
         }
 

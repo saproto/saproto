@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Proto\Models\Tempadmin;
 use Proto\Models\User;
+use Redirect;
 
 class TempAdminController extends Controller
 {
@@ -30,7 +31,7 @@ class TempAdminController extends Controller
         $tempAdmin->user()->associate($user);
         $tempAdmin->save();
 
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -53,7 +54,7 @@ class TempAdminController extends Controller
         // Will result in kick for users whose temporary admin powers were removed.
         Http::get(config('herbert.server').'/adminCheck');
 
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -77,7 +78,7 @@ class TempAdminController extends Controller
             Http::get(config('herbert.server').'/adminCheck');
         }
 
-        return redirect()->back();
+        return Redirect::back();
     }
 
     /**
@@ -110,7 +111,7 @@ class TempAdminController extends Controller
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
 
-        return redirect(route('tempadmin::index'));
+        return Redirect::route('tempadmin::index');
     }
 
     /**
@@ -136,6 +137,6 @@ class TempAdminController extends Controller
         $tempadmin->end_at = date('Y-m-d H:i:s', strtotime($request->end_at));
         $tempadmin->save();
 
-        return redirect(route('tempadmin::index'));
+        return Redirect::route('tempadmin::index');
     }
 }

@@ -129,12 +129,7 @@ class CommitteeController extends Controller
      */
     public function edit($id)
     {
-        $committee = Committee::find($id);
-
-        if ($committee == null) {
-            abort(404);
-        }
-
+        $committee = Committee::findOrFail($id);
         return view('committee.edit', ['new' => false, 'id' => $id, 'committee' => $committee, 'members' => $committee->allMembers()]);
     }
 
@@ -191,14 +186,8 @@ class CommitteeController extends Controller
      */
     public function addMembership(Request $request)
     {
-        $user = User::find($request->user_id);
-        $committee = Committee::find($request->committee_id);
-        if ($user == null) {
-            abort(404);
-        }
-        if ($committee == null) {
-            abort(404);
-        }
+        $user = User::findOrFail($request->user_id);
+        $committee = Committee::findOrFail($request->committee_id);
 
         $membership = new CommitteeMembership();
         $membership->role = $request->role;

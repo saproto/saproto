@@ -58,7 +58,7 @@ class JobofferController extends Controller
         $joboffer = Joboffer::create($request->all());
         $joboffer->save();
 
-        return redirect(route('joboffers::admin'));
+        return Redirect::route('joboffers::admin');
     }
 
     /**
@@ -97,7 +97,7 @@ class JobofferController extends Controller
         $joboffer->save();
 
         Session::flash('flash_message', 'Job offer has been updated.');
-        return redirect(route('joboffers::admin'));
+        return Redirect::route('joboffers::admin');
     }
 
     /**

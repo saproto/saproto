@@ -443,7 +443,7 @@ class AuthController extends Controller
     public function startSurfConextAuth()
     {
         Session::reflash();
-        return redirect(route('saml2_login', ['idpName' => 'surfconext']));
+        return Redirect::route('saml2_login', ['idpName' => 'surfconext']);
     }
 
     /**

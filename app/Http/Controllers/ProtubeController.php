@@ -51,7 +51,7 @@ class ProtubeController extends Controller
     /** @return RedirectResponse */
     public function loginRedirect()
     {
-        return redirect(route('protube::remote'));
+        return Redirect::route('protube::remote');
     }
 
     /** @return View */

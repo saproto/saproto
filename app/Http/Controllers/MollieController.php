@@ -85,7 +85,8 @@ class MollieController extends Controller
             });
 
             if ($selected_method->count() === 0) {
-                return Redirect::back()->with('flash_message','The selected payment method is unavailable, please select a different method');
+                Session::flash('flash_message','The selected payment method is unavailable, please select a different method');
+                return Redirect::back();
             }
 
             $selected_method = $selected_method->first();
@@ -94,7 +95,8 @@ class MollieController extends Controller
                 $total < floatval($selected_method->minimumAmount->value) ||
                 $total > floatval($selected_method->maximumAmount->value)
             ) {
-                return Redirect::back()->with('flash_message', 'You are unable to pay this amount with the selected method!');
+                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
+                return Redirect::back();
             }
         }
 

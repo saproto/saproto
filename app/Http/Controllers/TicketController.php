@@ -345,7 +345,8 @@ class TicketController extends Controller
 
         $payment_method = '';
         if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
-            return Redirect::back()->with('flash_message', 'No payment method is selected!');
+            Session::flash('flash_message', 'No payment method is selected!');
+            return Redirect::back();
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
@@ -357,7 +358,8 @@ class TicketController extends Controller
             });
 
             if ($payment_method->count() === 0) {
-                return Redirect::back()->with('flash_message','The selected payment method is unavailable, please select a different method');
+                Session::flash('flash_message','The selected payment method is unavailable, please select a different method');
+                return Redirect::back();
             }
             $payment_method = $payment_method->first();
         
@@ -365,7 +367,8 @@ class TicketController extends Controller
                 $total_cost < floatval($payment_method->minimumAmount->value) ||
                 $total_cost > floatval($payment_method->maximumAmount->value)
             ) {
-                return Redirect::back()->with('flash_message', 'You are unable to pay this amount with the selected method!');
+                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
+                return Redirect::back();
             }
         }
 

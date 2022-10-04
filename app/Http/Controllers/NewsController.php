@@ -79,7 +79,7 @@ class NewsController extends Controller
         $newsitem->user_id = Auth::user()->id;
         $newsitem->save();
 
-        return redirect(route('news::admin'));
+        return Redirect::route('news::admin');
     }
 
     /** @return View */
@@ -103,7 +103,7 @@ class NewsController extends Controller
         $newsitem->published_at = date('Y-m-d H:i:s', strtotime($request->published_at));
         $newsitem->save();
 
-        return redirect(route('news::admin'));
+        return Redirect::route('news::admin');
     }
 
     /**
