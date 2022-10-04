@@ -137,7 +137,7 @@
                                 @elseif($email->to_list)
                                     list(s) {{ $email->getListName() }}
                                 @elseif($email->to_event)
-                                    event(s):
+                                    event(s) {{$email->to_backup?'with backup users':''}}:
                                     @foreach($email->events()->get() as $event)
                                         {{$event->title}}.
                                         @endforeach

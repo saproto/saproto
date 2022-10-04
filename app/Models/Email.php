@@ -22,15 +22,16 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $sender_address
  * @property string $body
  * @property int|null $sent_to
- * @property int $time
- * @property bool $sent
- * @property bool $ready
  * @property bool $to_user
  * @property bool $to_member
  * @property bool $to_list
  * @property bool $to_event
  * @property bool $to_active
  * @property bool $to_pending
+ * @property bool $to_backup
+ * @property bool $ready
+ * @property bool $sent
+ * @property int $time
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|StorageEntry[] $attachments
@@ -100,6 +101,9 @@ class Email extends Model
         } elseif ($this->to_list) {
             return 'list';
         } elseif ($this->to_event) {
+            if($this->to_backup){
+                return 'event with backup';
+            }
             return 'event';
         } else {
             throw new Exception('Email has no destination');
@@ -134,7 +138,12 @@ class Email extends Model
         } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
-                $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
+                if ($event != null) {
+                    $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
+                    if($this->to_backup && $event->activity){
+                        $user_ids = array_merge($user_ids, $event->activity->backupUsers()->pluck('users.id')->toArray());
+                    }
+                }
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
@@ -163,7 +172,7 @@ class Email extends Model
     public function getEventName()
     {
         $events = [];
-        if ($this->to_event == false) {
+        if (! $this->to_event) {
             return '';
         } else {
             foreach ($this->events as $event) {
@@ -177,7 +186,7 @@ class Email extends Model
     public function getListName()
     {
         $lists = [];
-        if ($this->to_list == false) {
+        if (! $this->to_list) {
             return '';
         } else {
             foreach ($this->lists as $list) {
