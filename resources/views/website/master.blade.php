@@ -44,6 +44,8 @@
 
     @include('website.layouts.macros.flashmessages')
 
+    <div class="position-absolute top-0 start-50" style="margin-top: 70px" id="alert-wrapper"></div>
+
     @include('website.layouts.macros.achievement-popup')
 
     @include('website.layouts.macros.errormessages')
