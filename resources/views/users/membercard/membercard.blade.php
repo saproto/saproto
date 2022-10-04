@@ -14,9 +14,10 @@
         }
 
         #name {
-            margin-top: 6mm;
+            margin-top: 4mm;
             font-size: 18px;
             font-weight: bold;
+            margin-right: 30mm;
         }
 
         #photo {
