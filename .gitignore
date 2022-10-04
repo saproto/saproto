@@ -17,6 +17,7 @@
 .phpstorm.meta.php
 _ide_helper.php
 .php-cs-fixer.cache
+phpstan.neon
 
 # Meta files
 composer.phar

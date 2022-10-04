@@ -52,8 +52,8 @@
                 <tbody>
                     <tr>
                         <td class="align-middle">€{{ $dinnerform->totalAmount() }}</td>
-                        <td class="align-middle">{{ $dinnerform->amountOfOrders() }}</td>
-                        <td class="align-middle">{{ $dinnerform->amountOfHelpers() }}</td>
+                        <td class="align-middle">{{ $dinnerform->orderCount() }}</td>
+                        <td class="align-middle">{{ $dinnerform->helperCount() }}</td>
                         <td class="align-middle">€{{ $dinnerform->discount }}</td>
                         <td class="align-middle">€{{ $dinnerform->totalAmountwithHelperDiscount() }}</td>
                     </tr>
@@ -75,8 +75,8 @@
                     @if(count($orderList) > 0)
                         @foreach($orderList as $order)
                             <tr>
-                                <td class="align-middle">{{ $order->user()->name }}
-                                    <span class="text-muted"> {{ $order->user()->id }}</span>
+                                <td class="align-middle">{{ $order->user->name }}
+                                    <span class="text-muted"> {{ $order->user->id }}</span>
                                 </td>
                                 <td class="align-middle">{{ $order->description }}</td>
                                 <td class="align-middle"> €{{ $order->price }} </td>
@@ -86,7 +86,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    €{{$order->price()}}
+                                    €{{$order->price}}
                                 </td>
                                 <td class="text-start align-middle">
                                     @if(!$order->closed)

@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Proto\Models\EmailList;
 use Proto\Models\User;
 use Redirect;
+use Session;
 
 class EmailListController extends Controller
 {
@@ -31,7 +32,7 @@ class EmailListController extends Controller
             'is_member_only' => $request->has('is_member_only'),
         ]);
 
-        $request->session()->flash('flash_message', 'Your list has been created!');
+        Session::flash('flash_message', 'Your list has been created!');
         return Redirect::route('email::admin');
     }
 
@@ -56,7 +57,7 @@ class EmailListController extends Controller
         ]);
         $list->save();
 
-        $request->session()->flash('flash_message', 'The list has been updated!');
+        Session::flash('flash_message', 'The list has been updated!');
         return Redirect::route('email::admin');
     }
 
@@ -70,13 +71,12 @@ class EmailListController extends Controller
         $list = EmailList::findOrFail($id);
         $list->delete();
 
-        $request->session()->flash('flash_message', 'The list has been deleted!');
-
+        Session::flash('flash_message', 'The list has been deleted!');
         return Redirect::route('email::admin');
     }
 
     /**
-     * @param array $type
+     * @param string $type
      * @param User $user
      */
     public static function autoSubscribeToLists($type, $user)
@@ -104,25 +104,21 @@ class EmailListController extends Controller
 
         if ($list->isSubscribed($user)) {
             if ($list->unsubscribe($user)) {
-                $request->session()->flash('flash_message', 'You have been unsubscribed to the list '.$list->name.'.');
-
+                Session::flash('flash_message', 'You have been unsubscribed to the list '.$list->name.'.');
                 return Redirect::route('user::dashboard');
             }
         } else {
             if ($list->is_member_only && ! $user->is_member) {
-                $request->session()->flash('flash_message', 'This list is only for members.');
-
+                Session::flash('flash_message', 'This list is only for members.');
                 return Redirect::route('user::dashboard');
             }
             if ($list->subscribe($user)) {
-                $request->session()->flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
-
+                Session::flash('flash_message', 'You have been subscribed to the list '.$list->name.'.');
                 return Redirect::route('user::dashboard');
             }
         }
 
-        $request->session()->flash('flash_message', 'Something went wrong toggling your subscription for '.$list->name.'.');
-
+        Session::flash('flash_message', 'Something went wrong toggling your subscription for '.$list->name.'.');
         return Redirect::route('user::dashboard');
     }
 }

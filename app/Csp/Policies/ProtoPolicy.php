@@ -12,6 +12,7 @@ use Spatie\Csp\Policies\Policy;
 
 class ProtoPolicy extends Policy
 {
+    /** @return void */
     public function configure()
     {
         try {

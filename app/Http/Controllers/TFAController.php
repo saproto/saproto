@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use PragmaRX\Google2FA\Google2FA;
 use Proto\Models\User;
 use Redirect;
+use Session;
 
 class TFAController extends Controller
 {
@@ -25,9 +26,9 @@ class TFAController extends Controller
         if ($google2fa->verifyKey($secret, $code)) {
             $user->tfa_totp_key = $secret;
             $user->save();
-            $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication enabled!');
+            Session::flash('flash_message', 'Time-Based 2 Factor Authentication enabled!');
         } else {
-            $request->session()->flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
+            Session::flash('flash_message', 'The code you entered is not correct. Remove the account from your 2FA app and try again.');
         }
 
         return Redirect::route('user::dashboard');
@@ -48,23 +49,27 @@ class TFAController extends Controller
                 $user->tfa_totp_key = null;
                 $user->save();
             } else {
-                $request->session()->flash('flash_message', 'Invalid code supplied, could not disable 2FA!');
-
+                Session::flash('flash_message', 'Invalid code supplied, could not disable 2FA!');
                 return Redirect::back();
             }
         }
 
-        $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
+        Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
         return Redirect::route('user::dashboard');
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
     public function adminDestroy(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $user->tfa_totp_key = null;
         $user->save();
 
-        $request->session()->flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
+        Session::flash('flash_message', 'Time-Based 2 Factor Authentication disabled!');
         return Redirect::back();
     }
 }

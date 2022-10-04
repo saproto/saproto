@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|RadioStation whereName($value)
  * @method static Builder|RadioStation whereUpdatedAt($value)
  * @method static Builder|RadioStation whereUrl($value)
+ * @method static Builder|RadioStation newModelQuery()
+ * @method static Builder|RadioStation newQuery()
+ * @method static Builder|RadioStation query()
  * @mixin Eloquent
  */
 class RadioStation extends Model

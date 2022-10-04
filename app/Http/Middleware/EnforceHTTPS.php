@@ -4,6 +4,7 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Redirect;
 
 class EnforceHTTPS
 {
@@ -17,7 +18,7 @@ class EnforceHTTPS
     public function handle($request, $next)
     {
         if (! $request->secure() && config('app.ssl')) {
-            return redirect()->secure($request->getRequestUri(), 301);
+            return Redirect::secure($request->getRequestUri(), 301);
         }
 
         return $next($request);

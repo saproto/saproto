@@ -4,10 +4,10 @@ namespace Proto\Models;
 
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * Ticket Model.
@@ -15,10 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property int $event_id
  * @property int $product_id
- * @property int $members_only
  * @property int $available_from
  * @property int $available_to
- * @property int $is_prepaid
+ * @property bool $members_only
+ * @property bool $is_prepaid
  * @property-read Event $event
  * @property-read Product $product
  * @property-read Collection|TicketPurchase[] $purchases
@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Ticket whereIsPrepaid($value)
  * @method static Builder|Ticket whereMembersOnly($value)
  * @method static Builder|Ticket whereProductId($value)
+ * @method static Builder|Ticket newModelQuery()
+ * @method static Builder|Ticket newQuery()
+ * @method static Builder|Ticket query()
  * @mixin Eloquent
  */
 class Ticket extends Model
@@ -39,24 +42,25 @@ class Ticket extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo|Product */
+    /** @return BelongsTo */
     public function product()
     {
-        return $this->belongsTo('Proto\Models\Product', 'product_id');
+        return $this->belongsTo('Proto\Models\Product');
     }
 
+    /** @return BelongsTo */
     public function event()
     {
-        return $this->belongsTo('Proto\Models\Event', 'event_id');
+        return $this->belongsTo('Proto\Models\Event');
     }
 
-    /** @return HasMany|TicketPurchase */
+    /** @return HasMany */
     public function purchases()
     {
-        return $this->hasMany('Proto\Models\TicketPurchase', 'ticket_id');
+        return $this->hasMany('Proto\Models\TicketPurchase');
     }
 
-    /** @return User[] */
+    /** @return Collection */
     public function getUsers()
     {
         $ids = TicketPurchase::where('ticket_id', $this->id)->get()->pluck('user_id')->toArray();

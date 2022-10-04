@@ -16,12 +16,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $activity_id
  * @property int $committee_id
  * @property int $amount
- * @property int $notification_sent
+ * @property bool $notification_sent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Activity $activity
- * @property-read Committee $committee
- * @property-read Collection|User[] $users
+ * @property-read Activity|null $activity
+ * @property-read Committee|null $committee
+ * @property-read Collection|User[]|null $users
  * @method static Builder|HelpingCommittee whereActivityId($value)
  * @method static Builder|HelpingCommittee whereAmount($value)
  * @method static Builder|HelpingCommittee whereCommitteeId($value)
@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|HelpingCommittee whereId($value)
  * @method static Builder|HelpingCommittee whereNotificationSent($value)
  * @method static Builder|HelpingCommittee whereUpdatedAt($value)
+ * @method static Builder|HelpingCommittee newModelQuery()
+ * @method static Builder|HelpingCommittee newQuery()
+ * @method static Builder|HelpingCommittee query()
  * @mixin Eloquent
  */
 class HelpingCommittee extends Validatable
@@ -43,19 +46,19 @@ class HelpingCommittee extends Validatable
         'amount' => 'required|integer',
     ];
 
-    /** @return BelongsTo|Activity */
+    /** @return BelongsTo */
     public function activity()
     {
         return $this->belongsTo('Proto\Models\Activity');
     }
 
-    /** @return BelongsTo|Committee */
+    /** @return BelongsTo */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
         return $this

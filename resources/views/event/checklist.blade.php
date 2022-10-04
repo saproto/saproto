@@ -38,7 +38,7 @@
 
                         <tbody>
 
-                        @foreach($event->returnAllUsers() as $user)
+                        @foreach($event->allUsers() as $user)
                             @php
                                 $participation = $user->pivot;
                             @endphp

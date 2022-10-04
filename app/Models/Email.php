@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Carbon;
 use DB;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -20,16 +21,16 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $sender_name
  * @property string $sender_address
  * @property string $body
- * @property int $to_user
- * @property int $to_member
- * @property int $to_list
- * @property int $to_event
- * @property int $to_active
- * @property int $to_pending
  * @property int|null $sent_to
- * @property int $sent
- * @property int $ready
  * @property int $time
+ * @property bool $sent
+ * @property bool $ready
+ * @property bool $to_user
+ * @property bool $to_member
+ * @property bool $to_list
+ * @property bool $to_event
+ * @property bool $to_active
+ * @property bool $to_pending
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|StorageEntry[] $attachments
@@ -52,6 +53,10 @@ use Illuminate\Support\Collection as SupportCollection;
  * @method static Builder|Email whereToMember($value)
  * @method static Builder|Email whereToUser($value)
  * @method static Builder|Email whereUpdatedAt($value)
+ * @method static Builder|Email whereToPending($value)
+ * @method static Builder|Email newModelQuery()
+ * @method static Builder|Email newQuery()
+ * @method static Builder|Email query()
  * @mixin Eloquent
  */
 class Email extends Model
@@ -60,25 +65,28 @@ class Email extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany|EmailList[] */
+    /** @return BelongsToMany */
     public function lists()
     {
         return $this->belongsToMany('Proto\Models\EmailList', 'emails_lists', 'email_id', 'list_id');
     }
 
-    /** @return BelongsToMany|Event[] */
+    /** @return BelongsToMany */
     public function events()
     {
         return $this->belongsToMany('Proto\Models\Event', 'emails_events', 'email_id', 'event_id');
     }
 
-    /** @return BelongsToMany|StorageEntry[] */
+    /** @return BelongsToMany */
     public function attachments()
     {
         return $this->belongsToMany('Proto\Models\StorageEntry', 'emails_files', 'email_id', 'file_id');
     }
 
-    /** @return string */
+    /**
+     * @return string
+     * @throws Exception
+     */
     public function destinationForBody()
     {
         if ($this->to_user) {
@@ -93,6 +101,8 @@ class Email extends Model
             return 'list';
         } elseif ($this->to_event) {
             return 'event';
+        } else {
+            throw new Exception('Email has no destination');
         }
     }
 
@@ -121,12 +131,10 @@ class Email extends Model
                 $user_ids = array_merge($user_ids, $list->users->pluck('id')->toArray());
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
-        } elseif ($this->to_event != false) {
+        } elseif ($this->to_event) {
             $user_ids = [];
             foreach ($this->events as $event) {
-                if ($event) {
-                    $user_ids = array_merge($user_ids, $event->returnAllUsers()->pluck('id')->toArray());
-                }
+                $user_ids = array_merge($user_ids, $event->allUsers()->pluck('id')->toArray());
             }
             return User::whereIn('id', $user_ids)->orderBy('name', 'asc')->get();
         } else {
@@ -159,11 +167,7 @@ class Email extends Model
             return '';
         } else {
             foreach ($this->events as $event) {
-                if ($event) {
-                    $events[] = $event->title;
-                } else {
-                    $events[] = 'Unknown Event';
-                }
+                $events[] = $event->title;
             }
         }
         return implode(', ', $events);

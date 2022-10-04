@@ -6,7 +6,6 @@ use AbcAeffchen\SepaUtilities\SepaUtilities;
 use AbcAeffchen\Sephpa\SephpaDirectDebit;
 use AbcAeffchen\Sephpa\SephpaInputException;
 use Auth;
-use Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -54,8 +53,7 @@ class WithdrawalController extends Controller
 
         $date = strtotime($request->input('date'));
         if ($date === false) {
-            $request->session()->flash('flash_message', 'Invalid date.');
-
+            Session::flash('flash_message', 'Invalid date.');
             return Redirect::back();
         }
 
@@ -115,7 +113,7 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function showAccounts($id)
@@ -129,38 +127,6 @@ class WithdrawalController extends Controller
             ->select('orderlines.*', 'accounts.account_number', 'accounts.name')
             ->where('orderlines.payed_with_withdrawal', $withdrawal->id)
             ->get();
-
-        $accounts = [];
-
-        foreach ($orderlines as $orderline) {
-            // We sort by date, where a date goes from 6am - 6am.
-            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
-
-            // Shorthand variable names.
-            $nr = $orderline->account_number;
-
-            // Add account to dataset if not existing yet.
-            if (! isset($accounts[$nr])) {
-                $accounts[$nr] = (object) [
-                    'byDate' => [],
-                    'name' => $orderline->name,
-                    'total' => 0,
-                ];
-            }
-
-            // Add orderline to total account price.
-            $accounts[$nr]->total += $orderline->total_price;
-
-            // Add date to account data if not existing yet.
-            if (! isset($accounts[$nr]->byDate[$sortDate])) {
-                $accounts[$nr]->byDate[$sortDate] = 0;
-            }
-
-            // Add orderline to account-on-date total.
-            $accounts[$nr]->byDate[$sortDate] += $orderline->total_price;
-        }
-
-        ksort($accounts);
 
         return view('omnomcom.accounts.orderlines-breakdown', [
             'accounts' => Account::generateAccountOverviewFromOrderlines($orderlines),
@@ -180,22 +146,20 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
         $date = strtotime($request->input('date'));
         if ($date === false) {
-            $request->session()->flash('flash_message', 'Invalid date.');
-
+            Session::flash('flash_message', 'Invalid date.');
             return Redirect::back();
         }
 
         $withdrawal->date = date('Y-m-d', $date);
         $withdrawal->save();
 
-        $request->session()->flash('flash_message', 'Withdrawal updated.');
+        Session::flash('flash_message', 'Withdrawal updated.');
         return Redirect::route('omnomcom::withdrawal::show', ['id' => $withdrawal->id]);
     }
 
@@ -207,12 +171,10 @@ class WithdrawalController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be deleted.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be deleted.');
             return Redirect::back();
         }
 
@@ -228,14 +190,14 @@ class WithdrawalController extends Controller
 
         $withdrawal->delete();
 
-        $request->session()->flash('flash_message', 'Withdrawal deleted.');
+        Session::flash('flash_message', 'Withdrawal deleted.');
         return Redirect::route('omnomcom::withdrawal::list');
     }
 
     /**
      * @param Request $request
-     * @param $id
-     * @param $user_id
+     * @param int $id
+     * @param int $user_id
      * @return RedirectResponse
      */
     public static function deleteFrom(Request $request, $id, $user_id)
@@ -244,8 +206,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
@@ -257,7 +218,7 @@ class WithdrawalController extends Controller
             $orderline->save();
         }
 
-        $request->session()->flash('flash_message', 'Orderlines for '.$user->name.' removed from this withdrawal.');
+        Session::flash('flash_message', 'Orderlines for '.$user->name.' removed from this withdrawal.');
         return Redirect::back();
     }
 
@@ -273,7 +234,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
@@ -281,8 +242,7 @@ class WithdrawalController extends Controller
         $user = User::findOrFail($user_id);
 
         if (FailedWithdrawal::where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
-            $request->session()->flash('flash_message', 'This withdrawal has already been marked as failed.');
-
+            Session::flash('flash_message', 'This withdrawal has already been marked as failed.');
             return Redirect::back();
         }
 
@@ -311,7 +271,7 @@ class WithdrawalController extends Controller
 
         Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
 
-        $request->session()->flash('flash_message', 'Withdrawal for '.$user->name.' marked as failed. User e-mailed.');
+        Session::flash('flash_message', 'Withdrawal for '.$user->name.' marked as failed. User e-mailed.');
         return Redirect::back();
     }
 
@@ -379,14 +339,14 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
             return Redirect::back();
         }
 
         $withdrawal->closed = true;
         $withdrawal->save();
 
-        $request->session()->flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
+        Session::flash('flash_message', 'The withdrawal is now closed. Changes cannot be made anymore.');
         return Redirect::back();
     }
 
@@ -414,8 +374,7 @@ class WithdrawalController extends Controller
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->closed) {
-            $request->session()->flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
-
+            Session::flash('flash_message', 'This withdrawal is already closed so e-mails cannot be sent.');
             return Redirect::back();
         }
 
@@ -423,8 +382,7 @@ class WithdrawalController extends Controller
             Mail::to($user)->queue((new OmnomcomWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
         }
 
-        $request->session()->flash('flash_message', 'All e-mails have been queued.');
-
+        Session::flash('flash_message', 'All e-mails have been queued.');
         return Redirect::back();
     }
 
@@ -433,6 +391,7 @@ class WithdrawalController extends Controller
     {
         $users = [];
 
+        /** @var OrderLine $orderline */
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
             if ($orderline->isPayed()) {
                 continue;

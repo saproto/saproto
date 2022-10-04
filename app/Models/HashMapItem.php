@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|HashMapItem whereKey($value)
  * @method static Builder|HashMapItem whereSubkey($value)
  * @method static Builder|HashMapItem whereValue($value)
+ * @method static builder|hashMapItem newmodelquery()
+ * @method static builder|hashMapItem newquery()
+ * @method static builder|hashMapItem query()
  * @mixin Eloquent
  */
 class HashMapItem extends Model
@@ -30,9 +33,9 @@ class HashMapItem extends Model
     public $timestamps = false;
 
     /**
-     * @param $query
+     * @param Builder $query
      * @param string $key
-     * @return mixed
+     * @return Builder
      */
     public function scopeKey($query, $key)
     {
@@ -40,9 +43,9 @@ class HashMapItem extends Model
     }
 
     /**
-     * @param $query
+     * @param Builder $query
      * @param string $subkey
-     * @return mixed
+     * @return Builder
      */
     public function scopeSubkey($query, $subkey)
     {

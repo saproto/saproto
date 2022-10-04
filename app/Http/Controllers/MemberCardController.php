@@ -28,6 +28,10 @@ class MemberCardController extends Controller
         return $card->output();
     }
 
+    /**
+     * @param Request $request
+     * @return string
+     */
     public function startPrint(Request $request)
     {
         $user = User::find($request->input('id'));

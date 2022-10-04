@@ -32,10 +32,23 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $data = [[], [], []];
-        $data[0] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '<=', strtotime('+1 week'))->get();
-        $data[1] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 week'))->where('start', '<=', strtotime('+1 month'))->get();
-        $data[2] = Event::where('start', '>=',strtotime('now'))->orderBy('start')->with('activity')->where('start', '>', strtotime('+1 month'))->get();
-        $category = EventCategory::find($request->category);
+        $data[0] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '<=', strtotime('+1 week'))
+            ->get();
+        $data[1] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '>', strtotime('+1 week'))
+            ->where('start', '<=', strtotime('+1 month'))
+            ->get();
+        $data[2] = Event::query()
+            ->where('start', '>=',strtotime('now'))
+            ->orderBy('start')->with('activity')
+            ->where('start', '>', strtotime('+1 month'))
+            ->get();
+        $category = EventCategory::find($request->input('category'));
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
         if (Auth::check()) {
@@ -74,7 +87,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @return RedirectResponse
      * @throws FileNotFoundException
      */
@@ -109,7 +122,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return View
      */
     public function edit($id)
@@ -120,7 +133,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param StoreEventRequest $request
      * @param int $id
      * @return RedirectResponse
      * @throws FileNotFoundException
@@ -202,7 +215,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -213,7 +226,6 @@ class EventController extends Controller
 
         if ($event->activity !== null) {
             Session::flash('flash_message', "You cannot delete event '".$event->title."' since it has a participation details.");
-
             return Redirect::back();
         }
 
@@ -225,7 +237,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      */
     public function forceLogin($id)
@@ -234,7 +246,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function admin($id)
@@ -243,7 +255,6 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
-
             return Redirect::back();
         }
 
@@ -251,7 +262,7 @@ class EventController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse|View
      */
     public function scan($id)
@@ -260,7 +271,6 @@ class EventController extends Controller
 
         if (! $event->isEventAdmin(Auth::user())) {
             Session::flash('flash_message', 'You are not an event admin for this event!');
-
             return Redirect::back();
         }
 
@@ -391,16 +401,16 @@ class EventController extends Controller
                 'image' => ($event->image ? $event->image->generateImagePath(800, 300) : null),
                 'description' => $event->description,
                 'start' => $event->start,
-                'organizing_committee' => ($event && $event->committee ? [
+                'organizing_committee' => ($event->committee ? [
                     'id' => $event->committee->id,
                     'name' => $event->committee->name,
                 ] : null),
-                'registration_start' => ($event && $event->activity ? $event->activity->registration_start : null),
-                'registration_end' => ($event && $event->activity ? $event->activity->registration_end : null),
-                'deregistration_end' => ($event && $event->activity ? $event->activity->deregistration_end : null),
-                'total_places' => ($event && $event->activity ? $event->activity->participants : null),
-                'available_places' => ($event && $event->activity ? $event->activity->freeSpots() : null),
-                'is_full' => ($event && $event->activity ? $event->activity->isFull() : null),
+                'registration_start' => ($event->activity ? $event->activity->registration_start : null),
+                'registration_end' => ($event->activity ? $event->activity->registration_end : null),
+                'deregistration_end' => ($event->activity ? $event->activity->deregistration_end : null),
+                'total_places' => ($event->activity ? $event->activity->participants : null),
+                'available_places' => ($event->activity ? $event->activity->freeSpots() : null),
+                'is_full' => ($event->activity ? $event->activity->isFull() : null),
                 'end' => $event->end,
                 'location' => $event->location,
                 'current' => $event->current(),
@@ -432,22 +442,17 @@ class EventController extends Controller
     public function setReminder(Request $request)
     {
         $user = Auth::user();
-
         $hours = floatval($request->get('hours'));
 
         if ($request->has('delete') || $hours <= 0) {
             $user->setCalendarAlarm(null);
             Session::flash('flash_message', 'Reminder removed.');
-
-            return Redirect::back();
-        } elseif ($hours > 0) {
+        } else {
             $user->setCalendarAlarm($hours);
             Session::flash('flash_message', sprintf('Reminder set to %s hours.', $hours));
-
-            return Redirect::back();
-        } else {
-            return abort(500, 'Invalid request.');
         }
+
+        return Redirect::back();
     }
 
     /** @return RedirectResponse */
@@ -572,7 +577,7 @@ class EventController extends Controller
                 $calendar .= 'BEGIN:VALARM'."\r\n".
                     sprintf('TRIGGER:-PT%dM', ceil($reminder * 60))."\r\n".
                     'ACTION:DISPLAY'."\r\n".
-                    sprintf('DESCRIPTION:%s at %s', $status ? sprintf('[%s] %s', $status, $event->title) : $event->title, date('l F j, H:i:s', $event->start))."\r\n".
+                    sprintf('DESCRIPTION:%s at %s', sprintf('[%s] %s', $status, $event->title), date('l F j, H:i:s', $event->start))."\r\n".
                     'END:VALARM'."\r\n";
             }
 
@@ -645,7 +650,7 @@ class EventController extends Controller
     public function categoryDestroy($id)
     {
         $category = EventCategory::findOrFail($id);
-        $events = $category->events();
+        $events = $category->events;
         if ($events) {
             foreach ($events as $event) {
                 $event->category()->dissociate();

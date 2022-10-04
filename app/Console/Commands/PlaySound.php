@@ -4,6 +4,7 @@ namespace Proto\Console\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 
 class PlaySound extends Command
 {
@@ -34,12 +35,13 @@ class PlaySound extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
         try {
-            file_get_contents(config('herbert.server').'/soundboard?secret='.config('herbert.secret').'&sound='.$this->argument('sound'));
+            $sound = '&sound='.$this->argument('sound');
+            Http::get(config('herbert.server').'/soundboard?secret='.config('herbert.secret').$sound);
             $this->info('Playing sound.');
         } catch (Exception $e) {
             $this->error('Could not find herbert:', $e->getMessage());

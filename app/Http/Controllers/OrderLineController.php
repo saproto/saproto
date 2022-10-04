@@ -17,18 +17,19 @@ use Proto\Models\Product;
 use Proto\Models\TicketPurchase;
 use Proto\Models\User;
 use Redirect;
+use Session;
 
 class OrderLineController extends Controller
 {
     /**
-     * @param null $date
+     * @param string $date
      * @return View
      */
     public function index($date = null)
     {
         $user = Auth::user();
 
-        $next_withdrawal = $orderlines = OrderLine::query()
+        $next_withdrawal = OrderLine::query()
             ->where('user_id', $user->id)
             ->whereNull('payed_with_cash')
             ->whereNull('payed_with_bank_card')
@@ -84,8 +85,7 @@ class OrderLineController extends Controller
 
     /**
      * @param Request $request
-     * @param null $date
-     * @return View|RedirectResponse
+     * @return View
      */
     public function adminindex(Request $request)
     {
@@ -100,14 +100,14 @@ class OrderLineController extends Controller
 
         return view('omnomcom.orders.adminhistory', [
             'date' => Carbon::today()->format('d-m-Y'),
-            'orderlines' => ($orderlines ?? []),
+            'orderlines' => $orderlines,
             'user' =>null,
         ]);
     }
 
     /**
      * @param Request $request
-     * @return View|RedirectResponse
+     * @return View
      */
     public function filterByDate(Request $request)
     {
@@ -125,7 +125,7 @@ class OrderLineController extends Controller
 
         return view('omnomcom.orders.adminhistory', [
             'date' => $date,
-            'orderlines' => ($orderlines ?? []),
+            'orderlines' => $orderlines,
             'user' => null,
         ]);
     }
@@ -151,7 +151,7 @@ class OrderLineController extends Controller
         return view('omnomcom.orders.adminhistory', [
             'date' => null,
             'user' => User::findOrFail($user)->name,
-            'orderlines' => ($orderlines ?? []),
+            'orderlines' => $orderlines,
         ]);
     }
 
@@ -170,7 +170,7 @@ class OrderLineController extends Controller
             $product->buyForUser($user, $units, $price * $units, null, null, $request->input('description'), sprintf('bulk_add_by_%u', Auth::user()->id));
         }
 
-        $request->session()->flash('flash_message', 'Your manual orders have been added.');
+        Session::flash('flash_message', 'Your manual orders have been added.');
         return Redirect::back();
     }
 
@@ -191,7 +191,7 @@ class OrderLineController extends Controller
             }
         }
 
-        $request->session()->flash('flash_message', 'Your manual orders have been added.');
+        Session::flash('flash_message', 'Your manual orders have been added.');
         return Redirect::back();
     }
 
@@ -207,7 +207,7 @@ class OrderLineController extends Controller
         $order = OrderLine::findOrFail($id);
 
         if (! $order->canBeDeleted()) {
-            $request->session()->flash('flash_message', 'The orderline cannot be deleted.');
+            Session::flash('flash_message', 'The orderline cannot be deleted.');
             return Redirect::back();
         }
 
@@ -219,7 +219,7 @@ class OrderLineController extends Controller
 
         $order->delete();
 
-        $request->session()->flash('flash_message', 'The orderline was deleted.');
+        Session::flash('flash_message', 'The orderline was deleted.');
         return Redirect::back();
     }
 

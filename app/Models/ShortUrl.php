@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|ShortUrl whereTarget($value)
  * @method static Builder|ShortUrl whereUpdatedAt($value)
  * @method static Builder|ShortUrl whereUrl($value)
+ * @method static Builder|ShortUrl newModelQuery()
+ * @method static Builder|ShortUrl newQuery()
+ * @method static Builder|ShortUrl query()
  * @mixin Eloquent
  */
 class ShortUrl extends Model

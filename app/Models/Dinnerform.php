@@ -5,6 +5,7 @@ namespace Proto\Models;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,11 +19,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  * @property bool $closed
  * @property bool $visible_home_page
+ * @property float $discount
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Event $event
+ * @property-read Event|null $event
+ * @property-read Collection|Orderline[]|null $orderlines
  * @method static Builder|Dinnerform whereCreatedAt($value)
  * @method static Builder|Dinnerform whereDescription($value)
  * @method static Builder|Dinnerform whereEnd($value)
@@ -31,6 +34,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Dinnerform whereStart($value)
  * @method static Builder|Dinnerform whereUpdatedAt($value)
  * @method static Builder|Dinnerform whereUrl($value)
+ * @method static Builder|Dinnerform newModelQuery()
+ * @method static Builder|Dinnerform newQuery()
+ * @method static Builder|Dinnerform query()
  * @mixin Eloquent
  */
 class Dinnerform extends Model
@@ -42,6 +48,18 @@ class Dinnerform extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $dates = ['start', 'end'];
+
+    /** @return BelongsTo */
+    public function event()
+    {
+        return $this->belongsTo('Proto\Models\Event');
+    }
+
+    /** @return HasMany */
+    public function orderLines()
+    {
+        return $this->hasMany('Proto\Models\DinnerformOrderline');
+    }
 
     /**
      * @return string A timespan string with format 'D H:i'.
@@ -63,27 +81,17 @@ class Dinnerform extends Model
         return $this->end->addHours(1)->isPast();
     }
 
-    /** @return HasMany|DinnerformOrderline[] */
-    public function orderLines()
-    {
-        return $this->hasMany('Proto\Models\DinnerformOrderline');
-    }
-
-    /** @return BelongsTo */
-    public function event()
-    {
-        return $this->belongsTo('Proto\Models\Event', 'event_id');
-    }
-
+    /** @return float Total amount of oderlines */
     public function totalAmount() {
         return $this->orderlines()->sum('price');
     }
 
-    public function totalAmountwithHelperDiscount() {
+    /** @return float Total amount of orderlines reduced by helper discount */
+    public function totalAmountWithHelperDiscount() {
         if($this->discount) {
             $total = 0;
             foreach($this->orderlines()->get() as $dinnerOrderline){
-                $total += $dinnerOrderline->price();
+                $total += $dinnerOrderline->price;
             }
             return $total;
         }else{
@@ -91,11 +99,13 @@ class Dinnerform extends Model
         }
     }
 
-    public function amountOfOrders() {
+    /** @return int Number of orders */
+    public function orderCount() {
         return $this->orderlines()->count();
     }
 
-    public function amountOfHelpers() {
+    /** @return int number of helpers */
+    public function helperCount() {
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
 
@@ -107,5 +117,5 @@ class Dinnerform extends Model
              $dinnerOrderline->delete();
           }
         });
-        }
+    }
 }
