@@ -8,7 +8,7 @@
 
 @section('body')
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center vh-100">
 
         <div class="col-xl-4 col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-3 text-center">
 

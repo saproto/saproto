@@ -27,8 +27,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address
- * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read StorageEntry|null $image
+ * @property-read Collection|HelperReminder[] $helperReminderSubscriptions
  * @property-read Collection|Event[] $organizedEvents
  * @property-read Collection|User[] $users
  * @method static Builder|Committee whereAllowAnonymousEmail($value)
@@ -41,6 +41,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Committee wherePublic($value)
  * @method static Builder|Committee whereSlug($value)
  * @method static Builder|Committee whereUpdatedAt($value)
+ * @method static Builder|Committee newModelQuery()
+ * @method static Builder|Committee newQuery()
+ * @method static Builder|Committee query()
  * @mixin Eloquent
  */
 class Committee extends Model
@@ -78,19 +81,19 @@ class Committee extends Model
             ->orderBy('pivot_created_at', 'desc');
     }
 
-    /** @return BelongsTo|StorageEntry */
+    /** @return BelongsTo */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    /** @return HasMany|Event[] */
+    /** @return HasMany */
     public function organizedEvents()
     {
         return $this->hasMany('Proto\Models\Event', 'committee_id');
     }
 
-    /** @return HasMany|HelperReminder[] */
+    /** @return HasMany */
     public function helperReminderSubscriptions()
     {
         return $this->hasMany('Proto\Models\HelperReminder');
@@ -183,7 +186,7 @@ class Committee extends Model
         return $events;
     }
 
-    /** @return Member[] */
+    /** @return array<string, array<string, array<int, CommitteeMembership>>> */
     public function allMembers()
     {
         $members = ['editions' => [], 'members' => ['current' => [], 'past' => [], 'future' => []]];

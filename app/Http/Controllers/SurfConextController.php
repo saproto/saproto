@@ -44,8 +44,7 @@ class SurfConextController extends Controller
         $user->utwente_department = null;
         $user->save();
 
-        $request->session()->flash('flash_message', 'The link with your university account has been deleted.');
-
+        Session::flash('flash_message', 'The link with your university account has been deleted.');
         return Redirect::route('user::dashboard');
     }
 }

@@ -68,6 +68,20 @@
     </div>
 </div>
 
+<div id="randcard-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-body">
+                <h1 class="text-danger">Unsupported card!</h1>
+                <span class="modal-status">
+                    It seems you are trying to scan a randomized NFC card.
+                    Make sure to <b>not</b> use a government issued card or a mobile phone.
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="purchase-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">

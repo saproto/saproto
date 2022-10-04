@@ -5,10 +5,8 @@
 @endsection
 
 @section('container')
-
-    <div class="row justify-content-center">
-
-        <div class="col-md-6">
+    <div class="row justify-content-end">
+    <div class="col">
 
             <div class="card mb-3">
 
@@ -74,6 +72,9 @@
 
         </div>
 
+        <div class="col-md-auto">
+    @include('achievement.admin_includes.awards-addone')
+        </div>
     </div>
-
 @endsection
+

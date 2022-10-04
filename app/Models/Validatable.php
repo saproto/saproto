@@ -3,12 +3,16 @@
 namespace Proto\Models;
 
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\MessageBag;
 use Validator;
 
 /**
  * Validatable Model.
  *
+ * @method static Builder|Validatable newModelQuery()
+ * @method static Builder|Validatable newQuery()
+ * @method static Builder|Validatable query()
  * @mixin Eloquent
  */
 class Validatable extends Eloquent

@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Proto\Models\Alias;
 use Proto\Models\User;
 use Redirect;
+use Session;
 
 class AliasController extends Controller
 {
@@ -48,7 +49,7 @@ class AliasController extends Controller
             ]);
             $alias->save();
 
-            $request->session()->flash('flash_message', 'Destination added to alias.');
+            Session::flash('flash_message', 'Destination added to alias.');
         } elseif ($request->input('user') != '') {
             /** @var User $user */
             $user = User::findOrFail($request->input('user'));
@@ -58,9 +59,9 @@ class AliasController extends Controller
             ]);
             $alias->save();
 
-            $request->session()->flash('flash_message', 'User added to alias.');
+            Session::flash('flash_message', 'User added to alias.');
         } else {
-            $request->session()->flash('flash_message', 'No action performed.');
+            Session::flash('flash_message', 'No action performed.');
         }
         return Redirect::route('alias::index');
     }
@@ -79,9 +80,9 @@ class AliasController extends Controller
         ]);
 
         if ($affected > 0) {
-            $request->session()->flash('flash_message', 'Renamed '.$from.' into '.$into.'.');
+            Session::flash('flash_message', 'Renamed '.$from.' into '.$into.'.');
         } else {
-            $request->session()->flash('flash_message', 'No such alias ('.$from.').');
+            Session::flash('flash_message', 'No such alias ('.$from.').');
         }
         return Redirect::back();
     }
@@ -98,16 +99,15 @@ class AliasController extends Controller
 
         if ($alias) {
             $alias->delete();
-            $request->session()->flash('flash_message', 'Entry deleted.');
-
+            Session::flash('flash_message', 'Entry deleted.');
             return Redirect::back();
         }
 
         $affected = DB::table('alias')->where('alias', $id_or_alias)->delete();
         if ($affected > 0) {
-            $request->session()->flash('flash_message', 'Deleted alias <strong>'.$id_or_alias.'</strong> with '.$affected.' destinations.');
+            Session::flash('flash_message', 'Deleted alias <strong>'.$id_or_alias.'</strong> with '.$affected.' destinations.');
         } else {
-            $request->session()->flash('flash_message', 'No such alias ('.$id_or_alias.').');
+            Session::flash('flash_message', 'No such alias ('.$id_or_alias.').');
         }
         return Redirect::back();
     }

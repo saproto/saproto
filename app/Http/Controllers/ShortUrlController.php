@@ -46,7 +46,6 @@ class ShortUrlController extends Controller
         $url->fill($request->all());
         $url->save();
         Session::flash('flash_message', 'Short URL updated!');
-
         return Redirect::route('short_url::index');
     }
 

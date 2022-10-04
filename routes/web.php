@@ -289,16 +289,24 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::',  'middleware' => ['auth']], function () {
         Route::group(['middleware' => ['permission:tipcie']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'DinnerformController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'DinnerformController@store']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformController@update']);
+            Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DinnerformController@destroy']);
+            Route::get('admin/{id}', ['as' => 'admin', 'uses' => 'DinnerformController@admin']);
+            Route::get('process/{id}', ['as' => 'process', 'uses' => 'DinnerformController@process']);
+        });
+        Route::group(['prefix' => 'orderline', 'as' => 'orderline::'], function () {
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DinnerformOrderlineController@delete']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformOrderlineController@edit']);
+            Route::post('add/{id}', ['as' => 'add', 'uses' => 'DinnerformOrderlineController@store']);
+            Route::post('update/{id}', ['as' => 'update', 'middleware' => ['permission:tipcie'], 'uses' => 'DinnerformOrderlineController@update']);
         });
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
-        Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
     });
 
     /*
@@ -510,7 +518,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@destroy']);
 
             Route::get('history/{date?}', ['as' => 'list', 'uses' => 'OrderLineController@index']);
-            Route::get('{date?}', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
+            Route::get('', ['as' => 'adminlist', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@adminindex']);
+
+            Route::group(['prefix' => 'filter', 'middleware' => ['permission:omnomcom'], 'as' => 'filter::'], function () {
+                Route::get('name/{name?}', ['as' => 'name', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@filterByUser']);
+                Route::get('date/{date?}', ['as' => 'date', 'middleware' => ['permission:omnomcom'], 'uses' => 'OrderLineController@filterByDate']);
+            });
         });
 
         /* Routes related to the TIPCie OmNomCom store. */
@@ -748,7 +761,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('manage/{id}', ['as' => 'manage', 'uses' => 'AchievementController@manage']);
             Route::post('update/{id}', ['as' => 'update', 'uses' => 'AchievementController@update']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'AchievementController@destroy']);
-            Route::post('give/{id}', ['as' => 'give', 'uses' => 'AchievementController@give']);
+            Route::post('award/{id}', ['as' => 'award', 'uses' => 'AchievementController@award']);
+            Route::post('give', ['as' => 'give', 'uses' => 'AchievementController@give']);
             Route::get('take/{id}/{user}', ['as' => 'take', 'uses' => 'AchievementController@take']);
             Route::get('takeAll/{id}', ['as' => 'takeAll', 'uses' => 'AchievementController@takeAll']);
             Route::post('{id}/icon', ['as' => 'icon', 'uses' => 'AchievementController@icon']);

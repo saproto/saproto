@@ -29,6 +29,7 @@
             padding: 15px 10px;
             margin: 0;
             background-color: #333;
+            overflow: hidden;
         }
 
         .box {
@@ -308,6 +309,7 @@
                 timetable.innerHTML = ''
                 let count = 0
                 for (let i in data) {
+                    if(count>=4)return
                     if (!data[i].over) {
                         let start = moment.unix(data[i].start)
                         let end = moment.unix(data[i].end)
@@ -434,11 +436,11 @@
                     count++
                 }
                 if (open) {
-                    protopolisFa.classList.add('fa-door-open green')
-                    protopolisFa.classList.remove('fa-door-closed')
+                    protopolisFa.classList.add('green')
+                    protopolisFa.classList.replace('fa-door-closed', 'fa-door-open')
                 } else {
-                    protopolisFa.classList.remove('fa-door-open green')
-                    protopolisFa.classList.add('fa-door-closed')
+                    protopolisFa.classList.remove('green')
+                    protopolisFa.classList.replace('fa-door-open', 'fa-door-closed')
                 }
                 if (count === 0) timetable.innerHTML = '<div class="notice">Protopolis closed for today!</div>'
             } else {
@@ -446,7 +448,8 @@
             }
             setTimeout(updateProtopeners, 60000)
         })
-        .catch(_ => {
+        .catch(err => {
+            console.error(err)
             timetable.innerHTML = '<div class="notice">Something went wrong during retrieval...</div>'
             setTimeout(updateProtopeners, 5000)
         })

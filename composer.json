@@ -55,7 +55,7 @@
     "laravel/framework": "^7.30",
     "laravel/helpers": "1.*",
     "laravelcollective/html": "6.*",
-    "laravel/passport": "9.3.*",
+    "laravel/passport": "^9.4.0",
     "league/commonmark": "1.5.*",
     "league/oauth1-client": "1.7.*",
     "lisennk/laravel-slack-web-api": "0.1.*",
@@ -73,7 +73,8 @@
     "spatie/laravel-permission": "^4.2.0",
     "ext-calendar": "*",
     "solitweb/directadmin": "^3.0",
-    "spipu/html2pdf": "^5.2"
+    "spipu/html2pdf": "^5.2",
+    "guzzlehttp/guzzle": "^6.5.5"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.8.2",
@@ -81,7 +82,9 @@
     "symfony/dom-crawler": "~4.0",
     "fakerphp/faker": "^1.13",
     "friendsofphp/php-cs-fixer": "^3.0.0",
-    "laravel/tinker": "^2.6"
+    "laravel/tinker": "^2.6",
+    "nunomaduro/larastan": "^1.0",
+    "itsgoingd/clockwork": "^5.1"
   },
   "autoload": {
     "classmap": [
@@ -92,6 +95,17 @@
     }
   },
   "scripts": {
+    "fix": [
+      "php-cs-fixer fix --verbose"
+    ],
+    "ide-helper": [
+      "php artisan cache:clear",
+      "php artisan ide-helper:generate",
+      "php artisan ide-helper:meta"
+    ],
+    "analyse": [
+      "vendor/bin/phpstan analyse"
+    ],
     "post-install-cmd": [
       "php artisan clear-compiled"
     ],
@@ -100,14 +114,6 @@
     ],
     "post-update-cmd": [
       "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-      "php artisan ide-helper:generate",
-      "php artisan ide-helper:meta"
-    ],
-    "fix": [
-      "php-cs-fixer fix --verbose"
-    ],
-    "ide-helper": [
-      "php artisan cache:clear",
       "php artisan ide-helper:generate",
       "php artisan ide-helper:meta"
     ],

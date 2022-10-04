@@ -3,7 +3,6 @@
 namespace Proto\Exceptions;
 
 use App;
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -11,10 +10,10 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Intervention\Image\Exception\NotReadableException;
+use Redirect;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -39,8 +38,6 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
     ];
 
-    private $sentryID;
-
     /**
      * Report or log an exception.
      *
@@ -64,7 +61,7 @@ class Handler extends ExceptionHandler
      *
      * @param Request $request
      * @param Throwable $e
-     * @return Response
+     * @return SymfonyResponse
      * @throws Throwable
      */
     public function render($request, Throwable $e)
@@ -89,7 +86,7 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return redirect()->guest('login');
+        return Redirect::guest('login');
     }
 
     /**
