@@ -23,29 +23,27 @@
             width: 25mm;
             height: 25mm;
             top: 8mm;
-            right: 3mm;
+            right: 5mm;
         }
 
         #power-icons {
             position: absolute;
             top: 8mm;
-            right: 3mm;
-            padding: 0.6mm;
             width: 4.1%;
             background-color: white;
         }
 
         #details {
             position: absolute;
-            top: 6mm;
-            left: 5mm;
+            top: 9mm;
+            left: 3mm;
             color: #000;
             font-size: 13px;
         }
 
         #details .heading {
             color: #aaa;
-            margin-top: 2mm;
+            margin-top: 1.5mm;
             text-transform: uppercase;
             font-size: 10px;
         }
@@ -53,7 +51,7 @@
         #barcode {
             width: 35mm;
             height: 5mm;
-            margin-top: 3mm;
+            margin-top: 2mm;
         }
     </style>
     <div id="card">
