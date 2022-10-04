@@ -14,7 +14,7 @@
         }
 
         #name {
-            font-size: 17px;
+            font-size: 13px;
             font-weight: bold;
         }
 
@@ -29,6 +29,8 @@
         #power-icons {
             position: absolute;
             top: 8mm;
+            right: 0mm;
+            padding: 0mm;
             width: 4.1%;
             background-color: white;
         }
@@ -36,7 +38,7 @@
         #details {
             position: absolute;
             top: 9mm;
-            left: 3mm;
+            left: 0mm;
             color: #000;
             font-size: 13px;
         }
