@@ -88,7 +88,10 @@
 
                                     <td class="text-center">
                                         @if($password->username != null)
-                                            <a class="passwordmanager__copy" data-copy="{{ Crypt::decrypt($password->username) }}">
+                                            <a class="passwordmanager__copy"
+                                               data-description="{{$password->description}}"
+                                               data-type="username"
+                                               data-copy="{{ Crypt::decrypt($password->username) }}">
                                                 <i class="fas fa-user me-1"></i>
                                             </a>
                                         @endif
@@ -96,7 +99,10 @@
 
                                     <td class="text-center">
                                         @if($password->password != null)
-                                            <a class="passwordmanager__copy" data-copy="{{ Crypt::decrypt($password->password) }}">
+                                            <a class="passwordmanager__copy"
+                                               data-description="{{$password->description}}"
+                                               data-type="password"
+                                               data-copy="{{ Crypt::decrypt($password->password) }}">
                                                 <i class="fas fa-key me-1"></i>
                                             </a>
                                         @endif
@@ -180,8 +186,12 @@
 
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll(".passwordmanager__copy").forEach(el => {
-            el.addEventListener('click', e => {
-                navigator.clipboard.writeText(el.getAttribute("data-copy"))
+            const copy = el.getAttribute('data-copy')
+            const description = el.getAttribute('data-copy')
+            const type = el.getAttribute('data-type')
+            el.addEventListener('click', _ => {
+                navigator.clipboard.writeText(copy)
+                flash('success', `"${description}" ${type} copied!`)
             })
         })
     </script>
