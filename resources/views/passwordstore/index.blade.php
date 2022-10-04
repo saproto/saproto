@@ -187,7 +187,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll(".passwordmanager__copy").forEach(el => {
             const copy = el.getAttribute('data-copy')
-            const description = el.getAttribute('data-copy')
+            const description = el.getAttribute('data-description')
             const type = el.getAttribute('data-type')
             el.addEventListener('click', _ => {
                 navigator.clipboard.writeText(copy)
