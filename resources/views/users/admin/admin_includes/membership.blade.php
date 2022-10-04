@@ -34,14 +34,6 @@
                     'message' => "Do you want to print $user->name's card? <br> Card last printed on: ".($user->member->card_printed_on ?? 'Never printed before' )
                 ])
 
-                @include('website.layouts.macros.confirm-modal', [
-                    'action' => route("membercard::printoverlay", ['id'=>$user->id]),
-                    'method' => 'POST',
-                    'classes' => 'list-group-item',
-                    'text' => 'Print opener overlay',
-                    'message' => "Do you want to print $user->name's overlay?"
-                ])
-
             @else
                 <li class="list-group-item">
                     Not a member

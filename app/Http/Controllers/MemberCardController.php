@@ -50,25 +50,4 @@ class MemberCardController extends Controller
 
         return 'The printer service responded: '.$result;
     }
-
-    /**
-     * @param Request $request
-     * @return string
-     */
-    public function startOverlayPrint(Request $request)
-    {
-        $user = User::find($request->input('id'));
-
-        if (! $user) {
-            return 'This user could not be found!';
-        }
-
-        if (! $user->is_member) {
-            return 'Only members can have their card printed!';
-        }
-
-        $result = FileController::requestPrint('card', route('membercard::download', ['id' => $user->id, 'overlayonly' => 1]));
-
-        return 'The printer service responded: '.$result;
-    }
 }

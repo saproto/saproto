@@ -246,7 +246,6 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'CompanyController@indexmembercard']);
 
         Route::post('print', ['as' => 'print', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startPrint']);
-        Route::post('printoverlay', ['as' => 'printoverlay', 'middleware' => ['auth', 'permission:board'], 'uses' => 'MemberCardController@startOverlayPrint']);
         Route::get('download/{id}', ['as' => 'download', 'uses' => 'MemberCardController@download']);
 
         Route::get('{id}', ['as' => 'show', 'uses' => 'CompanyController@showmembercard']);
