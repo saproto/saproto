@@ -28,9 +28,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $cashier
+ * @property-read Product|null $product
  * @property-read MollieTransaction|null $molliePayment
- * @property-read Product $product
- * @property-read TicketPurchase $ticketPurchase
+ * @property-read TicketPurchase|null $ticketPurchase
  * @property-read User|null $user
  * @property-read Withdrawal|null $withdrawal
  * @method static Builder|OrderLine whereAuthenticatedBy($value)
@@ -48,6 +48,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|OrderLine whereUnits($value)
  * @method static Builder|OrderLine whereUpdatedAt($value)
  * @method static Builder|OrderLine whereUserId($value)
+ * @method static Builder|OrderLine newModelQuery()
+ * @method static Builder|OrderLine newQuery()
+ * @method static Builder|OrderLine query()
  * @mixin Eloquent
  */
 class OrderLine extends Model
@@ -56,37 +59,37 @@ class OrderLine extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsTo|Product */
+    /** @return BelongsTo */
     public function product()
     {
         return $this->belongsTo('Proto\Models\Product');
     }
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function cashier()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsTo|Withdrawal */
+    /** @return BelongsTo */
     public function withdrawal()
     {
         return $this->belongsTo('Proto\Models\Withdrawal', 'payed_with_withdrawal');
     }
 
-    /** @return BelongsTo|MollieTransaction */
+    /** @return BelongsTo */
     public function molliePayment()
     {
         return $this->belongsTo('Proto\Models\MollieTransaction', 'payed_with_mollie');
     }
 
-    /** @return HasOne|TicketPurchase */
+    /** @return HasOne */
     public function ticketPurchase()
     {
         return $this->hasOne('Proto\Models\TicketPurchase', 'orderline_id');

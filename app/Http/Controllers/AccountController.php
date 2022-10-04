@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Proto\Models\Account;
 use Proto\Models\Product;
 use Redirect;
+use Session;
 
 class AccountController extends Controller
 {
@@ -45,8 +46,7 @@ class AccountController extends Controller
         $account = Account::create($request->all());
         $account->save();
 
-        $request->session()->flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') created.');
-
+        Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') created.');
         return Redirect::route('omnomcom::accounts::list');
     }
 
@@ -71,8 +71,7 @@ class AccountController extends Controller
         $account->fill($request->all());
         $account->save();
 
-        $request->session()->flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') saved.');
-
+        Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') saved.');
         return Redirect::route('omnomcom::accounts::list');
     }
 
@@ -87,12 +86,11 @@ class AccountController extends Controller
         $account = Account::findOrFail($id);
 
         if ($account->products->count() > 0) {
-            $request->session()->flash('flash_message', 'Could not delete account '.$account->account_number.' ('.$account->name.') since there are products associated with this account.');
-
+            Session::flash('flash_message', 'Could not delete account '.$account->account_number.' ('.$account->name.') since there are products associated with this account.');
             return Redirect::back();
         }
 
-        $request->session()->flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') deleted.');
+        Session::flash('flash_message', 'Account '.$account->account_number.' ('.$account->name.') deleted.');
         $account->delete();
 
         return Redirect::route('omnomcom::accounts::list');
@@ -102,7 +100,7 @@ class AccountController extends Controller
      * Display aggregated results of sales. Per product to value that has been sold in the specified period.
      *
      * @param Request $request
-     * @param $account
+     * @param int $account
      * @return View
      */
     public function showAggregation(Request $request, $account)

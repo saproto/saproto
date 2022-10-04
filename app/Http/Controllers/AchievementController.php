@@ -48,10 +48,7 @@ class AchievementController extends Controller
     public function manage($id)
     {
         /** @var Achievement $achievement */
-        $achievement = Achievement::find($id);
-        if (! $achievement) {
-            abort(404);
-        }
+        $achievement = Achievement::findOrFail($id);
 
         return view('achievement.manage', ['achievement' => $achievement]);
     }
@@ -119,7 +116,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -129,17 +126,15 @@ class AchievementController extends Controller
         $achievement = Achievement::findOrFail($id);
         if (count($achievement->users) > 0) {
             Session::flash('flash_message', "Achievement '".$achievement->name."' has users associated with it. You cannot remove it.");
-
             return Redirect::route('achievement::list');
         }
         $achievement->delete();
         Session::flash('flash_message', "Achievement '".$achievement->name."' has been removed.");
-
         return Redirect::route('achievement::list');
     }
 
     /**
-     * @param $page_name
+     * @param string $page_name
      * @return View|RedirectResponse
      */
     public function achieve($page_name)
@@ -147,7 +142,6 @@ class AchievementController extends Controller
         $user = Auth::user();
         if (! $user->is_member) {
             Session::flash('flash_message', 'You need to be a member to receive this achievement');
-
             return Redirect::back();
         }
 
@@ -167,7 +161,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
+     * @param int $achievement_id
      * @param Request $request
      * @return RedirectResponse
      */
@@ -206,19 +200,16 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
-     * @param $user_id
+     * @param int $achievement_id
+     * @param int $user_id
      * @return RedirectResponse
      * @throws Exception
      */
     public function take($achievement_id, $user_id)
     {
-        /** @var Achievement $achievement */
-        $achievement = Achievement::find($achievement_id);
-        $user = User::find($user_id);
-        if (! $user || ! $achievement) {
-            abort(404, 'User or achievement not found.');
-        }
+        $achievement = Achievement::findOrFail($achievement_id);
+        $user = User::findOrFail($user_id);
+
         $achieved = AchievementOwnership::all();
         foreach ($achieved as $entry) {
             if ($entry->achievement_id == $achievement_id && $entry->user_id == $user_id) {
@@ -231,7 +222,7 @@ class AchievementController extends Controller
     }
 
     /**
-     * @param $achievement_id
+     * @param int $achievement_id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -240,12 +231,11 @@ class AchievementController extends Controller
         $this->staticTakeAll($achievement_id);
         $achievement = Achievement::findOrFail($achievement_id);
         Session::flash('flash_message', "Achievement $achievement->name taken from everyone");
-
         return Redirect::back();
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @param Request $request
      * @return RedirectResponse
      */
@@ -257,7 +247,6 @@ class AchievementController extends Controller
         $achievement->save();
 
         Session::flash('flash_message', 'Achievement Icon set');
-
         return Redirect::route('achievement::manage', ['id' => $id]);
     }
 

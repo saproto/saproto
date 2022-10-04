@@ -22,7 +22,6 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $id
  * @property string $title
  * @property string $description
- * @property int $is_external
  * @property int $start
  * @property int $end
  * @property Carbon|null $created_at
@@ -47,9 +46,6 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Photo|null $photo
  * @property-read Collection|Ticket[] $tickets
  * @property-read Collection|Video[] $videos
- * @property-read int|null $albums_count
- * @property-read int|null $tickets_count
- * @property-read int|null $videos_count
  * @method static bool|null forceDelete()
  * @method static QueryBuilder|Event onlyTrashed()
  * @method static QueryBuilder|Event withTrashed()
@@ -88,7 +84,7 @@ class Event extends Model
 
     protected $guarded = ['id'];
 
-    protected $hidden = ['created_at', 'updated_at', 'secret', 'photo_id', 'deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'secret', 'image_id', 'deleted_at', 'update_sequence'];
 
     protected $appends = ['is_future', 'formatted_date'];
 
@@ -101,7 +97,7 @@ class Event extends Model
     }
 
     /**
-     * @param $public_id
+     * @param string $public_id
      * @return Model
      */
     public static function fromPublicId($public_id)
@@ -110,43 +106,49 @@ class Event extends Model
         return self::findOrFail(count($id) > 0 ? $id[0] : 0);
     }
 
-    /** @return BelongsTo|Committee */
+    /** @return BelongsTo */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsTo|Photo */
-    public function photo()
+    /** @return BelongsTo */
+    public function image()
     {
         return $this->belongsTo('Proto\Models\Photo');
     }
 
-    /** @return HasOne|Activity */
+    /** @return HasOne */
     public function activity()
     {
         return $this->hasOne('Proto\Models\Activity');
     }
 
-    /** @return HasMany|Video[] */
+    /** @return HasMany */
     public function videos()
     {
         return $this->hasMany('Proto\Models\Video');
     }
 
-    /** @return HasMany|PhotoAlbum[] */
+    /** @return HasMany */
     public function albums()
     {
         return $this->hasMany('Proto\Models\PhotoAlbum', 'event_id');
     }
 
-    /** @return HasMany|Ticket[] */
+    /** @return HasMany */
     public function tickets()
     {
         return $this->hasMany('Proto\Models\Ticket', 'event_id');
     }
 
-    /** @return BelongsTo|EventCategory */
+    /** @return HasMany */
+    public function dinnerforms()
+    {
+        return $this->hasMany('Proto\Models\Dinnerform', 'event_id');
+    }
+
+    /** @return BelongsTo */
     public function category()
     {
         return $this->BelongsTo('Proto\Models\EventCategory');
@@ -164,13 +166,21 @@ class Event extends Model
     /** @return Collection|TicketPurchase[] */
     public function getTicketPurchasesFor(User $user)
     {
-        return TicketPurchase::where('user_id', $user->id)->whereIn('ticket_id', $this->tickets->pluck('id'))->get();
+        return TicketPurchase::query()
+            ->where('user_id', $user->id)
+            ->whereIn('ticket_id', $this->tickets->pluck('id'))
+            ->get();
     }
 
     /** @return Collection|Event[] */
     public static function getEventsForNewsletter()
     {
-        return self::where('include_in_newsletter', true)->where('secret', false)->where('start', '>', date('U'))->orderBy('start')->get();
+        return self::query()
+            ->where('include_in_newsletter', true)
+            ->where('secret', false)
+            ->where('start', '>', date('U'))
+            ->orderBy('start')
+            ->get();
     }
 
     /** @return bool */
@@ -199,7 +209,7 @@ class Event extends Model
                 date($short_format, $this->end)
                 :
                 date($long_format, $this->end)
-        );
+            );
     }
 
     /**
@@ -226,12 +236,14 @@ class Event extends Model
         if (! $this->activity) {
             return false;
         }
-        $eroHelping = HelpingCommittee::where('activity_id', $this->activity->id)
+        $eroHelping = HelpingCommittee::query()
+            ->where('activity_id', $this->activity->id)
             ->where('committee_id', config('proto.committee')['ero'])->first();
         if ($eroHelping) {
-            return ActivityParticipation::where('activity_id', $this->activity->id)
-                    ->where('committees_activities_id', $eroHelping->id)
-                    ->where('user_id', $user->id)->count() > 0;
+            return ActivityParticipation::query()
+                ->where('activity_id', $this->activity->id)
+                ->where('committees_activities_id', $eroHelping->id)
+                ->where('user_id', $user->id)->count() > 0;
         } else {
             return false;
         }
@@ -247,7 +259,7 @@ class Event extends Model
     }
 
     /** @return SupportCollection */
-    public function returnAllUsers()
+    public function allUsers()
     {
         $users = collect([]);
         foreach ($this->tickets as $ticket) {
@@ -266,7 +278,7 @@ class Event extends Model
     /** @return string[] */
     public function getAllEmails()
     {
-        return $this->returnAllUsers()->pluck('email')->toArray();
+        return $this->allUsers()->pluck('email')->toArray();
     }
 
     /** @return bool */
@@ -302,5 +314,14 @@ class Event extends Model
         }
 
         return $events->count();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updating(function ($event) {
+            $event->update_sequence = $event->update_sequence + 1;
+        });
     }
 }

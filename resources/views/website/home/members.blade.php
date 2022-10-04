@@ -19,15 +19,15 @@
 
         <div class="col-xl-4 col-md-12">
 
-            @if($dinnerform)
+            @if(count($dinnerforms)>0)
 
                 <div class="card mb-3">
 
                     <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinner Form</div>
                     <div class="card-body">
-
-                        @include('dinnerform.dinnerform_block', ['dinnerform'=> $dinnerform])
-
+                        @foreach($dinnerforms as $dinnerform)
+                            @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
+                        @endforeach
                     </div>
 
                 </div>

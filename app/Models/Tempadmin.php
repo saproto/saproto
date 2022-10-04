@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Tempadmin whereStartAt($value)
  * @method static Builder|Tempadmin whereUpdatedAt($value)
  * @method static Builder|Tempadmin whereUserId($value)
+ * @method static Builder|Tempadmin newModelQuery()
+ * @method static Builder|Tempadmin newQuery()
+ * @method static Builder|Tempadmin query()
  * @mixin Eloquent
  */
 class Tempadmin extends Model
@@ -35,13 +38,13 @@ class Tempadmin extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function creator()
     {
         return $this->belongsTo('Proto\Models\User', 'created_by');

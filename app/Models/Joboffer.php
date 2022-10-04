@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,7 +26,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Joboffer whereRedirectUrl($value)
  * @method static Builder|Joboffer whereTitle($value)
  * @method static Builder|Joboffer whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Joboffer newModelQuery()
+ * @method static Builder|Joboffer newQuery()
+ * @method static Builder|Joboffer query()
+ * @mixin Eloquent
  */
 class Joboffer extends Model
 {
@@ -33,7 +37,7 @@ class Joboffer extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|Company */
+    /** @return BelongsTo */
     public function company()
     {
         return $this->belongsTo('Proto\Models\Company', 'company_id');

@@ -31,6 +31,9 @@ use Proto\Http\Controllers\FileController;
  * @method static Builder|StorageEntry whereMime($value)
  * @method static Builder|StorageEntry whereOriginalFilename($value)
  * @method static Builder|StorageEntry whereUpdatedAt($value)
+ * @method static Builder|StorageEntry newModelQuery()
+ * @method static Builder|StorageEntry newQuery()
+ * @method static Builder|StorageEntry query()
  * @mixin Eloquent
  */
 class StorageEntry extends Model
@@ -185,12 +188,13 @@ class StorageEntry extends Model
      */
     public function getBase64($w = null, $h = null)
     {
+        /* @phpstan-ignore-next-line */
         return base64_encode(FileController::makeImage($this, $w, $h));
     }
 
     /**
      * @param bool $human Defaults to true.
-     * @return string
+     * @return string|int
      */
     public function getFileSize($human = true)
     {

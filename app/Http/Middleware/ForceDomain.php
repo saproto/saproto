@@ -4,6 +4,7 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Redirect;
 
 class ForceDomain
 {
@@ -20,7 +21,7 @@ class ForceDomain
         $environment = config('app.env');
 
         if ($environment != 'local' && $force != null && $request->getHttpHost() != $force) {
-            return redirect()->to(config('app-proto.app-url').'/'.($request->path() == '/' ? '' : $request->path()), 301);
+            return Redirect::to(config('app-proto.app-url').'/'.($request->path() == '/' ? '' : $request->path()), 301);
         }
 
         return $next($request);

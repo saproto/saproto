@@ -43,6 +43,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Company whereSort($value)
  * @method static Builder|Company whereUpdatedAt($value)
  * @method static Builder|Company whereUrl($value)
+ * @method static Builder|Company newModelQuery()
+ * @method static Builder|Company newQuery()
+ * @method static Builder|Company query()
  * @mixin Eloquent
  */
 class Company extends Model
@@ -57,7 +60,7 @@ class Company extends Model
         return $this->belongsTo('Proto\Models\Photo', 'photo_id');
     }
 
-    /** @return HasMany|Joboffer[] */
+    /** @return HasMany */
     public function joboffers()
     {
         return $this->hasMany('Proto\Models\Joboffer', 'company_id');

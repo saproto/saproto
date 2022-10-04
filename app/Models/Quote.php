@@ -19,14 +19,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $quote
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|QuoteLike[] $QuoteLike
  * @property-read User $user
+ * @property-read Collection|QuoteLike[] $QuoteLike
  * @property-read Collection|User[] $users
  * @method static Builder|Quote whereCreatedAt($value)
  * @method static Builder|Quote whereId($value)
  * @method static Builder|Quote whereQuote($value)
  * @method static Builder|Quote whereUpdatedAt($value)
  * @method static Builder|Quote whereUserId($value)
+ * @method static Builder|Quote newModelQuery()
+ * @method static Builder|Quote newQuery()
+ * @method static Builder|Quote query()
  * @mixin Eloquent
  */
 class Quote extends Model
@@ -37,25 +40,25 @@ class Quote extends Model
 
     protected $hidden = ['user'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'quotes_users');
     }
 
-    /** @return HasMany|QuoteLike[] */
+    /** @return HasMany */
     public function QuoteLike()
     {
         return $this->hasMany('Proto\Models\QuoteLike');
     }
 
-    /** @return User[] */
+    /** @return array<int, QuoteLike> */
     public function likes()
     {
         $users = [];
