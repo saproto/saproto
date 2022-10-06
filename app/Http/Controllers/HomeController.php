@@ -22,7 +22,7 @@ class HomeController extends Controller
     {
         $companies = Company::where('in_logo_bar', true)->inRandomOrder()->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
-        $birthdays = User::has('member')->where('show_birthday')->where('birthdate', 'LIKE', date('%-m-d'))->get()->reject(function ($user, $index) {
+        $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get()->reject(function ($user, $index) {
                 return $user->member->is_pending == true;
         });
         $dinnerforms = Dinnerform::where('closed', false)->where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour())->where('visible_home_page', true)->orderBy('end')->get();
