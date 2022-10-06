@@ -355,8 +355,6 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
         }
     }
 
-
-
     /**
      * @param string $password
      * @throws Exception

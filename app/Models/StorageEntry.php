@@ -2,13 +2,13 @@
 
 namespace Proto\Models;
 
-use Carbon;
-use Illuminate\Support\Facades\DB;
 use Barryvdh\LaravelIdeHelper\Eloquent;
+use Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
@@ -138,7 +138,7 @@ class StorageEntry extends Model
                 $constraint->aspectRatio();
             });
 
-            $offset = (int)floor($image->width() / 100 * 2.5);
+            $offset = (int) floor($image->width() / 100 * 2.5);
             $image->insert($watermark, 'bottom-right', $offset, 2 * $offset);
         }
         $image->stream();
@@ -146,10 +146,10 @@ class StorageEntry extends Model
         $this->original_filename = $original_name;
         $this->mime = $image->mime();
 
-        if(!File::exists(Storage::disk('local')->path($customPath))){
+        if(! File::exists(Storage::disk('local')->path($customPath))){
             File::makeDirectory(Storage::disk('local')->path($customPath), 0777, true);
         }
-        if(!File::exists(Storage::disk('public')->path($customPath))){
+        if(! File::exists(Storage::disk('public')->path($customPath))){
             File::makeDirectory(Storage::disk('public')->path($customPath), 0777, true);
         }
 

@@ -9,10 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
-use Intervention\Image\Facades\Image;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
-use Proto\Models\StorageEntry;
 use Redirect;
 use Session;
 
@@ -142,8 +140,8 @@ class PhotoAdminController extends Controller
                 case 'private':
                     foreach ($photos as $photoId => $photo) {
                         $photo = Photo::find($photoId);
-                        if($photo&&!$album->published) {
-                            $photo->private = !$photo->private;
+                        if($photo && ! $album->published) {
+                            $photo->private = ! $photo->private;
                             $photo->save();
                         }
                     }

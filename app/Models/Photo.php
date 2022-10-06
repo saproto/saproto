@@ -24,7 +24,7 @@ use Intervention\Image\Facades\Image;
  * @property int $tiny_file_id
  * @property int $album_id
  * @property int $date_taken
- * @property boolean $private
+ * @property bool $private
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read PhotoAlbum $album
@@ -53,13 +53,13 @@ class Photo extends Model
 
     protected $guarded = ['id'];
 
-    public function makePhoto($photo, $original_name, $date_taken, $private=false, $pathInPhotos=null, $albumId=null, $addWatermark=false, $watermarkUserName=null)
+    public function makePhoto($photo, $original_name, $date_taken, $private = false, $pathInPhotos = null, $albumId = null, $addWatermark = false, $watermarkUserName = null)
     {
-        $original_photo_storage = 'photos/original_photos/'.($albumId??$pathInPhotos).'/';
-        $large_photos_storage = 'photos/large_photos/'.($albumId??$pathInPhotos).'/';
-        $medium_photos_storage = 'photos/medium_photos/'.($albumId??$pathInPhotos).'/';
-        $small_photos_storage = 'photos/small_photos/'.($albumId??$pathInPhotos).'/';
-        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId??$pathInPhotos).'/';
+        $original_photo_storage = 'photos/original_photos/'.($albumId ?? $pathInPhotos).'/';
+        $large_photos_storage = 'photos/large_photos/'.($albumId ?? $pathInPhotos).'/';
+        $medium_photos_storage = 'photos/medium_photos/'.($albumId ?? $pathInPhotos).'/';
+        $small_photos_storage = 'photos/small_photos/'.($albumId ?? $pathInPhotos).'/';
+        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId ?? $pathInPhotos).'/';
 
         $watermark = null;
         if($addWatermark) {
