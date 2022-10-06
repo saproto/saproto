@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
+use stdClass;
 
 class PhotoController extends Controller
 {
@@ -28,7 +29,7 @@ class PhotoController extends Controller
         $album = PhotoAlbum::findOrFail($id);
         $photos = $album->items()->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->paginate(24);
 
-        if ($photos) {
+        if ($photos->count()) {
             return view('photos.album', ['album' => $album, 'photos' => $photos]);
         }
 
@@ -67,6 +68,7 @@ class PhotoController extends Controller
                 'hasPreviousPhoto'=>$adjacent->getAdjacentPhoto(false, Auth::user()) !== null,
             ]);
         }
+        return response()->json(['error' => 'adjacent photo not found.'], 404);
     }
 
     public function getNextPhoto($id) {
@@ -101,7 +103,7 @@ class PhotoController extends Controller
         }
         $photo = Photo::findOrFail($photo_id);
         return response()->json([
-                'likes' => $photo->getLikes() ?? 0,
+                'likes' => $photo->getLikes(),
                 'likedByUser' => $photo->likedByUser(Auth::user()),
             ]
         );
@@ -126,7 +128,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param int $album_id
      * @return string JSON
      */
 

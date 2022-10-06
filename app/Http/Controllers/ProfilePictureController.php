@@ -28,7 +28,7 @@ class ProfilePictureController extends Controller
             if (substr($image->getMimeType(), 0, 5) == 'image') {
                 $photo = new Photo();
                 $img=Image::make($image);
-                $smallestSide=$img->width()<$img->height()?$img->width:$img->height();
+                $smallestSide=$img->width()<$img->height()?$img->width():$img->height();
                 $img->fit($smallestSide);
                 $photo->makePhoto($img, $image->getClientOriginalName(), $image->getCTime(), false, 'profile_pictures');
                 $photo->save();

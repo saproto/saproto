@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Event|null $event
- * @property-read Photo $thumb_photo
+ * @property-read Photo|null $thumb_photo
  * @property-read Collection|Photo[] $items
  * @method static Builder|PhotoAlbum whereCreatedAt($value)
  * @method static Builder|PhotoAlbum whereDateCreate($value)
@@ -54,7 +54,7 @@ class PhotoAlbum extends Model
         return $this->belongsTo('Proto\Models\Event', 'event_id');
     }
 
-    /** @return HasOne|Photo */
+    /** @return HasOne */
     public function thumbPhoto()
     {
         return $this->hasOne('Proto\Models\Photo', 'id', 'thumb_id');

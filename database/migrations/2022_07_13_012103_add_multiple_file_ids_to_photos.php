@@ -45,7 +45,7 @@ class AddMultipleFileIdsToPhotos extends Migration
 
         foreach (Photo::all() as $photo) {
             $newPhoto=new Photo();
-            $newPhoto-> makePhoto($photo->fileRelation->generateLocalPath(), $photo->fileRelation->filename, $photo->created_at, $photo->private, $pathInPhotos=null, $photo->album_id);
+            $newPhoto-> makePhoto($photo->file->generateLocalPath(), $photo->fileRelation->filename, $photo->created_at, $photo->private, $pathInPhotos=null, $photo->album_id);
             $newPhoto-> save();
             $photo -> delete();
         }
@@ -62,19 +62,19 @@ class AddMultipleFileIdsToPhotos extends Migration
         $output->writeln('starting moving all files back over');
         foreach(Photo::all() as $photo){
             if($photo->private){
-                $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+                $oldPath = Storage::disk('local')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->file->hash);
             }else{
-                $oldPath = Storage::disk('public')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->fileRelation->hash);
+                $oldPath = Storage::disk('public')->path('photos/original_photos/'.$photo->album->id.'/'.$photo->file->hash);
             }
 
-            $newPath = 'photos/'.$photo->album->id.'/'.$photo->fileRelation->hash;
+            $newPath = 'photos/'.$photo->album->id.'/'.$photo->file->hash;
             $newPathFromRoot = Storage::disk('local')->path($newPath);
 
             $this->ensureLocalDirectoryExists('photos/'.$photo->album->id.'/', $output);
 
             if (! File::exists($newPathFromRoot) && File::move($oldPath , $newPathFromRoot)) {
-                $photo->fileRelation->filename = $newPath;
-                $photo->fileRelation->save();
+                $photo->file->filename = $newPath;
+                $photo->file->save();
 
                 $large_photo = StorageEntry::find($photo->large_file_id);
                 if($large_photo)$large_photo->delete();

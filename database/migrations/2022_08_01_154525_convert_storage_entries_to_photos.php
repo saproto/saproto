@@ -30,8 +30,8 @@ class ConvertStorageEntriesToPhotos extends Migration
     private function moveBackPhotos($items){
         foreach($items as $item){
             $photo=Photo::find($item->photo_id);
-            if($photo &&$photo->fileRelation()->first()) {
-                $originalFile=$photo->fileRelation()->first();
+            if($photo &&$photo->file()->first()) {
+                $originalFile=$photo->file()->first();
                 $newFolder=date('Y\/F\/d').'/';
                 if(!File::exists(Storage::disk('local')->path($newFolder))) {
                     File::makeDirectory(Storage::disk('local')->path($newFolder), 0777, true);

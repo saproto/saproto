@@ -71,7 +71,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read bool $photo_preview
  * @property-read bool $signed_membership_form
  * @property-read string|null $welcome_message
- * @property-read StorageEntry|null $photo
+ * @property-read Photo|null $photo
  * @property-read Address|null $address
  * @property-read Bank|null $bank
  * @property-read Member|null $member

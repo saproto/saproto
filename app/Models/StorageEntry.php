@@ -3,15 +3,16 @@
 namespace Proto\Models;
 
 use Carbon;
-use DB;
-use Eloquent;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Image;
+use Intervention\Image\ImageManagerStatic;
 use Proto\Http\Controllers\FileController;
 
 /**
@@ -125,7 +126,7 @@ class StorageEntry extends Model
         if ($customPath) {
             $this->filename = $customPath.$this->hash;
         }
-        $image = Image::make($file);
+        $image = ImageManagerStatic::make($file);
 
         if ($width != null) {
             $image->resize($width, null, function ($constraint) {
@@ -137,7 +138,7 @@ class StorageEntry extends Model
                 $constraint->aspectRatio();
             });
 
-            $offset = floor($image->width() / 100 * 2.5);
+            $offset = (int)floor($image->width() / 100 * 2.5);
             $image->insert($watermark, 'bottom-right', $offset, 2 * $offset);
         }
         $image->stream();

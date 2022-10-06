@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property int|null $photo_id
+ * @property Photo|null $photo
  * @property int $allow_anonymous_email
  * @property int $is_society
  * @property-read string $email_address

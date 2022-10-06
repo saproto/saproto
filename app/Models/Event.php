@@ -25,6 +25,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property int $start
  * @property int $end
  * @property int|null $image_id
+ * @property Photo|null $photo
  * @property int|null $committee_id
  * @property int|null $category_id
  * @property string|null $summary

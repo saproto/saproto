@@ -24,7 +24,7 @@ use Intervention\Image\Facades\Image;
  * @property int $tiny_file_id
  * @property int $album_id
  * @property int $date_taken
- * @property int $private
+ * @property boolean $private
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read PhotoAlbum $album
@@ -120,38 +120,34 @@ class Photo extends Model
         return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
-    public function fileRelation() {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
-    }
-
     /** @return HasOne|StorageEntry */
     public function large_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'large_file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'large_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function medium_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'medium_file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'medium_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function small_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'small_file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'small_file_id');
     }
 
     /** @return HasOne|StorageEntry */
     public function tiny_file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'tiny_file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'tiny_file_id');
     }
 
     /**
      * @param bool $next
      * @param User $user
-     * @return Photo
+     * @return Photo|null
      */
     public function getAdjacentPhoto($next = true, $user = null)
     {
@@ -217,31 +213,31 @@ class Photo extends Model
     /** @return string */
     public function getOriginalUrl()
     {
-        return $this->file()->generateUrl();
+        return $this->file->generateUrl();
     }
 
     /** @return string */
     public function getLargeUrl()
     {
-        return $this->large_file()->generateUrl();
+        return $this->large_file->generateUrl();
     }
 
     /** @return string */
     public function getMediumUrl()
     {
-        return $this->medium_file()->generateUrl();
+        return $this->medium_file->generateUrl();
     }
 
     /** @return string */
     public function getSmallUrl()
     {
-        return $this->small_file()->generateUrl();
+        return $this->small_file->generateUrl();
     }
 
     /** @return string */
     public function getTinyUrl()
     {
-        return $this->tiny_file()->generateUrl();
+        return $this->tiny_file->generateUrl();
     }
 
     public function mayViewPhoto($user) {
@@ -254,20 +250,20 @@ class Photo extends Model
 
     public function makePublic() {
         return
-        $this->file()->makePublic() &&
-        $this->large_file()->makePublic() &&
-        $this->medium_file()->makePublic() &&
-        $this->small_file()->makePublic() &&
-        $this->tiny_file()->makePublic();
+        $this->file->makePublic() &&
+        $this->large_file->makePublic() &&
+        $this->medium_file->makePublic() &&
+        $this->small_file->makePublic() &&
+        $this->tiny_file->makePublic();
     }
 
     public function makePrivate() {
         return
-        $this->file()->makePrivate() &&
-        $this->large_file()->makePrivate() &&
-        $this->medium_file()->makePrivate() &&
-        $this->small_file()->makePrivate() &&
-        $this->tiny_file()->makePrivate();
+        $this->file->makePrivate() &&
+        $this->large_file->makePrivate() &&
+        $this->medium_file->makePrivate() &&
+        $this->small_file->makePrivate() &&
+        $this->tiny_file->makePrivate();
     }
 
     public static function boot()
