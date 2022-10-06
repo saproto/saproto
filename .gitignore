@@ -27,7 +27,6 @@ composer.phar
 # Generated files
 /public/css
 /public/js
-/public/fonts
 /public/mix-manifest.json
 
 # Dammit, Mac users
