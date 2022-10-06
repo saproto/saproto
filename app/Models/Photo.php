@@ -49,19 +49,19 @@ class Photo extends Model
 
     protected $guarded = ['id'];
 
-    public function makePhoto($photo, $original_name, $date_taken, $private=false, $pathInPhotos=null, $albumId=null, $addWatermark=false, $watermarkUserName=null)
+    public function makePhoto($photo, $original_name, $date_taken, $private = false, $pathInPhotos = null, $albumId = null, $addWatermark = false, $watermarkUserName = null)
     {
-        $original_photo_storage = 'photos/original_photos/'.($albumId??$pathInPhotos).'/';
-        $large_photos_storage = 'photos/large_photos/'.($albumId??$pathInPhotos).'/';
-        $medium_photos_storage = 'photos/medium_photos/'.($albumId??$pathInPhotos).'/';
-        $small_photos_storage = 'photos/small_photos/'.($albumId??$pathInPhotos).'/';
-        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId??$pathInPhotos).'/';
+        $original_photo_storage = 'photos/original_photos/'.($albumId ?? $pathInPhotos).'/';
+        $large_photos_storage = 'photos/large_photos/'.($albumId ?? $pathInPhotos).'/';
+        $medium_photos_storage = 'photos/medium_photos/'.($albumId ?? $pathInPhotos).'/';
+        $small_photos_storage = 'photos/small_photos/'.($albumId ?? $pathInPhotos).'/';
+        $tiny_photos_storage = 'photos/tiny_photos/'.($albumId ?? $pathInPhotos).'/';
 
         $watermark = null;
         if($addWatermark) {
             $watermark = Image::make(public_path('images/protography-watermark-template.png'));
             $watermark->text(strtoupper($watermarkUserName), 267, 1443, function ($font) {
-                $font->file((public_path('fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf')));
+                $font->file((public_path('fonts/Ubuntu-R.ttf')));
                 $font->size(180);
                 $font->valign('top');
             });

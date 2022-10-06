@@ -16,7 +16,6 @@ use Proto\Models\EventCategory;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
-use Proto\Models\StorageEntry;
 use Proto\Models\User;
 use Redirect;
 use Response;
@@ -115,7 +114,7 @@ class EventController extends Controller
 
         if ($request->file('image')) {
             $photo = new Photo();
-            $uploaded_photo=$request->file('image');
+            $uploaded_photo = $request->file('image');
             $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'event_photos');
             $photo->save();
             $event->photo()->associate($photo);
@@ -172,7 +171,7 @@ class EventController extends Controller
 
         if ($request->file('image')) {
             $photo = new Photo();
-            $uploaded_photo=$request->file('image');
+            $uploaded_photo = $request->file('image');
             $photo->makePhoto($uploaded_photo, $uploaded_photo->getClientOriginalName(), $uploaded_photo->getCTime(), false, 'event_photos');
             $photo->save();
             $event->photo()->associate($photo);
