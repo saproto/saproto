@@ -61,7 +61,7 @@ class Photo extends Model
         if($addWatermark) {
             $watermark = Image::make(public_path('images/protography-watermark-template.png'));
             $watermark->text(strtoupper($watermarkUserName), 267, 1443, function ($font) {
-                $font->file((public_path('fonts/ubuntu-font-family-0.83/Ubuntu-R.ttf')));
+                $font->file((public_path('fonts/Ubuntu-R.ttf')));
                 $font->size(180);
                 $font->valign('top');
             });
