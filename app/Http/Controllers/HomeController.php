@@ -23,16 +23,15 @@ class HomeController extends Controller
         $companies = Company::where('in_logo_bar', true)->inRandomOrder()->get();
         $newsitems = Newsitem::where('published_at', '<=', Carbon::now())->where('published_at', '>', Carbon::now()->subWeeks(2))->orderBy('published_at', 'desc')->take(3)->get();
         $birthdays = User::has('member')->where('show_birthday', true)->where('birthdate', 'LIKE', date('%-m-d'))->get()->reject(function ($user, $index) {
-            return $user->member->is_pending == true;
+                return $user->member->is_pending == true;
         });
-        $dinnerform = Dinnerform::where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour(1))->first();
+        $dinnerforms = Dinnerform::where('closed', false)->where('start', '<=', Carbon::now())->where('end', '>', Carbon::now()->subHour())->where('visible_home_page', true)->orderBy('end')->get();
         $header = HeaderImage::inRandomOrder()->first();
         $videos = Video::orderBy('video_date', 'desc')->where('video_date', '>', Carbon::now()->subMonths(3))->limit(3)->get();
 
         if (Auth::check() && Auth::user()->is_member) {
             $message = WelcomeMessage::where('user_id', Auth::user()->id)->first();
-            return view('website.home.members', ['companies' => $companies, 'message' => $message,
-                'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerform' => $dinnerform, 'header' => $header, 'videos' => $videos, ]);
+            return view('website.home.members', ['companies' => $companies, 'message' => $message, 'newsitems' => $newsitems, 'birthdays' => $birthdays, 'dinnerforms' => $dinnerforms, 'header' => $header, 'videos' => $videos, ]);
         } else {
             return view('website.home.external', ['companies' => $companies, 'header' => $header]);
         }
@@ -51,8 +50,7 @@ class HomeController extends Controller
     }
 
     /** @return View Display FishCam. */
-    public function fishcam()
-    {
+    public function fishcam() {
         return view('misc.fishcam');
     }
 }

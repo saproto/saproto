@@ -16,6 +16,11 @@ class Newsletter extends Mailable
     public $list;
     public $text;
 
+    /**
+     * @param User $user
+     * @param string $list
+     * @param string $text
+     */
     public function __construct(User $user, $list, $text)
     {
         $this->user = $user;
@@ -23,6 +28,7 @@ class Newsletter extends Mailable
         $this->text = $text;
     }
 
+    /** @return Newsletter */
     public function build()
     {
         return $this

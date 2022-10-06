@@ -54,7 +54,7 @@ class HeaderImageController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return RedirectResponse
      * @throws Exception
      */
@@ -62,7 +62,6 @@ class HeaderImageController extends Controller
     {
         HeaderImage::findOrFail($id)->delete();
         Session::flash('flash_message', 'Image deleted.');
-
         return Redirect::route('headerimage::index');
     }
 }

@@ -18,10 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $desc
  * @property string|null $fa_icon
  * @property string $tier
- * @property int $has_page
  * @property string|null $page_name
  * @property string|null $page_content
- * @property int $is_archived
+ * @property bool $has_page
+ * @property bool $is_archived
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection|User[] $users
@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Achievement wherePageName($value)
  * @method static Builder|Achievement whereTier($value)
  * @method static Builder|Achievement whereUpdatedAt($value)
+ * @method static Builder|Achievement newModelQuery()
+ * @method static Builder|Achievement newQuery()
+ * @method static Builder|Achievement query()
  * @mixin Eloquent
  */
 class Achievement extends Model
@@ -45,13 +48,13 @@ class Achievement extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'achievements_users');
     }
 
-    /** @return HasMany|AchievementOwnership[] */
+    /** @return HasMany */
     public function achievementOwnership()
     {
         return $this->hasMany('Proto\Models\AchievementOwnership');

@@ -21,15 +21,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
- * @property int $closed
- * @property int|null $closed_account
+ * @property string|null $comment
+ * @property bool $closed
+ * @property bool $hide_participants
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $comment
- * @property-read Collection|User[] $allUsers
- * @property-read Collection|User[] $backupUsers
  * @property-read Account|null $closedAccount
  * @property-read Event|null $event
+ * @property-read Collection|User[] $allUsers
+ * @property-read Collection|User[] $backupUsers
  * @property-read Collection|HelpingCommittee[] $helpingCommitteeInstances
  * @property-read Collection|Committee[] $helpingCommittees
  * @property-read Collection|User[] $presentUsers
@@ -47,6 +47,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Activity whereRegistrationEnd($value)
  * @method static Builder|Activity whereRegistrationStart($value)
  * @method static Builder|Activity whereUpdatedAt($value)
+ * @method static Builder|Activity whereHideParticipants($value)
+ * @method static Builder|Activity newModelQuery()
+ * @method static Builder|Activity newQuery()
+ * @method static Builder|Activity query()
  * @mixin Eloquent
  */
 class Activity extends Validatable
@@ -63,57 +67,64 @@ class Activity extends Validatable
         'price' => 'required|regex:/[0-9]+(\.[0-9]{0,2}){0,1}/',
     ];
 
-    /** @return BelongsTo|Event */
+    /** @return BelongsTo */
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event');
     }
 
-    /** @return BelongsTo|Account */
+    /** @return BelongsTo */
     public function closedAccount()
     {
         return $this->belongsTo('Proto\Models\Account', 'closed_account');
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function users()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', false)->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function presentUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('activities_users.is_present', true)->where('backup', false)->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->whereNull('committees_activities_id')
+            ->where('activities_users.is_present', true)
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function allUsers()
     {
-        return $this->belongsToMany('Proto\Models\User', 'activities_users')->withPivot('id', 'committees_activities_id', 'is_present')->whereNull('activities_users.deleted_at')->where('backup', false)->withTimestamps();
+        return $this->belongsToMany('Proto\Models\User', 'activities_users')
+            ->withPivot('id', 'committees_activities_id', 'is_present')
+            ->whereNull('activities_users.deleted_at')
+            ->where('backup', false)
+            ->withTimestamps();
     }
 
-    /** @return Collection|User[] */
-    public function allUsersSorted()
-    {
-        return $this->allUsers->sort(function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        });
-    }
-
-    /** @return BelongsToMany|User[] */
+    /** @return BelongsToMany */
     public function backupUsers()
     {
         return $this->belongsToMany('Proto\Models\User', 'activities_users')->whereNull('activities_users.deleted_at')->whereNull('committees_activities_id')->where('backup', true)->withPivot('id')->withTimestamps();
     }
 
-    /** @return BelongsToMany|Committee[] */
+    /** @return BelongsToMany */
     public function helpingCommittees()
     {
         return $this->belongsToMany('Proto\Models\Committee', 'committees_activities')->withPivot(['amount', 'id'])->withTimestamps();
     }
 
-    /** @return HasMany|HelpingCommittee[] */
+    /** @return HasMany */
     public function helpingCommitteeInstances()
     {
         return $this->hasMany('Proto\Models\HelpingCommittee', 'activity_id');
@@ -191,6 +202,10 @@ class Activity extends Validatable
         return $this->getParticipation($user) !== null;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     */
     public function isOnBackupList($user) {
         return in_array($user->id,$this->backupUsers()->pluck('users.id')->toArray());
     }

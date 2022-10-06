@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Carbon;
+use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,12 +19,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $menuname
  * @property string|null $url
  * @property int|null $page_id
+ * @property int $order
+ * @property bool $is_member_only
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property int $order
- * @property int $is_member_only
- * @property-read Collection|MenuItem[] $children
  * @property-read Page|null $page
+ * @property-read Collection|MenuItem[] $children
  * @method static Builder|MenuItem whereCreatedAt($value)
  * @method static Builder|MenuItem whereId($value)
  * @method static Builder|MenuItem whereIsMemberOnly($value)
@@ -33,7 +34,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|MenuItem whereParent($value)
  * @method static Builder|MenuItem whereUpdatedAt($value)
  * @method static Builder|MenuItem whereUrl($value)
- * @mixin \Eloquent
+ * @method static Builder|MenuItem newModelQuery()
+ * @method static Builder|MenuItem newQuery()
+ * @method static Builder|MenuItem query()
+ * @mixin Eloquent
  */
 class MenuItem extends Model
 {
@@ -41,13 +45,13 @@ class MenuItem extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|Page */
+    /** @return BelongsTo */
     public function page()
     {
         return $this->belongsTo('Proto\Models\Page', 'page_id', 'id');
     }
 
-    /** @return HasMany|MenuItem */
+    /** @return HasMany */
     public function children()
     {
         return $this->hasMany('Proto\Models\MenuItem', 'parent');
@@ -62,14 +66,8 @@ class MenuItem extends Model
             } catch (Exception $e) {
                 return '#';
             }
-        } elseif ($this->page_id == null) {
+        } else{
             return $this->url;
-        } else {
-            $page = Page::find($this->page_id);
-            if ($page) {
-                return $page->getUrl();
-            }
-            return '#';
         }
     }
 

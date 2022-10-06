@@ -6,6 +6,7 @@ use Carbon;
 use Eloquent;
 use File;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,8 +17,6 @@ use Intervention\Image\Facades\Image;
  * Photo model.
  *
  * @property int $id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  * @property int $file_id
  * @property int $large_file_id
  * @property int $medium_file_id
@@ -26,6 +25,8 @@ use Intervention\Image\Facades\Image;
  * @property int $album_id
  * @property int $date_taken
  * @property int $private
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read PhotoAlbum $album
  * @property-read StorageEntry $file
  * @property-read StorageEntry $large_file
@@ -33,7 +34,7 @@ use Intervention\Image\Facades\Image;
  * @property-read StorageEntry $small_file
  * @property-read StorageEntry $tiny_file
  * @property-read File $url
- * @property-read PhotoLikes[] $likes
+ * @property-read Collection|PhotoLikes[] $likes
  * @method static Builder|Photo whereAlbumId($value)
  * @method static Builder|Photo whereCreatedAt($value)
  * @method static Builder|Photo whereDateTaken($value)
@@ -41,6 +42,9 @@ use Intervention\Image\Facades\Image;
  * @method static Builder|Photo whereId($value)
  * @method static Builder|Photo wherePrivate($value)
  * @method static Builder|Photo whereUpdatedAt($value)
+ * @method static Builder|Photo newModelQuery()
+ * @method static Builder|Photo newQuery()
+ * @method static Builder|Photo query()
  * @mixin Eloquent
  */
 class Photo extends Model
@@ -110,10 +114,10 @@ class Photo extends Model
         return $this->hasMany('Proto\Models\PhotoLikes');
     }
 
-    /** @return HasOne|StorageEntry */
+    /** @return hasOne */
     public function file()
     {
-        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id')->first();
+        return $this->hasOne('Proto\Models\StorageEntry', 'id', 'file_id');
     }
 
     public function fileRelation() {
@@ -181,7 +185,10 @@ class Photo extends Model
         return $this->getAdjacentPhoto(false, $user);
     }
 
-    /** @return int */
+    /**
+     * @param int $paginateLimit
+     * @return false|float|int
+     */
     public function getAlbumPageNumber($paginateLimit)
     {
         $photoIndex = 1;

@@ -15,6 +15,7 @@ use PragmaRX\Google2FA\Google2FA;
 use Proto\Mail\UserMailChange;
 use Proto\Models\Member;
 use Proto\Models\StorageEntry;
+use Proto\Models\User;
 use Redirect;
 use Session;
 use Validator;
@@ -24,6 +25,7 @@ class UserDashboardController extends Controller
     /** @return View */
     public function show()
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $qrcode = null;
@@ -45,6 +47,7 @@ class UserDashboardController extends Controller
      */
     public function updateMail(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $password = $request->input('password');
@@ -52,8 +55,7 @@ class UserDashboardController extends Controller
         $auth_check = AuthController::verifyCredentials($user->email, $password);
 
         if ($auth_check == null || $auth_check->id != $user->id) {
-            $request->session()->flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
-
+            Session::flash('flash_message', 'You need to provide a valid password to update your e-mail address.');
             return Redirect::back();
         }
 
@@ -93,7 +95,6 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'E-mail address changed.');
-
         return Redirect::route('user::dashboard');
     }
 
@@ -103,6 +104,7 @@ class UserDashboardController extends Controller
      */
     public function update(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $userdata['website'] = $request->input('website');
@@ -138,7 +140,6 @@ class UserDashboardController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Changes saved.');
-
         return Redirect::route('user::dashboard');
     }
 
@@ -148,6 +149,7 @@ class UserDashboardController extends Controller
      */
     public function editDiet(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
         $user->diet = htmlspecialchars($request->input('diet'));
         $user->save();
@@ -159,6 +161,7 @@ class UserDashboardController extends Controller
     /** @return View */
     public function becomeAMemberOf()
     {
+        /* @var null|User $user */
         if (Auth::check()) {
             $user = Auth::user();
         } else {
@@ -237,9 +240,9 @@ class UserDashboardController extends Controller
 
         foreach ($steps as $step) {
             if ($step['done']) {
-                array_push($done, $step);
+                $done[] = $step;
             } else {
-                array_push($todo, $step);
+                $todo[] = $step;
             }
         }
 
@@ -252,7 +255,6 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
-
             return Redirect::route('becomeamember');
         }
 
@@ -269,7 +271,6 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->completed_profile) {
             Session::flash('flash_message', 'Your membership profile is already complete.');
-
             return Redirect::route('becomeamember');
         }
 
@@ -290,11 +291,9 @@ class UserDashboardController extends Controller
             $user->save();
 
             Session::flash('flash_message', 'Completed profile.');
-
             return Redirect::route('becomeamember');
         } else {
             Session::flash('flash_userdata', $userdata);
-
             return view(
                 'users.dashboard.completeprofile_verify',
                 ['userdata' => $userdata, 'age' => Carbon::instance(new DateTime($userdata['birthdate']))->age]
@@ -310,7 +309,6 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
-
             return Redirect::route('becomeamember');
         }
 
@@ -326,7 +324,6 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         if ($user->is_member || $user->signed_membership_form) {
             Session::flash('flash_message', 'You have already signed the membership form');
-
             return Redirect::route('becomeamember');
         }
 
@@ -353,6 +350,7 @@ class UserDashboardController extends Controller
     /** @return View */
     public function getClearProfile()
     {
+        /** @var User $user */
         $user = Auth::user();
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
@@ -367,6 +365,7 @@ class UserDashboardController extends Controller
     /** @return RedirectResponse */
     public function postClearProfile()
     {
+        /** @var User $user */
         $user = Auth::user();
         if (! $user->completed_profile) {
             abort(403, 'You have not yet completed your membership profile.');
@@ -375,7 +374,6 @@ class UserDashboardController extends Controller
             abort(403, 'You cannot clear your membership profile while your membership is active.');
         }
 
-        $user = Auth::user();
         $user->clearMemberProfile();
 
         Session::flash('flash_message', 'Profile cleared.');
@@ -385,6 +383,7 @@ class UserDashboardController extends Controller
     /** @return RedirectResponse */
     public function generateKey()
     {
+        /** @var User $user */
         $user = Auth::user();
         $user->generateNewPersonalKey();
 

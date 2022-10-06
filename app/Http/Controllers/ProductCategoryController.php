@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\ProductCategory;
 use Redirect;
+use Session;
 
 class ProductCategoryController extends Controller
 {
@@ -32,7 +33,7 @@ class ProductCategoryController extends Controller
         $category = ProductCategory::create($request->all());
         $category->save();
 
-        $request->session()->flash('flash_message', 'Category '.$category->name.' created.');
+        Session::flash('flash_message', 'Category '.$category->name.' created.');
         return Redirect::route('omnomcom::categories::list');
     }
 
@@ -58,7 +59,7 @@ class ProductCategoryController extends Controller
         $category->fill($request->all());
         $category->save();
 
-        $request->session()->flash('flash_message', 'Category '.$category->name.' saved.');
+        Session::flash('flash_message', 'Category '.$category->name.' saved.');
         return Redirect::route('omnomcom::categories::list');
     }
 
@@ -73,7 +74,7 @@ class ProductCategoryController extends Controller
         /** @var ProductCategory $category */
         $category = ProductCategory::findOrFail($id);
 
-        $request->session()->flash('flash_message', 'Category '.$category->name.' deleted.');
+        Session::flash('flash_message', 'Category '.$category->name.' deleted.');
         $category->delete();
 
         return Redirect::route('omnomcom::categories::list');

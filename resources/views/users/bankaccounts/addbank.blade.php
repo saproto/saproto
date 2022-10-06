@@ -51,7 +51,6 @@
 
                                         <p class="card-text text-center">
                                             <sub>
-                                                {{ ($user->bank->is_first ? "First time" : "Recurring") }}
                                                 authorization issued on {{ $user->bank->created_at }}.<br>
                                                 Authorization ID: {{ $user->bank->machtigingid }}
                                             </sub>

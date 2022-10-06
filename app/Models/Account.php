@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * Account Model.
@@ -24,6 +25,9 @@ use Illuminate\Support\Collection;
  * @method static Builder|Account whereId($value)
  * @method static Builder|Account whereName($value)
  * @method static Builder|Account whereUpdatedAt($value)
+ * @method static Builder|Account newModelQuery()
+ * @method static Builder|Account newQuery()
+ * @method static Builder|Account query()
  * @mixin Eloquent
  */
 class Account extends Model
@@ -32,7 +36,7 @@ class Account extends Model
 
     protected $guarded = ['id'];
 
-    /** @return hasMany|Product[] */
+    /** @return hasMany */
     public function products()
     {
         return $this->hasMany('Proto\Models\Product');
@@ -40,7 +44,7 @@ class Account extends Model
 
     /**
      * @param Collection $orderlines
-     * @return Account[]
+     * @return array<int, stdClass>
      */
     public static function generateAccountOverviewFromOrderlines($orderlines)
     {
@@ -48,7 +52,7 @@ class Account extends Model
 
         foreach ($orderlines as $orderline) {
             // We sort by date, where a date goes from 6am - 6am.
-            $sortDate = Carbon::parse($orderline->created_at)->subHours(6)->toDateString();
+            $sortDate = $orderline->created_at->subHours(6)->toDateString();
 
             // Abbreviate variable names.
             $nr = $orderline->account_number;
@@ -97,7 +101,7 @@ class Account extends Model
             )
             ->groupby('orderlines.product_id')
             ->where('accounts.id', '=', $this->id)
-            ->where('orderlines.created_at', '>=', Carbon::parse($start)->format('Y-m-d H:i:s'))
-            ->where('orderlines.created_at', '<', Carbon::parse($end)->format('Y-m-d H:i:s'))->get();
+            ->where('orderlines.created_at', '>=', Carbon::parse(strval($start))->format('Y-m-d H:i:s'))
+            ->where('orderlines.created_at', '<', Carbon::parse(strval($end))->format('Y-m-d H:i:s'))->get();
     }
 }

@@ -38,7 +38,7 @@
 
                         <tbody>
 
-                        @foreach($event->returnAllUsers() as $user)
+                        @foreach($event->allUsers() as $user)
                             @php
                                 $participation = $user->pivot;
                             @endphp
@@ -46,10 +46,11 @@
                             <tr>
                                 <td>
                                     @if($participation)
-                                        <a href="{{ route('event::togglepresence', ['id' => $participation->id]) }}"
-                                           class="badge bg-{{ $participation->is_present ? 'success' : 'danger' }}">
+                                        <span
+                                           class="cursor-pointer is_present badge bg-{{ $participation->is_present ? 'success' : 'danger' }}"
+                                           data-id="{{ $participation->id }}">
                                             {{ $participation->is_present ? 'Present' : 'Absent' }}
-                                        </a>
+                                        </span>
                                     @endif
                                 </td>
 
@@ -104,3 +105,18 @@
     </div>
 
 @endsection
+
+@push('javascript')
+    <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        document.querySelectorAll('.is_present').forEach(el => {
+            el.onclick = _ => {
+                get("{{ route('event::togglepresence', ['id' => 'id']) }}".replace("id", el.getAttribute('data-id')))
+                .then(_ => {
+                    el.classList.toggle('bg-success')
+                    el.classList.toggle('bg-danger')
+                    el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                })
+            }
+        })
+    </script>
+@endpush

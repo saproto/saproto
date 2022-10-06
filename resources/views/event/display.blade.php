@@ -43,14 +43,29 @@
 
         @endif
 
-        @if($event->activity && Auth::check() && Auth::user()->is_member && count($event->activity->helpingCommitteeInstances) > 0)
+        @if($event->activity && Auth::check() && Auth::user()->is_member && count($event->activity->helpingCommitteeInstances) > 0 ||$event->dinnerforms()->count())
 
             <div class="col-md-4">
+                <div class="card mb-3">
+                @if(count($event->activity->helpingCommitteeInstances) > 0 )
+                    @include('event.display_includes.helpers', [
+                        'event' => $event
+                    ])
+                @endif
+                </div>
 
-                @include('event.display_includes.helpers', [
-                    'event' => $event
-                ])
+                @if($event->dinnerforms()->count())
+                    <div class="card mb-3">
 
+                        <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinner Form</div>
+                        <div class="card-body">
+                            @foreach($event->dinnerforms()->get() as $dinnerform)
+                                @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
+                            @endforeach
+                        </div>
+
+                    </div>
+                    @endif
             </div>
 
         @endif

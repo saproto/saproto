@@ -21,7 +21,7 @@ class QuoteCornerController extends Controller
         $quotes = Quote::where('updated_at', '>', Carbon::now()->subWeeks(4))->get();
         $popular = null;
         $popularLikes = 0;
-        foreach ($quotes as $key => $quote) {
+        foreach ($quotes as $quote) {
             $likes = QuoteLike::where('quote_id', $quote->id)->get();
             if ($popularLikes < count($likes)) {
                 $popular = $quote;
@@ -30,15 +30,17 @@ class QuoteCornerController extends Controller
         }
 
         if (request()->wantsJson()) {
-            $quotes = Quote::orderBy('created_at', 'desc')->paginate(20);
+            $quotes = Quote::orderBy('created_at', 'desc')->get();
             foreach ($quotes as $quote) {
                 $quote->quote = str_replace('<br />', "\n", strip_tags($quote->quote, 'br'));
+                /* @phpstan-ignore-next-line  */
                 $quote->user_info = (object) [
                     'name' => $quote->user->name,
                     'photo' => $quote->user->photo_preview,
                 ];
             }
             $popular->quote = str_replace('<br />', "\n", strip_tags($popular->quote, 'br'));
+            /* @phpstan-ignore-next-line  */
             $popular->user_info = (object) [
                 'name' => $popular->user->name,
                 'photo' => $popular->user->photo_preview,
@@ -78,6 +80,7 @@ class QuoteCornerController extends Controller
         if ($request->wantsJson()) {
             $data_quote = $quote;
             $data_quote->quote = str_replace('<br />', "\n", strip_tags($data_quote->quote, 'br'));
+            /* @phpstan-ignore-next-line  */
             $data_quote->user_info = (object) [
                 'name' => $data_quote->user->name,
                 'photo' => $data_quote->user->photo_preview,
@@ -90,7 +93,6 @@ class QuoteCornerController extends Controller
             ]);
         } else {
             Session::flash('flash_message', 'Quote added.');
-
             return Redirect::route('quotes::list');
         }
     }
@@ -106,7 +108,6 @@ class QuoteCornerController extends Controller
         QuoteLike::where('quote_id', $id)->delete();
         $quote->delete();
         Session::flash('flash_message', 'Quote deleted.');
-
         return Redirect::route('quotes::list');
     }
 

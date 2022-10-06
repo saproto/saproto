@@ -23,8 +23,8 @@ use Mollie;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $payment_url
- * @property-read Collection|OrderLine[] $orderlines
  * @property-read User $user
+ * @property-read Collection|OrderLine[] $orderlines
  * @method static Builder|MollieTransaction whereAmount($value)
  * @method static Builder|MollieTransaction whereCreatedAt($value)
  * @method static Builder|MollieTransaction whereId($value)
@@ -33,6 +33,9 @@ use Mollie;
  * @method static Builder|MollieTransaction whereStatus($value)
  * @method static Builder|MollieTransaction whereUpdatedAt($value)
  * @method static Builder|MollieTransaction whereUserId($value)
+ * @method static Builder|MollieTransaction newModelQuery()
+ * @method static Builder|MollieTransaction newQuery()
+ * @method static Builder|MollieTransaction query()
  * @mixin Eloquent
  */
 class MollieTransaction extends Model
@@ -41,13 +44,13 @@ class MollieTransaction extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User')->withTrashed();
     }
 
-    /** @return HasMany|Orderline[] */
+    /** @return HasMany */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine', 'payed_with_mollie');
@@ -127,7 +130,7 @@ class MollieTransaction extends Model
                 if (
                     $orderline->product->ticket &&
                     $orderline->product->ticket->is_prepaid &&
-                    $orderline->ticketPurchase->payment_complete == false
+                    ! $orderline->ticketPurchase->payment_complete
                 ) {
                     if ($orderline->ticketPurchase) {
                         $orderline->ticketPurchase->delete();
@@ -143,7 +146,7 @@ class MollieTransaction extends Model
             }
         } elseif ($new_status == 'paid') {
             foreach ($this->orderlines as $orderline) {
-                if ($orderline->ticketPurchase && $orderline->ticketPurchase->payment_complete == false) {
+                if ($orderline->ticketPurchase && ! $orderline->ticketPurchase->payment_complete) {
                     $orderline->ticketPurchase->payment_complete = true;
                     $orderline->ticketPurchase->save();
                 }
