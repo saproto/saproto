@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Address Model.
+ * Proto\Models\Address.
  *
  * @property int $id
  * @property int $user_id
@@ -29,9 +29,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Address whereUpdatedAt($value)
  * @method static Builder|Address whereUserId($value)
  * @method static Builder|Address whereZipcode($value)
- * @method static Builder|Address newModelQuery()
- * @method static Builder|Address newQuery()
- * @method static Builder|Address query()
  * @mixin Eloquent
  */
 class Address extends Validatable
@@ -51,7 +48,7 @@ class Address extends Validatable
         'country' => 'required|string',
     ];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

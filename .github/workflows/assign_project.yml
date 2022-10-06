@@ -12,9 +12,19 @@ env:
 jobs:
   assign_to_project:
     runs-on: ubuntu-latest
-    name: Assign issues/pull-requests to project
+    name: Assign to the Project
     steps:
-      - uses: actions/add-to-project@v0.3.0
+      - name: Assign new issues to the project in 'new issues'
+        uses: srggrs/assign-one-project-github-action@1.2.1
+        if: github.event_name == 'issues'
         with:
-          project-url: 'https://github.com/orgs/saproto/projects/1'
-          github-token: ${{ secrets.PROJECTS_TOKEN }}
+          project: 'https://github.com/saproto/saproto/projects/5'
+          column_name: 'New Issues'
+
+      - name: Assign new pull requests to the project in 'in review'
+        uses: srggrs/assign-one-project-github-action@1.2.1
+        if: github.event_name == 'pull_request'
+        with:
+          project: 'https://github.com/saproto/saproto/projects/5'
+          column_name: 'In Review'
+

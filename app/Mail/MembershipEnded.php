@@ -16,14 +16,22 @@ class MembershipEnded extends Mailable
     public $user;
     public $lists;
 
-    /** @return void */
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
     public function __construct(User $user)
     {
         $this->user = $user;
         $this->lists = $this->getSubscriptionList();
     }
 
-    /** @return MembershipEnded */
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
         return $this
@@ -32,7 +40,6 @@ class MembershipEnded extends Mailable
             ->view('emails.membershipend');
     }
 
-    /** @return string */
     public function getSubscriptionList()
     {
         $footer = [];

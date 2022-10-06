@@ -22,9 +22,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|FailedWithdrawal whereId($value)
  * @method static Builder|FailedWithdrawal whereUserId($value)
  * @method static Builder|FailedWithdrawal whereWithdrawalId($value)
- * @method static Builder|FailedWithdrawal newModelQuery()
- * @method static Builder|FailedWithdrawal newQuery()
- * @method static Builder|FailedWithdrawal query()
  * @mixin Eloquent
  */
 class FailedWithdrawal extends Model
@@ -35,19 +32,19 @@ class FailedWithdrawal extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|OrderLine */
     public function correctionOrderline()
     {
         return $this->belongsTo('Proto\Models\OrderLine', 'correction_orderline_id');
     }
 
-    /** @return HasOne */
+    /** @return HasOne|Withdrawal */
     public function withdrawal()
     {
         return $this->hasOne('Proto\Models\Withdrawal', 'withdrawal_id');
     }
 
-    /** @return HasOne */
+    /** @return HasOne|User */
     public function user()
     {
         return $this->hasOne('Proto\Models\User', 'user_id');

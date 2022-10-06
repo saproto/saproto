@@ -42,7 +42,7 @@ class PhotoAdminController extends Controller
         }
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $album->id]);
+        return redirect(route('photo::admin::edit', ['id' => $album->id]));
     }
 
     /**
@@ -122,7 +122,7 @@ class PhotoAdminController extends Controller
         $photos = $request->input('photo');
 
         if ($photos) {
-            $album = PhotoAlbum::findOrFail($id);
+            $album = PhotoAlbum::where('id', $id)->get()->first();
 
             if ($album->published && ! Auth::user()->can('publishalbums')) {
                 abort(403, 'Unauthorized action.');
@@ -153,7 +153,7 @@ class PhotoAdminController extends Controller
             $album->save();
         }
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     /**
@@ -178,13 +178,14 @@ class PhotoAdminController extends Controller
 
         if (! count($album->items) > 0 || $album->thumb_id == null) {
             Session::flash('flash_message', 'Albums need at least one photo and a thumbnail to be published.');
+
             return Redirect::back();
         }
 
         $album->published = true;
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     /**
@@ -197,7 +198,7 @@ class PhotoAdminController extends Controller
         $album->published = false;
         $album->save();
 
-        return Redirect::route('photo::admin::edit', ['id' => $id]);
+        return redirect(route('photo::admin::edit', ['id' => $id]));
     }
 
     /**

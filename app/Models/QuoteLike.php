@@ -23,9 +23,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|QuoteLike whereQuoteId($value)
  * @method static Builder|QuoteLike whereUpdatedAt($value)
  * @method static Builder|QuoteLike whereUserId($value)
- * @method static Builder|QuoteLike newModelQuery()
- * @method static Builder|QuoteLike newQuery()
- * @method static Builder|QuoteLike query()
  * @mixin Eloquent
  */
 class QuoteLike extends Model
@@ -39,13 +36,13 @@ class QuoteLike extends Model
         'quote_id' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Quote */
     public function quote()
     {
         return $this->belongsTo('Proto\Models\Quote');

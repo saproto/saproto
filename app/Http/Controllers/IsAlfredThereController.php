@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -49,7 +48,7 @@ class IsAlfredThereController extends Controller
             $status->value = $new_status;
             $text->value = '';
         } elseif ($new_status === 'away') {
-            $status->value = $arrival_time;
+            $status->value = strtotime($arrival_time);
             $text->value = $request->input('is_alfred_there_text');
         }elseif($new_status === 'text_only'){
             $text->value = $request->input('is_alfred_there_text');
@@ -60,7 +59,7 @@ class IsAlfredThereController extends Controller
         return Redirect::back();
     }
 
-    /** @return HashMapItem */
+    /** @return HashMapItem|null */
     public static function getOrCreateHasMapItem($key)
     {
         $item = HashMapItem::where('key', $key)->first();
@@ -80,12 +79,12 @@ class IsAlfredThereController extends Controller
         $result->text = self::getOrCreateHasMapItem(self::$HashMapTextKey)->value;
 
         $status = self::getOrCreateHasMapItem(self::$HashMapItemKey);
-        if ($status->value == 'there' || $status->value == 'unknown') {
+        if ($status->value == 'there' ?? $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
-        } elseif (preg_match('/^\d{10}/', $status->value) === 1) {
+        } elseif (preg_match('/^[0-9]{10}/', $status->value) === 1) {
             $result->status = 'away';
-            $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
+            $result->back = date('Y-m-d H:i', $status->value);
             $result->backunix = $status->value;
             return $result;
         }

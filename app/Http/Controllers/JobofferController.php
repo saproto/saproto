@@ -13,21 +13,21 @@ use Session;
 
 class JobofferController extends Controller
 {
-    /** @return View */
+    /** @return View  */
     public function index()
     {
         $companies = Company::has('joboffers')->get();
         return view('companies.joboffers.list', ['companies' => $companies]);
     }
 
-    /** @return View */
+    /** @return View  */
     public function adminIndex()
     {
         $joboffers = Joboffer::all();
         return view('companies.joboffers.adminlist', ['joboffers' => $joboffers]);
     }
 
-    /** @return View */
+    /** @return View  */
     public function create()
     {
         $companies = Company::all();
@@ -58,7 +58,7 @@ class JobofferController extends Controller
         $joboffer = Joboffer::create($request->all());
         $joboffer->save();
 
-        return Redirect::route('joboffers::admin');
+        return redirect(route('joboffers::admin'));
     }
 
     /**
@@ -97,7 +97,7 @@ class JobofferController extends Controller
         $joboffer->save();
 
         Session::flash('flash_message', 'Job offer has been updated.');
-        return Redirect::route('joboffers::admin');
+        return redirect(route('joboffers::admin'));
     }
 
     /**

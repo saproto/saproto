@@ -36,11 +36,12 @@
                             </tr>
 
                             </thead>
-                            @foreach($menuItems as $index=>$menuItem)
+
+                            @foreach($menuItems as $menuItem)
 
                                 <tr class="bg-info text-white">
                                     <td><i class="fas fa-folder me-2"></i> {{ $menuItem->menuname }}</td>
-                                    <td>{{ $menuItem->getUrl()}} </td>
+                                    <td>{{ $menuItem->getUrl() }}</td>
                                     <td>@if($menuItem->is_member_only) <i class="fas fa-lock"></i> @endif</td>
                                     <td>
                                         <a href="{{ route('menu::edit', ['id' => $menuItem->id]) }}">
@@ -55,13 +56,13 @@
                                             'confirm' => 'Delete',
                                         ])
 
-                                        @if(!$index==0)
+                                        @if(!$menuItem->isFirst())
                                             <a href="{{ route('menu::orderUp', ['id' => $menuItem->id]) }}">
                                                 <i class="fas fa-arrow-up me-2 text-white"></i>
                                             </a>
                                         @endif
 
-                                        @if(!$index==count($menuItems))
+                                        @if(!$menuItem->isLast())
                                             <a href="{{ route('menu::orderDown', ['id' => $menuItem->id]) }}">
                                                 <i class="fas fa-arrow-down me-2 text-white"></i>
                                             </a>

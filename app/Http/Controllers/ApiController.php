@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Input;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
@@ -30,7 +31,7 @@ class ApiController extends Controller
     }
 
     /**
-     * @param string $token
+     * @param $token
      * @return false|string
      */
     public function protubeAdmin($token)
@@ -83,7 +84,7 @@ class ApiController extends Controller
         $playedVideo = new PlayedVideo();
         $user = User::findOrFail($request->user_id);
 
-        if ($user->keep_protube_history) {
+        if ($user && $user->keep_protube_history) {
             $playedVideo->user()->associate($user);
         }
 
@@ -112,13 +113,12 @@ class ApiController extends Controller
         }
 
         if ($request->has('callback')) {
-            return response()->json($response)->setCallback($request->input('callback'));
+            return response()->json($response)->setCallback(Input::get('callback'));
         } else {
             return response()->json($response);
         }
     }
 
-    /** @return void */
     public function fishcamStream()
     {
         if (! file_exists(env('FISHCAM_URL'))) {

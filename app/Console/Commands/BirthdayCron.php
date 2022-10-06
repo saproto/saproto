@@ -39,11 +39,9 @@ class BirthdayCron extends Command
      */
     public function handle()
     {
-        $users = User::query()
-            ->where('birthdate', 'LIKE', '%-'.date('m-d'))
-            ->has('member')
-            ->get()
-            ->reject(function ($user, $index) { return $user->member->is_pending == true; });
+        $users = User::where('birthdate', 'LIKE', '%-'.date('m-d'))->has('member')->get()->reject(function ($user, $index) {
+            return $user->member->is_pending == true;
+        });
 
         if ($users->count() > 0) {
             $this->info('Sending birthday notification to '.$users->count().' people.');
@@ -66,7 +64,5 @@ class BirthdayCron extends Command
         } else {
             $this->info('There are no jarige joppen today.');
         }
-
-        return 0;
     }
 }

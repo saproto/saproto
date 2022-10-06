@@ -36,17 +36,8 @@
 
         @endif
 
-        @if($outstanding>0)
-        <p class="card-text">
-            Remaining outstanding amount
-        </p>
-
-        <h3 class="card-title">
-            &euro; {{ number_format($outstanding, 2, '.', '') }}
-        </h3>
-        @endif
     </div>
-    
+
     @if($next_withdrawal > 0)
 
         <div class="card-footer">

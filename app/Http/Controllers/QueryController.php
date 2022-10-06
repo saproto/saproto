@@ -2,6 +2,9 @@
 
 namespace Proto\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -18,11 +21,11 @@ class QueryController extends Controller
 
     /**
      * @param Request $request
-     * @return View
+     * @return RedirectResponse|View
      */
     public function activityOverview(Request $request)
     {
-        if ($request->missing('start') || $request->missing('end')) {
+        if (! $request->has('start') || ! $request->has('start')) {
             if (intval(date('n')) >= 9) {
                 $year_start = intval(date('Y'));
             } else {
@@ -48,15 +51,22 @@ class QueryController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\Response|View
+     * @return Application|Factory|\Illuminate\Http\Response|RedirectResponse|View
      */
     public function membershipTotals(Request $request)
     {
         // Get a list of all CreaTe students.
-        $students = LdapController::searchStudents();
-        $names = $students['names'];
-        $emails = $students['emails'];
-        $usernames = $students['usernames'];
+        $ldap_students = LdapController::searchUtwente('|(department=*B-CREA*)(department=*M-ITECH*)');
+
+        $names = [];
+        $emails = [];
+        $usernames = [];
+
+        foreach ($ldap_students as $student) {
+            $names[] = strtolower($student->givenname.' '.$student->sn);
+            $emails[] = strtolower($student->userprincipalname);
+            $usernames[] = $student->uid;
+        }
 
         $count_total = 0;
         $count_primary = 0;

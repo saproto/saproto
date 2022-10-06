@@ -45,7 +45,7 @@ class VideoController extends Controller
         $youtube_id = $request->youtube_id;
         $youtube_video = Youtube::getVideoInfo($youtube_id);
 
-        if ($youtube_video != null) {
+        if (! $youtube_video) {
             Session::flash('flash_message', 'This is an invalid YouTube video ID!');
             return Redirect::back();
         }

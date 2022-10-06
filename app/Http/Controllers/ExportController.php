@@ -25,7 +25,7 @@ class ExportController extends Controller
     /**
      * @param array $table
      * @param string $personal_key
-     * @return mixed
+     * @return Account[]|Activity[]|Committee[]|Event[]|Permission[]|ProductCategory[]|User|null
      */
     public function export($table, $personal_key)
     {

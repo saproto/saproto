@@ -11,9 +11,9 @@ use Proto\Models\StorageEntry;
 class FileController extends Controller
 {
     /**
-     * @param int $id
-     * @param string $hash
-     * @return Response
+     * @param $id
+     * @param $hash
+     * @return string|Response
      * @throws FileNotFoundException
      */
     public function get($id, $hash)
@@ -52,7 +52,7 @@ class FileController extends Controller
         ];
 
         ini_set('memory_limit', '512M');
-        /* @phpstan-ignore-next-line */
+        //cache the image for two months
         return Image::cache(function ($image) use ($storage, $entry, $opts) {
             if ($opts['w'] && $opts['h']) {
                 $image->make($storage['local']['root'].'/'.$entry->filename)->fit($opts['w'], $opts['h'], function ($constraint) {

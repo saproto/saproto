@@ -22,9 +22,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|EmailList whereId($value)
  * @method static Builder|EmailList whereIsMemberOnly($value)
  * @method static Builder|EmailList whereName($value)
- * @method static Builder|EmailList newModelQuery()
- * @method static Builder|EmailList newQuery()
- * @method static Builder|EmailList query()
  * @mixin Eloquent
  */
 class EmailList extends Model
@@ -35,7 +32,7 @@ class EmailList extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsToMany */
+    /** @return BelongsToMany|User[] */
     public function users()
     {
         return $this->belongsToMany('Proto\Models\User', 'users_mailinglists', 'list_id', 'user_id');
@@ -75,7 +72,7 @@ class EmailList extends Model
     public function unsubscribe($user)
     {
         $s = EmailListSubscription::where('user_id', $user->id)->where('list_id', $this->id);
-        if ($s == null) {
+        if (! $s) {
             return false;
         }
         $s->delete();

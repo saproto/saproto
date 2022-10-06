@@ -18,16 +18,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $idea
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User|null $user
+ * @property-read User $user
  * @property-read Collection|GoodIdeaVote[] $votes
  * @method static Builder|GoodIdea whereCreatedAt($value)
  * @method static Builder|GoodIdea whereId($value)
  * @method static Builder|GoodIdea whereIdea($value)
  * @method static Builder|GoodIdea whereUpdatedAt($value)
  * @method static Builder|GoodIdea whereUserId($value)
- * @method static Builder|GoodIdea newModelQuery()
- * @method static Builder|GoodIdea newQuery()
- * @method static Builder|GoodIdea query()
  * @mixin Eloquent
  */
 class GoodIdea extends Model
@@ -36,13 +33,13 @@ class GoodIdea extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return HasMany */
+    /** @return HasMany|GoodIdeaVote[] */
     public function votes()
     {
         return $this->hasMany('Proto\Models\GoodIdeaVote');
@@ -62,7 +59,7 @@ class GoodIdea extends Model
     {
         /** @var GoodIdeaVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();
-        if ($vote != null) {
+        if ($vote) {
             return $vote->vote;
         }
         return 0;

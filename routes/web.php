@@ -289,24 +289,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to dinnerforms. */
-    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::',  'middleware' => ['auth']], function () {
+    Route::group(['prefix' => 'dinnerform', 'as' => 'dinnerform::'], function () {
         Route::group(['middleware' => ['permission:tipcie']], function () {
             Route::get('add', ['as' => 'add', 'uses' => 'DinnerformController@create']);
             Route::post('add', ['as' => 'add', 'uses' => 'DinnerformController@store']);
             Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformController@edit']);
             Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformController@update']);
-            Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DinnerformController@destroy']);
-            Route::get('admin/{id}', ['as' => 'admin', 'uses' => 'DinnerformController@admin']);
-            Route::get('process/{id}', ['as' => 'process', 'uses' => 'DinnerformController@process']);
-        });
-        Route::group(['prefix' => 'orderline', 'as' => 'orderline::'], function () {
-            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'DinnerformOrderlineController@delete']);
-            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'DinnerformOrderlineController@edit']);
-            Route::post('add/{id}', ['as' => 'add', 'uses' => 'DinnerformOrderlineController@store']);
-            Route::post('update/{id}', ['as' => 'update', 'middleware' => ['permission:tipcie'], 'uses' => 'DinnerformOrderlineController@update']);
         });
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'DinnerformController@close']);
     });
 
     /*

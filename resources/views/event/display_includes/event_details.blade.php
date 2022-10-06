@@ -28,7 +28,7 @@
         <img class="card-img-top" src="{{ $event->photo->getMediumUrl() }}" width="100%">
     @endif
 
-    <div class="card-header bg-light">
+    <div class="card-header">
         <h5 class="card-title">@yield('page-title')</h5>
     </div>
 

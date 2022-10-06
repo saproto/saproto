@@ -22,25 +22,17 @@ class SmartXpScreenController extends Controller
     /** @return array */
     public function timetable()
     {
-        return CalendarController::returnGoogleCalendarEvents(
-            config('proto.google-timetable-id'),
-            date('c', strtotime('today')),
-            date('c', strtotime('tomorrow'))
-        );
+        return CalendarController::returnGoogleCalendarEvents(config('proto.google-timetable-id'), date('c', strtotime('today')), date('c', strtotime('tomorrow')));
     }
 
     /** @return array */
     public function protopenersTimetable()
     {
-        return CalendarController::returnGoogleCalendarEvents(
-            config('proto.protopeners-google-timetable-id'),
-            date('c', strtotime('today')),
-            date('c', strtotime('tomorrow'))
-        );
+        return CalendarController::returnGoogleCalendarEvents(config('proto.protopeners-google-timetable-id'), date('c', strtotime('today')), date('c', strtotime('tomorrow')));
     }
 
     /**
-     * @param Request $request
+     * @param $stop
      * @return Response|JsonResponse
      */
     public function bus(Request $request)

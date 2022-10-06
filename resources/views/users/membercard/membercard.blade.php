@@ -14,7 +14,7 @@
         }
 
         #name {
-            font-size: 13px;
+            font-size: 17px;
             font-weight: bold;
         }
 
@@ -23,29 +23,29 @@
             width: 25mm;
             height: 25mm;
             top: 8mm;
-            right: 5mm;
+            right: 3mm;
         }
 
         #power-icons {
             position: absolute;
             top: 8mm;
-            right: 0mm;
-            padding: 0mm;
+            right: 3mm;
+            padding: 0.6mm;
             width: 4.1%;
             background-color: white;
         }
 
         #details {
             position: absolute;
-            top: 9mm;
-            left: 0mm;
+            top: 6mm;
+            left: 5mm;
             color: #000;
             font-size: 13px;
         }
 
         #details .heading {
             color: #aaa;
-            margin-top: 1.5mm;
+            margin-top: 2mm;
             text-transform: uppercase;
             font-size: 10px;
         }
@@ -53,7 +53,7 @@
         #barcode {
             width: 35mm;
             height: 5mm;
-            margin-top: 2mm;
+            margin-top: 3mm;
         }
     </style>
     <div id="card">

@@ -6,7 +6,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Proto\Models\HashMapItem;
 use Redirect;
-use Session;
 use SpotifyWebAPI\Session as SpotifySession;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -25,7 +24,7 @@ class SpotifyController extends Controller
             route('spotify::oauth')
         );
 
-        $api = new SpotifyWebAPI();
+        $api = new \SpotifyWebAPI\SpotifyWebAPI();
 
         if (! $request->has('code')) {
             $options = [
@@ -40,7 +39,6 @@ class SpotifyController extends Controller
             $session->requestAccessToken($request->get('code'));
             $api->setAccessToken($session->getAccessToken());
 
-            /** @phpstan-ignore-next-line  */
             $spotify_user = $api->me()->id;
             $right_user = config('app-proto.spotify-user');
             if ($spotify_user != $right_user) {
@@ -50,7 +48,7 @@ class SpotifyController extends Controller
             self::setSession($session);
             self::setApi($api);
 
-            Session::flash('flash_message', 'Successfully saved Spotify credentials.');
+            $request->session()->flash('flash_message', 'Successfully saved Spotify credentials.');
             return Redirect::route('homepage');
         }
     }

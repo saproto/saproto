@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $user_id
  * @property int $achievement_id
- * @property int $alerted
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Achievement $achievement
@@ -24,10 +23,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|AchievementOwnership whereId($value)
  * @method static Builder|AchievementOwnership whereUpdatedAt($value)
  * @method static Builder|AchievementOwnership whereUserId($value)
- * @method static Builder|AchievementOwnership whereAlerted($value)
- * @method static Builder|AchievementOwnership newModelQuery()
- * @method static Builder|AchievementOwnership newQuery()
- * @method static Builder|AchievementOwnership query()
  * @mixin Eloquent
  */
 class AchievementOwnership extends Model
@@ -43,13 +38,13 @@ class AchievementOwnership extends Model
         'achievement_id' => 'required|integer',
     ];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Achievement */
     public function achievement()
     {
         return $this->belongsTo('Proto\Models\Achievement');

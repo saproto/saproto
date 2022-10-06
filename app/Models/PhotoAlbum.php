@@ -15,18 +15,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * Proto\Models\PhotoAlbum.
  *
  * @property int $id
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string $name
  * @property int $date_create
  * @property int $date_taken
  * @property int $thumb_id
  * @property int|null $event_id
- * @property bool $private
- * @property bool $published
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * @property int $private
+ * @property int $published
  * @property-read Event|null $event
- * @property-read Photo $thumb_photo
  * @property-read Collection|Photo[] $items
+ * @property-read Photo $thumb_photo
  * @method static Builder|PhotoAlbum whereCreatedAt($value)
  * @method static Builder|PhotoAlbum whereDateCreate($value)
  * @method static Builder|PhotoAlbum whereDateTaken($value)
@@ -37,9 +37,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|PhotoAlbum wherePublished($value)
  * @method static Builder|PhotoAlbum whereThumbId($value)
  * @method static Builder|PhotoAlbum whereUpdatedAt($value)
- * @method static Builder|PhotoAlbum newModelQuery()
- * @method static Builder|PhotoAlbum newQuery()
- * @method static Builder|PhotoAlbum query()
  * @mixin Eloquent
  */
 class PhotoAlbum extends Model
@@ -48,25 +45,25 @@ class PhotoAlbum extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Event */
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event', 'event_id');
     }
 
-    /** @return HasOne */
-    private function thumbPhoto()
+    /** @return HasOne|Photo */
+    public function thumbPhoto()
     {
         return $this->hasOne('Proto\Models\Photo', 'id', 'thumb_id');
     }
 
-    /** @return HasMany */
+    /** @return HasMany|Photo[] */
     public function items()
     {
         return $this->hasMany('Proto\Models\Photo', 'album_id');
     }
 
-    /** @return string|null */
+    /** @return string */
     public function thumb()
     {
         if ($this->thumb_id) {

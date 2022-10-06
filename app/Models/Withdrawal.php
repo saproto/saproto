@@ -15,18 +15,15 @@ use Illuminate\Support\Collection;
  *
  * @property int $id
  * @property string $date
- * @property bool $closed
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|Orderline[] $orderlines
+ * @property int $closed
+ * @property-read Collection|OrderLine[] $orderlines
  * @method static Builder|Withdrawal whereClosed($value)
  * @method static Builder|Withdrawal whereCreatedAt($value)
  * @method static Builder|Withdrawal whereDate($value)
  * @method static Builder|Withdrawal whereId($value)
  * @method static Builder|Withdrawal whereUpdatedAt($value)
- * @method static Builder|Withdrawal newModelQuery()
- * @method static Builder|Withdrawal newQuery()
- * @method static Builder|Withdrawal query()
  * @mixin Eloquent
  */
 class Withdrawal extends Model
@@ -35,7 +32,7 @@ class Withdrawal extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasMany */
+    /** @return HasMany|OrderLine[] */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine', 'payed_with_withdrawal');
@@ -65,7 +62,7 @@ class Withdrawal extends Model
 
     /**
      * @param User $user
-     * @return Collection|OrderLine[]
+     * @return OrderLine[]
      */
     public function orderlinesForUser($user)
     {
@@ -101,7 +98,7 @@ class Withdrawal extends Model
         return count($data);
     }
 
-    /** @return Collection|User[] */
+    /** @return User[] */
     public function users()
     {
         $users = array_unique(OrderLine::where('payed_with_withdrawal', $this->id)->get()->pluck('user_id')->toArray());

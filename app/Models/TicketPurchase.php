@@ -16,10 +16,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $orderline_id
  * @property int $user_id
  * @property string $barcode
- * @property bool $payment_complete
  * @property string|null $scanned
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property int $payment_complete
  * @property-read mixed $api_attributes
  * @property-read OrderLine $orderline
  * @property-read Ticket $ticket
@@ -33,9 +33,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|TicketPurchase whereTicketId($value)
  * @method static Builder|TicketPurchase whereUpdatedAt($value)
  * @method static Builder|TicketPurchase whereUserId($value)
- * @method static Builder|TicketPurchase newModelQuery()
- * @method static Builder|TicketPurchase newQuery()
- * @method static Builder|TicketPurchase query()
  * @mixin Eloquent
  */
 class TicketPurchase extends Model
@@ -44,19 +41,19 @@ class TicketPurchase extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Ticket */
     public function ticket()
     {
         return $this->belongsTo('Proto\Models\Ticket', 'ticket_id');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|OrderLine */
     public function orderline()
     {
         return $this->belongsTo('Proto\Models\OrderLine', 'orderline_id');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User', 'user_id')->withTrashed();

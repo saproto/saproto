@@ -24,9 +24,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|GoodIdeaVote whereUpdatedAt($value)
  * @method static Builder|GoodIdeaVote whereUserId($value)
  * @method static Builder|GoodIdeaVote whereVote($value)
- * @method static Builder|GoodIdeaVote newModelQuery()
- * @method static Builder|GoodIdeaVote newQuery()
- * @method static Builder|GoodIdeaVote query()
  * @mixin Eloquent
  */
 class GoodIdeaVote extends Model
@@ -35,7 +32,7 @@ class GoodIdeaVote extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasOne */
+    /** @return HasOne|GoodIdea */
     public function goodIdea()
     {
         return $this->hasOne('Proto\Models\GoodIdea');

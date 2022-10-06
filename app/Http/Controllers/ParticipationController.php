@@ -18,7 +18,6 @@ use Proto\Models\Event;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 use Redirect;
-use Session;
 
 class ParticipationController extends Controller
 {
@@ -57,10 +56,10 @@ class ParticipationController extends Controller
             Mail::queue((new HelperMutation(Auth::user(), $helping, true))->onQueue('medium'));
         } elseif ($is_web) {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
-                Session::flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
+                $request->session()->flash('flash_message', 'You have been placed on the back-up list for '.$event->title.'.');
                 $data['backup'] = true;
             } else {
-                Session::flash('flash_message', 'You claimed a spot for '.$event->title.'.');
+                $request->session()->flash('flash_message', 'You claimed a spot for '.$event->title.'.');
             }
         } else {
             if ($event->activity->isFull() || ! $event->activity->canSubscribe()) {
@@ -118,12 +117,13 @@ class ParticipationController extends Controller
             abort(403, 'This activity is closed, you cannot change participation anymore.');
         }
 
-        Session::flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
+        $request->session()->flash('flash_message', 'You added '.$user->name.' for '.$event->title.'.');
+
         $participation = new ActivityParticipation();
         $participation->fill($data);
         $participation->save();
 
-        $help_committee = ($helping->committee->name ?? null);
+        $help_committee = ($request->has('helping_committee_id') ? $helping->committee->name : null);
 
         Mail::to($participation->user)->queue((new ActivitySubscribedTo($participation, $help_committee))->onQueue('high'));
 
@@ -167,7 +167,7 @@ class ParticipationController extends Controller
 
             $message = $participation->user->name.' is not attending '.$participation->activity->event->title.' anymore.';
             if ($is_web) {
-                Session::flash('flash_message', $message);
+                $request->session()->flash('flash_message', $message);
             }
 
             $participation->delete();
@@ -178,7 +178,7 @@ class ParticipationController extends Controller
         } else {
             $message = $participation->user->name.' is not helping with '.$participation->activity->event->title.' anymore.';
             if ($is_web) {
-                Session::flash('flash_message', $message);
+                $request->session()->flash('flash_message', $message);
             }
 
             if ($notify) {
@@ -203,6 +203,7 @@ class ParticipationController extends Controller
     /**
      * @param int $participation_id
      * @param Request $request
+     * @return RedirectResponse
      */
     public function togglePresence($participation_id, Request $request)
     {
@@ -216,7 +217,7 @@ class ParticipationController extends Controller
         $participation->is_present = ! $participation->is_present;
         $participation->save();
 
-        return true;
+        return Redirect::back();
     }
 
     /** @param Activity $activity */

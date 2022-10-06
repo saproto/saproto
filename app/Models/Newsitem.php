@@ -22,9 +22,8 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read User $user
- * @property-read string $url
  * @property-read StorageEntry|null $featuredImage
+ * @property-read User $user
  * @method static bool|null forceDelete()
  * @method static bool|null restore()
  * @method static QueryBuilder|Newsitem onlyTrashed()
@@ -39,9 +38,6 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|Newsitem whereTitle($value)
  * @method static Builder|Newsitem whereUpdatedAt($value)
  * @method static Builder|Newsitem whereUserId($value)
- * @method static Builder|Newsitem newModelQuery()
- * @method static Builder|Newsitem newQuery()
- * @method static Builder|Newsitem query()
  * @mixin Eloquent
  */
 class Newsitem extends Model
@@ -52,13 +48,13 @@ class Newsitem extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User', 'user_id');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|StorageEntry */
     public function featuredImage()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'featured_image_id');

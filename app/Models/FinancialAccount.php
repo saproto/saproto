@@ -23,9 +23,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|FinancialAccount whereId($value)
  * @method static Builder|FinancialAccount whereName($value)
  * @method static Builder|FinancialAccount whereUpdatedAt($value)
- * @method static Builder|FinancialAccount newModelQuery()
- * @method static Builder|FinancialAccount newQuery()
- * @method static Builder|FinancialAccount query()
  * @mixin Eloquent
  */
 class FinancialAccount extends Model
@@ -34,7 +31,7 @@ class FinancialAccount extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasMany */
+    /** @return HasMany|Product[] */
     public function products()
     {
         return $this->hasMany('Proto\Models\Product', 'account_id');

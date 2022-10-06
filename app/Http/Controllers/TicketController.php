@@ -73,6 +73,7 @@ class TicketController extends Controller
     {
         if (! $request->has('is_members_only') && ! $request->has('is_prepaid') && ! Auth::user()->can('sysadmin')) {
             Session::flash('flash_message', 'Making tickets for external people payable via withdrawal is risky and usually not necessary. If you REALLY want this, please contact the Have You Tried Turninig It Off And On Again committee.');
+
             return Redirect::back();
         }
 
@@ -107,6 +108,7 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         if ($ticket->purchases()->count() > 0) {
             Session::flash('flash_message', 'This ticket has already been sold, you cannot remove it!');
+
             return Redirect::back();
         }
         $ticket->delete();
@@ -116,7 +118,7 @@ class TicketController extends Controller
     }
 
     /**
-     * @param string $barcode
+     * @param $barcode
      * @return RedirectResponse
      */
     public function scan($barcode)
@@ -137,11 +139,6 @@ class TicketController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param int $event
-     * @param Request $request
-     * @return array
-     */
     public function scanApi($event, Request $request)
     {
         if (! $request->has('barcode')) {
@@ -163,10 +160,10 @@ class TicketController extends Controller
             ];
         }
 
-        /** @var TicketPurchase|null $ticket */
+        /** @var TicketPurchase $ticket */
         $ticket = TicketPurchase::where('barcode', $request->barcode)->first();
 
-        if ($ticket != null && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
+        if ($ticket && ! $ticket->ticket->event->isEventAdmin(Auth::user())) {
             return [
                 'code' => 500,
                 'message' => 'Unauthorized to scan',
@@ -174,7 +171,7 @@ class TicketController extends Controller
             ];
         }
 
-        if ($ticket != null) {
+        if ($ticket) {
             $ticket->load('user', 'orderline', 'ticket', 'ticket.product');
             if ($ticket->ticket->event_id != $event->id) {
                 return [
@@ -310,7 +307,7 @@ class TicketController extends Controller
                 return Redirect::back();
             }
             if ($amount > $ticket->product->stock) {
-                Session::flash('flash_message', "You tried to buy $amount of ticket '".$ticket->product->name."', but only ".$ticket->product->stock.' are available. Entire order cancelled.');
+                Session::flash('flash_message', "You tried to buy $amount of ticket '".$ticket->product->name."', but only ".$ticket->product->title.' are available. Entire order cancelled.');
                 return Redirect::back();
             }
         }
@@ -345,8 +342,7 @@ class TicketController extends Controller
 
         $payment_method = '';
         if (config('omnomcom.mollie.use_fees') && ! $request->has('method') && count($prepaid_tickets) > 0){
-            Session::flash('flash_message', 'No payment method is selected!');
-            return Redirect::back();
+            return Redirect::back()->with('flash_message', 'No payment method is selected!');
         }
 
         // check if total ticket cost is allowed at this payment_method and validate the selected method
@@ -358,8 +354,7 @@ class TicketController extends Controller
             });
 
             if ($payment_method->count() === 0) {
-                Session::flash('flash_message','The selected payment method is unavailable, please select a different method');
-                return Redirect::back();
+                return Redirect::back()->with('flash_message','The selected payment method is unavailable, please select a different method');
             }
             $payment_method = $payment_method->first();
         
@@ -367,8 +362,7 @@ class TicketController extends Controller
                 $total_cost < floatval($payment_method->minimumAmount->value) ||
                 $total_cost > floatval($payment_method->maximumAmount->value)
             ) {
-                Session::flash('flash_message', 'You are unable to pay this amount with the selected method!');
-                return Redirect::back();
+                return Redirect::back()->with('flash_message', 'You are unable to pay this amount with the selected method!');
             }
         }
 

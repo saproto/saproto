@@ -11,7 +11,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Mail;
 use nickurt\PwnedPasswords\PwnedPasswords;
-use OneLogin\Saml2\AuthnRequest;
 use PragmaRX\Google2FA\Google2FA;
 use Proto\Mail\PasswordResetEmail;
 use Proto\Mail\PwnedPasswordNotification;
@@ -69,14 +68,16 @@ class AuthController extends Controller
 
         // User is already logged in
         if (Auth::check()) {
-            self::postLoginRedirect();
+            self::postLoginRedirect($request);
+        // User is not yet logged in.
+        } else {
+            // Catch a login form submission for two factor authentication.
+            if ($request->session()->has('2fa_user')) {
+                return self::handleTwofactorSubmit($request, $google2fa);
+            }
+            // Otherwise this is a regular login.
+            return self::handleRegularLogin($request);
         }
-        // Catch a login form submission for two factor authentication.
-        if ($request->session()->has('2fa_user')) {
-            return self::handleTwofactorSubmit($request, $google2fa);
-        }
-        // Otherwise, this is a regular login.
-        return self::handleRegularLogin($request);
     }
 
     /** @return RedirectResponse */
@@ -100,7 +101,7 @@ class AuthController extends Controller
     public function getRegister(Request $request)
     {
         if (Auth::check()) {
-            Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
             return Redirect::route('user::dashboard');
         }
 
@@ -118,11 +119,12 @@ class AuthController extends Controller
     public function postRegister(Request $request)
     {
         if (Auth::check()) {
-            Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
             return Redirect::route('user::dashboard');
         }
 
-        Session::flash('register_persist', $request->all());
+        $request->session()->flash('register_persist', $request->all());
+
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'name' => 'required|string',
@@ -133,7 +135,7 @@ class AuthController extends Controller
 
         $this->registerAccount($request);
 
-        Session::flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
+        $request->session()->flash('flash_message', 'Your account has been created. You will receive an e-mail with instructions on how to set your password shortly.');
         return Redirect::route('homepage');
     }
 
@@ -145,12 +147,12 @@ class AuthController extends Controller
     public function postRegisterSurfConext(Request $request)
     {
         if (Auth::check()) {
-            Session::flash('flash_message', 'You already have an account. To register an account, please log off.');
+            $request->session()->flash('flash_message', 'You already have an account. To register an account, please log off.');
             return Redirect::route('user::dashboard');
         }
 
         if (! Session::has('surfconext_create_account')) {
-            Session::flash('flash_message', 'Account creation expired. Please try again.');
+            $request->session()->flash('flash_message', 'Account creation expired. Please try again.');
             return Redirect::route('login::show');
         }
 
@@ -188,7 +190,7 @@ class AuthController extends Controller
             ]);
         }
 
-        Session::flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
+        $request->session()->flash('flash_message', 'Your account has been created. You will receive a confirmation e-mail shortly.');
         return Redirect::route('login::edu');
     }
 
@@ -232,17 +234,17 @@ class AuthController extends Controller
         $auth_check = self::verifyCredentials($user->email, $password);
 
         if ($user->hasUnpaidOrderlines()) {
-            Session::flash('flash_message', 'You cannot deactivate your account while you have open payments!');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you have open payments!');
             return Redirect::route('omnomcom::orders::list');
         }
 
         if ($auth_check == null || $auth_check->id != $user->id) {
-            Session::flash('flash_message', 'You need to provide a valid password to delete your account.');
+            $request->session()->flash('flash_message', 'You need to provide a valid password to delete your account.');
             return Redirect::back();
         }
 
         if ($user->member) {
-            Session::flash('flash_message', 'You cannot deactivate your account while you are a member.');
+            $request->session()->flash('flash_message', 'You cannot deactivate your account while you are a member.');
             return Redirect::back();
         }
 
@@ -279,7 +281,7 @@ class AuthController extends Controller
         $user->save();
         $user->delete();
 
-        Session::flash('flash_message', 'Your account has been deactivated.');
+        $request->session()->flash('flash_message', 'Your account has been deactivated.');
         return Redirect::route('homepage');
     }
 
@@ -300,7 +302,7 @@ class AuthController extends Controller
             self::dispatchPasswordEmailFor($user);
         }
 
-        Session::flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
+        $request->session()->flash('flash_message', 'If an account exists at this e-mail address, you will receive an e-mail with instructions to reset your password.');
         return Redirect::route('login::show');
     }
 
@@ -317,7 +319,7 @@ class AuthController extends Controller
         if ($reset !== null) {
             return view('auth.passreset_pass', ['reset' => $reset]);
         } else {
-            Session::flash('flash_message', 'This reset token does not exist or has expired.');
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
             return Redirect::route('login::resetpass');
         }
     }
@@ -333,18 +335,18 @@ class AuthController extends Controller
         $reset = PasswordReset::where('token', $request->token)->first();
         if ($reset !== null) {
             if ($request->password !== $request->password_confirmation) {
-                Session::flash('flash_message', 'Your passwords don\'t match.');
+                $request->session()->flash('flash_message', 'Your passwords don\'t match.');
                 return Redirect::back();
             } elseif (strlen($request->password) < 10) {
-                Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
+                $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
                 return Redirect::back();
             }
             $reset->user->setPassword($request->password);
             PasswordReset::where('token', $request->token)->delete();
-            Session::flash('flash_message', 'Your password has been changed.');
+            $request->session()->flash('flash_message', 'Your password has been changed.');
             return Redirect::route('login::show');
         } else {
-            Session::flash('flash_message', 'This reset token does not exist or has expired.');
+            $request->session()->flash('flash_message', 'This reset token does not exist or has expired.');
             return Redirect::route('login::resetpass');
         }
     }
@@ -356,7 +358,7 @@ class AuthController extends Controller
     public function getPasswordChange(Request $request)
     {
         if (! Auth::check()) {
-            Session::flash('flash_message', 'Please log-in first.');
+            $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
         return view('auth.passchange');
@@ -370,7 +372,7 @@ class AuthController extends Controller
     public function postPasswordChange(Request $request)
     {
         if (! Auth::check()) {
-            Session::flash('flash_message', 'Please log-in first.');
+            $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
 
@@ -384,22 +386,22 @@ class AuthController extends Controller
 
         if ($user_verify && $user_verify->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
-                Session::flash('flash_message', 'The new passwords do not match.');
+                $request->session()->flash('flash_message', 'The new passwords do not match.');
                 return view('auth.passchange');
             } elseif (strlen($pass_new1) < 10) {
-                Session::flash('flash_message', 'Your new password should be at least 10 characters long.');
+                $request->session()->flash('flash_message', 'Your new password should be at least 10 characters long.');
                 return view('auth.passchange');
             } elseif ((new PwnedPasswords())->setPassword($pass_new1)->isPwnedPassword()) {
-                Session::flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
+                $request->session()->flash('flash_message', 'The password you would like to set is unsafe because it has been exposed in one or more data breaches. Please choose a different password and <a href="https://wiki.proto.utwente.nl/ict/pwned-passwords" target="_blank">click here to learn more</a>.');
                 return view('auth.passchange');
             } else {
                 $user->setPassword($pass_new1);
-                Session::flash('flash_message', 'Your password has been changed.');
+                $request->session()->flash('flash_message', 'Your password has been changed.');
                 return Redirect::route('user::dashboard');
             }
         }
 
-        Session::flash('flash_message', 'Old password incorrect.');
+        $request->session()->flash('flash_message', 'Old password incorrect.');
         return view('auth.passchange');
     }
 
@@ -407,7 +409,7 @@ class AuthController extends Controller
     public function getPasswordSync(Request $request)
     {
         if (! Auth::check()) {
-            Session::flash('flash_message', 'Please log-in first.');
+            $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
         return view('auth.sync');
@@ -421,7 +423,7 @@ class AuthController extends Controller
     public function postPasswordSync(Request $request)
     {
         if (! Auth::check()) {
-            Session::flash('flash_message', 'Please log-in first.');
+            $request->session()->flash('flash_message', 'Please log-in first.');
             return Redirect::route('login::show');
         }
 
@@ -431,10 +433,10 @@ class AuthController extends Controller
 
         if ($user_verify && $user_verify->id === $user->id) {
             $user->setPassword($pass);
-            Session::flash('flash_message', 'Your password was successfully synchronized.');
+            $request->session()->flash('flash_message', 'Your password was successfully synchronized.');
             return Redirect::route('user::dashboard');
         } else {
-            Session::flash('flash_message', 'Password incorrect.');
+            $request->session()->flash('flash_message', 'Password incorrect.');
             return view('auth.sync');
         }
     }
@@ -443,7 +445,7 @@ class AuthController extends Controller
     public function startSurfConextAuth()
     {
         Session::reflash();
-        return Redirect::route('saml2_login', ['idpName' => 'surfconext']);
+        return redirect(route('saml2_login', ['idpName' => 'surfconext']));
     }
 
     /**
@@ -551,8 +553,7 @@ class AuthController extends Controller
      *
      * @param string $username Email address or Proto username.
      * @param string $password
-     * @return User|null The user associated with the credentials, or null if no user could be found or credentials are invalid.
-     * @throws Exception
+     * @return User The user associated with the credentials, or null if no user could be found or credentials are invalid.
      */
     public static function verifyCredentials($username, $password)
     {
@@ -615,7 +616,7 @@ class AuthController extends Controller
             return self::continueLogin($user);
         }
 
-        Session::flash('flash_message', 'Invalid username or password provided.');
+        $request->session()->flash('flash_message', 'Invalid username or password provided.');
         return Redirect::route('login::show');
     }
 
@@ -654,14 +655,14 @@ class AuthController extends Controller
             if ($google2fa->verifyKey($user->tfa_totp_key, $request->input('2fa_totp_token'))) {
                 return self::loginUser($user);
             } else {
-                Session::flash('flash_message', 'Your code is invalid. Please try again.');
+                $request->session()->flash('flash_message', 'Your code is invalid. Please try again.');
                 $request->session()->reflash();
                 return view('auth.2fa');
             }
         }
 
         /* Something we don't recognize */
-        Session::flash('flash_message', 'Please complete the requested challenge.');
+        $request->session()->flash('flash_message', 'Please complete the requested challenge.');
         $request->session()->reflash();
         return view('auth.2fa');
     }
@@ -697,8 +698,8 @@ class AuthController extends Controller
      * The function expects an authenticated user for which to complete the SAML request.
      * This function assumes the user has already been authenticated one way or another.
      *
-     * @param User $user The (currently logged in) user to complete the SAML request for.
-     * @param string $saml The SAML data (deflated and encoded).
+     * @param $user User The (currently logged in) user to complete the SAML request for.
+     * @param $saml string The SAML data (deflated and encoded).
      * @return View|RedirectResponse
      */
     private static function handleSAMLRequest($user, $saml)
@@ -739,15 +740,15 @@ class AuthController extends Controller
      * Another static helper function to build a SAML response based on a user and a request.
      *
      * @param User $user The user to generate the SAML response for.
-     * @param AuthnRequest $authnRequest The request to generate a SAML response for.
+     * @param $authnRequest The request to generate a SAML response for.
      * @return \LightSaml\Model\Protocol\Response A LightSAML response.
      */
     private static function buildSAMLResponse($user, $authnRequest)
     {
 
         // LightSaml Magic. Taken from https://imbringingsyntaxback.com/implementing-a-saml-idp-with-laravel/
-        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience']; /** @phpstan-ignore-line */
-        $destination = $authnRequest->getAssertionConsumerServiceURL(); /** @phpstan-ignore-line */
+        $audience = config('saml-idp.sp')[base64_encode($authnRequest->getAssertionConsumerServiceURL())]['audience'];
+        $destination = $authnRequest->getAssertionConsumerServiceURL();
         $issuer = config('saml-idp.idp.issuer');
 
         $certificate = \LightSaml\Credential\X509Certificate::fromFile(base_path().config('saml-idp.idp.cert'));
@@ -782,7 +783,7 @@ class AuthController extends Controller
                                 (new \LightSaml\Model\Assertion\SubjectConfirmationData())
                                     ->setInResponseTo($authnRequest->getId())
                                     ->setNotOnOrAfter(new \DateTime('+1 MINUTE'))
-                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL()) /* @phpstan-ignore-line */
+                                    ->setRecipient($authnRequest->getAssertionConsumerServiceURL())
                             )
                     )
             )
@@ -810,7 +811,7 @@ class AuthController extends Controller
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
                         'urn:mace:dir:attribute-def:givenName',
-                        $user->name
+                        $user->given_name
                     ))
                     ->addAttribute(new \LightSaml\Model\Assertion\Attribute(
                         'urn:mace:dir:attribute-def:uid',

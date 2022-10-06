@@ -14,8 +14,8 @@
 
                 <div class="form-group">
                     <div class="form-group autocomplete">
-                        <label for="member">Member</label>
-                        <input id="member" class="form-control user-search" name="user_id" required/>
+                        <label>Member</label>
+                        <input class="form-control user-search" name="user_id" required/>
                     </div>
                     <input type="hidden" name="committee_id" value="{{ $committee->id }}">
                 </div>
@@ -23,29 +23,28 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="role">Role</label>
-                            <input id="role" type="text" class="form-control" name="role" placeholder="Developer">
+                            <label>Role</label>
+                            <input type="text" class="form-control" name="role" placeholder="Developer">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="edition">Edition</label>
-                            <input id="edition" type="text" class="form-control" name="edition" placeholder="3.0">
+                            <label>Edition</label>
+                            <input type="text" class="form-control" name="edition" placeholder="3.0">
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6">
+                        <label>Since</label>
                         @include('website.layouts.macros.datetimepicker', [
-                            'format' => 'date',
                             'name' => 'start',
                             'label' => 'Since'
                         ])
                     </div>
                     <div class="col-6">
                         @include('website.layouts.macros.datetimepicker', [
-                            'format' => 'date',
                             'name' => 'end',
                             'label' => 'Until',
                             'not_required' => true

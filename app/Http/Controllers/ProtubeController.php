@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
-use Proto\Models\User;
 use Redirect;
 use Session;
 
@@ -51,7 +50,7 @@ class ProtubeController extends Controller
     /** @return RedirectResponse */
     public function loginRedirect()
     {
-        return Redirect::route('protube::remote');
+        return redirect(route('protube::remote'));
     }
 
     /** @return View */
@@ -81,7 +80,7 @@ class ProtubeController extends Controller
 
     /**
      * @param string $since
-     * @param User|null $user
+     * @param null $user
      * @param int $max
      * @return array
      */
@@ -91,7 +90,7 @@ class ProtubeController extends Controller
             ->select(DB::raw('video_id, video_title, spotify_id, spotify_name, created_at as played_at'))
             ->where('created_at', '>', date('Y-m-d', strtotime($since)));
 
-        if ($user != null) {
+        if ($user) {
             $query = $query->where('user_id', $user->id);
         }
 
@@ -100,8 +99,8 @@ class ProtubeController extends Controller
 
     /**
      * @param int $limit
-     * @param string|null $since
-     * @param User|null $user
+     * @param string $since
+     * @param null $user
      * @return array
      */
     private function getTopVideos($limit = 10, $since = '2011-04-20', $user = null)
@@ -110,7 +109,7 @@ class ProtubeController extends Controller
             ->select(DB::raw('video_id, video_title, spotify_id, spotify_name, count(*) as played_count'))
             ->where('created_at', '>', date('Y-m-d', strtotime($since)));
 
-        if ($user != null) {
+        if ($user) {
             $query = $query->where('user_id', $user->id);
         }
 

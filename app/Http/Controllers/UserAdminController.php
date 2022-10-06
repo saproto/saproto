@@ -7,6 +7,7 @@ use Carbon;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Mail;
 use PDF;
@@ -17,7 +18,6 @@ use Proto\Models\Member;
 use Proto\Models\User;
 use Redirect;
 use Session;
-use Spatie\Permission\Models\Permission;
 
 class UserAdminController extends Controller
 {
@@ -110,7 +110,6 @@ class UserAdminController extends Controller
 
         if (! Auth::user()->can('sysadmin')) {
             foreach ($user->roles as $role) {
-                /** @var Permission $permission */
                 foreach ($role->permissions as $permission) {
                     if (! Auth::user()->can($permission->name)) {
                         abort(403, 'You may not impersonate this person.');
@@ -122,7 +121,7 @@ class UserAdminController extends Controller
         Session::put('impersonator', Auth::user()->id);
         Auth::login($user);
 
-        return Redirect::route('homepage');
+        return redirect('/');
     }
 
     /** @return RedirectResponse */
@@ -136,10 +135,8 @@ class UserAdminController extends Controller
 
             Auth::login($impersonator);
 
-            return Redirect::route('user::admin::details', ['id' => $redirect_user]);
+            return redirect()->route('user::admin::details', ['id' => $redirect_user]);
         }
-
-        return Redirect::back();
     }
 
     /**
@@ -152,24 +149,19 @@ class UserAdminController extends Controller
         /** @var User $user */
         $user = User::findOrFail($id);
 
-        if ($user->is_member) {
-            Session::flash('flash_message', 'This user is already a member!');
-            return Redirect::back();
-        }
-
-        if (! ($user->address == null && $user->bank == null)) {
+        if (! ($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
             return Redirect::back();
         }
 
-        if ($user->member == null) {
+        if (! $user->member) {
             $member = Member::create();
             $member->user()->associate($user);
+        } else {
+            $member = $user->member;
+            $member->created_at = Carbon::now()->toDateTimeString();
+            $member->is_pending = false;
         }
-
-        $member = $user->member;
-        $member->created_at = Carbon::now();
-        $member->is_pending = false;
 
         $name = explode(' ', $user->name);
         if (count($name) > 1) {
@@ -212,7 +204,7 @@ class UserAdminController extends Controller
         // Artisan::call('proto:playsound', ['sound' =>  config('proto.soundboardSounds')['new-member']]);
 
         Session::flash('flash_message', 'Congratulations! '.$user->name.' is now our newest member!');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -233,7 +225,7 @@ class UserAdminController extends Controller
         Mail::to($user)->queue((new MembershipEnded($user))->onQueue('high'));
 
         Session::flash('flash_message', 'Membership of '.$user->name.' has been terminated.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -258,7 +250,7 @@ class UserAdminController extends Controller
         $member->save();
 
         Session::flash('flash_message', $user->name.' is now a '.$type.' member.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -277,7 +269,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled NDA status of '.$user->name.'. Please verify if it is correct.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -292,7 +284,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'OmNomCom unblocked for '.$user->name.'.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -307,7 +299,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled CreaTe status of '.$user->name.'.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**
@@ -322,7 +314,7 @@ class UserAdminController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Toggled ITech status of '.$user->name.'.');
-        return Redirect::back();
+        return redirect()->back();
     }
 
     /**

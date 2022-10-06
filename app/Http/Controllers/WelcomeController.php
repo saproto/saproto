@@ -49,9 +49,13 @@ class WelcomeController extends Controller
      */
     public function destroy($id)
     {
-        $message = WelcomeMessage::findOrFail($id);
+        $message = WelcomeMessage::find($id);
+        if (! $message) {
+            abort(404);
+        }
         $message->delete();
         Session::flash('flash_message', 'Welcome Message removed');
+
         return Redirect::route('welcomeMessages::list');
     }
 }

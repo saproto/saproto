@@ -18,9 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|HelperReminder whereCommitteeId($value)
  * @method static Builder|HelperReminder whereId($value)
  * @method static Builder|HelperReminder whereUserId($value)
- * @method static Builder|HelperReminder newModelQuery()
- * @method static Builder|HelperReminder newQuery()
- * @method static Builder|HelperReminder query()
  * @mixin Eloquent
  */
 class HelperReminder extends Model
@@ -31,13 +28,13 @@ class HelperReminder extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Committee */
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

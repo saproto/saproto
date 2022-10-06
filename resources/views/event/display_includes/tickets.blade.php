@@ -2,7 +2,7 @@
 
     <?php $has_unpaid_tickets = false; ?>
 
-    @if($event->hasBoughtTickets(Auth::user()))
+    @if(count($event->getTicketPurchasesFor(Auth::user())) > 0)
 
         <div class="card mb-3">
 

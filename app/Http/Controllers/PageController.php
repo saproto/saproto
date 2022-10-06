@@ -18,7 +18,7 @@ class PageController extends Controller
 {
     /**
      * These slugs can't be used for pages, as they are used by the app.
-     * @var string[]
+     * @var array
      */
     protected $reservedSlugs = ['add', 'edit', 'delete'];
 
@@ -60,7 +60,7 @@ class PageController extends Controller
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
 
-        if (Page::where('slug', $page->slug)->exists()) {
+        if (Page::where('slug', $page->slug)->get()->count() > 0) {
             Session::flash('flash_message', 'This URL has already been used and can\'t be used again. Please choose a different URL.');
             return view('pages.edit', ['item' => $page, 'new' => true]);
         }
@@ -72,7 +72,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param string $slug
+     * @param $slug
      * @return View
      */
     public function show($slug)
@@ -91,7 +91,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return View
      */
     public function edit($id)
@@ -102,7 +102,7 @@ class PageController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
+     * @param $id
      * @return RedirectResponse|View
      */
     public function update(Request $request, $id)
@@ -110,7 +110,7 @@ class PageController extends Controller
         /** @var Page $page */
         $page = Page::findOrFail($id);
 
-        if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->exists()) {
+        if (($request->slug != $page->slug) && Page::where('slug', $page->slug)->get()->count() > 0) {
             Session::flash('flash_message', 'This URL has been reserved and can\'t be used. Please choose a different URL.');
             return view('pages.edit', ['item' => $request, 'new' => false]);
         }
@@ -141,7 +141,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return RedirectResponse
      * @throws Exception
      */

@@ -27,7 +27,7 @@
                         <table class="table">
                             <tbody>
 
-                            @foreach($event->allUsers() as $user)
+                            @foreach($event->returnAllUsers() as $user)
 
                                 @if($user->hasDiet())
 

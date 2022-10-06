@@ -15,7 +15,6 @@ use Proto\Models\Product;
 use Proto\Models\ProductCategory;
 use Proto\Models\StorageEntry;
 use Redirect;
-use Session;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
@@ -65,10 +64,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = Product::create($request->except('image', 'product_categories'));
-        $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->price = str_replace(',', '.', $request->price);
+        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -90,7 +90,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        Session::flash('flash_message', 'The new product has been created!');
+        $request->session()->flash('flash_message', 'The new product has been created!');
         return Redirect::route('omnomcom::products::list', ['search' => $product->name]);
     }
 
@@ -121,10 +121,11 @@ class ProductController extends Controller
         /** @var Product $product */
         $product = Product::findOrFail($id);
         $product->fill($request->except('image', 'product_categories'));
-        $product->price = floatval(str_replace(',', '.', $request->price));
         $product->is_visible = $request->has('is_visible');
         $product->is_alcoholic = $request->has('is_alcoholic');
         $product->is_visible_when_no_stock = $request->has('is_visible_when_no_stock');
+        $product->price = str_replace(',', '.', $request->price);
+        $product->supplier_id = $request->get('supplier_id');
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -148,7 +149,7 @@ class ProductController extends Controller
 
         $product->save();
 
-        Session::flash('flash_message', 'The product has been updated.');
+        $request->session()->flash('flash_message', 'The product has been updated.');
         return Redirect::route('omnomcom::products::edit', ['id' => $product->id]);
     }
 
@@ -196,7 +197,8 @@ class ProductController extends Controller
             $product->save();
         }
 
-        Session::flash('flash_message', 'Done. Errors:<br>'.$errors);
+        $request->session()->flash('flash_message', 'Done. Errors:<br>'.$errors);
+
         Mail::queue((new ProductBulkUpdateNotification(Auth::user(), $errors.$log))->onQueue('low'));
 
         return Redirect::back();
@@ -210,23 +212,18 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($id == config('omnomcom.dinnerform-product') || $id == config('omnomcom.failed-withdrawal')){
-            Session::flash('flash_message', 'You cannot delete this product because it is used in the source code of the website');
-            return Redirect::back();
-        }
         /** @var Product $product */
         $product = Product::findOrFail($id);
 
         if ($product->orderlines->count() > 0) {
-            Session::flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
+            $request->session()->flash('flash_message', 'You cannot delete this product because there are orderlines associated with it.');
+
             return Redirect::back();
         }
 
-
-
         $product->delete();
 
-        Session::flash('flash_message', 'The product has been deleted.');
+        $request->session()->flash('flash_message', 'The product has been deleted.');
         return Redirect::route('omnomcom::products::list');
     }
 

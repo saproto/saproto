@@ -4,10 +4,7 @@ namespace Proto\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Redirect;
 
 class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
 {
@@ -15,22 +12,31 @@ class Authenticate extends \Illuminate\Auth\Middleware\Authenticate
      * The Guard implementation.
      * @var Guard
      */
-    protected $auth; /** @phpstan-ignore-line  */
+    protected $auth;
+
+    /**
+     * Create a new filter instance.
+     * @param  Guard $auth
+     * @return void
+     */
+    public function __construct($auth)
+    {
+        $this->auth = $auth;
+    }
 
     /**
      * Handle an incoming request.
      * @param Request $request
      * @param Closure $next
-     * @param string[] $guards
-     * @return RedirectResponse|Response|Closure
+     * @return mixed
      */
-    public function handle($request, $next, ...$guards)
+    public function handle($request, $next)
     {
         if ($this->auth->guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return Redirect::route('login::show');
+                return redirect()->route('login::show');
             }
         }
 

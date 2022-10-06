@@ -2,7 +2,7 @@
 
 namespace Proto\Console\Commands;
 
-use Carbon;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Console\Command;
 use Proto\Models\Member;
@@ -41,7 +41,7 @@ class MemberCleanup extends Command
      */
     public function handle()
     {
-        $old_pending_memberships = Member::where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth())->get();
+        $old_pending_memberships = Member::where('is_pending', true)->where('created_at', '<', Carbon::now()->subMonth(1))->get();
         foreach ($old_pending_memberships as $pending_membership) {
             $pending_membership->delete();
         }

@@ -17,23 +17,16 @@ const NAME = 'countdown-timer'
 class CountdownTimer extends BaseComponent {
     constructor(element) {
         super(element)
-        this._started=false;
-        this.start()
+
+        this._config = this._getConfig()
+        this._start = (new Date(this._config.start * 1000)).getTime()
+        setInterval(this._update.bind(this), 1000)
     }
 
     // Getters
 
     static get NAME() {
         return NAME
-    }
-
-    start(){
-        this._config = this._getConfig()
-        if(isNaN(this._config.start)||this._started)
-            return
-        this._start = (new Date(this._config.start * 1000)).getTime()
-        this._started=true;
-        setInterval(this._update.bind(this), 1000)
     }
 
     // Private

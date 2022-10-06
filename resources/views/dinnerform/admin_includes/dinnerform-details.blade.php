@@ -42,19 +42,10 @@
                     <div class="row align-items-end mb-6">
                         <div class="col-md-12 mb-3">
 
-                            <label for="url">Restaurant website:</label>
+                            <label for="url">Url:</label>
                             <input type="text" class="form-control" id="url" name="url"
-                                   placeholder='www.elat-roma.nl/'
+                                   placeholder='https://forms.gle/t2hDEnkNCLXNpvYTA'
                                    value="{{ $dinnerformCurrent->url ?? ''}}" required>
-                        </div>
-                    </div>
-                    <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3">
-
-                            <label value="url">Helper discount €:</label>
-                            <input type="value" class="form-control" id="discount" name="discount"
-                                   placeholder='7.5'
-                                   value="{{ $dinnerformCurrent->discount ?? ''}}" required>
                         </div>
                     </div>
                 </div>
@@ -80,24 +71,7 @@
                         </div>
 
                     </div>
-                    <div class="row align-items-end mb-6">
-                        <div class="col-md-12 mb-3 mt-3 form-group autocomplete">
-                            <label value="url">Event:</label>
-                            <input class="form-control event-search" id="eventSelect" name="eventSelect"
-                                   value="{{$dinnerformCurrent?$dinnerformCurrent->event_id:''}}"
-                                   placeholder="{{($dinnerformCurrent && $dinnerformCurrent->event && $dinnerformCurrent->event->activity)?$dinnerformCurrent->event->title:''}}">
-                        </div>
-                    </div>
 
-
-                    <div class="col-md-12 mb-3">
-                        <input type="checkbox" class="form-check-input" id="homepage" name="homepage"
-                               @if($dinnerformCurrent&&$dinnerformCurrent->visible_home_page||!$dinnerformCurrent)
-                                   checked
-                                @endif
-                        />
-                        <label for="homepage">Visible on the homepage?  </label>
-                    </div>
                 </div>
 
             </div>

@@ -192,15 +192,4 @@ return [
 
     'failed-withdrawal' => 1055,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Dinner takeAway Product
-    |--------------------------------------------------------------------------
-    |
-    | This product is used in the dinnerform orderlines functionality
-    |
-    */
-
-    'dinnerform-product' => 1404,
-
 ];

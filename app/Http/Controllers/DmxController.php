@@ -47,7 +47,7 @@ class DmxController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return View
      */
     public function edit($id)

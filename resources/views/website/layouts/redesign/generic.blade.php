@@ -10,8 +10,6 @@
 
         @include('website.announcements')
 
-        @include('website.errors')
-
         @yield('container')
 
     </main>

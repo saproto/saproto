@@ -50,18 +50,17 @@ class AchievementsCron extends Command
 
         // Get data that will be the same for every user.
         $first = [];
-        foreach(Product::where('is_visible')->get() as $product) {
-            /** @var OrderLine $orderline */
+        foreach(Product::where('is_visible') as $product) {
             $orderline = $product->orderlines()->first();
             $first[] = $orderline->user_id;
         }
 
-        $AmountOfSignupsThisMonth = Event::query()
-            ->whereHas('activity')
-            ->where('secret', false)
-            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
-            ->where('end', '<', Carbon::now()->timestamp)
-            ->count();
+        $AmountOfSignupsThisMonth = Event::query()->
+                                    where([['start', '>', Carbon::now()->subMonth()->timestamp],
+                                            ['secret', '=', false],
+                                            ['end', '<', Carbon::now()->timestamp],
+                                        ])->whereHas('activity')
+                                        ->count();
 
         $youDandy = $this->categoryProducts([9]);
         $fourOClock = $this->categoryProducts([11, 15, 18, 19]);
@@ -272,13 +271,14 @@ class AchievementsCron extends Command
 
         $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
         $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
-        $EventsParticipated = Event::query()
-            ->whereHas('activity')
-            ->where('secret', false)
-            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
-            ->where('end', '<', Carbon::now()->timestamp)
-            ->whereIn('id', $activities)
-            ->count();
+        $EventsParticipated = Event::query()->
+                                where([['start', '>', Carbon::now()->subMonth()->timestamp],
+                                        ['end', '<', Carbon::now()->timestamp],
+                                        ['secret', '=', false],
+                                ])->
+                                whereHas('activity')->
+                                whereIn('id', $activities)->
+                                count();
         return floor($EventsParticipated / $possibleSignups * 100) >= $percentage;
     }
 
@@ -327,7 +327,7 @@ class AchievementsCron extends Command
     {
         $products = [];
         foreach($categories as $category) {
-            $products = array_merge($products, ProductCategory::find($category)->products()->pluck('id')->toArray());
+            array_merge($products, ProductCategory::find($category)->products()->pluck('id')->toArray());
         }
         return $products;
     }

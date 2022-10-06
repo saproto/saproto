@@ -16,7 +16,7 @@
 
             <h1 class="mt-3 mb-3" style="font-size: 70px;">Is Alfred There?</h1>
 
-            <h1 class="mt-3 mb-3 proto-countdown"  style="font-size: 50px;"data-countdown-text-counting="Nope. Alfred will be back in {}."
+            <h1 class="mt-3 mb-3"  style="font-size: 50px;"data-countdown-text-counting="Nope. Alfred will be back in {}."
                 data-countdown-text-finished="Alfred should be there. 👀" id="alfred-status">
                 We're currently looking for Alfred, please stand by...
             </h1>
@@ -79,14 +79,16 @@
                         document.body.classList.add('bg-warning')
                     break
                     case('away'):
+                        status.classList.add('proto-countdown')
+                        status.setAttribute('data-countdown-start', data.backunix)
                         time.innerHTML = `That would be ${data.back}.`
                         time.classList.remove('d-none')
                         emoji.innerHTML = '<i class="far fa-grimace"></i><i class="far fa-clock"></i>'
                         document.body.classList.add('bg-danger')
-                            status.setAttribute('data-countdown-start', data.backunix)
-                            window.timerList.forEach((timer)=>{
-                                timer.start()
-                            })
+                        if (! alfredCountdownStarted) {
+                            // timer.start()
+                            alfredCountdownStarted = true
+                        }
                     break
                 }
             })

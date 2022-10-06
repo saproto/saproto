@@ -24,14 +24,14 @@
                             <label for="name">Event name:</label>
                             <input type="text" class="form-control" id="name" name="title"
                                    placeholder="Lightsaber Building in the SmartXp"
-                                   value="{{ old('title',$event->title ?? '') }}"
+                                   value="{{ $event->title ?? '' }}"
                                    required>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label for="location">Location:</label>
                             <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="SmartXp" value="{{ old('location',$event->location ??'') }}" required>
+                                   placeholder="SmartXp" value="{{ $event->location ?? '' }}" required>
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -47,7 +47,7 @@
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'start',
                                 'label' => 'Event start:',
-                                'placeholder' => request()->old('start')? strtotime(request()->old('start')):($event ? $event->start : null)
+                                'placeholder' => $event ? $event->start : null
                             ])
                         </div>
 
@@ -55,7 +55,7 @@
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'end',
                                 'label' => 'Event end:',
-                                'placeholder' => request()->old('start')?strtotime(request()->old('end')):($event ? $event->end : null)
+                                'placeholder' => $event ? $event->end : null
                             ])
                         </div>
 
@@ -63,10 +63,10 @@
 
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" {{ (old('secret')==1||$event != null && $event->secret ? 'selected' : '') }}>
+                                <option value="1" {{ ($event != null && $event->secret ? 'selected' : '') }}>
                                     Secret
                                 </option>
-                                <option value="0" {{ (old('secret')==0||$event != null && !$event->secret ? 'selected' : '') }}>
+                                <option value="0" {{ ($event != null && !$event->secret ? 'selected' : '') }}>
                                     Public
                                 </option>
                             </select>
@@ -97,6 +97,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+
                             </div>
                         @endif
 
@@ -104,7 +105,7 @@
 
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_external" {{($event && $event->is_external ? 'checked' : '') }}>
+                                    <input type="checkbox" name="is_external" {{ ($event && $event->is_external ? 'checked' : '') }}>
                                     This activity is not organized by Proto.
                                 </label>
                             </div>
@@ -166,7 +167,7 @@
                         @include('website.layouts.macros.markdownfield', [
                             'name' => 'description',
                             'placeholder' => $event == null ? "Please elaborate on why this event is awesome." : null,
-                            'value' => old('description',$event == null ? null : $event->description)
+                            'value' => $event == null ? null : $event->description
                         ])
                     </div>
 
@@ -175,7 +176,7 @@
                         @include('website.layouts.macros.markdownfield', [
                             'name' => 'summary',
                             'placeholder' => $event == null ? "A summary (used in the newsletter for example). Only a small description is required, other details will be added." : null,
-                            'value' => old('summary',$event == null ? null : $event->summary)
+                            'value' => $event == null ? null : $event->summary
                         ])
                     </div>
 

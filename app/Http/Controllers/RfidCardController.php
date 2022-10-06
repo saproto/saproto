@@ -10,7 +10,6 @@ use Illuminate\View\View;
 use Proto\Models\QrAuthRequest;
 use Proto\Models\RfidCard;
 use Redirect;
-use Session;
 
 class RfidCardController extends Controller
 {
@@ -65,7 +64,7 @@ class RfidCardController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return View
      */
     public function edit($id)
@@ -95,7 +94,7 @@ class RfidCardController extends Controller
         $rfid->name = $request->input('name');
         $rfid->save();
 
-        Session::flash('flash_message', 'Your RFID card has been updated.');
+        $request->session()->flash('flash_message', 'Your RFID card has been updated.');
         return Redirect::route('user::dashboard');
     }
 
@@ -114,7 +113,7 @@ class RfidCardController extends Controller
         }
         $rfid->delete();
 
-        Session::flash('flash_message', 'Your RFID card has been deleted.');
+        $request->session()->flash('flash_message', 'Your RFID card has been deleted.');
         return Redirect::back();
     }
 }

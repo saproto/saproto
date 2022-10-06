@@ -13,12 +13,16 @@ use Proto\Models\User;
 class UserProfileController extends Controller
 {
     /**
-     * @param string|null $id
+     * @param int|null $id
      * @return View
      */
     public function show($id = null)
     {
-        $user = $id == null ? Auth::user() : User::fromPublicId($id);
+        if ($id == null) {
+            $user = Auth::user();
+        } else {
+            $user = User::fromPublicId($id);
+        }
 
         if ($user == null) {
             abort(404);

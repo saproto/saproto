@@ -28,9 +28,6 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static Builder|ProductCategory whereId($value)
  * @method static Builder|ProductCategory whereName($value)
  * @method static Builder|ProductCategory whereUpdatedAt($value)
- * @method static Builder|ProductCategory newModelQuery()
- * @method static Builder|ProductCategory newQuery()
- * @method static Builder|ProductCategory query()
  * @mixin Eloquent
  */
 class ProductCategory extends Model

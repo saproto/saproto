@@ -28,9 +28,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|PlayedVideo whereUserId($value)
  * @method static Builder|PlayedVideo whereVideoId($value)
  * @method static Builder|PlayedVideo whereVideoTitle($value)
- * @method static Builder|PlayedVideo newModelQuery()
- * @method static Builder|PlayedVideo newQuery()
- * @method static Builder|PlayedVideo query()
  * @mixin Eloquent
  */
 class PlayedVideo extends Model
@@ -39,7 +36,7 @@ class PlayedVideo extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

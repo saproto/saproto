@@ -126,7 +126,7 @@ class PhotoController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param $id
      * @return string JSON
      */
 

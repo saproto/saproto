@@ -2,11 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
-use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Proto\Models\Company;
 use Proto\Models\Photo;
 use Redirect;
@@ -17,7 +13,7 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return RedirectResponse|View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -26,6 +22,7 @@ class CompanyController extends Controller
             return view('companies.list', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There is currently nothing to see on the companies page, but please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -33,7 +30,7 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return RedirectResponse|View
+     * @return \Illuminate\Http\Response
      */
     public function indexMembercard()
     {
@@ -42,6 +39,7 @@ class CompanyController extends Controller
             return view('companies.listmembercard', ['companies' => $companies]);
         } else {
             Session::flash('flash_message', 'There are currently no promotions for Proto members, please check back real soon!');
+
             return Redirect::back();
         }
     }
@@ -49,7 +47,7 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function adminIndex()
     {
@@ -59,7 +57,7 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -69,9 +67,8 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws FileNotFoundException
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -98,6 +95,7 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been added.");
+
         return Redirect::route('companies::admin');
     }
 
@@ -105,7 +103,7 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -116,7 +114,7 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function showMembercard($id)
     {
@@ -127,7 +125,7 @@ class CompanyController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -139,10 +137,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
-     * @throws FileNotFoundException
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -168,13 +165,10 @@ class CompanyController extends Controller
         $company->save();
 
         Session::flash('flash_message', "Your company '".$company->name."' has been edited.");
+
         return Redirect::route('companies::admin');
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function orderUp($id)
     {
         $company = Company::findOrFail($id);
@@ -194,15 +188,11 @@ class CompanyController extends Controller
         return Redirect::route('companies::admin');
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function orderDown($id)
     {
         $company = Company::findOrFail($id);
 
-        if ($company->sort >= Company::count() - 1) {
+        if ($company->sort >= Company::all()->count() - 1) {
             abort(500);
         }
 
@@ -220,9 +210,8 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return RedirectResponse
-     * @throws Exception
+     * @param  int $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {

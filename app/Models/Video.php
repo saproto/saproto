@@ -33,9 +33,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Video whereYoutubeTitle($value)
  * @method static Builder|Video whereYoutubeUserId($value)
  * @method static Builder|Video whereYoutubeUserName($value)
- * @method static Builder|Video newModelQuery()
- * @method static Builder|Video newQuery()
- * @method static Builder|Video query()
  * @mixin Eloquent
  */
 class Video extends Model
@@ -46,7 +43,7 @@ class Video extends Model
 
     public $timestamps = false;
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|Event */
     public function event()
     {
         return $this->belongsTo('Proto\Models\Event', 'event_id');
@@ -84,9 +81,9 @@ class Video extends Model
         } elseif ($interval->d > 0) {
             return sprintf('%s days', $interval->d);
         } elseif ($interval->h > 0) {
-            return sprintf('%s:%s:%s ', $interval->h, str_pad(strval($interval->i), 2, '0', STR_PAD_LEFT), str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
+            return sprintf('%s:%s:%s ', $interval->h, str_pad($interval->i, 2, '0', STR_PAD_LEFT), str_pad($interval->s, 2, '0', STR_PAD_LEFT));
         } elseif ($interval->i > 0) {
-            return sprintf('%s:%s ', $interval->i, str_pad(strval($interval->s), 2, '0', STR_PAD_LEFT));
+            return sprintf('%s:%s ', $interval->i, str_pad($interval->s, 2, '0', STR_PAD_LEFT));
         } else {
             return sprintf('%s seconds', $interval->s);
         }

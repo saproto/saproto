@@ -78,8 +78,6 @@
 
         @include('website.layouts.assets.javascripts')
 
-        @stack("javascript")
-
         <script type='text/javascript' nonce='{{ csp_nonce() }}'>
             let actionStatus
             let purchaseProcessing
@@ -358,7 +356,7 @@
                 try {
                     status.classList.add('inactive')
                     status.innerHTML = 'RFID Service: Connecting...'
-                    server = new WebSocket('ws://localhost:3000')
+                    server = new WebSocket('ws://localhost:3000', 'nfc')
                 } catch (error) {
                     if (error.message.split('/\s+/').contains('insecure')) {
                         status.classList.add('inactive')
@@ -390,15 +388,7 @@
                         return
                     }
 
-                    if (data.startsWith('08')) {
-                        Object.values(modals).forEach(el => el.hide())
-                        modals['randcard-modal'].show()
-                        actionStatus = 'badcard'
-                        return
-                    }
-
                     modals['badcard-modal'].hide()
-                    modals['randcard-modal'].hide()
 
                     if (actionStatus === 'rfid') {
                         const rfidLinkCard = data

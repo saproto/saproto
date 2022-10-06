@@ -26,16 +26,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $preferred_stock
  * @property int $max_stock
  * @property int $supplier_collo
- * @property bool $is_visible
- * @property bool $is_alcoholic
- * @property bool $is_visible_when_no_stock
+ * @property int $is_visible
+ * @property int $is_alcoholic
+ * @property int $is_visible_when_no_stock
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read FinancialAccount|null $account
- * @property-read StorageEntry|null $image
- * @property-read Ticket|null $ticket
+ * @property-read FinancialAccount $account
  * @property-read Collection|ProductCategory[] $categories
+ * @property-read StorageEntry|null $image
  * @property-read Collection|OrderLine[] $orderlines
+ * @property-read Ticket $ticket
  * @method static Builder|Product whereAccountId($value)
  * @method static Builder|Product whereCalories($value)
  * @method static Builder|Product whereCreatedAt($value)
@@ -52,9 +52,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|Product whereSupplierCollo($value)
  * @method static Builder|Product whereSupplierId($value)
  * @method static Builder|Product whereUpdatedAt($value)
- * @method static Builder|Product newModelQuery()
- * @method static Builder|Product newQuery()
- * @method static Builder|Product query()
  * @mixin Eloquent
  */
 class Product extends Model
@@ -65,31 +62,31 @@ class Product extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|FinancialAccount */
     public function account()
     {
         return $this->belongsTo('Proto\Models\FinancialAccount');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|StorageEntry */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
     }
 
-    /** @return BelongsToMany */
+    /** @return BelongsToMany|ProductCategory */
     public function categories()
     {
         return $this->belongsToMany('Proto\Models\ProductCategory', 'products_categories', 'product_id', 'category_id');
     }
 
-    /** @return HasOne */
+    /** @return HasOne|Ticket */
     public function ticket()
     {
         return $this->hasOne('Proto\Models\Ticket', 'product_id');
     }
 
-    /** @return HasMany */
+    /** @return HasMany|OrderLine[] */
     public function orderlines()
     {
         return $this->hasMany('Proto\Models\OrderLine');
@@ -105,8 +102,8 @@ class Product extends Model
      * @param User $user
      * @param int $amount
      * @param float|null $total_price
-     * @param bool|null $withCash
-     * @param bool|null $withBankCard
+     * @param bool $withCash
+     * @param bool $withBankCard
      * @param string|null $description
      * @param string $auth_method
      * @return int OrderLine id

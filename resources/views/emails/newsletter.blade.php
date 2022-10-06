@@ -108,7 +108,7 @@
     <p>
         Kind regards,<br>
         {{ config('proto.internal') }}<br>
-        <em>Officer of Internal Affairs</em>
+        <em>Secretary & Officer of Internal Affairs</em>
     </p>
 
     <p>

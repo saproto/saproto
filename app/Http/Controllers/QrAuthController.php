@@ -6,7 +6,6 @@ use Auth;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Milon\Barcode\DNS2D;
 use Proto\Models\QrAuthRequest;
@@ -15,14 +14,14 @@ use Proto\Models\User;
 class QrAuthController extends Controller
 {
     /**
-     * @param string $code
-     * @return Response
+     * @param $code
+     * @return mixed
      */
     public function showCode($code)
     {
         $qrAuthRequest = QrAuthRequest::where('qr_token', '=', $code)->first();
 
-        if ($qrAuthRequest == null) {
+        if (! $qrAuthRequest) {
             abort(404);
         }
 
@@ -49,7 +48,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param $code
      * @return View
      */
     public function showDialog($code)
@@ -64,7 +63,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param $code
      * @return View
      */
     public function approve($code)
@@ -84,7 +83,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param $code
      * @return JsonResponse
      */
     public function apiApprove($code)
@@ -104,7 +103,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $code
+     * @param $code
      * @return JsonResponse
      */
     public function apiInfo($code)
@@ -138,7 +137,7 @@ class QrAuthController extends Controller
     }
 
     /**
-     * @param string $authToken
+     * @param $authToken
      * @return false|User
      * @throws Exception
      */

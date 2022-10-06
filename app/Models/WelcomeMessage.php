@@ -22,9 +22,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|WelcomeMessage whereMessage($value)
  * @method static Builder|WelcomeMessage whereUpdatedAt($value)
  * @method static Builder|WelcomeMessage whereUserId($value)
- * @method static Builder|WelcomeMessage newModelQuery()
- * @method static Builder|WelcomeMessage newQuery()
- * @method static Builder|WelcomeMessage query()
  * @mixin Eloquent
  */
 class WelcomeMessage extends Model
@@ -38,7 +35,7 @@ class WelcomeMessage extends Model
         'message' => 'required|string',
     ];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

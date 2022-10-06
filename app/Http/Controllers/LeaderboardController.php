@@ -2,9 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Proto\Models\Committee;
 use Proto\Models\Leaderboard;
 use Redirect;
@@ -15,7 +13,7 @@ class LeaderboardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return RedirectResponse|View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -31,7 +29,7 @@ class LeaderboardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function adminIndex()
     {
@@ -41,7 +39,7 @@ class LeaderboardController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -51,8 +49,8 @@ class LeaderboardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return RedirectResponse
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -74,7 +72,7 @@ class LeaderboardController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return View
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -83,11 +81,6 @@ class LeaderboardController extends Controller
         return view('leaderboards.edit', ['leaderboard' => $leaderboard, 'entries' => $entries]);
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function update(Request $request, $id)
     {
         if ($request->featured && Leaderboard::where('featured', true)->first() != null) {
@@ -112,10 +105,6 @@ class LeaderboardController extends Controller
         return Redirect::back();
     }
 
-    /**
-     * @param int $id
-     * @return RedirectResponse
-     */
     public function destroy($id)
     {
         $leaderboard = Leaderboard::findOrFail($id);

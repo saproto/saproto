@@ -16,17 +16,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('website.navigation.navbar', function ($view) {
-            $menuItems = MenuItem::where('parent', null)->orderBy('order')->with('page')->with('children')->get();
+            $menuItems = MenuItem::where('parent', null)->orderBy('order')->get();
             $view->with('menuItems', $menuItems);
         });
         view()->composer('website.layouts.macros.achievement-popup', function ($view) {
             if (Auth::check()) {
                 $newAchievementsQuery = Auth::user()->achievements()->where('alerted', false);
                 $newAchievements = $newAchievementsQuery->get();
-                if(count($newAchievements) > 0) {
-                    $newAchievementsQuery->update(['alerted' => true]);
-                    $view->with('newAchievements', $newAchievements);
-                }
+                $newAchievementsQuery->update(['alerted' => true]);
+                $view->with('newAchievements', $newAchievements);
             }
         });
     }

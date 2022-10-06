@@ -2,7 +2,7 @@
 
 namespace Proto\Http\Controllers;
 
-use Carbon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\User;
@@ -43,13 +43,13 @@ class RegistrationHelperController extends Controller
     /**
      * Show the user details for registration helper.
      *
-     * @param int $id
+     * @param $id
      * @return View
      */
     public function details($id)
     {
         $user = User::whereHas('member', function ($q) {
-            $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay());
+            $q->where('is_pending', true)->orWhere('updated_at', '>', Carbon::now()->subDay(1));
         })->findOrFail($id);
         $memberships = $user->getMemberships();
 

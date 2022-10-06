@@ -17,16 +17,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User|null $user
+ * @property-read User $user
  * @method static Builder|RfidCard whereCardId($value)
  * @method static Builder|RfidCard whereCreatedAt($value)
  * @method static Builder|RfidCard whereId($value)
  * @method static Builder|RfidCard whereName($value)
  * @method static Builder|RfidCard whereUpdatedAt($value)
  * @method static Builder|RfidCard whereUserId($value)
- * @method static Builder|RfidCard newModelQuery()
- * @method static Builder|RfidCard newQuery()
- * @method static Builder|RfidCard query()
  * @mixin Eloquent
  */
 class RfidCard extends Model
@@ -35,7 +32,7 @@ class RfidCard extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

@@ -25,9 +25,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|HeaderImage whereImageId($value)
  * @method static Builder|HeaderImage whereTitle($value)
  * @method static Builder|HeaderImage whereUpdatedAt($value)
- * @method static Builder|HeaderImage newModelQuery()
- * @method static Builder|HeaderImage newQuery()
- * @method static Builder|HeaderImage query()
  * @mixin Eloquent
  */
 class HeaderImage extends Model
@@ -36,13 +33,13 @@ class HeaderImage extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|User */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User', 'credit_id');
     }
 
-    /** @return BelongsTo */
+    /** @return BelongsTo|StorageEntry */
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id', 'id');

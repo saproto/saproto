@@ -40,7 +40,7 @@ class AddSysadmin extends Command
         $user = User::find($user_id);
         if(! $user) {
             $this->error('User could not be found.');
-            return 1;
+            $this->exit();
         }
 
         if($this->confirm('Give '.$user->name.' admin right?')) {
@@ -48,6 +48,5 @@ class AddSysadmin extends Command
             $this->info('Sysadmin role granted!');
         }
 
-        return 0;
     }
 }

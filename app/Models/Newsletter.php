@@ -3,24 +3,24 @@
 namespace Proto\Models;
 
 use Artisan;
-use Carbon;
+use Carbon\Carbon;
 use Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Proto\Models\Newsletter.
  *
  * @mixin Eloquent
  */
-class Newsletter
+class Newsletter extends Model
 {
     /** @return HashMapItem */
-    private static function getSentAt()
+    public static function getLastSent()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_last_sent')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
-                'key' => 'newsletter',
-                'subkey' => 'sent_at',
+                'key' => 'newsletter_last_sent',
                 'value' => 0,
             ]);
         }
@@ -28,64 +28,35 @@ class Newsletter
     }
 
     /** @return HashMapItem */
-    private static function getUpdatedAt()
-    {
-        $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
-        if ($lastUpdated == null) {
-            $lastUpdated = HashMapItem::create([
-                'key' => 'newsletter',
-                'subkey' => 'updated_at',
-                'value' => 0,
-            ]);
-        }
-        return $lastUpdated;
-    }
-
-    /** @return HashMapItem */
-    private static function getText()
+    public static function getText()
     {
         $lastSent = HashMapItem::where('key', 'newsletter_text')->first();
         if ($lastSent == null) {
             $lastSent = HashMapItem::create([
-                'key' => 'newsletter',
-                'subkey' => 'text',
+                'key' => 'newsletter_text',
                 'value' => null,
             ]);
         }
         return $lastSent;
     }
 
-    /** @return void */
-    public static function setUpdatedAt()
+    /** @return HashMapItem */
+    public static function getTextLastUpdated()
     {
-        $lastSent = self::getSentAt();
-        $lastSent->value = Carbon::now()->timestamp;
-        $lastSent->save();
+        $lastUpdated = HashMapItem::where('key', 'newsletter_text_updated')->first();
+        if ($lastUpdated == null) {
+            $lastUpdated = HashMapItem::create([
+                'key' => 'newsletter_text_updated',
+                'value' => 0,
+            ]);
+        }
+        return $lastUpdated;
     }
 
-    /** @return void */
-    public static function setText($text)
+    /** @return string */
+    public static function lastSent()
     {
-        $newsletterText = self::getText();
-        $textUpdated = self::getUpdatedAt();
-
-        $newsletterText->value = $text;
-        $newsletterText->save();
-
-        $textUpdated->value = Carbon::now()->timestamp;
-        $textUpdated->save();
-    }
-
-    /** @return Carbon */
-    public static function sentAt()
-    {
-        return Carbon::createFromTimestamp(self::getSentAt()->value);
-    }
-
-    /** @return Carbon */
-    public static function updatedAt()
-    {
-        return Carbon::createFromTimestamp(self::getUpdatedAt()->value);
+        return self::getLastSent()->value;
     }
 
     /** @return string */
@@ -94,10 +65,42 @@ class Newsletter
         return self::getText()->value;
     }
 
+    /** @return string */
+    public static function textUpdated()
+    {
+        return self::getTextLastUpdated()->value;
+    }
+
+    /** @return string */
+    public static function updateLastSent()
+    {
+        $lastSent = self::getLastSent();
+
+        $lastSent->value = date('U');
+        $lastSent->save();
+
+        return $lastSent->value;
+    }
+
+    /** @return string */
+    public static function updateText($text)
+    {
+        $newsletterText = self::getText();
+        $textUpdated = self::getTextLastUpdated();
+
+        $newsletterText->value = $text;
+        $newsletterText->save();
+
+        $textUpdated->value = date('U');
+        $textUpdated->save();
+
+        return $newsletterText->value;
+    }
+
     /** @return bool */
     public static function lastSentMoreThanWeekAgo()
     {
-        $lastSent = Carbon::createFromTimestamp(self::sentAt());
+        $lastSent = Carbon::createFromFormat('U', self::lastSent());
         $current = Carbon::now();
         $diff = $lastSent->diffInWeeks($current);
         return $diff >= 1;
@@ -113,15 +116,20 @@ class Newsletter
     /** @return bool */
     public static function showTextOnHomepage()
     {
-        $daysSinceLastUpdated = Carbon::createFromTimestamp(self::updatedAt())->diffInDays();
-        return ! empty(self::text()) && $daysSinceLastUpdated < 10;
+        if (self::text() == '') {
+            return false;
+        }
+        if ((date('U') - self::textUpdated()) / (3600 * 24) > 10) {
+            return false;
+        }
+        return true;
     }
 
     /** @return bool */
     public static function send()
     {
         Artisan::call('proto:newslettercron');
-        self::setUpdatedAt();
+        self::updateLastSent();
         return true;
     }
 }

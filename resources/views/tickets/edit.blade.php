@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    {{ ($ticket == null ? "Create new ticket." : "Edit ticket " . $ticket->product->name .".") }}
+    {{ ($ticket == null ? "Create new ticket." : "Edit tick " . $ticket->product->name .".") }}
 @endsection
 
 @section('container')

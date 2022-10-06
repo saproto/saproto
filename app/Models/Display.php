@@ -22,9 +22,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Display whereName($value)
  * @method static Builder|Display whereUpdatedAt($value)
  * @method static Builder|Display whereUrl($value)
- * @method static Builder|Display newModelQuery()
- * @method static Builder|Display newQuery()
- * @method static Builder|Display query()
  * @mixin Eloquent
  */
 class Display extends Model

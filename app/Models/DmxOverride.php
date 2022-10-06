@@ -22,9 +22,6 @@ use Illuminate\Support\Collection;
  * @method static Builder|DmxOverride whereFixtures($value)
  * @method static Builder|DmxOverride whereId($value)
  * @method static Builder|DmxOverride whereStart($value)
- * @method static Builder|DmxOverride newModelQuery()
- * @method static Builder|DmxOverride newQuery()
- * @method static Builder|DmxOverride query()
  * @mixin Eloquent
  */
 class DmxOverride extends Model
@@ -53,31 +50,31 @@ class DmxOverride extends Model
         return self::where('end', '<', date('U'))->get()->sortByDesc('start');
     }
 
-    /** @return array<int, int> */
+    /** @return string[] */
     public function colorArray()
     {
         return array_map('intval', explode(',', $this->color));
     }
 
-    /** @return int */
+    /** @return string */
     public function red()
     {
         return $this->colorArray()[0];
     }
 
-    /** @return int */
+    /** @return string */
     public function green()
     {
         return $this->colorArray()[1];
     }
 
-    /** @return int */
+    /** @return string */
     public function blue()
     {
         return $this->colorArray()[2];
     }
 
-    /** @return int */
+    /** @return string */
     public function brightness()
     {
         return $this->colorArray()[3];
@@ -95,13 +92,13 @@ class DmxOverride extends Model
         return date('U') > $this->end && date('U') < $this->end. 600;
     }
 
-    /** @return false|string[] */
+    /** @return string */
     public function getFixtureIds()
     {
         return explode(',', $this->fixtures);
     }
 
-    /** @return Collection */
+    /** @return Collection|DmxFixture[] */
     public function getFixtures()
     {
         return DmxFixture::whereIn('id', $this->getFixtureIds())->get();
@@ -113,9 +110,9 @@ class DmxOverride extends Model
         return $this->active();
     }
 
-    /** @return int */
+    /** @return string */
     public function getWindowSizeAttribute()
     {
-        return (int) $this->end - (int) $this->start;
+        return $this->end - $this->start;
     }
 }

@@ -116,6 +116,7 @@ class AddressController extends Controller
         $user->save();
 
         Session::flash('flash_message', 'Your primary address is now '.($user->address_visible ? 'visible' : 'hidden').' for members.');
+
         return Redirect::back();
     }
 

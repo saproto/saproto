@@ -17,7 +17,7 @@
                 <tbody>
                 <tr>
                     <th>Type</th>
-                    <td>Recurring</td>
+                    <td>{{ ($user->bank->is_first ? "New" : "Recurring") }}</td>
                 </tr>
                 <tr>
                     <th>Issued on</th>
