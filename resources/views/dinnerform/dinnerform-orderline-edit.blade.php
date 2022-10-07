@@ -13,7 +13,7 @@
                 <div class="card mb-3">
 
                     <div class="card-header bg-dark text-white">
-                        Edit dinner form orderline from {{$dinnerformOrderline->user()->name}}
+                        Edit dinner form orderline from {{$dinnerformOrderline->user->name}}
                     </div>
 
                     <div class="card-body">
