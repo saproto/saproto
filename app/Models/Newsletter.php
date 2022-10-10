@@ -97,7 +97,7 @@ class Newsletter
     /** @return bool */
     public static function lastSentMoreThanWeekAgo()
     {
-        $lastSent = Carbon::createFromTimestamp(self::sentAt());
+        $lastSent = self::sentAt();
         $current = Carbon::now();
         $diff = $lastSent->diffInWeeks($current);
         return $diff >= 1;
@@ -113,7 +113,7 @@ class Newsletter
     /** @return bool */
     public static function showTextOnHomepage()
     {
-        $daysSinceLastUpdated = Carbon::createFromTimestamp(self::updatedAt())->diffInDays();
+        $daysSinceLastUpdated = self::updatedAt()->diffInDays();
         return ! empty(self::text()) && $daysSinceLastUpdated < 10;
     }
 

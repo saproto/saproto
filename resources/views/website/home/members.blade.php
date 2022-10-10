@@ -101,7 +101,7 @@
             <div class="card-header bg-dark text-white">
                 <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
             </div>
-            <div class="card-body vh-100 overflow-auto">
+            <div class="card-body overflow-hidden" style="height: calc(100vh - 250px)">
                 {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
             </div>
             <div class="card-footer">
