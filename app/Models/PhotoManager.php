@@ -5,12 +5,18 @@ namespace Proto\Models;
 use Auth;
 use Eloquent;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use stdClass;
 
 /**
  * Photo Manager Model.
  *
+ * @method static Builder|PhotoManager newModelQuery()
+ * @method static Builder|PhotoManager newQuery()
+ * @method static Builder|PhotoManager query()
  * @mixin Eloquent
  */
 class PhotoManager extends Model
@@ -20,7 +26,7 @@ class PhotoManager extends Model
      * @param string|null $query
      * @param bool $unpublished
      * @param bool $no_thumb
-     * @return PhotoAlbum[]
+     * @return Collection|LengthAwarePaginator
      */
     public static function getAlbums($max = null, $query = null, $unpublished = false, $no_thumb = true)
     {
@@ -110,7 +116,7 @@ class PhotoManager extends Model
         $data->album_name = $photo->album->name;
         $data->private = $photo->private;
         $data->likes = $photo->getLikes();
-        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::user()->id)->count() : 0;
+        $data->liked = Auth::check() ? PhotoLikes::where('photo_id', '=', $photo_id)->where('user_id', Auth::id())->count() : 0;
 
         if ($photo->getNextPhoto() != null) {
             $data->next = $photo->getNextPhoto()->id;
@@ -136,8 +142,8 @@ class PhotoManager extends Model
      */
     public static function deleteAlbum($album_id)
     {
-        $album = PhotoAlbum::where('id', $album_id)->get()->first();
-        $photos = Photo::where('album_id', $album_id)->get();
+        $album = PhotoAlbum::find($album_id);
+        $photos = $album->items;
 
         foreach ($photos as $photo) {
             $photo->delete();

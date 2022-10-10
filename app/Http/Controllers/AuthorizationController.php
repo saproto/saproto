@@ -4,11 +4,13 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Permission;
 use Proto\Models\User;
 use Redirect;
 use Role;
+use Session;
 
 class AuthorizationController extends Controller
 {
@@ -29,7 +31,7 @@ class AuthorizationController extends Controller
     public function grant(Request $request, $id)
     {
         if ($id == config('proto.rootrole')) {
-            $request->session()->flash('flash_message', 'This role can only be manually added in the database.');
+            Session::flash('flash_message', 'This role can only be manually added in the database.');
             return Redirect::back();
         }
 
@@ -39,13 +41,13 @@ class AuthorizationController extends Controller
         $user = User::findOrFail($request->user);
 
         if ($user->hasRole($role)) {
-            $request->session()->flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
+            Session::flash('flash_message', $user->name.' already has role: <strong>'.$role->name.'</strong>.');
             return Redirect::back();
         }
 
         $user->assignRole($role);
 
-        $request->session()->flash('flash_message', $user->name.' has been granted role: <strong>'.$role->name.'</strong>.');
+        Session::flash('flash_message', $user->name.' has been granted role: <strong>'.$role->name.'</strong>.');
         return Redirect::back();
     }
 
@@ -58,7 +60,7 @@ class AuthorizationController extends Controller
     public function revoke(Request $request, $id, $userId)
     {
         if ($id == config('proto.rootrole')) {
-            $request->session()->flash('flash_message', 'This role can only be manually removed in the database.');
+            Session::flash('flash_message', 'This role can only be manually removed in the database.');
             return Redirect::back();
         }
 
@@ -70,9 +72,11 @@ class AuthorizationController extends Controller
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-        file_get_contents(config('herbert.server').'/adminCheck');
 
-        $request->session()->flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
+        //        disabled because protube is down
+        //        Http::get(config('herbert.server').'/adminCheck');
+
+        Session::flash('flash_message', '<strong>'.$role->name.'</strong> has been revoked from '.$user->name.'.');
         return Redirect::back();
     }
 }

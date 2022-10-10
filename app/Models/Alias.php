@@ -3,6 +3,7 @@
 namespace Proto\Models;
 
 use Carbon;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Alias Model.
  *
- * @mixin Model
  * @property int $id
  * @property string $alias
  * @property int|null $user_id
@@ -24,6 +24,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|Alias whereId($value)
  * @method static Builder|Alias whereUpdatedAt($value)
  * @method static Builder|Alias whereUserId($value)
+ * @method static Builder|Alias newModelQuery()
+ * @method static Builder|Alias newQuery()
+ * @method static Builder|Alias query()
+ * @mixin Eloquent
  */
 class Alias extends Model
 {
@@ -31,7 +35,7 @@ class Alias extends Model
 
     protected $guarded = ['id'];
 
-    /** @return BelongsTo|User */
+    /** @return BelongsTo */
     public function user()
     {
         return $this->belongsTo('Proto\Models\User');

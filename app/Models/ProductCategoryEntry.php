@@ -23,6 +23,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|ProductCategoryEntry whereId($value)
  * @method static Builder|ProductCategoryEntry whereProductId($value)
  * @method static Builder|ProductCategoryEntry whereUpdatedAt($value)
+ * @method static Builder|ProductCategoryEntry newModelQuery()
+ * @method static Builder|ProductCategoryEntry newQuery()
+ * @method static Builder|ProductCategoryEntry query()
  * @mixin Eloquent
  */
 class ProductCategoryEntry extends Model
@@ -37,13 +40,13 @@ class ProductCategoryEntry extends Model
         'rank' => 'required|integer',
     ];
 
-    /** @return BelongsTo|Product */
+    /** @return BelongsTo */
     public function product()
     {
         return $this->belongsTo('Proto\Models\Product');
     }
 
-    /** @return BelongsTo|ProductCategory */
+    /** @return BelongsTo */
     public function ProductCategory()
     {
         return $this->belongsTo('Proto\Models\ProductCategory');

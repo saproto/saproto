@@ -2,7 +2,9 @@
 
 namespace Proto\Handlers\Events;
 
+use Illuminate\Auth\Events\Login;
 use Proto\Models\Committee;
+use Proto\Models\User;
 
 class AuthLoginEventHandler
 {
@@ -19,11 +21,12 @@ class AuthLoginEventHandler
     /**
      * Handle the event.
      *
-     * @param $event
+     * @param Login $event
      * @return void
      */
     public function handle($event)
     {
+        /** @var User $user */
         $user = $event->user;
         $user->generateNewToken();
 

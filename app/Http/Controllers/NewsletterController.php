@@ -10,6 +10,7 @@ use Proto\Models\EmailList;
 use Proto\Models\Event;
 use Proto\Models\Newsletter;
 use Redirect;
+use Session;
 
 class NewsletterController extends Controller
 {
@@ -41,7 +42,7 @@ class NewsletterController extends Controller
             'user' => Auth::user(),
             'list' => EmailList::find(config('proto.weeklynewsletter')),
             'events' => Event::getEventsForNewsletter(),
-            'text' => Newsletter::getText()->value,
+            'text' => Newsletter::text(),
         ]);
     }
 
@@ -57,7 +58,7 @@ class NewsletterController extends Controller
 
         Newsletter::send();
 
-        $request->session()->flash('flash_message', 'The weekly newsletter has been sent.');
+        Session::flash('flash_message', 'The weekly newsletter has been sent.');
         return Redirect::back();
     }
 
@@ -67,9 +68,9 @@ class NewsletterController extends Controller
      */
     public function saveNewsletterText(Request $request)
     {
-        Newsletter::updateText($request->text);
+        Newsletter::setText($request->text);
 
-        $request->session()->flash('flash_message', 'The newsletter text has been set.');
+        Session::flash('flash_message', 'The newsletter text has been set.');
         return Redirect::back();
     }
 }

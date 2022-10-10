@@ -2,6 +2,9 @@
 
 namespace Proto\Http\Controllers;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Proto\Models\Leaderboard;
 use Proto\Models\LeaderboardEntry;
@@ -12,10 +15,8 @@ use Session;
 class LeaderboardEntryController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
@@ -36,9 +37,8 @@ class LeaderboardEntryController extends Controller
     }
 
     /**
-     * Update resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
+     * @param Request $request
+     * @return JsonResponse
      */
     public function update(Request $request)
     {
@@ -49,10 +49,9 @@ class LeaderboardEntryController extends Controller
     }
 
     /**
-     * Delete leaderboard entry.
-     *
-     * @param  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function destroy($id)
     {

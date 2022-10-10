@@ -5,7 +5,6 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Input;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
@@ -31,7 +30,7 @@ class ApiController extends Controller
     }
 
     /**
-     * @param $token
+     * @param string $token
      * @return false|string
      */
     public function protubeAdmin($token)
@@ -57,6 +56,23 @@ class ApiController extends Controller
         return json_encode($adminInfo);
     }
 
+    /** @return JsonResponse */
+    public function protubeUserDetails()
+    {
+        $user = Auth::user();
+
+        if($user) {
+            return response()->json([
+                'authenticated' => true,
+                'name' => $user->calling_name,
+                'is_admin' => $user->can('protube') || $user->isTempadmin(),
+                'user_id' => $user->id,
+            ]);
+        }
+
+        return response()->json(['authenticated' => false]);
+    }
+
     /** @param Request $request */
     public function protubePlayed(Request $request)
     {
@@ -65,15 +81,10 @@ class ApiController extends Controller
         }
 
         $playedVideo = new PlayedVideo();
+        $user = User::findOrFail($request->user_id);
 
-        $token = Token::where('token', $request->token)->first();
-
-        if ($token) {
-            /** @var User $user */
-            $user = $token->user()->first();
-            if ($user->keep_protube_history) {
-                $playedVideo->user()->associate($user);
-            }
+        if ($user->keep_protube_history) {
+            $playedVideo->user()->associate($user);
         }
 
         $playedVideo->video_id = $request->video_id;
@@ -101,12 +112,13 @@ class ApiController extends Controller
         }
 
         if ($request->has('callback')) {
-            return response()->json($response)->setCallback(Input::get('callback'));
+            return response()->json($response)->setCallback($request->input('callback'));
         } else {
             return response()->json($response);
         }
     }
 
+    /** @return void */
     public function fishcamStream()
     {
         if (! file_exists(env('FISHCAM_URL'))) {

@@ -38,14 +38,7 @@
                     <tr>
                         <td>All members</td>
                         <td></td>
-                        <td>{{ Proto\Models\Member::count() }}</td>
-                        <td></td>
-                    </tr>
-
-                    <tr>
-                        <td>All active members</td>
-                        <td></td>
-                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
+                        <td>{{ Proto\Models\Member::countValidMembers() }}</td>
                         <td></td>
                     </tr>
 
@@ -53,6 +46,13 @@
                         <td>All pending members</td>
                         <td></td>
                         <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
+                        <td></td>
+                    </tr>
+
+                    <tr>
+                        <td>All active members</td>
+                        <td></td>
+                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
                         <td></td>
                     </tr>
 
@@ -137,7 +137,7 @@
                                 @elseif($email->to_list)
                                     list(s) {{ $email->getListName() }}
                                 @elseif($email->to_event)
-                                    event(s):
+                                    event(s) {{$email->to_backup?'with backup users':''}}:
                                     @foreach($email->events()->get() as $event)
                                         {{$event->title}}.
                                         @endforeach

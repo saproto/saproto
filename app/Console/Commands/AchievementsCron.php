@@ -8,14 +8,11 @@ use Proto\Models\Achievement;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
 use Proto\Models\ActivityParticipation;
-use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Event;
-use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\ProductCategory;
-use Proto\Models\ProductCategoryEntry;
 use Proto\Models\User;
 
 class AchievementsCron extends Command
@@ -49,487 +46,289 @@ class AchievementsCron extends Command
      */
     public function handle()
     {
-        $this->info('Autoassigning achievements to users...');
+        $this->info('Automatically granting achievements to users...');
 
-        $this->giveAchievement($this->AchievementBeast(), 19);
-        $this->giveAchievement($this->Hangry(), 20);
-        $this->giveAchievement($this->CryBaby(), 21);
-        $this->giveAchievement($this->TrueGerman(), 22);
-        $this->giveAchievement($this->OldFart(), 23);
-        $this->giveAchievement($this->IAmBread(), 24);
-        $this->giveAchievement($this->GottaCatchEmAll(), 25);
-        $this->giveAchievement($this->YouDandy(), 26);
-        $this->giveAchievement($this->FristiMember(), 27);
-        $this->giveAchievement($this->BigSpender(), 28);
-        $this->giveAchievement($this->fourOClock(), 29);
-        $this->giveAchievement($this->youreSpecial(), 30);
-        $this->giveAchievement($this->bigKid(), 32);
-        $this->giveAchievement($this->NoLife(), 52);
-        $this->giveAchievement($this->First(), 51);
-        $this->giveAchievement($this->ForeverMember(), 38);
-        $this->giveAchievement($this->GoodHuman(), 53);
-        $this->giveAchievement($this->IAmNoodle(), 54);
-        $this->giveAchievement($this->nThActivity(1), 63);
-        $this->giveAchievement($this->nThActivity(100), 64);
+        // Get data that will be the same for every user.
+        $first = [];
+        foreach(Product::where('is_visible')->get() as $product) {
+            /** @var OrderLine $orderline */
+            $orderline = $product->orderlines()->first();
+            $first[] = $orderline->user_id;
+        }
 
-        $this->info('Auto achievement gifting done!');
-    }
+        $AmountOfSignupsThisMonth = Event::query()
+            ->whereHas('activity')
+            ->where('secret', false)
+            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->count();
 
-    /**
-     * Give an achievement to a list of users.
-     */
-    private function giveAchievement($users, $achievement_id)
-    {
-        $changecount = 0;
+        $youDandy = $this->categoryProducts([9]);
+        $fourOClock = $this->categoryProducts([11, 15, 18, 19]);
+        $bigKid = $this->categoryProducts([21]);
+        $goodHuman = $this->categoryProducts([28]);
 
-        $achievement = Achievement::find($achievement_id);
+        // Define the automatic achievements and their conditions.
+        $achievements = [
+            19 => function ($user) { return $this->achievementBeast($user); }, // Achievement Beast
+            20 => function ($user) { return $this->nThProducts($user, [2], 5); }, // Hangry
+            21 => function ($user) { return $this->nThProducts($user, [487], 15); }, // Cry Baby
+            22 => function ($user) { return $this->nThProducts($user, [805, 211, 758], 20); }, // True German
+            23 => function ($user) { return $this->oldFart($user); }, // Old Fart
+            24 => function ($user) { $this->nThProducts($user, [22, 219, 419], 100); }, // I Am Bread
+            25 => function ($user) { return $this->gottaCatchEmAll($user); }, // Gotta Catch em All
+            26 => function ($user) use ($youDandy) { return $this->nThProducts($user, $youDandy, 3); }, // You Dandy
+            27 => function ($user) { return $this->nThProducts($user, [180], 1) && ! $user->did_study_create; }, // Fristi Member
+            28 => function ($user) { return $this->bigSpender($user); }, // Big Spender
+            29 => function ($user) use ($fourOClock) { return $this->percentageProducts($user, $fourOClock, 0.25); }, // Four 'O Clock
+         // 30 => function($user) { return $this->percentageProducts($user, $this->categoriesProductIds([11, 15, 18, 19]), 0.25); }, # You're Special
+            32 => function ($user) use ($bigKid) { return $this->percentageProducts($user, $bigKid, 0.25); }, // Big Kid
+            38 => function ($user) { return $this->foreverMember($user); }, // Forever Member
+            51 => function ($user) use ($first) { return $this->first($user, $first); }, // First
+            52 => function ($user) { return $this->nThProducts($user, [987], 777); }, // No Life
+            53 => function ($user) use ($goodHuman) { return $this->nThProducts($user, $goodHuman, 1); }, // Good Human
+            54 => function ($user) { return $this->nThProducts($user, [39], 100); }, // I Am Noodle
+            63 => function ($user) { return $this->nThActivity($user, 1); }, // First Activity
+            64 => function ($user) { return $this->nThActivity($user, 100); }, // Hundredth Activity
+            66 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 25,$AmountOfSignupsThisMonth); }, // 25% Participation Trophee
+            67 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 50,$AmountOfSignupsThisMonth); }, // 50% Participation Trophee
+            68 => function ($user) use ($AmountOfSignupsThisMonth) { return $this->percentageParticipation($user, 75,$AmountOfSignupsThisMonth); }, // 75% Participation Trophee
+        ];
 
-        if ($achievement) {
-            foreach ($users as $user) {
-                if ($user) {
-                    try {
-                        $achieved = $user->achieved();
+        // Check if the specified achievements actually exist.
+        $existing = Achievement::all()->pluck('id')->toArray();
+        foreach (array_keys($achievements) as $id) {
+            if (! in_array($id, $existing)) {
+                unset($achievements[$id]);
+                $this->error("Achievement #$id does not exist, not granting this achievement.");
+            }
+        }
 
-                        $hasAchievement = false;
+        // Loop over all current members and check if they should earn any new achievements.
+        $users = User::withoutTrashed()
+            ->whereHas('member', function ($query) {
+                $query->where('is_pending', false);
+            })
+            ->get();
+        $totalUsers = $users->count();
 
-                        foreach ($achieved as $test) {
-                            if ($test->id == $achievement_id) {
-                                $hasAchievement = true;
-                                break;
-                            }
-                        }
-                    } catch (Exception $e) {
-                        dd($e);
-                    }
-
-                    if (! $hasAchievement) {
-                        $new = [
-                            'user_id' => $user->id,
-                            'achievement_id' => $achievement_id,
-                        ];
-                        $relation = new AchievementOwnership($new);
-                        $relation->save();
-                        $changecount += 1;
-                        $this->line('Achievement "'.$achievement->name.'" given to '.$user->name);
-                    } else {
-//                        $this->line($achievement->name . ' already obtained by ' . $user->name . '.');
-                    }
-                } else {
-                    $this->error('Cant find a certain user for '.$achievement->name.'. User probably deleted.');
+        foreach($users as $index => $user) {
+            $this->line(($index + 1).'/'.$totalUsers.' #'.$user->id);
+            $alreadyAchieved = $user->achievements->pluck('id')->toArray();
+            foreach ($achievements as $id => $check) {
+                if (! in_array($id, $alreadyAchieved) && $check($user)) {
+                    $this->giveAchievement($user, $id);
                 }
             }
-
-            $this->info('Gave away '.$changecount.' of achievement "'.$achievement->name.'".');
-        } else {
-            $this->error('Error! '.$achievement_id.' is a non-existing achievement ID. Skipping to next auto achievement.');
         }
+
+        $this->info('Finished automatically granting achievements!');
     }
 
     /**
-     *    ------------------------------------------------------------------------   ACHIEVEMENT LOGIC FUNCTIONS   --------------------------------------------------------------------------------.
+     * Give an achievement to a user.
+     *
+     * @param User $user
+     * @param int $id
      */
-
-    /**
-     * Achievement beast = 10 achievements or more.
-     */
-    private function AchievementBeast()
+    private function giveAchievement($user, $id)
     {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            if (count($user->achieved()) >= 10) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        $achievement = Achievement::find($id);
+
+        AchievementOwnership::updateOrCreate([
+            'user_id' => $user->id,
+            'achievement_id' => $id,
+        ]);
+
+        $this->line("Earned \033[32m$achievement->name\033[0m");
     }
 
     /**
-     * Hangry = bought 5 snickers or more (all time).
+     * Check if it is NOT the first of the month.
+     *
+     * @return bool
      */
-    private function Hangry()
+    private function notFirstOfMonth()
     {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            $orders = Orderline::where('user_id', $user->id)->where('product_id', 2)->get();
-            $count = 0;
-            foreach ($orders as $order) {
-                $count += $order->units;
-            }
-            if ($count >= 5) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        return Carbon::now()->day != 1;
     }
 
     /**
-     * Cry baby = bought 15 surprise eggs or more.
+     * Achievement beast = earned 10 achievements or more.
+     *
+     * @param User $user
+     * @return bool
      */
-    private function CryBaby()
+    private function achievementBeast($user)
     {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            $orders = Orderline::where('user_id', $user->id)->where('product_id', 487)->get();
-            $count = 0;
-            foreach ($orders as $order) {
-                $count += $order->units;
-            }
-            if ($count >= 15) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        return count($user->achieved()) >= 10;
     }
 
     /**
-     * True German = more than 20 Weizen in beer history.
+     * Old Fart = member for more than 5 years.
+     *
+     * @param User $user
+     * @return bool
      */
-    private function TrueGerman()
+    private function oldFart($user)
     {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            $orders = Orderline::where('user_id', $user->id)->whereIn('product_id', [805, 211, 758])->get();
-            $count = 0;
-            foreach ($orders as $order) {
-                $count += $order->units;
-            }
-            if ($count >= 20) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        return $user->is_member && $user->member->created_at < Carbon::now()->subYears(5);
     }
 
     /**
-     *  Old Fart = more than 5 years a member.
+     * Gotta catch 'em all! = be a member of at least 10 different committees.
+     *
+     * @param User $user
+     * @return bool
      */
-    private function OldFart()
+    private function gottaCatchEmAll($user)
     {
-        $members = Member::where('deleted_at', null)->where('created_at', '<', Carbon::now()->subYears(5))->get();
-        $selected = [];
-        foreach ($members as $member) {
-            $selected[] = User::find($member->user_id);
-        }
-        return $selected;
+        return $user->committees()->count() >= 10;
     }
 
     /**
-     * 4ever committee member = you've been a committee member for more than three years.
+     * Big spender = paid more than the max. amount of money in a month (=€250).
+     *
+     * @param User $user
+     * @return bool
      */
-    private function ForeverMember()
+    private function bigSpender($user)
     {
-        $selected = [];
+        if ($this->notFirstOfMonth()) return false;
 
-        foreach (User::all() as $user) {
-            $forever = false;
-            foreach (Committee::all() as $committee) {
-                $memberships = CommitteeMembership::withTrashed()
-                    ->where('user_id', $user->id)
-                    ->where('committee_id', $committee->id)
-                    ->get();
-                $days = 0;
-                foreach ($memberships as $membership) {
-                    if ($membership->deleted_at != null && ! $committee->is_society) {
-                        $diff = $membership->deleted_at->diff($membership->created_at);
-                    } else {
-                        $diff = Carbon::now()->diff($membership->created_at);
-                    }
-                    $days += $diff->days;
-                }
-                if ($days >= 1095) {
-                    $forever = true;
-                }
-            }
-            if ($forever) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        $amount = $user->orderlines()
+            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->sum('total_price');
+        return $amount >= 250;
     }
 
     /**
-     *  Good Human = you have donated to a committee!
+     * 4ever committee member = has been a committee member for more than three years.
+     *
+     * @param User $user
+     * @return bool
      */
-    private function GoodHuman()
+    private function foreverMember($user)
     {
-        $selected = [];
-        $products = ProductCategoryEntry::where('category_id', 28)->get();
-        foreach ($products as $product) {
-            $orders = OrderLine::where('product_id', $product->id)->get();
-            foreach ($orders as $order) {
-                $user = User::find($order['user_id']);
-                $selected[] = $user;
-            }
-        }
-        return $selected;
-    }
-
-    /**
-     *  I am Bread = you bought more than 100 croque monsieurs.
-     */
-    private function IAmBread()
-    {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            $orders = Orderline::where('user_id', $user->id)->whereIn('product_id', [22, 219, 419])->get();
-            $count = 0;
-            foreach ($orders as $order) {
-                $count += $order->units;
-            }
-            if ($count >= 100) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
-    }
-
-    /**
-     *  I am Bread = you bought more than 100 noodles;.
-     */
-    private function IAmNoodle()
-    {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
-            $orders = Orderline::where('user_id', $user->id)->where('product_id', 39)->get();
-            $count = 0;
-            foreach ($orders as $order) {
-                $count += $order->units;
-            }
-            if ($count >= 100) {
-                $selected[] = $user;
-            }
-        }
-
-        return $selected;
-    }
-
-    /**
-     *  Gotta catch 'em all! = at least in 10 different committees.
-     */
-    private function GottaCatchEmAll()
-    {
-        $users = User::all();
-        $selected = [];
-        foreach ($users as $user) {
+        foreach ($user->committees as $committee) {
             $memberships = CommitteeMembership::withTrashed()
                 ->where('user_id', $user->id)
-                ->with('committee')
+                ->where('committee_id', $committee->id)
                 ->get();
-            for ($i = 0; $i < count($memberships); $i++) {
-                for ($j = $i + 1; $j < count($memberships); $j++) {
-                    if ($memberships[$i]->committee_id == $memberships[$j]->committee_id) {
-                        $memberships[$i] = null;
-                        break;
-                    }
+
+            $days = 0;
+            foreach ($memberships as $membership) {
+                if ($membership->deleted_at != null) {
+                    $diff = $membership->deleted_at->diff($membership->created_at);
+                } else {
+                    $diff = Carbon::now()->diff($membership->created_at);
                 }
+                $days += $diff->days;
             }
-            $count = 0;
-            foreach ($memberships as $temp) {
-                if ($temp != null && ! $temp->committee->is_society) {
-                    $count++;
-                }
-            }
-            if ($count >= 10) {
-                $selected[] = $user;
+            if ($days >= 1095) {
+                return true;
             }
         }
-
-        return $selected;
+        return false;
     }
 
     /**
-     *  You dandy = you bought 3 different types of merchandise.
+     * FIRST!!!! = the first to buy a product.
+     *
+     * @param User $user
+     * @param int[] $firsts
+     * @return bool
      */
-    private function YouDandy()
+    private function first($user, $firsts)
     {
-        $users = User::all();
-        $selected = [];
-        $merch = ProductCategory::find(9)->products()->pluck('id');
-        foreach ($users as $user) {
-            $merchorders = OrderLine::where('user_id', $user->id)->whereIn('product_id', $merch)->get();
-            if (count($merchorders) > 3) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        return in_array($user->id, $firsts);
     }
 
     /**
-     * FIRST!!!! = you were the first to buy a product.
+     * Attended a certain number of activities.
+     *
+     * @param User $user
+     * @param int $n
+     * @return bool
      */
-    private function First()
-    {
-        $products = Product::all();
-        $selected = [];
-
-        foreach ($products as $product) {
-            if ($product->is_visible == 1) {
-                $order = OrderLine::orderBy('id')->where('product_id', $product->id)->first();
-                if ($order != null) {
-                    $user = User::find($order['user_id']);
-                    $selected[] = $user;
-                }
-            }
-        }
-
-        return $selected;
+    private function nThActivity($user, $n) {
+        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+        $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+        $events = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->timestamp);
+        return $events->count() >= $n;
     }
 
     /**
-     *  Fristi Member = you're no CreaTer and you bought a Fristi.
+     * Attended a certain percentage of signups in the last month.
+     *
+     * @param User $user
+     * @param int $percentage
+     * @param int $possibleSignups
+     * @return bool
      */
-    private function FristiMember()
-    {
-        $selected = [];
-        $fristies = OrderLine::where('product_id', 180)->whereNotNull('user_id')->get();
-        foreach ($fristies as $fristi) {
-            if ($fristi->user && ! $fristi->user->did_study_create) {
-                $selected[] = User::find($fristi->user_id);
-            }
-        }
-        return $selected;
+    private function percentageParticipation($user, $percentage, $possibleSignups) {
+        if ($this->notFirstOfMonth()) return false;
+        if ($possibleSignups < 5) return false;
+
+        $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
+        $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
+        $EventsParticipated = Event::query()
+            ->whereHas('activity')
+            ->where('secret', false)
+            ->where('start', '>', Carbon::now()->subMonth()->timestamp)
+            ->where('end', '<', Carbon::now()->timestamp)
+            ->whereIn('id', $activities)
+            ->count();
+        return floor($EventsParticipated / $possibleSignups * 100) >= $percentage;
     }
 
     /**
-     *  Big spender = you had the max money subtracted for 1 month (=€250).
+     * Bought a certain number of a set of products.
+     *
+     * @param User $user
+     * @param int[] $products
+     * @param int $n
+     * @return bool
      */
-    private function BigSpender()
+    private function nThProducts($user, $products, $n)
     {
-        $selected = [];
-        if (Carbon::now()->day == 1) {
-            $users = User::all();
-            foreach ($users as $user) {
-                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
-                $cost = 0;
-                foreach ($orders as $order) {
-                    $cost += $order->total_price;
-                    if ($cost >= 250) {
-                        $selected[] = $user;
-                        break;
-                    }
-                }
-            }
-        } else {
-            $this->info('Its not the first of the month! Cancelling Big Spender...');
-        }
-        return $selected;
+        return $user->orderlines()->whereIn('product_id', $products)->sum('units') > $n;
     }
 
     /**
-     *  No Life = when you have bought the will to live product 777 times.
+     * A percentage of purchases were of a certain set of products.
+     *
+     * @param User $user
+     * @param int[] $products
+     * @param float $p
+     * @return bool
      */
-    private function NoLife()
+    private function percentageProducts($user, $products, $p)
     {
-        $selected = [];
-        $users = User::all();
-        foreach ($users as $user) {
-            $amount = 0;
-            $orders = OrderLine::where('product_id', 987)->where('user_id', $user->id)->get();
-            foreach ($orders as $order) {
-                $amount += $order->units;
-            }
-            if ($amount >= 777) {
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        $orders = OrderLine::query()
+            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->where('user_id', $user->id)
+            ->count();
+        $bought = OrderLine::query()
+            ->where('updated_at', '>', Carbon::now()->subMonths())
+            ->where('user_id', $user->id)
+            ->whereIn('product_id', $products)
+            ->count();
+        return $bought > 0 && $orders > 0 && $bought / $orders > $p;
     }
 
     /**
-     *  It’s always 4 o’clock somewhere = a month where more than 25% of OmNomCom purchases is beer.
+     * Get the ids of the products in a set of categories.
+     *
+     * @param int[] $categories
+     * @return int[]
      */
-    private function fourOClock()
+    private function categoryProducts($categories)
     {
-        $selected = [];
-        if (Carbon::now()->day == 1) {
-            $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products()->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products()->pluck('id')->toArray());
-            $users = User::all();
-            foreach ($users as $user) {
-                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
-                $beers = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->whereIn('product_id', $beerIDs)->get();
-                if (count($beers) > 0) {
-                    if (count($beers) / count($orders) > 0.25) {
-                        $selected[] = $user;
-                    }
-                }
-            }
-        } else {
-            $this->info('Its not the first of the month! Cancelling It\'s always 4 o\'clock somewhere...');
+        $products = [];
+        foreach($categories as $category) {
+            $products = array_merge($products, ProductCategory::find($category)->products()->pluck('id')->toArray());
         }
-        return $selected;
-    }
-
-    /**
-     *  You’re special = more than 25% of your beer purchases this month is special beer.
-     */
-    private function youreSpecial()
-    {
-        $selected = [];
-        if (Carbon::now()->day == 1) {
-            $beerIDs = ProductCategory::find(11)->products()->pluck('id')->toArray();
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(15)->products()->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(18)->products()->pluck('id')->toArray());
-            $beerIDs = array_merge($beerIDs, ProductCategory::find(19)->products()->pluck('id')->toArray());
-            $users = User::all();
-            foreach ($users as $user) {
-                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
-                $beers = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->whereIn('product_id', $beerIDs)->get();
-                if (count($beers) > 0) {
-                    if (count($beers) / count($orders) > 0.25) {
-                        $selected[] = $user;
-                    }
-                }
-            }
-        } else {
-            $this->info('Its not the first of the month! Cancelling You\'re special...');
-        }
-        return $selected;
-    }
-
-    /**
-     *  Big kid = month where more than 25% of purchases is from the kid friendly category.
-     */
-    private function bigKid()
-    {
-        $selected = [];
-        if (Carbon::now()->day == 1) {
-            $kidIDs = ProductCategory::find(21)->products()->pluck('id')->toArray();
-            $users = User::all();
-            foreach ($users as $user) {
-                $orders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->where('user_id', $user->id)->get();
-                $kidOrders = OrderLine::where('updated_at', '>', Carbon::now()->subMonths(1))->whereIn('product_id', $kidIDs)->where('user_id', $user->id)->get();
-                if (count($kidOrders) > 0) {
-                    if (count($kidOrders) / count($orders) > 0.25) {
-                        $selected[] = $user;
-                    }
-                }
-            }
-        } else {
-            $this->info('Its not the first of the month! Cancelling Big kid...');
-        }
-        return $selected;
-    }
-
-    private function nThActivity($activityAmount) {
-        $selected = [];
-        $users = User::all();
-        foreach ($users as $user) {
-            $participated = ActivityParticipation::where('user_id', $user->id)->pluck('activity_id');
-            $activities = Activity::WhereIn('id', $participated)->pluck('event_id');
-            $CountEvents = Event::whereIn('id', $activities)->where('end', '<', Carbon::now()->valueOf())->count();
-            if($CountEvents >= $activityAmount){
-                $selected[] = $user;
-            }
-        }
-        return $selected;
+        return $products;
     }
 }

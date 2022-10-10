@@ -40,3 +40,30 @@ global.debounce = (callback, timeout = 300) => {
 }
 
 global.preventSubmitBounce = e => e.target.onsubmit = _ => false
+
+import {Alert} from 'bootstrap'
+const alertWrapper = document.getElementById('alert-wrapper')
+let currentAlert = null
+
+const createAlertElement = (type, message) => {
+    const el = document.createElement('div')
+    el.classList.add('fade', 'show', 'alert', `alert-${type}`, 'alert-dismissible')
+    el.role = 'alert'
+    el.innerHTML =
+        `<div>${message}</div><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>`
+    return el
+}
+global.flash = (type, message, duration=2000) => {
+    if (currentAlert) currentAlert.close()
+    let closeTimeout
+    setTimeout(_ => {
+        clearTimeout(closeTimeout)
+        let el = createAlertElement(type, message)
+        alertWrapper.append(el)
+        currentAlert = new Alert(el)
+        closeTimeout = setTimeout(() => {
+            if (currentAlert) currentAlert.close()
+            currentAlert = null
+        }, duration)
+    }, 200)
+}

@@ -20,6 +20,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|DmxFixture whereFollowTimetable($value)
  * @method static Builder|DmxFixture whereId($value)
  * @method static Builder|DmxFixture whereName($value)
+ * @method static Builder|DmxFixture newModelQuery()
+ * @method static Builder|DmxFixture newQuery()
+ * @method static Builder|DmxFixture query()
  * @mixin Eloquent
  */
 class DmxFixture extends Model

@@ -44,7 +44,7 @@ class NewsletterCron extends Command
 
         $events = Event::getEventsForNewsletter();
 
-        $text = Newsletter::getText()->value;
+        $text = Newsletter::text();
 
         $this->info('Sending weekly newsletter to '.$newsletterlist->users->count().' people.');
 

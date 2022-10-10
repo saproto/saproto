@@ -202,7 +202,7 @@
                                 </li>
                             @endif
 
-                            @can('protograhy')
+                            @can('protography')
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route("photo::admin::index") }}" role="button"
                                            aria-haspopup="false" aria-expanded="false">Photo Admin</a>

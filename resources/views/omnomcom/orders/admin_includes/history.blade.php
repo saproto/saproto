@@ -1,7 +1,11 @@
 <div class="card">
 
     <div class="card-header bg-dark text-white">
-        Orderlines on {{ $date }}
+        @if($date)
+            Orderlines on {{ $date }}
+        @elseif($user)
+            Orderlines for {{ $user }}
+        @endif
     </div>
 
     @if(count($orderlines) > 0)
@@ -74,7 +78,7 @@
     @else
         <div class="card-body">
             <p class="text-center mt-3">
-                No orderlines for this date.
+                No orderlines for this {{($date?'date':'user')}}.
             </p>
         </div>
     @endif

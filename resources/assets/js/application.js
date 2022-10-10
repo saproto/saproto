@@ -6,7 +6,7 @@ global.Quagga = require('quagga')
 import './countdown-timer'
 import './utilities'
 import './broto'
-
+import './nightMode'
 // Execute theme JavaScript
 window[config.theme]?.()
 
@@ -200,10 +200,18 @@ productSearchList.forEach(el => new SearchField(el, config.routes.api_search_pro
 const committeeSearchList = Array.from(document.querySelectorAll('.committee-search'))
 committeeSearchList.forEach(el => new SearchField(el, config.routes.api_search_committee))
 
+const achievementSearchList = Array.from(document.querySelectorAll('.achievement-search'))
+achievementSearchList.forEach(el => new SearchField(el, config.routes.api_search_achievement, {
+    optionTemplate: (el, item) => {
+        el.innerHTML = `#${item.id} ${item.name}`
+    }
+}))
+
 // Enable countdown timers
+global.timerList=[]
 import CountdownTimer from "./countdown-timer"
 const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
-countdownList.forEach(el => new CountdownTimer(el))
+countdownList.forEach((el)=>{timerList.push(new CountdownTimer(el))})
 
 // Matomo Analytics
 const _paq = _paq || [];

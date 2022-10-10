@@ -3,11 +3,14 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as SupportResponse;
 use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\View\View;
+use Proto\Models\Achievement;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\Page;
@@ -30,7 +33,7 @@ class SearchController extends Controller
             $presearch_users = $this->getGenericSearch(
                 User::class,
                 $term,
-                Auth::check() && Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
+                Auth::user()->can('board') ? ['id', 'name', 'calling_name', 'utwente_username', 'email'] : ['id', 'name', 'calling_name', 'email']
             );
             foreach ($presearch_users as $user) {
                 if ($user->is_member) {
@@ -122,6 +125,7 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
+        /* @phpstan-ignore-next-line */
         return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
     }
 
@@ -178,10 +182,21 @@ class SearchController extends Controller
     }
 
     /**
-     * @param $model
-     * @param $query
-     * @param $attributes
+     * @param Request $request
      * @return array
+     */
+    public function getAchievementSearch(Request $request)
+    {
+        $search_attributes = ['id', 'name'];
+
+        return $this->getGenericSearch(Achievement::class, $request->get('q'), $search_attributes);
+    }
+
+    /**
+     * @param class-string|Model $model
+     * @param string $query
+     * @param string[] $attributes
+     * @return Collection<Model>|array
      */
     private function getGenericSearch($model, $query, $attributes)
     {
@@ -195,7 +210,8 @@ class SearchController extends Controller
             }
             $check_at_least_one_valid_term = true;
         }
-        if ($check_at_least_one_valid_term == false) {
+
+        if (! $check_at_least_one_valid_term) {
             return [];
         }
 

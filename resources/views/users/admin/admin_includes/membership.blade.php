@@ -25,17 +25,15 @@
                    class="list-group-item">
                     Preview membership card
                 </a>
-                <a href="#" id="print-card" data-id="{{ $user->id }}" class="list-group-item">
-                    Print membership card<br>
-                    @if($user->member->card_printed_on)
-                        (Last printed: {{ $user->member->card_printed_on }})
-                    @else
-                        (Never printed before)
-                    @endif
-                </a>
-                <a href="#" id="print-card-overlay" data-id="{{ $user->id }}" class="list-group-item">
-                    Print opener overlay
-                </a>
+
+                @include('website.layouts.macros.confirm-modal', [
+                    'action' => route("membercard::print", ['id'=>$user->id]),
+                    'method' => 'POST',
+                    'classes' => 'list-group-item',
+                    'text' => 'Print membership card',
+                    'message' => "Do you want to print $user->name's card? <br> Card last printed on: ".($user->member->card_printed_on ?? 'Never printed before' )
+                ])
+
             @else
                 <li class="list-group-item">
                     Not a member

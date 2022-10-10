@@ -42,7 +42,6 @@ class NarrowcastingController extends Controller
     {
         if (! $request->file('image') && ! $request->has('youtube_id')) {
             Session::flash('flash_message', 'Every campaign needs either an image or a video!');
-
             return Redirect::back();
         }
 
@@ -64,15 +63,14 @@ class NarrowcastingController extends Controller
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $video = Youtube::getVideoInfo($youtube_id);
 
+            /* @phpstan-ignore-next-line */
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
-
                 return Redirect::back();
             }
 
             if (! $video->status->embeddable) {
                 Session::flash('flash_message', 'This video is not embeddable and therefore cannot be used on the site!');
-
                 return Redirect::back();
             }
 
@@ -93,13 +91,9 @@ class NarrowcastingController extends Controller
      */
     public function edit($id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
-        if ($narrowcasting) {
-            return view('narrowcasting.edit', ['item' => $narrowcasting]);
-        } else {
-            abort(404);
-        }
+        return view('narrowcasting.edit', ['item' => $narrowcasting]);
     }
 
     /**
@@ -110,11 +104,7 @@ class NarrowcastingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
-
-        if (! $narrowcasting) {
-            abort(404);
-        }
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
         $narrowcasting->name = $request->name;
         $narrowcasting->campaign_start = strtotime($request->campaign_start);
@@ -133,9 +123,9 @@ class NarrowcastingController extends Controller
         if ($request->has('youtube_id') && strlen($youtube_id) > 0) {
             $video = Youtube::getVideoInfo($youtube_id);
 
+            /* @phpstan-ignore-next-line */
             if (! $video) {
                 Session::flash('flash_message', 'This is an invalid video ID!');
-
                 return Redirect::back();
             }
 
@@ -159,11 +149,7 @@ class NarrowcastingController extends Controller
      */
     public function destroy($id)
     {
-        $narrowcasting = NarrowcastingItem::find($id);
-
-        if (! $narrowcasting) {
-            abort(404);
-        }
+        $narrowcasting = NarrowcastingItem::findOrFail($id);
 
         Session::flash('flash_message', "Your campaign '".$narrowcasting->name."' has been deleted.");
         $narrowcasting->delete();
@@ -182,7 +168,6 @@ class NarrowcastingController extends Controller
         }
 
         Session::flash('flash_message', 'All finished campaigns have been deleted.');
-
         return Redirect::route('narrowcasting::list');
     }
 

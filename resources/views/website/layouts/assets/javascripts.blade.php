@@ -6,6 +6,7 @@
             api_search_event: "{{ route('api::search::event') }}",
             api_search_product: "{{ route('api::search::product') }}",
             api_search_committee: "{{ route('api::search::committee') }}",
+            api_search_achievement: "{{ route('api::search::achievement') }}",
             api_omnomcom_stock: "{{ route('api::omnomcom::stock') }}"
         },
         analytics_url: "{{ config('proto.analytics_url') }}",
