@@ -28,13 +28,13 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This is a featured activity!"></i>
             @endif
             @if($event->activity && Auth::check() && $event->activity->isParticipating(Auth::user()))
-                    @if($event->activity->isOnBackupList(Auth::user()))
-                        <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
-                    @else
-                        <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
-                           data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
-                    @endif
+                @if($event->activity->isOnBackupList(Auth::user()))
+                    <i class="fas fa-check text-warning fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are on the backuplist!"></i>
+                @else
+                    <i class="fas fa-check text-primary fa-fw" aria-hidden="true"
+                       data-bs-toggle="tooltip" data-bs-placement="top" title="You are participating!"></i>
+                @endif
                 @if($event->activity->isHelping(Auth::user()))
                     <i class="fas fa-life-ring fa-fw text-danger" aria-hidden="true"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="You are helping!"></i>
@@ -63,7 +63,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
 
                 <span>
                     <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-            @if (isset($include_year))
+                    @if (isset($include_year))
                         {{ $event->generateTimespanText('D j M Y, H:i', 'H:i', '-') }}
                     @else
                         {{ $event->generateTimespanText('D j M, H:i', 'H:i', '-') }}
@@ -86,21 +86,29 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                 </span>
             @endif
 
-                @if($event->activity)
-                    <div class= "d-flex justify-content-between">
-                        @if($event->activity->users->count()>0)
-                            <span>
-                    <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
-                    {{$event->activity->users->count()}}
-                </span>
+                <div class= "d-flex justify-content-between">
+                    <span>
+                        @if($event->activity && $event->activity->users->count() > 0)
+                            <i class="fas fa-user-alt fa-fw" aria-hidden="true"></i>
+                            {{ $event->activity->users->count() }}
                         @endif
-                        @if($event->activity->canSubscribe())
+                    </span>
+                    @if($event->activity)
+                        @if(! $event->activity->canSubscribeBackup())
                             <span>
-                        <i class="fas fa-lock-open"></i>
+                                <i class="fas fa-lock me-1"></i> closed
+                            </span>
+                        @elseif(! $event->activity->canSubscribe())
+                            <span>
+                                <i class="fas fa-list me-1"></i> backup
+                            </span>
+                        @endif
+                    @else
+                        <span>
+                            <i class="far fa-circle-xmark me-1"></i> no signup
                         </span>
-                        @endif
-                    </div>
-                @endif
+                    @endif
+                </div>
 
         </div>
 
