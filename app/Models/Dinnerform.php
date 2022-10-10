@@ -94,8 +94,8 @@ class Dinnerform extends Model
                 $total += $dinnerOrderline->price;
             }
             return $total;
-        }else{
-         return $this->totalAmount();
+        } else {
+            return $this->totalAmount();
         }
     }
 

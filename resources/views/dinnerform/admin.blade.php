@@ -79,14 +79,14 @@
                                     <span class="text-muted"> {{ $order->user->id }}</span>
                                 </td>
                                 <td class="align-middle">{{ $order->description }}</td>
-                                <td class="align-middle"> €{{ $order->price }} </td>
+                                <td class="align-middle"> €{{ $order->price() }} </td>
                                 <td class="align-middle">
                                     @if($order->helper)
                                      <i class="fas fa-check text-info" aria-hidden="true"></i>
                                     @endif
                                 </td>
                                 <td>
-                                    €{{$order->price}}
+                                    €{{$order->price()}}
                                 </td>
                                 <td class="text-start align-middle">
                                     @if(!$order->closed)
