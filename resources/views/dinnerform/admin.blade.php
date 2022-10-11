@@ -86,7 +86,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    €{{$order->price}}
+                                    €{{$order->price()}}
                                 </td>
                                 <td class="text-start align-middle">
                                     @if(!$order->closed)
