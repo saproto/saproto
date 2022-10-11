@@ -48,7 +48,7 @@
                             <span class="input-group-text">&euro;</span>
                         </div>
                         <input type="text" class="form-control" id="price" name="price"
-                               placeholder="0" value="{{ number_format($product->price, 2) ?? '' }}" required>
+                               placeholder="0" value="{{ $product ? number_format($product->price, 2) : '' }}" required>
                     </div>
 
                 </div>
