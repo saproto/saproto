@@ -42,7 +42,7 @@ class DinnerformOrderline extends Model
     }
 
     /** @return float Price of orderline - possible discount */
-    public function getPriceAttribute() {
+    public function price() {
         $price = $this->attributes['price'];
         if($this->helper && $this->dinnerform->discount){
             $discounted = $price - $this->dinnerform->discount;

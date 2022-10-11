@@ -172,7 +172,7 @@ class DinnerformController extends Controller
             $product->buyForUser(
                 $dinnerformOrderline->user,
                 1,
-                $dinnerformOrderline->price,
+                $dinnerformOrderline->price(),
                 null,
                 null,
                 sprintf('Dinnerform from %s, ordered at '.$dinnerform->restaurant, date('d-m-Y', strtotime($dinnerform->end))),
