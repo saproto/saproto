@@ -37,8 +37,8 @@
 
                 @if ($announcement->is_dismissable)
                     <span class="float-end">
-                       <a href="{{ route('announcement::dismiss', ['id' => $announcement->id]) }}">
-                           <i class="fas fa-times-circle" aria-hidden="true"></i>
+                       <a class="text-black" href="{{ route('announcement::dismiss', ['id' => $announcement->id]) }}">
+                           <i class="fas fa-xmark-circle" aria-hidden="true"></i>
                        </a>
                     </span>
                 @endif
