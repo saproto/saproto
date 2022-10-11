@@ -65,7 +65,21 @@
 
         @endif
 
-        @include('website.layouts.macros.recentalbums', ['n' => 4])
+        @if(Proto\Models\Newsletter::showTextOnHomepage())
+
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
+                </div>
+                <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
+                    {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue reading</a>
+                </div>
+            </div>
+
+        @endif
 
         @if(isset($videos) && count($videos) > 0)
 
@@ -95,21 +109,7 @@
 
 @section('right-column')
 
-    @if(Proto\Models\Newsletter::showTextOnHomepage())
-
-        <div class="card mb-3">
-            <div class="card-header bg-dark text-white">
-                <i class="fas fa-bullhorn fa-fw me-2"></i> Weekly update
-            </div>
-            <div class="card-body overflow-hidden" style="height: calc(100vh - 250px)">
-                {!! Markdown::convertToHtml(Proto\Models\Newsletter::text()) !!}
-            </div>
-            <div class="card-footer">
-                <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue reading</a>
-            </div>
-        </div>
-
-    @endif
+    @include('website.layouts.macros.recentalbums', ['n' => 4])
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
