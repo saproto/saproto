@@ -91,7 +91,7 @@ class Dinnerform extends Model
         if($this->discount) {
             $total = 0;
             foreach($this->orderlines()->get() as $dinnerOrderline){
-                $total += $dinnerOrderline->price;
+                $total += $dinnerOrderline->price();
             }
             return $total;
         } else {
