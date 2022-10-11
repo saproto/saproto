@@ -33,7 +33,7 @@
         @else
 
             <div role="alert"
-                 class="alert alert-{{ $announcement->bootstrap_style() }}">
+                 class="alert alert-{{ $announcement->bootstrap_style }}">
 
                 @if ($announcement->is_dismissable)
                     <span class="float-end">
