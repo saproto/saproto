@@ -44,7 +44,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">&euro;</span>
                                 </div>
-                                <input type="number" min="0" class="form-control" id="max" name="max">
+                                <input type="number" min="0" class="form-control" id="max" name="max" required>
                                 <span class="input-group-text">,<sup>00</sup></span>
                             </div>
                         </div>
