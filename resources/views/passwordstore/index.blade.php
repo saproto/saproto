@@ -191,7 +191,16 @@
             const type = el.getAttribute('data-type')
             el.addEventListener('click', _ => {
                 navigator.clipboard.writeText(copy)
-                flash('success', `"${description}" ${type} copied!`)
+                const tooltip = new Tooltip(el, {
+                    title: 'Copied!',
+                    placement: 'left',
+                    trigger: 'manual',
+                })
+                tooltip.show()
+                el.addEventListener('hidden.bs.tooltip', _ => {
+                    tooltip.dispose()
+                })
+                setTimeout(_ => {tooltip.hide()}, 1000)
             })
         })
     </script>

@@ -25,6 +25,7 @@ if (discordOnlineCount) {
 
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
+global.Tooltip = Tooltip
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 if (tooltipTriggerList.length) tooltipTriggerList.forEach(el => new Tooltip(el, {container: el.parentNode, boundary: document.body}))
 
