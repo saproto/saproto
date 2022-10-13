@@ -88,6 +88,7 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let id = {{$photo->id}};
+        const showOnlyLiked= {{isset($liked)}};
         const likeBtn = document.getElementById('likeBtn');
         const albumUrl = document.getElementById('albumUrl');
         const downloadUrl = document.getElementById('download');
@@ -109,7 +110,11 @@
         })
 
         function swapPhoto(next) {
-            var route = next ? '{{ route('api::photos::getNextPhoto', ['id' => ':id']) }}' : '{{ route('api::photos::getPreviousPhoto', ['id' => ':id']) }}';
+            var route;
+            if(showOnlyLiked){route = next ? '{{ route('api::photos::getNextPhoto', ['id' => ':id']) }}' : '{{ route('api::photos::getPreviousPhoto', ['id' => ':id']) }}';}
+            else {
+                route = next ? '{{ route('api::photos::getNextLikedPhoto', ['id' => ':id']) }}' : '{{ route('api::photos::getPreviousLikedPhoto', ['id' => ':id']) }}';
+            }
             get(route.replace(':id', id), null, {parse: true})
                 .then((nextPhoto) => {
                     if (nextPhoto.hasOwnProperty('message')) {

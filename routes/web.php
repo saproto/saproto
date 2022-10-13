@@ -645,6 +645,12 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'photos', 'as' => 'photo::'], function () {
         Route::get('', ['as' => 'albums', 'uses' => 'PhotoController@index']);
         Route::get('slideshow', ['as' => 'slideshow', 'uses' => 'PhotoController@slideshow']);
+        Route::get('liked', ['as' => 'liked', 'uses' => 'likedPicturesController@show']);
+
+        Route::group(['prefix' => 'liked', 'as' => 'liked::'], function () {
+            Route::get('', ['as' => 'list', 'uses' => 'likedPicturesController@show']);
+            Route::get('/{id}', ['as' => 'likedPhoto', 'uses' => 'likedPicturesController@photo']);
+        });
 
         Route::group(['prefix' => '{id}', 'as' => 'album::'], function () {
             Route::get('', ['as' => 'list', 'uses' => 'PhotoController@show']);
