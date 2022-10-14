@@ -43,7 +43,7 @@ class PhotoController extends Controller
     public function photo($id)
     {
         $photo = Photo::findOrFail($id);
-        return view('photos.photopage', ['photo' => $photo]);
+        return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousPhoto', ['id' => ':id'])]);
     }
 
     /**
