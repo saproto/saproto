@@ -5,11 +5,8 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Proto\Models\Photo;
-use Proto\Models\PhotoAlbum;
-use Proto\Models\User;
 
 class LikedPicturesController extends Controller
 {
@@ -54,7 +51,7 @@ class LikedPicturesController extends Controller
     /** @return JsonResponse */
     public function getPreviousPhoto($id)
     {
-        return $this->getAdjacentResponse($id, true);
+        return $this->getAdjacentResponse($id, false);
     }
 
     /**
@@ -73,6 +70,7 @@ class LikedPicturesController extends Controller
                 'largeUrl' => $adjacent->getLargeUrl(),
                 'tinyUrl' => $adjacent->getTinyUrl(),
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
+                'albumTitle'=>$photo->album->name,
                 'likes'=>$adjacent->getLikes(),
                 'likedByUser'=>$adjacent->likedByUser(Auth::user()),
                 'private' => $adjacent->private,

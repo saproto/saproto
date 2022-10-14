@@ -8,6 +8,11 @@
             filter: blur(0em);
             transition: filter 0.1s;
         }
+        .spinner-border {
+            width: 100px;
+            height: 100px;
+            border: 1em;
+        }
     </style>
 </head>
 @extends('website.layouts.redesign.generic')
@@ -27,44 +32,49 @@
                 <div class="card-header bg-dark text-end">
 
                     <a id="albumUrl"
-                       href="{{route("photo::album::list", ["id"=> $photo->album_id])."?page=".$photo->getAlbumPageNumber(24)}}"
+                       href=""
                        class="btn btn-success float-start me-3">
-                        <i class="fas fa-images me-2"></i> {{ $photo->album->name }}
+                        <i class="fas fa-images me-2"></i><span id="albumTitle"></span>
                     </a>
 
-                    <a id="download" href="{{$photo->getOriginalUrl()}}" download
+                    <a id="download" href="" download
                        class="btn btn-success float-start me-3">
                         <i class="fas fa-download me-2"></i> high-res
                     </a>
 
 
                     <button id="previousBtn"
-                            class="btn btn-dark me-3 {{$photo->getPreviousPhoto(Auth::user()) != null?'' : 'd-none'}}">
+                            class="btn btn-dark me-3 d-none">
                         <i class="fas fa-arrow-left"></i>
                     </button>
 
 
-                    <button id="likeBtn" class="btn btn-info me-3 {{Auth::user() != null?'' : 'd-none'}}">
-                        <i class="{{Auth::user()&&$photo->likedByUser(Auth::user())?'fas':'far'}} fa-heart"></i><span> {{ $photo->getLikes() }}</span>
+                    <button id="likeBtn" class="btn btn-info me-3">
+                        <i class="far fa-heart"></i><span></span>
                     </button>
 
 
-                        <button id="privateIcon" class="btn btn-info me-3 {{$photo->private?'' : 'd-none'}}" data-bs-toggle="tooltip"
+                        <button id="privateIcon" class="btn btn-info me-3 d-none" data-bs-toggle="tooltip"
                            data-bs-placement="top" title="This photo is only visible to members.">
                             <i class="fas fa-eye-slash p-1"></i>
                         </button>
 
                     <button id="nextBtn"
-                            class="btn btn-dark {{$photo->getNextPhoto(Auth::user()) != null?'' : 'd-none'}}">
+                            class="btn btn-dark d-none">
                     <i class="fas fa-arrow-right"></i>
                     </button>
 
                 </div>
-                    <img id="photo" class="card-img-bottom {{$photo->mayViewPhoto(Auth::user())?'' : 'd-none'}}" src="{!!$photo->mayViewPhoto(Auth::user())?$photo->getTinyUrl():''!!}"
-                         data-src="{!!$photo->mayViewPhoto(Auth::user())?$photo->getLargeUrl():''!!}" style="height: 75vh; object-fit:contain">
+                    <img id="photo" class="card-img-bottom  d-none" src=""
+                         data-src="" style="height: 75vh; object-fit:contain">
 
-                <div id="nonMemberText" class="d-flex justify-content-center mb-3 mt-3 {{$photo->mayViewPhoto(Auth::user())? 'd-none':''}}">
+                <div id="nonMemberText" class="d-flex justify-content-center mb-3 mt-3 d-none">
                         This photo is only visible to members!
+                </div>
+                <div id="spinner" class="d-flex text-center">
+                    <div class="spinner-border text-primary" style="width:60vh; height:60vh;" role="status">
+                        <span class="sr-only">Loading...</span>
+                </div>
                 </div>
 
             </div>
@@ -90,56 +100,64 @@
         let id = {{$photo->id}};
         const likeBtn = document.getElementById('likeBtn');
         const albumUrl = document.getElementById('albumUrl');
+        const albumTitle = document.getElementById('albumTitle');
         const downloadUrl = document.getElementById('download');
         const nextBtn = document.getElementById('nextBtn');
         const privateIcon = document.getElementById('privateIcon');
         const previousBtn = document.getElementById('previousBtn');
         const photoElement = document.getElementById('photo');
         const nonMemberText = document.getElementById('nonMemberText');
+        const spinner = document.getElementById('spinner');
         likeBtn.addEventListener('click', _ => {
             switchLike(likeBtn)
         })
         nextBtn.addEventListener('click', _ => {
-            swapPhoto(true);
+            swapPhoto(true)
         })
         previousBtn.addEventListener('click', _ => {
             if (!previousBtn.classList.contains('d-none')) {
-                swapPhoto(false);
+                swapPhoto(false)
             }
         })
 
-        function swapPhoto(next) {
-            let route = next ? '{{$nextRoute}}' : '{{$previousRoute}}';
-            console.log(route);
-            route=route.replace(':id', id);
-            console.log(route);
+        function swapPhoto(next){
+            next?loadPhoto('{{$nextRoute}}'):loadPhoto('{{$previousRoute}}')
+        }
+
+        function loadPhoto(route) {
+            console.log(route)
+            route=route.replace(':id', id)
+            console.log(route)
             get(route, null, {parse: true})
                 .then((nextPhoto) => {
                     if (nextPhoto.hasOwnProperty('message')) {
-                        throw nextPhoto.message;
+                        throw nextPhoto.message
                     }
                     id = nextPhoto.id
                     console.log(nextPhoto)
                     photoElement.setAttribute('data-src', nextPhoto.largeUrl)
                     photoElement.setAttribute('src', nextPhoto.tinyUrl)
-                    photoElement.classList.remove('d-none');
+                    photoElement.classList.remove('d-none')
                     const icon = likeBtn.children[0]
                     const likes = likeBtn.children[1]
                     nextPhoto.likedByUser ? icon.classList.replace('far', 'fas') : icon.classList.replace('fas', 'far')
                     nextPhoto.private ? privateIcon.classList.remove('d-none') : privateIcon.classList.add('d-none')
                     nextPhoto.hasNextPhoto ? nextBtn.classList.remove('d-none') : nextBtn.classList.add('d-none');
-                    nextPhoto.hasPreviousPhoto ? previousBtn.classList.remove('d-none') : previousBtn.classList.add('d-none');
-                    likes.innerHTML = nextPhoto.likes;
-                    albumUrl.href = nextPhoto.albumUrl;
-                    downloadUrl.href = nextPhoto.originalUrl;
-                    nonMemberText.classList.add('d-none');
-                    window.history.replaceState(document.title, '', id);
+                    nextPhoto.hasPreviousPhoto ? previousBtn.classList.remove('d-none') : previousBtn.classList.add('d-none')
+                    likes.innerHTML = nextPhoto.likes
+                    albumUrl.href = nextPhoto.albumUrl
+                    albumTitle.innerText=nextPhoto.albumTitle
+                    downloadUrl.href = nextPhoto.originalUrl
+                    nonMemberText.classList.add('d-none')
+                    window.history.replaceState(document.title, '', id)
+                    spinner.classList.add('d-none')
                 })
                 .catch(err => {
                     console.error(err)
                     window.alert('Something went wrong getting the photo. '.concat(err))
                 })
         }
+        {{--loadPhoto('{{route("api::photos::getPhoto", ['id'=>':id']) }}')--}}
 
         function switchLike(outputElement) {
             get('{{ route('photo::like', ['id' => ':id']) }}'.replace(':id', id), null, {parse: true})
@@ -147,7 +165,7 @@
                     const icon = outputElement.children[0]
                     const likes = outputElement.children[1]
                     data.likedByUser ? icon.classList.replace('far', 'fas') : icon.classList.replace('fas', 'far')
-                    likes.innerHTML = data.likes;
+                    likes.innerHTML = data.likes
                 })
                 .catch(err => {
                     console.error(err)
@@ -162,40 +180,40 @@
             switch (e.key) {
                 case 'ArrowLeft':
                     if (!previousBtn.classList.contains('d-none')) {
-                        swapPhoto(false);
+                        swapPhoto(false)
                     }
-                    break;
+                    break
                 case 'ArrowRight':
                     if (!nextBtn.classList.contains('d-none')) {
-                        swapPhoto(true);
+                        swapPhoto(true)
                     }
-                    break;
+                    break
                 @if (Auth::check())
                 case 'ArrowUp':
                     switchLike(likeBtn);
-                    break;
+                    break
                 @endif
                 @if (Auth::check())
                 case 'ArrowDown':
                     document.getElementById('download').click();
-                    break;
+                    break
                     @endif
             }
         })
 
         photoElement.onload = () => {
-            changeToLargeImage();
+            changeToLargeImage()
         };
 
         if(photoElement.complete){
-            changeToLargeImage();
+            changeToLargeImage()
         }
 
         function changeToLargeImage(){
             if (photoElement.hasAttribute('data-src')) {
-                photoElement.setAttribute('src', photoElement.getAttribute('data-src'));
-                photoElement.removeAttribute('data-src');
-                photoElement.style["-webkit-filter"] = "blur(0px)";
+                photoElement.setAttribute('src', photoElement.getAttribute('data-src'))
+                photoElement.removeAttribute('data-src')
+                photoElement.style["-webkit-filter"] = "blur(0px)"
             }
         }
     </script>

@@ -48,35 +48,39 @@ class PhotoController extends Controller
 
     /**
      * @param int $id
-     * @param bool $next
      * @return JsonResponse
      */
-    private function getAdjacentPhoto($id, $next) {
-        $photo = Photo::findOrFail($id);
-        $adjacent = $photo->getAdjacentPhoto($next, Auth::user());
-        if($adjacent) {
+    public function getPhoto($id) {
+        $photo = Photo::find($id);
+        if(!$photo) return response()->json(['error' => 'photo not found.'], 404);
+
             return response()->JSON([
-                'id' => $adjacent->id,
-                'originalUrl' => $adjacent->getOriginalUrl(),
-                'largeUrl' => $adjacent->getLargeUrl(),
-                'tinyUrl' => $adjacent->getTinyUrl(),
+                'id' => $photo->id,
+                'originalUrl' => $photo->getOriginalUrl(),
+                'largeUrl' => $photo->getLargeUrl(),
+                'tinyUrl' => $photo->getTinyUrl(),
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
-                'likes'=>$adjacent->getLikes(),
-                'likedByUser'=>$adjacent->likedByUser(Auth::user()),
-                'private' => $adjacent->private,
-                'hasNextPhoto'=>$adjacent->getAdjacentPhoto(true, Auth::user()) !== null,
-                'hasPreviousPhoto'=>$adjacent->getAdjacentPhoto(false, Auth::user()) !== null,
+                'albumTitle'=>$photo->album->name,
+                'likes'=>$photo->getLikes(),
+                'likedByUser'=>$photo->likedByUser(Auth::user()),
+                'private' => $photo->private,
+                'hasNextPhoto'=>$photo->getAdjacentPhoto(true, Auth::user()) !== null,
+                'hasPreviousPhoto'=>$photo->getAdjacentPhoto(false, Auth::user()) !== null,
             ]);
-        }
-        return response()->json(['error' => 'adjacent photo not found.'], 404);
     }
 
-    public function getNextPhoto($id) {
-        return $this->getAdjacentPhoto($id, true);
+    public function getNextPhoto($id)
+    {
+        $photo = Photo::findOrFail($id);
+        $adjacent = $photo->getAdjacentPhoto(true, Auth::user());
+        return $this->getPhoto($adjacent->id);
     }
 
-    public function getPreviousPhoto($id) {
-        return $this->getAdjacentPhoto($id, false);
+    public function getPreviousPhoto($id)
+    {
+        $photo = Photo::findOrFail($id);
+        $adjacent = $photo->getAdjacentPhoto(false, Auth::user());
+        return $this->getPhoto($adjacent->id);
     }
 
     /** @return View */

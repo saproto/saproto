@@ -56,6 +56,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::group(['middleware' => ['web']], function () {
             Route::get('photos', ['as' => 'albums', 'uses' => 'PhotoController@apiIndex']);
             Route::get('photos/{id?}/', ['as' => 'albumList', 'uses' => 'PhotoController@apiShow']);
+            Route::get('photos/get_photo/{id}', ['as' => 'getPhoto', 'uses' => 'PhotoController@getPhoto']);
             Route::get('photos/get_next_photo/{id}', ['as' => 'getNextPhoto', 'uses' => 'PhotoController@getNextPhoto']);
             Route::get('photos/get_previous_photo/{id}', ['as' => 'getPreviousPhoto', 'uses' => 'PhotoController@getPreviousPhoto']);
 
