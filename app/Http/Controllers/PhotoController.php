@@ -42,7 +42,7 @@ class PhotoController extends Controller
      */
     public function photo($id)
     {
-        $photo = Photo::findOrFail($id);
+        $photo= (new PhotoController)->getPhoto($id)->getData();
         return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousPhoto', ['id' => ':id'])]);
     }
 
@@ -53,7 +53,7 @@ class PhotoController extends Controller
     public function getPhoto($id) {
         $photo = Photo::find($id);
         if(!$photo) return response()->json(['error' => 'photo not found.'], 404);
-
+        if(!$photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'User not allowed to see this photo!'], 403);
             return response()->JSON([
                 'id' => $photo->id,
                 'originalUrl' => $photo->getOriginalUrl(),

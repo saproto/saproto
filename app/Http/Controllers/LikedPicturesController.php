@@ -38,7 +38,7 @@ class LikedPicturesController extends Controller
      */
     public function photo($id)
     {
-        $photo = Photo::findOrFail($id);
+        $photo= (new PhotoController)->getPhoto($id)->getData();
         return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextLikedPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousLikedPhoto', ['id' => ':id'])]);
     }
 
