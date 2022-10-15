@@ -17,6 +17,7 @@
     <div class="row justify-content-center">
         <div class="col-auto">
             <div class="card mb-3">
+                @if(!isset($photo->error))
                 <div class="card-header bg-dark text-end">
                     <a id="albumUrl"
                        href="{{$photo->albumUrl}}"
@@ -45,9 +46,14 @@
                 </div>
                 <img id="photo" class="card-img-bottom" src="{{$photo->tinyUrl}}"
                      data-src="{{$photo->largeUrl}}" style="height: 75vh; object-fit:contain">
-                <div id="nonMemberText" class="d-flex justify-content-center mb-3 mt-3 {{!isset($photo->error)? 'd-none':''}}">
-                    This photo is only visible to members!
-                </div>
+                @endif
+
+                    <div id="nonMemberText" class=" {{!isset($photo->error)??'d-none'}}d-flex justify-content-center mb-3 mt-3">
+                        @if(isset($photo->error))
+                            {{$photo->error}}
+                        @endif
+                    </div>
+
             </div>
             <div class="card mb-3">
                 <div class="card-body text-center">

@@ -52,8 +52,8 @@ class PhotoController extends Controller
      */
     public function getPhoto($id) {
         $photo = Photo::find($id);
-        if(!$photo) return response()->json(['error' => 'photo not found.'], 404);
-        if(!$photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'User not allowed to see this photo!'], 403);
+        if(!$photo) return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
+        if(!$photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
             return response()->JSON([
                 'id' => $photo->id,
                 'originalUrl' => $photo->getOriginalUrl(),

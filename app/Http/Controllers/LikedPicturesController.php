@@ -20,8 +20,8 @@ class LikedPicturesController extends Controller
         })->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->paginate(24);
 
         $album=new \stdClass();
-        $album->title='my liked photos!';
-        $album->name='my liked photos!';
+        $album->title='My liked photos';
+        $album->name='My liked photos';
         $album->date_taken=\Carbon::today()->timestamp;
         $album->event=null;
 
