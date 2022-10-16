@@ -7,6 +7,7 @@ use Proto\Http\Controllers\PhotoAdminController;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Illuminate\Http\Request;
+use Proto\Models\PhotoLikes;
 
 class PhotoSeeder extends Seeder
 {
@@ -47,6 +48,14 @@ class PhotoSeeder extends Seeder
                 $album->thumb_id=$album->items->first()->id;
                 $album->save();
 
+                if(mt_rand(1, 2) > 1){
+                    new PhotoLikes([
+                        'user_id' => 1,
+                        'photo_id' => $photo->id,
+                    ]);
+                }
+                
+                
                 echo "\e[33mCreating:\e[0m  ".$henk.'/'.$n." Photos\r";
             }
         }
