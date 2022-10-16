@@ -88,10 +88,9 @@
 
                                     <td class="text-center">
                                         @if($password->username != null)
-                                            <a class="passwordmanager__copy"
-                                               data-description="{{$password->description}}"
-                                               data-type="username"
-                                               data-copy="{{ Crypt::decrypt($password->username) }}">
+                                            <a id="{{ $password->description }}-username" class="passwordmanager__copy"
+                                               data-copy="{{ Crypt::decrypt($password->username) }}"
+                                               data-bs-toggle="tooltip" data-bs-trigger="manual" title="Copied!">
                                                 <i class="fas fa-user me-1"></i>
                                             </a>
                                         @endif
@@ -99,10 +98,9 @@
 
                                     <td class="text-center">
                                         @if($password->password != null)
-                                            <a class="passwordmanager__copy"
-                                               data-description="{{$password->description}}"
-                                               data-type="password"
-                                               data-copy="{{ Crypt::decrypt($password->password) }}">
+                                            <a id="{{ $password->description }}-password" class="passwordmanager__copy"
+                                               data-copy="{{ Crypt::decrypt($password->password) }}"
+                                               data-bs-toggle="tooltip" data-bs-trigger="manual" title="Copied!">
                                                 <i class="fas fa-key me-1"></i>
                                             </a>
                                         @endif
@@ -111,7 +109,7 @@
                                     <td class="text-center">
                                         @if($password->note)
                                             <a class="passwordmanager__shownote" data-bs-toggle="modal"
-                                                  data-bs-target="#passwordmodal-{{ $password->id }}">
+                                               data-bs-target="#passwordmodal-{{ $password->id }}">
                                                 <i class="fas fa-sticky-note"></i>
                                             </a>
                                         @endif
@@ -187,20 +185,11 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll(".passwordmanager__copy").forEach(el => {
             const copy = el.getAttribute('data-copy')
-            const description = el.getAttribute('data-description')
-            const type = el.getAttribute('data-type')
             el.addEventListener('click', _ => {
                 navigator.clipboard.writeText(copy)
-                const tooltip = new Tooltip(el, {
-                    title: 'Copied!',
-                    placement: 'left',
-                    trigger: 'manual',
-                })
+                let tooltip = tooltips[el.id]
                 tooltip.show()
-                el.addEventListener('hidden.bs.tooltip', _ => {
-                    tooltip.dispose()
-                })
-                setTimeout(_ => {tooltip.hide()}, 1000)
+                setTimeout(_ => { tooltip.hide() }, 1000)
             })
         })
     </script>
