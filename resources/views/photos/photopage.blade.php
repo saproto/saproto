@@ -80,7 +80,6 @@
         const previousBtn = document.getElementById('previousBtn');
         const photoElement = document.getElementById('photo');
         const errorText = document.getElementById('errorText');
-        const spinner = document.getElementById('spinner');
         likeBtn.addEventListener('click', _ => {
             switchLike(likeBtn)
         })
