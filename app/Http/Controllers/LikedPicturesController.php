@@ -19,11 +19,11 @@ class LikedPicturesController extends Controller
             $query->where('user_id', Auth::user()->id);
         })->orderBy('date_taken', 'asc')->orderBy('id', 'asc')->paginate(24);
 
-        $album=new \stdClass();
-        $album->title='My liked photos';
-        $album->name='My liked photos';
-        $album->date_taken=\Carbon::today()->timestamp;
-        $album->event=null;
+        $album = new \stdClass();
+        $album->title = 'My liked photos';
+        $album->name = 'My liked photos';
+        $album->date_taken = \Carbon::today()->timestamp;
+        $album->event = null;
 
         if ($likedPhotos->count()) {
             return view('photos.album', ['album' => $album, 'photos' => $likedPhotos, 'liked'=>true]);
@@ -38,7 +38,7 @@ class LikedPicturesController extends Controller
      */
     public function photo($id)
     {
-        $photo= (new PhotoController)->getPhoto($id)->getData();
+        $photo = (new PhotoController())->getPhoto($id)->getData();
         return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextLikedPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousLikedPhoto', ['id' => ':id'])]);
     }
 
@@ -59,9 +59,9 @@ class LikedPicturesController extends Controller
      * @param bool $next
      * @return JsonResponse
      */
-    private function getAdjacentResponse($id, $next)    {
+    private function getAdjacentResponse($id, $next) {
         $photo = Photo::findOrFail($id);
-        $adjacent= $this->getAdjacentPhoto($photo, $next);
+        $adjacent = $this->getAdjacentPhoto($photo, $next);
 
         if($adjacent) {
             return response()->JSON([
@@ -74,14 +74,14 @@ class LikedPicturesController extends Controller
                 'likes'=>$adjacent->getLikes(),
                 'likedByUser'=>$adjacent->likedByUser(Auth::user()),
                 'private' => $adjacent->private,
-                'hasNextPhoto'=> (bool)$this->getAdjacentPhoto($adjacent, true),
-                'hasPreviousPhoto'=>(bool)$this->getAdjacentPhoto($adjacent, false),
+                'hasNextPhoto'=> (bool) $this->getAdjacentPhoto($adjacent, true),
+                'hasPreviousPhoto'=>(bool) $this->getAdjacentPhoto($adjacent, false),
             ]);
         }
         return response()->json(['message' => 'adjacent photo not found.'], 404);
     }
 
-    private function getAdjacentPhoto($photo, $next){
+    private function getAdjacentPhoto($photo, $next) {
         if ($next) {
             $ord = 'ASC';
             $comp = '>';

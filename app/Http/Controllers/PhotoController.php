@@ -42,7 +42,7 @@ class PhotoController extends Controller
      */
     public function photo($id)
     {
-        $photo= (new PhotoController)->getPhoto($id)->getData();
+        $photo = (new PhotoController())->getPhoto($id)->getData();
         return view('photos.photopage', ['photo' => $photo, 'nextRoute'=> route('api::photos::getNextPhoto', ['id' => ':id']), 'previousRoute'=>route('api::photos::getPreviousPhoto', ['id' => ':id'])]);
     }
 
@@ -52,8 +52,8 @@ class PhotoController extends Controller
      */
     public function getPhoto($id) {
         $photo = Photo::find($id);
-        if(!$photo) return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
-        if(!$photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
+        if(! $photo) return response()->json(['error' => 'Photo not found.', 'id'=>$id], 404);
+        if(! $photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
             return response()->JSON([
                 'id' => $photo->id,
                 'originalUrl' => $photo->getOriginalUrl(),
@@ -121,7 +121,7 @@ class PhotoController extends Controller
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');
         $albums = $albums->where('published', '=', $published);
-        if(!(Auth::check()&&Auth::user()->member()!==null)){$albums=$albums->where('private', false);}
+        if(! (Auth::check() && Auth::user()->member() !== null)){$albums = $albums->where('private', false); }
         return $albums->get();
     }
 
