@@ -105,6 +105,16 @@ docker compose exec app /bin/bash
 php artisan migrate:fresh --seed
 ```
 
+### Code completion, style and static analysis
+##### IDE-helper
+When writing code it is useful to have tools such as code completion and linting in an integrated development environment (IDE). As mentioned before [PHPStorm](https://www.jetbrains.com/phpstorm/) is the recommended IDE for this project. To add additional code completion for Laravel you can run `composer ide-helper` in the docker container to let [Laravel-IDE-Helper](https://github.com/barryvdh/laravel-ide-helper) generate an `_ide_helper.php` file which tells PHPStorm what certain classes and function are, so it can perform proper code completion and show documentation.
+
+##### PHP-CS-Fixer
+Run `composer fix` in the docker container to fix stylistic errors in your code using [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer). This will also be done automatically when creating a pull-request or pushing to a branch with an open pull-request.
+
+##### Larastan
+There is also the option for static analysis of your code. Run `composer analyse` in the docker container to let [Larastan](https://github.com/nunomaduro/larastan) find any potential bugs in your code. 
+
 ### Debugging
 Xdebug has been added to the php runner in docker to aid you while debugging the website.
 Xdebug enables breakpoints and step debugging which can easily be controlled from your IDE.
