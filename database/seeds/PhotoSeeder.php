@@ -46,7 +46,7 @@ class PhotoSeeder extends Seeder
                 $album->save();
 
                 if(mt_rand(1, 2) > 1){
-                    $like=new PhotoLikes([
+                    $like = new PhotoLikes([
                         'user_id' => 1,
                         'photo_id' => $photo->id,
                     ]);
