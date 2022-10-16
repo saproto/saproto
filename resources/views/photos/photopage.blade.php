@@ -97,16 +97,13 @@
         }
 
         function loadPhoto(route) {
-            console.log(route)
             route=route.replace(':id', id)
-            console.log(route)
             get(route, null, {parse: true})
                 .then((nextPhoto) => {
                     if (nextPhoto.hasOwnProperty('message')) {
                         throw nextPhoto.message
                     }
                     id = nextPhoto.id
-                    console.log(nextPhoto)
                     photoElement.setAttribute('data-src', nextPhoto.largeUrl)
                     photoElement.setAttribute('src', nextPhoto.tinyUrl)
                     photoElement.classList.remove('d-none')
