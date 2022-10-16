@@ -48,7 +48,7 @@
                      data-src="{{$photo->largeUrl}}" style="height: 75vh; object-fit:contain">
                 @endif
 
-                    <div id="nonMemberText" class=" {{!isset($photo->error)??'d-none'}}d-flex justify-content-center mb-3 mt-3">
+                    <div id="errorText" class="{{(!isset($photo->error)||isset($photo->private)&&$photo->private)?'d-none':''}} d-flex justify-content-center mb-3 mt-3">
                         @if(isset($photo->error))
                             {{$photo->error}}
                         @endif
@@ -79,7 +79,7 @@
         const privateIcon = document.getElementById('privateIcon');
         const previousBtn = document.getElementById('previousBtn');
         const photoElement = document.getElementById('photo');
-        const nonMemberText = document.getElementById('nonMemberText');
+        const errorText = document.getElementById('errorText');
         const spinner = document.getElementById('spinner');
         likeBtn.addEventListener('click', _ => {
             switchLike(likeBtn)
@@ -121,7 +121,7 @@
                     albumUrl.href = nextPhoto.albumUrl
                     albumTitle.innerText=nextPhoto.albumTitle
                     downloadUrl.href = nextPhoto.originalUrl
-                    nonMemberText.classList.add('d-none')
+                    errorText.classList.add('d-none')
                     window.history.replaceState(document.title, '', id)
                 })
                 .catch(err => {
@@ -129,7 +129,6 @@
                     window.alert('Something went wrong getting the photo. '.concat(err))
                 })
         }
-        {{--loadPhoto('{{route("api::photos::getPhoto", ['id'=>':id']) }}')--}}
 
         function switchLike(outputElement) {
             get('{{ route('photo::like', ['id' => ':id']) }}'.replace(':id', id), null, {parse: true})

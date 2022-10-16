@@ -121,6 +121,7 @@ class PhotoController extends Controller
     {
         $albums = PhotoAlbum::orderBy('date_taken', 'desc');
         $albums = $albums->where('published', '=', $published);
+        if(!(Auth::check()&&Auth::user()->member()!==null)){$albums=$albums->where('private', false);}
         return $albums->get();
     }
 
