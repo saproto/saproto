@@ -79,7 +79,7 @@ class SearchController extends Controller
             }
         }
 
-        $photoAlbums=[];
+        $photoAlbums = [];
         $presearch_photo_albums = $this->getGenericSearch(
             PhotoAlbum::class,
             $term,
