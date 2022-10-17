@@ -48,7 +48,7 @@ git clone git@github.com:saproto/saproto.git
 ### Setup
 After installing Docker and cloning the repository the following instructions can be run in the terminal in the source folder of the project.
 
-##### Configuration
+#### Configuration
 Copy and rename `.env.docker.example` to `.env`.
 
 ```
@@ -57,14 +57,14 @@ cp .env.docker.example .env
 
 After that, open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of [your dashboard](https://www.proto.utwente.nl/user/dashboard) on the ***live*** Proto website.
 
-##### Client-side dependencies
+#### Client-side dependencies
 To install the client-side dependencies you'll need to run `npm install` to install all client-side dependencies.
 
 To compile the project assets (JS/CSS) run `npm run dev` to compile once or `npm run watch` to keep checking for changes to scripts or stylesheets.
 
 When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`.
 
-##### Initial application setup
+#### Initial application setup
 ```
 docker compose up -d
 docker compose exec app /bin/bash
@@ -85,22 +85,22 @@ You can sign in with the same Proto username you use on the ***live*** website a
 
 ### Useful commands
 
-##### Start server
+#### Start server
 ```
 docker compose up -d
 ```
 
-##### Stop server
+#### Stop server
 ```
 docker compose stop
 ```
 
-##### Access to PHP container
+#### Access to PHP container
 ```
 docker compose exec app /bin/bash
 ```
 
-##### Nuke your database *(run in container)*
+#### Nuke your database *(run in container)*
 ```
 php artisan migrate:fresh --seed
 ```
@@ -115,7 +115,8 @@ Run `composer fix` in the docker container to fix stylistic errors in your code 
 ##### Larastan
 There is also the option for static analysis of your code. Run `composer analyse` in the docker container to let [Larastan](https://github.com/nunomaduro/larastan) find any potential bugs in your code. 
 
-### Debugging
+## Debugging
+### Xdebug
 Xdebug has been added to the php runner in docker to aid you while debugging the website.
 Xdebug enables breakpoints and step debugging which can easily be controlled from your IDE.
 For this to work, you will have to set up your IDE correctly.
@@ -129,8 +130,11 @@ To make the Xdebug server connect to PhpStorm you can follow the steps below.
    - Host: `localhost`
    - Port: `8080`
    - Debugger: `Xdebug`
-   - Absolute path on the server: `/var/www`
-     - Note: only set this for the `saproto` folder under `Project files`
+   - Use path mappings: `True`
+     - Absolute path on the server: `/var/www`  
+       **Note:** *only set this for the `saproto` folder under `Project files`*
+
+    ![xdebug settings](public/images/readme/xdebug.png)
 4. Click OK in the bottom right
 5. In the dropdown to the left of the run button, choose `Edit Configurations...`
 6. Add a new `PHP Remote Debug` configuration with the following parameters:
@@ -141,7 +145,7 @@ To make the Xdebug server connect to PhpStorm you can follow the steps below.
 8. Select the `saproto-debug` configuration in the dropdown menu on the left of the run button.
 9. Press the green `Debug` button to start debugging.
 
-#### Browser configuration
+### Browser configuration
 If you just visit the local website normally, no debug session will be started.
 A specific parameter has to be sent with the request to enable debugging.
 Luckily, there are easy browser extensions to help you with this:
@@ -153,7 +157,12 @@ If you don't want to use a browser extension, you can also choose to add `?XDEBU
 Do keep in mind that clicking an internal link will not add this parameter, so it has to be added every time you navigate to a new page.
 When using a browser extension this will be automatically taken care of.
 
-## Running without Docker
+### Clockwork
+[Clockwork](https://underground.works/clockwork) is a php dev tool in your browser. When running the website in debug mode you can access the clockwork debug page at <localhost:8080/clockwork>. The application has various debugging features such as timelines of runtime requests, database queries and client-metrics.
+
+
+## Running without Docker (Legacy)
+This is the old method of running a local environment. This is no longer recommended. Please first try running with Docker first.
 
 ### Download
 First you need to clone the repository somewhere on your system.
@@ -182,7 +191,7 @@ This is the environment configuration. In this file you will establish your own 
 
 You can skip all the other stuff (mailing API, Google API) until you need to work on the specific part of the website that uses them.
 
-##### Initial application setup
+#### Initial application setup
 Now we can initialize the project.
 
 ```
