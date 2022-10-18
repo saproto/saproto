@@ -25,11 +25,11 @@ class LikedPicturesController extends Controller
         $album->date_taken = \Carbon::today()->timestamp;
         $album->event = null;
 
-        if ($likedPhotos->count()) {
-            return view('photos.album', ['album' => $album, 'photos' => $likedPhotos, 'liked'=>true]);
+        if ($likedPhotos->isEmpty()) {
+            abort(404, 'No liked photos!');
         }
 
-        abort(404, 'No liked photos!');
+        return view('photos.album', ['album' => $album, 'photos' => $likedPhotos, 'liked'=>true]);
     }
 
     /**
@@ -96,9 +96,11 @@ class LikedPicturesController extends Controller
         if(Auth::user() == null || Auth::user()->member() == null) $adjacent = $adjacent->where('private', false);
 
         $adjacent = $adjacent->orderBy('date_taken', $ord)->orderBy('id', $ord);
-        if ($adjacent->count() > 1) {
-            return $adjacent->where('id', $comp, $photo->id)->first();
+
+        if ($adjacent->count() <= 1) {
+            return null;
         }
-        return null;
+
+        return $adjacent->where('id', $comp, $photo->id)->first();
     }
 }

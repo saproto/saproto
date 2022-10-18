@@ -43,7 +43,7 @@
 
                                 @include('website.layouts.macros.card-bg-image', [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => isset($liked)?route("photo::liked::likedPhoto", ["id"=> $photo->id]):route("photo::view", ["id"=> $photo->id]),
+                                'url' => isset($liked) ? route("photo::liked::likedPhoto", ["id"=> $photo->id]):route("photo::view", ["id"=> $photo->id]),
                                 'img' => $photo->getSmallUrl(),
                                 'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
                                     $photo->getLikes(), $photo->private ?

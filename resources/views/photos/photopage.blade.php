@@ -29,18 +29,18 @@
                         <i class="fas fa-download me-2"></i> high-res
                     </a>
                     <button id="previousBtn"
-                            class="btn btn-dark me-3 {{$photo->hasNextPhoto?'' : 'd-none'}}">
+                            class="btn btn-dark me-3 {{$photo->hasNextPhoto ? '' : 'd-none'}}">
                         <i class="fas fa-arrow-left"></i>
                     </button>
-                    <button id="likeBtn" class="btn btn-info me-3 {{Auth::user() != null?'' : 'd-none'}}">
+                    <button id="likeBtn" class="btn btn-info me-3 {{Auth::user() != null ? '' : 'd-none'}}">
                         <i class="{{$photo->likedByUser?'fas':'far'}} fa-heart"></i><span> {{ $photo->likes }}</span>
                     </button>
-                    <button id="privateIcon" class="btn btn-info me-3 {{$photo->private?'' : 'd-none'}}" data-bs-toggle="tooltip"
+                    <button id="privateIcon" class="btn btn-info me-3 {{$photo->private ? '' : 'd-none'}}" data-bs-toggle="tooltip"
                             data-bs-placement="top" title="This photo is only visible to members.">
                         <i class="fas fa-eye-slash p-1"></i>
                     </button>
                     <button id="nextBtn"
-                            class="btn btn-dark {{$photo->hasNextPhoto?'' : 'd-none'}}">
+                            class="btn btn-dark {{$photo->hasNextPhoto ? '' : 'd-none'}}">
                         <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
@@ -48,7 +48,7 @@
                      data-src="{{$photo->largeUrl}}" style="height: 75vh; object-fit:contain">
                 @endif
 
-                    <div id="errorText" class="{{(!isset($photo->error)||isset($photo->private)&&$photo->private)?'d-none':''}} d-flex justify-content-center mb-3 mt-3">
+                    <div id="errorText" class="{{(!isset($photo->error)||isset($photo->private)&&$photo->private) ? 'd-none':''}} d-flex justify-content-center mb-3 mt-3">
                         @if(isset($photo->error))
                             {{$photo->error}}
                         @endif
@@ -93,7 +93,7 @@
         })
 
         function swapPhoto(next){
-            next?loadPhoto('{{$nextRoute}}'):loadPhoto('{{$previousRoute}}')
+            next ? loadPhoto('{{$nextRoute}}'):loadPhoto('{{$previousRoute}}')
         }
 
         function loadPhoto(route) {
