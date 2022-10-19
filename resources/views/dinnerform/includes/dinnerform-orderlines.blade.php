@@ -23,7 +23,7 @@
                 @foreach($previousOrders as $order)
                     <tr>
                         <td>{{$order->description}}</td>
-                        <td>€{{$order->price}}</td>
+                        <td>€{{$order->price()}}</td>
                         <td class="text-center">
                             @if($order->helper)
                                 <i class="fas fa-check text-info" aria-hidden="true"></i>
@@ -32,12 +32,12 @@
                         @if($dinnerform->isCurrent())
                             <td>
                                 @include('website.layouts.macros.confirm-modal', [
-                                            'action' => route("dinnerform::orderline::delete", ['id' => $order->id]),
-                                            'text' => '<i class="fas fa-trash text-danger"></i>',
-                                            'title' => 'Confirm Delete',
-                                            'message' => "Are you sure you want to delete your order: $order->description at $dinnerform->restaurant?",
-                                            'confirm' => 'Delete',
-                                        ])
+                                         'action' => route("dinnerform::orderline::delete", ['id' => $order->id]),
+                                         'text' => '<i class="fas fa-trash text-danger"></i>',
+                                         'title' => 'Confirm Delete',
+                                         'message' => "Are you sure you want to delete your order: $order->description at $dinnerform->restaurant?",
+                                         'confirm' => 'Delete',
+                                ])
                             </td>
                         @endif
                     </tr>

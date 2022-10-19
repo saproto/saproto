@@ -10,8 +10,7 @@
 @section('container')
 
     <div class="row justify-content-center">
-
-        @if (count($users) + count($committees) + count($pages) + count($events) == 0)
+        @if (count($users) + count($committees) + count($pages) + count($events) + count($photoAlbums) == 0)
 
             <div class="col-md-4 col-sm-6 col-xs-10">
                 <div class="card">
@@ -25,10 +24,31 @@
 
         @endif
 
-        @if (count($users) > 0)
 
+        @if(count($photoAlbums)+count($users)>0)
             <div class="col-md-3">
+                @if (count($photoAlbums) > 0)
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        Photo Albums
+                    </div>
+                    <div class="card-body">
 
+                        @foreach($photoAlbums as $album)
+
+                            @include('website.layouts.macros.card-bg-image', [
+                            'url' => route('photo::album::list', ['id' => $album->id]) ,
+                            'img' => $album->thumb(),
+                            'html' => sprintf('<sub>%s</sub><br><strong>%s</strong>', date("M j, Y", $album->date_taken), $album->name),
+                            'leftborder' => 'info'
+                            ])
+
+                        @endforeach
+
+                    </div>
+                </div>
+                 @endif
+                @if (count($users) > 0)
                 <div class="card">
                     <div class="card-header bg-dark text-white">
                         Proto members
@@ -47,9 +67,8 @@
 
                     </div>
                 </div>
-
+                @endif
             </div>
-
         @endif
 
         @if (count($committees) > 0)

@@ -10,7 +10,7 @@ services:
     build: ./docker/build/php
     container_name: ${DOCKER_NAME}-queue
     command:
-      'php /var/www/artisan queue:work --verbose --tries=3 --timeout=90 --queue=low,medium,high'
+      "/bin/bash -c 'php /var/www/artisan queue:work --verbose --tries=3 --timeout=90 --queue=low,medium,high'"
     volumes:
       - .:/var/www
 

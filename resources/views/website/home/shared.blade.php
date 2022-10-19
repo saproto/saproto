@@ -66,38 +66,18 @@
 
             @endif
 
-            @section('left-column')
-            @show
+            <div class="row justify-content-center">
+
+                @section('left-column')
+                @show
+
+            </div>
 
         </div>
 
         <div class="col-xl-3 col-md-6 col-sm-12">
+
             @section('right-column')
-
-                @if(isset($videos) && count($videos) > 0)
-
-                    <div class="card mb-3">
-                        <div class="card-header bg-dark text-white">
-                            <i class="fab fa-youtube fa-fw me-2"></i> Recent videos
-                        </div>
-                        <div class="card-body">
-
-                            @foreach($videos as $video)
-
-                                @include('videos.includes.video_block', [
-                                    'video' => $video,
-                                    'photo_pop' => false
-                                ])
-
-                            @endforeach
-
-                        </div>
-                    </div>
-
-                @endif
-
-                @include('website.layouts.macros.recentalbums', ['n' => 4])
-
             @show
 
         </div>

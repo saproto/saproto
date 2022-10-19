@@ -47,7 +47,7 @@ class WithdrawalController extends Controller
     public function store(Request $request)
     {
         $max = ($request->has('max') ? $request->input('max') : null);
-        if ($max <= 0) {
+        if ($max < 0) {
             $max = null;
         }
 
