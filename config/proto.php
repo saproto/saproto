@@ -297,6 +297,7 @@ return [
         2 => 'rainbowbarf',
         3 => 'broto',
         4 => 'nightMode',
+        5 => 'december'
     ],
 
     // Analytics URL
