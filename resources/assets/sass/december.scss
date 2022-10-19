@@ -9,8 +9,8 @@ $blue-medium: #354D31;
 $blue-dark: #19282F;
 $dark: $blue-medium;
 $light: $blue-light;
-$warning:#EA5D0B;
-$info:#028090;
+$warning: #EA5D0B;
+$info: #028090;
 $brand-primary: #B32020;
 $theme-colors: (
         "primary": $brand-primary,
@@ -35,7 +35,9 @@ $modal-content-bg: $blue-light;
 //table
 $table-color: #fff;
 $table-border-color: $blue-dark;
-table > tbody { border-top-color: $blue-dark !important; }
+table > tbody {
+  border-top-color: $blue-dark !important;
+}
 
 //list group
 $list-group-bg: $blue-medium;
@@ -74,8 +76,8 @@ $event-hover-bg: $blue-light;
 $card-bg: $blue-light;
 $card-color: #f1f1f1;
 $card-collapse-bg: #fff;
-$card-header:$blue-medium;
-$card-title:$blue-medium;
+$card-header: $blue-medium;
+$card-title: $blue-medium;
 
 //pagination
 $pagination-bg: $blue-dark;
@@ -111,6 +113,7 @@ hr {
 .list-group-item {
   background-color: $blue-medium;
 }
+
 .list-group-item-dark {
   background-color: $blue-dark;
   color: #fff;
@@ -127,7 +130,10 @@ hr {
   &-outline-dark {
     color: #fff;
     border-color: #aaa;
-    &:hover { background: $info; }
+
+    &:hover {
+      background: $info;
+    }
   }
 
   &.lamp {
@@ -135,13 +141,16 @@ hr {
       background: $primary;
       border-color: $primary;
     }
+
     &Off:hover {
       background: $warning;
       border-color: $warning;
     }
   }
 
-  &-close { @extend .btn-close-white }
+  &-close {
+    @extend .btn-close-white
+  }
 }
 
 //modals
@@ -151,27 +160,40 @@ hr {
 }
 
 //cards
-.card.leftborder.leftborder-info { background-color: $blue-medium; }
-.card-header.bg-dark { background-color: $blue-medium !important; }
-.card-header.bg-light { background-color: $blue-dark !important; }
+.card.leftborder.leftborder-info {
+  background-color: $blue-medium;
+}
+
+.card-header.bg-dark {
+  background-color: $blue-medium !important;
+}
+
+.card-header.bg-light {
+  background-color: $blue-dark !important;
+}
 
 
 //simplemde
 .editor-toolbar button {
   @extend .text-white;
-  &.active, &:hover{
+
+  &.active, &:hover {
     @extend .bg-dark;
   }
 }
 
-.main-footer { background-color: $blue-medium !important; }
+.main-footer {
+  background-color: $blue-medium !important;
+}
 
 .editor-toolbar.disabled-for-preview button {
   @extend .bg-dark;
 }
 
 //datetimepicker
-.datetimepicker::-webkit-calendar-picker-indicator { background-color: #f1f1f1; }
+.datetimepicker::-webkit-calendar-picker-indicator {
+  background-color: #f1f1f1;
+}
 
 //custom file labels
 .custom-file-label::after {
@@ -198,9 +220,29 @@ html {
   scrollbar-shadow-color: $blue-medium;
 }
 
-::-webkit-scrollbar { width: 10px; height: 3px; }
-::-webkit-scrollbar-track { background-color: $blue-medium; }
-::-webkit-scrollbar-track-piece { background-color: #000; }
-::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
-::-webkit-scrollbar-corner { background-color: $blue-medium; }
-::-webkit-resizer { background-color: #666; }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $blue-medium;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: #666;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: $blue-medium;
+}
+
+::-webkit-resizer {
+  background-color: #666;
+}
