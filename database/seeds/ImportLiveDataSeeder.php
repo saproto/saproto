@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Member;
@@ -22,28 +24,49 @@ class ImportLiveDataSeeder extends Seeder
 
         // First let's create our user.
         $userData = (array) self::getDataFromExportApi('user');
-        $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
-        unset($userData['member']);
-        unset($userData['photo']);
-        unset($userData['roles']);
-        unset($userData['is_member']);
-        unset($userData['photo_preview']);
-        unset($userData['welcome_message']);
-        unset($userData['is_protube_admin']);
-        unset($userData['use_dark_theme']);
-        unset($userData['created_at']);
-        unset($userData['permissions']);
-        unset($memberData['created_at']);
-        $userData['id'] = 1;
+        if ($userData == null) {
+            /** @var User $newUser */
+            $newUser = factory(User::class)->create(["id" => 1]);
+            /** @var Member $newMember */
+            $newMember = factory(Member::class)->create(["user_id" => 1]);
+            $newUser->setPassword($password);
 
-        $newUser = User::create($userData);
-        $newUser->save();
-        $newUser->setPassword($password);
+            echo PHP_EOL;
+            echo "\e[32mCreated:\e[0m   admin user".PHP_EOL;
+            echo "\e[1musername:\e[0m  $newMember->proto_username".PHP_EOL;
+            echo "\e[1mpassword:\e[0m  $password".PHP_EOL;
+            echo PHP_EOL;
 
-        if ($memberData) {
-            $newMember = Member::create($memberData);
-            $newMember->user_id = 1;
-            $newMember->save();
+            throw new Exception(
+                "You are not allowed to import data from the live website.".PHP_EOL.
+                "Make sure you are a member of the HYTTIOAOAc and have signed an NDA.".PHP_EOL.
+                "Otherwise you can continue without seeding the database."
+            );
+        } else {
+            $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
+            unset($userData['member']);
+            unset($userData['photo']);
+            unset($userData['roles']);
+            unset($userData['is_member']);
+            unset($userData['photo_preview']);
+            unset($userData['welcome_message']);
+            unset($userData['is_protube_admin']);
+            unset($userData['use_dark_theme']);
+            unset($userData['created_at']);
+            unset($userData['permissions']);
+            unset($memberData['created_at']);
+            $userData['id'] = 1;
+
+            $newUser = User::create($userData);
+            $newUser->save();
+
+            if ($memberData) {
+                $newMember = Member::create($memberData);
+                $newMember->user_id = 1;
+                $newMember->save();
+            }
+
+            $newUser->setPassword($password);
         }
 
         // Now let's import all data we can from the live environment.
@@ -96,11 +119,20 @@ class ImportLiveDataSeeder extends Seeder
         echo "\e[32mSeeded:\e[0m    \e[1mImportDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
     }
 
+    /**
+     * Import data from the live website export API.
+     *
+     * @param $table string The table to import from live website.
+     * @return string|null Decoded JSON response.
+     */
     public static function getDataFromExportApi($table)
     {
         $local_url = route('api::user::dev_export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $table]);
         $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl/', $local_url);
-        $encoded_data = file_get_contents($remote_url);
-        return json_decode($encoded_data);
+        $response = Http::get($remote_url);
+        if ($response->failed()) {
+            return null;
+        }
+        return json_decode($response);
     }
 }
