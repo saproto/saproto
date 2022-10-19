@@ -836,6 +836,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('/membership_totals', ['as' => 'membership_totals', 'uses' => 'QueryController@membershipTotals']);
     });
 
+    /*Routes related to the advent calender*/
+    Route::group(['prefix' => 'advent', 'as' => 'advent::'], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'AdventController@index']);
+    });
+
     /* Routes related to the Minisites */
     Route::group(['prefix' => 'minisites', 'as' => 'minisites::'], function () {
         Route::group(['prefix' => 'isalfredthere', 'as' => 'isalfredthere::'], function () {
