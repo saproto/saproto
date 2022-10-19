@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Proto\Models\Committee;
@@ -26,9 +25,9 @@ class ImportLiveDataSeeder extends Seeder
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
             /** @var User $newUser */
-            $newUser = factory(User::class)->create(["id" => 1]);
+            $newUser = factory(User::class)->create(['id' => 1]);
             /** @var Member $newMember */
-            $newMember = factory(Member::class)->create(["user_id" => 1]);
+            $newMember = factory(Member::class)->create(['user_id' => 1]);
             $newUser->setPassword($password);
 
             echo PHP_EOL;
@@ -38,9 +37,9 @@ class ImportLiveDataSeeder extends Seeder
             echo PHP_EOL;
 
             throw new Exception(
-                "You are not allowed to import data from the live website.".PHP_EOL.
-                "Make sure you are a member of the HYTTIOAOAc and have signed an NDA.".PHP_EOL.
-                "Otherwise you can continue without seeding the database."
+                'You are not allowed to import data from the live website.'.PHP_EOL.
+                'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.'.PHP_EOL.
+                'Otherwise you can continue without seeding the database.'
             );
         } else {
             $memberData = (array) (array_key_exists('member', $userData) ? $userData['member'] : null);
