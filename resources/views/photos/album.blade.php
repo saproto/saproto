@@ -19,12 +19,14 @@
             <a href="{{route("photo::albums")}}" class="btn btn-success float-start me-3">
                 <i class="fas fa-list"></i> <span class="d-none d-sm-inline">Album overview</span>
             </a>
+            @if(!isset($liked))
             @can('protography')
                 <a href="{{route("photo::admin::edit", ['id' => $album->id])}}"
                    class="btn btn-success float-start me-3">
                     <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit album</span>
                 </a>
             @endcan
+            @endif
             <div class="p-1 m-1 fw-bold">
                 {{ $album->name }} ({{ date('M j, Y', $album->date_taken) }})
             </div>
@@ -32,7 +34,7 @@
 
 
         <div class="card-body">
-            @if($album->mayViewAlbum(Auth::user()))
+            @if(isset($liked)||$album->mayViewAlbum(Auth::user()))
                 <div class="row">
 
                     @foreach($photos as $photo)
@@ -41,7 +43,7 @@
 
                                 @include('website.layouts.macros.card-bg-image', [
                                 'id' => sprintf('photo_%s', $photo->id),
-                                'url' => route("photo::view", ["id"=> $photo->id]),
+                                'url' => isset($liked) ? route("photo::liked::likedPhoto", ["id"=> $photo->id]):route("photo::view", ["id"=> $photo->id]),
                                 'img' => $photo->getSmallUrl(),
                                 'html' => sprintf('<i class="fas fa-heart"></i> %s %s',
                                     $photo->getLikes(), $photo->private ?

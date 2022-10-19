@@ -243,6 +243,7 @@
                                     <a class="dropdown-item" href="{{ route('user::dashboard') }}">Dashboard</a>
                                     @if(Auth::user()->is_member)
                                         <a class="dropdown-item" href="{{ route('user::profile') }}">My Profile</a>
+                                        <a class="dropdown-item" href="{{ route('photo::liked::list') }}">My Liked Photos</a>
                                     @else
                                         <a class="dropdown-item" href="{{ route('becomeamember') }}">Become a member!</a>
                                     @endif
