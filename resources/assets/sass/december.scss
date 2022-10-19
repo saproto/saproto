@@ -4,16 +4,16 @@
 @import 'partials/variables';
 
 //colors
-$blue-light: #1e2f62;
-$blue-medium: #0c1f66;
-$blue-dark: #05103A;
+$blue-light: #60753F;
+$blue-medium: #354D31;
+$blue-dark: #19282F;
 $dark: $blue-medium;
 $light: $blue-light;
 $warning:#EA5D0B;
 $info:#028090;
-$brand-primary:#597C13;
+$brand-primary: #B32020;
 $theme-colors: (
-        "primary": $primary,
+        "primary": $brand-primary,
         "secondary": $secondary,
         "brand-primary": $brand-primary,
         "success": $info,
