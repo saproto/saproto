@@ -373,7 +373,7 @@ class EventController extends Controller
         $user = (Auth::check() ? Auth::user() : null);
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
 
-        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {
