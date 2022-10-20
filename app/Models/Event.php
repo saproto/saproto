@@ -24,6 +24,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $description
  * @property int $start
  * @property int $end
+ * @property int $publication
  * @property int|null $image_id
  * @property int|null $committee_id
  * @property int|null $category_id
@@ -111,6 +112,26 @@ class Event extends Model
     public function committee()
     {
         return $this->belongsTo('Proto\Models\Committee');
+    }
+
+    /** @return bool */
+    public function mayViewEvent($user)
+    {
+        if($user->can('board')){
+            return true;
+        }
+        if($this->secret){
+            if($this->activity && $this->activity->isParticipating($user)){
+                return true;
+            }
+        }
+
+        if(!$this->secret){
+            if(!$this->publication || $this->publication<Carbon::now()->timestamp){
+                return true;
+            }
+        }
+        return false;
     }
 
     /** @return BelongsTo */

@@ -146,6 +146,17 @@
                             </div>
 
                         </div>
+                        <div class="col-4">
+                            @include('website.layouts.macros.datetimepicker',[
+                            'name' => 'publication',
+                            'label' => 'Publication time: ',
+                            'placeholder' => old('publication')?strtotime(old('publication')):($event ? $event->publication : null),
+                            'not_required'=>true,
+                        ])
+                        </div>
+                        <div class="col-3">
+                            <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored untill the specified time, then it will be made public"></i>
+                        </div>
 
                     </div>
 

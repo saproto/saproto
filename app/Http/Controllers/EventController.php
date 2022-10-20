@@ -103,7 +103,9 @@ class EventController extends Controller
         'summary' => $request->summary,
         'is_featured' => $request->has('is_featured'),
         'is_external' => $request->has('is_external'),
-        'force_calendar_sync' => $request->has('force_calendar_sync'), ]);
+        'force_calendar_sync' => $request->has('force_calendar_sync'),
+        'publication'=>$request->publication?strtotime($request->publication):null,
+         ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -142,7 +144,6 @@ class EventController extends Controller
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
-
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
@@ -154,6 +155,7 @@ class EventController extends Controller
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
+        $event->publication=$request->publication?strtotime($request->publication):null;
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
