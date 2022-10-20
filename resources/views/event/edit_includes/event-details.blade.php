@@ -63,10 +63,10 @@
 
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" {{ (old('secret')==1||$event != null && $event->secret ? 'selected' : '') }}>
+                                <option value="1" {{ (old('secret')===1||$event != null && $event->secret ? 'selected' : '') }}>
                                     Secret
                                 </option>
-                                <option value="0" {{ (old('secret')==0||$event != null && !$event->secret ? 'selected' : '') }}>
+                                <option value="0" {{ (old('secret')===0||$event != null && !$event->secret ? 'selected' : '') }}>
                                     Public
                                 </option>
                             </select>
