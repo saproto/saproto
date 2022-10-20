@@ -1,4 +1,4 @@
-@if(Auth::check()&&$event->mayViewEvent(Auth::user()))
+@if($event->mayViewEvent(Auth::user()))
 
     <a class="card mb-3 leftborder leftborder-info text-decoration-none"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
@@ -21,7 +21,7 @@
                     <i class="fas fa-eye-slash fa-fw me-1"></i> Secret activity!</span>
             @endif
 
-                @if($event->publication && Carbon::now()->timestamp<$event->publication)
+                @if($event->publication && !$event->isPublished())
                     <span class="badge bg-warning float-end"
                           data-bs-toggle="tooltip" data-bs-placement="top" title="Scheduled activities can only be visited if the schedule date is past. You can see it now because you are an admin.">
                     <i class="fas fa-eye-slash fa-fw me-1"></i> Scheduled activity!</span>

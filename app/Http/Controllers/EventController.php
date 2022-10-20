@@ -98,7 +98,7 @@ class EventController extends Controller
         'start' => strtotime($request->start),
         'end' => strtotime($request->end),
         'location' => $request->location,
-        'secret' => $request->secret,
+        'secret' => $request->publication?false:$request->secret,
         'description' => $request->description,
         'summary' => $request->summary,
         'is_featured' => $request->has('is_featured'),
@@ -148,7 +148,7 @@ class EventController extends Controller
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
-        $event->secret = $request->secret;
+        $event->secret = $request->publication?false:$request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');

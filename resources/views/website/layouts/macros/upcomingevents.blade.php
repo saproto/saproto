@@ -11,7 +11,7 @@
 
             @foreach($events as $key => $event)
 
-                @if(!$event->secret || (Auth::check() && ($event->activity && $event->activity->isParticipating(Auth::user()))))
+                @if($event->mayViewEvent(Auth::user())&&!$event->secret&&!$event->publication)
 
                     @include('event.display_includes.event_block', ['event'=> $event])
 
