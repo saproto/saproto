@@ -98,7 +98,7 @@ Auth::check() && (($event->activity && $event->activity->isParticipating(Auth::u
                         {{ $event->activity->users->count() }}
                     @endif
                 </span>
-                <span class="position-absolute bottom-0 end-0">
+                <span class="position-absolute bottom-0 end-0 small">
                     @if($event->activity)
                         @if(! $event->activity->canSubscribeBackup())
                             <i class="fas fa-lock me-1"></i> <span class="d-none d-sm-inline">closed</span>
