@@ -161,7 +161,7 @@ class Committee extends Model
         $events = [];
         foreach ($activities as $activity) {
             $event = $activity->event;
-            if ($event && $event->isPublished() (! $event->secret || $includeSecret)) {
+            if ($event && $event->isPublished()(! $event->secret || $includeSecret)) {
                 $events[] = $event;
             }
         }
