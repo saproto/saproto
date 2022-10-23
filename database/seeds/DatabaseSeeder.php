@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         $importSeeder = new ImportLiveDataSeeder();
         $importSeeder->run($adminPassword);
 
+        // TODO: Replace deprecated factory() with new Database\Factories
         echo PHP_EOL;
         $otherSeeder = new OtherDataSeeder();
         $otherSeeder->run();
