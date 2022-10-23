@@ -37,7 +37,7 @@ ln -s /actual/path \
 
 # Setup new build
 echo "Bringing down builds..."
-(cd new_build && php artisan down)
+(cd new_build && php artisan down --render='errors::503')
 (cd live && php artisan down)
 
 echo "Rotating builds..."
@@ -50,10 +50,13 @@ echo "Migrating database..."
 echo "Syncing permissions and roles..."
 (cd live && php artisan 'proto:syncroles')
 
-echo "clear laravel config"
+echo "Clearing laravel config..."
 (cd live && php artisan 'config:clear')
 
 echo "Bringing up new live build..."
 (cd live && php artisan up)
+
+echo "Zipping previous build..."
+zip -rq previous_build.zip previous_build
 
 echo "Done!"
