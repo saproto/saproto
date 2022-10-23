@@ -98,13 +98,13 @@ class EventController extends Controller
         'start' => strtotime($request->start),
         'end' => strtotime($request->end),
         'location' => $request->location,
-        'secret' => $request->publication?false:$request->secret,
+        'secret' => $request->publication ? false : $request->secret,
         'description' => $request->description,
         'summary' => $request->summary,
         'is_featured' => $request->has('is_featured'),
         'is_external' => $request->has('is_external'),
         'force_calendar_sync' => $request->has('force_calendar_sync'),
-        'publication'=>$request->publication?strtotime($request->publication):null,
+        'publication'=>$request->publication ? strtotime($request->publication) : null,
          ]);
 
         if ($request->file('image')) {
@@ -148,14 +148,14 @@ class EventController extends Controller
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
-        $event->secret = $request->publication?false:$request->secret;
+        $event->secret = $request->publication ? false : $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
-        $event->publication=$request->publication?strtotime($request->publication):null;
+        $event->publication = $request->publication ? strtotime($request->publication) : null;
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
