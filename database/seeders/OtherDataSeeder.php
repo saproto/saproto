@@ -1,5 +1,8 @@
 <?php
 
+namespace Database\Seeders;
+
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
@@ -22,7 +25,7 @@ class OtherDataSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
 
         echo "\e[33mSeeding:\e[0m   \e[1mOtherDataSeeder\e[0m".PHP_EOL;
         $seeder_start = microtime(true);

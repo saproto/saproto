@@ -87,11 +87,9 @@
     "symfony/dom-crawler": "~4.0"
   },
   "autoload": {
-    "classmap": [
-      "database"
-    ],
     "psr-4": {
-      "Proto\\": "app/"
+      "Proto\\": "app/",
+      "Database\\Seeders\\": "database/seeders/"
     }
   },
   "scripts": {
