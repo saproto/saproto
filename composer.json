@@ -60,7 +60,6 @@
     "laravel/passport": "^10.4",
     "league/commonmark": "^1.5",
     "league/oauth1-client": "^1.7",
-    "lisennk/laravel-slack-web-api": "^0.1",
     "milon/barcode": "^8.0",
     "mollie/laravel-mollie": "^2.15",
     "nesbot/carbon": "^2.62",

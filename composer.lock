@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a737032a0ec793d54f12c0d3030e0139",
+    "content-hash": "7db5bdc36527dea3732814c7e803b400",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -1395,53 +1395,6 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
             },
             "time": "2022-07-15T16:48:45+00:00"
-        },
-        {
-            "name": "frlnc/php-slack",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Frlnc/php-slack.git",
-                "reference": "07797663e8799407675d473d9153b260dd0fb023"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Frlnc/php-slack/zipball/07797663e8799407675d473d9153b260dd0fb023",
-                "reference": "07797663e8799407675d473d9153b260dd0fb023",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Frlnc\\Slack\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Connor Parks",
-                    "email": "connor@connorvg.tv"
-                }
-            ],
-            "description": "A lightweight PHP implementation of Slack's API.",
-            "keywords": [
-                "slack"
-            ],
-            "support": {
-                "issues": "https://github.com/Frlnc/php-slack/issues",
-                "source": "https://github.com/Frlnc/php-slack/tree/master"
-            },
-            "time": "2016-04-10T18:57:50+00:00"
         },
         {
             "name": "globalcitizen/php-iban",
@@ -3526,54 +3479,6 @@
                 }
             ],
             "time": "2021-06-28T04:27:21+00:00"
-        },
-        {
-            "name": "lisennk/laravel-slack-web-api",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Lisennk/Laravel-Slack-Web-API.git",
-                "reference": "d768fe4a892c3b9ef86693d335cbf89cee1c9fce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Lisennk/Laravel-Slack-Web-API/zipball/d768fe4a892c3b9ef86693d335cbf89cee1c9fce",
-                "reference": "d768fe4a892c3b9ef86693d335cbf89cee1c9fce",
-                "shasum": ""
-            },
-            "require": {
-                "frlnc/php-slack": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "5.5.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Lisennk\\Laravel\\SlackWebApi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Lisennk,",
-                    "email": "serewann@gmail.com"
-                }
-            ],
-            "description": "Light Laravel wrapper for Slack Web API",
-            "keywords": [
-                "api",
-                "laravel",
-                "slack"
-            ],
-            "support": {
-                "issues": "https://github.com/Lisennk/Laravel-Slack-Web-API/issues",
-                "source": "https://github.com/Lisennk/Laravel-Slack-Web-API/tree/master"
-            },
-            "time": "2016-08-16T22:19:48+00:00"
         },
         {
             "name": "milon/barcode",
