@@ -5,17 +5,24 @@
     </div>
     <div class="card-body">
 
-        @php($events = Proto\Models\Event::where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->with('activity')->limit($n)->get())
+        @php
+            $events = Proto\Models\Event::query()
+                ->where('is_featured', false)
+                ->where('end', '>=', date('U'))
+                ->orderBy('start')->with('activity')
+                ->limit($n)
+                ->get()
+        @endphp
 
         @if(count($events) > 0)
 
             @foreach($events as $key => $event)
 
-                @if($event->mayViewEvent(Auth::user())&&!$event->secret&&$event->isPublished())
+                @if($event->mayViewEvent(Auth::user()) && ! $event->secret && $event->isPublished())
 
                     @include('event.display_includes.event_block', ['event'=> $event])
 
-                    <?php $week = date('W', $event->start); ?>
+                    @php $week = date('W', $event->start); @endphp
 
                @endif
 
