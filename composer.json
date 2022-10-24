@@ -41,7 +41,7 @@
   "type": "project",
   "require": {
     "aacotroneo/laravel-saml2": "^2.1.0",
-    "abcaeffchen/sephpa": "^2.0.0-beta1",
+    "abcaeffchen/sephpa": "2.0.0-beta1",
     "alaouy/youtube": "^2.1",
     "biscolab/laravel-recaptcha": "^4.2",
     "doctrine/dbal": "^2.13",

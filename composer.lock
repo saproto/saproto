@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69d318852f3b11750967655aa11c6754",
+    "content-hash": "289a60b5443c44089e659a1312da37c8",
     "packages": [
         {
             "name": "aacotroneo/laravel-saml2",
@@ -73,24 +73,23 @@
         },
         {
             "name": "abcaeffchen/sepa-utilities",
-            "version": "1.3.4",
+            "version": "1.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AbcAeffchen/SepaUtilities.git",
-                "reference": "81d05ca846ba295653c786ffcaff81d5c533a0b8"
+                "reference": "89fd61ee38e8898d887f5af6f28a3a098de92e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AbcAeffchen/SepaUtilities/zipball/81d05ca846ba295653c786ffcaff81d5c533a0b8",
-                "reference": "81d05ca846ba295653c786ffcaff81d5c533a0b8",
+                "url": "https://api.github.com/repos/AbcAeffchen/SepaUtilities/zipball/89fd61ee38e8898d887f5af6f28a3a098de92e32",
+                "reference": "89fd61ee38e8898d887f5af6f28a3a098de92e32",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "ext-calendar": "*",
-                "phpunit/phpunit": "^9 || ^8 || ^7"
+                "phpunit/phpunit": "5.7.* || 6.3.*"
             },
             "type": "library",
             "autoload": {
@@ -109,52 +108,47 @@
                     "role": "Developer"
                 }
             ],
-            "description": "SepaUtilities provides useful methods for validating and sanitizing inputs used in SEPA files supporting PHP >= 7.2.",
+            "description": "SepaUtilities provides useful methods for validating and sanitizing inputs used in SEPA files supporting PHP >= 5.6 and HHVM.",
             "homepage": "https://github.com/AbcAeffchen/SepaUtilities",
             "keywords": [
-                "BIC",
                 "IBAN",
                 "PHP7",
-                "php8",
+                "hhvm",
                 "sanitize",
                 "sepa",
                 "validate"
             ],
             "support": {
                 "issues": "https://github.com/AbcAeffchen/SepaUtilities/issues",
-                "source": "https://github.com/AbcAeffchen/SepaUtilities/tree/1.3.4"
+                "source": "https://github.com/AbcAeffchen/SepaUtilities/tree/master"
             },
-            "time": "2021-09-07T22:53:33+00:00"
+            "time": "2018-02-21T13:50:32+00:00"
         },
         {
             "name": "abcaeffchen/sephpa",
-            "version": "2.1.2",
+            "version": "2.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AbcAeffchen/Sephpa.git",
-                "reference": "9159cf39b54f9aba1b13863d063db2b0092dfc32"
+                "reference": "e23afd8df12c8caa1248e0ff5f00766bb7834846"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AbcAeffchen/Sephpa/zipball/9159cf39b54f9aba1b13863d063db2b0092dfc32",
-                "reference": "9159cf39b54f9aba1b13863d063db2b0092dfc32",
+                "url": "https://api.github.com/repos/AbcAeffchen/Sephpa/zipball/e23afd8df12c8caa1248e0ff5f00766bb7834846",
+                "reference": "e23afd8df12c8caa1248e0ff5f00766bb7834846",
                 "shasum": ""
             },
             "require": {
-                "abcaeffchen/sepa-utilities": "^1.3.4",
-                "ext-simplexml": "*",
+                "abcaeffchen/sepa-utilities": "~1.2.5",
                 "ext-xml": "*",
-                "php": ">=7.1"
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "abcaeffchen/sepa-documentor": "^2.0",
-                "ext-dom": "*",
-                "ext-zip": "*",
-                "phpunit/phpunit": "^9 || ^8 || ^7"
+                "abcaeffchen/sepa-documentor": "~1.0.0",
+                "phpunit/phpunit": "5.7.* || 6.3.*"
             },
             "suggest": {
-                "abcaeffchen/sepa-documentor": "^2.0",
-                "ext-zip": "Needed to store or download multiple files at once."
+                "ext-zlib": "Needed to store or download multiple files at once."
             },
             "type": "library",
             "autoload": {
@@ -174,24 +168,22 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Generates SEPA files for credit transfers (pain.001.001.03, pain.001.002.03, pain.001.003.03) and direct debit (pain.008.001.02, pain.008.002.02, pain.008.003.02)",
+            "description": "Generates Sepa files for credit transfers (pain.001.001.03, pain.001.002.03, pain.001.003.03) and direct debit (pain.008.001.02, pain.008.002.02, pain.008.003.02)",
             "homepage": "https://github.com/AbcAeffchen/Sephpa",
             "keywords": [
                 "Banking",
-                "PHP7",
                 "credit transfer",
                 "direct debit",
                 "files",
                 "finance",
-                "php8",
                 "sepa",
                 "xml"
             ],
             "support": {
                 "issues": "https://github.com/AbcAeffchen/Sephpa/issues",
-                "source": "https://github.com/AbcAeffchen/Sephpa/tree/2.1.2"
+                "source": "https://github.com/AbcAeffchen/Sephpa/tree/master"
             },
-            "time": "2021-09-08T01:00:19+00:00"
+            "time": "2018-04-22T00:42:21+00:00"
         },
         {
             "name": "alaouy/youtube",
