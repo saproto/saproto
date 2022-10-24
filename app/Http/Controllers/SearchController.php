@@ -139,7 +139,6 @@ class SearchController extends Controller
     /** @return Response */
     public function openSearch()
     {
-        /* @phpstan-ignore-next-line */
         return SupportResponse::make(ViewFacade::make('website.opensearch'))->header('Content-Type', 'text/xml');
     }
 
