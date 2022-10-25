@@ -13,7 +13,7 @@
                         <i class="fas fa-edit me-1"></i> Edit dinnerform
                     </a>
                 @endif
-                <a href="{{"//".$dinnerform->url}}" class="btn btn-success badge float-end me-3">
+                <a href="{{$dinnerform->url}}" target="_blank" class="btn btn-success badge float-end me-3">
                     <i class="fas fa-utensils me-1"></i> {{$dinnerform->restaurant}}'s website
                 </a>
                 @if($dinnerform->event)
