@@ -6,7 +6,7 @@
 
 @section('container')
     <div class="row justify-content-center">
-        @if($dinnerform->isCurrent())
+        @if($dinnerform->isCurrent() && count($previousOrders)===0)
             <div class="col-12 col-sm-6">
                 @include('dinnerform.includes.order-details')
             </div>

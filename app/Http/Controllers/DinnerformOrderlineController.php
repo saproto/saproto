@@ -23,6 +23,12 @@ class DinnerformOrderlineController extends Controller
         $order = $request->input('order');
         $amount = $request->input('price');
         $helper = $request->has('helper');
+
+        if($dinnerform->orderlines()->where('user_id', Auth::user()->id)->exists()){
+            Session::flash('flash_message','You can only add one order per dinnerform!');
+            return Redirect::back();
+        }
+
         if($dinnerform->event && $dinnerform->event->activity && $dinnerform->event->activity->isHelping(Auth::user())){
             $helper = true;
         }
