@@ -98,12 +98,14 @@ class EventController extends Controller
         'start' => strtotime($request->start),
         'end' => strtotime($request->end),
         'location' => $request->location,
-        'secret' => $request->secret,
+        'secret' => $request->publication ? false : $request->secret,
         'description' => $request->description,
         'summary' => $request->summary,
         'is_featured' => $request->has('is_featured'),
         'is_external' => $request->has('is_external'),
-        'force_calendar_sync' => $request->has('force_calendar_sync'), ]);
+        'force_calendar_sync' => $request->has('force_calendar_sync'),
+        'publication'=>$request->publication ? strtotime($request->publication) : null,
+         ]);
 
         if ($request->file('image')) {
             $file = new StorageEntry();
@@ -142,18 +144,18 @@ class EventController extends Controller
     {
         /** @var Event $event */
         $event = Event::findOrFail($id);
-
         $event->title = $request->title;
         $event->start = strtotime($request->start);
         $event->end = strtotime($request->end);
         $event->location = $request->location;
-        $event->secret = $request->secret;
+        $event->secret = $request->publication ? false : $request->secret;
         $event->description = $request->description;
         $event->summary = $request->summary;
         $event->involves_food = $request->has('involves_food');
         $event->is_featured = $request->has('is_featured');
         $event->is_external = $request->has('is_external');
         $event->force_calendar_sync = $request->has('force_calendar_sync');
+        $event->publication = $request->publication ? strtotime($request->publication) : null;
 
         if ($event->end < $event->start) {
             Session::flash('flash_message', 'You cannot let the event end before it starts.');
@@ -371,7 +373,7 @@ class EventController extends Controller
         $user = (Auth::check() ? Auth::user() : null);
         $noFutureLimit = filter_var($request->get('no_future_limit', false), FILTER_VALIDATE_BOOLEAN);
 
-        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->orderBy('start', 'asc')->take($limit)->get();
+        $events = Event::where('end', '>', strtotime('today'))->where('start', '<', strtotime($noFutureLimit ? '+10 years' : '+1 month'))->whereNull('publication')->orderBy('start', 'asc')->take($limit)->get();
         $data = [];
 
         foreach ($events as $event) {

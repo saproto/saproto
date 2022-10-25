@@ -73,8 +73,6 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-If you are on WSL, you might run into some permission issues. While still inside the docker container, you can use `bash fix_permissions.sh` to change the permissions of the troublesome directories.
-
 When you have finished the setup and Docker the following port will be exposed on localhost.
 
 - `8080` = Website
@@ -82,6 +80,11 @@ When you have finished the setup and Docker the following port will be exposed o
 - `8082` = [Mailhog](https://github.com/mailhog/MailHog)
 
 You can sign in with the same Proto username you use on the ***live*** website and the password given to you during the database seeding. This user will have full admin rights on the ***local*** website.
+
+#### Fixing various issues on WSL2
+If you are on WSL, you might run into some permission issues. While still inside the docker container, you can use `bash fix_permissions.sh` to change the permissions of the troublesome directories.
+
+Due to the permission changes, git might detect that all files have been changed. If this is the case, run `git config core.filemode false` to make git ignore the permission changes.
 
 ### Useful commands
 
