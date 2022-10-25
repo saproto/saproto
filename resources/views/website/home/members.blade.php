@@ -48,9 +48,9 @@
 
     </div>
 
-    @if(Carbon::now()->month===Carbon::OCTOBER)
     <div class="col-xl-4 col-md-12">
 
+        @if(Carbon::now()->month>=10)
         <div class="card mb-3">
             <div class="card-header bg-dark text-white">
                ❄🎄🍬
