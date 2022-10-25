@@ -55,7 +55,7 @@ class DinnerformController extends Controller
     public function store(Request $request)
     {
         if ($request->input('end') < $request->input('start')) {
-            Session::flash('flash_message', 'You cannot let the dinner form close before it opens.');
+            Session::flash('flash_message', 'You cannot let the dinnerform close before it opens.');
             return Redirect::back();
         }
 
@@ -71,7 +71,7 @@ class DinnerformController extends Controller
             'visible_home_page'=> $request->has('homepage'),
         ]);
 
-        Session::flash('flash_message', "Your dinner form at '".$dinnerform->restaurant."' has been added.");
+        Session::flash('flash_message', "Your dinnerform at '".$dinnerform->restaurant."' has been added.");
         return Redirect::route('dinnerform::add');
     }
 
@@ -129,9 +129,9 @@ class DinnerformController extends Controller
         ]);
 
         if ($changed_important_details) {
-            Session::flash('flash_message', "Your dinner form for '".$dinnerform->restaurant."' has been saved. You updated some important information. Don't forget to notify your participants with this info!");
+            Session::flash('flash_message', "Your dinnerform for '".$dinnerform->restaurant."' has been saved. You updated some important information. Don't forget to notify your participants with this info!");
         } else {
-            Session::flash('flash_message', "Your dinner form for '".$dinnerform->restaurant."' has been saved.");
+            Session::flash('flash_message', "Your dinnerform for '".$dinnerform->restaurant."' has been saved.");
         }
 
         return $this->edit($id);
@@ -146,10 +146,10 @@ class DinnerformController extends Controller
     {
         $dinnerform = Dinnerform::findOrFail($id);
         if(! $dinnerform->closed){
-            Session::flash('flash_message', "The dinner form for '".$dinnerform->restaurant."' has been deleted.");
+            Session::flash('flash_message', "The dinnerform for '".$dinnerform->restaurant."' has been deleted.");
             $dinnerform->delete();
         }else{
-            Session::flash('flash_message', 'The dinner form is already closed and can not be deleted!');
+            Session::flash('flash_message', 'The dinnerform is already closed and can not be deleted!');
         }
             return Redirect::route('dinnerform::add');
     }
