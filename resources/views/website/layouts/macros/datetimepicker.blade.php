@@ -9,7 +9,7 @@
 <div id="datetimepicker-{{ $name }}-form" class="form-group {{ $form_class_name ?? '' }}">
     @isset($label)
         <label for="datetimepicker-{{ $name }}">
-            {{ $label }}
+            {!! $label !!}
         </label>
     @endisset
     <input

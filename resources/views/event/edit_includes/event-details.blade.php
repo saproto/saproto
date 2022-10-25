@@ -20,7 +20,8 @@
 
                     <div class="row align-items-end mb-3">
 
-                        <div class="col-md-4 mb-3">
+                        <!-- Title -->
+                        <div class="col-md-6 mb-3">
                             <label for="name">Event name:</label>
                             <input type="text" class="form-control" id="name" name="title"
                                    placeholder="Lightsaber Building in the SmartXp"
@@ -28,29 +29,23 @@
                                    required>
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <!-- Location -->
+                        <div class="col-md-6 mb-3">
                             <label for="location">Location:</label>
                             <input type="text" class="form-control" id="location" name="location"
-                                   placeholder="SmartXp" value="{{ old('location',$event->location ??'') }}" required>
+                                   placeholder="SmartXp" value="{{ old('location',$event->location ?? '') }}" required>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <div class="form-group autocomplete">
-                                <label for="organisation">Organisation:</label>
-                                <input class="form-control committee-search" id="organisation" name="committee"
-                                       placeholder="{{ $event->committee->name ?? '' }}"
-                                       value="{{ $event->committee->id ?? '' }}">
-                            </div>
-                        </div>
-
+                        <!-- Start -->
                         <div class="col-md-6 mb-3">
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'start',
                                 'label' => 'Event start:',
-                                'placeholder' => request()->old('start')? strtotime(request()->old('start')):($event ? $event->start : null)
+                                'placeholder' => request()->old('start') ? strtotime(request()->old('start')) : ($event ? $event->start : null)
                             ])
                         </div>
 
+                        <!-- End -->
                         <div class="col-md-6 mb-3">
                             @include('website.layouts.macros.datetimepicker',[
                                 'name' => 'end',
@@ -59,29 +54,48 @@
                             ])
                         </div>
 
+                        <!-- Visibility -->
                         <div class="col-md-6 mb-3">
-
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" {{ (old('secret')===1||$event != null && $event->secret ? 'selected' : '') }}>
+                                <option value="1" {{ (old('secret') === 1 || $event != null && $event->secret ? 'selected' : '') }}>
                                     Secret
                                 </option>
-                                <option value="0" {{ (old('secret')===0||$event != null && !$event->secret ? 'selected' : '') }}>
+                                <option value="0" {{ (old('secret') === 0 || $event != null && !$event->secret ? 'selected' : '') }}>
                                     Public
                                 </option>
                             </select>
-
                         </div>
 
+                        <!-- Publication -->
                         <div class="col-md-6 mb-3">
+                            @include('website.layouts.macros.datetimepicker',[
+                                'name' => 'publication',
+                                'label' => 'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
+                                'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
+                                'not_required'=>true,
+                            ])
+                        </div>
 
+                        <!-- Organisers -->
+                        <div class="col-md-6 mb-3">
+                            <div class="form-group autocomplete">
+                                <label for="organisation">Organised by:</label>
+                                <input class="form-control committee-search" id="organisation" name="committee"
+                                       placeholder="{{ $event->committee->name ?? '' }}"
+                                       value="{{ $event->committee->id ?? '' }}">
+                            </div>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="col-md-6 mb-3">
                             <div class="custom-file">
-                                <label class="form-label" for="image">Set event image:</label>
+                                <label for="image">Set event image:</label>
                                 <input type="file" id="image" class="form-control" name="image">
                             </div>
-
                         </div>
 
+                        <!-- Category -->
                         @php($categories = Proto\Models\EventCategory::all())
                         @if(count($categories) > 0)
                             <div class="col-md-6 mb-3">
@@ -89,7 +103,7 @@
                                 <label for="category">Event category:</label>
                                 <select id="category" name="category" class="form-control">
                                     <option {{ $event && !$event->category ? 'selected' : '' }}>
-                                        Uncategorised
+                                        Uncategorized
                                     </option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ $event && $event->category_id == $category->id ? 'selected' : '' }}>
@@ -100,19 +114,18 @@
                             </div>
                         @endif
 
+                        <!-- External -->
                         <div class="col-md-6 mb-3">
-
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_external" {{($event && $event->is_external ? 'checked' : '') }}>
                                     This activity is not organized by Proto.
                                 </label>
                             </div>
-
                         </div>
 
+                        <!-- Food -->
                         <div class="col-md-6 mb-3">
-
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="involves_food"
@@ -120,11 +133,10 @@
                                     This activity involves people eating food.
                                 </label>
                             </div>
-
                         </div>
 
+                        <!-- Force Calendar -->
                         <div class="col-md-6 mb-3">
-
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="force_calendar_sync"
@@ -132,11 +144,10 @@
                                     Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
                                 </label>
                             </div>
-
                         </div>
 
+                        <!-- Feature -->
                         <div class="col-md-6 mb-3">
-
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_featured"
@@ -144,7 +155,6 @@
                                     Feature this event on the homepage.
                                 </label>
                             </div>
-
                         </div>
 
                     </div>
