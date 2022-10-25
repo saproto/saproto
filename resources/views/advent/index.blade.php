@@ -15,19 +15,18 @@
             @foreach($eventsArray as $colIndex=>$column)
                 <div class="col">
                     @foreach($column as $rowIndex=>$event)
-                        @if($date->addHours($colIndex*4+$rowIndex)->timestamp<Carbon::now()->timestamp)
+                        @if($event->isPublished())
                         <div>
                             @include('event.display_includes.event_block', ['event'=> $event])
                         </div>
                         @else
-                            <a class="card mb-3 leftborder leftborder-info text-decoration-none">
+                            <a class="card mb-3 leftborder leftborder-info text-decoration-none text-primary">
                             <div>
-                                <div unix-time="{{$date->addHours($colIndex*4+$rowIndex)->timestamp}}" class="h1 col text-center countdown">Loading...</div>
+                                <div unix-time="{{$event->publication}}" class="h1 col text-center countdown">Loading...</div>
                             </div>
                             </a>
                         @endif
-                    {{$colIndex*4+$rowIndex}}
-                        {{$date->addHour($colIndex*4+$rowIndex)->diffForHumans()}}
+                        {{$event->title}}
                     @endforeach
                 </div>
             @endforeach
@@ -44,7 +43,6 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
 
         let timers=Array.from(document.getElementsByClassName("countdown"));
-        console.log(timers)
         timers.forEach((timer)=>{
         var timing = setInterval( // you're making an interval - a thing, that is updating content after number of miliseconds, that you're writing after comma as second parameter
         function () {
@@ -65,8 +63,8 @@
 
         if (timeLeft <= 0) {
         clearInterval(timing);
-        window.location.reload();
-        document.getElementById("countdown").innerHTML = "It's over"; //if there's no time left, programm in this 2 lines is clearing interval (nothing is counting now)
+        document.getElementById("countdown").innerHTML = "It's over"; //if there's no time left, program in this 2 lines is clearing interval (nothing is counting now)
+            window.location.reload();
         //and you see "It's over" instead of time left
         }
         }, 1000);

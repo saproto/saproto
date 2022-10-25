@@ -8,7 +8,13 @@ import './utilities'
 import './broto'
 import './nightMode'
 // Execute theme JavaScript
-window[config.theme]?.()
+if((new Date().getMonth() + 1)===10){//FOR TESTING NEEDS CHANGED TO 12
+    console.log(config.theme)
+    window[december]?.()
+}else{
+    window[config.theme]?.()
+}
+
 
 // Disable submit buttons after a form has been submitted so
 // spamming the button does not result in multiple requests
