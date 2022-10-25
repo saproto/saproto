@@ -118,7 +118,7 @@ class Dinnerform extends Model
     /** @return bool Whether the current user is a helper for the event related to the dinnerform or has marked themselves as a helper. */
     public function isHelping()
     {
-        return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)
+        return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
             || ($this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()));
     }
 
