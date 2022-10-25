@@ -98,7 +98,7 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(function($orderline) {
+            ->sum(function ($orderline) {
                 return $orderline->price_with_discount;
             });
     }
@@ -119,13 +119,13 @@ class Dinnerform extends Model
     public function isHelping()
     {
         return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)
-            || ( $this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()) );
+            || ($this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()));
     }
 
     /** @return bool Whether the current user has any discounts. */
     public function hasDiscount()
     {
-        return $this->regular_discount_percentage || ( $this->helper_discount && $this->isHelping() );
+        return $this->regular_discount_percentage || ($this->helper_discount && $this->isHelping());
     }
 
     /** @return bool Whether the current user has made an order yet. */
