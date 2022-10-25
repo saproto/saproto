@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property bool|null $helper
  * @property-read User $user
  * @property-read Dinnerform $dinnerform
+ * @property-read Dinnerform $price_with_discount
  * @mixin Eloquent
  **/
 class DinnerformOrderline extends Model
@@ -41,13 +42,15 @@ class DinnerformOrderline extends Model
         return $this->belongsTo('Proto\Models\Dinnerform');
     }
 
-    /** @return float Price of orderline - possible discount */
-    public function price() {
-        $price = $this->attributes['price'];
-        if($this->helper && $this->dinnerform->discount){
-            $discounted = $price - $this->dinnerform->discount;
-            if($discounted > 0)return $discounted;
-            return 0;
+    /** @return float Price of orderline reduced by possible discounts. */
+    public function getPriceWithDiscountAttribute()
+    {
+        $with_regular_discount = $this->price * $this->dinnerform->regular_discount;
+        $price = round($with_regular_discount, 2, PHP_ROUND_HALF_DOWN);
+
+        if($this->helper && $this->dinnerform->helper_discount){
+            $with_helper_discount = $price - $this->dinnerform->helper_discount;
+            return max(0, $with_helper_discount);
         }
 
         return $price;
