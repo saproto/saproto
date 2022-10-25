@@ -7,7 +7,7 @@
                 @if($dinnerform->hasExpired())
                     <div class="btn btn-danger btn-block mb-3 ">
                         <i class="fas fa-lock fa-fw me-2" aria-hidden="true"></i>
-                        <span>This dinner form has ended</span>
+                        <span>This dinnerform has ended</span>
                     </div>
                 @else
                     <div class="btn btn-info btn-block mb-3 ">
