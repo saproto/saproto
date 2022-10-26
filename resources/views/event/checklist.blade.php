@@ -17,6 +17,23 @@
                 </div>
 
                 <div class="card-body">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Absent {{$event->activity->id}}</th>
+                                <th>Present {{$event->allUsers()->count()}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><div id="absent">{{\Proto\Http\Controllers\ParticipationController::getPresence($event->activity->id)->absent}}</div></td>
+                            <td><div id="present">{{\Proto\Http\Controllers\ParticipationController::getPresence($event->activity->id)->present}}</div></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-body">
 
                     <table class="table table-responsive">
 
@@ -108,13 +125,19 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        present=document.getElementById('present');
+        absent=document.getElementById('absent');
+
         document.querySelectorAll('.is_present').forEach(el => {
             el.onclick = _ => {
                 get("{{ route('event::togglepresence', ['id' => 'id']) }}".replace("id", el.getAttribute('data-id')))
-                .then(_ => {
+                .then((data) => {
+                    console.log(data)
                     el.classList.toggle('bg-success')
                     el.classList.toggle('bg-danger')
                     el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                    present.innerHTML=data.present
+                    absent.innerHTML=data.absent
                 })
             }
         })
