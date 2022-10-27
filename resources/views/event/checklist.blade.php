@@ -126,7 +126,6 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         present=document.getElementById('present');
-        absent=document.getElementById('absent');
 
         document.querySelectorAll('.is_present').forEach(el => {
             el.onclick = _ => {
