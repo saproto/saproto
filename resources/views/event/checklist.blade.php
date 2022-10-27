@@ -20,14 +20,12 @@
                     <table class="table table-responsive">
                         <thead>
                             <tr>
-                                <th>Absent {{$event->activity->id}}</th>
-                                <th>Present {{$event->allUsers()->count()}}</th>
+                                <th>Present</th>
                             </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td><div id="absent">{{\Proto\Http\Controllers\ParticipationController::getPresence($event->activity->id)->absent}}</div></td>
-                            <td><div id="present">{{\Proto\Http\Controllers\ParticipationController::getPresence($event->activity->id)->present}}</div></td>
+                            <td><span id="present">{{\Proto\Http\Controllers\ParticipationController::getPresent($event->activity->id)}}</span>/{{$event->allUsers()->count()}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -132,12 +130,10 @@
             el.onclick = _ => {
                 get("{{ route('event::togglepresence', ['id' => 'id']) }}".replace("id", el.getAttribute('data-id')))
                 .then((data) => {
-                    console.log(data)
                     el.classList.toggle('bg-success')
                     el.classList.toggle('bg-danger')
                     el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
-                    present.innerHTML=data.present
-                    absent.innerHTML=data.absent
+                    present.innerHTML=data
                 })
             }
         })

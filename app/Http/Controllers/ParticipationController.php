@@ -216,26 +216,16 @@ class ParticipationController extends Controller
         $participation->is_present = ! $participation->is_present;
         $participation->save();
 
-        return response()->json($this->getPresence($participation->activity_id));
+        return response()->json($this->getPresent($participation->activity_id));
     }
 
-    static function getPresence($activity_id){
-        $present = ActivityParticipation::query()
+    static function getPresent($activity_id){
+        return ActivityParticipation::query()
             ->where('activity_id', $activity_id)
             ->where('is_present', true)
             ->where('backup', false)
             ->whereNull('deleted_at')
             ->count();
-        $absent  = ActivityParticipation::query()
-            ->where('activity_id', $activity_id)
-            ->where('is_present', false)
-            ->where('backup', false)
-            ->whereNull('deleted_at')
-            ->count();
-        return (object) [
-            'present' => $present,
-            'absent' => $absent,
-        ];
     }
 
     /** @param Activity $activity */
