@@ -1,7 +1,9 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Participant checklist for {{ $event->title }}
+    Participant checklist for {{ $event->title }} <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}" class="btn btn-default float-end">
+        Back to event
+    </a>
 @endsection
 
 @section('container')
