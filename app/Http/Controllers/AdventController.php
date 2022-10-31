@@ -8,13 +8,14 @@ use Proto\Models\Event;
 class AdventController extends Controller
 {
     public function index(){
-        $ids=[[2028,13,73,17],[15,61,72,84],[84,34,31,42]];
-        $date=Carbon::create('first day of december')->addHours(12);
-        $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-10-19 12:05:00');
-        $events=[];
-        foreach ($ids as $key=>$id){
-            $events[$key]=Event::whereIn('id', $id)->get();
-        }
+        $ids=[2063,2067,2068, 2072,2064,2070, 2071,2066,2065];
+        $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-11-30 12:12:12');
+
+//        to test uncomment the two lines below!
+//        $ids=[2040,2,3, 1,5,2068, 7,2030,9];
+//        $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-10-19 12:05:00');
+
+        $events=Event::whereIn('id', $ids)->get();
         return view('advent.index',['eventsArray'=>$events, 'date'=>$date]);
     }
 }

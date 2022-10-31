@@ -8,7 +8,7 @@ import './utilities'
 import './broto'
 import './nightMode'
 // Execute theme JavaScript
-if((new Date().getMonth() + 1)!==10){//FOR TESTING NEEDS CHANGED TO 12
+if((new Date().getMonth() + 1)!==12){
     window[config.theme]?.()
 }
 

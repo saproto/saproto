@@ -1,7 +1,6 @@
-@if(Carbon::now()->month===Carbon::OCTOBER)
+@if(Carbon::now()->month===Carbon::DECEMBER ||(config('app.env') != 'production'))
     <link rel="stylesheet" href="{{ mix('/css/application-december.css') }}">
-
-    @for($count=0; $count<120; $count++)
+    @for($count=0; $count<12*12; $count++)
         <div class="snowflake"></div>
     @endfor
 @elseif(Auth::check() && Auth::user()->theme)

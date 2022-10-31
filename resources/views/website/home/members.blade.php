@@ -56,7 +56,7 @@
                ❄🎄🍬
             </div>
             <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
-                <div unix-time={{Carbon::create('first day of december')->addHours(12)->timestamp}} class="h1 col text-center december-countdown">Loading...</div>
+                <div unix-time={{ $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-11-30 12:12:12')->timestamp}} class="h1 col text-center december-countdown">Loading...</div>
             </div>
             <div class="card-footer">
                 <a href="{{ route("advent::index") }}" class="btn btn-info btn-block my-2">👻</a>
