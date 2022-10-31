@@ -51,17 +51,19 @@
     <div class="col-xl-4 col-md-12">
 
         @if(Carbon::now()->month>=10)
-        <div class="card mb-3">
-            <div class="card-header bg-dark text-white">
-               ❄🎄🍬
-            </div>
-            <div class="card-body overflow-hidden" style="max-height: calc(100vh - 250px)">
-                <div unix-time={{ $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-11-30 12:12:12')->timestamp}} class="h1 col text-center december-countdown">Loading...</div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ route("advent::index") }}" class="btn btn-info btn-block my-2">👻</a>
-            </div>
-        </div>
+            <?php $date=Carbon::createFromFormat('Y-m-d H:i:s', '2022-11-30 12:12:12')->timestamp; ?>
+            <a href="{{route('advent::index')}}" class="card mb-3 text-decoration-none">
+                <div class="card-header bg-dark text-white">
+                   ❄🎄🍬👻
+                </div>
+                <div class="card-body">
+                    @if($date > Carbon::now()->timestamp)
+                        <div unix-time="{{ $date }}" class="h1 col text-center december-countdown">Loading...</div>
+                    @else
+                        <h1 class="text-center">🎄 Advent Calendar 🎄</h1>
+                    @endif
+                </div>
+            </a>
         @endif
 
         @if(count($dinnerforms)>0)
