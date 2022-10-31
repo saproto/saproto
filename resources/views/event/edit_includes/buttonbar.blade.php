@@ -1,6 +1,6 @@
 @if($event)
     <button type="submit" class="btn btn-success float-end ms-2">
-        Update
+        Update event details
     </button>
     @include('website.layouts.macros.confirm-modal', [
         'action' => route("event::delete", ['id' => $event->id]),
