@@ -55,8 +55,6 @@
             <strong>{{ $event->title }}</strong>
 
             @if($event->category)
-                <br>
-
                 <span class="badge rounded-pill bg-info px-3 mt-1 d-inline-block mw-100 ellipsis">
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>
                     {{ $event->category->name }}
