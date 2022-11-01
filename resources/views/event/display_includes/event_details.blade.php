@@ -41,8 +41,15 @@
         <img class="card-img-top" src="{{ $event->image->generateImagePath(800, 300) }}" width="100%">
     @endif
 
-    <div class="card-header bg-light">
+    <div class="card-header bg-light justify-content-between d-inline-flex align-items-center">
         <h5 class="card-title">@yield('page-title')</h5>
+
+        @if($event->category)
+            <span class="badge rounded-pill bg-info ellipsis float-end mw-100">
+                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
+            </span>
+        @endif
+        
     </div>
 
     <ul class="list-group list-group-flush">
@@ -52,15 +59,6 @@
                 <i class="fas fa-fw fa-users" aria-hidden="true"></i>
                 Organised by the @if($event->committee->is_society) society @endif
                 <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">{{ $event->committee->name }}</a>
-            </li>
-        @endif
-
-        @if($event->category)
-            <li class="list-group-item">
-                <span><i class="fas fa-tag fa-fw"></i>Category:</span>
-                <span class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis">
-                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
-                </span>
             </li>
         @endif
 
