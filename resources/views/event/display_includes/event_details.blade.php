@@ -49,8 +49,8 @@
 
         @if($event->category)
             <li class="list-group-item">
-                <span><i class="fas fa-tag fa-fw"></i>Category:</span><br>
-                <span class="badge rounded-pill bg-info px-3 mt-2 d-inline-block mw-100 ellipsis">
+                <span><i class="fas fa-tag fa-fw"></i>Category:</span>
+                <span class="badge rounded-pill bg-info d-inline-block mw-100 ellipsis">
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
                 </span>
             </li>
