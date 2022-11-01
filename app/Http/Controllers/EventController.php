@@ -51,11 +51,11 @@ class EventController extends Controller
         $category = EventCategory::find($request->input('category'));
         foreach ($data as $index=>$query){
             if($category){
-                $data[$index]=$query->whereHas('Category', function ($q) use($category) {
+                $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
                     $q->where('id', $category->id)->where('deleted_at', '=', null);
                 });
             }
-            $data[$index]=$query->get();
+            $data[$index] = $query->get();
         }
 
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
