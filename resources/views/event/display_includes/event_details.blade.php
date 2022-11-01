@@ -6,6 +6,7 @@
     <div class="alert alert-warning" role="alert">
         This event is scheduled and not shown yet on the site.
         For now you can only access it directly via the URL.
+        It is scheduled for <i>{{Carbon::createFromTimestamp($event->publication)->format('l j F Y, H:i')}}</i>
     </div>
 @endif
 
@@ -26,6 +27,13 @@
     </div>
 
 @endif
+
+
+<div class="card mb-3">
+    <a href="{{ route("event::list", ['id'=>$event->id]) }}" class="btn btn-default">
+        Back to calendar
+    </a>
+</div>
 
 <div class="card mb-3">
 
