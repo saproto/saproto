@@ -48,8 +48,8 @@ class ExportController extends Controller
                 if ($user->can('board')) {
                     $data = Activity::all();
                 } else {
-                    $data = Activity::with('event')->get()->filter(function ($activity) use($user) {
-                        return $activity->event&& $activity->event->mayViewEvent($user);
+                    $data = Activity::with('event')->get()->filter(function ($activity) use ($user) {
+                        return $activity->event && $activity->event->mayViewEvent($user);
                     });
                     foreach ($data as $key => $val) {
                         unset($data[$key]->event);
@@ -73,7 +73,7 @@ class ExportController extends Controller
                 if ($user->can('sysadmin')) {
                     $data = Event::all();
                 } else {
-                    $data = Event::all()->filter(function ($event) use($user) {
+                    $data = Event::all()->filter(function ($event) use ($user) {
                         return $event->mayViewEvent($user);
                     });
                 }

@@ -527,7 +527,7 @@ class EventController extends Controller
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
         foreach (Event::where('start', '>', strtotime('-6 months'))->get() as $event) {
-            if (!$event->mayViewEvent(Auth::user())) {
+            if (! $event->mayViewEvent(Auth::user())) {
                 continue;
             }
 
