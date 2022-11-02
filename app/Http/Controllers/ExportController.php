@@ -45,7 +45,7 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                if ($user->can('board')) {
+                if ($user->can('admin')) {
                     $data = Activity::all();
                 } else {
                     $data = Activity::with('event')->get()->filter(function ($activity) use ($user) {
