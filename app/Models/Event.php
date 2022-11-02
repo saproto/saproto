@@ -117,13 +117,9 @@ class Event extends Model
     /** @return bool */
     public function mayViewEvent($user)
     {
-        //board may always view events
-        if($user && $user->can('board')){
-            return true;
-        }
-        //only show secret events if the user is participating
+        //only show secret events if the user is participating, helping or organising
         if($this->secret){
-            if($user && $this->activity && $this->activity->isParticipating($user)){
+            if($user && $this->activity && ($this->activity->isParticipating($user)||$this->activity->isHelping($user)||$this->activity->isOrganising($user))){
                 return true;
             }
         }

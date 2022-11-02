@@ -45,11 +45,11 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                if ($user->can('admin')) {
+                if ($user->can('board')) {
                     $data = Activity::all();
                 } else {
-                    $data = Activity::with('event')->get()->filter(function ($val) {
-                        return $val->event && $val->event->secret == 0;
+                    $data = Activity::with('event')->get()->filter(function ($activity) use($user) {
+                        return $activity->event&& $activity->event->mayViewEvent($user);
                     });
                     foreach ($data as $key => $val) {
                         unset($data[$key]->event);
@@ -70,10 +70,12 @@ class ExportController extends Controller
                 $data = Company::all();
                 break;
             case 'events':
-                if ($user->can('admin')) {
+                if ($user->can('sysadmin')) {
                     $data = Event::all();
                 } else {
-                    $data = Event::where('secret', 0)->get();
+                    $data = Event::all()->filter(function ($event) use($user) {
+                        return $event->mayViewEvent($user);
+                    });
                 }
                 break;
             case 'mailinglists':
