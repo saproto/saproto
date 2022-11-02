@@ -54,27 +54,23 @@
 
             {{-- Secret --}}
             @if($event->secret)
-                <span class="badge bg-info float-end" data-bs-toggle="tooltip" data-bs-placement="top"
+                <span class="badge bg-info float-end mb-1" data-bs-toggle="tooltip" data-bs-placement="top"
                       title="Secret activities can only be visited if you know the link. You can see it now because you are an admin.">
-                    <i class="fas fa-eye-slash fa-fw me-1"></i> Secret activity!
+                    <i class="fas fa-eye-slash fa-fw me-1"></i> Secret!
                 </span>
-
-                <br>
             @endif
 
             {{-- Published --}}
             @if($event->publication && !$event->isPublished())
-                <span class="badge bg-warning float-end" data-bs-toggle="tooltip" data-bs-placement="top"
+                <span class="badge bg-warning float-end mb-1" data-bs-toggle="tooltip" data-bs-placement="top"
                       title="Scheduled activities can only be visited if the schedule date is past. You can see it now because you are an admin.">
-                    <i class="fas fa-eye-slash fa-fw me-1"></i> Scheduled activity!
+                    <i class="fas fa-eye-slash fa-fw me-1"></i> Scheduled!
                 </span>
-
-                <br>
             @endif
 
             {{-- Category --}}
             @if($event->category)
-                <span class="badge rounded-pill bg-info px-3 mt-1 d-inline-block mw-100 ellipsis float-end">
+                <span class="badge rounded-pill bg-info px-3 me-1 mb-1 d-inline-block mw-100 ellipsis float-end">
                     <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>
                     {{ $event->category->name }}
                 </span>
