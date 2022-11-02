@@ -74,7 +74,7 @@ class SearchController extends Controller
             ['id', 'title']
         );
         foreach ($presearch_events as $event) {
-            if ($event->mayViewEvent(Auth::user()) || Auth::user()->can('board')) {
+            if ($event->mayViewEvent(Auth::user())) {
                 $events[] = $event;
             }
         }

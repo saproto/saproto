@@ -1,4 +1,4 @@
-@if($event->mayViewEvent(Auth::user()) || Auth::user()->can('board'))
+@if($event->mayViewEvent(Auth::user()))
 
     <a class="card mb-3 leftborder leftborder-info text-decoration-none"
        href="{{ route('event::show', ['id' => $event->getPublicId()]) }}">
