@@ -1,5 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
+use App;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
@@ -33,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $importSeeder = new ImportLiveDataSeeder();
         $importSeeder->run($adminPassword);
 
+        // TODO: Replace deprecated factory() with new Database\Factories
         echo PHP_EOL;
         $otherSeeder = new OtherDataSeeder();
         $otherSeeder->run();

@@ -51,14 +51,6 @@ return [
             'days' => 7,
         ],
 
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
-            'emoji' => ':boom:',
-            'level' => 'critical',
-        ],
-
         'stderr' => [
             'driver' => 'monolog',
             'handler' => StreamHandler::class,

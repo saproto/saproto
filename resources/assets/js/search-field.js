@@ -1,6 +1,5 @@
 import BaseComponent from "bootstrap/js/src/base-component"
 import Manipulator from "bootstrap/js/src/dom/manipulator"
-import { typeCheckConfig } from "bootstrap/js/src/util"
 
 /**
  * ------------------------------------------------------------------------
@@ -76,7 +75,7 @@ class SearchField extends BaseComponent {
             ...Manipulator.getDataAttributes(this._element),
             ...(typeof config === 'object' ? config : {})
         }
-        typeCheckConfig(NAME, config, DefaultType)
+        this._typeCheckConfig(NAME, config, DefaultType)
         return config
     }
 
