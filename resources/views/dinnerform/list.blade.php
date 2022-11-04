@@ -1,7 +1,7 @@
-@extends('website.layouts.redesign.generic')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Dinner Form Admin
+    Dinnerform Admin
 @endsection
 
 @section('container')

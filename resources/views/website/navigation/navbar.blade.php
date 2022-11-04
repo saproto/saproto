@@ -73,7 +73,7 @@
 
                                     @can('tipcie')
                                         <li role="separator" class="dropdown-divider"></li>
-                                        <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinner Forms</a>
+                                        <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinnerforms</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie Order Overview</a>
                                     @endcan
 

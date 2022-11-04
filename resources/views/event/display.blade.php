@@ -47,7 +47,7 @@
 
             <div class="col-md-4">
                 <div class="card mb-3">
-                @if(count($event->activity->helpingCommitteeInstances) > 0 )
+                @if($event->activity->helpingCommitteeInstances && count($event->activity->helpingCommitteeInstances) > 0 )
                     @include('event.display_includes.helpers', [
                         'event' => $event
                     ])
@@ -57,7 +57,7 @@
                 @if($event->dinnerforms()->count())
                     <div class="card mb-3">
 
-                        <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinner Form</div>
+                        <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
                         <div class="card-body">
                             @foreach($event->dinnerforms()->get() as $dinnerform)
                                 @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])

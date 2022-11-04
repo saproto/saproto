@@ -1,33 +1,36 @@
-@extends('website.layouts.redesign.generic')
+@extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    Dinner Form Admin
+    Dinnerform Admin
 @endsection
 @section('container')
-    <div class="card mb-3">
+    <div class="card mb-3 col-lg-8 ms-auto me-auto">
 
         <div class="card-header bg-dark text-white mb-1">
             <span>Dinnerform orderline overview</span>
+            <a href="{{ route('dinnerform::add') }}" class="btn btn-info badge float-end ms-2">
+                <i class="fas fa-hand-point-left me-1"></i> Return to overview
+            </a>
             @if($dinnerform->isCurrent())
                 @include('website.layouts.macros.confirm-modal', [
-                    'action' => route("dinnerform::close", ['id' => $dinnerform->id]),
-                    'text' => '<i class="fas fa-ban"></i> Close dinnerform!',
-                    'title' => 'Confirm Close',
-                    'message' => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
-                    'confirm' => 'Close',
-                    'classes' => 'btn btn-warning badge float-end'
+                         'action' => route("dinnerform::close", ['id' => $dinnerform->id]),
+                         'text' => '<i class="fas fa-ban me-1"></i> Close dinnerform!',
+                         'title' => 'Confirm Close',
+                         'message' => "Are you sure you want to close the dinnerform for $dinnerform->restaurant early? The dinnerform will close automatically at $dinnerform->end.",
+                         'confirm' => 'Close',
+                         'classes' => 'btn btn-warning badge float-end'
                 ])
             @elseif(!$dinnerform->closed)
                 @include('website.layouts.macros.confirm-modal', [
                          'action' => route("dinnerform::process", ['id' => $dinnerform->id]),
-                         'text' => '<i class="fas fa-file-export"></i> Process dinnerform',
+                         'text' => '<i class="fas fa-file-export me-1"></i> Process dinnerform',
                          'title' => 'Confirm processing dinnerform',
                          'message' => "Are you sure you want to process the dinnerform from $dinnerform->restaurant?<br> This will convert all dinnerform orderlines to orderlines and mean none of the orderlines can be changed anymore!",
                          'confirm' => 'Process',
                          'classes'=>"btn btn-danger badge float-end"
-                    ])
+                ])
             @else
-                <span class="bg-info badge float-end">
+                <span class="badge btn bg-primary cursor-default badge float-end">
                     <i class="fas fa-check"></i> Processed!
                 </span>
             @endif
@@ -35,89 +38,94 @@
 
         <div class="table-responsive">
 
-            <table class="table table-sm">
+            <table class="table table-sm text-center">
 
                 <thead>
                     <tr class="bg-dark text-white">
-                        <td>Total</td>
-                        <td>Orders</td>
-                        <td>Helpers</td>
-                        <td>Helper discount</td>
-                        <td>Total with helper discount</td>
-                        <td></td>
-                        <td></td>
+                        <th>Orders</th>
+                        <th>Helpers</th>
+                        <th>Helper discount</th>
+                        <th>Regular discount</th>
+                        <th>Total Price</th>
+                        <th>Total Discounted</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
-                        <td class="align-middle">€{{ $dinnerform->totalAmount() }}</td>
-                        <td class="align-middle">{{ $dinnerform->orderCount() }}</td>
-                        <td class="align-middle">{{ $dinnerform->helperCount() }}</td>
-                        <td class="align-middle">€{{ $dinnerform->discount }}</td>
-                        <td class="align-middle">€{{ $dinnerform->totalAmountwithHelperDiscount() }}</td>
+                        <td>{{ $dinnerform->orderCount() }}</td>
+                        <td>{{ $dinnerform->helperCount() }}</td>
+                        <td>€{{ number_format($dinnerform->helper_discount, 2) }}</td>
+                        <td>{{ $dinnerform->regular_discount_percentage }}%</td>
+                        <td>€{{ number_format($dinnerform->totalAmount(), 2) }}</td>
+                        <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
                     </tr>
                 </tbody>
 
-                <thead>
-                    <tr class="bg-dark text-white">
-                        <td>User</td>
-                        <td>Order</td>
-                        <td>Price</td>
-                        <td>Helper</td>
-                        <td>Price with discount</td>
-                        <td>Controls</td>
-                        <td></td>
-                    </tr>
-                </thead>
+            </table>
 
-                <tbody>
-                    @if(count($orderList) > 0)
+            @if(count($orderList) > 0)
+
+                <table class="table table-sm">
+
+                    <thead>
+                        <tr class="bg-dark text-white">
+                            <th></th>
+                            <th>User</th>
+                            <th>Helper</th>
+                            <th>Order</th>
+                            <th>Price</th>
+                            <th>Discounted</th>
+                            <th class="text-center">Controls</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
                         @foreach($orderList as $order)
                             <tr>
-                                <td class="align-middle">{{ $order->user->name }}
-                                    <span class="text-muted"> {{ $order->user->id }}</span>
-                                </td>
-                                <td class="align-middle">{{ $order->description }}</td>
-                                <td class="align-middle"> €{{ $order->price }} </td>
-                                <td class="align-middle">
-                                    @if($order->helper)
-                                     <i class="fas fa-check text-info" aria-hidden="true"></i>
-                                    @endif
+                                <td class="text-muted">#{{ $order->user->id }}</td>
+                                <td>
+                                    {{ $order->user->name }}
                                 </td>
                                 <td>
-                                    €{{$order->price}}
+                                    @if($order->helper)
+                                        <i class="fas fa-check text-info" aria-hidden="true"></i>
+                                    @endif
                                 </td>
-                                <td class="text-start align-middle">
+                                <td>{{ $order->description }}</td>
+                                <td> €{{ number_format($order->price, 2) }} </td>
+                                <td>
+                                    €{{ number_format($order->price_with_discount, 2) }}
+                                </td>
+                                <td class="text-center">
                                     @if(!$order->closed)
                                     <a href="{{ route('dinnerform::orderline::edit', ['id' => $order->id]) }}">
                                         <i class="fas fa-edit me-2"></i>
                                     </a>
                                     @include('website.layouts.macros.confirm-modal', [
-                                        'action' => route("dinnerform::orderline::delete", ['id' => $order->id]),
-                                        'text' => '<i class="fas fa-trash text-danger"></i>',
-                                        'title' => 'Confirm Delete',
-                                        'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
-                                        'confirm' => 'Delete',
-
+                                             'action' => route("dinnerform::orderline::delete", ['id' => $order->id]),
+                                             'text' => '<i class="fas fa-trash text-danger"></i>',
+                                             'title' => 'Confirm Delete',
+                                             'message' => "Are you sure you want to remove the dinnerform opening $dinnerform->start ordering at $dinnerform->restaurant?",
+                                             'confirm' => 'Delete'
                                     ])
                                     @endif
                                 </td>
                             </tr>
-                      @endforeach
-                @else
-                    <tr>
-                        <td>There are no orderlines yet!</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                @endif
+                        @endforeach
+                    </tbody>
 
-                </tbody>
+                </table>
 
-        </table>
+            @else
+
+                <div class="text-center text-muted pb-3">
+                    There are no orders yet!
+                </div>
+
+            @endif
+
+        </div>
+
     </div>
 @endsection

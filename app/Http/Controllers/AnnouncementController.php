@@ -105,16 +105,13 @@ class AnnouncementController extends Controller
     public function dismiss($id)
     {
         /** @var Announcement $announcement */
-        $announcement = Announcement::findOrFail($id);
+        $announcement = Announcement::find($id);
 
-        if (! $announcement->is_dismissable) {
-            Session::flash('flash_message', 'You cannot dismiss this announcement.');
+        if ($announcement == null || ! $announcement->is_dismissable) {
             return Redirect::back();
         }
 
         $announcement->dismissForUser(Auth::user());
-
-        Session::flash('flash_message', 'Announcement dismissed.');
         return Redirect::back();
     }
 }

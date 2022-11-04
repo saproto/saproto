@@ -52,7 +52,7 @@ class Account extends Model
 
         foreach ($orderlines as $orderline) {
             // We sort by date, where a date goes from 6am - 6am.
-            $sortDate = $orderline->created_at->subHours(6)->toDateString();
+            $sortDate = Carbon::createFromFormat('Y-m-d H:i:s', $orderline->created_at)->subHours(6)->toDateString();
 
             // Abbreviate variable names.
             $nr = $orderline->account_number;

@@ -1,26 +1,3 @@
-@php($featuredevents = Proto\Models\Event::where('secret', false)->where('is_featured', true)->where('end', '>=', date('U'))->orderBy('start')->limit($n)->get())
-
-@if(count($featuredevents) > 0)
-
-<div class="card mb-3">
-    <div class="card-header bg-dark text-white">
-        <i class="fas fa-star fa-fw me-2"></i> Featured events
-    </div>
-    <div class="card-body">
-
-
-        @foreach($featuredevents as $key => $event)
-
-            @include('event.display_includes.event_block', ['event'=> $event, 'countdown' => true])
-
-            @php($week = date('W', $event->start))
-
-        @endforeach
-
-    </div>
-</div>
-
-@endif
 
 <div class="card mb-3">
     <div class="card-header bg-dark text-white">
@@ -28,17 +5,24 @@
     </div>
     <div class="card-body">
 
-        @php($events = Proto\Models\Event::where('is_featured', false)->where('end', '>=', date('U'))->orderBy('start')->with('activity')->limit($n)->get())
+        @php
+            $events = Proto\Models\Event::query()
+                ->where('is_featured', false)
+                ->where('end', '>=', date('U'))
+                ->orderBy('start')->with('activity')
+                ->limit($n)
+                ->get()
+        @endphp
 
         @if(count($events) > 0)
 
             @foreach($events as $key => $event)
 
-                @if(!$event->secret || (Auth::check() && ($event->activity && $event->activity->isParticipating(Auth::user()))))
+                @if($event->mayViewEvent(Auth::user()) && ! $event->secret && $event->isPublished())
 
                     @include('event.display_includes.event_block', ['event'=> $event])
 
-                    <?php $week = date('W', $event->start); ?>
+                    @php $week = date('W', $event->start); @endphp
 
                @endif
 

@@ -24,6 +24,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property string $description
  * @property int $start
  * @property int $end
+ * @property int $publication
  * @property int|null $image_id
  * @property Photo|null $photo
  * @property int|null $committee_id
@@ -114,8 +115,37 @@ class Event extends Model
         return $this->belongsTo('Proto\Models\Committee');
     }
 
-    /** @return BelongsTo|Photo */
-    public function photo()
+    /** @return bool */
+    public function mayViewEvent($user)
+    {
+        //board may always view events
+        if($user && $user->can('board')){
+            return true;
+        }
+
+        //only show secret events if the user is participating, helping or organising
+        if($this->secret){
+            if($user && $this->activity && ($this->activity->isParticipating($user) || $this->activity->isHelping($user) || $this->activity->isOrganising($user))){
+                return true;
+            }
+        }
+
+        //show non-secret events only when published
+        if(! $this->secret){
+            if(! $this->publication || $this->isPublished()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** @return bool */
+    public function isPublished() {
+        return $this->publication < Carbon::now()->timestamp;
+    }
+
+    /** @return BelongsTo */
+    public function image()
     {
         return $this->belongsTo('Proto\Models\Photo');
     }

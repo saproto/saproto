@@ -26,7 +26,12 @@ if (discordOnlineCount) {
 // Enables tooltips elements
 import { Tooltip } from 'bootstrap'
 const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-if (tooltipTriggerList.length) tooltipTriggerList.forEach(el => new Tooltip(el, {container: el.parentNode, boundary: document.body}))
+window.tooltips = {}
+if (tooltipTriggerList.length) {
+    tooltipTriggerList.forEach(el => {
+        window.tooltips[el.id] = Tooltip.getOrCreateInstance(el, {container: el.parentNode, boundary: document.body})
+    })
+}
 
 // Enable popover elements
 import { Popover } from 'bootstrap'
@@ -219,12 +224,12 @@ _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (_ => {
     let u = '//'+config.analytics_url+'/';
-    _paq.push(['setTrackerUrl', u + 'piwik.php']);
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
     _paq.push(['setSiteId', '1']);
     let d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.type = 'text/javascript';
     g.async = true;
     g.defer = true;
-    g.src = u + 'piwik.js';
+    g.src = u + 'matomo.js';
     s.parentNode.insertBefore(g, s);
 })()

@@ -157,7 +157,7 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        if (! ($user->address == null && $user->bank == null)) {
+        if (! ($user->address && $user->bank)) {
             Session::flash('flash_message', "This user really needs a bank account and address. Don't bypass the system!");
             return Redirect::back();
         }

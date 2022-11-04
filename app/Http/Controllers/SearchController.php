@@ -14,6 +14,7 @@ use Proto\Models\Achievement;
 use Proto\Models\Committee;
 use Proto\Models\Event;
 use Proto\Models\Page;
+use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\User;
 use Session;
@@ -73,8 +74,20 @@ class SearchController extends Controller
             ['id', 'title']
         );
         foreach ($presearch_events as $event) {
-            if (! $event->secret || (Auth::check() && Auth::user()->can('board'))) {
+            if ($event->mayViewEvent(Auth::user())) {
                 $events[] = $event;
+            }
+        }
+
+        $photoAlbums = [];
+        $presearch_photo_albums = $this->getGenericSearch(
+            PhotoAlbum::class,
+            $term,
+            ['id', 'name']
+        );
+        foreach ($presearch_photo_albums as $album) {
+            if (! $album->secret || (Auth::check() && Auth::user()->can('protography'))) {
+                $photoAlbums[] = $album;
             }
         }
 
@@ -84,6 +97,7 @@ class SearchController extends Controller
             'pages' => $pages,
             'committees' => $committees,
             'events' => array_reverse($events),
+            'photoAlbums'=>$photoAlbums,
         ]);
     }
 
