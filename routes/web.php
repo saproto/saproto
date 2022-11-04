@@ -10,6 +10,8 @@ View::composer('*', function ($view) {
     View::share('viewName', $view->getName());
 });
 
+// TODO: change string based controller route definitions to standard PHP callable syntax.
+
 Route::group(['middleware' => ['forcedomain']], function () {
 
     /* The main route for the frontpage. */

@@ -34,25 +34,25 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 30,
+            'backoff' => 30,
         ],
         'high' => [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'high',
-            'retry_after' => 30,
+            'backoff' => 30,
         ],
         'medium' => [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'medium',
-            'retry_after' => 60,
+            'backoff' => 60,
         ],
         'low' => [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'low',
-            'retry_after' => 120,
+            'backoff' => 120,
         ],
     ],
 
@@ -68,6 +68,7 @@ return [
     */
 
     'failed' => [
+        'driver' => 'database-uuids',
         'database' => env('DB_CONNECTION'),
         'table' => 'failed_jobs',
     ],

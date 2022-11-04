@@ -9,10 +9,6 @@ use Proto\Models\EmailDbAlias;
 use Proto\Models\EmailDbDomain;
 use Proto\Models\User;
 
-/**
- * TODO
- * Autorelate permissions to roles.
- */
 class MailAliasSync extends Command
 {
     /**
