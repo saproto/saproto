@@ -1,10 +1,14 @@
 <?php
 
+namespace Database\Seeders;
+
+use Carbon;
 use Illuminate\Database\Seeder;
 use Intervention\Image\Facades\Image;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
+use Faker\Factory;
 
 class PhotoSeeder extends Seeder
 {
@@ -18,7 +22,7 @@ class PhotoSeeder extends Seeder
         foreach (PhotoAlbum::all() as $album){
             $album->delete();
         }
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
 
         $n = 12 / 2;
         $time_start = microtime(true);
