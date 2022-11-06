@@ -22,7 +22,7 @@ jobs:
       SENTRY_PROJECT: sa-proto-website
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🔍 Read .env
         run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
@@ -36,17 +36,10 @@ jobs:
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
       - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: 📂 Cache front-end dependencies
-        id: npm-cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          cache: npm
 
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
