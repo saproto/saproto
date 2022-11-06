@@ -24,7 +24,7 @@
                        class="btn btn-success float-start me-3">
                         <i class="fas fa-images me-2"></i> <span id="albumTitle">{{ $photo->albumTitle }}</span>
                     </a>
-                    <a id="download" href="{{$photo->originalUrl}}" download
+                    <a id="download" href="{{$photo->downloadUrl}}" download
                        class="btn btn-success float-start me-3">
                         <i class="fas fa-download me-2"></i> high-res
                     </a>

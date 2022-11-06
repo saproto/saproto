@@ -4,6 +4,7 @@ namespace Proto\Http\Controllers;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Image;
 use Proto\Models\StorageEntry;
@@ -25,7 +26,11 @@ class FileController extends Controller
             abort(404);
         }
 
-        $file = Storage::disk('local')->get($entry->filename);
+        if(File::exists(Storage::disk('public')->path($entry->filename))) {
+            $file = Storage::disk('public')->get($entry->filename);
+        }else {
+            $file = Storage::disk('local')->get($entry->filename);
+        }
 
         $response = new Response($file, 200);
         $response->header('Content-Type', $entry->mime);

@@ -66,6 +66,7 @@ class PhotoController extends Controller
                 'private' => $photo->private,
                 'hasNextPhoto'=>$photo->getAdjacentPhoto(true, Auth::user()) !== null,
                 'hasPreviousPhoto'=>$photo->getAdjacentPhoto(false, Auth::user()) !== null,
+                'downloadUrl'=>route("image::get", ['id'=>$photo->file->id, 'hash'=>$photo->file->hash])
             ]);
     }
 
