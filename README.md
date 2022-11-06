@@ -37,12 +37,17 @@ This repository can be run through Docker by using `docker compose`. The website
 On Windows, Docker will now default to [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install). However, if you prefer to not use WSL, you can turn it off going to Settings > General and disable the option "Use the WSL 2 based engine". Be aware that in this case you need to have **Windows Educational or Pro** installed, because Docker uses the Hyper-V engine instead of WSL. Which needs to be activated in the Windows "optional features" settings page.
 
 To use WSL however you do need to install a distribution of your choice, such as Ubuntu, using `wsl --install -d <Distribution Name>`. Now you can continue the setup from within your WSL installation by starting your distribution using the command `wsl` and navigating to a directory inside your distribution. So, not a directory under `/mnt`, which are mounted from the Windows file system.
+Keep in mind that, by default, WSL distros do not come pre-installed with npm or Node. Please **do not** install these with `sudo apt install`, as this is most likely a different version from the one used in this project. Instead, opt to use [nvm](https://github.com/nvm-sh/nvm). This will allow you to easily install the version of Node that is currently being used (see [Client-side dependencies](client-side-dependencies)).
 
 ### Download
 First you need to clone the repository somewhere on your system.
-
+#### If you use SSH keys:
 ```
 git clone git@github.com:saproto/saproto.git
+```
+#### Otherwise, clone via https:
+```
+git clone https://github.com/saproto/saproto.git
 ```
 
 ### Setup
@@ -58,6 +63,8 @@ cp .env.docker.example .env
 After that, open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of [your dashboard](https://www.proto.utwente.nl/user/dashboard) on the ***live*** Proto website.
 
 #### Client-side dependencies
+If you have nvm installed, run `nvm install` to install the current used version of Node listed in .nvmrc.
+
 To install the client-side dependencies you'll need to run `npm install` to install all client-side dependencies.
 
 To compile the project assets (JS/CSS) run `npm run dev` to compile once or `npm run watch` to keep checking for changes to scripts or stylesheets.
