@@ -26,7 +26,9 @@ jobs:
 
       - name: 🔍 Read .env
         id: dotenv
-        uses: .env.prod
+        uses: falti/dotenv-action@v1.0.1
+        with:
+          path: .env.prod
 
       - name: 🖱️ Setup PHP v${{ steps.dotenv.outputs.php_version }}
         uses: shivammathur/setup-php@v2

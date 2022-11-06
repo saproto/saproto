@@ -14,7 +14,6 @@ jobs:
     name: Deploy Check
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.3
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
       BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
@@ -25,22 +24,24 @@ jobs:
       - name: 🛎️ Checkout project
         uses: actions/checkout@v2
 
-      - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
+      - name: 🔍 Read .env
+        id: dotenv
+        uses: falti/dotenv-action@v1.0.1
+        with:
+          path: .env.prod
+
+      - name: 🖱️ Setup PHP v${{ steps.dotenv.outputs.php_version }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ env.PHP_VERSION }}
+          php-version: ${{ steps.dotenv.outputs.php_version }}
 
       - name: 📥 Install back-end dependencies
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
-      - name: 🔍 Get Node version
-        id: nvm
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-
-      - name: 🖱️ Set Node v${{ steps.nvm.outputs.NODE_VERSION }}
+      - name: 🖱️ Set Node v${{ steps.dotenv.outputs.node_version }}
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+          node-version: ${{ steps.dotenv.outputs.node_version }}
 
       - name: 📂 Cache front-end dependencies
         id: npm-cache
