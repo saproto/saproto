@@ -84,7 +84,8 @@
     "laravel/tinker": "^2.6",
     "nunomaduro/larastan": "^1.0",
     "symfony/css-selector": "~4.0",
-    "symfony/dom-crawler": "~4.0"
+    "symfony/dom-crawler": "~4.0",
+    "laravel/sail": "^1.16"
   },
   "autoload": {
     "psr-4": {
