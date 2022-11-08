@@ -77,13 +77,6 @@ By default, Laravel Sail commands are invoked using the `vendor/bin/sail` script
 echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" > ~/.bash_aliases
 ```
 
-#### Client-side dependencies
-To install the client-side dependencies you'll need to run `sail npm install` to install all client-side dependencies.
-
-To compile the project assets (JS/CSS) run `sail npm run dev` to compile once or `sail npm run watch` to keep checking for changes to scripts or stylesheets.
-
-When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`.
-
 #### Initial application setup
 ```
 sail up -d
@@ -92,7 +85,15 @@ sail artisan key:generate
 sail artisan migrate --seed
 ```
 
-When you have finished the setup and Docker the following port will be exposed on localhost.
+#### Client-side dependencies
+To install the client-side dependencies you'll need to run `sail npm install` to install all client-side dependencies.
+
+To compile the project assets (JS/CSS) run `sail npm run dev` to compile once or `sail npm run watch` to keep checking for changes to scripts or stylesheets.
+
+When adding a new library or client-side dependency through npm don't forget to require the scripts in `application.js` and the stylesheet in `vendor.scss`.
+
+#### Localhost
+When you have finished the above setup the following port will be exposed on localhost.
 
 - `8080` = Website
 - `8081` = PhpMyAdmin
