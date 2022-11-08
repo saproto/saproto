@@ -154,7 +154,7 @@ class OtherDataSeeder extends Seeder
         $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
-            $quote=new Quote([
+            $quote = new Quote([
                 'user_id'=> array_random($users),
                 'quote'=>$faker->text(100),
             ]);
