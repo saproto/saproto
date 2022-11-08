@@ -489,6 +489,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@destroy']);
         Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
+        Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'QuoteCornerController@search']);
     });
 
     /* Routes related to the Good Idea Board. */

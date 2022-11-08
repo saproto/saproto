@@ -13,6 +13,8 @@
 
             @include('quotecorner.popular')
 
+            @include('quotecorner.include.searchquote', ['searchTerm'=>$searchTerm ?? ''])
+
         </div>
 
         <div class="col-md-8 col-md-4">
