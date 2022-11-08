@@ -117,14 +117,14 @@ class SearchField extends BaseComponent {
     }
 
     _createResultElement(item) {
-        let el = document.createElement('option')
+        let el = document.createElement('div')
         el.classList.add(CLASS_NAME_RESULT)
         this._config.optionTemplate(el, item)
-        el.onclick = _ => {
+        el.addEventListener('click', _ => {
             if (this._multiple) this._addSelected(item)
             else this._setSelected(item)
             this._search()
-        }
+        })
         return el
     }
 
