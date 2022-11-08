@@ -65,7 +65,7 @@ docker run --rm \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
     laravelsail/php74-composer:latest \
-    composer install --ignore-platform-reqs
+    composer install --ignore-platform-reqs --no-scripts
 ```
 
 #### Laravel Sail alias
@@ -112,7 +112,7 @@ sail up -d
 
 #### Stop server
 ```
-sail down
+sail stop
 ```
 
 #### Access to app container
