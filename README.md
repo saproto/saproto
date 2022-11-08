@@ -74,7 +74,7 @@ By default, Laravel Sail commands are invoked using the `vendor/bin/sail` script
 *The rest of these instruction will assume that you successfully added the `sail` alias.*
 
 ```shell
-echo "alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'" > ~/.bash_aliases
+echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_aliases
 ```
 
 #### Initial application setup
