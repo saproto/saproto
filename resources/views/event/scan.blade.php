@@ -157,7 +157,7 @@
     initializeCamera()
 
     function initializeCamera() {
-        window.Quagga.init({
+        Quagga.init({
             inputStream: {
                 name: 'Live',
                 type: 'LiveStream',
@@ -172,10 +172,10 @@
             }
         }, err => {
             if (err) return console.error(err)
-            window.Quagga.start()
+            Quagga.start()
         })
 
-        window.Quagga.onDetected(data => {
+        Quagga.onDetected(data => {
             const code = data.codeResult.code
             // const code = rawCode.substring(1, rawCode.length-1)
             if (code !== prevRead) {

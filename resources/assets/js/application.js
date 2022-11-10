@@ -2,7 +2,7 @@
 global.SignaturePad = require('signature_pad')
 global.moment = require('moment/moment')
 import quagga from 'quagga'
-window.Quagga = quagga
+global.Quagga = quagga
 
 import './countdown-timer'
 import './utilities'
