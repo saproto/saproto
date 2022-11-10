@@ -35,6 +35,7 @@ class ProtoPolicy extends Policy
                     'https://www.google.com/recaptcha/api.js',
                     'https://kit.fontawesome.com/63e98a7060.js',
                     'https://ka-f.fontawesome.com/',
+                    'blob:',
                 ])
                 ->addNonceForDirective(Directive::SCRIPT)
                 ->addDirective(Directive::STYLE, [
