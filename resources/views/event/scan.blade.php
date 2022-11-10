@@ -150,7 +150,6 @@
 @include('website.layouts.assets.javascripts')
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-    // const scannerField = document.getElementById("scanner-field")
     const feedbackField = document.getElementById("feedback-field")
     let prevRead = ''
 
@@ -177,7 +176,6 @@
 
         Quagga.onDetected(data => {
             const code = data.codeResult.code
-            // const code = rawCode.substring(1, rawCode.length-1)
             if (code !== prevRead) {
                 scan(code)
                 prevRead = code
@@ -188,11 +186,9 @@
     function setStatus(status) {
         switch (status) {
             case 'received':
-                // scannerField.disabled = true
                 feedbackField.innerHTML = 'Validating barcode...'
                 break
             case 'error':
-                // scannerField.disabled = false
                 feedbackField.classList.remove('blink')
                 feedbackField.innerHTML = 'Something went wrong. Try again!'
                 flash('danger')
@@ -205,7 +201,6 @@
                 setTimeout(setStatus, 1000)
                 break
             default:
-                // scannerField.disabled = false
                 feedbackField.classList.add('blink')
                 feedbackField.innerHTML = 'Searching for barcode...'
                 break
