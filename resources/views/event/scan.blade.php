@@ -10,12 +10,13 @@
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="Ticket Scanner for {{ $event->title }}"/>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
+
     <link rel="shortcut icon" href="{{ asset('images/favicons/favicon'.mt_rand(1, 4).'.png') }}"/>
 
     <title>Ticket Scanner for {{ $event->title }}</title>
 
     @include('website.layouts.assets.stylesheets')
-    @include('website.layouts.assets.javascripts')
 
     <style type="text/css">
         * { box-sizing: border-box; }
