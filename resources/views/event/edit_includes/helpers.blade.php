@@ -34,7 +34,7 @@
 
             </form>
 
-            @if($event->activity->helping_commitees_count > 0)
+            @if($event->activity->helpingCommittees()->count() > 0)
 
                 <hr>
 
