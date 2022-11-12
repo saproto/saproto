@@ -15,6 +15,7 @@ use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
 use Proto\Models\User;
+use Proto\Models\Withdrawal;
 
 class OtherDataSeeder extends Seeder
 {
@@ -43,9 +44,7 @@ class OtherDataSeeder extends Seeder
                 $user->bank()->save(factory(Bank::class)->make());
                 $user->address()->save(factory(Address::class)->make());
                 $user->member()->save(factory(Member::class)->make());
-            }
-
-            // user is not a member
+            } // user is not a member
             else {
                 if (mt_rand(1, 20) > 15) {
                     $user->address()->save(factory(Address::class)->make());
@@ -80,6 +79,20 @@ class OtherDataSeeder extends Seeder
 
         $time_end = microtime(true);
         echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' orderlines '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
+        // Create withdrawals
+        $n = 1;
+        $orderlines_per_withdrawal = 4;
+        $max_withdrawal_amount = 100;
+        $orderlines_associated = 0;
+
+        $time_start = microtime(true);
+
+        foreach (range(0,$n) as $index){
+            $orderlines_associated += $this->seedWithdrawals($index, $max_withdrawal_amount,$orderlines_per_withdrawal);
+        }
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mAssociated:\e[0m  ".$orderlines_associated.' orderlines to '.$n.' rounds of withdrawals'.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create AchievementOwnership
         $n = 200;
@@ -159,5 +172,92 @@ class OtherDataSeeder extends Seeder
 
         $seeder_end = microtime(true);
         echo "\e[32mSeeded:\e[0m    \e[1mOtherDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
+    }
+
+    // Withdrawal seeding helper method, based on store() method in WithdrawalController.php
+    // NOTE: Any updates in that method should be mirrorred in here
+
+    public function seedWithdrawals(int $index, int $maxMoney, int $maxOrderlinesInWithdrawal): int
+    {
+        $totalOrderlinesAdded = 0;
+
+        $date = strtotime('now');
+
+        $withdrawal = Withdrawal::create([
+            'date' => date('Y-m-d', $date),
+        ]);
+
+        $totalOrderlinesPerUser = [];
+        $totalPerUser = [];
+
+        foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
+            if ($orderline->isPayed()) {
+                continue;
+            }
+            if ($orderline->user === null) {
+                continue;
+            }
+            if ($orderline->user->bank == null) {
+                continue;
+            }
+
+            if (! array_key_exists($orderline->user->id, $totalPerUser)) {
+                $totalPerUser[$orderline->user->id] = 0;
+            }
+
+            if (! array_key_exists($orderline->user->id, $totalOrderlinesPerUser)) {
+                $totalOrderlinesPerUser[$orderline->user->id] = 0;
+            }
+            if ($totalPerUser[$orderline->user->id] + $orderline->total_price > $maxMoney) {
+                continue;
+            }
+
+            $orderline->withdrawal()->associate($withdrawal);
+            $orderline->save();
+
+            $totalOrderlinesAdded++;
+            echo "\e[33mCollecting:\e[0m  ".$totalOrderlinesAdded.' orderlines into withdrawal set '.$index."\r";
+
+            $totalPerUser[$orderline->user->id] += $orderline->total_price;
+            $totalOrderlinesPerUser[$orderline->user->id] += 0;
+        }
+
+        // Slim down the amount of orderlines attached to the withdrawals to the maximum amount given
+        foreach ($totalOrderlinesPerUser as $user_id => $nOrderlines) {
+
+            $user = User::findOrFail($user_id);
+            $curNOrderlines = $nOrderlines;
+
+            foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+
+                if ($curNOrderlines <= $maxOrderlinesInWithdrawal) {
+                    break;
+                }
+
+                $orderline->withdrawal()->dissociate();
+                $orderline->save();
+
+                $curNOrderlines--;
+
+                $totalOrderlinesAdded--;
+                echo "\e[33mReducing:\e[0m  The amount of orderlines in withdrawal round ".$index.'to'.$totalOrderlinesAdded." orderlines \r";
+            }
+
+        }
+        // Prevent negative withdrawals
+        foreach ($totalPerUser as $user_id => $total) {
+            if ($total < 0) {
+                /** @var User $user */
+                $user = User::findOrFail($user_id);
+                foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+                    $orderline->withdrawal()->dissociate();
+                    $orderline->save();
+
+                    $totalOrderlinesAdded--;
+                    echo "\e[33mReducing:\e[0m  The amount of orderlines in withdrawal round ".$index.'to'.$totalOrderlinesAdded." orderlines \r";
+                }
+            }
+        }
+        return $totalOrderlinesAdded;
     }
 }
