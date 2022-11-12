@@ -29,7 +29,7 @@
                         <i class="fas fa-download me-2"></i> high-res
                     </a>
                     <button id="previousBtn"
-                            class="btn btn-dark me-3 {{$photo->hasNextPhoto ? '' : 'd-none'}}">
+                            class="btn btn-dark me-3 {{$photo->hasPreviousPhoto ? '' : 'd-none'}}">
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <button id="likeBtn" class="btn btn-info me-3 {{Auth::user() != null ? '' : 'd-none'}}">
