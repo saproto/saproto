@@ -3,12 +3,12 @@
 namespace Database\Seeders;
 
 use Carbon;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Intervention\Image\Facades\Image;
 use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\PhotoLikes;
-use Faker\Factory;
 
 class PhotoSeeder extends Seeder
 {
