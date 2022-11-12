@@ -176,7 +176,6 @@ class OtherDataSeeder extends Seeder
 
     // Withdrawal seeding helper method, based on store() method in WithdrawalController.php
     // NOTE: Any updates in that method should be mirrorred in here
-
     public function seedWithdrawals(int $index, int $maxMoney, int $maxOrderlinesInWithdrawal): int
     {
         $totalOrderlinesAdded = 0;
@@ -212,38 +211,21 @@ class OtherDataSeeder extends Seeder
                 continue;
             }
 
+            if($totalOrderlinesPerUser[$orderline->user->id] >= $maxOrderlinesInWithdrawal){
+                continue;
+            }
+
             $orderline->withdrawal()->associate($withdrawal);
             $orderline->save();
 
             $totalOrderlinesAdded++;
-            echo "\e[33mCollecting:\e[0m  ".$totalOrderlinesAdded.' orderlines into withdrawal set '.$index."\r";
 
             $totalPerUser[$orderline->user->id] += $orderline->total_price;
-            $totalOrderlinesPerUser[$orderline->user->id] += 0;
+            $totalOrderlinesPerUser[$orderline->user->id] += 1;
+            
+            echo "\e[32mCollecting:\e[0m  ".$totalOrderlinesAdded.' orderlines into withdrawal set '.$index."\r";
         }
 
-        // Slim down the amount of orderlines attached to the withdrawals to the maximum amount given
-        foreach ($totalOrderlinesPerUser as $user_id => $nOrderlines) {
-
-            $user = User::findOrFail($user_id);
-            $curNOrderlines = $nOrderlines;
-
-            foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
-
-                if ($curNOrderlines <= $maxOrderlinesInWithdrawal) {
-                    break;
-                }
-
-                $orderline->withdrawal()->dissociate();
-                $orderline->save();
-
-                $curNOrderlines--;
-
-                $totalOrderlinesAdded--;
-                echo "\e[33mReducing:\e[0m  The amount of orderlines in withdrawal round ".$index.'to'.$totalOrderlinesAdded." orderlines \r";
-            }
-
-        }
         // Prevent negative withdrawals
         foreach ($totalPerUser as $user_id => $total) {
             if ($total < 0) {
