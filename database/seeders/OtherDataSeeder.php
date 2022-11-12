@@ -92,7 +92,7 @@ class OtherDataSeeder extends Seeder
             $orderlines_associated += $this->seedWithdrawals($index, $max_withdrawal_amount,$orderlines_per_withdrawal);
         }
         $time_end = microtime(true);
-        echo PHP_EOL."\e[32mAssociated:\e[0m  ".$orderlines_associated.' orderlines to '.$n.' rounds of withdrawals'.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        echo PHP_EOL."\e[32mAssociated:\e[0m".$orderlines_associated.' orderlines to '.$n.' rounds of withdrawals'.' ('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create AchievementOwnership
         $n = 200;
@@ -223,7 +223,7 @@ class OtherDataSeeder extends Seeder
             $totalPerUser[$orderline->user->id] += $orderline->total_price;
             $totalOrderlinesPerUser[$orderline->user->id] += 1;
 
-            echo "\e[32mCollecting:\e[0m  ".$totalOrderlinesAdded.' orderlines into withdrawal set '.$index."\r";
+            echo "\e[33mAdding:\e[0m    ".$totalOrderlinesAdded.' orderlines to withdrawals (round '.$index.")   \r";
         }
 
         // Prevent negative withdrawals
@@ -236,7 +236,7 @@ class OtherDataSeeder extends Seeder
                     $orderline->save();
 
                     $totalOrderlinesAdded--;
-                    echo "\e[33mReducing:\e[0m  The amount of orderlines in withdrawal round ".$index.'to'.$totalOrderlinesAdded." orderlines \r";
+                    echo "\e[33mReducing:\e[0mThe amount of orderlines in withdrawal round ".$index.'to'.$totalOrderlinesAdded." orderlines   \r";
                 }
             }
         }
