@@ -88,7 +88,7 @@ class OtherDataSeeder extends Seeder
 
         $time_start = microtime(true);
 
-        foreach (range(0,$n) as $index){
+        foreach (range(1,$n) as $index){
             $orderlines_associated += $this->seedWithdrawals($index, $max_withdrawal_amount,$orderlines_per_withdrawal);
         }
         $time_end = microtime(true);
