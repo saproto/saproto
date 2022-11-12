@@ -81,8 +81,8 @@ class OtherDataSeeder extends Seeder
         echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' orderlines '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create withdrawals
-        $n = 1;
-        $orderlines_per_withdrawal = 4;
+        $n = 2;
+        $orderlines_per_withdrawal = 5;
         $max_withdrawal_amount = 100;
         $orderlines_associated = 0;
 
@@ -222,7 +222,7 @@ class OtherDataSeeder extends Seeder
 
             $totalPerUser[$orderline->user->id] += $orderline->total_price;
             $totalOrderlinesPerUser[$orderline->user->id] += 1;
-            
+
             echo "\e[32mCollecting:\e[0m  ".$totalOrderlinesAdded.' orderlines into withdrawal set '.$index."\r";
         }
 
