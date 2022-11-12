@@ -1,7 +1,8 @@
 // Vendors
 global.SignaturePad = require('signature_pad')
 global.moment = require('moment/moment')
-global.Quagga = require('quagga')
+import quagga from 'quagga'
+global.Quagga = quagga
 
 import './countdown-timer'
 import './utilities'

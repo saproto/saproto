@@ -1,5 +1,4 @@
 import BaseComponent from "bootstrap/js/src/base-component"
-import Manipulator from "bootstrap/js/src/dom/manipulator"
 
 /**
  * ------------------------------------------------------------------------
@@ -53,6 +52,10 @@ class SearchField extends BaseComponent {
         return Default
     }
 
+    static get DefaultType() {
+        return DefaultType
+    }
+
     static get NAME() {
         return NAME
     }
@@ -68,16 +71,6 @@ class SearchField extends BaseComponent {
     }
 
     // Private
-
-    _getConfig(config) {
-        config = {
-            ...Default,
-            ...Manipulator.getDataAttributes(this._element),
-            ...(typeof config === 'object' ? config : {})
-        }
-        this._typeCheckConfig(NAME, config, DefaultType)
-        return config
-    }
 
     _initializeSearchField() {
         this._resultsContainer = this._createResultsContainer()
@@ -124,14 +117,14 @@ class SearchField extends BaseComponent {
     }
 
     _createResultElement(item) {
-        let el = document.createElement('option')
+        let el = document.createElement('div')
         el.classList.add(CLASS_NAME_RESULT)
         this._config.optionTemplate(el, item)
-        el.onclick = _ => {
+        el.addEventListener('click', _ => {
             if (this._multiple) this._addSelected(item)
             else this._setSelected(item)
             this._search()
-        }
+        })
         return el
     }
 

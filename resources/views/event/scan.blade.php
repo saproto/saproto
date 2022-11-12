@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <meta name="theme-color" content="#C1FF00">
 
@@ -15,7 +16,6 @@
     <title>Ticket Scanner for {{ $event->title }}</title>
 
     @include('website.layouts.assets.stylesheets')
-    @include('website.layouts.assets.javascripts')
 
     <style type="text/css">
         * { box-sizing: border-box; }
@@ -148,10 +148,8 @@
 <div id="flash"></div>
 
 @include('website.layouts.assets.javascripts')
-@stack('javascript')
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
-    const scannerField = document.getElementById("scanner-field")
     const feedbackField = document.getElementById("feedback-field")
     let prevRead = ''
 
@@ -168,18 +166,16 @@
                 target: document.getElementById('video')
             },
             decoder: {
-                readers: ["codabar_reader"],
+                readers: ["code_39_reader"],
                 multiple: false
             }
         }, err => {
             if (err) return console.error(err)
-            console.log("Scanner initialized!")
             Quagga.start()
         })
 
         Quagga.onDetected(data => {
-            const rawCode = data.codeResult.code
-            const code = rawCode.substring(1, rawCode.length-1)
+            const code = data.codeResult.code
             if (code !== prevRead) {
                 scan(code)
                 prevRead = code
@@ -190,11 +186,9 @@
     function setStatus(status) {
         switch (status) {
             case 'received':
-                scannerField.disabled = true
                 feedbackField.innerHTML = 'Validating barcode...'
                 break
             case 'error':
-                scannerField.disabled = false
                 feedbackField.classList.remove('blink')
                 feedbackField.innerHTML = 'Something went wrong. Try again!'
                 flash('danger')
@@ -207,7 +201,6 @@
                 setTimeout(setStatus, 1000)
                 break
             default:
-                scannerField.disabled = false
                 feedbackField.classList.add('blink')
                 feedbackField.innerHTML = 'Searching for barcode...'
                 break
@@ -219,8 +212,8 @@
     function scan(barcode) {
         if (barcode === '') return
         setStatus('received')
-        get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode }, { parse: false })
-        .then(res => parseReply(res.json(), res.statusText, res.status))
+        get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode })
+        .then(res => parseReply(res.data, res.message, res.code))
         .catch(err => {
             console.error(err)
             setStatus('error')
@@ -240,29 +233,23 @@
                 feedbackField.classList.remove('blink')
                 feedbackField.innerHTML = message
                 setTimeout(setStatus, 1000)
-                document.getElementById('history').prepend(
-                    "<tr>" +
-                        "<td>" + data.id + "</td>" +
-                        "<td>" + data.user.name + "</td>" +
-                        "<td>" + data.ticket.product.name + "</td>" +
-                        "<td>" + timeNow() + "</td>" +
-                        "<td><span class='text-warning'>Used on " + data.scanned + "</span></td>" +
-                    "</tr>"
-                )
+                document.getElementById('history').prepend(createTicketEl(data, false, 'Used on ' + data.scanned))
                 break
             case 200:
                 setStatus('ok')
-                document.getElementById('history').prepend(
-                    "<tr>" +
-                        "<td>" + data.id + "</td>" +
-                        "<td>" + data.user.name + "</td>" +
-                        "<td>" + data.ticket.product.name + "</td>" +
-                        "<td>" + timeNow() + "</td>" +
-                        "<td><span style='color: #c1ff00;'>Valid</span></td>" +
-                    "</tr>"
-                )
+                document.getElementById('history').prepend(createTicketEl(data, true, 'Valid'))
                 break
         }
+    }
+
+    function createTicketEl(data, valid, message) {
+        let el = document.createElement('tr')
+        el.innerHTML = `<td>${data.id}</td>
+            <td>${data.user.name}</td>
+            <td>${data.ticket.product.name}</td>
+            <td>${timeNow()}</td>
+            <td><span class='text-${(valid ? 'success' : 'warning')}'>${message}</span></td>`
+        return el
     }
 
     function timeNow() {

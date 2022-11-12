@@ -87,7 +87,7 @@
                             </div>
 
                             <p>
-                                <sup><strong>Screen resolution</strong> is 1680 x 1050 pixels.</sup>
+                                <sup><strong>Images should be</strong> 1366 x 768 pixels.</sup>
                             </p>
 
                             @if($item && $item->image)
