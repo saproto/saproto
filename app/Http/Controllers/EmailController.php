@@ -262,7 +262,7 @@ class EmailController extends Controller
      * @param array $events
      * @param bool $toBackup
      */
-    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup=False)
+    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup = false)
     {
 
         switch ($type) {
