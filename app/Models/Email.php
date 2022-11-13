@@ -116,11 +116,11 @@ class Email extends Model
         if ($this->to_user) {
             return User::orderBy('name', 'asc')->get();
         } elseif ($this->to_member) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user, $index) {
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
                 return $user->member->is_pending == true;
             });
         } elseif ($this->to_pending) {
-            return User::has('member')->orderBy('name', 'asc')->get()->reject(function ($user) {
+            return User::has('member')->orderBy('name', 'asc')->get()->reject(function (User $user, int $index) {
                 return $user->member->is_pending == false;
             });
         } elseif ($this->to_active) {

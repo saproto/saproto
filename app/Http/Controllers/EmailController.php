@@ -260,9 +260,11 @@ class EmailController extends Controller
      * @param array $type
      * @param array $lists
      * @param array $events
+     * @param bool $toBackup
      */
-    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup)
+    private function updateEmailDestination(Email $email, $type, $lists = [], $events = [], $toBackup=False)
     {
+
         switch ($type) {
 
             case 'members':

@@ -98,7 +98,7 @@ class Dinnerform extends Model
     public function totalAmountWithDiscount()
     {
         return $this->orderlines()->get()
-            ->sum(function ($orderline) {
+            ->sum(function (DinnerformOrderline $orderline) {
                 return $orderline->price_with_discount;
             });
     }

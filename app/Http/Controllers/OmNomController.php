@@ -42,9 +42,13 @@ class OmNomController extends Controller
         $categories = $this->getCategories($store);
 
         if ($store_slug == 'tipcie') {
-            $minors = User::where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))->has('member')->get()->reject(function ($user, $index) {
-                return $user->member->is_pending || $user->member->is_pet;
-            });
+            $minors = User::query()
+                ->where('birthdate', '>', date('Y-m-d', strtotime('-18 years')))
+                ->has('member')
+                ->get()
+                ->reject(function (User $user, int $index) {
+                    return $user->member->is_pending || $user->member->is_pet;
+                });
         } else {
             $minors = collect([]);
         }

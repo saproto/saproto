@@ -298,7 +298,7 @@ class Event extends Model
         }
         if ($this->activity) {
             $users = $users->merge($this->activity->allUsers->sort(function ($a, $b) {
-                return isset($a->pivot->committees_activities_id); // prefer helper participation registration
+                return (int) isset($a->pivot->committees_activities_id); // prefer helper participation registration
             })->unique());
         }
         return $users->sort(function ($a, $b) {

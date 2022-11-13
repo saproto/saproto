@@ -71,7 +71,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             self::postLoginRedirect();
         }
-        // Catch a login form submission for two factor authentication.
+        // Catch a login form submission for two-factor authentication.
         if ($request->session()->has('2fa_user')) {
             return self::handleTwofactorSubmit($request, $google2fa);
         }
