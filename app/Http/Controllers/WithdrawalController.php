@@ -322,7 +322,7 @@ class WithdrawalController extends Controller
         }
 
         foreach ($withdrawal->users() as $user) {
-            if (!isset($user->bank)) {
+            if (! isset($user->bank)) {
                 Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
                 return Redirect::back();
             }

@@ -122,7 +122,7 @@ class OrderLine extends Model
     public function generateHistoryStatus()
     {
         if ($this->payed_with_loss) {
-            return "Loss";
+            return 'Loss';
         } elseif ($this->payed_with_withdrawal !== null) {
             return "Withdrawal <a href='".
                 route('omnomcom::mywithdrawal', ['id' => $this->payed_with_withdrawal]).
