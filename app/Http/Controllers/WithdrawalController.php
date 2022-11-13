@@ -216,7 +216,7 @@ class WithdrawalController extends Controller
             $orderline->save();
         }
 
-        Session::flash('flash_message', 'Orderlines for '.$user->name.' removed from this withdrawal.');
+        Session::flash('flash_message', "Orderlines for $user->name removed from this withdrawal.");
         return Redirect::back();
     }
 
@@ -269,7 +269,39 @@ class WithdrawalController extends Controller
 
         Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
 
-        Session::flash('flash_message', 'Withdrawal for '.$user->name.' marked as failed. User e-mailed.');
+        Session::flash('flash_message', "Withdrawal for $user->name marked as failed. User e-mailed.");
+        return Redirect::back();
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @param int $user_id
+     * @return RedirectResponse
+     */
+    public static function markLoss(Request $request, $id, $user_id)
+    {
+        /** @var Withdrawal $withdrawal */
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->closed) {
+            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
+            return Redirect::back();
+        }
+
+        /** @var User $user */
+        $user = User::findOrFail($user_id);
+
+        /** @var Orderline[] $orderlines */
+        $orderlines = $withdrawal->orderlinesForUser($user);
+
+        foreach ($orderlines as $orderline) {
+            $orderline->withdrawal()->dissociate();
+            $orderline->payed_with_loss = true;
+            $orderline->save();
+        }
+
+        Session::flash('flash_message', "Withdrawal for $user->name marked as loss.");
         return Redirect::back();
     }
 
@@ -406,6 +438,7 @@ class WithdrawalController extends Controller
             if ($orderline->isPayed()) {
                 continue;
             }
+
             if ($orderline->user === null) {
                 Session::flash('flash_message', 'There are unpaid anonymous orderlines. Please contact the IT committee.');
                 continue;
@@ -420,6 +453,7 @@ class WithdrawalController extends Controller
                     'total' => 0,
                 ];
             }
+
             $users[$orderline->user->id]->orderlines[] = $orderline;
             $users[$orderline->user->id]->total += $orderline->total_price;
         }

@@ -10,6 +10,11 @@
 
         <div class="col-md-3">
 
+            <a href="{{ route('omnomcom::withdrawal::list') }}" class="btn btn-block btn-dark mb-2">
+                <i class="fas fa-back"></i>
+                Return to overview
+            </a>
+
             <form method="post" action="{{ route('omnomcom::withdrawal::edit', ['id' => $withdrawal->id]) }}">
 
                 {!! csrf_field() !!}
@@ -52,44 +57,47 @@
                             'name' => 'date',
                             'label' => 'Change date:',
                             'placeholder' => strtotime($withdrawal->date),
-                            'format' => 'date'
+                            'format' => 'date',
                         ])
+                        <input type="submit" value="Save" class="btn btn-success btn-block mt-2">
                     </div>
 
                     <div class="card-footer">
 
-                        <input type="submit" value="Save" class="btn btn-success btn-block mb-4">
-
                         <a href="{{ route('omnomcom::withdrawal::export', ['id' => $withdrawal->id]) }}"
-                           class="btn btn-outline-success btn-block mb-2">
+                           class="btn btn-outline-success btn-block">
                             Generate XML
                         </a>
 
-                        @include('website.layouts.macros.confirm-modal', [
-                           'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-warning btn-block mb-2',
-                           'text' => 'E-mail Users',
-                           'title' => 'Confirm Send',
-                           'message' => 'Are you sure you want to send an email to all '.$withdrawal->users()->count().' users associated with this withdrawal?',
-                           'confirm' => 'Send',
-                        ])
+                        @if(! $withdrawal->closed)
 
-                        @include('website.layouts.macros.confirm-modal', [
-                           'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-danger btn-block mb-2',
-                           'text' => 'Close Withdrawal',
-                           'title' => 'Confirm Close',
-                           'message' => 'Are you sure you want to close this withdrawal? After closing, you cannot change anything about this withdrawal anymore.',
-                           'confirm' => 'Close',
-                        ])
+                            @include('website.layouts.macros.confirm-modal', [
+                               'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
+                               'classes' => 'btn btn-outline-warning btn-block mt-2',
+                               'text' => 'E-mail Users',
+                               'title' => 'Confirm Send',
+                               'message' => 'Are you sure you want to send an email to all '.$withdrawal->users()->count().' users associated with this withdrawal?',
+                               'confirm' => 'Send',
+                            ])
 
-                        @include('website.layouts.macros.confirm-modal', [
-                           'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-danger btn-block mb-2',
-                           'text' => 'Delete',
-                           'title' => 'Confirm Delete',
-                           'message' => 'Are you sure you want to delete this withdrawal?',
-                        ])
+                            @include('website.layouts.macros.confirm-modal', [
+                               'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
+                               'classes' => 'btn btn-outline-danger btn-block mt-2',
+                               'text' => 'Close Withdrawal',
+                               'title' => 'Confirm Close',
+                               'message' => 'Are you sure you want to close this withdrawal? After closing, you cannot change anything about this withdrawal anymore.',
+                               'confirm' => 'Close',
+                            ])
+
+                            @include('website.layouts.macros.confirm-modal', [
+                               'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
+                               'classes' => 'btn btn-outline-danger btn-block mt-2',
+                               'text' => 'Delete',
+                               'title' => 'Confirm Delete',
+                               'message' => 'Are you sure you want to delete this withdrawal?',
+                            ])
+
+                        @endif
 
                     </div>
 
@@ -127,17 +135,17 @@
 
                         @foreach($withdrawal->totalsPerUser() as $data)
 
-                            <tr class="{{ !isset($data->user->bank) ? 'bg-warning text-white' : '' }}">
+                            <tr>
                                 <td>{{ $data->user->name }}</td>
-                                @if(!$withdrawal->closed)
+                                @if(! $withdrawal->closed)
                                     @isset($data->user->bank)
                                         <td>
-                                            <strong>{{ $data->user->bank->iban }}</strong>
-                                            / {{ $data->user->bank->bic }}
+                                            {{ $data->user->bank->iban }}
+                                            <span class="text-muted">/ {{ $data->user->bank->bic }}</span>
                                         </td>
                                         <td>{{ $data->user->bank->machtigingid }}</td>
                                     @else
-                                        <td>
+                                        <td class="text-warning">
                                             <i class="fa fas fa-exclamation-triangle"></i>
                                             <strong>No bank account!</strong>
                                         </td>
@@ -162,13 +170,23 @@
                                                 Remove
                                             </a>
 
-                                            or
+                                            |
 
                                             @include('website.layouts.macros.confirm-modal', [
                                                'action' => route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
-                                               'text' => 'Mark Failed',
+                                               'text' => 'Failed',
                                                'title' => 'Confirm Marking Failed',
-                                               'message' => 'Are you sure you want to mark this withdrawal as for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
+                                               'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
+                                               'classes' => 'text-white fw-bold underline-on-hover'
+                                            ])
+
+                                            |
+
+                                            @include('website.layouts.macros.confirm-modal', [
+                                               'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
+                                               'text' => 'Loss',
+                                               'title' => 'Confirm Marking Loss',
+                                               'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as a loss? <b>This cannot easily be undone!</b>',
                                                'classes' => 'text-white fw-bold underline-on-hover'
                                             ])
                                         @endif
