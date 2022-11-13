@@ -66,10 +66,8 @@ class WithdrawalController extends Controller
             if ($orderline->isPayed()) {
                 continue;
             }
+
             if ($orderline->user === null) {
-                continue;
-            }
-            if ($orderline->user->bank == null) {
                 continue;
             }
 
@@ -278,13 +276,25 @@ class WithdrawalController extends Controller
     /**
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse|\Illuminate\Http\Response
      * @throws SephpaInputException
      */
     public static function export(Request $request, $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->orderlines()->count() == 0) {
+            Session::flash('flash_message', 'Cannot export! This withdrawal is empty.');
+            return Redirect::back();
+        }
+
+        foreach ($withdrawal->users() as $user) {
+            if (!isset($user->bank)) {
+                Session::flash('flash_message', 'Cannot export! A user in this withdrawal is missing bank information.');
+                return Redirect::back();
+            }
+        }
 
         $direct_debit = new SephpaDirectDebit('Study Association Proto', $withdrawal->withdrawalId(), SephpaDirectDebit::SEPA_PAIN_008_001_02, [
             'pmtInfId' => sprintf('%s-1', $withdrawal->withdrawalId()),

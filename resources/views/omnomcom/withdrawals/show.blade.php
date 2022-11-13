@@ -58,16 +58,16 @@
 
                     <div class="card-footer">
 
-                        <input type="submit" value="Save" class="btn btn-success btn-block">
+                        <input type="submit" value="Save" class="btn btn-success btn-block mb-4">
 
                         <a href="{{ route('omnomcom::withdrawal::export', ['id' => $withdrawal->id]) }}"
-                           class="btn btn-outline-success btn-block">
+                           class="btn btn-outline-success btn-block mb-2">
                             Generate XML
                         </a>
 
                         @include('website.layouts.macros.confirm-modal', [
                            'action' => route('omnomcom::withdrawal::email', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-warning btn-block',
+                           'classes' => 'btn btn-outline-warning btn-block mb-2',
                            'text' => 'E-mail Users',
                            'title' => 'Confirm Send',
                            'message' => 'Are you sure you want to send an email to all '.$withdrawal->users()->count().' users associated with this withdrawal?',
@@ -76,7 +76,7 @@
 
                         @include('website.layouts.macros.confirm-modal', [
                            'action' => route('omnomcom::withdrawal::close', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-danger btn-block',
+                           'classes' => 'btn btn-outline-danger btn-block mb-2',
                            'text' => 'Close Withdrawal',
                            'title' => 'Confirm Close',
                            'message' => 'Are you sure you want to close this withdrawal? After closing, you cannot change anything about this withdrawal anymore.',
@@ -85,7 +85,7 @@
 
                         @include('website.layouts.macros.confirm-modal', [
                            'action' => route('omnomcom::withdrawal::delete', ['id' => $withdrawal->id]),
-                           'classes' => 'btn btn-outline-danger btn-block',
+                           'classes' => 'btn btn-outline-danger btn-block mb-2',
                            'text' => 'Delete',
                            'title' => 'Confirm Delete',
                            'message' => 'Are you sure you want to delete this withdrawal?',
@@ -127,7 +127,7 @@
 
                         @foreach($withdrawal->totalsPerUser() as $data)
 
-                            <tr class="{{ !isset($data->user->bank) ? 'bg-warning' : '' }}">
+                            <tr class="{{ !isset($data->user->bank) ? 'bg-warning text-white' : '' }}">
                                 <td>{{ $data->user->name }}</td>
                                 @if(!$withdrawal->closed)
                                     @isset($data->user->bank)
@@ -139,7 +139,7 @@
                                     @else
                                         <td>
                                             <i class="fa fas fa-exclamation-triangle"></i>
-                                            <strong>This user no longer exists</strong>
+                                            <strong>No bank account!</strong>
                                         </td>
                                         <td></td>
                                     @endisset
@@ -158,7 +158,7 @@
                                                'confirm' => 'Revert',
                                             ])
                                         @else
-                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}">
+                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}" class="text-white fw-bold underline-on-hover">
                                                 Remove
                                             </a>
 
@@ -169,6 +169,7 @@
                                                'text' => 'Mark Failed',
                                                'title' => 'Confirm Marking Failed',
                                                'message' => 'Are you sure you want to mark this withdrawal as for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
+                                               'classes' => 'text-white fw-bold underline-on-hover'
                                             ])
                                         @endif
                                     </td>
