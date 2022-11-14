@@ -1,9 +1,5 @@
 @if($event)
 
-    <a href="{{ route('event::copy', ['id' => $event->id]) }}" class="btn btn-default btn-warning float-end ms-2">
-        Copy
-    </a>
-
     <button type="submit" class="btn btn-success float-end ms-2">
         Update event details
     </button>

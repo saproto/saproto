@@ -372,7 +372,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
-        Route::get('copy/{id}', ['as' => 'copy', 'uses' => 'EventController@copyEvent']);
+        Route::post('copy', ['as' => 'copy', 'uses' => 'EventController@copyEvent']);
 
         // Force login for event
         Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
