@@ -670,38 +670,38 @@ class EventController extends Controller
         return Redirect::route('event::category::admin', ['category' => null]);
     }
 
-    public function copyEvent(Request $request){
+    public function copyEvent(Request $request) {
         $event = Event::findOrFail($request->id);
         $newEvent = $event->replicate();
-        $newEvent->title=$newEvent->title." [copy]";
+        $newEvent->title = $newEvent->title.' [copy]';
 
-        $oldStart=Carbon::createFromTimestamp($event->start);
-        $newDate=Carbon::createFromFormat('Y-m-d',$request->input('newDate'));
-        $newDate=$newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
-        $diff=$newDate-$event->start;
+        $oldStart = Carbon::createFromTimestamp($event->start);
+        $newDate = Carbon::createFromFormat('Y-m-d',$request->input('newDate'));
+        $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
+        $diff = $newDate - $event->start;
 
-        $newEvent->start=$newDate;
-        $newEvent->end=$event->end + $diff;
-        $newEvent->secret=true;
+        $newEvent->start = $newDate;
+        $newEvent->end = $event->end + $diff;
+        $newEvent->secret = true;
         if($event->publication){
-            $newEvent->publication=$event->publication + $diff;
-            $newEvent->secret=false;
+            $newEvent->publication = $event->publication + $diff;
+            $newEvent->secret = false;
         }
 
         $newEvent->save();
 
         if($event->activity) {
             $newActivity = $event->activity->replicate();
-            $newActivity->event_id=$newEvent->id;
+            $newActivity->event_id = $newEvent->id;
 
-            $newActivity->registration_start=$event->activity->registration_start+$diff;
-            $newActivity->registration_end=$event->activity->registration_end+$diff;
-            $newActivity->deregistration_end=$event->activity->deregistration_end+$diff;
+            $newActivity->registration_start = $event->activity->registration_start + $diff;
+            $newActivity->registration_end = $event->activity->registration_end + $diff;
+            $newActivity->deregistration_end = $event->activity->deregistration_end + $diff;
 
             $newActivity->save();
         }
 
-        Session::flash('flash_message', "Copied the event!");
+        Session::flash('flash_message', 'Copied the event!');
         return view('event.edit', ['event' => $newEvent]);
     }
 }
