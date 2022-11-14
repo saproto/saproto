@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Paginator::useBootstrap();
+        Paginator::useBootstrapFive();
 
         view()->composer('website.navigation.navbar', function ($view) {
             $menuItems = MenuItem::where('parent', null)->orderBy('order')->with('page')->with('children')->get();
