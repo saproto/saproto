@@ -7,7 +7,7 @@
     </p>
 
     @if($text != '')
-        {!! Markdown::convertToHtml($text) !!}
+        {!! Markdown::convert($text) !!}
     @endif
 
     <br>
@@ -35,7 +35,7 @@
 
                         <p>
 
-                            {!! Markdown::convertToHtml($event->summary) !!}
+                            {!! Markdown::convert($event->summary) !!}
 
                         </p>
 

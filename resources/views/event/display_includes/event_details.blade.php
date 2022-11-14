@@ -102,7 +102,7 @@
 
     <div class="card-body">
 
-        {!! Markdown::convertToHtml($event->description) !!}
+        {!! Markdown::convert($event->description) !!}
 
     </div>
 

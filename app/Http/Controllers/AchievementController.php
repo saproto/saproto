@@ -157,7 +157,7 @@ class AchievementController extends Controller
             Session::flash('flash_message', 'You have already earned this achievement');
         }
 
-        return view('achievement.achieve', ['achievement' => $achievement, 'parsed_content' => Markdown::convertToHtml($achievement->page_content)]);
+        return view('achievement.achieve', ['achievement' => $achievement, 'parsed_content' => Markdown::convert($achievement->page_content)]);
     }
 
     /**

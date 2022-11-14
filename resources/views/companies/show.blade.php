@@ -32,7 +32,7 @@
                         </h2>
 
                         <div class="mt-3">
-                            {!! Markdown::convertToHtml($company->description) !!}
+                            {!! Markdown::convert($company->description) !!}
                         </div>
 
                         <a href="{{ $company->url }}" class="card-link text-info">

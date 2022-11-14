@@ -57,7 +57,7 @@ class NewsController extends Controller
             }
         }
 
-        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convertToHtml($newsitem->content), 'preview' => $preview]);
+        return view('news.show', ['newsitem' => $newsitem, 'parsedContent' => Markdown::convert($newsitem->content), 'preview' => $preview]);
     }
 
     /** @return View */

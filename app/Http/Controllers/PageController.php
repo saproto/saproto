@@ -87,7 +87,7 @@ class PageController extends Controller
             abort(403, 'You need to be a member of S.A. Proto to see this page.');
         }
 
-        return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convertToHtml($page->content)]);
+        return view('pages.show', ['page' => $page, 'parsedContent' => Markdown::convert($page->content)]);
     }
 
     /**

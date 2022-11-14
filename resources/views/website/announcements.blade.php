@@ -16,7 +16,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {!! Markdown::convertToHtml($announcement->content) !!}
+                            {!! Markdown::convert($announcement->content) !!}
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                     </span>
                 @endif
 
-                {!! Markdown::convertToHtml($announcement->content) !!}
+                {!! Markdown::convert($announcement->content) !!}
 
             </div>
 
