@@ -8,6 +8,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
@@ -19,7 +20,6 @@ use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
-use Redirect;
 use Response;
 use Session;
 
@@ -667,5 +667,19 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
         return Redirect::route('event::category::admin', ['category' => null]);
+    }
+
+    public function copyEvent($id){
+        $event = Event::findOrFail($id);
+        $newEvent = $event->replicate();
+        $newEvent->title=$newEvent->title." [copy]";
+        $newEvent->save();
+
+        if($event->activity) {
+            $newActivity = $event->activity->replicate();
+            $newActivity->event_id=$newEvent->id;
+            $newActivity->save();
+        }
+        return view('event.edit', ['event' => $newEvent]);
     }
 }
