@@ -64,7 +64,7 @@
                                     <label>
                                         <input type="hidden" name="show_only_homepage" value="0">
                                         <input type="checkbox" name="show_only_homepage" value="1"
-                                                {{ ($announcement == null ? 'checked' : $announcement->show_only_homepage ? 'checked' : '') }}>
+                                                {{ $announcement->show_only_homepage ?? 'checked' }}>
                                         Homepage only
                                     </label>
                                 </div>
@@ -84,7 +84,7 @@
                                     <label>
                                         <input type="hidden" name="is_dismissable" value="0">
                                         <input type="checkbox" name="is_dismissable" value="1"
-                                                {{ ($announcement == null ? 'checked' : $announcement->is_dismissable ? 'checked' : '') }}>
+                                                {{ $announcement->is_dismissable ?? 'checked' }}>
                                         Dismissable
                                     </label>
                                 </div>
