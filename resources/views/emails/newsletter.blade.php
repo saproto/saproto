@@ -39,7 +39,7 @@
 
                         </p>
 
-                        @if($event->activity && $event->activity->participants != 0)
+                        @if($event->activity?->participants != 0)
 
                             <p>
                                 <strong>Sign-up required!</strong><br>

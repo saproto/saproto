@@ -34,7 +34,7 @@
                             <label for="channel_start">Fixture behavior:</label>
                             <select class="form-control" name="follow_timetable">
                                 <option value="0" @selected($fixture && !$fixture->follow_timetable)>Manual</option>
-                                <option value="1" @selected($fixture && $fixture->follow_timetable)>
+                                <option value="1" @selected($fixture?->follow_timetable)>
                                     Automatic via timetable
                                 </option>
                             </select>

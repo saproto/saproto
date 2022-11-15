@@ -27,7 +27,7 @@
                         <div class="form-group autocomplete">
                             <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
                             <input class="form-control committee-search" id="organisation" name="committee"
-                                   value=value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}"
+                                   value=value="{{$leaderboard?->committee_id ? $leaderboard->committee_id : ""}}"
                                    required>
                         </div>
 

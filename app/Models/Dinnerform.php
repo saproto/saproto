@@ -119,7 +119,7 @@ class Dinnerform extends Model
     public function isHelping()
     {
         return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
-            || ($this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()));
+            || ($this->event?->activity && $this->event->activity->isHelping(Auth::user()));
     }
 
     /** @return bool Whether the current user has any discounts. */

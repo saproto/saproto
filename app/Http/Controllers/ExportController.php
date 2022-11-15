@@ -48,11 +48,9 @@ class ExportController extends Controller
                 $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
                     return $activity->event->mayViewEvent($user);
                 });
-
-                foreach ($data as $key => $val) {
+                foreach ($data as $val) {
                     unset($val->event);
                 }
-
                 break;
             case 'committees':
                 if ($user->can('admin')) {

@@ -64,7 +64,7 @@
                         @endif
 
                         <textarea class="form-control mb-3" name="note" rows="10"
-                                  placeholder="The content.">{{ $password && $password->note ? Crypt::decrypt($password->note) : '' }}</textarea>
+                                  placeholder="The content.">{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea>
 
                     </div>
 

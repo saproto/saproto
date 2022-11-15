@@ -106,7 +106,7 @@
                                         Uncategorized
                                     </option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" @selected($event && $event->category_id == $category->id)>
+                                        <option value="{{ $category->id }}" @selected($event?->category_id == $category->id)>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -152,7 +152,7 @@
 
                     </div>
 
-                    @if($event && $event->image)
+                    @if($event?->image)
 
                         <hr>
 

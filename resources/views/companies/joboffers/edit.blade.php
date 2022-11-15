@@ -31,7 +31,7 @@
                                 </option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}"
-                                            @if($joboffer && $joboffer->company->id == $company->id) selected @endif>{{ $company->name }}</option>
+                                            @if($joboffer?->company->id == $company->id) selected @endif>{{ $company->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -50,9 +50,9 @@
                                         @endif disabled>Select a type...
                                 </option>
                                 <option value="description"
-                                        @if($joboffer && $joboffer->description != null) selected @endif>Description
+                                        @if($joboffer?->description != null) selected @endif>Description
                                 </option>
-                                <option value="url" @if($joboffer && $joboffer->redirect_url != null) selected @endif>
+                                <option value="url" @if($joboffer?->redirect_url != null) selected @endif>
                                     Redirect URL
                                 </option>
                             </select>

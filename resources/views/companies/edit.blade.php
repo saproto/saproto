@@ -24,7 +24,7 @@
 
                     <div class="card-body">
 
-                        @if($company && $company->image)
+                        @if($company?->image)
 
                             <div class="text-center">
                                 <img src="{!! $company->image->generateImagePath(500, null) !!}"

@@ -60,7 +60,7 @@
                                 field is ignored and hidden.</sup>
                         </p>
 
-                        @if($item && $item->youtube_id)
+                        @if($item?->youtube_id)
 
                             <label>Current video:</label>
 
@@ -90,7 +90,7 @@
                                 <sup><strong>Images should be</strong> 1366 x 768 pixels.</sup>
                             </p>
 
-                            @if($item && $item->image)
+                            @if($item?->image)
 
                                 <label>Current image:</label>
                                 <img src="{!! $item->image->generateImagePath(500, null) !!}" class="w-100">

@@ -212,7 +212,7 @@
 
             <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-end">Cancel</a>
 
-            @if ($product && $product->ticket)
+            @if ($product?->ticket)
                 <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}"
                    class="btn btn-default float-end">
                     Go to event ticket

@@ -190,7 +190,7 @@
 
     @endif
 
-@elseif($event->activity && $event->activity->withParticipants())
+@elseif($event->activity?->withParticipants())
 
     <div class="card">
         <div class="card-header text-center bg-dark text-white">

@@ -382,7 +382,7 @@ class AuthController extends Controller
 
         $user_verify = self::verifyCredentials($user->email, $pass_old);
 
-        if ($user_verify && $user_verify->id === $user->id) {
+        if ($user_verify?->id === $user->id) {
             if ($pass_new1 !== $pass_new2) {
                 Session::flash('flash_message', 'The new passwords do not match.');
                 return view('auth.passchange');
@@ -429,7 +429,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $user_verify = self::verifyCredentials($user->email, $pass);
 
-        if ($user_verify && $user_verify->id === $user->id) {
+        if ($user_verify?->id === $user->id) {
             $user->setPassword($pass);
             Session::flash('flash_message', 'Your password was successfully synchronized.');
             return Redirect::route('user::dashboard');

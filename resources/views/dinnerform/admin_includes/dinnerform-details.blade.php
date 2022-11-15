@@ -94,7 +94,7 @@
                             <label for="event-select">Event:</label>
                             <input class="form-control event-search" id="event-select" name="event_select"
                                    value="{{ $dinnerformCurrent ? $dinnerformCurrent->event_id : '' }}"
-                                   placeholder="{{ ($dinnerformCurrent && $dinnerformCurrent->event && $dinnerformCurrent->event->activity) ? $dinnerformCurrent->event->title : '' }}"
+                                   placeholder="{{ ($dinnerformCurrent?->event && $dinnerformCurrent->event->activity) ? $dinnerformCurrent->event->title : '' }}"
                             />
                         </div>
                     </div>

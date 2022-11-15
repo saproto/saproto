@@ -26,7 +26,7 @@
 
         </div>
 
-        @if(Auth::check() && (($event->activity && $event->activity->withParticipants()) || $event->tickets()->count() > 0))
+        @if(Auth::check() && (($event->activity?->withParticipants()) || $event->tickets()->count() > 0))
 
             <div class="col-md-4">
 
