@@ -35,8 +35,9 @@
                             <select class="form-control" name="parent" id="parent">
                                 <option @selected(!isset($item) || $item->parent == null) value>No parent</option>
                                 @foreach($topMenuItems as $topMenuItem)
-                                    <option value="{{ $topMenuItem->id }}" @selected(isset($item) && $topMenuItem->id == $item->parent)
-                                            {{ (isset($item) && $topMenuItem->id == $item->id) ? 'disabled' : '' }}>
+                                    <option value="{{ $topMenuItem->id }}"
+                                            @selected(isset($item) && $topMenuItem->id == $item->parent)
+                                            @disabled(isset($item) && $topMenuItem->id == $item->id)>
                                         {{ $topMenuItem->menuname }}
                                     </option>
                                 @endforeach
