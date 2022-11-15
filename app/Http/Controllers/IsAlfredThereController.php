@@ -83,7 +83,7 @@ class IsAlfredThereController extends Controller
         if ($status->value == 'there' || $status->value == 'unknown') {
             $result->status = $status->value;
             return $result;
-        } elseif (preg_match('/^\d{10}/', $status->value) === 1) {
+        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
             $result->backunix = $status->value;
