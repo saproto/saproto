@@ -53,17 +53,17 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <input type="checkbox" id="is_archived" name="is_archived"
-                       {{ ($achievement && $achievement->is_archived ? 'checked' : '') }}>
-                <label for="is_archived">Archive this achievement</label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_archived',
+                'checked' => $achievement?->is_archived,
+                'label' => 'This achievement is archived'
+            ])
 
-            <div class="form-group">
-                <input type="checkbox" id="has_page" name="has_page"
-                       {{ ($achievement && $achievement->has_page ? 'checked' : '') }}>
-                <label for="has_page">Can be achieved by visiting url</label>
-            </div>
+            @include('components.forms.checkbox',[
+                'name' => 'has_page',
+                'checked' => $achievement?->has_page,
+                'label' => 'Can be achieved by visiting url'
+            ])
 
             <div id="achieve_page_block" class="d-none" @if(!$achievement || !$achievement->has_page) @endif>
 
@@ -93,7 +93,6 @@
             </div>
 
 
-
         </div>
 
         <div class="card-footer">
@@ -112,7 +111,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let pageBlock = document.getElementById('achieve_page_block')
         document.getElementById('has_page').addEventListener('click', e => {
-            if(e.target.checked) {
+            if (e.target.checked) {
                 pageBlock.classList.remove('d-none')
                 pageBlock.querySelector('input').required = true
             } else {

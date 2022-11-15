@@ -45,10 +45,16 @@
                         <div class="form-group">
                             <label for="information_type_selector">Offer information type</label>
                             <select id="information_type_selector" class="form-control">
-                                <option value="" @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected @endif disabled>Select a type...
+                                <option value=""
+                                        @if(!$joboffer || ($joboffer->description == null && $joboffer->redirect_url == null)) selected
+                                        @endif disabled>Select a type...
                                 </option>
-                                <option value="description" @if($joboffer && $joboffer->description != null) selected @endif>Description</option>
-                                <option value="url" @if($joboffer && $joboffer->redirect_url != null) selected @endif>Redirect URL</option>
+                                <option value="description"
+                                        @if($joboffer && $joboffer->description != null) selected @endif>Description
+                                </option>
+                                <option value="url" @if($joboffer && $joboffer->redirect_url != null) selected @endif>
+                                    Redirect URL
+                                </option>
                             </select>
                         </div>
 
@@ -107,7 +113,7 @@
         typeSelector.addEventListener('change', updateInformationDisplay)
 
         function updateInformationDisplay() {
-            switch(typeSelector.value) {
+            switch (typeSelector.value) {
                 case 'description':
                     typeDescription.classList.remove('d-none')
                     typeUrl.classList.add('d-none')

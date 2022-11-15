@@ -50,7 +50,8 @@
                     <!-- Helper Discount -->
                     <div class="col-md-12 mb-3">
                         <label for="helper-discount">Helper discount €:</label>
-                        <input type="number" step="0.01" class="form-control" id="helper-discount" name="helper_discount"
+                        <input type="number" step="0.01" class="form-control" id="helper-discount"
+                               name="helper_discount"
                                placeholder='7.5'
                                value="{{ $dinnerformCurrent->helper_discount ?? ''}}"
                                required
@@ -59,10 +60,11 @@
 
                     <!-- Homepage -->
                     <div class="col-md-12 mb-3">
-                        <input type="checkbox" class="form-check-input" id="homepage" name="homepage"
-                               {{ ($dinnerformCurrent && $dinnerformCurrent->visible_home_page || ! $dinnerformCurrent) ? 'checked' : '' }}
-                        />
-                        <label for="homepage">Visible on the homepage?</label>
+                        @include('components.forms.checkbox', [
+                            'name' => 'homepage',
+                            'checked' => $dinnerformCurrent?->visible_home_page,
+                            'label' => 'Visible on the homepage?'
+                        ])
                     </div>
 
                 </div>
@@ -100,7 +102,8 @@
                     <!-- Regular Discount -->
                     <div class="col-md-12 mb-3">
                         <label for="regular-discount">Regular discount %:</label>
-                        <input type="number" step="0.01" class="form-control" id="regular-discount" name="regular_discount"
+                        <input type="number" step="0.01" class="form-control" id="regular-discount"
+                               name="regular_discount"
                                placeholder='0'
                                value="{{ $dinnerformCurrent->regular_discount_percentage ?? ''}}"
                                required
@@ -116,7 +119,8 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($dinnerformCurrent)
-                <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}" class="btn btn-danger ms-3">
+                <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}"
+                   class="btn btn-danger ms-3">
                     Delete
                 </a>
             @endif

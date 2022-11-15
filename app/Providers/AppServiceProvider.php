@@ -2,6 +2,7 @@
 
 namespace Proto\Providers;
 
+use Blade;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
                     $view->with('newAchievements', $newAchievements);
                 }
             }
+        });
+
+        Blade::directive('required', function($condition) {
+            return "<?php echo $condition ? 'required' : '' ?>";
         });
     }
 

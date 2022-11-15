@@ -1,7 +1,11 @@
 @extends('website.layouts.redesign.dashboard')
 
 @section('page-title')
-    @if($new) Create new news article @else Edit news article {{ $item->title }} @endif
+    @if($new)
+        Create new news article
+    @else
+        Edit news article {{ $item->title }}
+    @endif
 @endsection
 
 @section('container')

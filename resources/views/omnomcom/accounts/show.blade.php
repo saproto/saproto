@@ -81,7 +81,7 @@
                             @endforeach
                         </li>
 
-                    <hr>
+                        <hr>
 
                         {!! $products->links() !!}
 

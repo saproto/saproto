@@ -44,14 +44,11 @@
                             </select>
                         </div>
 
-                        <div class="form-check my-2">
-                            <label class="form-check-label">
-                                <input class="form-check-input" type="checkbox" name="is_member_only"
-                                       {{ isset($item->is_member_only) && $item->is_member_only ? 'checked' : '' }}>
-                                <i class="fas fa-lock" aria-hidden="true"></i> Members only
-                            </label>
-                        </div>
-
+                        @include('components.forms.checkbox', [
+                            'name' => 'is_member_only',
+                            'checked' => $item?->is_member_only,
+                            'label' => '<i class="fas fa-lock" aria-hidden="true"></i> Members only'
+                        ])
                         <div class="form-group">
                             <label for="page_id">Target page:</label>
                             <select class="form-control" name="page_id" id="page_id">

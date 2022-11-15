@@ -26,22 +26,22 @@
 
                         <div class="form-group autocomplete">
                             <label for="organisation">Committee: {{$leaderboard->committee->name ?? ''}}</label>
-                            <input class="form-control committee-search" id="organisation" name="committee" value=value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}" required>
+                            <input class="form-control committee-search" id="organisation" name="committee"
+                                   value=value="{{$leaderboard && $leaderboard->committee_id ? $leaderboard->committee_id : ""}}"
+                                   required>
                         </div>
 
-                        @if($leaderboard)
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="featured" name="featured" {{ $leaderboard->featured ? 'checked' : '' }}>
-                                <label class="form-check-label" for="featured">
-                                    Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>
-                                </label>
-                            </div>
-                        @endif
+                        @include('components.forms.checkbox', [
+                            'name' => 'featured',
+                            'checked' => $leaderboard?->featured,
+                            'label' => 'Feature this leaderboard on the home page. <i class="fas fa-sm fa-star"></i>'
+                        ])
 
                         <div class="form-group">
                             <label for="name">Leaderboard name:</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Proto drink beer scores" value="{{ $leaderboard->name ?? '' }}" required>
+                                   placeholder="Proto drink beer scores" value="{{ $leaderboard->name ?? '' }}"
+                                   required>
                         </div>
 
                         <div class="form-group">
@@ -59,12 +59,12 @@
                         ])
 
                         <div class="form-group">
-                                <label for="editor">Description:</label>
-                                @include('website.layouts.macros.markdownfield', [
-                                    'name' => 'description',
-                                    'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
-                                    'value' => !$leaderboard ? null : $leaderboard->description
-                                ])
+                            <label for="editor">Description:</label>
+                            @include('website.layouts.macros.markdownfield', [
+                                'name' => 'description',
+                                'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
+                                'value' => !$leaderboard ? null : $leaderboard->description
+                            ])
                         </div>
 
                     </div>
@@ -74,7 +74,8 @@
                             Submit
                         </button>
                         @if($leaderboard != null)
-                            <a class="btn btn-danger float-end" href="{{ route("leaderboards::delete", ['id'=>$leaderboard->id]) }}">Delete</a>
+                            <a class="btn btn-danger float-end"
+                               href="{{ route("leaderboards::delete", ['id'=>$leaderboard->id]) }}">Delete</a>
                         @endif
                     </div>
 
@@ -112,34 +113,36 @@
                                         <table class="table table-sm table-hover mb-0">
 
                                             <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Name</th>
-                                                    <th>{{ $leaderboard->points_name }} <i class="ms-1 {{ $leaderboard->icon }}"></i></th>
-                                                    <th></th>
-                                                    <th></th>
-                                                </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th>Name</th>
+                                                <th>{{ $leaderboard->points_name }} <i
+                                                            class="ms-1 {{ $leaderboard->icon }}"></i></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
                                             </thead>
 
                                             <tbody>
-                                                @foreach($entries as $entry)
-                                                    <tr class="le-points" data-id="{{ $entry->id }}">
-                                                        <td>#{{ $loop->index+1 }}</td>
-                                                        <td>{{ $entry->user->name }}</td>
-                                                        <td style="width: 80px">
-                                                            <input id="le_{{ $entry->id }}" value="{{ $entry->points}}" class="le-points-input">
-                                                        </td>
-                                                        <td class="cursor-pointer" style="min-width: 60px;">
-                                                            <span class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"></span>
-                                                            <span class="fa fas fa-lg fa-caret-down ms-1 le-points-decrease"></span>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
-                                                                <i class="fas fa-trash text-danger fa-fw"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+                                            @foreach($entries as $entry)
+                                                <tr class="le-points" data-id="{{ $entry->id }}">
+                                                    <td>#{{ $loop->index+1 }}</td>
+                                                    <td>{{ $entry->user->name }}</td>
+                                                    <td style="width: 80px">
+                                                        <input id="le_{{ $entry->id }}" value="{{ $entry->points}}"
+                                                               class="le-points-input">
+                                                    </td>
+                                                    <td class="cursor-pointer" style="min-width: 60px;">
+                                                        <span class="fa fas fa-lg fa-caret-up ms-2 le-points-increase"></span>
+                                                        <span class="fa fas fa-lg fa-caret-down ms-1 le-points-decrease"></span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('leaderboards::entries::delete', ['id' => $entry->id]) }}">
+                                                            <i class="fas fa-trash text-danger fa-fw"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
 
                                         </table>
@@ -202,10 +205,10 @@
 
         function updatePoints(id, points) {
             post('{{ route('leaderboards::entries::update') }}', {id: id, points: points})
-            .catch(err => {
-                console.error(err)
-                window.alert('Something went wrong while updating the points. Please try again.')
-            })
+                .catch(err => {
+                    console.error(err)
+                    window.alert('Something went wrong while updating the points. Please try again.')
+                })
         }
     </script>
 

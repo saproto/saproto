@@ -50,10 +50,10 @@
                             'label' => 'Album date:',
                             'placeholder' => strtotime(Carbon::now())
                         ])
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="private" name="private">
-                            <label class="form-check-label" for="private">Private album</label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'private',
+                            'label' => 'Private album'
+                        ])
                     </div>
 
                     <div class="card-footer">

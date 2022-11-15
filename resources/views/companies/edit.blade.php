@@ -50,29 +50,23 @@
 
                         <hr>
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="on_carreer_page" {{ ($company && $company->on_carreer_page? 'checked' : '') }}>
-                                Visible on the carreer page.
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'on_carreer_page',
+                            'checked' => $announcement?->on_carreer_page,
+                            'label' => 'Visible on the career page'
+                        ])
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="in_logo_bar" {{ ($company && $company->in_logo_bar? 'checked' : '') }}>
-                                Place logo in the logo bar.
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'in_logo_bar',
+                            'checked' => $announcement?->in_logo_bar,
+                            'label' => 'Place logo in the logo bar'
+                        ])
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"
-                                       name="on_membercard" {{ ($company && $company->on_membercard? 'checked' : '') }}>
-                                Visible on membercard page.
-                            </label>
-                        </div>
+                        @include('components.forms.checkbox', [
+                            'name' => 'on_membercard',
+                            'checked' => $announcement?->on_membercard,
+                            'label' => 'Visible on membercard page'
+                        ])
 
                         <hr>
 
@@ -88,7 +82,9 @@
                             Submit
                         </button>
 
-                        <a href="{{ route("companies::admin") }}" class="btn btn-default">Cancel</a>
+                        <a href="{{ route("companies::admin") }}" class="btn btn-default">
+                            Cancel
+                        </a>
                     </div>
 
                 </div>

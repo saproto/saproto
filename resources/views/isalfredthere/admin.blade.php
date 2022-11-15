@@ -44,7 +44,7 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_2"
-                                   value="away" required  {{ $status->status == 'away' ? 'checked' : '' }}>
+                                   value="away" required {{ $status->status == 'away' ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_2">
                                 I'll be back in a while!
                             </label>
@@ -60,7 +60,8 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="where_is_alfred" id="where_is_alfred_4"
-                                   value="text_only" required {{ ($status->status == 'unknown' && !empty($status->text)) ? 'checked' : '' }}>
+                                   value="text_only"
+                                   required {{ ($status->status == 'unknown' && !empty($status->text)) ? 'checked' : '' }}>
                             <label class="form-check-label" for="where_is_alfred_4">
                                 I would only like to display a message!
                             </label>
@@ -73,8 +74,11 @@
                             'form_class_name' => $status->status == 'away' ? '' : 'd-none'
                         ])
 
-                        <div id="alfred-text" class="{{($status->status == 'away'||($status->status=='unknown'&&!empty($status->text))) ? '' : 'd-none'}}"><br>
-                        <input name="is_alfred_there_text" type="text" class="form-control" placeholder="additional message" value="{{$status->text}}">
+                        <div id="alfred-text"
+                             class="{{($status->status == 'away'||($status->status=='unknown'&&!empty($status->text))) ? '' : 'd-none'}}">
+                            <br>
+                            <input name="is_alfred_there_text" type="text" class="form-control"
+                                   placeholder="additional message" value="{{$status->text}}">
                         </div>
 
                     </div>
@@ -103,18 +107,16 @@
             el.addEventListener('change', _ => {
 
                 if (el.checked && el.value === 'away') {
-                        dateSelect.classList.remove('d-none')
-                        alfredText.classList.remove('d-none')
-                        alfredText.querySelector('input').placeholder="Additional message"
-                        dateBack.required = true
-                }
-                else if(el.checked && el.value === 'text_only'){
+                    dateSelect.classList.remove('d-none')
+                    alfredText.classList.remove('d-none')
+                    alfredText.querySelector('input').placeholder = "Additional message"
+                    dateBack.required = true
+                } else if (el.checked && el.value === 'text_only') {
                     alfredText.classList.remove('d-none')
                     dateSelect.classList.add('d-none')
-                    alfredText.querySelector('input').placeholder="Message!"
+                    alfredText.querySelector('input').placeholder = "Message!"
                     alfredText.required = true
-                }
-                else {
+                } else {
                     dateSelect.classList.add('d-none')
                     alfredText.classList.add('d-none')
                     dateBack.required = false

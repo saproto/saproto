@@ -119,29 +119,29 @@
 
             </div>
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_visible" {{ ($product != null && $product->is_visible ? 'checked' : '') }}>
-                    Visible in OmNomCom.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_visible',
+                'checked' => $product?->is_visible,
+                'label' => 'Visible in OmNomCom.'
+            ])
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_visible_when_no_stock" {{ ($product != null && $product->is_visible_when_no_stock ? 'checked' : '') }}>
-                    Visible in OmNomCom even when out of stock.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_visible_when_no_stock',
+                'checked' => $product?->is_visible_when_no_stock,
+                'label' => 'Visible in OmNomCom even when out of stock.'
+            ])
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"
-                           name="is_alcoholic" {{ ($product != null && $product->is_alcoholic ? 'checked' : '') }}>
-                    Product contains alcohol.
-                </label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_visible_when_no_stock',
+                'checked' => $product?->is_visible_when_no_stock,
+                'label' => 'Visible in OmNomCom even when out of stock.'
+            ])
+
+            @include('components.forms.checkbox', [
+                'name' => 'is_alcoholic',
+                'checked' => $product?->is_alcoholic,
+                'label' => 'Product contains alcohol.'
+            ])
 
             <hr>
 
@@ -173,7 +173,7 @@
 
                         @foreach($accounts as $account)
 
-                            <option value="{{ $account->id }}" {{ ($product != null && $account->id == $product->account_id ? 'selected' : '') }}>
+                            <option value="{{ $account->id }}" @selected(old('account_id', $account?->id == $product->account_id))>
                                 {{ $account->name }} ({{ $account->account_number }})
                             </option>
 

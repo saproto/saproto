@@ -43,7 +43,8 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-primary float-end btn-block">Complete profile</button>
+                        <button type="submit" class="btn btn-outline-primary float-end btn-block">Complete profile
+                        </button>
                     </div>
 
                 </div>

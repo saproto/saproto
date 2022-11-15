@@ -116,45 +116,38 @@
 
                         <!-- External -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_external" {{($event && $event->is_external ? 'checked' : '') }}>
-                                    This activity is not organized by Proto.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'is_external',
+                                'checked' => $event?->is_external,
+                                'label' => 'This activity is not organized by Proto.'
+                            ])
                         </div>
 
                         <!-- Food -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="involves_food"
-                                            {{ ($event && $event->involves_food ? 'checked' : '') }}>
-                                    This activity involves people eating food.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'involves_food',
+                                'checked' => $event?->involves_food,
+                                'label' => 'This activity involves people eating food.'
+                            ])
                         </div>
 
                         <!-- Force Calendar -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="force_calendar_sync"
-                                            {{ ($event && $event->force_calendar_sync ? 'checked' : '') }}>
-                                    Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'force_calendar_sync',
+                                'checked' => $event?->force_calendar_sync,
+                                'label' => 'Always sync this event to user calendars. <i class="fas fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="This will also sync this event to the calendars of users that specifically opted to only sync events they are either attending, organizing or helping at. This feature should only be used for events like GMMs."></i>'
+                            ])
                         </div>
 
                         <!-- Feature -->
                         <div class="col-md-6 mb-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_featured"
-                                            {{ ($event && $event->is_featured ? 'checked' : '') }}>
-                                    Feature this event on the homepage.
-                                </label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'is_featured',
+                                'checked' => $event?->is_featured,
+                                'label' => 'Feature this event on the homepage.'
+                            ])
                         </div>
 
                     </div>
