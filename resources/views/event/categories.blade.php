@@ -23,7 +23,7 @@
                         <input type="text" class="form-control mb-3" id="name" name="name"
                                placeholder="OmNomNom" value="{{ $cur_category->name ?? '' }}" required>
 
-                        @include('website.layouts.macros.iconpicker', [
+                        @include('components.forms.iconpicker', [
                             'name' => 'icon',
                             'placeholder' => isset($cur_category) ? $cur_category->icon : null,
                             'label' => 'Category icon:'

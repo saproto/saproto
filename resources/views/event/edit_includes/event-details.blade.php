@@ -38,7 +38,7 @@
 
                         <!-- Start -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'start',
                                 'label' => 'Event start:',
                                 'placeholder' => request()->old('start') ? strtotime(request()->old('start')) : ($event ? $event->start : null)
@@ -47,7 +47,7 @@
 
                         <!-- End -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'end',
                                 'label' => 'Event end:',
                                 'placeholder' => request()->old('start')?strtotime(request()->old('end')):($event ? $event->end : null)
@@ -69,7 +69,7 @@
 
                         <!-- Publication -->
                         <div class="col-md-6 mb-3">
-                            @include('website.layouts.macros.datetimepicker',[
+                            @include('components.forms.datetimepicker',[
                                 'name' => 'publication',
                                 'label' => 'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
                                 'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
@@ -167,7 +167,7 @@
 
                     <div class="form-group">
                         <label for="editor">Description</label>
-                        @include('website.layouts.macros.markdownfield', [
+                        @include('components.forms.markdownfield', [
                             'name' => 'description',
                             'placeholder' => $event == null ? "Please elaborate on why this event is awesome." : null,
                             'value' => old('description',$event == null ? null : $event->description)
@@ -176,7 +176,7 @@
 
                     <div class="form-group">
                         <label for="editor-summary">Summary</label>
-                        @include('website.layouts.macros.markdownfield', [
+                        @include('components.forms.markdownfield', [
                             'name' => 'summary',
                             'placeholder' => $event == null ? "A summary (used in the newsletter for example). Only a small description is required, other details will be added." : null,
                             'value' => old('summary',$event == null ? null : $event->summary)

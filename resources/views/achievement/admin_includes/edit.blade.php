@@ -80,7 +80,7 @@
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    @include('website.layouts.macros.markdownfield', [
+                    @include('components.forms.markdownfield', [
                         'name' => 'page_content',
                         'placeholder' => 'Achievement page message.',
                         'value' => $achievement->page_content ?? null

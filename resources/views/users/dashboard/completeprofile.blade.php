@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <label>Birthdate</label>
-                                @include('website.layouts.macros.datetimepicker', [
+                                @include('components.forms.datetimepicker', [
                                     'name' => 'birthdate',
                                     'format' => 'date',
                                     'placeholder' => strtotime('2000-01-01')

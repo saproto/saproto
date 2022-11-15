@@ -110,12 +110,13 @@
 
             <div class="row mb-3">
 
-              <div class="col-md-4">
-                <label for="price">Calories:</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="calories" name="calories" placeholder="0" value="{{ $product->calories ?? '' }}">
+                <div class="col-md-4">
+                    <label for="price">Calories:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="calories" name="calories" placeholder="0"
+                               value="{{ $product->calories ?? '' }}">
+                    </div>
                 </div>
-              </div>
 
             </div>
 
@@ -198,7 +199,7 @@
 
 
             @if($product)
-                @include('website.layouts.macros.confirm-modal', [
+                @include('components.modals.confirm-modal', [
                    'action' => route('omnomcom::products::delete', ['id' => $product->id]),
                    'classes' => 'btn btn-danger',
                    'text' => 'Delete',
@@ -212,7 +213,8 @@
             <a href="{{ route("omnomcom::products::list") }}" class="btn btn-default float-end">Cancel</a>
 
             @if ($product && $product->ticket)
-                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}" class="btn btn-default float-end">
+                <a href="{{ route('tickets::edit', ['id' => $product->ticket->id]) }}"
+                   class="btn btn-default float-end">
                     Go to event ticket
                 </a>
             @endif

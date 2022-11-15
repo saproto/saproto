@@ -33,20 +33,20 @@
 
                         <div class="form-group">
                             <label for="editor">Announcement:</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'content',
                                 'placeholder' => "Awesome announcement goes here.",
                                 'value' => $announcement == null ? null : $announcement->content
                             ])
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'display_from',
                             'label' => 'Start:',
                             'placeholder' => $announcement ? strtotime($announcement->display_from) : strtotime(Carbon::now())
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'display_till',
                             'label' => 'End:',
                             'placeholder' => $announcement ? strtotime($announcement->display_till) : strtotime(Carbon::now()->endOfDay()   )

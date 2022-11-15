@@ -80,7 +80,7 @@
 
             <div class="form-group">
                 <label for="editor">Description</label>
-                @include('website.layouts.macros.markdownfield', [
+                @include('components.forms.markdownfield', [
                     'name' => 'description',
                     'placeholder' => $new ? "Please elaborate on why this committee is awesome." : null,
                     'value' => $new ? null : $committee->description

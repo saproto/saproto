@@ -38,13 +38,13 @@
                                    value="{{ $ticket ? $ticket->event->id : ''  }}" {{ $ticket ? '' : 'required' }}>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'available_from',
                             'label' => 'Available from:',
                             'placeholder' => $ticket ? $ticket->available_from : null
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'available_to',
                             'label' => 'Available to:',
                             'placeholder' => $ticket ? $ticket->available_to : null

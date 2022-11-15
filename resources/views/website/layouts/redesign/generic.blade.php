@@ -2,7 +2,7 @@
 
 @section('body')
 
-    @include('website.navigation.navbar')
+    @include('website.navbar')
 
     <div class="w-100" style="height: 71px;">&nbsp;</div>
 

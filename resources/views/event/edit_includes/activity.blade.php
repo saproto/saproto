@@ -25,7 +25,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        @include('website.layouts.macros.datetimepicker',[
+                        @include('components.forms.datetimepicker',[
                             'name' => 'registration_start',
                             'label' => 'Sign-up start:',
                             'placeholder' => old('registration_start')?strtotime(old('registration_start')):($event->activity ? $event->activity->registration_start : null)
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @include('website.layouts.macros.datetimepicker',[
+                        @include('components.forms.datetimepicker',[
                             'name' => 'registration_end',
                             'label' => 'Sign-up end:',
                             'placeholder' => old('registration_end')?strtotime(old('registration_end')):($event->activity ? $event->activity->registration_end : null)
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        @include('website.layouts.macros.datetimepicker',[
+                        @include('components.forms.datetimepicker',[
                             'name' => 'deregistration_end',
                             'label' => 'Sign-out end:',
                             'placeholder' => old('registration_end')?strtotime(old('deregistration_end')):($event->activity ? $event->activity->deregistration_end : null)

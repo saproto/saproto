@@ -59,7 +59,7 @@
 
                         <div class="form-group">
                             <label for="content">Content</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'content',
                                 'placeholder' => 'Text goes here.',
                                 'value' => $item ? $item->content : null

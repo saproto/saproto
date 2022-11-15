@@ -38,12 +38,12 @@
 
                     <div class="card-body">
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'start',
                             'label' => 'Start'
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'end',
                             'label' => 'End'
                         ])

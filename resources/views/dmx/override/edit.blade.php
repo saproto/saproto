@@ -63,7 +63,7 @@
 
                         <hr>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'start',
                             'label' => 'Override start:',
                             'placeholder' => $override ? $override->start : strtotime(Carbon::now())
@@ -71,7 +71,7 @@
 
                         <div class="form-group">
                             <label for="end">Override end:</label>
-                            @include('website.layouts.macros.datetimepicker', [
+                            @include('components.forms.datetimepicker', [
                                 'name' => 'end',
                                 'label' => 'Override end:',
                                 'placeholder' => $override ? $override->end : strtotime(Carbon::now()->endOfDay())

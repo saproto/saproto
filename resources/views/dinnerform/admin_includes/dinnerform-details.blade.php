@@ -73,7 +73,7 @@
                 <div class="col-md-6">
 
                     <!-- Start -->
-                    @include('website.layouts.macros.datetimepicker', [
+                    @include('components.forms.datetimepicker', [
                         'name' => 'start',
                         'label' => 'Opens at:',
                         'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->start->timestamp : null,
@@ -81,7 +81,7 @@
                     ])
 
                     <!-- End -->
-                    @include('website.layouts.macros.datetimepicker',[
+                    @include('components.forms.datetimepicker',[
                         'name' => 'end',
                         'label' => 'Closes at:',
                         'placeholder' => $dinnerformCurrent ? $dinnerformCurrent->end->timestamp : null,

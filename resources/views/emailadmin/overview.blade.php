@@ -20,68 +20,68 @@
                 </div>
 
                 <div class="table-responsive">
-                <table class="table table-hover table-sm">
+                    <table class="table table-hover table-sm">
 
-                    <thead>
+                        <thead>
 
-                    <tr class="bg-dark text-white">
+                        <tr class="bg-dark text-white">
 
-                        <td>List name</td>
-                        <td>Public</td>
-                        <td>Subscribers</td>
-                        <td>Controls</td>
-
-                    </tr>
-
-                    </thead>
-
-                    <tr>
-                        <td>All members</td>
-                        <td></td>
-                        <td>{{ Proto\Models\Member::countValidMembers() }}</td>
-                        <td></td>
-                    </tr>
-
-                    <tr>
-                        <td>All pending members</td>
-                        <td></td>
-                        <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
-                        <td></td>
-                    </tr>
-
-                    <tr>
-                        <td>All active members</td>
-                        <td></td>
-                        <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
-                        <td></td>
-                    </tr>
-
-                    @foreach($lists as $list)
-
-                        <tr>
-
-                            <td>{{ $list->name }}</td>
-                            <td>{{ ($list->is_member_only ? 'Member only' : 'Public') }}</td>
-                            <td>{{ $list->users->count() }}</td>
-                            <td>
-                                <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
-                                    <i class="fas fa-edit me-2"></i>
-                                </a>
-
-                                @include('website.layouts.macros.confirm-modal', [
-                                    'action' => route('email::list::delete', ['id' => $list->id]),
-                                    'text' => '<i class="fas fa-trash text-danger"></i>',
-                                    'title' => 'Confirm Delete',
-                                    'message' => "Are you sure you want to delete e-mail list $list->name?",
-                                    'confirm' => 'Delete',
-                                ])
-                            </td>
+                            <td>List name</td>
+                            <td>Public</td>
+                            <td>Subscribers</td>
+                            <td>Controls</td>
 
                         </tr>
 
-                    @endforeach
+                        </thead>
 
-                </table>
+                        <tr>
+                            <td>All members</td>
+                            <td></td>
+                            <td>{{ Proto\Models\Member::countValidMembers() }}</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>All pending members</td>
+                            <td></td>
+                            <td>{{ Proto\Models\Member::countPendingMembers() }}</td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td>All active members</td>
+                            <td></td>
+                            <td>{{ Proto\Models\Member::countActiveMembers() }}</td>
+                            <td></td>
+                        </tr>
+
+                        @foreach($lists as $list)
+
+                            <tr>
+
+                                <td>{{ $list->name }}</td>
+                                <td>{{ ($list->is_member_only ? 'Member only' : 'Public') }}</td>
+                                <td>{{ $list->users->count() }}</td>
+                                <td>
+                                    <a href="{{ route('email::list::edit', ['id' => $list->id]) }}">
+                                        <i class="fas fa-edit me-2"></i>
+                                    </a>
+
+                                    @include('components.modals.confirm-modal', [
+                                        'action' => route('email::list::delete', ['id' => $list->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to delete e-mail list $list->name?",
+                                        'confirm' => 'Delete',
+                                    ])
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </table>
                 </div>
 
             </div>
@@ -140,7 +140,7 @@
                                     event(s) {{$email->to_backup?'with backup users':''}}:
                                     @foreach($email->events()->get() as $event)
                                         {{$event->title}}.
-                                        @endforeach
+                                    @endforeach
                                 @endif
                             </td>
                             <td>
@@ -162,7 +162,7 @@
                                     <i class="fas fa-eye me-2 text-info"></i>
                                 </a>
                                 @if (!$email->sent)
-                                    @include('website.layouts.macros.confirm-modal', [
+                                    @include('components.modals.confirm-modal', [
                                         'action' => route('email::delete', ['id' => $email->id]),
                                         'text' => '<i class="fas fa-trash text-danger me-2"></i>',
                                         'title' => 'Confirm Delete',

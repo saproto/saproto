@@ -31,13 +31,13 @@
                                    required>
                         </div>
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'campaign_start',
                             'label' => 'Campaign start:',
                             'placeholder' => $item ? $item->campaign_start : date('U')
                         ])
 
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'campaign_end',
                             'label' => 'Campaign end:',
                             'placeholder' => $item ? $item->campaign_end : null

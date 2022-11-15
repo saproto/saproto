@@ -44,7 +44,7 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.layouts.macros.upcomingevents', ['n' => 6])
+        @include('website.home.cards.upcomingevents', ['n' => 6])
 
     </div>
 
@@ -70,12 +70,12 @@
 
             <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
-                    <div class="card-body">
-                        @foreach($dinnerforms as $dinnerform)
-                            @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
-                        @endforeach
-                    </div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
+                <div class="card-body">
+                    @foreach($dinnerforms as $dinnerform)
+                        @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
+                    @endforeach
+                </div>
 
             </div>
 
@@ -91,7 +91,8 @@
                     {!! Markdown::convert(Proto\Models\Newsletter::text()) !!}
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue reading</a>
+                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue
+                        reading</a>
                 </div>
             </div>
 

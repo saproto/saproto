@@ -60,7 +60,7 @@
 
                         <div id="information_type_description" class="form-group">
                             <label for="editor-description">Description</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'description',
                                 'placeholder' => !$joboffer ? 'A text dedicated to the job offer. Be as elaborate as you need to be!' : null,
                                 'value' => !$joboffer ? null : $joboffer->description

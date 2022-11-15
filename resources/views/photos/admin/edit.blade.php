@@ -59,7 +59,7 @@
                                 <input required type="text" id="album" name="album" class="form-control"
                                        value="{{ $photos->album_title }}">
                             </div>
-                            @include('website.layouts.macros.datetimepicker', [
+                            @include('components.forms.datetimepicker', [
                                 'name' => 'date',
                                 'label' => 'Album date:',
                                 'placeholder' => date($photos->album_date),
@@ -233,7 +233,7 @@
 
                             @foreach($photos->photos as $key => $photo)
 
-                                @include('website.layouts.macros.selectablephoto', ['photo' => $photo])
+                                @include('photos.includes.selectablephoto', ['photo' => $photo])
 
                             @endforeach
 

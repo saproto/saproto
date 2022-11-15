@@ -45,7 +45,7 @@
                             <label for="name">Album name:</label>
                             <input required type="text" id="name" name="name" class="form-control">
                         </div>
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'date',
                             'label' => 'Album date:',
                             'placeholder' => strtotime(Carbon::now())

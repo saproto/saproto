@@ -68,7 +68,7 @@
 
             <div class="form-group">
                 <label for="editor">E-mail</label>
-                @include('website.layouts.macros.markdownfield', [
+                @include('components.forms.markdownfield', [
                     'name' => 'body',
                     'placeholder' => 'Text goes here.',
                     'value' => $email ? $email->body : null
@@ -183,7 +183,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    @include('website.layouts.macros.datetimepicker', [
+                    @include('components.forms.datetimepicker', [
                         'name' => 'time',
                         'label' => 'Scheduled:',
                         'placeholder' => $email ? $email->time : strtotime(Carbon::now()->endOfDay())

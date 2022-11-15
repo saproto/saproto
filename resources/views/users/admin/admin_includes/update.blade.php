@@ -19,7 +19,7 @@
                    value="{{ $user->calling_name }}" required>
 
             @if($user->completed_profile)
-                @include('website.layouts.macros.datetimepicker', [
+                @include('components.forms.datetimepicker', [
                     'name' => 'birthdate',
                     'label' => 'Birthday:',
                     'format' => 'date',

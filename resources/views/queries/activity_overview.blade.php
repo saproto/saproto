@@ -24,7 +24,7 @@
 
                             <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">Start:</label>
                             <div class="col-sm-auto">
-                                @include('website.layouts.macros.datetimepicker',[
+                                @include('components.forms.datetimepicker',[
                                     'name' => 'start',
                                     'format' => 'date',
                                     'placeholder' => $start
@@ -32,7 +32,7 @@
                             </div>
                             <label for="datetimepicker-start" class="col-sm-auto col-form-label pe-0">End:</label>
                             <div class="col-sm-auto mb-3">
-                                @include('website.layouts.macros.datetimepicker',[
+                                @include('components.forms.datetimepicker',[
                                     'name' => 'end',
                                     'format' => 'date',
                                     'placeholder' => $end

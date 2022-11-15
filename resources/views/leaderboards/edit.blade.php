@@ -52,7 +52,7 @@
 
                         <input type="hidden" name="icon" id="icon" required>
 
-                        @include('website.layouts.macros.iconpicker', [
+                        @include('components.forms.iconpicker', [
                             'name' => 'icon',
                             'placeholder' => isset($leaderboard) ? $leaderboard->icon : null,
                             'label' => 'Icon:'
@@ -60,7 +60,7 @@
 
                         <div class="form-group">
                             <label for="editor">Description:</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'description',
                                 'placeholder' => !$leaderboard ? 'A small paragraph about the leaderboard.' : null,
                                 'value' => !$leaderboard ? null : $leaderboard->description

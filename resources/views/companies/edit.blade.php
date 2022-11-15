@@ -103,7 +103,7 @@
 
                         <div class="col-6">
                             <label for="editor">Company excerpt</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'excerpt',
                                 'placeholder' => !$company ? 'A small paragraph about this company.' : null,
                                 'value' => !$company ? null : $company->excerpt
@@ -112,7 +112,7 @@
 
                         <div class="col-6">
                             <label for="editor">Company description</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'description',
                                 'placeholder' => !$company ? 'A text dedicated to the company. Be as elaborate as you need to be!' : null,
                                 'value' => !$company ? null : $company->description
@@ -121,7 +121,7 @@
 
                         <div class="col-6">
                             <label for="editor">Membercard excerpt</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'membercard_excerpt',
                                 'placeholder' => !$company ? 'A small paragraph about what this company does on our membercard.' : null,
                                 'value' => !$company ? null : $company->membercard_excerpt
@@ -130,7 +130,7 @@
 
                         <div class="col-6">
                             <label for="editor">Membercard description</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'membercard_long',
                                 'placeholder' => !$company ? 'A text dedicated to the companies role for our membercard. Be as elaborate as you need to be!' : null,
                                 'value' => !$company ? null : $company->membercard_long

@@ -33,7 +33,7 @@
 
                         <div class="form-group">
                             <label for="editor">Description</label>
-                            @include('website.layouts.macros.markdownfield', [
+                            @include('components.forms.markdownfield', [
                                 'name' => 'description',
                                 'placeholder' => 'Text goes here.',
                                 'value' => $list ? $list->description: null
