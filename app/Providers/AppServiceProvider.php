@@ -2,7 +2,6 @@
 
 namespace Proto\Providers;
 
-use Blade;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
