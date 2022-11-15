@@ -45,11 +45,11 @@
                             <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
                         </div>
                         <select id="category" name="category" class="form-control">
-                            <option value="" {{ !$cur_category ? 'selected' : '' }}>
+                            <option value="" @selected(!$cur_category)>
                                 All
                             </option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ $cur_category && $cur_category == $category ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" @selected($cur_category && $cur_category == $category)>
                                     {{ $category->name }}
                                 </option>
                             @endforeach

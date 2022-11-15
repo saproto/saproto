@@ -155,7 +155,7 @@
 
                         @foreach($categories as $catogory)
 
-                            <option value="{{ $catogory->id }}" {{ ($product != null && $product->categories->contains($catogory) ? 'selected' : '') }}>
+                            <option value="{{ $catogory->id }}" @selected($product != null && $product->categories->contains($catogory))>
                                 {{ $catogory->name }}
                             </option>
 

@@ -32,22 +32,19 @@
             <div class="form-group">
                 <label for="tier">Tier:</label>
                 <select class="form-control {{ $achievement->tier ?? '' }}" name="tier">
-                    <option value="COMMON"
-                            {{ ($achievement && $achievement->tier == "COMMON" ? 'selected' : '') }}>
+                    <option value="COMMON" @selected($achievement && $achievement->tier == "COMMON")>
                         Common
                     </option>
-                    <option value="UNCOMMON"
-                            {{ ($achievement && $achievement->tier == "UNCOMMON" ? 'selected' : '') }}>
+                    <option value="UNCOMMON" @selected($achievement && $achievement->tier == "UNCOMMON")>
                         Uncommon
                     </option>
-                    <option value="RARE"
-                            {{ ($achievement && $achievement->tier == "RARE" ? 'selected' : '') }}>Rare
+                    <option value="RARE" @selected($achievement && $achievement->tier == "RARE")>
+                        Rare
                     </option>
-                    <option value="EPIC"
-                            {{ ($achievement && $achievement->tier == "EPIC" ? 'selected' : '') }}>Epic
+                    <option value="EPIC" @selected($achievement && $achievement->tier == "EPIC")>
+                        Epic
                     </option>
-                    <option value="LEGENDARY"
-                            {{ ($achievement && $achievement->tier == "LEGENDARY" ? 'selected' : '') }}>
+                    <option value="LEGENDARY" @selected($achievement && $achievement->tier == "LEGENDARY")>
                         Legendary
                     </option>
                 </select>

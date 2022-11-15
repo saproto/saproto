@@ -268,7 +268,7 @@
                         </label>
                         <select class="form-control" id="theme" name="theme">
                             @foreach(config('proto.themes') as $i => $name)
-                                <option value="{{ $i }}" {{ ($user->theme == $i) ? 'selected' : '' }}>{{ ucwords($name) }}</option>
+                                <option value="{{ $i }}" @selected($user->theme == $i)>{{ ucwords($name) }}</option>
                             @endforeach
                         </select>
                         <small class="form-text text-muted">

@@ -33,10 +33,9 @@
                         <div class="form-group">
                             <label for="parent">Parent:</label>
                             <select class="form-control" name="parent" id="parent">
-                                <option {{ (!isset($item) || $item->parent == null) ? 'selected' : ''}} value>No parent</option>
+                                <option @selected(!isset($item) || $item->parent == null) value>No parent</option>
                                 @foreach($topMenuItems as $topMenuItem)
-                                    <option value="{{ $topMenuItem->id }}"
-                                            {{ (isset($item) && $topMenuItem->id == $item->parent) ? 'selected' : '' }}
+                                    <option value="{{ $topMenuItem->id }}" @selected(isset($item) && $topMenuItem->id == $item->parent)
                                             {{ (isset($item) && $topMenuItem->id == $item->id) ? 'disabled' : '' }}>
                                         {{ $topMenuItem->menuname }}
                                     </option>
@@ -49,15 +48,16 @@
                             'checked' => $item?->is_member_only,
                             'label' => '<i class="fas fa-lock" aria-hidden="true"></i> Members only'
                         ])
+
                         <div class="form-group">
                             <label for="page_id">Target page:</label>
                             <select class="form-control" name="page_id" id="page_id">
-                                <option disabled {{ !isset($item) ?  'selected' : '' }}>Select a page...</option>
+                                <option disabled @selected(!isset($item))>Select a page...</option>
                                 <option disabled>---</option>
-                                <option id="other-url-option" {{ isset($item) && $item->page_id ? 'selected' : '' }} value>Other URL</option>
+                                <option id="other-url-option" @selected(isset($item) && $item->page_id) value>Other URL</option>
                                 <option disabled>---</option>
                                 @foreach($pages as $page)
-                                    <option {{ isset($item) && $page->id == $item->page_id ? 'selected' : '' }} value="{{ $page->id }}">
+                                    <option @selected(isset($item) && $page->id == $item->page_id) value="{{ $page->id }}">
                                         {{ $page->title }}
                                     </option>
                                 @endforeach
@@ -75,14 +75,14 @@
                             <div class="form-group">
                                 <label for="route">Existing Route:</label>
                                 <select class="form-control" id="route">
-                                    <option disabled {{ !isset($item) || $item->url == null ? 'selected' : '' }}>Select a route...</option>
+                                    <option disabled @selected(!isset($item) || $item->url == null)>Select a route...</option>
                                     @foreach($routes as $route)
                                         @php
                                             $domain = $route->domain() == null ? config('app-proto.primary-domain') : $route->domain();
                                             $uri = $route->uri() == '/' ? '' : $route->uri();
                                             $url = "https://$domain/$uri";
                                         @endphp
-                                        <option value="{{ $url }}" {{ isset($item) && $item->url == '(route) '.$route->getName() ? 'selected' : '' }}>
+                                        <option value="{{ $url }}" @selected(isset($item) && $item->url == '(route) '.$route->getName())>
                                             [{{ $route->getName() }}] -> {{ $route->domain() }}/{{ $route->uri }}
                                         </option>
                                     @endforeach

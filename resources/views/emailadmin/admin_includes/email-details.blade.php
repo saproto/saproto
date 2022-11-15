@@ -170,7 +170,7 @@
 
                             @foreach(Proto\Models\EmailList::all() as $list)
 
-                                <option value="{{ $list->id }}" {{ ($email && $email->hasRecipientList($list) ? 'selected' : '' ) }}>
+                                <option value="{{ $list->id }}" @selected($email && $email->hasRecipientList($list))>
                                     {{ $list->name }}
                                 </option>
 

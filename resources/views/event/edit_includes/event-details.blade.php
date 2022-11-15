@@ -58,10 +58,10 @@
                         <div class="col-md-6 mb-3">
                             <label for="secret">Event visibility:</label>
                             <select id="secret" name="secret" class="form-control" required>
-                                <option value="1" {{ (old('secret') === 1 || $event != null && $event->secret ? 'selected' : '') }}>
+                                <option value="1" @selected(old('secret') === 1 || $event != null && $event->secret)>
                                     Secret
                                 </option>
-                                <option value="0" {{ (old('secret') === 0 || $event != null && !$event->secret ? 'selected' : '') }}>
+                                <option value="0" @selected(old('secret') === 0 || $event != null && !$event->secret)>
                                     Public
                                 </option>
                             </select>
@@ -73,7 +73,7 @@
                                 'name' => 'publication',
                                 'label' => 'Publication time: <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="right" title="By setting this the event visibility will be ignored until the specified time, then it will be made public"></i>',
                                 'placeholder' => old('publication') ? strtotime(old('publication')) : ($event ? $event->publication : null),
-                                'not_required'=>true,
+                                'not_required'=> true,
                             ])
                         </div>
 
@@ -102,11 +102,11 @@
 
                                 <label for="category">Event category:</label>
                                 <select id="category" name="category" class="form-control">
-                                    <option {{ $event && !$event->category ? 'selected' : '' }}>
+                                    <option @selected($event && !$event->category)>
                                         Uncategorized
                                     </option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $event && $event->category_id == $category->id ? 'selected' : '' }}>
+                                        <option value="{{ $category->id }}" @selected($event && $event->category_id == $category->id)>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
