@@ -15,6 +15,7 @@
         </div>
 
         <div class="col-md-4">
+            @include('event.edit_includes.copy')
 
             @include('event.edit_includes.activity')
 
