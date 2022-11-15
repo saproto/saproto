@@ -12,7 +12,6 @@ use Illuminate\View\View;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
 use Proto\Models\User;
-use Redirect;
 use Session;
 
 class ProtubeController extends Controller
