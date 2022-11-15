@@ -2,9 +2,9 @@
 
 namespace Proto\Http\Controllers;
 
-use Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Models\HashMapItem;
@@ -86,7 +86,7 @@ class IsAlfredThereController extends Controller
         } elseif (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/', $status->value) === 1) {
             $result->status = 'away';
             $result->back = Carbon::parse($status->value)->format('Y-m-d H:i');
-            $result->backunix = $status->value;
+            $result->backunix = Carbon::parse($status->value)->getTimestamp();
             return $result;
         }
         $result->status = 'unknown';
