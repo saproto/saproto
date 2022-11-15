@@ -34,10 +34,6 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
-
-        Blade::directive('required', function($condition) {
-            return "<?php echo $condition ? 'required' : '' ?>";
-        });
     }
 
     /**
