@@ -3,11 +3,13 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
@@ -19,7 +21,6 @@ use Proto\Models\Photo;
 use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\User;
-use Redirect;
 use Response;
 use Session;
 
@@ -672,5 +673,40 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
         return Redirect::route('event::category::admin', ['category' => null]);
+    }
+
+    public function copyEvent(Request $request) {
+        $event = Event::findOrFail($request->id);
+        $newEvent = $event->replicate();
+        $newEvent->title = $newEvent->title.' [copy]';
+
+        $oldStart = Carbon::createFromTimestamp($event->start);
+        $newDate = Carbon::createFromFormat('Y-m-d',$request->input('newDate'));
+        $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
+        $diff = $newDate - $event->start;
+
+        $newEvent->start = $newDate;
+        $newEvent->end = $event->end + $diff;
+        $newEvent->secret = true;
+        if($event->publication){
+            $newEvent->publication = $event->publication + $diff;
+            $newEvent->secret = false;
+        }
+
+        $newEvent->save();
+
+        if($event->activity) {
+            $newActivity = $event->activity->replicate();
+            $newActivity->event_id = $newEvent->id;
+
+            $newActivity->registration_start = $event->activity->registration_start + $diff;
+            $newActivity->registration_end = $event->activity->registration_end + $diff;
+            $newActivity->deregistration_end = $event->activity->deregistration_end + $diff;
+
+            $newActivity->save();
+        }
+
+        Session::flash('flash_message', 'Copied the event!');
+        return view('event.edit', ['event' => $newEvent]);
     }
 }

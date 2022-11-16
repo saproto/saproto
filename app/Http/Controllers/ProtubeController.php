@@ -7,11 +7,11 @@ use Carbon\CarbonInterval;
 use DB;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Models\PlayedVideo;
 use Proto\Models\SoundboardSound;
 use Proto\Models\User;
-use Redirect;
 use Session;
 
 class ProtubeController extends Controller
@@ -51,7 +51,7 @@ class ProtubeController extends Controller
     /** @return RedirectResponse */
     public function loginRedirect()
     {
-        return Redirect::route('protube::remote');
+        return Redirect::away('protube::remote');
     }
 
     /** @return View */
