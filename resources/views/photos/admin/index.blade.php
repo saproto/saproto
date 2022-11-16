@@ -83,7 +83,7 @@
 
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                @include('website.layouts.macros.card-bg-image', [
+                                @include('website.home.cards.card-bg-image', [
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
@@ -119,7 +119,7 @@
 
                             <div class="col-lg-2 col-lg-3 col-md-4 col-sm-6">
 
-                                @include('website.layouts.macros.card-bg-image', [
+                                @include('website.home.cards.card-bg-image', [
                                 'url' => route('photo::admin::edit', ['id' => $album->id]) ,
                                 'img' => $album->thumb(),
                                 'html' => sprintf('<sub>%s</sub><br>%s<strong>%s</strong>', date("M j, Y", $album->date_taken),
