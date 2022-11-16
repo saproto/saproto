@@ -14,6 +14,7 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
+use Proto\Models\Quote;
 use Proto\Models\User;
 
 class OtherDataSeeder extends Seeder
@@ -147,6 +148,24 @@ class OtherDataSeeder extends Seeder
 
         $time_end = microtime(true);
         echo "\e[32mCreated:\e[0m   activity participations ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
+        // Create AchievementOwnership
+        $n = 200;
+        $time_start = microtime(true);
+
+        foreach (range(1, $n) as $index) {
+            $quote = new Quote([
+                'user_id'=> array_random($users),
+                'quote'=>$faker->text(100),
+            ]);
+
+            $quote->save();
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." quotes\r";
+        }
+
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+
 
         // Create newsletter text
         echo "\e[33mCreating:\e[0m  newsletter text".PHP_EOL;
