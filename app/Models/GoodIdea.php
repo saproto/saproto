@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Good Idea Model.
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class GoodIdea extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'good_ideas';
 
     protected $guarded = ['id'];

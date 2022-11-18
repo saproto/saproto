@@ -3,8 +3,8 @@
     <div class="card-header bg-dark text-white">
         Good Ideas
         @can("board")
-            <a href="{{ route('goodideas::deleteall') }}" class="float-end ms-3 btn btn-danger">
-                <i class="fas fa-trash-alt text-white"></i> Delete all
+            <a href="{{ route('goodideas::archiveall') }}" class="float-end ms-3 btn btn-danger">
+                <i class="fas fa-file-archive text-white"></i> Archive all
             </a>
         @endcan
     </div>

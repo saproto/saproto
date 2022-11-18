@@ -495,12 +495,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to the Good Idea Board. */
-    Route::group(['prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
+    Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
+        Route::get('archived', ['as' => 'archived', 'uses' => 'GoodIdeaController@archived']);
         Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
+        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'GoodIdeaController@reply']);
+        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'GoodIdeaController@archive']);
+        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'GoodIdeaController@restore']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
         Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
-        Route::get('deleteall', ['as' => 'deleteall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@deleteall']);
+        Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@archiveAll']);
     });
 
     /* Routes related to the OmNomCom. */
