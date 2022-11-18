@@ -56,7 +56,8 @@
                             downvote.classList.replace('far', 'fas')
                             break
                         case 0:
-                            votes.classList.replace('fas', 'far')
+                            downvote.classList.replace('fas', 'far')
+                            upvote.classList.replace('fas', 'far')
                     }
                 })
             })
