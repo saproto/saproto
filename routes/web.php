@@ -844,6 +844,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
     /*Routes related to the advent calender*/
     Route::group(['prefix' => 'advent', 'as' => 'advent::'], function () {
         Route::get('', ['as' => 'index', 'uses' => 'AdventController@index']);
+        Route::get('toggle', ['as' => 'toggle', 'uses' => 'AdventController@toggle_december']);
     });
 
     /* Routes related to the Minisites */

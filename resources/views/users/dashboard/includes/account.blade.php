@@ -294,6 +294,11 @@
                             This feature was requested by pretty much everyone.
                         </small>
 
+                        <br>
+                        <a href="{{route('advent::toggle')}}">
+                        <button type="button" class="btn btn-warning">{{Cookie::get('disable-december')==='disabled'?'enable':'disable'}} december theme</button>
+                        </a>
+
                     </td>
                 </tr>
 

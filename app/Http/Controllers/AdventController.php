@@ -3,6 +3,9 @@
 namespace Proto\Http\Controllers;
 
 use Carbon;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
 use Proto\Models\Event;
 
 class AdventController extends Controller
@@ -17,5 +20,10 @@ class AdventController extends Controller
 
         $events = Event::whereIn('id', $ids)->get();
         return view('advent.index',['eventsArray'=>$events, 'date'=>$date]);
+    }
+
+    public function toggle_december(){
+            Cookie::queue('disable-december', Cookie::get('disable-december')==='disabled'?'enabled':'disabled', 43800);
+            return Redirect::back();
     }
 }
