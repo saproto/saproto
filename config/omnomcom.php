@@ -81,6 +81,11 @@ return [
             'end' => 'December 6',
         ],
         (object) [
+            'name' => 'christmaswrap',
+            'start' => 'December 8',
+            'end' => 'December 13',
+        ],
+        (object) [
             'name' => 'autumn',
             'start' => 'September 23',
             'end' => 'December 22',

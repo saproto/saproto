@@ -14,7 +14,6 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     env:
-      PHP_VERSION: 7.3
       BUILD_SOURCE_DIR: .
       BUILD_ARTIFACT_STAGING_DIR: build/
       BUILD_ARTIFACT_DESTINATION_DIR: /domains/proto.utwente.nl/deployment/uploads/
@@ -23,7 +22,10 @@ jobs:
       SENTRY_PROJECT: sa-proto-website
     steps:
       - name: 🛎️ Checkout project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: 🔍 Read .env
+        run: grep -E 'PHP_VERSION|NODE_VERSION' .env.prod >> $GITHUB_ENV
 
       - name: 🖱️ Setup PHP v${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
@@ -33,22 +35,11 @@ jobs:
       - name: 📥 Install back-end dependencies
         run: composer install --no-interaction --prefer-dist --no-dev --optimize-autoloader
 
-      - name: 🔍 Get Node version
-        id: nvm
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
-
-      - name: 🖱️ Set Node v${{ steps.nvm.outputs.NODE_VERSION }}
-        uses: actions/setup-node@v2
+      - name: 🖱️ Set Node v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
-
-      - name: 📂 Cache front-end dependencies
-        id: npm-cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
       - name: 📥 Install front-end dependencies
         run: npm ci --ignore-scripts
@@ -58,7 +49,7 @@ jobs:
 
       - name: 🗑️ Remove storage directory
         run: rm -rf storage
-        
+
       - name: 📝 Create Sentry release
         uses: getsentry/action-release@v1
         env:

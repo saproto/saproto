@@ -1,7 +1,8 @@
 // Vendors
 global.SignaturePad = require('signature_pad')
 global.moment = require('moment/moment')
-global.Quagga = require('quagga')
+import quagga from 'quagga'
+global.Quagga = quagga
 
 import './countdown-timer'
 import './utilities'
@@ -127,13 +128,11 @@ if (markdownFieldList.length) {
         window.easyMDEFields[el.id] =
             new EasyMDE({
                 element: el,
-                toolbar: ['bold', 'italic', '|', 'unordered-list', 'ordered-list', '|', 'image', 'link', 'quote', 'table', 'code', '|', 'preview'],
+                toolbar: ['bold', 'italic', 'strikethrough', '|', 'table', 'unordered-list', 'ordered-list', '|', 'image', 'link', 'quote', 'code', '|', 'preview', 'guide'],
+                toolbarButtonClassPrefix: 'mde-',
                 autoDownloadFontAwesome: false
             })
     })
-    const statusbarList = Array.from(document.querySelectorAll('.editor-statusbar'))
-    const link = '<a class="md-ref float-start" target="_blank" href="https://www.markdownguide.org/basic-syntax/">markdown syntax</a>'
-    statusbarList.forEach(el => el.innerHTML = link + el.innerHTML)
 }
 
 // Enable FontAwesome icon pickers

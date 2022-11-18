@@ -427,13 +427,13 @@ a.badge {
         display: block;
       }
 
-      option, span {
+      div, span {
         padding-left: 7px;
         padding-right: 7px;
         overflow-x: hidden;
       }
 
-      option {
+      div {
         &:hover {
           background-color: $info;
           cursor: pointer;

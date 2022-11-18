@@ -18,14 +18,19 @@ class DinnerformOrderlineController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function store(Request $request, $id) {
+    public function store(Request $request, $id)
+    {
         $dinnerform = Dinnerform::findOrFail($id);
+
+        if($dinnerform->hasOrdered()){
+            Session::flash('flash_message','You can only make one order per dinnerform!');
+            return Redirect::back();
+        }
+
         $order = $request->input('order');
         $amount = $request->input('price');
-        $helper = $request->has('helper');
-        if($dinnerform->event && $dinnerform->event->activity && $dinnerform->event->activity->isHelping(Auth::user())){
-            $helper = true;
-        }
+        $helper = $request->has('helper') || $dinnerform->isHelping();
+
         $dinnerOrderline = DinnerformOrderline::create([
             'description' => $order,
             'price' => $amount,
@@ -33,6 +38,7 @@ class DinnerformOrderlineController extends Controller
             'dinnerform_id'=>$id,
             'helper'=>$helper,
         ]);
+
         Session::flash('flash_message','Your order has been saved!');
         return Redirect::back();
     }
@@ -42,10 +48,11 @@ class DinnerformOrderlineController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
         if($dinnerOrderline->closed){
-            Session::flash('flash_message', 'You can not delete a closed dinnerform orderline!');
+            Session::flash('flash_message', 'You cannot delete an order of a closed dinnerform!');
             return Redirect::back();
         }
         if(! Auth::user() || Auth::user()->id !== $dinnerOrderline->user_id || ! $dinnerOrderline->dinnerform->isCurrent() || ! Auth::user()->can('tipcie')){
@@ -62,13 +69,14 @@ class DinnerformOrderlineController extends Controller
      * @param int $id
      * @return View|RedirectResponse
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
         if($dinnerOrderline->closed){
-            Session::flash('flash_message', 'You can not edit a closed dinner orderline!');
+            Session::flash('flash_message', 'You cannot edit an order of a closed dinnerform!');
             return Redirect::back();
         }
-        return view('dinnerform.dinnerform-orderline-edit', ['dinnerformOrderline'=>$dinnerOrderline]);
+        return view('dinnerform.admin-edit-order', ['dinnerformOrderline'=>$dinnerOrderline]);
     }
 
     /**
@@ -76,11 +84,12 @@ class DinnerformOrderlineController extends Controller
      * @param int $id
      * @return View
      */
-    public function update(Request $request,$id) {
+    public function update(Request $request,$id)
+    {
         $dinnerOrderline = DinnerformOrderline::findOrFail($id);
         if($dinnerOrderline->closed){
             $dinnerform = $dinnerOrderline->dinnerform;
-            Session::flash('flash_message', 'You can not update a closed dinner orderline!');
+            Session::flash('flash_message', 'You cannot update an order of a closed dinnerform!');
             return view('dinnerform.admin', ['dinnerform'=>$dinnerform, 'orderList'=>$dinnerform->orderlines()->get()]);
         }
 

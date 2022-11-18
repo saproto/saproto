@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Edit Dinner Form Orderline
+    Edit Dinnerform Orderline
 @endsection
 
 @section('container')
@@ -13,27 +13,28 @@
                 <div class="card mb-3">
 
                     <div class="card-header bg-dark text-white">
-                        Edit dinner form orderline from {{$dinnerformOrderline->user->name}}
+                        Edit order by {{ $dinnerformOrderline->user->name }} for dinnerform at {{ $dinnerformOrderline->dinnerform->restaurant }}
                     </div>
 
                     <div class="card-body">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="order">What have they ordered?</label>
                             <input class="form-control" value="{{$dinnerformOrderline->description}}" id="order" name="order" type="text" required>
                         </div>
-                        <div class="form-group">
-                            <label for="price">Price</label>
+                        <div class="form-group mb-3">
+                            <label for="price">What did it cost?</label>
                             <input class="form-control" value="{{$dinnerformOrderline->price}}" id="price" name="price" type="number" min="1" step="any"
                                    required>
                         </div>
-                        <div class="form-group">
-                           Where they a helper?
-                            <input class="form-check-inline" {{$dinnerformOrderline->helper?'checked':''}} id="helper" name="helper" type="checkbox">
+                        <div class="form-check">
+                            <input class="form-check-input" id="helper" name="helper" type="checkbox" {{$dinnerformOrderline->helper ? 'checked' : ''}}>
+                            <label for="helper">Were they a helper?</label>
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <input type="submit" class="btn btn-success btn-block" value="Edit">
+                        <input type="submit" class="btn btn-success" value="Edit">
+                        <a class="btn btn-danger ms-2" href="{{ route('dinnerform::admin', ['id' => $dinnerformOrderline->dinnerform->id]) }}">Cancel</a>
                     </div>
 
                 </div>

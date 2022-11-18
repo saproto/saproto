@@ -6,6 +6,7 @@
     <div class="alert alert-warning" role="alert">
         This event is scheduled and not shown yet on the site.
         For now you can only access it directly via the URL.
+        It is scheduled for <i>{{Carbon::createFromTimestamp($event->publication)->format('l j F Y, H:i')}}</i>
     </div>
 @endif
 
@@ -27,14 +28,28 @@
 
 @endif
 
+
+<div class="card mb-3">
+    <a href="{{ route("event::list", ['id'=>$event->id]) }}" class="btn btn-default">
+        Back to calendar
+    </a>
+</div>
+
 <div class="card mb-3">
 
     @if($event->image)
         <img class="card-img-top" src="{{ $event->image->generateImagePath(800, 300) }}" width="100%">
     @endif
 
-    <div class="card-header bg-light">
+    <div class="card-header bg-light justify-content-between d-inline-flex align-items-center">
         <h5 class="card-title">@yield('page-title')</h5>
+
+        @if($event->category)
+            <span class="badge rounded-pill bg-info ellipsis float-end mw-100">
+                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
+            </span>
+        @endif
+        
     </div>
 
     <ul class="list-group list-group-flush">
@@ -44,15 +59,6 @@
                 <i class="fas fa-fw fa-users" aria-hidden="true"></i>
                 Organised by the @if($event->committee->is_society) society @endif
                 <a href="{{ route('committee::show', ['id' => $event->committee->getPublicId()]) }}">{{ $event->committee->name }}</a>
-            </li>
-        @endif
-
-        @if($event->category)
-            <li class="list-group-item">
-                <span><i class="fas fa-tag fa-fw"></i>Category:</span><br>
-                <span class="badge rounded-pill bg-info px-3 mt-2 d-inline-block mw-100 ellipsis">
-                    <i class="{{ $event->category->icon }} fa-fw" aria-hidden="true"></i>{{ $event->category->name }}
-                </span>
             </li>
         @endif
 

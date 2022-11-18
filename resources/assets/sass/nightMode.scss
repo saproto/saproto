@@ -204,3 +204,32 @@ html {
 ::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px; }
 ::-webkit-scrollbar-corner { background-color: $blue-medium; }
 ::-webkit-resizer { background-color: #666; }
+
+
+.star {
+  --size:#{random(1) * 0.2}vw;
+  width: var(--size);
+  height: var(--size);
+  background: white;
+  border-radius: 50%;
+  position: fixed;
+  z-index: -1;
+}
+
+@keyframes grow {
+  0%, 100% {
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+}
+
+@for $i from 1 through 240 {
+  .star:nth-child(#{$i}) {
+    left: #{random(100)}vw;
+    top: #{random(100)}vh;
+    animation: grow #{5 - random(3)}s linear infinite;
+    animation-delay: -#{random(20)}s;
+  }
+}

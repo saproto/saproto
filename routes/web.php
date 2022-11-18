@@ -10,6 +10,8 @@ View::composer('*', function ($view) {
     View::share('viewName', $view->getName());
 });
 
+// TODO: change string based controller route definitions to standard PHP callable syntax.
+
 Route::group(['middleware' => ['forcedomain']], function () {
 
     /* The main route for the frontpage. */
@@ -370,6 +372,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
         // Show event
         Route::get('{id}', ['as' => 'show', 'uses' => 'EventController@show']);
 
+        Route::post('copy', ['as' => 'copy', 'uses' => 'EventController@copyEvent']);
+
         // Force login for event
         Route::get('{id}/login', ['as' => 'login', 'middleware' => ['auth'], 'uses' => 'EventController@forceLogin']);
     });
@@ -487,6 +491,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
         Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@destroy']);
         Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
+        Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'QuoteCornerController@search']);
     });
 
     /* Routes related to the Good Idea Board. */

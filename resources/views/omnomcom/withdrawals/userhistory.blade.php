@@ -2,7 +2,7 @@
 
 @section('page-title')
     Personal Overview for the {{ date('d-m-Y', strtotime($withdrawal->date)) }} Withdrawal
-    <br>Withdrawal status: {{$withdrawal->closed?'Closed':'Payed'}}
+    <br>Withdrawal status: {{$withdrawal->closed?'Closed':'Paid'}}
 @endsection
 
 @section('container')

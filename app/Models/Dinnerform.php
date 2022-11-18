@@ -2,6 +2,7 @@
 
 namespace Proto\Models;
 
+use Auth;
 use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +20,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  * @property bool $closed
  * @property bool $visible_home_page
- * @property float $discount
+ * @property float $helper_discount
+ * @property float $regular_discount
+ * @property float $regular_discount_percentage
  * @property Carbon $start
  * @property Carbon $end
  * @property Carbon|null $created_at
@@ -56,20 +59,24 @@ class Dinnerform extends Model
     }
 
     /** @return HasMany */
-    public function orderLines()
+    public function orderlines()
     {
         return $this->hasMany('Proto\Models\DinnerformOrderline');
     }
 
-    /**
-     * @return string A timespan string with format 'D H:i'.
-     */
+    /** @return float The regular discount as a percentage out of 100. */
+    public function getRegularDiscountPercentageAttribute()
+    {
+        return 100 - ($this->regular_discount * 100);
+    }
+
+    /** @return string A timespan string with format 'D H:i'. */
     public function generateTimespanText()
     {
         return $this->start->format('D H:i').' - '.Carbon::parse($this->end)->format('D H:i');
     }
 
-    /** @return bool Whether the dinnerform is currently open */
+    /** @return bool Whether the dinnerform is currently open. */
     public function isCurrent()
     {
         return $this->start->isPast() && $this->end->isFuture();
@@ -78,43 +85,62 @@ class Dinnerform extends Model
     /** @return bool Whether the dinnerform is more than 1 hour past it's end time. */
     public function hasExpired()
     {
-        return $this->end->addHours(1)->isPast();
+        return $this->end->addHour()->isPast();
     }
 
-    /** @return float Total amount of oderlines */
-    public function totalAmount() {
+    /** @return float Total amount of dinnerform orders without discounts. */
+    public function totalAmount()
+    {
         return $this->orderlines()->sum('price');
     }
 
-    /** @return float Total amount of orderlines reduced by helper discount */
-    public function totalAmountWithHelperDiscount() {
-        if($this->discount) {
-            $total = 0;
-            foreach($this->orderlines()->get() as $dinnerOrderline){
-                $total += $dinnerOrderline->price();
-            }
-            return $total;
-        } else {
-            return $this->totalAmount();
-        }
+    /** @return float Total amount of orderlines reduced by discounts. */
+    public function totalAmountWithDiscount()
+    {
+        return $this->orderlines()->get()
+            ->sum(function ($orderline) {
+                return $orderline->price_with_discount;
+            });
     }
 
-    /** @return int Number of orders */
-    public function orderCount() {
+    /** @return int Number of orders. */
+    public function orderCount()
+    {
         return $this->orderlines()->count();
     }
 
-    /** @return int number of helpers */
-    public function helperCount() {
+    /** @return int Number of helpers. */
+    public function helperCount()
+    {
         return $this->orderlines()->where('helper', true)->distinct('user_id')->count();
     }
 
+    /** @return bool Whether the current user is a helper for the event related to the dinnerform or has marked themselves as a helper. */
+    public function isHelping()
+    {
+        return $this->orderlines()->where('user_id', Auth::id())->where('helper', true)->exists()
+            || ($this->event && $this->event->activity && $this->event->activity->isHelping(Auth::user()));
+    }
+
+    /** @return bool Whether the current user has any discounts. */
+    public function hasDiscount()
+    {
+        return $this->regular_discount_percentage || ($this->helper_discount && $this->isHelping());
+    }
+
+    /** @return bool Whether the current user has made an order yet. */
+    public function hasOrdered()
+    {
+        return $this->orderlines()->where('user_id', Auth::id())->exists();
+    }
+
+    /** Delete related orders with dinnerform. */
     public static function boot()
     {
         parent::boot();
         static::deleting(function ($dinnerform) {
-          foreach($dinnerform->orderLines()->get() as $dinnerOrderline){
-             $dinnerOrderline->delete();
+          foreach($dinnerform->orderlines()->get() as $orderline){
+             $orderline->delete();
           }
         });
     }

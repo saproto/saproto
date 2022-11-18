@@ -150,6 +150,11 @@ class ActivityController extends Controller
 
         $committee = Committee::findOrFail($request->input('committee'));
 
+        if (HelpingCommittee::whereActivityId($event->activity->id)->whereCommitteeId($committee->id)->count() > 0) {
+            Session::flash('flash_message', 'This committee is already helping at this event.');
+            return Redirect::back();
+        }
+
         HelpingCommittee::create([
             'activity_id' => $event->activity->id,
             'committee_id' => $committee->id,

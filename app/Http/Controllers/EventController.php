@@ -3,11 +3,13 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Http\Requests\StoreEventRequest;
 use Proto\Models\Account;
@@ -19,7 +21,6 @@ use Proto\Models\PhotoAlbum;
 use Proto\Models\Product;
 use Proto\Models\StorageEntry;
 use Proto\Models\User;
-use Redirect;
 use Response;
 use Session;
 
@@ -35,20 +36,29 @@ class EventController extends Controller
         $data[0] = Event::query()
             ->where('start', '>=',strtotime('now'))
             ->orderBy('start')->with('activity')
-            ->where('start', '<=', strtotime('+1 week'))
-            ->get();
+            ->where('start', '<=', strtotime('+1 week'));
+
         $data[1] = Event::query()
             ->where('start', '>=',strtotime('now'))
             ->orderBy('start')->with('activity')
             ->where('start', '>', strtotime('+1 week'))
-            ->where('start', '<=', strtotime('+1 month'))
-            ->get();
+            ->where('start', '<=', strtotime('+1 month'));
+
         $data[2] = Event::query()
             ->where('start', '>=',strtotime('now'))
             ->orderBy('start')->with('activity')
-            ->where('start', '>', strtotime('+1 month'))
-            ->get();
+            ->where('start', '>', strtotime('+1 month'));
+
         $category = EventCategory::find($request->input('category'));
+        foreach ($data as $index=>$query){
+            if($category){
+                $data[$index] = $query->whereHas('Category', function ($q) use ($category) {
+                    $q->where('id', $category->id)->where('deleted_at', '=', null);
+                });
+            }
+            $data[$index] = $query->get();
+        }
+
         $years = collect(DB::select('SELECT DISTINCT Year(FROM_UNIXTIME(start)) AS start FROM events ORDER BY Year(FROM_UNIXTIME(start))'))->pluck('start');
 
         if (Auth::check()) {
@@ -518,11 +528,7 @@ class EventController extends Controller
         $relevant_only = $user ? $user->getCalendarRelevantSetting() : false;
 
         foreach (Event::where('start', '>', strtotime('-6 months'))->get() as $event) {
-            if ($event->secret && ($user == null || $event->activity == null || (
-                ! $event->activity->isParticipating($user) &&
-                        ! $event->activity->isHelping($user) &&
-                        ! $event->activity->isOrganising($user)
-            ))) {
+            if (! $event->mayViewEvent(Auth::user())) {
                 continue;
             }
 
@@ -662,5 +668,40 @@ class EventController extends Controller
 
         Session::flash('flash_message', 'The category '.$category->name.' has been deleted.');
         return Redirect::route('event::category::admin', ['category' => null]);
+    }
+
+    public function copyEvent(Request $request) {
+        $event = Event::findOrFail($request->id);
+        $newEvent = $event->replicate();
+        $newEvent->title = $newEvent->title.' [copy]';
+
+        $oldStart = Carbon::createFromTimestamp($event->start);
+        $newDate = Carbon::createFromFormat('Y-m-d',$request->input('newDate'));
+        $newDate = $newDate->setHour($oldStart->hour)->setMinute($oldStart->minute)->setSecond($oldStart->second)->timestamp;
+        $diff = $newDate - $event->start;
+
+        $newEvent->start = $newDate;
+        $newEvent->end = $event->end + $diff;
+        $newEvent->secret = true;
+        if($event->publication){
+            $newEvent->publication = $event->publication + $diff;
+            $newEvent->secret = false;
+        }
+
+        $newEvent->save();
+
+        if($event->activity) {
+            $newActivity = $event->activity->replicate();
+            $newActivity->event_id = $newEvent->id;
+
+            $newActivity->registration_start = $event->activity->registration_start + $diff;
+            $newActivity->registration_end = $event->activity->registration_end + $diff;
+            $newActivity->deregistration_end = $event->activity->deregistration_end + $diff;
+
+            $newActivity->save();
+        }
+
+        Session::flash('flash_message', 'Copied the event!');
+        return view('event.edit', ['event' => $newEvent]);
     }
 }

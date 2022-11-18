@@ -1,7 +1,9 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Participant checklist for {{ $event->title }}
+    Participant checklist for {{ $event->title }} <a href="{{ route('event::show', ['id' => $event->getPublicId()]) }}" class="btn btn-default float-end">
+        Back to event
+    </a>
 @endsection
 
 @section('container')
@@ -14,6 +16,21 @@
 
                 <div class="card-header bg-dark text-white">
                     @yield('page-title')
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><span id="present">{{\Proto\Http\Controllers\ParticipationController::getPresent($event->activity->id)}}</span>/{{$event->allUsers()->count()}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="card-body">
@@ -108,13 +125,16 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
+        present=document.getElementById('present');
+
         document.querySelectorAll('.is_present').forEach(el => {
             el.onclick = _ => {
                 get("{{ route('event::togglepresence', ['id' => 'id']) }}".replace("id", el.getAttribute('data-id')))
-                .then(_ => {
+                .then((data) => {
                     el.classList.toggle('bg-success')
                     el.classList.toggle('bg-danger')
                     el.innerHTML = el.innerHTML === 'Present' ? 'Absent' : 'Present'
+                    present.innerHTML=data
                 })
             }
         })
