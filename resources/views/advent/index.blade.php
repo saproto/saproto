@@ -6,12 +6,21 @@
 
 @section('container')
 
+    <style>
+        .tooltip-inner{
+            font-size: 2rem;
+        }
+    </style>
+
     @if($date->timestamp<Carbon::now()->timestamp)
         <div class="row d-flex justify-content-center" style="z-index: -12">
             <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h1>12th Month Advent Calender</h1>
+                        <h1>
+                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                  title="'Vo" class="VO">12th </span>
+                                Month Advent Calender</h1>
                     </div>
                     <div class="row row-cols-3 card-body">
                         @foreach($eventsArray as $event)
