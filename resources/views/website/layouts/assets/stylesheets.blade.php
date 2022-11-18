@@ -1,4 +1,4 @@
-@if(Carbon::now()->month===Carbon::NOVEMBER && Cookie::get('disable-december')!=='disabled')
+@if(Carbon::now()->month===Carbon::DECEMBER && Cookie::get('disable-december')!=='disabled')
     <link rel="stylesheet" href="{{ mix('/css/application-december.css') }}">
     @for($count=0; $count<12*12; $count++)
         <div class="snowflake"></div>
