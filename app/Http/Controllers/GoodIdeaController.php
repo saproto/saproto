@@ -3,6 +3,7 @@
 namespace Proto\Http\Controllers;
 
 use Carbon;
+use DB;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -23,17 +24,15 @@ class GoodIdeaController extends Controller
     public function index($page = 1)
     {
         $goodIdeas = GoodIdea::where('updated_at', '>', Carbon::now()->subWeeks(4));
-        $leastVoted = null;
-        $leastVotes = INF;
-        foreach ($goodIdeas->get() as $idea) {
-            $voteCount = $idea->votes()->count();
-            if ($voteCount < $leastVotes) {
-                $leastVotes = $voteCount;
-                $leastVoted = $idea;
-            }
-        }
 
-        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'leastVoted' => $leastVoted]);
+        $mostVotedID = DB::table('good_idea_votes')
+            ->select('good_idea_id', DB::raw('count(*) as votes'))
+            ->groupBy('good_idea_id')
+            ->orderBy('votes', 'DESC')->pluck('good_idea_id')->first();
+
+        $mostVoted=GoodIdea::find($mostVotedID);
+
+        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted]);
     }
 
     /**
@@ -88,9 +87,12 @@ class GoodIdeaController extends Controller
 
         /** @var GoodIdeaVote $vote */
         $vote = GoodIdeaVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
-        $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
-        $vote->save();
-
+        if($vote->vote==$request->input('voteValue')){
+            $vote->delete();
+        }else {
+            $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
+            $vote->save();
+        }
         return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote(Auth::user())]);
     }
 }

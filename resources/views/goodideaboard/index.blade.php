@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-lg-3">
             @include('goodideaboard.newidea')
-            @include('goodideaboard.leastvoted')
+            @include('goodideaboard.mostvoted')
         </div>
 
         <div class="col-lg-9">
@@ -40,6 +40,7 @@
         function sendVote(id, voteValue) {
             post('{{ route('goodideas::vote') }}', { id: id, voteValue: voteValue })
             .then(data => {
+                console.log(data)
                 document.querySelectorAll(`[data-id='${id}']`).forEach(el => {
                     const votes = el.querySelector('.votes')
                     const upvote = el.querySelector('.upvote')

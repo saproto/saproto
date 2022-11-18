@@ -11,6 +11,8 @@ use Proto\Models\Address;
 use Proto\Models\Bank;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
+use Proto\Models\GoodIdea;
+use Proto\Models\GoodIdeaVote;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
@@ -166,6 +168,24 @@ class OtherDataSeeder extends Seeder
         $time_end = microtime(true);
         echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
+
+        // Create GoodIdea
+        $n = 200;
+
+        $time_start = microtime(true);
+
+        foreach (range(1, $n) as $index) {
+            $goodIdea = new GoodIdea([
+                'user_id'=> array_random($users),
+                'idea'=>$faker->text(50),
+            ]);
+            $goodIdea->save();
+
+            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." goodIdeas\r";
+        }
+
+        $time_end = microtime(true);
+        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
         // Create newsletter text
         echo "\e[33mCreating:\e[0m  newsletter text".PHP_EOL;
