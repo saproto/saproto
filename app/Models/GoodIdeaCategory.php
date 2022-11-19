@@ -12,8 +12,8 @@ class GoodIdeaCategory extends Model
     protected $guarded = ['id'];
 
     /** @return HasMany */
-    public function goodIdeas(): HasMany
+    public function ideas(): HasMany
     {
-        return $this->hasMany('Proto\Models\GoodIdea');
+        return $this->hasMany('Proto\Models\GoodIdea', 'idea_category_id');
     }
 }

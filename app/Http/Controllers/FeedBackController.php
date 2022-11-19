@@ -2,7 +2,6 @@
 
 namespace Proto\Http\Controllers;
 
-use Carbon;
 use DB;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -27,19 +26,19 @@ class FeedBackController extends Controller
      */
     public function index(String $category)
     {
-        $category=GoodIdeaCategory::where('name', $category)->first();
-        return $category->goodIdeas();
-        $goodIdeas = GoodIdea::orderBy('created_at', 'desc');
+        $category=GoodIdeaCategory::where('name', $category)->firstOrFail();
+        $goodIdeas = $category->ideas()->orderBy('created_at', 'desc');
 
         $mostVotedID = DB::table('good_idea_votes')
             ->select('good_idea_id', DB::raw('count(*) as votes'))
             ->groupBy('good_idea_id')
             ->orderBy('votes', 'DESC')
-            ->pluck('good_idea_id')->first();
+            ->pluck('good_idea_id')
+            ->first();
 
         $mostVoted=GoodIdea::find($mostVotedID);
 
-        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted]);
+        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category]);
     }
 
     public function archived($page = 1) {
@@ -141,12 +140,12 @@ class FeedBackController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function archiveAll() {
+    public function archiveAll($category) {
         $ideas = GoodIdea::all();
         foreach($ideas as $idea) {
             $idea->delete();
         }
-        return Redirect::route('feedback::archived');
+        return Redirect::route('feedback::category:archived', ['category' => $category]);
     }
 
     /**

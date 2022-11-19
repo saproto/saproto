@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("feedback::add") }}">
+<form class="form-horizontal" method="post" action="{{ route("feedback::category::add", ['category'=>$category]) }}">
 
     {{ csrf_field() }}
 

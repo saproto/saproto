@@ -3,11 +3,11 @@
     <div class="card-header bg-dark text-white">
         Good Ideas
         @can("board")
-            <a href="{{ route('feedback::archiveall') }}" class="float-end ms-3 btn btn-danger">
+            <a href="{{ route('feedback::category::archiveall', ['category'=>$category]) }}" class="float-end ms-3 btn btn-danger">
                 <i class="fas fa-file-archive text-white"></i> Archive all
             </a>
 
-            <a href="{{ route('feedback::archived') }}" class="ms-3 btn btn-info">
+            <a href="{{ route('feedback::category::archived', ['category' => $category]) }}" class="ms-3 btn btn-info">
                 <i class="fas fa-box-archive text-white"></i> View archived
             </a>
         @endcan
