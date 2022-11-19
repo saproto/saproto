@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="{{ route("goodideas::add") }}">
+<form class="form-horizontal" method="post" action="{{ route("feedback::add") }}">
 
     {{ csrf_field() }}
 

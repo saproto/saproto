@@ -9,19 +9,20 @@
         </span>
 
         @if (Auth::user()->can("board"))
-            <a href="{{ route('goodideas::archive', ['id' => $idea->id]) }}" class="float-end"><i
+            <a href="{{ route('feedback::archive', ['id' => $idea->id]) }}" class="float-end"><i
                         class="fas fa-file-archive text-white"></i></a>
-
-            <a class="float-end me-2 toggle-navbar-{{$idea->id}}">
-                <i class="fas fa-reply text-white"></i>
-            </a>
+            @if(!$idea->reply)
+                <a class="float-end me-2 toggle-navbar-{{$idea->id}}">
+                    <i class="fas fa-reply text-white"></i>
+                </a>
+            @endif
         @endif
 
 
 
         @if (Auth::user()->id == $idea->user->id)
             @include('website.layouts.macros.confirm-modal', [
-                                     'action' => route("goodideas::delete", ['id' => $idea->id]),
+                                     'action' => route("feedback::delete", ['id' => $idea->id]),
                                      'text' => '<i class="fas fa-trash text-white"></i>',
                                      'title' => 'Confirm Delete',
                                      'message' => "Are you sure you want to delete this potentially good idea?",
@@ -35,10 +36,18 @@
 
         {!! $idea->idea !!}
 
+        @if ($idea->reply)
+
+            <hr>
+
+            <b>board:</b> {!! $idea->reply !!}
+
+        @endif
+
         @if (Auth::user()->can("board"))
 
-            <div class="collapse mb-3" id="idea__{{ $idea->id }}__collapse">
-                <form method="post" action="{{ route('goodideas::reply', ['id' => $idea->id]) }}">
+            <div class="collapse mt-3" id="idea__{{ $idea->id }}__collapse">
+                <form method="post" action="{{ route('feedback::reply', ['id' => $idea->id]) }}">
                     {{ csrf_field() }}
                     <textarea class="form-control mb-2" rows="2" cols="30" name="reply"
                               placeholder="A reply to this amazing idea.">{!! $idea->reply ?? '' !!}</textarea>

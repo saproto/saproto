@@ -38,7 +38,7 @@
         })
 
         function sendVote(id, voteValue) {
-            post('{{ route('goodideas::vote') }}', { id: id, voteValue: voteValue })
+            post('{{ route('feedback::vote') }}', { id: id, voteValue: voteValue })
             .then(data => {
                 console.log(data)
                 document.querySelectorAll(`[data-id='${id}']`).forEach(el => {

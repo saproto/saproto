@@ -12,26 +12,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Proto\Models\GoodIdea;
+use Proto\Models\GoodIdeaCategory;
 use Proto\Models\GoodIdeaVote;
 use Illuminate\Support\Facades\Mail;
 use Proto\Mail\GoodIdeaReplyEmail;
 use Proto\Models\User;
 use Session;
 
-class GoodIdeaController extends Controller
+class FeedBackController extends Controller
 {
     /**
      * @param int $page
      * @return View
      */
-    public function index(int $page = 1): View
+    public function index(String $category)
     {
+        $category=GoodIdeaCategory::where('name', $category)->first();
+        return $category->goodIdeas();
         $goodIdeas = GoodIdea::orderBy('created_at', 'desc');
 
         $mostVotedID = DB::table('good_idea_votes')
             ->select('good_idea_id', DB::raw('count(*) as votes'))
             ->groupBy('good_idea_id')
-            ->orderBy('votes', 'DESC')->pluck('good_idea_id')->first();
+            ->orderBy('votes', 'DESC')
+            ->pluck('good_idea_id')->first();
 
         $mostVoted=GoodIdea::find($mostVotedID);
 
@@ -142,7 +146,7 @@ class GoodIdeaController extends Controller
         foreach($ideas as $idea) {
             $idea->delete();
         }
-        return Redirect::route('goodideas::archived');
+        return Redirect::route('feedback::archived');
     }
 
     /**

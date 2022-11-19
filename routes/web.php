@@ -495,16 +495,16 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to the Good Idea Board. */
-    Route::group([ 'prefix' => 'goodideas', 'middleware' => ['member'], 'as' => 'goodideas::'], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'GoodIdeaController@index']);
-        Route::get('archived', ['as' => 'archived', 'uses' => 'GoodIdeaController@archived']);
-        Route::post('add', ['as' => 'add', 'uses' => 'GoodIdeaController@add']);
-        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'GoodIdeaController@reply']);
-        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'GoodIdeaController@archive']);
-        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'GoodIdeaController@restore']);
-        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'GoodIdeaController@delete']);
-        Route::post('vote', ['as' => 'vote', 'uses' => 'GoodIdeaController@vote']);
-        Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'GoodIdeaController@archiveAll']);
+    Route::group([ 'prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
+        Route::get('/{category?}', ['as' => 'index', 'uses' => 'FeedBackController@index']);
+        Route::get('archived', ['as' => 'archived', 'uses' => 'FeedBackController@archived']);
+        Route::post('add', ['as' => 'add', 'uses' => 'FeedBackController@add']);
+        Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedBackController@reply']);
+        Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'FeedBackController@archive']);
+        Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'FeedBackController@restore']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedBackController@delete']);
+        Route::post('vote', ['as' => 'vote', 'uses' => 'FeedBackController@vote']);
+        Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedBackController@archiveAll']);
     });
 
     /* Routes related to the OmNomCom. */

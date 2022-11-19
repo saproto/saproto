@@ -45,6 +45,12 @@ class GoodIdea extends Model
         return $this->belongsTo('Proto\Models\User');
     }
 
+    /** @return BelongsTo */
+    public function goodIdeaCategory()
+    {
+        return $this->belongsTo('Proto\Models\GoodIdeaCategory', 'idea_category_id');
+    }
+
     /** @return HasMany */
     public function votes()
     {

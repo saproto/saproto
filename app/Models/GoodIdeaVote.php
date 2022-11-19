@@ -36,7 +36,7 @@ class GoodIdeaVote extends Model
     protected $guarded = ['id'];
 
     /** @return HasOne */
-    public function goodIdea()
+    public function goodIdea(): HasOne
     {
         return $this->hasOne('Proto\Models\GoodIdea');
     }
