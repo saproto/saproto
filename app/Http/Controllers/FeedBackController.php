@@ -24,9 +24,9 @@ class FeedBackController extends Controller
      * @param int $page
      * @return View
      */
-    public function index(String $category)
+    public function index(String $category): View
     {
-        $category=GoodIdeaCategory::where('name', $category)->firstOrFail();
+        $category=GoodIdeaCategory::where('url', $category)->firstOrFail();
         $goodIdeas = $category->ideas()->orderBy('created_at', 'desc');
 
         $mostVotedID = DB::table('good_idea_votes')
@@ -41,23 +41,25 @@ class FeedBackController extends Controller
         return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category]);
     }
 
-    public function archived($page = 1) {
+    public function archived($category) {
+        $category=GoodIdeaCategory::where('url', $category)->firstOrFail();
         if(!Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to view archived ideas.');
             return Redirect::back();
         }
-        $goodIdeas = GoodIdea::onlyTrashed()->orderBy('created_at', 'desc');
-        return view('goodideaboard.archive', ['data' => $goodIdeas->paginate(20)]);
+        $goodIdeas = GoodIdea::onlyTrashed()->where('idea_category_id', $category->id)->orderBy('created_at', 'desc');
+        return view('goodideaboard.archive', ['data' => $goodIdeas->paginate(20), 'category'=>$category]);
     }
 
     /**
      * @param Request $request
      * @return RedirectResponse
      */
-    public function add(Request $request)
+    public function add(Request $request, $category)
     {
+        $category = GoodIdeaCategory::findOrFail($category);
         $temp = nl2br(trim($request->input('idea')));
-        $new = ['idea' => $temp, 'user_id' => Auth::id()];
+        $new = ['idea' => $temp, 'user_id' => Auth::id(), 'idea_category_id'=>$category->id];
         $idea = new GoodIdea($new);
         $idea->save();
 
@@ -141,7 +143,8 @@ class FeedBackController extends Controller
      * @throws Exception
      */
     public function archiveAll($category) {
-        $ideas = GoodIdea::all();
+        $category = GoodIdeaCategory::findOrFail($category);
+        $ideas = $category->ideas();
         foreach($ideas as $idea) {
             $idea->delete();
         }

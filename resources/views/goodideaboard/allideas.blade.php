@@ -1,9 +1,9 @@
 <div class="card mb-3 w-100">
 
     <div class="card-header bg-dark text-white">
-        Good Ideas
+        {{$category->title}}
         @can("board")
-            <a href="{{ route('feedback::category::archiveall', ['category'=>$category]) }}" class="float-end ms-3 btn btn-danger">
+            <a href="{{ route('feedback::category::archiveall', ['category' => $category]) }}" class="float-end ms-3 btn btn-danger">
                 <i class="fas fa-file-archive text-white"></i> Archive all
             </a>
 

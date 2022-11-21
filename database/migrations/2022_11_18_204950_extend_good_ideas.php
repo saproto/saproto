@@ -13,14 +13,18 @@ class ExtendGoodIdeas extends Migration
     public function up()
     {
         Schema::table('good_ideas', function (Blueprint $table) {
-            $table->bigInteger('idea_category_id')->after('user_id')->nullable();
-            $table->text('reply')->after('idea')->nullable();
+            $table->bigInteger('idea_category_id')->after('user_id')->default(1);
+            $table->boolean('reviewed')->after('idea')->default(False);
+            $table->text('reply')->after('reviewed')->nullable();
             $table->softDeletes();
         });
 
         Schema::create('good_idea_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('url');
+            $table->boolean('review');
+            $table->integer('reviewer_id')->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +38,7 @@ class ExtendGoodIdeas extends Migration
         Schema::table('good_ideas', function (Blueprint $table) {
             $table->dropColumn('reply');
             $table->dropColumn('idea_category_id');
+            $table->dropColumn('reviewed');
             $table->dropSoftDeletes();
         });
 
