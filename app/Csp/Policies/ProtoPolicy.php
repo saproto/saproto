@@ -22,6 +22,7 @@ class ProtoPolicy extends Policy
                 ->addDirective(Directive::FORM_ACTION, [
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
+                    'https://protube.jntn.dev',
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
