@@ -8,7 +8,7 @@
         <div class="card-body">
             <div class="form-group">
                 Search term:
-                <input class="form-control" id="searchTerm" name="searchTerm" placeholder="Ysbrand" value="{{$searchTerm??''}}" required>
+                <input class="form-control" id="searchTerm" name="searchTerm" placeholder="{{Auth::user()->calling_name}}" value="{{$searchTerm??''}}" required>
             </div>
         </div>
 

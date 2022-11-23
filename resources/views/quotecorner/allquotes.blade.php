@@ -1,7 +1,7 @@
 <div class="card mb-3">
 
     <div class="card-header pb-0 overflow-auto">
-        {{ $data->links() }}
+        {{ $data->withQueryString()->links() }}
     </div>
 
     <div class="card-body">
@@ -30,7 +30,7 @@
 
     @if(count($data)>10)
     <div class="card-header pb-0 overflow-auto">
-        {{ $data->links() }}
+        {{ $data->withQueryString()->links() }}
     </div>
     @endif
 </div>
