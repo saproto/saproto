@@ -116,7 +116,7 @@
                     likes.innerHTML = nextPhoto.likes
                     albumUrl.href = nextPhoto.albumUrl
                     albumTitle.innerText=nextPhoto.albumTitle
-                    downloadUrl.href = nextPhoto.originalUrl
+                    downloadUrl.href = nextPhoto.downloadUrl
                     errorText.classList.add('d-none')
                     window.history.replaceState(document.title, '', id)
                 })

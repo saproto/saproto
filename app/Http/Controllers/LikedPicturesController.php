@@ -66,7 +66,6 @@ class LikedPicturesController extends Controller
         if($adjacent) {
             return response()->JSON([
                 'id' =>$adjacent->id,
-                'originalUrl' => $adjacent->getOriginalUrl(),
                 'largeUrl' => $adjacent->getLargeUrl(),
                 'tinyUrl' => $adjacent->getTinyUrl(),
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
@@ -76,6 +75,7 @@ class LikedPicturesController extends Controller
                 'private' => $adjacent->private,
                 'hasNextPhoto'=> (bool) $this->getAdjacentPhoto($adjacent, true),
                 'hasPreviousPhoto'=>(bool) $this->getAdjacentPhoto($adjacent, false),
+                'downloadUrl'=>route('image::get', ['id'=>$photo->file->id, 'hash'=>$photo->file->hash]),
             ]);
         }
         return response()->json(['message' => 'adjacent photo not found.'], 404);

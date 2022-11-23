@@ -56,7 +56,6 @@ class PhotoController extends Controller
         if(! $photo->mayViewPhoto(Auth::user())) return response()->json(['error' => 'This photo is only visible to members!', 'id'=>$id], 403);
             return response()->JSON([
                 'id' => $photo->id,
-                'originalUrl' => $photo->getOriginalUrl(),
                 'largeUrl' => $photo->getLargeUrl(),
                 'tinyUrl' => $photo->getTinyUrl(),
                 'albumUrl' => route('photo::album::list', ['id' => $photo->album_id]).'?page='.$photo->getAlbumPageNumber(24),
