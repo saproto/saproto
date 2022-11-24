@@ -49,7 +49,7 @@
                                 All
                             </option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" @selected($cur_category? == $category)>
+                                <option value="{{ $category->id }}" @selected($cur_category == $category)>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
