@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
@@ -24,159 +23,98 @@ class OtherDataSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($output)
     {
-        $faker = Factory::create();
-
-        echo "\e[33mSeeding:\e[0m   \e[1mOtherDataSeeder\e[0m".PHP_EOL;
-        $seeder_start = microtime(true);
-
         // Create users
         $n = 100;
-        $time_start = microtime(true);
-
-        foreach (range(1, $n) as $index) {
-            /** @var $user User */
-            $user = factory(User::class)->create();
-
-            // user is a member
-            if (mt_rand(1, 5) > 1) {
-                $user->bank()->save(factory(Bank::class)->make());
-                $user->address()->save(factory(Address::class)->make());
-                $user->member()->save(factory(Member::class)->make());
+        $output->task("creating $n users", function () use ($n) {
+            $users = User::factory()
+                ->count($n)
+                ->create();
+            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
+                Bank::factory()
+                    ->for($user)
+                    ->create();
             }
-
-            // user is not a member
-            else {
-                if (mt_rand(1, 20) > 15) {
-                    $user->address()->save(factory(Address::class)->make());
-                }
-
-                if (mt_rand(1, 20) > 15) {
-                    $user->bank()->save(factory(Bank::class)->make());
-                }
+            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
+                Address::factory()
+                    ->for($user)
+                    ->create();
             }
+        });
 
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." users\r";
-        }
+        // Create members
+        $users = User::has('bank')->has('address')->get();
+        $n = $users->count();
+        $output->task("creating $n members", function () use ($n, $users) {
+            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
+                Member::factory()
+                    ->for($user)
+                    ->create();
+            }
+        });
 
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' users '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-
-        // Create arrays of member user ids
-        $users = User::whereHas('member', function ($q) {
-            $q->where('is_pending', '=', false);
-        })->pluck('id')->toArray();
-
-        // Create orderlines
-        $n = 1000;
-        $time_start = microtime(true);
-
-        foreach (range(1, $n) as $index) {
-            factory(Orderline::class)->create([
-                'user_id' => array_random($users),
-            ]);
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." orderlines\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' orderlines '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-
-        // Create AchievementOwnership
-        $n = 200;
-        $time_start = microtime(true);
-
-        foreach (range(1, $n) as $index) {
-            factory(AchievementOwnership::class)->create([
-                'user_id' => array_random($users),
-            ]);
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." achievement ownerships\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' achievement ownerships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        // Get users with completed membership
+        $members = User::whereHas('member', fn ($members) => $members->where('is_pending', '==', false))->get();
 
         // Create committee participations
-        $n = 50;
-        $time_start = microtime(true);
-        $committees = Committee::all()->pluck('id')->toArray();
-
-        foreach (range(1, $n) as $index) {
-            factory(CommitteeMembership::class, $n)->create([
-                'user_id' => array_random($users),
-                'committee_id' => array_random($committees),
-            ]);
-
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." committee memberships\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' committee memberships '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-
-        // Create activity participations
-        echo "\e[33mCreating:\e[0m  activity participations".PHP_EOL;
-        $time_start = microtime(true);
-
-        foreach (Activity::orderBy('id', 'desc')->take(25)->get() as $activity) {
-            if (! $activity->event) {
-                continue;
+        $committees = Committee::all();
+        $output->task('Creating committee memberships', function () use ($members, $committees) {
+            foreach($committees as $committee) {
+                foreach($members->random(mt_rand(1, $members->count())) as $member) {
+                    CommitteeMembership::factory()
+                        ->for($member)
+                        ->for($committee)
+                        ->create();
+                }
             }
+        });
 
-            $mintime = date('U', strtotime($activity->registration_start));
-            $maxtime = date('U', strtotime($activity->event->start));
-
-            $offset = mt_rand(-15, 5);
-            $max = ($activity->participants < 0 ? mt_rand(0, 50) : $activity->participants);
-            $p = (max($max + $offset, 0));
-
-            $j = 0;
-            for ($i = 0; $i < $p; $i++) {
-                $startDate = date('U', ($maxtime > $mintime ? mt_rand($mintime, $maxtime) : $mintime));
-                $endDate = date('Y-m-d H:i:s', ($maxtime > $startDate ? mt_rand($startDate, $maxtime) : $maxtime));
-
-                ActivityParticipation::create([
-                    'user_id' => array_random($users),
-                    'activity_id' => $activity->id,
-                    'created_at' => date('Y-m-d H:i:s', $startDate),
-                    'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
-                    'backup' => ($activity->participants != -1 && $j > $activity->participants),
-                ]);
-
-                $j++;
+        // Create orderlines
+        $output->task('creating orderlines', function () use ($members) {
+            foreach($members as $member) {
+                OrderLine::factory()
+                    ->count(mt_rand(0, 10))
+                    ->for($member)
+                    ->create();
             }
-        }
-
-        $time_end = microtime(true);
-        echo "\e[32mCreated:\e[0m   activity participations ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
+        });
 
         // Create AchievementOwnership
-        $n = 200;
-        $time_start = microtime(true);
+        $output->task('creating achievement ownerships', function () use ($members) {
+            foreach($members as $member){
+                AchievementOwnership::factory()
+                    ->count(mt_rand(0, 10))
+                    ->for($member)
+                    ->create();
+            }
+        });
 
-        foreach (range(1, $n) as $index) {
-            $quote = new Quote([
-                'user_id'=> array_random($users),
-                'quote'=>$faker->text(100),
-            ]);
+        // Create activity participations
+        $output->task('creating activity participations', function () use ($members) {
+            $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
+            foreach($activities as $activity) {
+                foreach($members->random(mt_rand(1, $members->count())) as $member) {
+                    ActivityParticipation::factory()->for($activity)->for($member);
+                }
+            }
+        });
 
-            $quote->save();
-            echo "\e[33mCreating:\e[0m  ".$index.'/'.$n." quotes\r";
-        }
-
-        $time_end = microtime(true);
-        echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-
+        // Create AchievementOwnership
+        $output->task('creating activity participations', function () use ($members) {
+            $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
+            foreach($activities as $activity) {
+                foreach($members->random(fake()->numberBetween(0, $members->count())) as $member) {
+                    ActivityParticipation::factory()->for($activity)->for($member);
+                }
+            }
+        });
 
         // Create newsletter text
-        echo "\e[33mCreating:\e[0m  newsletter text".PHP_EOL;
-        $time_start = microtime(true);
-        HashMapItem::create(['key' => 'newsletter_text', 'value' => $faker->text(400)]);
-        HashMapItem::create(['key' => 'newsletter_text_updated', 'value' => date('U')]);
-        HashMapItem::create(['key' => 'newsletter_last_sent', 'value' => date('U')]);
-        $time_end = microtime(true);
-        echo "\e[32mCreated:\e[0m   newsletter text ".'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-
-        $seeder_end = microtime(true);
-        echo "\e[32mSeeded:\e[0m    \e[1mOtherDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
+        $output->task('creating newsletter', function () use ($members) {
+            HashMapItem::factory()->text()->create(['key' => 'newsletter_text']);
+            HashMapItem::factory()->date()->create(['key' => 'newsletter_text_updated', ]);
+            HashMapItem::factory()->date()->create(['key' => 'newsletter_last_sent']);
+        });
     }
 }

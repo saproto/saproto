@@ -19,26 +19,88 @@ class ImportLiveDataSeeder extends Seeder
      * @return void
      * @throws Exception
      */
-    public function run($password)
+    public function run($password, $output)
     {
-        echo "\e[33mSeeding:\e[0m   \e[1mImportDataSeeder\e[0m".PHP_EOL;
-        $seeder_start = microtime(true);
+        // First let's create our admin user.
+        $output->task('creating admin user.', fn () => self::createAdminUser($password));
 
-        // First let's create our user.
+        // Now let's import all data we can from the live environment.
+        $tables = [
+            ['name' => 'accounts'],
+            ['name' => 'achievement'],
+            ['name' => 'activities'],
+            ['name' => 'committees'],
+            ['name' => 'committees_activities'],
+            ['name' => 'companies'],
+            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
+            ['name' => 'mailinglists'],
+            ['name' => 'menuitems'],
+            ['name' => 'products'],
+            ['name' => 'products_categories'],
+            ['name' => 'product_categories'],
+            ['name' => 'tickets'],
+        ];
+
+        foreach ($tables as $table) {
+            $output->task('importing '.$table['name'], fn () => self::createEntries(self::getDataFromExportApi($table['name']), $table));
+        }
+
+        // Now let's add our admin user to the committee and give them the sysadmin role.
+        $output->task('assigning admin roles.', fn () => self::assignAdminRole());
+
+    }
+
+    /**
+     * Import data from the live website export API.
+     *
+     * @param $tableName string The table to import from the live website.
+     * @return mixed|null
+     */
+    public static function getDataFromExportApi($tableName)
+    {
+        $local_url = route('api::user::dev_export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $tableName]);
+        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl/', $local_url);
+        $response = Http::get($remote_url);
+        if ($response->failed()) {
+            return null;
+        }
+        return json_decode($response);
+    }
+
+    /**
+     * @param $entries mixed
+     * @param $table array
+     * @return void
+     */
+    public static function createEntries($entries, $table)
+    {
+        foreach ($entries as $entry) {
+            $entry = (array) $entry;
+
+            if (array_key_exists('excluded_columns', $table)) {
+                foreach ($table['excluded_columns'] as $column) {
+                    unset($entry[$column]);
+                }
+            }
+
+            DB::table($table['name'])->insert($entry);
+        }
+    }
+
+    /**
+     * @param string $password
+     * @return void
+     * @throws Exception
+     */
+    public static function createAdminUser($password)
+    {
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
-            /** @var User $newUser */
-            $newUser = factory(User::class)->create(['id' => 1]);
-            /** @var Member $newMember */
-            $newMember = factory(Member::class)->create(['user_id' => 1]);
-            $newUser->setPassword($password);
+            /** @var User $adminUser */
+            $adminUser = User::factory()->member()->create(['id' => 1]);
+            $adminUser->setPassword($password);
 
-            echo PHP_EOL;
-            echo "\e[32mCreated:\e[0m   admin user".PHP_EOL;
-            echo "\e[1musername:\e[0m  $newMember->proto_username".PHP_EOL;
-            echo "\e[1mpassword:\e[0m  $password".PHP_EOL;
-            echo PHP_EOL;
-
+            // Stop the import dataseeder from here as the user does not have enough rights.
             throw new Exception(
                 'You are not allowed to import data from the live website.'.PHP_EOL.
                 'Make sure you are a member of the HYTTIOAOAc and have signed an NDA.'.PHP_EOL.
@@ -59,8 +121,8 @@ class ImportLiveDataSeeder extends Seeder
             unset($memberData['created_at']);
             $userData['id'] = 1;
 
-            $newUser = User::create($userData);
-            $newUser->save();
+            $adminUser = User::create($userData);
+            $adminUser->save();
 
             if ($memberData) {
                 $newMember = Member::create($memberData);
@@ -68,73 +130,19 @@ class ImportLiveDataSeeder extends Seeder
                 $newMember->save();
             }
 
-            $newUser->setPassword($password);
+            $adminUser->setPassword($password);
         }
+    }
 
-        // Now let's import all data we can from the live environment.
-        $tables = [
-            ['name' => 'accounts'],
-            ['name' => 'achievement'],
-            ['name' => 'activities'],
-            ['name' => 'committees'],
-            ['name' => 'committees_activities'],
-            ['name' => 'companies'],
-            ['name' => 'events', 'excluded_columns' => ['formatted_date', 'is_future']],
-            ['name' => 'mailinglists'],
-            ['name' => 'menuitems'],
-            ['name' => 'products'],
-            ['name' => 'products_categories'],
-            ['name' => 'product_categories'],
-            ['name' => 'tickets'],
-        ];
-
-        foreach ($tables as $table) {
-            echo "\e[33mImporting:\e[0m ".$table['name'].PHP_EOL;
-            $time_start = microtime(true);
-            $data = (array) self::getDataFromExportApi($table['name']);
-            foreach ($data as $entry) {
-                $entry = (array) $entry;
-
-                if (array_key_exists('excluded_columns', $table)) {
-                    foreach ($table['excluded_columns'] as $column) {
-                        unset($entry[$column]);
-                    }
-                }
-
-                DB::table($table['name'])->insert($entry);
-            }
-            $time_end = microtime(true);
-            echo "\e[32mImported:\e[0m  ".$table['name'].' ('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
-        }
-
-        // Now let's add our user account so that they can access everything.
-
+    public static function assignAdminRole()
+    {
+        $adminUser = User::find(1);
         $root = Committee::where('slug', config('proto.rootcommittee'))->first();
         CommitteeMembership::create([
-            'user_id' => $newUser->id,
+            'user_id' => $adminUser->id,
             'committee_id' => $root->id,
             'role' => 'Automatically Added',
         ]);
-        $newUser->assignRole('sysadmin');
-
-        $seeder_end = microtime(true);
-        echo "\e[32mSeeded:\e[0m    \e[1mImportDataSeeder\e[0m (".round(($seeder_end - $seeder_start), 2).'s)'.PHP_EOL;
-    }
-
-    /**
-     * Import data from the live website export API.
-     *
-     * @param $table string The table to import from live website.
-     * @return string|null Decoded JSON response.
-     */
-    public static function getDataFromExportApi($table)
-    {
-        $local_url = route('api::user::dev_export', ['personal_key' => config('app-proto.personal-proto-key'), 'table' => $table]);
-        $remote_url = str_replace(config('app-proto.app-url'), 'https://www.proto.utwente.nl/', $local_url);
-        $response = Http::get($remote_url);
-        if ($response->failed()) {
-            return null;
-        }
-        return json_decode($response);
+        $adminUser->assignRole('sysadmin');
     }
 }

@@ -1,16 +1,26 @@
 <?php
 
-use Faker\Generator as Faker;
-use Illuminate\Database\Eloquent\Factory;
+namespace Database\Factories;
 
-/* @var $factory Factory */
-$factory->define(
-    Proto\Models\CommitteeMembership::class,
-    function (Faker $faker, $attr) {
-        $mintime = date('U', strtotime('-1 year'));
-        $maxtime = date('U', strtotime('+1 year'));
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\CommitteeMembership;
 
-        $date = [date('Y-m-d H:i:s', mt_rand($mintime, $maxtime)), date('Y-m-d H:i:s', mt_rand($mintime, $maxtime))];
+/**
+ * @extends Factory<CommitteeMembership>
+ */
+class CommitteeMembershipFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        $minTime = date('U', strtotime('-1 year'));
+        $maxTime = date('U', strtotime('+1 year'));
+
+        $date = [date('Y-m-d H:i:s', mt_rand($minTime, $maxTime)), date('Y-m-d H:i:s', mt_rand($minTime, $maxTime))];
         if ($date[0] < $date[1]) {
             $startDate = $date[0];
             $endDate = $date[1];
@@ -26,4 +36,4 @@ $factory->define(
             'deleted_at' => (mt_rand(1, 3) == 1 ? $endDate : null),
         ];
     }
-);
+}
