@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\Committee;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
 use Proto\Models\User;
@@ -28,6 +29,7 @@ class OrderLineFactory extends Factory
         $date = date('Y-m-d H:i:s', mt_rand($minTime, $maxTime));
         $nbUnits = mt_rand(1, 3);
         $paidCash = mt_rand(1, 100);
+        $tipcie = Committee::find(config('proto.committee.tipcie'));
 
         return [
             'product_id' => $product->id,
@@ -35,7 +37,7 @@ class OrderLineFactory extends Factory
             'units' => $nbUnits,
             'total_price' => $nbUnits * $product->price,
             'created_at' => $date,
-            'cashier_id' => $paidCash == 1 ? User::inRandomOrder()->first()->id : null,
+            'cashier_id' => $paidCash == 1 ? $tipcie->users()->inRandomOrder()->first()->id : null,
             'payed_with_bank_card' => $paidCash == 1 ? $date : null,
             'description' => fake()->sentences(3, true),
         ];
