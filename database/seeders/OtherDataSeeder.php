@@ -14,7 +14,6 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
-use Proto\Models\Quote;
 use Proto\Models\User;
 
 class OtherDataSeeder extends Seeder
