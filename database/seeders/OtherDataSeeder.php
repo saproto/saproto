@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Activity;
@@ -26,8 +27,8 @@ class OtherDataSeeder extends Seeder
     public function run($output)
     {
         // Create users
-        $n = 100;
-        $output->task("creating $n users", function () use ($n) {
+        $n = 10;
+        $output->task("creating $n regular users", function () use ($n) {
             $users = User::factory()
                 ->count($n)
                 ->create();
@@ -44,14 +45,24 @@ class OtherDataSeeder extends Seeder
         });
 
         // Create members
-        $users = User::has('bank')->has('address')->get();
-        $n = $users->count();
-        $output->task("creating $n members", function () use ($n, $users) {
-            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
+        $n = 90;
+        $output->task("creating $n members", function () use ($n) {
                 Member::factory()
-                    ->for($user)
+                    ->count($n - 5)
                     ->create();
-            }
+                Member::factory()
+                    ->count(4)
+                    ->state(new Sequence(
+                        ['is_lifelong' => 1],
+                        ['is_honorary' => 1],
+                        ['is_donor' => 1],
+                        ['is_pet' => 1],
+                    ))
+                    ->state([
+                        'is_pending' => 0,
+                        'deleted_at' => null,
+                    ])
+                    ->create();
         });
 
         // Get users with completed membership
