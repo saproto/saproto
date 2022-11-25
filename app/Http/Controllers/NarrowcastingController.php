@@ -189,7 +189,7 @@ class NarrowcastingController extends Controller
                 ];
             }
         }
-        return 10/0;
+        return 10 / 0;
         return $data;
     }
 }
