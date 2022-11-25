@@ -5,6 +5,7 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -54,12 +55,13 @@ class PhotoAdminController extends Controller
     public function edit($id)
     {
         $photos = PhotoManager::getPhotos($id);
+        $fileSizeLimit = ini_get('post_max_size');
 
         if ($photos == null) {
             abort(404);
         }
 
-        return view('photos.admin.edit', ['photos' => $photos]);
+        return view('photos.admin.edit', ['photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
     }
 
     /**
