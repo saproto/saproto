@@ -18,9 +18,9 @@ class PageFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->unique()->words(fake()->numberBetween(1, 3)),
+            'title' => fake()->unique()->words(fake()->numberBetween(1, 3), true),
             'slug' => fn ($attributes) => str_slug($attributes['title']),
-            'content' => fake()->paragraphs(10, true),
+            'content' => fake()->paragraphs(fake()->numberBetween(5, 15), true),
             'is_member_only' => fake()->boolean(),
             'featured_image_id' => null,
             'show_attachments' => false,

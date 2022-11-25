@@ -14,6 +14,8 @@ use Proto\Models\CommitteeMembership;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
+use Proto\Models\Page;
+use Proto\Models\Quote;
 use Proto\Models\User;
 
 class OtherDataSeeder extends Seeder
@@ -109,6 +111,14 @@ class OtherDataSeeder extends Seeder
                 }
             }
         });
+
+        // Create pages
+        $n = 10;
+        $output->task("creating $n pages", fn () => Page::factory()->count($n)->create());
+
+        // Create quotes
+        $n = 100;
+        $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
 
         // Create AchievementOwnership
         $output->task('creating activity participations', function () use ($members) {
