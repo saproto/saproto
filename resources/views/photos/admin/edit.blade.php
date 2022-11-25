@@ -240,6 +240,7 @@
 @push('javascript')
 
     <script async type="text/javascript" nonce="{{ csp_nonce() }}">
+        let fileSizeLimit = '{{ $fileSizeLimit }}B'
         let fileId = 1
         let uploadRunning = false
         let dropArea = document.getElementById('droparea')
@@ -295,20 +296,28 @@
                 formData.append('file', file)
                 toggleRunning()
                 await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {parse:false})
-                    .then(response=>{
-                        if(!response.ok) throw 'Something went wrong with the upload!'
-                        return response.text();
-                    }).then(function(data) {
-                        document.getElementById('photo-view').innerHTML += data
-                        document.getElementById('error-bar').classList.add('d-none')
-                        document.querySelector('#error-bar ul').innerHTML = ''
+                    .then(response => {
+                        response.text().then(text => {
+                            document.getElementById('photo-view').innerHTML += text
+                            document.getElementById('error-bar').classList.add('d-none')
+                            document.querySelector('#error-bar ul').innerHTML = ''
+                            toggleRunning()
+                        })
+                    })
+                    .catch(err => {
+                        let errText
+                        switch (err.status) {
+                            case 413:
+                                errText = `Uploaded photo was bigger than limit of ${fileSizeLimit}.`
+                                break
+                            default:
+                                errText = `Error ${err.status}: ${err.statusText}`
+                                break
+                        }
+                        console.error(errText, err)
+                        uploadError(file, errText)
                         toggleRunning()
                     })
-                .catch(err => {
-                    console.error(err)
-                    uploadError(file, err)
-                    toggleRunning()
-                })
             }
         }
 

@@ -286,6 +286,9 @@
                                 })
                         }, 1000)
                     })
+                    .catch(err => {
+                        element.innerHTML = `Error retrieving QR code.\n\n${err.status}: ${err.statusText}`
+                    })
             }
 
             function finishPurchase(display_message = null) {
@@ -410,6 +413,7 @@
                             document.querySelector('#rfid-modal .qrAuth'),
                             'Link RFID card to account',
                             (auth_token, credentialtype) => {
+                                let status = {class: '', text: ''}
                                 post(
                                     '{{ route('omnomcom::store::rfidadd') }}',
                                     {
@@ -418,8 +422,10 @@
                                         credentials: auth_token,
                                     }
                                 )
-                                    .then(data => document.querySelector('#rfid-modal .modal-status').innerHTML =
-                                        '<span class="' + (data.ok ? 'primary' : 'danger') + '">' + data.text + '</span>')
+                                    .then(data => status = {class: 'primary', text: data.text})
+                                    .catch(err => status = {class: 'danger', text: err.statusText})
+                                    .finally(_ => document.querySelector('#rfid-modal .modal-status').innerHTML =
+                                        '<span class="' + status.class + '">' + status.text + '</span>')
                             }
                         )
                     } else if (actionStatus === 'purchase') {
