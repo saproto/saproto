@@ -54,12 +54,13 @@ class PhotoAdminController extends Controller
     public function edit($id)
     {
         $photos = PhotoManager::getPhotos($id);
+        $fileSizeLimit = ini_get('post_max_size');
 
         if ($photos == null) {
             abort(404);
         }
 
-        return view('photos.admin.edit', ['photos' => $photos]);
+        return view('photos.admin.edit', ['photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
     }
 
     /**

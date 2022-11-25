@@ -102,7 +102,7 @@
     }
 
     async function updateCampaigns() {
-        await get('{{ route("api::screen::narrowcasting") }}').then(data => campaigns = data)
+        await get('{{ route("api::screen::narrowcasting") }}').then(data => campaigns = data).catch(error => console.log('Error loading campaigns from server:', error))
     }
 
     function onPlayerReady(event) {
