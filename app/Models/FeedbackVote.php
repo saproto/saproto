@@ -36,7 +36,7 @@ class FeedbackVote extends Model
     protected $guarded = ['id'];
 
     /** @return HasOne */
-    public function goodIdea(): HasOne
+    public function feedback(): HasOne
     {
         return $this->hasOne('Proto\Models\Feedback');
     }

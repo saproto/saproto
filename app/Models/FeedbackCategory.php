@@ -13,7 +13,7 @@ class FeedbackCategory extends Model
     protected $guarded = ['id'];
 
     /** @return HasMany */
-    public function ideas(): HasMany
+    public function feedback(): HasMany
     {
         return $this->hasMany('Proto\Models\Feedback', 'feedback_category_id');
     }

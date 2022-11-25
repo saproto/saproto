@@ -24,9 +24,9 @@ class GoodIdeaReplyEmail extends Mailable
      * @param User $user
      * @param $reply
      */
-    public function __construct(Feedback $idea, User $user, $reply)
+    public function __construct(Feedback $feedback, User $user, $reply)
     {
-        $this->idea = $idea;
+        $this->idea = $feedback;
         $this->user = $user;
         $this->reply = $reply;
     }

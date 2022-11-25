@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Good Idea Model.
+ * Feedback model.
  *
  * @property int $id
  * @property int $user_id
- * @property string $idea
+ * @property string $feedback
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user

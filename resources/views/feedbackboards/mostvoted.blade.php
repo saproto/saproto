@@ -8,7 +8,7 @@
 
         <div class="card-body">
 
-            @include('goodideaboard.include.idea', [
+            @include('feedbackboards.include.feedback', [
             'idea' => $mostVoted
             ])
 

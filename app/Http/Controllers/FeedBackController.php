@@ -27,7 +27,7 @@ class FeedBackController extends Controller
     public function index(String $category): View
     {
         $category=FeedbackCategory::where('url', $category)->firstOrFail();
-        $goodIdeas = $category->ideas()->orderBy('created_at', 'desc');
+        $feedback = $category->feedback()->orderBy('created_at', 'desc');
 
         $mostVotedID = DB::table('feedback_votes')
             ->select('feedback_id', DB::raw('count(*) as votes'))
@@ -38,17 +38,17 @@ class FeedBackController extends Controller
 
         $mostVoted=Feedback::find($mostVotedID);
 
-        return view('goodideaboard.index', ['data' => $goodIdeas->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category]);
+        return view('feedbackboards.index', ['data' => $feedback->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category]);
     }
 
     public function archived($category) {
         $category=FeedbackCategory::where('url', $category)->firstOrFail();
         if(!Auth::user()->can('board')) {
-            Session::flash('flash_message', 'You are not allowed to view archived ideas.');
+            Session::flash('flash_message', 'You are not allowed to view archived feedback.');
             return Redirect::back();
         }
-        $goodIdeas = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->orderBy('created_at', 'desc');
-        return view('goodideaboard.archive', ['data' => $goodIdeas->paginate(20), 'category'=>$category]);
+        $feedback = Feedback::onlyTrashed()->where('feedback_category_id', $category->id)->orderBy('created_at', 'desc');
+        return view('feedbackboards.archive', ['data' => $feedback->paginate(20), 'category'=>$category]);
     }
 
     /**
@@ -144,9 +144,9 @@ class FeedBackController extends Controller
      */
     public function archiveAll($category) {
         $category = FeedbackCategory::findOrFail($category);
-        $ideas = $category->ideas();
-        foreach($ideas as $idea) {
-            $idea->delete();
+        $feedback = $category->feedback();
+        foreach($feedback as $item) {
+            $item->delete();
         }
         return Redirect::route('feedback::category:archived', ['category' => $category]);
     }
@@ -157,7 +157,7 @@ class FeedBackController extends Controller
      */
     public function vote(Request $request)
     {
-        $idea = Feedback::findOrFail($request->input('id'));
+        $feedback = Feedback::findOrFail($request->input('id'));
 
         /** @var FeedbackVote $vote */
         $vote = FeedbackVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
@@ -167,6 +167,6 @@ class FeedBackController extends Controller
             $vote->vote = $request->input('voteValue') > 0 ? 1 : -1;
             $vote->save();
         }
-        return response()->json(['voteScore' => $idea->voteScore(), 'userVote' => $idea->userVote(Auth::user())]);
+        return response()->json(['voteScore' => $feedback->voteScore(), 'userVote' => $feedback->userVote(Auth::user())]);
     }
 }

@@ -7,7 +7,7 @@
                 <i class="fas fa-file-archive text-white"></i> Archive all
             </a>
 
-            <a href="{{ route('feedback::category::archived', ['category' => $category]) }}" class="ms-3 btn btn-info">
+            <a href="{{ route('feedback::category::archived', ['category' => $category->url]) }}" class="ms-3 btn btn-info">
                 <i class="fas fa-box-archive text-white"></i> View archived
             </a>
         @endcan
@@ -23,7 +23,7 @@
 
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
-                        @include('goodideaboard.include.idea', [
+                        @include('feedbackboards.include.feedback', [
                         'idea' => $entry
                         ])
 

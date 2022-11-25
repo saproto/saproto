@@ -79,7 +79,6 @@
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         document.querySelectorAll('.toggle-navbar-{{$idea->id}}').forEach((element)=>{
-            console.log(element)
             element.addEventListener('click', (event)=>{
                 document.getElementById("idea__{{ $idea->id }}__collapse").classList.toggle("show");
                 console.log(document.getElementById("idea__{{ $idea->id }}__collapse"))

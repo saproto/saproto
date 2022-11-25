@@ -8,12 +8,12 @@
 
     <div class="row">
         <div class="col-lg-3">
-            @include('goodideaboard.newidea')
-            @include('goodideaboard.mostvoted')
+            @include('feedbackboards.newfeedback')
+            @include('feedbackboards.mostvoted')
         </div>
 
         <div class="col-lg-9">
-            @include('goodideaboard.allideas')
+            @include('feedbackboards.allfeedback')
         </div>
     </div>
 
@@ -26,6 +26,7 @@
             el.addEventListener('click', e => {
                 const id = e.target.parentElement.getAttribute('data-id')
                 if (id) sendVote(id, 1)
+                console.log(id, 1)
             })
         })
 
@@ -33,6 +34,7 @@
         downvoteList.forEach(el => {
             el.addEventListener('click', e => {
                 const id = e.target.parentElement.getAttribute('data-id')
+                console.log(id, -1)
                 if(id) sendVote(id, -1)
             })
         })
