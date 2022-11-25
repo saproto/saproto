@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Proto\Models\GoodIdeaVote.
+ * Proto\Models\FeedbackVote.
  *
  * @property int $id
  * @property int $user_id
@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $vote
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Feedback $goodIdea
+ * @property-read Feedback $feedback
  * @method static Builder|FeedbackVote whereCreatedAt($value)
- * @method static Builder|FeedbackVote whereGoodIdeaId($value)
+ * @method static Builder|FeedbackVote whereFeedbackId($value)
  * @method static Builder|FeedbackVote whereId($value)
  * @method static Builder|FeedbackVote whereUpdatedAt($value)
  * @method static Builder|FeedbackVote whereUserId($value)

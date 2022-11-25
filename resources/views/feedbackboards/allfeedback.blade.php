@@ -3,7 +3,7 @@
     <div class="card-header bg-dark text-white">
         {{$category->title}}
         @can("board")
-            <a href="{{ route('feedback::category::archiveall', ['category' => $category]) }}" class="float-end ms-3 btn btn-danger">
+            <a href="{{ route('feedback::category::archiveall', ['category' => $category->url]) }}" class="float-end ms-3 btn btn-danger">
                 <i class="fas fa-file-archive text-white"></i> Archive all
             </a>
 
@@ -24,7 +24,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
                         @include('feedbackboards.include.feedback', [
-                        'idea' => $entry
+                        'feedback' => $entry
                         ])
 
                     </div>

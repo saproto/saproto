@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Good Idea Board
+{{$category->title}} Board
 @endsection
 
 @section('container')
@@ -65,7 +65,7 @@
             })
             .catch(err => {
                 console.error(err)
-                window.alert('Something went wrong voting the idea. Please try again.')
+                window.alert('Something went wrong voting. Please try again.')
             })
         }
     </script>

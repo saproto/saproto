@@ -169,7 +169,7 @@ class OtherDataSeeder extends Seeder
         echo PHP_EOL."\e[32mCreated:\e[0m   ".$n.' quotes '.'('.round(($time_end - $time_start), 2).'s)'.PHP_EOL;
 
 
-        // Create GoodIdea
+        // Create Feedback
         $n = 200;
 
         $time_start = microtime(true);

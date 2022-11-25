@@ -60,8 +60,8 @@ class FeedBackController extends Controller
         $category = FeedbackCategory::findOrFail($category);
         $temp = nl2br(trim($request->input('idea')));
         $new = ['feedback' => $temp, 'user_id' => Auth::id(), 'feedback_category_id'=>$category->id];
-        $idea = new Feedback($new);
-        $idea->save();
+        $feedback = new Feedback($new);
+        $feedback->save();
 
         Session::flash('flash_message', 'Idea added.');
         return Redirect::back();
@@ -73,21 +73,22 @@ class FeedBackController extends Controller
      * @return mixed
      */
     public function reply(int $id, Request $request) {
+        return $request;
         if(!Auth::user()->can('board')) {
             Session::flash('flash_message', 'You are not allowed to reply to this idea.');
             return Redirect::back();
         }
 
-        $idea = Feedback::findOrFail($id);
+        $feedback = Feedback::findOrFail($id);
         $reply = $request->input('reply');
 
-        if($idea->reply == null && $reply != null) {
-            $user = User::findOrFail($idea->user_id);
-            Mail::to($user)->queue((new GoodIdeaReplyEmail($idea, $user, $reply))->onQueue('low'));
+        if($feedback->reply == null && $reply != null) {
+            $user = User::findOrFail($feedback->user_id);
+            Mail::to($user)->queue((new GoodIdeaReplyEmail($feedback, $user, $reply))->onQueue('low'));
         }
 
-        $idea->reply = $reply;
-        $idea->save();
+        $feedback->reply = $reply;
+        $feedback->save();
         Session::flash('flash_message', 'You have replied to this idea');
         return Redirect::back();
     }
@@ -99,8 +100,8 @@ class FeedBackController extends Controller
             return Redirect::back();
         }
 
-        $idea = Feedback::findOrFail($id);
-        $idea->delete();
+        $feedback = Feedback::findOrFail($id);
+        $feedback->delete();
         Session::flash('flash_message', 'Good Idea archived.');
         return Redirect::back();
     }
@@ -115,8 +116,8 @@ class FeedBackController extends Controller
             return Redirect::back();
         }
 
-        $idea = Feedback::onlyTrashed()->findOrFail($id);
-        $idea->restore();
+        $feedback = Feedback::onlyTrashed()->findOrFail($id);
+        $feedback->restore();
         Session::flash('flash_message', 'Good Idea restored.');
         return Redirect::back();
     }
@@ -126,14 +127,14 @@ class FeedBackController extends Controller
      * @return mixed
      */
     public function delete(int $id) {
-        $idea = Feedback::withTrashed()->findOrFail($id);
-        if(!(Auth::user()->can('board') || Auth::user()->id == $idea->user->id)) {
+        $feedback = Feedback::withTrashed()->findOrFail($id);
+        if(!(Auth::user()->can('board') || Auth::user()->id == $feedback->user->id)) {
             Session::flash('flash_message', 'You are not allowed to delete this idea.');
             return Redirect::back();
         }
 
-        $idea->votes()->delete();
-        $idea->forceDelete();
+        $feedback->votes()->delete();
+        $feedback->forceDelete();
         Session::flash('flash_message', 'Good Idea deleted.');
         return Redirect::back();
     }
@@ -143,12 +144,12 @@ class FeedBackController extends Controller
      * @throws Exception
      */
     public function archiveAll($category) {
-        $category = FeedbackCategory::findOrFail($category);
+        $category=FeedbackCategory::where('url', $category)->firstOrFail();
         $feedback = $category->feedback();
         foreach($feedback as $item) {
             $item->delete();
         }
-        return Redirect::route('feedback::category:archived', ['category' => $category]);
+        return Redirect::route('feedback::category::archived', ['category' => $category->url]);
     }
 
     /**
@@ -160,7 +161,7 @@ class FeedBackController extends Controller
         $feedback = Feedback::findOrFail($request->input('id'));
 
         /** @var FeedbackVote $vote */
-        $vote = FeedbackVote::firstOrCreate(['user_id' => Auth::id(), 'good_idea_id' => $request->input('id')]);
+        $vote = FeedbackVote::firstOrCreate(['user_id' => Auth::id(), 'feedback_id' => $request->input('id')]);
         if($vote->vote===$request->input('voteValue')){
             $vote->delete();
         }else {

@@ -494,7 +494,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'QuoteCornerController@search']);
     });
 
-    /* Routes related to the Good Idea Board. */
+    /* Routes related to the Feedback Boards. */
     Route::group([ 'prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
         Route::group(['prefix' => '/{category}', 'as' => 'category::'], function () {
             Route::get('', ['as' => 'index', 'uses' => 'FeedBackController@index']);

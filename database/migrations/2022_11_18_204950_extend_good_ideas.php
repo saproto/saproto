@@ -22,7 +22,8 @@ class ExtendGoodIdeas extends Migration
             $table->renameColumn('idea', 'feedback');
             $table->bigInteger('feedback_category_id')->after('user_id')->default(1);
             $table->boolean('reviewed')->after('idea')->default(False);
-            $table->text('reply')->after('reviewed')->nullable();
+            $table->boolean('accepted')->after('reviewed')->nullable();
+            $table->text('reply')->after('accepted')->nullable();
             $table->softDeletes();
         });
 
@@ -49,14 +50,21 @@ class ExtendGoodIdeas extends Migration
      */
     public function down()
     {
+        Schema::rename('feedback_votes', 'good_idea_votes');
+        Schema::table('good_idea_votes', function (Blueprint $table) {
+            $table->renameColumn('feedback_id', 'good_idea_id');
+        });
+
         Schema::rename('feedback', 'good_ideas');
         Schema::table('good_ideas', function (Blueprint $table) {
-            $table->dropColumn('reply');
-            $table->dropColumn('idea_category_id');
-            $table->dropColumn('reviewed');
+            $table->renameColumn('feedback', 'idea');
+            $table->dropIfExists('reviewed');
+            $table->dropIfExists('accepted');
+            $table->dropIfExists('reply');
+            $table->dropIfExists('feedback_category_id');
             $table->dropSoftDeletes();
         });
 
-        Schema::drop('good_idea_categories');
+        Schema::drop('feedback_categories');
     }
 }

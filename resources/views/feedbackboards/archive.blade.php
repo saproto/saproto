@@ -1,7 +1,7 @@
 @extends('website.layouts.redesign.generic')
 
 @section('page-title')
-    Good Idea Board Archive
+{{$category->title}} Board Archive
 @endsection
 
 @section('container')
@@ -9,7 +9,7 @@
         <div class="card mb-3 mx-4 w-100">
 
             <div class="card-header bg-dark text-white">
-                <span class="m-0 float-left"><i class="fas fa-archive text-white mr-2"></i>Archived Good Ideas</span>
+                <span class="m-0 float-left"><i class="fas fa-archive text-white mr-2"></i>Archived {{$category->title}}</span>
                 <a href="{{ route('feedback::category::index', ['category' => $category->url]) }}" class="float-end ml-3 px-2 py-1 badge badge-info">
                     <i class="fas fa-thumbs-up text-white mr-1"></i> View Public
                 </a>
@@ -26,7 +26,7 @@
                             <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
                                 @include('feedbackboards.include.feedback', [
-                                'idea' => $entry
+                                'feedback' => $entry
                                 ])
 
                             </div>
