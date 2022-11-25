@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
 
         $adminUsername = User::find(1)->getPublicId();
 
-        $output->info("<options=bold>username:</> $adminUsername <options=bold>password:</> $adminPassword");
+        $output->info("<options=bold>password:</> <fg=green>$adminPassword</>
+                       <options=bold>username:</> <fg=green>$adminUsername</>");
     }
 }

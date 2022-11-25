@@ -24,7 +24,7 @@ class MemberFactory extends Factory
             'deleted_at' => (mt_rand(0, 1) === 1 ? null : fake()->dateTimeBetween($created_at)->format('Y-m-d H:i:s')),
             'is_pending' => mt_rand(0, 100) > 85 ? 1 : 0,
             'user_id' => User::factory()->hasBank()->hasAddress(),
-            'proto_username' => fn ($attributes) => Member::createProtoUsername(User::find($attributes['user_id'])->name)
+            'proto_username' => fn ($attributes) => Member::createProtoUsername(User::find($attributes['user_id'])->name),
         ];
     }
 }

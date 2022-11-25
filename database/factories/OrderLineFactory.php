@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Proto\Models\Committee;
 use Proto\Models\OrderLine;
 use Proto\Models\Product;
-use Proto\Models\User;
 
 /**
  * @extends Factory<OrderLine>
