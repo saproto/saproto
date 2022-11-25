@@ -20,7 +20,7 @@ class BankFactory extends Factory
         return [
             'iban' => fake()->iban(),
             'bic' => fake()->swiftBicNumber,
-            'machtigingid' => 'PROTOX'.mt_rand(10000, 99999).'X'.mt_rand(10000, 99999),
+            'machtigingid' => 'PROTOX'.fake()->randomNumber(5, true).'X'.fake()->randomNumber(5, true),
         ];
     }
 }

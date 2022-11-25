@@ -4,9 +4,10 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Proto\Models\Activity;
+use Proto\Models\ActivityParticipation;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Proto\Models\ActivityParticipation>
+ * @extends Factory<ActivityParticipation>
  */
 class ActivityParticipationFactory extends Factory
 {
@@ -18,25 +19,20 @@ class ActivityParticipationFactory extends Factory
     public function definition()
     {
         return [
-            'created_at' => fn ($attributes) => self::startDate($attributes),
-            'deleted_at' => fn ($attributes) => mt_rand(1, 3) == 1 ? self::endDate($attributes) : null,
+            'created_at' => fn ($attributes) => self::createAt($attributes),
+            'deleted_at' => fn ($attributes) => fake()->boolean(30) ? self::deletedAt($attributes) : null,
             'backup' => fn ($attributes) => self::Backup($attributes),
         ];
     }
 
-    public function startDate(array $attributes) {
+    public function createAt(array $attributes) {
         $activity = Activity::find($attributes['activity_id']);
-        $mintime = date('U', strtotime($activity->registration_start));
-        $maxtime = date('U', strtotime($activity->event->start));
-        return date('U', ($maxtime > $mintime ? mt_rand($mintime, $maxtime) : $mintime));
+        return fake()->dateTimeBetween($activity->registration_start, $activity->event->start)->format('Y-m-d H:i:s');
     }
 
-    public function endDate(array $attributes) {
+    public function deletedAt(array $attributes) {
         $activity = Activity::find($attributes['activity_id']);
-        $mintime = date('U', strtotime($activity->registration_start));
-        $maxtime = date('U', strtotime($activity->event->start));
-        $startDate = date('U', ($maxtime > $mintime ? mt_rand($mintime, $maxtime) : $mintime));
-        return date('Y-m-d H:i:s', ($maxtime > $startDate ? mt_rand($startDate, $maxtime) : $maxtime));
+        return fake()->dateTimeBetween($attributes['created_at'], $activity->event->start)->format('Y-m-d H:i:s');
     }
 
     public function backup(array $attributes) {

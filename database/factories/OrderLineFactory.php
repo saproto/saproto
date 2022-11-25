@@ -19,16 +19,16 @@ class OrderLineFactory extends Factory
      */
     public function definition()
     {
-        $minTime = date('U', strtotime('-1 year'));
-        $maxTime = date('U', strtotime('now'));
-
         /** @var Product $product */
         $product = Product::inRandomOrder()->first();
+        $date = fake()->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
+        $nbUnits = fake()->randomDigitNotNull();
+        $paidCash = fake()->boolean(5);
+        if ($paidCash) {
+            $tipcie = Committee::find(config('proto.committee')['tipcie']);
+            $cashierId = $tipcie->users()->inRandomOrder()->first()->id;
+        }
 
-        $date = date('Y-m-d H:i:s', mt_rand($minTime, $maxTime));
-        $nbUnits = mt_rand(1, 3);
-        $paidCash = mt_rand(1, 100);
-        $tipcie = Committee::find(config('proto.committee.tipcie'));
 
         return [
             'product_id' => $product->id,
@@ -36,8 +36,8 @@ class OrderLineFactory extends Factory
             'units' => $nbUnits,
             'total_price' => $nbUnits * $product->price,
             'created_at' => $date,
-            'cashier_id' => $paidCash == 1 ? $tipcie->users()->inRandomOrder()->first()->id : null,
-            'payed_with_bank_card' => $paidCash == 1 ? $date : null,
+            'cashier_id' => $paidCash ? $cashierId : null,
+            'payed_with_bank_card' => $paidCash ? $date : null,
             'description' => fake()->sentences(3, true),
         ];
     }

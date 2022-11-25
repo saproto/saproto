@@ -26,21 +26,19 @@ class OtherDataSeeder extends Seeder
      */
     public function run($output)
     {
+        $output->info('Seeding fake data');
+
         // Create users
         $n = 10;
         $output->task("creating $n regular users", function () use ($n) {
-            $users = User::factory()
-                ->count($n)
-                ->create();
-            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
-                Bank::factory()
-                    ->for($user)
-                    ->create();
-            }
-            foreach($users->random(mt_rand($n / 2, $n)) as $user) {
-                Address::factory()
-                    ->for($user)
-                    ->create();
+            $users = User::factory()->count($n)->create();
+            foreach($users as $user) {
+                if (fake()->boolean(30)) {
+                    Address::factory()->for($user)->create();
+                }
+                if (fake()->boolean(30)) {
+                    Bank::factory()->for($user)->create();
+                }
             }
         });
 
@@ -50,6 +48,7 @@ class OtherDataSeeder extends Seeder
                 Member::factory()
                     ->count($n - 5)
                     ->create();
+
                 Member::factory()
                     ->count(4)
                     ->state(new Sequence(
@@ -70,9 +69,10 @@ class OtherDataSeeder extends Seeder
 
         // Create committee participations
         $committees = Committee::all();
-        $output->task('Creating committee memberships', function () use ($members, $committees) {
+        $output->task('creating committee memberships', function () use ($members, $committees) {
             foreach($committees as $committee) {
-                foreach($members->random(mt_rand(1, $members->count())) as $member) {
+                $n = fake()->numberBetween(1, $members->count() / 2);
+                foreach($members->random($n) as $member) {
                     CommitteeMembership::factory()
                         ->for($member)
                         ->for($committee)
@@ -85,7 +85,7 @@ class OtherDataSeeder extends Seeder
         $output->task('creating orderlines', function () use ($members) {
             foreach($members as $member) {
                 OrderLine::factory()
-                    ->count(mt_rand(0, 10))
+                    ->count(fake()->randomDigit())
                     ->for($member)
                     ->create();
             }
@@ -95,7 +95,7 @@ class OtherDataSeeder extends Seeder
         $output->task('creating achievement ownerships', function () use ($members) {
             foreach($members as $member){
                 AchievementOwnership::factory()
-                    ->count(mt_rand(0, 10))
+                    ->count(fake()->randomDigit())
                     ->for($member)
                     ->create();
             }
@@ -105,7 +105,7 @@ class OtherDataSeeder extends Seeder
         $output->task('creating activity participations', function () use ($members) {
             $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
             foreach($activities as $activity) {
-                foreach($members->random(mt_rand(1, $members->count())) as $member) {
+                foreach($members->random(fake()->numberBetween(0, $members->count())) as $member) {
                     ActivityParticipation::factory()->for($activity)->for($member);
                 }
             }

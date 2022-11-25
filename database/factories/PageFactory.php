@@ -3,9 +3,10 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Proto\Models\Page;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Proto\Models\Page>
+ * @extends Factory<Page>
  */
 class PageFactory extends Factory
 {
@@ -17,10 +18,10 @@ class PageFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->words(mt_rand(1, 3), true),
-            'slug' => fake()->unique()->word(),
+            'title' => fake()->unique()->words(fake()->numberBetween(1, 3)),
+            'slug' => fn ($attributes) => str_slug($attributes['title']),
             'content' => fake()->paragraphs(10, true),
-            'is_member_only' => mt_rand(0, 1),
+            'is_member_only' => fake()->boolean(),
             'featured_image_id' => null,
             'show_attachments' => false,
         ];

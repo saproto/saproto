@@ -4,9 +4,10 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Proto\Models\Achievement;
+use Proto\Models\AchievementOwnership;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Proto\Models\AchievementOwnership>
+ * @extends Factory<AchievementOwnership>
  */
 class AchievementOwnershipFactory extends Factory
 {
@@ -17,20 +18,13 @@ class AchievementOwnershipFactory extends Factory
      */
     public function definition()
     {
-        $minTime = date('U', strtotime('-1 year'));
-        $maxTime = date('U', strtotime('now'));
-
-        /** @var Achievement $achievement */
-        $achievement = Achievement::inRandomOrder()->first();
-
-        $date = date('Y-m-d H:i:s', mt_rand($minTime, $maxTime));
-        $alerted = mt_rand(0,1);
+        $date = fake()->dateTimeBetween('-1 year')->format('Y-m-d H:i:s');
 
         return [
-            'achievement_id' => $achievement->id,
+            'achievement_id' => Achievement::inRandomOrder()->first()->id,
             'created_at' => $date,
             'updated_at' => $date,
-            'alerted' => $alerted,
+            'alerted' => fake()->boolean(),
         ];
     }
 }

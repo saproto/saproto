@@ -24,6 +24,8 @@ class ImportLiveDataSeeder extends Seeder
         // First let's create our admin user.
         $output->task('creating admin user.', fn () => self::createAdminUser($password));
 
+        $output->info('Importing live data');
+
         // Now let's import all data we can from the live environment.
         $tables = [
             ['name' => 'accounts'],
