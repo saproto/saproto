@@ -5,7 +5,6 @@ namespace Proto\Http\Controllers;
 use Auth;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;

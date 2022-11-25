@@ -35,7 +35,6 @@ class QrAuthController extends Controller
      */
     public function generateRequest(Request $request)
     {
-        return 10/0;
         if (! $request->has('description')) {
             abort(500, 'No description was provided.');
         }
