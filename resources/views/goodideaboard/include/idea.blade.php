@@ -34,7 +34,7 @@
 
     <div class="card-body">
 
-        {!! $idea->idea !!}
+        {!! $idea->feedback !!}
 
         @if ($idea->reply)
 

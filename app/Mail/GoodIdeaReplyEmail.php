@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Proto\Models\GoodIdea;
+use Proto\Models\Feedback;
 use Proto\Models\User;
 
 class GoodIdeaReplyEmail extends Mailable
@@ -20,11 +20,11 @@ class GoodIdeaReplyEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param GoodIdea $idea
+     * @param Feedback $idea
      * @param User $user
      * @param $reply
      */
-    public function __construct(GoodIdea $idea, User $user, $reply)
+    public function __construct(Feedback $idea, User $user, $reply)
     {
         $this->idea = $idea;
         $this->user = $user;

@@ -11,8 +11,8 @@ use Proto\Models\Address;
 use Proto\Models\Bank;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
-use Proto\Models\GoodIdea;
-use Proto\Models\GoodIdeaVote;
+use Proto\Models\Feedback;
+use Proto\Models\FeedbackVote;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;
@@ -175,9 +175,10 @@ class OtherDataSeeder extends Seeder
         $time_start = microtime(true);
 
         foreach (range(1, $n) as $index) {
-            $goodIdea = new GoodIdea([
+            $goodIdea = new Feedback([
                 'user_id'=> array_random($users),
-                'idea'=>$faker->text(50),
+                'feedback'=>$faker->text(50),
+                'feedback_category_id'=>1,
             ]);
             $goodIdea->save();
 

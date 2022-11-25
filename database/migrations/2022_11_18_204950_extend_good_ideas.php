@@ -12,14 +12,21 @@ class ExtendGoodIdeas extends Migration
      */
     public function up()
     {
-        Schema::table('good_ideas', function (Blueprint $table) {
-            $table->bigInteger('idea_category_id')->after('user_id')->default(1);
+        Schema::rename('good_idea_votes', 'feedback_votes');
+        Schema::table('feedback_votes', function (Blueprint $table) {
+            $table->renameColumn('good_idea_id', 'feedback_id');
+        });
+
+        Schema::rename('good_ideas', 'feedback');
+        Schema::table('feedback', function (Blueprint $table) {
+            $table->renameColumn('idea', 'feedback');
+            $table->bigInteger('feedback_category_id')->after('user_id')->default(1);
             $table->boolean('reviewed')->after('idea')->default(False);
             $table->text('reply')->after('reviewed')->nullable();
             $table->softDeletes();
         });
 
-        Schema::create('good_idea_categories', function (Blueprint $table) {
+        Schema::create('feedback_categories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('url');
@@ -27,6 +34,13 @@ class ExtendGoodIdeas extends Migration
             $table->integer('reviewer_id')->nullable();
             $table->timestamps();
         });
+
+        $goodideas= new \Proto\Models\FeedbackCategory([
+           'title'=>'Good ideas',
+            'url'=>'goodideas',
+            'review'=>False,
+        ]);
+        $goodideas->save();
     }
     /**
      * Reverse the migrations.
@@ -35,6 +49,7 @@ class ExtendGoodIdeas extends Migration
      */
     public function down()
     {
+        Schema::rename('feedback', 'good_ideas');
         Schema::table('good_ideas', function (Blueprint $table) {
             $table->dropColumn('reply');
             $table->dropColumn('idea_category_id');

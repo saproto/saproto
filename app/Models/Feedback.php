@@ -20,22 +20,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $user
- * @property-read Collection|GoodIdeaVote[] $votes
- * @method static Builder|GoodIdea whereCreatedAt($value)
- * @method static Builder|GoodIdea whereId($value)
- * @method static Builder|GoodIdea whereIdea($value)
- * @method static Builder|GoodIdea whereUpdatedAt($value)
- * @method static Builder|GoodIdea whereUserId($value)
- * @method static Builder|GoodIdea newModelQuery()
- * @method static Builder|GoodIdea newQuery()
- * @method static Builder|GoodIdea query()
+ * @property-read Collection|FeedbackVote[] $votes
+ * @method static Builder|Feedback whereCreatedAt($value)
+ * @method static Builder|Feedback whereId($value)
+ * @method static Builder|Feedback whereIdea($value)
+ * @method static Builder|Feedback whereUpdatedAt($value)
+ * @method static Builder|Feedback whereUserId($value)
+ * @method static Builder|Feedback newModelQuery()
+ * @method static Builder|Feedback newQuery()
+ * @method static Builder|Feedback query()
  * @mixin Eloquent
  */
-class GoodIdea extends Model
+class Feedback extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'good_ideas';
+    protected $table = 'feedback';
 
     protected $guarded = ['id'];
 
@@ -48,13 +48,13 @@ class GoodIdea extends Model
     /** @return BelongsTo */
     public function goodIdeaCategory()
     {
-        return $this->belongsTo('Proto\Models\GoodIdeaCategory', 'idea_category_id');
+        return $this->belongsTo('Proto\Models\FeedbackCategory', 'feedback_category_id');
     }
 
     /** @return HasMany */
     public function votes()
     {
-        return $this->hasMany('Proto\Models\GoodIdeaVote');
+        return $this->hasMany('Proto\Models\FeedbackVote');
     }
 
     /** @return int */
@@ -69,7 +69,7 @@ class GoodIdea extends Model
      */
     public function userVote($user)
     {
-        /** @var GoodIdeaVote $vote */
+        /** @var FeedbackVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();
         if ($vote != null) {
             return $vote->vote;
