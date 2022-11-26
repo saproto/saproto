@@ -52,11 +52,11 @@
                     <textarea class="form-control mb-2" rows="2" cols="30" name="reply"
                               placeholder="A reply to this idea." required>{!! $feedback->reply ?? '' !!}</textarea>
                     <div class="btn-group w-100">
-                            <button type="submit" name="responseBtn" value="accept" class="btn btn-success">
-                                <i class="fas fa-reply"></i> reject
+                            <button type="submit" name="responseBtn" value="accept" class="btn btn-primary">
+                                <i class="fas fa-reply"></i> accept
                             </button>
                             <button type="submit"  name="responseBtn" value="reject" class="btn btn-danger">
-                                <i class="fas fa-reply"></i> accept
+                                <i class="fas fa-reply"></i> reject
                             </button>
                     </div>
                 </form>

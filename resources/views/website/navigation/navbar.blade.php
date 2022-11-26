@@ -114,6 +114,7 @@
                                         <a class="dropdown-item" href="{{ route("committee::add") }}">Add Committee</a>
                                         <a class="dropdown-item" href="{{ route("event::add") }}">Add Event</a>
                                         <a class="dropdown-item" href="{{ route("event::category::admin") }}">Event Categories</a>
+                                        <a class="dropdown-item" href="{{ route("feedback::category::admin") }}">Feedback Categories</a>
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("narrowcasting::list") }}">Narrowcasting</a>

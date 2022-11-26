@@ -495,12 +495,20 @@ Route::group(['middleware' => ['forcedomain']], function () {
     });
 
     /* Routes related to the Feedback Boards. */
-    Route::group([ 'prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
+    Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
         Route::group(['prefix' => '/{category}', 'as' => 'category::'], function () {
             Route::get('', ['as' => 'index', 'uses' => 'FeedBackController@index']);
             Route::get('archived', ['as' => 'archived', 'uses' => 'FeedBackController@archived']);
             Route::post('add', ['as' => 'add', 'uses' => 'FeedBackController@add']);
             Route::get('archiveall', ['as' => 'archiveall', 'middleware' => ['permission:board'], 'uses' => 'FeedBackController@archiveAll']);
+        });
+
+        Route::group(['prefix' => 'categories', 'middleware' => ['permission:board'], 'as' => 'category::'], function () {
+            Route::get('admin', ['as' => 'admin', 'uses' => 'FeedBackController@categoryAdmin']);
+            Route::post('addone', ['as' => 'add', 'uses' => 'FeedBackController@categoryStore']);
+            Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'FeedBackController@categoryEdit']);
+            Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'FeedBackController@categoryUpdate']);
+            Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedBackController@categoryDestroy']);
         });
 
         Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedBackController@reply']);

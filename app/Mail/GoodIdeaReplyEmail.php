@@ -5,30 +5,32 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use phpDocumentor\Reflection\Types\Boolean;
 use Proto\Models\Feedback;
 use Proto\Models\User;
 
 class GoodIdeaReplyEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable; use SerializesModels;
 
-    public $idea;
+    public $feedback;
     public $user;
     public $reply;
+    public $accepted;
 
     /**
      * Create a new message instance.
      *
-     * @param Feedback $idea
+     * @param Feedback $feedback
      * @param User $user
      * @param $reply
      */
-    public function __construct(Feedback $feedback, User $user, $reply)
+    public function __construct(Feedback $feedback, User $user, $reply, Boolean $accepted)
     {
-        $this->idea = $feedback;
+        $this->feedback = $feedback;
         $this->user = $user;
         $this->reply = $reply;
+        $this->accepted = $accepted;
     }
 
     /**
@@ -39,8 +41,8 @@ class GoodIdeaReplyEmail extends Mailable
     public function build()
     {
         return $this
-            ->from('board@' . config('proto.emaildomain'), 'Board of S.A. Proto')
-            ->subject('Reply to your good idea!')
-            ->view('emails.goodideareply');
+            ->from('board@'.config('proto.emaildomain'), 'Board of S.A. Proto')
+            ->subject(`Answer on your {{$this->feedback->category->title}}`)
+            ->view('emails.feedbackreply');
     }
 }

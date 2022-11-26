@@ -1,7 +1,8 @@
 <?php
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class ExtendGoodIdeas extends Migration
 {
@@ -21,7 +22,7 @@ class ExtendGoodIdeas extends Migration
         Schema::table('feedback', function (Blueprint $table) {
             $table->renameColumn('idea', 'feedback');
             $table->bigInteger('feedback_category_id')->after('user_id')->default(1);
-            $table->boolean('reviewed')->after('idea')->default(False);
+            $table->boolean('reviewed')->after('idea')->default(false);
             $table->boolean('accepted')->after('reviewed')->nullable();
             $table->text('reply')->after('accepted')->nullable();
             $table->softDeletes();
@@ -36,13 +37,14 @@ class ExtendGoodIdeas extends Migration
             $table->timestamps();
         });
 
-        $goodideas= new \Proto\Models\FeedbackCategory([
+        $goodideas = new \Proto\Models\FeedbackCategory([
            'title'=>'Good ideas',
             'url'=>'goodideas',
-            'review'=>False,
+            'review'=>false,
         ]);
         $goodideas->save();
     }
+
     /**
      * Reverse the migrations.
      *

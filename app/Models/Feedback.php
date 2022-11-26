@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $feedback
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property FeedbackCategory|null $category
  * @property-read User|null $user
  * @property-read Collection|FeedbackVote[] $votes
  * @method static Builder|Feedback whereCreatedAt($value)
@@ -40,25 +41,25 @@ class Feedback extends Model
     protected $guarded = ['id'];
 
     /** @return BelongsTo */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\User');
     }
 
     /** @return BelongsTo */
-    public function goodIdeaCategory()
+    public function category(): BelongsTo
     {
         return $this->belongsTo('Proto\Models\FeedbackCategory', 'feedback_category_id');
     }
 
     /** @return HasMany */
-    public function votes()
+    public function votes(): HasMany
     {
         return $this->hasMany('Proto\Models\FeedbackVote');
     }
 
     /** @return int */
-    public function voteScore()
+    public function voteScore(): int
     {
         return $this->votes()->sum('vote');
     }
@@ -67,7 +68,7 @@ class Feedback extends Model
      * @param User $user
      * @return int
      */
-    public function userVote($user)
+    public function userVote($user): int
     {
         /** @var FeedbackVote $vote */
         $vote = $this->votes()->where('user_id', $user->id)->first();

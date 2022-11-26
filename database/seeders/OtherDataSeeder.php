@@ -12,7 +12,6 @@ use Proto\Models\Bank;
 use Proto\Models\Committee;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\Feedback;
-use Proto\Models\FeedbackVote;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\OrderLine;

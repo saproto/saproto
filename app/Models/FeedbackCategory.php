@@ -2,9 +2,36 @@
 
 namespace Proto\Models;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * Feedback model.
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $url
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Boolean $review
+ * @property int $reviewer_id
+ * @property-read User|null $reviewer
+ * @property-read Collection|FeedbackVote[] $votes
+ * @method static Builder|Feedback whereCreatedAt($value)
+ * @method static Builder|Feedback whereId($value)
+ * @method static Builder|Feedback whereIdea($value)
+ * @method static Builder|Feedback whereUpdatedAt($value)
+ * @method static Builder|Feedback whereUserId($value)
+ * @method static Builder|Feedback newModelQuery()
+ * @method static Builder|Feedback newQuery()
+ * @method static Builder|Feedback query()
+ * @mixin Eloquent
+ */
 
 class FeedbackCategory extends Model
 {
