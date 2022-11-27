@@ -35,12 +35,12 @@ This website can be run locally through Docker by using Laravel Sail. For more i
 First you need to clone the repository into a folder in WSL2.
 
 #### If you set an SSH key:
-```
+```shell
 git clone git@github.com:saproto/saproto.git
 ```
 
 #### Otherwise, use HTTPS:
-```
+```shell
 git clone https://github.com/saproto/saproto.git
 ```
 
@@ -48,10 +48,10 @@ git clone https://github.com/saproto/saproto.git
 After installing Docker and cloning the repository the following instructions can be run in the terminal in the source folder of the project.
 
 #### Configuration
-Copy and rename `.env.dev` to `.env`.
+Copy and rename `.env.sail.example` to `.env`.
 
-```
-cp .env.dev .env
+```shell
+cp .env.sail.example .env
 ```
 
 After that, open the new `.env` file and set the `PERSONAL_PROTO_KEY` to your personal Proto key, which can be found/generated on the bottom of [your dashboard](https://www.proto.utwente.nl/user/dashboard) on the ***live*** Proto website.
@@ -78,7 +78,7 @@ echo "alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'" > ~/.bash_a
 ```
 
 #### Initial application setup
-```
+```shell
 sail up -d
 sail composer install
 sail artisan key:generate
@@ -107,22 +107,22 @@ Due to the permission changes, Git might detect that all files have been changed
 ### Useful commands
 
 #### Start server
-```
+```shell
 sail up -d
 ```
 
 #### Stop server
-```
+```shell
 sail stop
 ```
 
 #### Access to app container
-```
+```shell
 sail shell
 ```
 
 #### Nuke your database *(run in container)*
-```
+```shell
 sail artisan migrate:fresh --seed
 ```
 
@@ -145,3 +145,20 @@ PhpStorm  for zero-configuration debugging. In case of zero-configuration debugg
 
 ### Clockwork
 [Clockwork](https://underground.works/clockwork) is a php dev tool in your browser. When running the website in debug mode you can access the clockwork debug page at <localhost:8080/clockwork>. The application has various debugging features such as timelines of runtime requests, database queries and client-metrics.
+
+
+## Testing
+This project has some [Laravel Dusk](https://laravel.com/docs/dusk) based end-to-end tests. These tests use a headless browser which runs in the `selenium` docker container. The tests can be run with `sail dusk` and should show you if the parts of the application which are covered by the tests are still functioning as expected. You can run `sail dusk:fails` to safe some time by re-running only failing tests.
+
+To start testing you will need to copy and rename `.env.dusk.example` to `.env.dusk`.
+
+```shell
+cp .env.dusk.example .env.dusk
+```
+
+Then, run `sail artisan key:generate --env=dusk` to set an app key.
+
+Finally, copy your personal proto key to `.env.dusk` as well.
+
+> **⚠️IMPORTANT**  
+> Whenever you try to change the behaviour of a feature covered by a test it is import to check if the test needs to be updated. This also goes for the front-end, as we use end-to-end tests which interact with elements on the page directly.

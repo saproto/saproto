@@ -1,5 +1,10 @@
 # Configuration
 .env
+.env.backup
+.env.dusk
+
+# Tests
+.phpunit.result.cache
 
 # External assets
 /vendor
@@ -33,10 +38,3 @@ composer.phar
 
 storage/oauth-private.key
 storage/oauth-public.key
-
-# Docker
-/docker/mariadb/*
-!/docker/mariadb/.gitkeep
-/docker/nginx-log/*
-!/docker/nginx-log/.gitkeep
-.cache

@@ -25,6 +25,7 @@ services:
         depends_on:
             - mariadb
             - mailhog
+            - selenium
     mariadb:
         container_name: '${SAIL_CONTAINER_NAME}-mariadb'
         image: 'mariadb:10'
@@ -65,6 +66,17 @@ services:
             - sail
         depends_on:
             - mariadb
+    selenium:
+        container_name: '${SAIL_CONTAINER_NAME}-selenium'
+        image: '${SAIL_SELENIUM_IMAGE}'
+        environment:
+            LARAVEL_SAIL: 1
+        volumes:
+            - '/dev/shm:/dev/shm'
+        ports:
+            - '${SAIL_SELENIUM_PORT:-4444}:4444'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
