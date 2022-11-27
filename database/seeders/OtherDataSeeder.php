@@ -94,7 +94,7 @@ class OtherDataSeeder extends Seeder
 
         // Create AchievementOwnership
         $output->task('creating achievement ownerships', function () use ($members) {
-            foreach($members as $member){
+            foreach($members as $member) {
                 AchievementOwnership::factory()
                     ->count(fake()->randomDigit())
                     ->for($member)
@@ -106,8 +106,12 @@ class OtherDataSeeder extends Seeder
         $output->task('creating activity participations', function () use ($members) {
             $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
             foreach($activities as $activity) {
-                foreach($members->random(fake()->numberBetween(0, $members->count())) as $member) {
-                    ActivityParticipation::factory()->for($activity)->for($member);
+                $n = fake()->numberBetween(1, $members->count());
+                foreach($members->random($n) as $member) {
+                    ActivityParticipation::factory()
+                        ->state(['activity_id' => $activity->id])
+                        ->for($member)
+                        ->create();
                 }
             }
         });
@@ -119,16 +123,6 @@ class OtherDataSeeder extends Seeder
         // Create quotes
         $n = 100;
         $output->task("creating $n quotes", fn () => Quote::factory()->count($n)->create());
-
-        // Create AchievementOwnership
-        $output->task('creating activity participations', function () use ($members) {
-            $activities = Activity::has('event')->orderBy('id', 'desc')->take(25)->get();
-            foreach($activities as $activity) {
-                foreach($members->random(fake()->numberBetween(0, $members->count())) as $member) {
-                    ActivityParticipation::factory()->for($activity)->for($member);
-                }
-            }
-        });
 
         // Create newsletter text
         $output->task('creating newsletter', function () use ($members) {

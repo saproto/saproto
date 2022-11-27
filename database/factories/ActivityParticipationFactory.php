@@ -25,16 +25,36 @@ class ActivityParticipationFactory extends Factory
         ];
     }
 
+    /**
+     * Set created at based on activity dates.
+     *
+     * @param array $attributes
+     * @return string
+     */
     public function createAt(array $attributes) {
         $activity = Activity::find($attributes['activity_id']);
-        return fake()->dateTimeBetween($activity->registration_start, $activity->event->start)->format('Y-m-d H:i:s');
+        $date = fake()->dateTimeBetween($activity->registration_start, $activity->event->start);
+        return $date->format('Y-m-d H:i:s');
     }
 
+    /**
+     * Set deleted at based on activity dates.
+     *
+     * @param array $attributes
+     * @return string
+     */
     public function deletedAt(array $attributes) {
         $activity = Activity::find($attributes['activity_id']);
-        return fake()->dateTimeBetween($attributes['created_at'], $activity->event->start)->format('Y-m-d H:i:s');
+        $date = fake()->dateTimeBetween($attributes['created_at'], $activity->event->start);
+        return $date->format('Y-m-d H:i:s');
     }
 
+    /**
+     * Set backup state based on available activity spots.
+     *
+     * @param array $attributes
+     * @return bool
+     */
     public function backup(array $attributes) {
         $activity = Activity::find($attributes['activity_id']);
         return $activity->freeSpots() == 0;
