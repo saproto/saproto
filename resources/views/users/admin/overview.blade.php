@@ -96,11 +96,10 @@
                                                 <i class="fas fa-user-lock fa-fw text-dark" aria-hidden="true"></i>
                                             </a>
                                         @else
-                                            {{-- Button removed because ProTube is not usable --}}
-                                            {{-- <a  href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
+                                            <a  href="{{ route('tempadmin::make', ['id'=>$user->id]) }}"
                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Grant temp admin till midnight" class="text-decoration-none">
                                                 <i class="fas fa-user-clock fa-fw text-dark" aria-hidden="true"></i>
-                                            </a>  --}}
+                                            </a>
                                         @endif
                                     @endif
                                 </td>
