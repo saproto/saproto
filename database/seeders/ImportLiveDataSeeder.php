@@ -99,7 +99,7 @@ class ImportLiveDataSeeder extends Seeder
         $userData = (array) self::getDataFromExportApi('user');
         if ($userData == null) {
             /** @var User $adminUser */
-            $adminUser = User::factory()->member()->create(['id' => 1]);
+            $adminUser = Member::factory()->has(User::factory()->state(['id' => 1]))->create()->user;
             $adminUser->setPassword($password);
 
             // Stop the import dataseeder from here as the user does not have enough rights.
