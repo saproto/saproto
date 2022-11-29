@@ -95,7 +95,7 @@ When adding a new library or client-side dependency through npm don't forget to 
 #### Localhost
 When you have finished the above setup the following port will be exposed on localhost.
 
-- `8080` = Website
+- `80` = Website
 - `8081` = PhpMyAdmin
 - `8082` = [Mailhog](https://github.com/mailhog/MailHog)
 
