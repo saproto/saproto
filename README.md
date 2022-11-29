@@ -158,6 +158,8 @@ cp .env.dusk.example .env.dusk
 
 Then, run `sail artisan key:generate --env=dusk` to set an app key.
 
+Also run `sail artisan dusk:install` to install the dusk drivers.
+
 Finally, copy your personal proto key to `.env.dusk` as well.
 
 > **⚠️IMPORTANT**  
