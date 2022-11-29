@@ -59,7 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
         ]);
 
         return RemoteWebDriver::create(
-            env('DUSK_DRIVER_URL', 'http://selenium:4444'),
+            env('SAIL_SELENIUM_URL', 'http://selenium:4444'),
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )

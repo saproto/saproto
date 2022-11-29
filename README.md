@@ -148,19 +148,17 @@ PhpStorm  for zero-configuration debugging. In case of zero-configuration debugg
 
 
 ## Testing
-This project has some [Laravel Dusk](https://laravel.com/docs/dusk) based end-to-end tests. These tests use a headless browser which runs in the `selenium` docker container. The tests can be run with `sail dusk` and should show you if the parts of the application which are covered by the tests are still functioning as expected. You can run `sail dusk:fails` to safe some time by re-running only failing tests.
+This project has some [Laravel Dusk](https://laravel.com/docs/dusk) based end-to-end tests. These tests use a headless browser which runs in the `selenium` docker container. The tests can be run with `sail dusk` and should show you if the parts of the application which are covered by the tests are still functioning as expected. You can run `sail dusk:fails` to safe some time by re-running failing tests first.
 
-To start testing you will need to copy and rename `.env.dusk.example` to `.env.dusk`.
+To start testing you will need to copy and rename `.env` to `.env.dusk`.
 
 ```shell
-cp .env.dusk.example .env.dusk
+cp .env .env.dusk
 ```
 
-Then, run `sail artisan key:generate --env=dusk` to set an app key.
+Next set the `APP_URL` and `DB_DATABASE` fields in your new `.env.dusk` to `testing`.
 
-Also run `sail artisan dusk:install` to install the dusk drivers.
-
-Finally, copy your personal proto key to `.env.dusk` as well.
+Finally, run `sail artisan dusk:install` to install the default dusk chrome drivers.
 
 > **⚠️IMPORTANT**  
 > Whenever you try to change the behaviour of a feature covered by a test it is import to check if the test needs to be updated. This also goes for the front-end, as we use end-to-end tests which interact with elements on the page directly.
