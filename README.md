@@ -156,7 +156,10 @@ To start testing you will need to copy and rename `.env` to `.env.dusk`.
 cp .env .env.dusk
 ```
 
-Next set the `APP_URL` and `DB_DATABASE` fields in your new `.env.dusk` to `testing`.
+Next change the following fields in your new `.env.dusk`:
+- `APP_URL=testing`
+- `COOKIE_DOMAIN=laravel.test`
+- `DB_DATABASE=testing`
 
 Finally, run `sail artisan dusk:install` to install the default dusk chrome drivers.
 
