@@ -204,8 +204,4 @@ class ActivityController extends Controller
         Session::flash('flash_message', 'Removed '.$help->committee->name.' as helping committee.');
         return Redirect::back();
     }
-
-    public function addAttendees(Request $request){
-        return $request;
-    }
 }
