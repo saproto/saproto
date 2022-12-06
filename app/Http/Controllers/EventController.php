@@ -296,7 +296,6 @@ class EventController extends Controller
      */
     public function finclose(Request $request, $id)
     {
-        return $request;
         /** @var Activity $activity */
         $activity = Activity::findOrFail($id);
 
