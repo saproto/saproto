@@ -80,7 +80,7 @@
 
                                     <td class="text-center">
                                         @if($password->url)
-                                            <a href="{{ $password->url }}">
+                                            <a href="{{ $password->url }}" target="_blank">
                                                 <i class="fas fa-globe-africa" aria-hidden="true"></i>
                                             </a>
                                         @endif
