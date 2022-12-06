@@ -205,7 +205,7 @@ class ActivityController extends Controller
         return Redirect::back();
     }
 
-    public function addAttendees(Request $request){
+    public function addAttendees(Request $request) {
         return $request;
     }
 }
