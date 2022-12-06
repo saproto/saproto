@@ -296,6 +296,7 @@ class EventController extends Controller
      */
     public function finclose(Request $request, $id)
     {
+        return $request;
         /** @var Activity $activity */
         $activity = Activity::findOrFail($id);
 
@@ -308,6 +309,8 @@ class EventController extends Controller
             Session::flash('flash_message', 'This activity is already closed.');
             return Redirect::back();
         }
+
+        $activity->attendees = $request->input('attendees');
 
         $account = Account::findOrFail($request->input('account'));
 

@@ -27,6 +27,7 @@
                             <td>Event</td>
                             <td>Fee</td>
                             <td>Participants</td>
+                            <td>Attendees</td>
                             <td>Account</td>
                             <td></td>
 
@@ -52,6 +53,8 @@
                                     <td>&euro;{{ number_format($activity->price, 2) }}</td>
 
                                     <td>{{ $activity->users->count() }}</td>
+
+                                    <td><input class="form-control" id="attendees" name="attendees" min="-1" type="number" required></td>
 
                                     <td>
                                         <select name="account" class="form-control">
