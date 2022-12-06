@@ -21,7 +21,8 @@
 
             <div class="col-lg-3 col-md-4 col-sm-6 col-7">
                 <br>
-                <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Mon-Fri, 09:30-17:30<br>
+                <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Monday & Friday 08:30-16:00<br>
+                <span class="fas fa-clock fa-fw"></span>&nbsp;&nbsp;Tuesday-Thursday, 08:30-17:30<br>
                 <span class="fas fa-phone fa-fw"></span>&nbsp;&nbsp;<a class="tel text-white" href="tel:+31534894423">
                     +31 (0)53 489 4423
                 </a><br>
@@ -31,17 +32,15 @@
             </div>
 
             <div class="col-3 d-none d-lg-block text-end">
-                <a class="text-white" href="https://www.facebook.com/groups/SAProto/" target="_blank">
-                    Facebook&nbsp;&nbsp;<i class="fab fa-fw fa-facebook" aria-hidden="true"></i></a><br>
+                <br>
                 <a class="text-white" href="https://www.youtube.com/channel/UCdH2x3ObOrmLdm2OOGDBslw" target="_blank">
                     YouTube&nbsp;&nbsp;<i class="fab fa-fw fa-youtube" aria-hidden="true"></i></a><br>
                 <a class="text-white" href="https://www.linkedin.com/company/s-a-proto/" target="_blank">
                     LinkedIn&nbsp;&nbsp;<i class="fab fa-fw fa-linkedin" aria-hidden="true"></i></a><br>
                 <a class="text-white" href="https://www.instagram.com/s.a.proto/" target="_blank">
                     Instagram&nbsp;&nbsp;<i class="fab fa-fw fa-instagram" aria-hidden="true"></i></a><br>
-                <a class="text-white" href="https://www.snapchat.com/add/sa_proto" target="_blank">
-                    Snapchat&nbsp;&nbsp;<i class="fab fa-fw fa-snapchat" aria-hidden="true"></i>
-                </a>
+                <a class="text-white" href="https://www.proto.utwente.nl/page/privacy" target="_blank">
+                    Privacy Policy&nbsp;&nbsp;<i class="fa fa-shield" aria-hidden="true"></i></a><br>
             </div>
 
             <div class="col-lg-3 col-md-5 d-none d-md-block text-end">
