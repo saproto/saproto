@@ -305,8 +305,4 @@ class Activity extends Validatable
     {
         return $this->participants !== 0;
     }
-
-    public function getAttendees(){
-        return $this->attendees??$this->presentUsers()->count();
-    }
 }
