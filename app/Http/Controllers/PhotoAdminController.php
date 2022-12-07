@@ -53,7 +53,7 @@ class PhotoAdminController extends Controller
     {
         $album = PhotoAlbum::findOrFail($id);
         $photos = $album->items()->get();
-        return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos]);
+        return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
     }
 
     /**

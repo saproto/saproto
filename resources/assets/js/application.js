@@ -168,6 +168,8 @@ if (iconPickerList.length) {
             })
         })
         console.log(`Icon-picker initialized (FontAwesome v${data.data.release.version}, ${icons.length} icons)`)
+    }).catch(err => {
+        console.log('Error retrieving icons for icon pickers: ', err)
     })
 }
 

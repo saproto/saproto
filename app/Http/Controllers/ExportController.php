@@ -45,16 +45,14 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                if ($user->can('admin')) {
-                    $data = Activity::all();
-                } else {
-                    $data = Activity::with('event')->get()->filter(function ($activity) use ($user) {
-                        $activity->event && $activity->event->mayViewEvent($user);
-                    });
-                    foreach ($data as $key => $val) {
-                        unset($data[$key]->event);
-                    }
+                $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
+                    return $activity->event->mayViewEvent($user);
+                });
+
+                foreach ($data as $key => $val) {
+                    unset($val->event);
                 }
+
                 break;
             case 'committees':
                 if ($user->can('admin')) {

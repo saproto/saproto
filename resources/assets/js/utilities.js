@@ -20,7 +20,8 @@ function request (method, url, params, options) {
     }
     const result = fetch(url, options)
     return result.then(response => {
-        if (!response.ok || (options.parse !== undefined && options.parse === false)) return response
+        if (!response.ok) throw response
+        if (options.parse !== undefined && options.parse === false) return response
         return response.json()
     })
 }
