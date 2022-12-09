@@ -307,7 +307,7 @@
                 formData.append('file', file)
                 if(addWaterMark)formData.append('addWaterMark', 'placeHolder')
                 toggleRunning()
-                await post('{{ route('photo::admin::upload', ['id' => $photos->album_id]) }}', formData, {parse:false})
+                await post('{{ route('photo::admin::upload', ['id' => $album->id]) }}', formData, {parse:false})
                     .then(response => {
                         response.text().then(text => {
                             document.getElementById('photo-view').innerHTML += text

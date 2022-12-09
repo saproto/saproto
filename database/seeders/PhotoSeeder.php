@@ -43,18 +43,21 @@ class PhotoSeeder extends Seeder
             $addWatermark = mt_rand(1, 2) > 1;
             foreach (range(1, $n) as $henk) {
                 $photo = new Photo();
-                $photo->makePhoto(Image::make('https://loremflickr.com/19200/10800') , 'henk.jpg', Carbon::now()->timestamp, $album->private, $album->id, $album->id, $addWatermark, 'Ysbrand');
-                $photo->save();
+                try {
+                    $photo->makePhoto(Image::make('https://loremflickr.com/1920/1080'), 'henk.jpg', Carbon::now()->timestamp, $album->private, $album->id, $album->id, $addWatermark, 'Ysbrand');
+                    $photo->save();
 
-                $album->thumb_id = $album->items->first()->id;
-                $album->save();
+                    $album->thumb_id = $album->items->first()->id;
+                    $album->save();
 
-                if(mt_rand(1, 2) > 1){
-                    $like = new PhotoLikes([
-                        'user_id' => 1,
-                        'photo_id' => $photo->id,
-                    ]);
-                    $like->save();
+                    if (mt_rand(1, 2) > 1) {
+                        $like = new PhotoLikes([
+                            'user_id' => 1,
+                            'photo_id' => $photo->id,
+                        ]);
+                        $like->save();
+                    }
+                }catch(\Exception $e){
                 }
                 
                 

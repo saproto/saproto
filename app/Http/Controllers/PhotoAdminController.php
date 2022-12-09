@@ -51,6 +51,7 @@ class PhotoAdminController extends Controller
      */
     public function edit($id)
     {
+        $fileSizeLimit = ini_get('post_max_size');
         $album = PhotoAlbum::findOrFail($id);
         $photos = $album->items()->get();
         return view('photos.admin.edit', ['album'=>$album, 'photos' => $photos, 'fileSizeLimit' => $fileSizeLimit]);
