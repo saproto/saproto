@@ -218,7 +218,7 @@
                             </div>
                         @endif
 
-                        <div id="photo-view" class="row">
+                        <div id="photo-view" data-name="photos" class="row shift-select">
 
                             @foreach($photos->photos as $key => $photo)
 
