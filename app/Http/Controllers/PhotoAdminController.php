@@ -117,7 +117,7 @@ class PhotoAdminController extends Controller
     public function action(Request $request, $id)
     {
         $action = $request->input('action');
-        $photos = $request->input('photo');
+        $photos = $request->input('photos');
 
         if ($photos) {
             $album = PhotoAlbum::findOrFail($id);
@@ -128,7 +128,7 @@ class PhotoAdminController extends Controller
 
             switch ($action) {
                 case 'remove':
-                    foreach ($photos as $photoId => $photo) {
+                    foreach ($photos as $photoId) {
                         Photo::find($photoId)->delete();
                     }
                     break;
@@ -139,7 +139,7 @@ class PhotoAdminController extends Controller
                     break;
 
                 case 'private':
-                    foreach ($photos as $photoId => $photo) {
+                    foreach ($photos as $photoId) {
                         $photo = Photo::find($photoId);
                         if($photo && ! $album->published) {
                             $photo->private = ! $photo->private;
