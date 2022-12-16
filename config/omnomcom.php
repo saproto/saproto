@@ -183,7 +183,7 @@ return [
     |
     */
 
-    'alcohol-start' => '15:30',
+    'alcohol-start' => '14:00',
     'alcohol-end' => '08:00',
 
     /*
