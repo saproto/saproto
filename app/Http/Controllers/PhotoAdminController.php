@@ -139,7 +139,7 @@ class PhotoAdminController extends Controller
                     break;
 
                 case 'thumbnail':
-                    $album->thumb_id = (int)$photos[0];
+                    $album->thumb_id = (int) $photos[0];
                     break;
 
                 case 'private':
