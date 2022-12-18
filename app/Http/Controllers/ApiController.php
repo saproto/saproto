@@ -120,12 +120,12 @@ class ApiController extends Controller
         }
     }
 
-    public function randomPhoto(){
-        $photo= Photo::where('private', false)->whereHas('album', function ($query) {
+    public function randomPhoto() {
+        $photo = Photo::where('private', false)->whereHas('album', function ($query) {
             $query->where('published', true)->where('private', false);
         })->inRandomOrder()->with('album')->first();
 
-        if(!$photo){
+        if(! $photo){
             return response()->json(['error' => 'No public photos found!.'], 404);
         }
 
