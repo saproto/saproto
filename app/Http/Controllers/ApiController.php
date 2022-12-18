@@ -3,12 +3,14 @@
 namespace Proto\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
 use Proto\Models\OrderLine;
+use Proto\Models\Photo;
 use Proto\Models\PhotoLikes;
 use Proto\Models\PlayedVideo;
 use Proto\Models\Quote;
@@ -116,6 +118,22 @@ class ApiController extends Controller
         } else {
             return response()->json($response);
         }
+    }
+
+    public function randomPhoto(){
+        $photo= Photo::where('private', false)->whereHas('album', function ($query) {
+            $query->where('published', true)->where('private', false);
+        })->inRandomOrder()->with('album')->first();
+
+        if(!$photo){
+            return response()->json(['error' => 'No public photos found!.'], 404);
+        }
+
+        return response()->JSON([
+            'url'=>$photo->url,
+            'album_name'=>$photo->album->name,
+            'date_taken'=>Carbon::createFromTimestamp($photo->date_taken)->format('d-m-Y'),
+        ]);
     }
 
     /** @return void */
