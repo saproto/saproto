@@ -101,7 +101,7 @@
 
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item disabled" href="{{ route("protube::admin") }}">ProTube Admin</a>
-                                        <a class="dropdown-item disabled" href="{{ route("tempadmin::index") }}">Temp ProTube Admin</a>
+                                        <a class="dropdown-item" href="{{ route("tempadmin::index") }}">Temp ProTube Admin</a>
 
                                         @can('sysadmin')
                                             <li role="separator" class="dropdown-divider"></li>

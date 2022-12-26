@@ -52,7 +52,9 @@ class TempAdminController extends Controller
 
         // Call Herbert webhook to run check through all connected admins.
         // Will result in kick for users whose temporary admin powers were removed.
-        Http::get(config('herbert.server').'/adminCheck');
+
+        //disabled because protube is down/it is not implemented in the new one yet
+        //Http::get(config('herbert.server').'/adminCheck');
 
         return Redirect::back();
     }
@@ -75,7 +77,11 @@ class TempAdminController extends Controller
 
             // Call Herbert webhook to run check through all connected admins.
             // Will result in kick for users whose temporary admin powers were removed.
-            Http::get(config('herbert.server').'/adminCheck');
+
+
+            //disabled because protube is down/it is not implemented in the new one yet
+            //Http::get(config('herbert.server').'/adminCheck');
+
         }
 
         return Redirect::back();

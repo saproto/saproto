@@ -1,6 +1,6 @@
 <h1 align="center">
     <a href="https://proto.utwente.nl">
-        <img alt="Proto logo" src="public/images/logo/banner-regular.png" width="100%">
+        <img alt="Proto logo" src="https://raw.githubusercontent.com/saproto/saproto/master/public/images/logo/banner-regular.png" width="100%">
     </a>
     <br>
     S.A. Proto
