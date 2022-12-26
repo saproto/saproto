@@ -6,6 +6,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
@@ -120,13 +121,33 @@ class ApiController extends Controller
         }
     }
 
-    public function randomPhoto() {
-        $photo = Photo::where('private', false)->whereHas('album', function ($query) {
+    public function randomPhoto(): JsonResponse
+    {
+        $privateQuery = Photo::query()->where('private', false)->whereHas('album', function ($query) {
             $query->where('published', true)->where('private', false);
-        })->inRandomOrder()->with('album')->first();
+        });
 
-        if(! $photo){
+        if(!$privateQuery->count()){
             return response()->json(['error' => 'No public photos found!.'], 404);
+        }
+
+        $random = mt_rand(1, 100);
+        if ($random > 0 && $random <= 30) { //30% chance the photo is from within the last year
+            $query=(clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYear()->timestamp, Carbon::now()->timestamp]);
+        } else if ($random > 30 && $random <= 55) { //25% chance the photo is from one year ago
+            $query=(clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(2)->timestamp, Carbon::now()->subYear()->timestamp]);
+        }else if ($random > 55 && $random <= 70) {//15% chance the photo is from two years ago
+            $query=(clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(3)->timestamp, Carbon::now()->subYears(2)->timestamp]);
+        }else if ($random > 70 && $random <= 80) {//10% chance the photo is from three years ago
+            $query=(clone $privateQuery)->whereBetween('date_taken',[Carbon::now()->subYears(4)->timestamp, Carbon::now()->subYears(3)->timestamp]);
+        } else {//20% chance the photo is older than 4 years
+            $query=(clone $privateQuery)->where('date_taken','>', Carbon::now()->subYears(4)->timestamp);
+        }
+        $photo=$query->inRandomOrder()->with('album')->first();
+
+//        if we picked a year and therefore a query where no photos exist, pick a random public photo as fallback
+        if(!$photo){
+            $photo=$privateQuery->inRandomOrder()->with('album')->first();
         }
 
         return response()->JSON([
