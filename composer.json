@@ -89,7 +89,8 @@
   "autoload": {
     "psr-4": {
       "Proto\\": "app/",
-      "Database\\Seeders\\": "database/seeders/"
+      "Database\\Seeders\\": "database/seeders/",
+      "Database\\Factories\\": "database/factories/"
     }
   },
   "scripts": {

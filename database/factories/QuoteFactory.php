@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Proto\Models\Bank;
+use Proto\Models\Quote;
+use Proto\Models\User;
 
 /**
- * @extends Factory<Bank>
+ * @extends Factory<Quote>
  */
-class BankFactory extends Factory
+class QuoteFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,9 +19,8 @@ class BankFactory extends Factory
     public function definition()
     {
         return [
-            'iban' => fake()->iban(),
-            'bic' => fake()->swiftBicNumber,
-            'machtigingid' => 'PROTOX'.fake()->randomNumber(5, true).'X'.fake()->randomNumber(5, true),
+            'user_id' => User::inRandomOrder()->first()->id,
+            'quote' => fake()->realTextBetween(50, 200),
         ];
     }
 }
