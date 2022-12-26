@@ -32,38 +32,35 @@
             <div class="form-group">
                 <label for="tier">Tier:</label>
                 <select class="form-control {{ $achievement->tier ?? '' }}" name="tier">
-                    <option value="COMMON"
-                            {{ ($achievement && $achievement->tier == "COMMON" ? 'selected' : '') }}>
+                    <option value="COMMON" @selected($achievement?->tier == "COMMON")>
                         Common
                     </option>
-                    <option value="UNCOMMON"
-                            {{ ($achievement && $achievement->tier == "UNCOMMON" ? 'selected' : '') }}>
+                    <option value="UNCOMMON" @selected($achievement?->tier == "UNCOMMON")>
                         Uncommon
                     </option>
-                    <option value="RARE"
-                            {{ ($achievement && $achievement->tier == "RARE" ? 'selected' : '') }}>Rare
+                    <option value="RARE" @selected($achievement?->tier == "RARE")>
+                        Rare
                     </option>
-                    <option value="EPIC"
-                            {{ ($achievement && $achievement->tier == "EPIC" ? 'selected' : '') }}>Epic
+                    <option value="EPIC" @selected($achievement?->tier == "EPIC")>
+                        Epic
                     </option>
-                    <option value="LEGENDARY"
-                            {{ ($achievement && $achievement->tier == "LEGENDARY" ? 'selected' : '') }}>
+                    <option value="LEGENDARY" @selected($achievement?->tier == "LEGENDARY")>
                         Legendary
                     </option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <input type="checkbox" id="is_archived" name="is_archived"
-                       {{ ($achievement && $achievement->is_archived ? 'checked' : '') }}>
-                <label for="is_archived">Archive this achievement</label>
-            </div>
+            @include('components.forms.checkbox', [
+                'name' => 'is_archived',
+                'checked' => $achievement?->is_archived,
+                'label' => 'This achievement is archived'
+            ])
 
-            <div class="form-group">
-                <input type="checkbox" id="has_page" name="has_page"
-                       {{ ($achievement && $achievement->has_page ? 'checked' : '') }}>
-                <label for="has_page">Can be achieved by visiting url</label>
-            </div>
+            @include('components.forms.checkbox',[
+                'name' => 'has_page',
+                'checked' => $achievement?->has_page,
+                'label' => 'Can be achieved by visiting url'
+            ])
 
             <div id="achieve_page_block" class="d-none" @if(!$achievement || !$achievement->has_page) @endif>
 
@@ -83,7 +80,7 @@
 
                 <div class="form-group">
                     <label for="content">Content</label>
-                    @include('website.layouts.macros.markdownfield', [
+                    @include('components.forms.markdownfield', [
                         'name' => 'page_content',
                         'placeholder' => 'Achievement page message.',
                         'value' => $achievement->page_content ?? null
@@ -91,7 +88,6 @@
                 </div>
 
             </div>
-
 
 
         </div>
@@ -112,7 +108,7 @@
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
         let pageBlock = document.getElementById('achieve_page_block')
         document.getElementById('has_page').addEventListener('click', e => {
-            if(e.target.checked) {
+            if (e.target.checked) {
                 pageBlock.classList.remove('d-none')
                 pageBlock.querySelector('input').required = true
             } else {

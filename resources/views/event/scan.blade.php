@@ -15,10 +15,12 @@
 
     <title>Ticket Scanner for {{ $event->title }}</title>
 
-    @include('website.layouts.assets.stylesheets')
+    @include('website.assets.stylesheets')
 
     <style type="text/css">
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         html {
             background-color: #555;
@@ -61,7 +63,9 @@
         }
 
         @keyframes blink {
-            50% { opacity: 0; }
+            50% {
+                opacity: 0;
+            }
         }
 
         .fade-out-50 {
@@ -69,8 +73,12 @@
         }
 
         @keyframes fade-out-50 {
-            from { opacity: 0.5; }
-            to { opacity: 0; }
+            from {
+                opacity: 0.5;
+            }
+            to {
+                opacity: 0;
+            }
         }
 
         #flash {
@@ -147,7 +155,7 @@
 
 <div id="flash"></div>
 
-@include('website.layouts.assets.javascripts')
+@include('website.assets.javascripts')
 
 <script type="text/javascript" nonce="{{ csp_nonce() }}">
     const feedbackField = document.getElementById("feedback-field")
@@ -207,17 +215,19 @@
         }
     }
 
-    const flash = color => { document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50' }
+    const flash = color => {
+        document.getElementById('flash').className = 'bg-' + color + ' opacity-0 fade-out-50'
+    }
 
     function scan(barcode) {
         if (barcode === '') return
         setStatus('received')
-        get('{{ route('api::scan', ['event' => $event->id]) }}', { barcode: barcode })
-        .then(res => parseReply(res.data, res.message, res.code))
-        .catch(err => {
-            console.error(err)
-            setStatus('error')
-        })
+        get('{{ route('api::scan', ['event' => $event->id]) }}', {barcode: barcode})
+            .then(res => parseReply(res.data, res.message, res.code))
+            .catch(err => {
+                console.error(err)
+                setStatus('error')
+            })
     }
 
     function parseReply(data, message, code) {

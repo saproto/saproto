@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -143,6 +144,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     use SoftDeletes;
     use HasApiTokens;
     use HasRoles;
+    use HasFactory;
 
     protected $table = 'users';
 
@@ -357,7 +359,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
             if (! $orderline->isPayed()) {
                 return true;
             }
-            if ($orderline->withdrawal && $orderline->withdrawal->id !== 1 && ! $orderline->withdrawal->closed) {
+            if ($orderline->withdrawal?->id !== 1 && ! $orderline->withdrawal->closed) {
                 return true;
             }
         }
@@ -593,7 +595,7 @@ class User extends Authenticatable implements AuthenticatableContract, CanResetP
     /** @return bool */
     public function getSignedMembershipFormAttribute()
     {
-        return $this->member && $this->member->membershipForm !== null;
+        return $this->member?->membershipForm !== null;
     }
 
     /** @return bool */

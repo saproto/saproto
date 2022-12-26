@@ -13,7 +13,7 @@
             {!! $subtitle !!}
         </div>
     </div>
-    @if(isset($footer) && $footer)
+    @if(!empty($footer))
         <div class="card-footer">
             {!! $footer !!}
         </div>

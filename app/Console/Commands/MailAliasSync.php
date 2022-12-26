@@ -99,6 +99,7 @@ class MailAliasSync extends Command
         $data = [];
 
         // Constructing user forwarders.
+        /** @var User[] $users */
         $users = User::all();
         foreach ($users as $user) {
             if ($user->is_member && $user->isActiveMember()) {
@@ -109,6 +110,7 @@ class MailAliasSync extends Command
         }
 
         // Constructing committee forwarders.
+        /** @var Committee[] $committees */
         $committees = Committee::all();
         foreach ($committees as $committee) {
             $destinations = [];

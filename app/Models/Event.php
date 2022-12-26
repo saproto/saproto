@@ -118,7 +118,7 @@ class Event extends Model
     public function mayViewEvent($user)
     {
         //board may always view events
-        if($user && $user->can('board')){
+        if($user?->can('board')){
             return true;
         }
 
@@ -249,7 +249,7 @@ class Event extends Model
      */
     public function isEventAdmin($user)
     {
-        return $user->can('board') || ($this->committee && $this->committee->isMember($user)) || $this->isEventEro($user);
+        return $user->can('board') || ($this->committee?->isMember($user)) || $this->isEventEro($user);
     }
 
     /**

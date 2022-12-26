@@ -24,14 +24,15 @@
 
                         <p class="card-text text-center">
 
-                            There are currently <strong>{{ \Proto\Http\Controllers\WithdrawalController::openOrderlinesTotal() }}</strong>
+                            There are currently
+                            <strong>{{ \Proto\Http\Controllers\WithdrawalController::openOrderlinesTotal() }}</strong>
                             unpaid orderlines for a grand total of
                             <strong>&euro;{{ number_format(\Proto\Http\Controllers\WithdrawalController::openOrderlinesSum(), 2, ',', '.') }}</strong>.
 
                         </p>
 
                         @php($wd = Carbon::createFromFormat('Y-m-d', date('Y-m-25')))
-                        @include('website.layouts.macros.datetimepicker', [
+                        @include('components.forms.datetimepicker', [
                             'name' => 'date',
                             'label' => 'Withdrawal date:',
                             'placeholder' => strtotime(Carbon::now()->day > 20 ? $wd->addMonth() : $wd),

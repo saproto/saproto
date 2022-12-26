@@ -91,7 +91,7 @@ class SearchController extends Controller
             }
         }
 
-        return view('website.search', [
+        return view('search.search', [
             'term' => $term,
             'users' => $users,
             'pages' => $pages,
@@ -130,7 +130,7 @@ class SearchController extends Controller
             }
         }
 
-        return view('website.ldapsearch', [
+        return view('search.ldapsearch', [
             'term' => $query,
             'data' => (array) $data,
         ]);

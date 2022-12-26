@@ -11,9 +11,9 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.layouts.macros.featuredevents', ['n' => 6])
+        @include('website.home.cards.featuredevents', ['n' => 6])
 
-        @include('website.layouts.macros.leaderboards')
+        @include('website.home.cards.leaderboards')
 
         @if (count($birthdays) > 0)
 
@@ -44,7 +44,7 @@
 
     <div class="col-xl-4 col-md-12">
 
-        @include('website.layouts.macros.upcomingevents', ['n' => 6])
+        @include('website.home.cards.upcomingevents', ['n' => 6])
 
     </div>
 
@@ -70,12 +70,12 @@
 
             <div class="card mb-3">
 
-                    <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
-                    <div class="card-body">
-                        @foreach($dinnerforms as $dinnerform)
-                            @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
-                        @endforeach
-                    </div>
+                <div class="card-header bg-dark text-white"><i class="fas fa-utensils fa-fw me-2"></i> Dinnerform</div>
+                <div class="card-body">
+                    @foreach($dinnerforms as $dinnerform)
+                        @include('dinnerform.includes.dinnerform-block', ['dinnerform'=> $dinnerform])
+                    @endforeach
+                </div>
 
             </div>
 
@@ -91,7 +91,8 @@
                     {!! Markdown::convert(Proto\Models\Newsletter::text()) !!}
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue reading</a>
+                    <a href="{{ route("newsletter::preview") }}" class="btn btn-info btn-block my-2">Continue
+                        reading</a>
                 </div>
             </div>
 
@@ -125,7 +126,7 @@
 
 @section('right-column')
 
-    @include('website.layouts.macros.recentalbums', ['n' => 4])
+    @include('website.home.cards.recentalbums', ['n' => 4])
 
     <div class="card mb-3">
         <div class="card-header bg-dark text-white"><i class="fas fa-newspaper fa-fw me-2"></i> News</div>
@@ -135,7 +136,7 @@
 
                 @foreach($newsitems as $index => $newsitem)
 
-                    @include('website.layouts.macros.card-bg-image', [
+                    @include('website.home.cards.card-bg-image', [
                     'url' => $newsitem->url,
                     'img' => $newsitem->featuredImage ? $newsitem->featuredImage->thumbnail() : null,
                     'html' => sprintf('<strong>%s</strong><br><em>Published %s</em>', $newsitem->title, Carbon::parse($newsitem->published_at)->diffForHumans()),

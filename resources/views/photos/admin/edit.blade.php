@@ -28,7 +28,8 @@
                 @endcan
             @else
                 @can('publishalbums')
-                    <a class="btn btn-danger text-white btn-block mb-3" href="{{ route('photo::admin::publish', ['id'=>$photos->album_id]) }}">
+                    <a class="btn btn-danger text-white btn-block mb-3"
+                       href="{{ route('photo::admin::publish', ['id'=>$photos->album_id]) }}">
                         This album is not yet published, click here to publish the album.
                     </a>
                 @else
@@ -58,22 +59,23 @@
                                 <input required type="text" id="album" name="album" class="form-control"
                                        value="{{ $photos->album_title }}">
                             </div>
-                            @include('website.layouts.macros.datetimepicker', [
+                            @include('components.forms.datetimepicker', [
                                 'name' => 'date',
                                 'label' => 'Album date:',
                                 'placeholder' => date($photos->album_date),
                                 'format' => 'date'
                             ])
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="private"
-                                       name="private" {{ $photos->private ? "checked" : "" }}>
-                                <label class="form-check-label" for="private">Private album</label>
-                            </div>
+                            @include('components.forms.checkbox', [
+                                'name' => 'private',
+                                'checked' => $photos->private,
+                                'label' => 'Private album'
+                            ])
                         </div>
 
                         <div class="card-footer">
                             <input type="submit" class="btn btn-success btn-block mb-1" value="Save">
-                            <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                            <button type="button" class="btn btn-danger btn-block" data-bs-toggle="modal"
+                                    data-bs-target="#delete-modal">
                                 Delete Album
                             </button>
                         </div>
@@ -106,7 +108,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-danger" href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">
+                            <a class="btn btn-danger"
+                               href="{{ route('photo::admin::delete', ['id' => $photos->album_id]) }}">
                                 Delete Album
                             </a>
                         </div>
@@ -122,7 +125,8 @@
                 </div>
 
                 @isset($photos->thumb)
-                    <div class="card-body" style="height: 300px; background: url({{ $photos->thumb }}) no-repeat center; background-size: cover;"></div>
+                    <div class="card-body"
+                         style="height: 300px; background: url({{ $photos->thumb }}) no-repeat center; background-size: cover;"></div>
                 @else
                     <div class="card-body d-flex opacity-25" style="height: 300px;">
                         <div class="text-center m-auto">
@@ -148,12 +152,14 @@
                             <ul></ul>
                         </div>
                         <div id="upload-view" class="row position-relative"></div>
-                        <div id="droparea" class="d-flex opacity-25 border border-2 border-light rounded-3" style="height: 200px">
+                        <div id="droparea" class="d-flex opacity-25 border border-2 border-light rounded-3"
+                             style="height: 200px">
                             <div id="droparea-content" class="text-center m-auto pointer-events-none">
                                 <i class="fa fa-images fa-5x mt-2"></i>
                                 <p>
                                     <span>Drop photos to upload</span>
-                                    <span id="droparea-loader" class="spinner-border spinner-border-sm ms-1 d-none" role="status"></span>
+                                    <span id="droparea-loader" class="spinner-border spinner-border-sm ms-1 d-none"
+                                          role="status"></span>
                                 </p>
                             </div>
                         </div>
@@ -197,18 +203,23 @@
 
                                     </div>
 
-                                    <div class="modal fade" id="published-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal fade" id="published-modal" tabindex="-1" role="dialog"
+                                         aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title">Perform action</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    This album has already been published. Are you sure you want perform this action?
+                                                    This album has already been published. Are you sure you want perform
+                                                    this action?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
                                                     <span id="confirm-button"></span>
                                                 </div>
                                             </div>
@@ -222,7 +233,7 @@
 
                             @foreach($photos->photos as $key => $photo)
 
-                                @include('website.layouts.macros.selectablephoto', ['photo' => $photo])
+                                @include('photos.includes.selectablephoto', ['photo' => $photo])
 
                             @endforeach
 

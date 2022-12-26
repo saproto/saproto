@@ -7,7 +7,7 @@
              style="{{ $event->image && (!isset($hide_photo) || !$hide_photo) ? sprintf('background: center no-repeat url(%s);', $event->image->generateImagePath(800,300)) : '' }} background-size: cover;">
 
             {{-- Countdown --}}
-            @if(isset($countdown) && $countdown)
+            @if(!empty($countdown))
                 <div class="btn btn-info btn-block mb-3 ">
                     <i class="fas fa-circle-notch fa-fw fa-spin me-2" aria-hidden="true"></i>
                     <span class="proto-countdown" data-countdown-start="{{ $event->start }}" data-countdown-text-counting="Starts in {}" data-countdown-text-finished="Event is underway!">
@@ -44,7 +44,7 @@
             @endif
 
             {{-- Helper --}}
-            @if (Auth::check() && Auth::user()->is_member && $event->activity && $event->activity->inNeedOfHelp(Auth::user()))
+            @if (Auth::check() && Auth::user()->is_member && $event->activity?->inNeedOfHelp(Auth::user()))
                 <i class="fas fa-exclamation-triangle fa-fw text-danger" aria-hidden="true"
                    data-bs-toggle="tooltip" data-bs-placement="top" title="This activity needs your help!"></i>
             @endif

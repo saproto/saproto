@@ -57,7 +57,7 @@ class HelperNotificationsCron extends Command
                     ->with('activity')->with('activity.event')->get()->sortBy('activity.event.start');
 
                 foreach ($helps as $help) {
-                    if ($help->activity && $help->activity->event && $help->amount > $help->helperCount() && $help->activity->event->start > time()) {
+                    if ($help->activity?->event && $help->amount > $help->helperCount() && $help->activity->event->start > time()) {
                         if (isset($help->activity->event->id)) {
                             if (! isset($events[$help->activity->event->id])) {
                                 $events[$help->activity->event->id] = new \stdClass();

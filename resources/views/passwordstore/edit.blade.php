@@ -33,7 +33,7 @@
                         <select name="permission_id" class="form-control mb-3" required>
                             @foreach(Permission::all() as $permission)
                                 @can($permission->name)
-                                    <option value="{{ $permission->id }}" {{ ($password && $permission->id == $password->permission_id ? 'selected' : '') }}>
+                                    <option value="{{ $permission->id }}" @selected($password && $permission->id == $password->permission_id)>
                                         {{ $permission->display_name }}
                                     </option>
                                 @endcan
@@ -64,7 +64,7 @@
                         @endif
 
                         <textarea class="form-control mb-3" name="note" rows="10"
-                                  placeholder="The content.">{{ $password && $password->note ? Crypt::decrypt($password->note) : '' }}</textarea>
+                                  placeholder="The content.">{{ $password?->note ? Crypt::decrypt($password->note) : '' }}</textarea>
 
                     </div>
 

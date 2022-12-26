@@ -395,13 +395,13 @@ class EventController extends Controller
                 continue;
             }
 
-            $participants = ($user && $user->is_member && $event->activity ? $event->activity->users->map(function ($item) {
+            $participants = ($user?->is_member && $event->activity ? $event->activity->users->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview,
                 ];
             }) : null);
-            $backupParticipants = ($user && $user->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
+            $backupParticipants = ($user?->is_member && $event->activity ? $event->activity->backupUsers->map(function ($item) {
                 return (object) [
                     'name' => $item->name,
                     'photo' => $item->photo_preview,
@@ -431,8 +431,8 @@ class EventController extends Controller
                 'price' => ($event->activity ? $event->activity->price : null),
                 'no_show_fee' => ($event->activity ? $event->activity->no_show_fee : null),
                 'user_signedup' => ($user && $event->activity ? $event->activity->isParticipating($user) : null),
-                'user_signedup_backup' => (bool) ($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
-                'user_signedup_id' => ($user && $event->activity && $event->activity->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
+                'user_signedup_backup' => (bool) ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->backup : null),
+                'user_signedup_id' => ($user && $event->activity?->isParticipating($user) ? $event->activity->getParticipation($user)->id : null),
                 'can_signup' => ($user && $event->activity ? $event->activity->canSubscribe() : null),
                 'can_signup_backup' => ($user && $event->activity ? $event->activity->canSubscribeBackup() : null),
                 'can_signout' => ($user && $event->activity ? $event->activity->canUnsubscribe() : null),

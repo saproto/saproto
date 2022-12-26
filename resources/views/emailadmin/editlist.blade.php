@@ -16,49 +16,47 @@
 
                 {!! csrf_field() !!}
 
-            <div class="card mb-3">
+                <div class="card mb-3">
 
-                <div class="card-header bg-dark text-white">
-                    @yield('page-title')
-                </div>
-
-                <div class="card-body">
-
-                    <div class="form-group">
-                        <label for="name">List name:</label>
-                        <input type="text" class="form-control" id="name" name="name"
-                               placeholder="Members will see this name, make it descriptive."
-                               value="{{ $list->name ?? '' }}" required>
+                    <div class="card-header bg-dark text-white">
+                        @yield('page-title')
                     </div>
 
-                    <div class="form-group">
-                        <label for="editor">Description</label>
-                        @include('website.layouts.macros.markdownfield', [
-                            'name' => 'description',
-                            'placeholder' => 'Text goes here.',
-                            'value' => $list ? $list->description: null
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="name">List name:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   placeholder="Members will see this name, make it descriptive."
+                                   value="{{ $list->name ?? '' }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editor">Description</label>
+                            @include('components.forms.markdownfield', [
+                                'name' => 'description',
+                                'placeholder' => 'Text goes here.',
+                                'value' => $list ? $list->description: null
+                            ])
+                        </div>
+
+                        @include('components.forms.checkbox', [
+                            'name' => 'is_member_only',
+                            'checked' => $list->is_member_only ,
+                            'label' => 'Only for members'
                         ])
+
                     </div>
 
-                    <div class="checkbox float-start">
-                        <label>
-                            <input type="checkbox"
-                                   name="is_member_only" {{ $list != null && $list->is_member_only ? 'checked="checked"' : '' }}>
-                            Only for members
-                        </label>
+                    <div class="card-footer">
+
+                        <button type="submit" class="btn btn-success float-end">Submit</button>
+
+                        <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
+
                     </div>
 
                 </div>
-
-                <div class="card-footer">
-
-                    <button type="submit" class="btn btn-success float-end">Submit</button>
-
-                    <a href="{{ route("email::admin") }}" class="btn btn-default">Cancel</a>
-
-                </div>
-
-            </div>
 
             </form>
 
