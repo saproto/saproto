@@ -29,13 +29,13 @@ class WithdrawalController extends Controller
     /**
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('omnomcom.withdrawals.index', ['withdrawals' => Withdrawal::orderBy('id', 'desc')->paginate(6)]);
     }
 
     /** @return View */
-    public function create()
+    public function create(): View
     {
         return view('omnomcom.withdrawals.create');
     }
@@ -44,7 +44,7 @@ class WithdrawalController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $max = ($request->has('max') ? $request->input('max') : null);
         if ($max < 0) {
@@ -105,7 +105,7 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return View
      */
-    public function show($id)
+    public function show(int $id): View
     {
         return view('omnomcom.withdrawals.show', ['withdrawal' => Withdrawal::findOrFail($id)]);
     }
@@ -114,7 +114,7 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return View
      */
-    public function showAccounts($id)
+    public function showAccounts(int $id): View
     {
         $withdrawal = Withdrawal::findOrFail($id);
 
@@ -138,7 +138,7 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
@@ -167,7 +167,7 @@ class WithdrawalController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id): RedirectResponse
     {
         $withdrawal = Withdrawal::findOrFail($id);
 
@@ -193,13 +193,82 @@ class WithdrawalController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param int $id
-     * @param int $user_id
+     * @param Withdrawal $withdrawal
+     * @param int[] $userIds
      * @return RedirectResponse
      */
-    public static function deleteFrom(Request $request, $id, $user_id)
+    public static function deleteFrom(Withdrawal $withdrawal, array $userIds): RedirectResponse
     {
+        $names = '';
+        foreach ($userIds as $user_id) {
+            /** @var User $user */
+            $user = User::find($user_id);
+
+            foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
+                $orderline->withdrawal()->dissociate();
+                $orderline->save();
+            }
+
+            $names .= $user->name.', ';
+        }
+
+        Session::flash('flash_message', "Orderlines for $names removed from this withdrawal.");
+        return Redirect::back();
+    }
+
+    /**
+     * @param Withdrawal $withdrawal
+     * @param int[] $userIds
+     * @return RedirectResponse
+     */
+    public static function markFailed(Withdrawal $withdrawal, array $userIds): RedirectResponse
+    {
+        $names = '';
+        foreach($userIds as $user_id) {
+            /** @var User $user */
+            $user = User::find($user_id);
+
+            if (FailedWithdrawal::where('user_id', $user_id)->where('withdrawal_id', $withdrawal->id)->first() !== null) {
+                continue;
+            }
+
+            /** @var Product $product */
+            $product = Product::findOrFail(config('omnomcom.failed-withdrawal'));
+            $total = $withdrawal->totalForUser($user);
+
+            /** @var OrderLine $failedOrderline */
+            $failedOrderline = OrderLine::findOrFail(
+                $product->buyForUser(
+                    $user,
+                    1,
+                    $total,
+                    null,
+                    null,
+                    sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
+                    sprintf('failed_withdrawal_by_%u', Auth::user()->id)
+                )
+            );
+
+            FailedWithdrawal::create([
+                'user_id' => $user->id,
+                'withdrawal_id' => $withdrawal->id,
+                'correction_orderline_id' => $failedOrderline->id,
+            ])->save();
+
+            Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
+            $names .= $user->name.', ';
+        }
+
+        Session::flash('flash_message', "Withdrawal for $names marked as failed. Users e-mailed.");
+        return Redirect::back();
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse|void
+     */
+    public function bulkUpdate(Request $request, int $id) {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
 
@@ -208,16 +277,25 @@ class WithdrawalController extends Controller
             return Redirect::back();
         }
 
-        /** @var User $user */
-        $user = User::findOrFail($user_id);
-
-        foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
-            $orderline->withdrawal()->dissociate();
-            $orderline->save();
+        $action = $request->input('action');
+        $userIds = $request->input('markids');
+        if(! $action){
+            Session::flash('flash_message', 'No action given, please use one of the action buttons');
+            return Redirect::back();
+        }
+        if(! $userIds || count($userIds) <= 0){
+            Session::flash('flash_message', 'No users given to perform the action on!');
+            return Redirect::back();
         }
 
-        Session::flash('flash_message', "Orderlines for $user->name removed from this withdrawal.");
-        return Redirect::back();
+        if($action === 'markfailed'){
+            return $this->markFailed($withdrawal, $userIds);
+        }elseif($action === 'remove'){
+            return $this->deleteFrom($withdrawal, $userIds);
+        }else{
+            Session::flash('flash_message', 'The inputted action is not recognised, please try again');
+            return Redirect::back();
+        }
     }
 
     /**
@@ -226,60 +304,7 @@ class WithdrawalController extends Controller
      * @param int $user_id
      * @return RedirectResponse
      */
-    public static function markFailed(Request $request, $id, $user_id)
-    {
-        /** @var Withdrawal $withdrawal */
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        if ($withdrawal->closed) {
-            Session::flash('flash_message', 'This withdrawal is already closed and cannot be edited.');
-            return Redirect::back();
-        }
-
-        /** @var User $user */
-        $user = User::findOrFail($user_id);
-
-        if (FailedWithdrawal::where('user_id', $user_id)->where('withdrawal_id', $id)->first() !== null) {
-            Session::flash('flash_message', 'This withdrawal has already been marked as failed.');
-            return Redirect::back();
-        }
-
-        /** @var Product $product */
-        $product = Product::findOrFail(config('omnomcom.failed-withdrawal'));
-        $total = $withdrawal->totalForUser($user);
-
-        /** @var OrderLine $failedOrderline */
-        $failedOrderline = OrderLine::findOrFail(
-            $product->buyForUser(
-                $user,
-                1,
-                $total,
-                null,
-                null,
-                sprintf('Overdue payment due to the failed withdrawal from %s.', date('d-m-Y', strtotime($withdrawal->date))),
-                sprintf('failed_withdrawal_by_%u', Auth::user()->id)
-            )
-        );
-
-        FailedWithdrawal::create([
-            'user_id' => $user->id,
-            'withdrawal_id' => $withdrawal->id,
-            'correction_orderline_id' => $failedOrderline->id,
-        ])->save();
-
-        Mail::to($user)->queue((new OmnomcomFailedWithdrawalNotification($user, $withdrawal))->onQueue('medium'));
-
-        Session::flash('flash_message', "Withdrawal for $user->name marked as failed. User e-mailed.");
-        return Redirect::back();
-    }
-
-    /**
-     * @param Request $request
-     * @param int $id
-     * @param int $user_id
-     * @return RedirectResponse
-     */
-    public static function markLoss(Request $request, $id, $user_id)
+    public static function markLoss(Request $request, int $id, int $user_id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
@@ -311,7 +336,7 @@ class WithdrawalController extends Controller
      * @return RedirectResponse|\Illuminate\Http\Response
      * @throws SephpaInputException
      */
-    public static function export(Request $request, $id)
+    public static function export(Request $request, int $id)
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
@@ -397,7 +422,7 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return View
      */
-    public function showForUser(Request $request, $id)
+    public function showForUser(Request $request, int $id): View
     {
         $withdrawal = Withdrawal::findOrFail($id);
         return view('omnomcom.withdrawals.userhistory', ['withdrawal' => $withdrawal, 'orderlines' => $withdrawal->orderlinesForUser(Auth::user())]);
@@ -410,7 +435,7 @@ class WithdrawalController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function email(Request $request, $id)
+    public function email(Request $request, int $id): RedirectResponse
     {
         /** @var Withdrawal $withdrawal */
         $withdrawal = Withdrawal::findOrFail($id);
@@ -429,7 +454,7 @@ class WithdrawalController extends Controller
     }
 
     /** @return View */
-    public function unwithdrawable()
+    public function unwithdrawable(): View
     {
         $users = [];
 
@@ -462,7 +487,7 @@ class WithdrawalController extends Controller
     }
 
     /** @return float|int */
-    public static function openOrderlinesSum()
+    public static function openOrderlinesSum(): int
     {
         $sum = 0;
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {
@@ -476,7 +501,7 @@ class WithdrawalController extends Controller
     }
 
     /** @return int */
-    public static function openOrderlinesTotal()
+    public static function openOrderlinesTotal(): int
     {
         $total = 0;
         foreach (OrderLine::whereNull('payed_with_withdrawal')->get() as $orderline) {

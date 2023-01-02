@@ -48,6 +48,7 @@
                             <th>Status</th>
                             <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
                         </tr>
+
                         </tbody>
 
                     </table>
@@ -122,6 +123,7 @@
                         <tr class="bg-dark text-white">
                             <td>User</td>
                             @if(!$withdrawal->closed)
+                                <td>Bulk update</td>
                                 <td>Bank Account</td>
                                 <td>Authorization</td>
                             @endif
@@ -130,73 +132,77 @@
                             @if(!$withdrawal->closed)
                                 <td>Controls</td>
                             @endif
+
                         </tr>
                         </thead>
+                        <form method="post" action="{{route('omnomcom::withdrawal::bulkupdate', ['id'=>$withdrawal->id])}}">
+                            {!! csrf_field() !!}
+                            @foreach($withdrawal->totalsPerUser() as $data)
 
-                        @foreach($withdrawal->totalsPerUser() as $data)
-
-                            <tr>
-                                <td>{{ $data->user->name }}</td>
-                                @if(! $withdrawal->closed)
-                                    @isset($data->user->bank)
+                                <tr>
+                                    <td>{{ $data->user->name }}</td>
+                                    @if(! $withdrawal->closed)
                                         <td>
-                                            {{ $data->user->bank->iban }}
-                                            <span class="text-muted">/ {{ $data->user->bank->bic }}</span>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="markids[]" value="{{$data->user->id}}">
+                                            </div>
                                         </td>
-                                        <td>{{ $data->user->bank->machtigingid }}</td>
-                                    @else
-                                        <td class="text-warning">
-                                            <i class="fa fas fa-exclamation-triangle"></i>
-                                            <strong>No bank account!</strong>
-                                        </td>
-                                        <td></td>
-                                    @endisset
-                                @endif
-                                <td>{{ $data->count }}</td>
-                                <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
-                                @if(!$withdrawal->closed)
-                                    <td>
-                                        @if($withdrawal->getFailedWithdrawal($data->user))
-                                            Failed
-                                            @include('website.layouts.macros.confirm-modal', [
-                                               'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
-                                               'text' => '(Revert)',
-                                               'title' => 'Confirm Revert',
-                                               'message' => 'Are you sure you want to revert this withdrawal? The user will <b>NOT</b> automatically receive an e-mail about this!',
-                                               'confirm' => 'Revert',
-                                            ])
+                                        @isset($data->user->bank)
+                                            <td>
+                                                {{ $data->user->bank->iban }}
+                                                <span class="text-muted">/ {{ $data->user->bank->bic }}</span>
+                                            </td>
+                                            <td>{{ $data->user->bank->machtigingid }}</td>
                                         @else
-                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}" class="text-white fw-bold underline-on-hover">
-                                                Remove
-                                            </a>
-
-                                            |
-
-                                            @include('website.layouts.macros.confirm-modal', [
-                                               'action' => route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
-                                               'text' => 'Failed',
-                                               'title' => 'Confirm Marking Failed',
-                                               'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
-                                               'classes' => 'text-white fw-bold underline-on-hover'
-                                            ])
-
-                                            |
-
-                                            @include('website.layouts.macros.confirm-modal', [
-                                               'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
-                                               'text' => 'Loss',
-                                               'title' => 'Confirm Marking Loss',
-                                               'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as a loss? <b>This cannot easily be undone!</b>',
-                                               'classes' => 'text-white fw-bold underline-on-hover'
-                                            ])
-                                        @endif
-                                    </td>
-                                @endif
-                            </tr>
+                                            <td class="text-warning">
+                                                <i class="fa fas fa-exclamation-triangle"></i>
+                                                <strong>No bank account!</strong>
+                                            </td>
+                                            <td></td>
+                                        @endisset
+                                    @endif
+                                    <td>{{ $data->count }}</td>
+                                    <td>&euro;{{ number_format($data->sum, 2, ',', '.') }}</td>
+                                    @if(!$withdrawal->closed)
+                                        <td>
+                                            @if($withdrawal->getFailedWithdrawal($data->user))
+                                                Failed
+                                                @include('website.layouts.macros.confirm-modal', [
+                                                   'action' => route('omnomcom::orders::delete', ['id'=>$withdrawal->getFailedWithdrawal($data->user)->correction_orderline_id]),
+                                                   'text' => '(Revert)',
+                                                   'title' => 'Confirm Revert',
+                                                   'message' => 'Are you sure you want to revert this withdrawal? The user will <b>NOT</b> automatically receive an e-mail about this!',
+                                                   'confirm' => 'Revert',
+                                                ])
+                                            @else
+                                                @include('website.layouts.macros.confirm-modal', [
+                                                   'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
+                                                   'text' => 'Loss',
+                                                   'title' => 'Confirm Marking Loss',
+                                                   'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as a loss? <b>This cannot easily be undone!</b>',
+                                                   'classes' => 'text-white fw-bold underline-on-hover'
+                                                ])
+                                            @endif
+                                        </td>
+                                    @endif
+                                </tr>
 
                         @endforeach
-
                     </table>
+                    @if(!$withdrawal->closed)
+                        <div class="card-footer bg-dark text-white mb-2 mr-2">
+                            <div class="d-inline-flex flex-row flex-row-reverse w-100">
+                                <button name="action" type="submit" value="remove" class="btn btn-danger">
+                                    Remove for selected users
+                                </button>
+
+                                <button name="action" type="submit" value="markfailed" class="btn btn-warning me-2">
+                                    Mark failed for selected users
+                                </button>
+                            </div>
+                        </div>
+                        @endif
+                        </form>
                 </div>
 
             </div>
