@@ -62,7 +62,7 @@ class UserDashboardController extends Controller
 
         if ($new_email !== $user->email) {
             $validator = Validator::make($request->only(['email']), [
-                'email' => ['required','unique:users','email:rfc', new NotUtwenteEmail],
+                'email' => ['required', 'unique:users', 'email:rfc', new NotUtwenteEmail()],
             ]);
             if ($validator->fails()) {
                 return Redirect::route('user::dashboard')->withErrors($validator);

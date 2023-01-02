@@ -27,7 +27,7 @@ class NotUtwenteEmail implements Rule
     {
         $domainPart = explode('@', $value)[1] ?? null;
 
-        if (!$domainPart) {
+        if (! $domainPart) {
             return false;
         }
 
