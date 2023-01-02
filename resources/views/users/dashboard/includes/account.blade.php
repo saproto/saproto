@@ -294,13 +294,6 @@
                             This feature was requested by pretty much everyone.
                         </small>
 
-                        @if(Carbon::now()->month===Carbon::DECEMBER)
-                        <br>
-                        <a href="{{route('advent::toggle')}}">
-                        <button type="button" class="btn btn-warning">{{Cookie::get('disable-december')==='disabled'?'enable':'disable'}} december theme</button>
-                        </a>
-                            @endif
-
                     </td>
                 </tr>
 
