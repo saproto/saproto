@@ -48,7 +48,6 @@
                             <th>Status</th>
                             <td>{{ $withdrawal->closed ? 'Closed' : 'Pending' }}</td>
                         </tr>
-
                         </tbody>
 
                     </table>
@@ -123,7 +122,6 @@
                         <tr class="bg-dark text-white">
                             <td>User</td>
                             @if(!$withdrawal->closed)
-                                <td>Bulk update</td>
                                 <td>Bank Account</td>
                                 <td>Authorization</td>
                             @endif
@@ -132,21 +130,14 @@
                             @if(!$withdrawal->closed)
                                 <td>Controls</td>
                             @endif
-
                         </tr>
                         </thead>
-                        <form method="post" action="{{route('omnomcom::withdrawal::bulkupdate', ['id'=>$withdrawal->id])}}">
-                            {!! csrf_field() !!}
+
                         @foreach($withdrawal->totalsPerUser() as $data)
 
                             <tr>
                                 <td>{{ $data->user->name }}</td>
                                 @if(! $withdrawal->closed)
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="markids[]" value="{{$data->user->id}}">
-                                        </div>
-                                    </td>
                                     @isset($data->user->bank)
                                         <td>
                                             {{ $data->user->bank->iban }}
@@ -175,6 +166,22 @@
                                                'confirm' => 'Revert',
                                             ])
                                         @else
+                                            <a href="{{ route('omnomcom::withdrawal::deleteuser', ['id' => $withdrawal->id, 'user_id' => $data->user->id]) }}" class="text-white fw-bold underline-on-hover">
+                                                Remove
+                                            </a>
+
+                                            |
+
+                                            @include('website.layouts.macros.confirm-modal', [
+                                               'action' => route('omnomcom::withdrawal::markfailed', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
+                                               'text' => 'Failed',
+                                               'title' => 'Confirm Marking Failed',
+                                               'message' => 'Are you sure you want to mark this withdrawal for '.$data->user->name.' as failed? They <b>will</b> automatically receive an e-mail about this!',
+                                               'classes' => 'text-white fw-bold underline-on-hover'
+                                            ])
+
+                                            |
+
                                             @include('website.layouts.macros.confirm-modal', [
                                                'action' => route('omnomcom::withdrawal::markloss', ['id' => $withdrawal->id, 'user_id' => $data->user->id]),
                                                'text' => 'Loss',
@@ -188,21 +195,8 @@
                             </tr>
 
                         @endforeach
-                    </table>
-                    @if(!$withdrawal->closed)
-                    <div class="card-footer bg-dark text-white mb-2 mr-2">
-                        <div class="d-inline-flex flex-row flex-row-reverse w-100">
-                        <button name="action" type="submit" value="remove" class="btn btn-danger">
-                            Remove for selected users
-                        </button>
 
-                        <button name="action" type="submit" value="markfailed" class="btn btn-warning me-2">
-                            Mark failed for selected users
-                        </button>
-                        </div>
-                    </div>
-                    @endif
-                    </form>
+                    </table>
                 </div>
 
             </div>

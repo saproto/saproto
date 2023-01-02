@@ -594,7 +594,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('close/{id}', ['as' => 'close', 'uses' => 'WithdrawalController@close']);
             Route::get('email/{id}', ['as' => 'email', 'uses' => 'WithdrawalController@email']);
 
-            Route::post('bulkupdate/{id}', ['as' => 'bulkupdate', 'uses' => 'WithdrawalController@bulkUpdate']);
+            Route::get('deletefrom/{id}/{user_id}', ['as' => 'deleteuser', 'uses' => 'WithdrawalController@deleteFrom']);
+            Route::get('markfailed/{id}/{user_id}', ['as' => 'markfailed', 'uses' => 'WithdrawalController@markFailed']);
             Route::get('markloss/{id}/{user_id}', ['as' => 'markloss', 'uses' => 'WithdrawalController@markLoss']);
         });
 

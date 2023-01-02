@@ -23,7 +23,6 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
                     'https://protu.be',
-                    'http://localhost:*',
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
