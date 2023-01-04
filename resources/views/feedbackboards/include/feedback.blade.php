@@ -9,8 +9,14 @@
         </span>
 
         @if (Auth::user()->can("board"))
+            @if(!$feedback->deleted_at)
             <a href="{{ route('feedback::archive', ['id' => $feedback->id]) }}" class="float-end"><i
                         class="fas fa-file-archive text-white"></i></a>
+            @else
+                <a href="{{ route('feedback::archive', ['id' => $feedback->id]) }}" class="float-end"><i
+                            class="fas fa-file-archive text-white"></i></a>
+            @endif
+
             @if(!$feedback->reply)
                 <a class="float-end me-2 toggle-navbar-{{$feedback->id}}">
                     <i class="fas fa-reply text-white"></i>
@@ -25,7 +31,7 @@
                                      'action' => route("feedback::delete", ['id' => $feedback->id]),
                                      'text' => '<i class="fas fa-trash text-white"></i>',
                                      'title' => 'Confirm Delete',
-                                     'message' => "Are you sure you want to delete this potentially good idea?",
+                                     'message' => "Are you sure you want to delete this potentially good feedback?",
                                      'confirm' => 'Delete',
                             ])
         @endif

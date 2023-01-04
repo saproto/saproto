@@ -102,5 +102,16 @@
             let categoryId = e.relatedTarget.getAttribute('data-id')
             document.getElementById('delete-category').href = '{{ route('event::category::delete', ['id' => ':id']) }}'.replace(':id', categoryId)
         })
+
+        let checkbox = document.querySelector("input[type=checkbox]");
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                console.log("Checkbox is checked..");
+            } else {
+                console.log("Checkbox is not checked..");
+            }
+        });
+
     </script>
 @endpush

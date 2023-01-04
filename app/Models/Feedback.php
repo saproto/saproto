@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $user_id
  * @property string $feedback
+ * @property-read User|null $reply
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property FeedbackCategory|null $category

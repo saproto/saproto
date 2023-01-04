@@ -496,7 +496,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {
-        Route::group(['prefix' => '/{category}', 'as' => 'category::'], function () {
+        Route::group(['prefix' => '/{category}'], function () {
             Route::get('', ['as' => 'index', 'uses' => 'FeedBackController@index']);
             Route::get('archived', ['as' => 'archived', 'uses' => 'FeedBackController@archived']);
             Route::post('add', ['as' => 'add', 'uses' => 'FeedBackController@add']);

@@ -101,9 +101,14 @@ class FeedBackController extends Controller
             return Redirect::back();
         }
 
-        $feedback = Feedback::findOrFail($id);
-        $feedback->delete();
-        Session::flash('flash_message', 'Good Idea archived.');
+        $feedback = Feedback::withTrashed()->findOrFail($id);
+            if($feedback->trashed()){
+                $feedback->restore();
+                Session::flash('flash_message', 'Good Idea restored.');
+            }else {
+                $feedback->delete();
+                Session::flash('flash_message', 'Good Idea archived.');
+            }
         return Redirect::back();
     }
 
@@ -150,7 +155,7 @@ class FeedBackController extends Controller
         foreach($feedback as $item) {
             $item->delete();
         }
-        return Redirect::route('feedback::category::archived', ['category' => $category->url]);
+        return Redirect::route('feedback::archived', ['category' => $category->url]);
     }
 
     /**

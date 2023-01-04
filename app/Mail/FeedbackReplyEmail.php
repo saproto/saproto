@@ -9,7 +9,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 use Proto\Models\Feedback;
 use Proto\Models\User;
 
-class GoodIdeaReplyEmail extends Mailable
+class FeedbackReply extends Mailable
 {
     use Queueable; use SerializesModels;
 
@@ -25,7 +25,7 @@ class GoodIdeaReplyEmail extends Mailable
      * @param User $user
      * @param $reply
      */
-    public function __construct(Feedback $feedback, User $user, $reply, Boolean $accepted)
+    public function __construct(Feedback $feedback, User $user, $reply, bool $accepted)
     {
         $this->feedback = $feedback;
         $this->user = $user;
