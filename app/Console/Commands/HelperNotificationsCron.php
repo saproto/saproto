@@ -5,6 +5,7 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Mail;
 use Proto\Mail\DailyHelperMail;
+use Proto\Models\CommitteeMembership;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 
@@ -41,24 +42,47 @@ class HelperNotificationsCron extends Command
      */
     public function handle()
     {
-        $users = User::all();
+
+//        1 mail per user met alle events waar minder help is dan nodig
+        //aan het eind notification send = true
+
+        $users = User::query()
+            ->whereHas('member')
+            ->get()
+            ->filter(function ($value, $key) {
+                    return $value->isActiveMember();
+            });
 
         $handledHelpIds = [];
 
         foreach ($users as $user) {
-            if (! $user->isActiveMember()) {
-                continue;
-            }
+//            alle active members
 
             $events = [];
 
             foreach ($user->committees as $committee) {
-                $helps = HelpingCommittee::where('committee_id', $committee->id)->where('notification_sent', '0')
-                    ->with('activity')->with('activity.event')->get()->sortBy('activity.event.start');
+                //loop door alle committees
+                $helps = HelpingCommittee::query()->where('committee_id', $committee->id)
+                    ->where('notification_sent', '0') //check if the event is not yet notified
+                    ->whereHas('activity', function($q){
+                        $q->whereHas('event', function($w){
+                            $w->where('start', '>', \Carbon::now()->timestamp); //check if the event is in the future
+                        });
+                    })
+                    ->whereHas('committee', function($q) use ($user){
+                        $q->whereHas('users',function($w) use ($user){
+                            $w->where('users.id', $user->id); //check if the user is still in the active committee members
+                        });
+                    })
+                    ->with('activity')
+                    ->with('activity.event') //load both activity and the event with the HelpingCommittee
+                    ->get()
+                    ->sortBy('activity.event.start')
+                    ->filter(function ($helpingCommittee) {
+                        return $helpingCommittee->amount > $helpingCommittee->helperCount(); //only include the activities that have not yet have enough helpers
+                    });
 
                 foreach ($helps as $help) {
-                    if ($help->activity && $help->activity->event && $help->amount > $help->helperCount() && $help->activity->event->start > time()) {
-                        if (isset($help->activity->event->id)) {
                             if (! isset($events[$help->activity->event->id])) {
                                 $events[$help->activity->event->id] = new \stdClass();
                                 $events[$help->activity->event->id]->help = [];
@@ -69,24 +93,18 @@ class HelperNotificationsCron extends Command
                             $helpInfo->committeeName = $help->committee->name;
 
                             $events[$help->activity->event->id]->help[] = $helpInfo;
-                        }
 
                         if (! in_array($help->id, $handledHelpIds)) {
                             $handledHelpIds[] = $help->id;
                         }
-                    }
-                }
 
-                unset($committee);
-                unset($helps);
+                }
             }
 
             if (count($events) > 0) {
                 $this->info('Sending notification mail to '.$user->name.' with '.count($events).' events.');
                 Mail::to($user)->queue((new DailyHelperMail($user, $events))->onQueue('low'));
             }
-
-            unset($user);
         }
 
         foreach ($handledHelpIds as $handledHelpId) {
