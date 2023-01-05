@@ -245,7 +245,7 @@ class ApiController extends Controller
                 ];
             }
 
-            foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', function ($q) use($category) {
+            foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', function ($q) use ($category) {
                 $q->where('feedback_category_id', $category->id);
             })->get() as $quote) {
                 $data["liked_$category->url"][] = [
