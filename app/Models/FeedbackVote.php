@@ -6,6 +6,7 @@ use Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -35,10 +36,10 @@ class FeedbackVote extends Model
 
     protected $guarded = ['id'];
 
-    /** @return HasOne */
-    public function feedback(): HasOne
+    /** @return BelongsTo */
+    public function feedback(): BelongsTo
     {
-        return $this->hasOne('Proto\Models\Feedback');
+        return $this->belongsTo('Proto\Models\Feedback');
     }
 
     /** @return HasOne */

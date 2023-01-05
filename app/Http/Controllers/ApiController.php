@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\ActivityParticipation;
 use Proto\Models\EmailListSubscription;
+use Proto\Models\Feedback;
+use Proto\Models\FeedbackCategory;
+use Proto\Models\FeedbackVote;
 use Proto\Models\OrderLine;
 use Proto\Models\Photo;
 use Proto\Models\PhotoLikes;
 use Proto\Models\PlayedVideo;
-use Proto\Models\Quote;
-use Proto\Models\QuoteLike;
 use Proto\Models\RfidCard;
 use Proto\Models\Token;
 use Proto\Models\User;
@@ -236,21 +237,23 @@ class ApiController extends Controller
         foreach (PhotoLikes::where('user_id', $user->id)->get() as $photo_like) {
             $data['liked_photos'][] = $photo_like->photo->url;
         }
+        foreach(FeedbackCategory::all() as $category) {
+            foreach (Feedback::where('user_id', $user->id)->where('feedback_category_id', $category->id)->get() as $quote) {
+                $data["placed_$category->url"][] = [
+                    'quote' => $quote->feedback,
+                    'created_at' => $quote->created_at,
+                ];
+            }
 
-        foreach (Quote::where('user_id', $user->id)->get() as $quote) {
-            $data['placed_quotes'][] = [
-                'quote' => $quote->quote,
-                'created_at' => $quote->created_at,
-            ];
+            foreach (FeedbackVote::where('user_id', $user->id)->whereHas('feedback', function ($q) use($category) {
+                $q->where('feedback_category_id', $category->id);
+            })->get() as $quote) {
+                $data["liked_$category->url"][] = [
+                    'quote' => $quote->feedback->feedback,
+                    'liked_at' => $quote->created_at,
+                ];
+            }
         }
-
-        foreach (QuoteLike::where('user_id', $user->id)->get() as $quote) {
-            $data['liked_quotes'][] = [
-                'quote' => $quote->quote,
-                'liked_at' => $quote->created_at,
-            ];
-        }
-
         return $data;
     }
 }
