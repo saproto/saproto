@@ -189,6 +189,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('{id}/delete', ['as' => 'delete', 'uses' => 'CommitteeController@deleteMembership']);
             Route::get('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembershipForm']);
             Route::post('{id}', ['as' => 'edit', 'uses' => 'CommitteeController@editMembership']);
+            Route::get('end/{committee}/{edition}', ['as' => 'endedition', 'uses' => 'CommitteeController@endEdition']);
         });
 
         Route::get('list', ['as' => 'list', 'uses' => 'CommitteeController@overview']);
