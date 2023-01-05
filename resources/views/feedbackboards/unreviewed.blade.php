@@ -9,7 +9,8 @@
         <div class="card-body">
             @foreach($unreviewed as $feedback)
                 @include('feedbackboards.include.feedback', [
-                'feedback' => $feedback
+                'feedback' => $feedback,
+                'controls'=>false,
                 ])
             @endforeach
         </div>

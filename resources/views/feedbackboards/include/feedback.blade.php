@@ -20,7 +20,7 @@
                             class="fas fa-trash-restore text-white"></i></a>
             @endif
 
-            @if(!$feedback->reply)
+            @if(!$feedback->reply && $controls)
                 <a class="float-end me-2 toggle-navbar-{{$feedback->id}}">
                     <i class="fas fa-reply text-white"></i>
                 </a>
@@ -52,7 +52,7 @@
 
             @endif
 
-            @if (Auth::user()->can("board"))
+            @if (Auth::user()->can("board") && $controls)
 
                 <div class="collapse mt-3" id="idea__{{ $feedback->id }}__collapse">
                     <form method="post" action="{{ route('feedback::reply', ['id' => $feedback->id]) }}">
@@ -92,11 +92,12 @@
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        document.querySelectorAll('.toggle-navbar-{{$feedback->id}}').forEach((element)=>{
-            element.addEventListener('click', (event)=>{
-                document.getElementById("idea__{{ $feedback->id }}__collapse").classList.toggle("show");
-                console.log(document.getElementById("idea__{{ $feedback->id }}__collapse"))
+        if({{isset($controls)}}) {
+            document.querySelectorAll('.toggle-navbar-{{$feedback->id}}').forEach((element) => {
+                element.addEventListener('click', (event) => {
+                    document.getElementById("idea__{{ $feedback->id }}__collapse").classList.toggle("show");
+                })
             })
-        })
+        }
     </script>
 @endpush

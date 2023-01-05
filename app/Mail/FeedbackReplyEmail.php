@@ -9,7 +9,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 use Proto\Models\Feedback;
 use Proto\Models\User;
 
-class FeedbackReply extends Mailable
+class FeedbackReplyEmail extends Mailable
 {
     use Queueable; use SerializesModels;
 

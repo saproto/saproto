@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Mail\FeedbackReply;
+use Proto\Mail\FeedbackReplyEmail;
 use Proto\Models\Feedback;
 use Proto\Models\FeedbackCategory;
 use Proto\Models\FeedbackVote;
@@ -31,12 +31,12 @@ class FeedBackController extends Controller
         $mostVoted=$this->getMostVoted($category);
 
         $unreviewed=$this->getUnreviewed($category);
-        return view('feedbackboards.index', ['data' => $this->getFeedbackQuery($category)->paginate(20), 'mostVoted' => $mostVoted??null, 'category'=>$category, 'unreviewed'=>$unreviewed->get()]);
+        return view('feedbackboards.index', ['data' => $this->getFeedbackQuery($category)->paginate(20), 'mostVoted' => $mostVoted??null, 'category'=>$category, 'unreviewed'=>$unreviewed]);
     }
 
     private function getFeedbackQuery(FeedbackCategory $category): HasMany
     {
-        $feedback = $category->feedback()->orderBy('created_at', 'desc');
+        $feedback = $category->feedback()->orderBy('created_at', 'desc')->with('votes');
         if($category->review && Auth::user()->id!==$category->reviewer_id){
             $feedback=$feedback->where('reviewed', true);
         }
@@ -56,13 +56,15 @@ class FeedBackController extends Controller
     }
 
     private function getUnreviewed(FeedbackCategory $category){
-        $unreviewed=Feedback::where('reviewed', false);
-
-        //only get the reviewed ideas if they require it
-        if($category->review && Auth::user()->id!==$category->reviewer_id){
-            $unreviewed=Feedback::where('user_id', Auth::user()->id);
+        if($category->review) {
+            //only get the reviewed ideas if they require it
+            $unreviewed = Feedback::where('reviewed', false);
+            if(Auth::user()->id!==$category->reviewer_id){
+                $unreviewed=Feedback::where('user_id', Auth::user()->id);
+            }
+            return $unreviewed->limit(20)->get();
         }
-        return $unreviewed;
+        return [];
     }
 
     public function search(Request $request, string $category) {
@@ -70,7 +72,7 @@ class FeedBackController extends Controller
         $mostVoted=$this->getMostVoted($category);
         $unreviewed=$this->getUnreviewed($category);
         $feedback=$this->getFeedbackQuery($category)->where('feedback', 'LIKE', "%{$searchTerm}%");
-        return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category, 'unreviewed'=>$unreviewed->get()]);
+        return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category, 'unreviewed'=>$unreviewed]);
     }
 
     public function archived($category) {
@@ -121,7 +123,7 @@ class FeedBackController extends Controller
 
         if($feedback->reply == null && $reply != null) {
             $user = User::findOrFail($feedback->user_id);
-            Mail::to($user)->queue((new FeedbackReply($feedback, $user, $reply, $accepted))->onQueue('low'));
+            Mail::to($user)->queue((new FeedbackReplyEmail($feedback, $user, $reply, $accepted))->onQueue('low'));
         }
 
         $feedback->reply = $reply;
@@ -183,7 +185,7 @@ class FeedBackController extends Controller
 
     /**
      * @return RedirectResponse
-     * @throws Exception
+     * @throws Exception\
      */
     public function archiveAll(string $category): RedirectResponse
     {

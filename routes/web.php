@@ -485,14 +485,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
         });
     });
 
-    /* Routes related to the Quote Corner. */
-    Route::group(['prefix' => 'quotes', 'middleware' => ['member'], 'as' => 'quotes::'], function () {
-        Route::get('', ['as' => 'list', 'uses' => 'QuoteCornerController@overview']);
-        Route::post('add', ['as' => 'add', 'uses' => 'QuoteCornerController@add']);
-        Route::get('delete/{id}', ['as' => 'delete', 'middleware' => ['permission:board'], 'uses' => 'QuoteCornerController@destroy']);
-        Route::get('like/{id}', ['as' => 'like', 'uses' => 'QuoteCornerController@toggleLike']);
-        Route::get('search/{searchTerm?}', ['as' => 'search', 'uses' => 'QuoteCornerController@search']);
-    });
+    Route::get('quotes',['as'=>'quotes::list', function (Illuminate\Http\Request $request) {
+        return (new Proto\Http\Controllers\FeedBackController)->index($request, 'quotes');
+    }]);
+
+    Route::get('goodideas',['as'=>'goodideas::index', function (Illuminate\Http\Request $request) {
+        return (new Proto\Http\Controllers\FeedBackController)->index($request, 'goodideas');
+    }]);
 
     /* Routes related to the Feedback Boards. */
     Route::group(['prefix' => 'feedback', 'middleware' => ['member'], 'as' => 'feedback::'], function () {

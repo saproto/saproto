@@ -27,7 +27,8 @@
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
 
                         @include('feedbackboards.include.feedback', [
-                        'feedback' => $entry
+                        'feedback' => $entry,
+                        'controls' => true,
                         ])
 
                     </div>
