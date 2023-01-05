@@ -11,6 +11,7 @@
             @include('feedbackboards.newfeedback')
             @include('feedbackboards.mostvoted')
             @include('feedbackboards.unreviewed')
+            @include('feedbackboards.include.searchfeedback')
         </div>
 
         <div class="col-lg-9">

@@ -40,4 +40,10 @@ class FeedbackVote extends Model
     {
         return $this->hasOne('Proto\Models\Feedback');
     }
+
+    /** @return HasOne */
+    public function user(): HasOne
+    {
+        return $this->hasOne('Proto\Models\User');
+    }
 }

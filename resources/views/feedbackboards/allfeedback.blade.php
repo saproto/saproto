@@ -1,7 +1,7 @@
 <div class="card mb-3 w-100">
-
     <div class="card-header bg-dark text-white">
         {{$category->title}}
+
         @can("board")
             <a href="{{ route('feedback::archiveall', ['category' => $category->url]) }}" class="float-end ms-3 btn btn-danger">
                 <i class="fas fa-file-archive text-white"></i> Archive all
@@ -11,6 +11,9 @@
                 <i class="fas fa-box-archive text-white"></i> View archived
             </a>
         @endcan
+        @if($data->links()!="")
+                {{ $data->withQueryString()->links() }}
+        @endif
     </div>
 
     <div class="card-body">
@@ -39,7 +42,7 @@
 
     @if($data->links() != "")
         <div class="card-footer">
-            {{ $data->links() }}
+            {{ $data->withQueryString()->links() }}
         </div>
     @endif
 
