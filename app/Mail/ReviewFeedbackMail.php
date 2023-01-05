@@ -9,7 +9,8 @@ use Proto\Models\FeedbackCategory;
 
 class ReviewFeedbackMail extends Mailable
 {
-    use Queueable; use SerializesModels;
+    use Queueable;
+ use SerializesModels;
 
     public $category;
     public $feedback;
