@@ -41,15 +41,15 @@ class MigrateQuotes extends Command
      */
     public function handle()
     {
-        $quoteCategory=new FeedbackCategory([
+        $quoteCategory = new FeedbackCategory([
             'title'=>'quotes',
             'url'=>'quotes',
-            'review'=>false
+            'review'=>false,
         ]);
         $quoteCategory->save();
 
         foreach(Quote::all() as $quote){
-            $new=new Feedback([
+            $new = new Feedback([
                 'user_id'=>$quote->user->id,
                 'feedback_category_id'=>$quoteCategory->id,
                 'feedback'=>$quote->quote,
@@ -57,7 +57,7 @@ class MigrateQuotes extends Command
             ]);
             $new->save();
             foreach($quote->quoteLike() as $like){
-                $newLike=new FeedbackVote([
+                $newLike = new FeedbackVote([
                     'user_id'=>$like->user_id,
                     'feedback_id'=>$new->id,
                     'vote'=>1,
