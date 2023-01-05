@@ -22,7 +22,7 @@ class ReviewFeedbackMail extends Mailable
     public function __construct(FeedbackCategory $category, $feedback)
     {
         $this->feedback=$feedback;
-        $this->$category=$this->category->title;
+        $this->category=$category->title;
     }
 
     /**
@@ -33,6 +33,7 @@ class ReviewFeedbackMail extends Mailable
     public function build()
     {
         return $this
+            ->to($this->category->reviewer()->get()->email)
             ->subject('Review feedback for: '.$this->category->title.'!')
             ->view('emails.feedbackreviewreminder', ['category'=>$this->category ,'unreviewed'=>$this->feedback]);
     }
