@@ -5,7 +5,6 @@ namespace Proto\Console\Commands;
 use Illuminate\Console\Command;
 use Mail;
 use Proto\Mail\DailyHelperMail;
-use Proto\Models\CommitteeMembership;
 use Proto\Models\HelpingCommittee;
 use Proto\Models\User;
 
@@ -64,13 +63,13 @@ class HelperNotificationsCron extends Command
                 //loop door alle committees
                 $helps = HelpingCommittee::query()->where('committee_id', $committee->id)
                     ->where('notification_sent', '0') //check if the event is not yet notified
-                    ->whereHas('activity', function($q){
-                        $q->whereHas('event', function($w){
+                    ->whereHas('activity', function ($q) {
+                        $q->whereHas('event', function ($w) {
                             $w->where('start', '>', \Carbon::now()->timestamp); //check if the event is in the future
                         });
                     })
-                    ->whereHas('committee', function($q) use ($user){
-                        $q->whereHas('users',function($w) use ($user){
+                    ->whereHas('committee', function ($q) use ($user) {
+                        $q->whereHas('users',function ($w) use ($user) {
                             $w->where('users.id', $user->id); //check if the user is still in the active committee members
                         });
                     })
