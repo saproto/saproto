@@ -7,11 +7,9 @@
         </div>
 
         <div class="card-body">
-
             @include('feedbackboards.include.feedback', [
             'feedback' => $mostVoted
             ])
-
         </div>
 
     </div>

@@ -17,9 +17,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $user_id
  * @property string $feedback
- * @property-read User|null $reply
+ * @property User|null $reply
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property bool|null $reviewed
+ * @property bool|null $accepted
  * @property FeedbackCategory|null $category
  * @property-read User|null $user
  * @property-read Collection|FeedbackVote[] $votes
@@ -63,6 +65,13 @@ class Feedback extends Model
     public function voteScore(): int
     {
         return $this->votes()->sum('vote');
+    }
+
+    public function mayViewFeedback($user):bool{
+        if(!$this->category->review) return true;
+        if($this->reviewed) return true;
+//        if($this->category->reviewer_id===$user->id)return true;
+        return false;
     }
 
     /**

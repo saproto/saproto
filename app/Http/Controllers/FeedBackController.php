@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use Proto\Mail\GoodIdeaReplyEmail;
+use Proto\Mail\FeedbackReply;
 use Proto\Models\Feedback;
 use Proto\Models\FeedbackCategory;
 use Proto\Models\FeedbackVote;
@@ -29,17 +29,24 @@ class FeedBackController extends Controller
         $category = FeedbackCategory::where('url', $category)->firstOrFail();
         $feedback = $category->feedback()->orderBy('created_at', 'desc');
 
-        $mostVotedID = DB::table('feedback_votes')
-            ->select('feedback_id', DB::raw('count(*) as votes'))
-            ->groupBy('feedback_id')
-            ->orderBy('votes', 'DESC')
-            ->pluck('feedback_id')
-            ->first();
+        //find the most voted idea
+        $mostVotedID=FeedbackVote::query()
+                                    ->selectRaw('feedback_id, sum(vote) as votes')
+                                    ->groupBy('feedback_id')
+                                    ->having('votes', '>=', 0)
+                                    ->orderBy('votes')
+                                    ->first();
+        $mostVoted=Feedback::where('id',$mostVotedID?$mostVotedID->feedback_id:null)->first();
 
+        $unreviewed=Feedback::where('reviewed', false);
 
-        $mostVoted = Feedback::find($mostVotedID);
+        //only get the reviewed ideas if they require it
+        if($category->review && Auth::user()->id!==$category->reviewer_id){
+            $feedback=$feedback->where('reviewed', true);
+            $unreviewed=Feedback::where('user_id', Auth::user()->id);
+        }
 
-        return view('feedbackboards.index', ['data' => $feedback->orderBy('created_at', 'desc')->paginate(20), 'mostVoted' => $mostVoted, 'category'=>$category]);
+        return view('feedbackboards.index', ['data' => $feedback->paginate(20), 'mostVoted' => $mostVoted??null, 'category'=>$category, 'unreviewed'=>$unreviewed->get()]);
     }
 
     public function archived($category) {
@@ -64,7 +71,12 @@ class FeedBackController extends Controller
         $feedback = new Feedback($new);
         $feedback->save();
 
-        Session::flash('flash_message', 'Idea added.');
+        if($category->review){
+            Session::flash('flash_message', 'Idea added. This first needs to be reviewed by the board so it might take some time to show up!');
+        }else{
+            Session::flash('flash_message', 'Idea added.');
+        }
+
         return Redirect::back();
     }
 
@@ -85,7 +97,7 @@ class FeedBackController extends Controller
 
         if($feedback->reply == null && $reply != null) {
             $user = User::findOrFail($feedback->user_id);
-            Mail::to($user)->queue((new GoodIdeaReplyEmail($feedback, $user, $reply, $accepted))->onQueue('low'));
+            Mail::to($user)->queue((new FeedbackReply($feedback, $user, $reply, $accepted))->onQueue('low'));
         }
 
         $feedback->reply = $reply;
@@ -178,6 +190,23 @@ class FeedBackController extends Controller
     }
 
     /**
+     * @param int $id
+     * @return RedirectResponse
+     */
+    public function approve(int $id): RedirectResponse
+    {
+        $feedback = Feedback::findOrFail($id);
+        if($feedback->category->reviewer_id!==Auth::user()->id){
+            Session::flash('flash_message', "Feedback may only be approved by the dedicated reviewer!");
+            return Redirect::back();
+        }
+        $feedback->reviewed=true;
+        $feedback->save();
+        Session::flash('flash_message', "Feedback Approved to be public!");
+        return Redirect::back();
+    }
+
+    /**
      * @param Request $request
      * @return View
      */
@@ -193,12 +222,15 @@ class FeedBackController extends Controller
      */
     public function categoryStore(Request $request)
     {
+        if($request->has('reviewed')&&!$request->input('user_id')){
+            Session::flash('flash_message', 'You need to enter a reviewer to have this as a reviewed category!');
+            return Redirect::back();
+        }
         $category = new FeedbackCategory();
         $category->title = $request->input('name');
         $category->url = strtolower(preg_replace("/[^a-zA-Z0-9]+/", "", $request->input('name')));
         $category->review = $request->has('reviewed');
         $category->reviewer_id = $request->has('reviewed')?$request->input('user_id'):null;
-
         $category->save();
 
         Session::flash('flash_message', 'The category '.$category->title.' has been created.');

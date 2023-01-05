@@ -511,6 +511,7 @@ Route::group(['middleware' => ['forcedomain']], function () {
             Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'FeedBackController@categoryDestroy']);
         });
 
+        Route::get('approve/{id}', ['as' => 'approve', 'uses' => 'FeedBackController@approve']);
         Route::post('reply/{id}', ['as' => 'reply', 'uses' => 'FeedBackController@reply']);
         Route::get('archive/{id}', ['as' => 'archive', 'uses' => 'FeedBackController@archive']);
         Route::get('restore/{id}', ['as' => 'restore', 'uses' => 'FeedBackController@restore']);

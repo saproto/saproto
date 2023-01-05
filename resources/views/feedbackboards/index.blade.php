@@ -10,6 +10,7 @@
         <div class="col-lg-3">
             @include('feedbackboards.newfeedback')
             @include('feedbackboards.mostvoted')
+            @include('feedbackboards.unreviewed')
         </div>
 
         <div class="col-lg-9">

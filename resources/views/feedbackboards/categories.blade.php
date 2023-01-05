@@ -26,9 +26,11 @@
                         Check feedback from the category before publishing?
                         <input class="form-check-input" type="checkbox" id="reviewed" name="reviewed" {{ $cur_category&&$cur_category->review ? 'checked' : '' }}>
                         <br>
-                        <label for="user_id">Reviewer Name:</label>
-                        <div class="form-group autocomplete">
-                            <input class="form-control user-search" value="{{$cur_category->reviewer_id??''}}" id="user_id" name="user_id"/>
+                        <div id="reviewer" class="d-none">
+                            <label for="user_id">Reviewer Name:</label>
+                            <div class="form-group autocomplete">
+                                <input class="form-control user-search" value="{{$cur_category->reviewer_id??''}}" id="user_id" name="user_id"/>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-success float-end">Submit</button>
@@ -52,15 +54,20 @@
                             @foreach($categories as $category)
                                 <div class="col-5 row m-1 w-100">
                                     <div class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}">
-                                        {{ $category->title }} {{$category->reviewer?$category->reviewer->calling_name:""}}
+                                        <a href="{{route('feedback::index', ['category'=>$category->url])}}" class="text-reset">{{ $category->title }}</a> {{$category->reviewer?" | Reviewer:".$category->reviewer->calling_name:""}}
                                     </div>
                                     <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
                                         <a href="{{ route('feedback::category::admin', ['id' => $category]) }}">
                                             <i class="fas fa-edit me-2 ms-1 mt-1 float-end"></i>
                                         </a>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#delete-category-modal" data-id="{{ $category->id }}">
-                                            <i class="fas fa-trash mt-1 text-danger float-end"></i>
-                                        </a>
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route('feedback::category::delete', ['id' => $category->id]),
+                                            'classes' => 'fas fa-trash mt-1 text-danger float-end',
+                                            'confirm'=>'Delete',
+                                            'text'=>'',
+                                            'title' => 'Confirm Delete',
+                                            'message' => "Are you sure you want to delete <b><i>$category->title</i></b>. All feedback that currently has this category will become <b>uncategorised!</b>",
+                                        ])
                                     </div>
                                 </div>
                             @endforeach
@@ -76,42 +83,20 @@
 
     </div>
 
-    <div class="modal fade" id="delete-category-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog model-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this category. All feedback that currently has this category will become <b>uncategorised</b>.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
-                    <a id="delete-category" class="btn btn-danger" href="#">Delete Category</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('javascript')
     <script type="text/javascript" nonce="{{ csp_nonce() }}">
-        document.getElementById('delete-category-modal').addEventListener('show.bs.modal', e => {
-            let categoryId = e.relatedTarget.getAttribute('data-id')
-            document.getElementById('delete-category').href = '{{ route('event::category::delete', ['id' => ':id']) }}'.replace(':id', categoryId)
-        })
-
         let checkbox = document.querySelector("input[type=checkbox]");
-
         checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                console.log("Checkbox is checked..");
-            } else {
-                console.log("Checkbox is not checked..");
+            if(checkbox.checked){
+                document.getElementById("reviewer").classList.remove('d-none');
+                document.getElementById("user_id").required=true;
+            }else{
+                document.getElementById("reviewer").classList.add('d-none');
+                document.getElementById("user_id").required=false;
             }
-        });
 
+        });
     </script>
 @endpush
