@@ -5,13 +5,13 @@ namespace Proto\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use phpDocumentor\Reflection\Types\Boolean;
 use Proto\Models\Feedback;
 use Proto\Models\User;
 
 class FeedbackReplyEmail extends Mailable
 {
-    use Queueable; use SerializesModels;
+    use Queueable;
+ use SerializesModels;
 
     public $feedback;
     public $user;

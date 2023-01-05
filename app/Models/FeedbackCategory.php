@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $url
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Boolean $review
+ * @property bool $review
  * @property int $reviewer_id
  * @property-read User|null $reviewer
  * @property-read Collection|FeedbackVote[] $votes
@@ -32,7 +32,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|Feedback query()
  * @mixin Eloquent
  */
-
 class FeedbackCategory extends Model
 {
     protected $table = 'feedback_categories';
