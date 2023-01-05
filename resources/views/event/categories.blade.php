@@ -50,6 +50,7 @@
                         @foreach($categories as $category)
                             <div class="col-5 row m-1">
                                 <div class="px-4 py-2 my-2 w-75 rounded-start overflow-hidden ellipsis {{ $category == $cur_category ? 'bg-warning' : 'bg-info' }}">
+                                    <i class="{{ $category->icon }} me-2"></i>
                                     {{ $category->name }}
                                 </div>
                                 <div class="bg-white px-2 py-2 my-2 w-25 rounded-end">
