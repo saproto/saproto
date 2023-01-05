@@ -1,4 +1,4 @@
-<form method="get" action="{{ route('feedback::index', ['category'=>$category->url]) }}">
+<form method="get" action="{{ route('feedback::search', ['category'=>$category->url]) }}">
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">

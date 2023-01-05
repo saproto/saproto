@@ -68,6 +68,7 @@ class FeedBackController extends Controller
     }
 
     public function search(Request $request, string $category) {
+        $searchTerm = $request->input('searchTerm');
         $category = FeedbackCategory::where('url', $category)->firstOrFail();
         $mostVoted=$this->getMostVoted($category);
         $unreviewed=$this->getUnreviewed($category);
