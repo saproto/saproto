@@ -250,6 +250,10 @@ import CountdownTimer from "./countdown-timer"
 const countdownList = Array.from(document.querySelectorAll(".proto-countdown"))
 countdownList.forEach((el)=>{timerList.push(new CountdownTimer(el))})
 
+// Shift select
+import shiftSelect from "./shift-select";
+document.querySelectorAll('.shift-select').forEach(el => el.hasAttribute('data-name') ? shiftSelect(el, el.getAttribute('data-name')): null)
+
 // Matomo Analytics
 const _paq = _paq || [];
 _paq.push(['trackPageView']);

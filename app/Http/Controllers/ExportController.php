@@ -45,7 +45,7 @@ class ExportController extends Controller
                 $data = Achievement::all();
                 break;
             case 'activities':
-                $data = Activity::with('event')->get()->filter(function ($activity) use ($user) {
+                $data = Activity::has('event')->with('event')->get()->filter(function ($activity) use ($user) {
                     return $activity->event->mayViewEvent($user);
                 });
 
