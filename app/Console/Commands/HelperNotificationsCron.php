@@ -41,10 +41,6 @@ class HelperNotificationsCron extends Command
      */
     public function handle()
     {
-
-//        1 mail per user met alle events waar minder help is dan nodig
-        //aan het eind notification send = true
-
         $users = User::query()
             ->whereHas('member')
             ->get()
@@ -55,12 +51,10 @@ class HelperNotificationsCron extends Command
         $handledHelpIds = [];
 
         foreach ($users as $user) {
-//            alle active members
 
             $events = [];
 
             foreach ($user->committees as $committee) {
-                //loop door alle committees
                 $helps = HelpingCommittee::query()->where('committee_id', $committee->id)
                     ->where('notification_sent', '0') //check if the event is not yet notified
                     ->whereHas('activity', function ($q) {
