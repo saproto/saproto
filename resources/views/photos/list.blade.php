@@ -7,7 +7,11 @@
 @section('container')
 
     <div class="card mb-3">
-
+        @can('protography')
+            <a href="{{route("photo::admin::index")}}" class="btn btn-info">
+                <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Photo admin</span>
+            </a>
+        @endcan
         <div class="card-body">
 
             <div class="row">
