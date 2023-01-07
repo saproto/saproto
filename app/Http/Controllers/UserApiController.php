@@ -3,15 +3,13 @@
 namespace Proto\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Proto\Models\AchievementOwnership;
 use Proto\Models\Address;
 use Proto\Models\CommitteeMembership;
 use Proto\Models\OrderLine;
-use Proto\Models\Product;
 use Proto\Models\User;
 
 class UserApiController extends Controller
@@ -69,7 +67,7 @@ class UserApiController extends Controller
     {
         $validated = $request->validate([
             'from' => 'date',
-            'to' => 'date'
+            'to' => 'date',
         ]);
 
         $orderlines = Orderline::where('user_id', Auth::id())->with('product');
@@ -78,10 +76,9 @@ class UserApiController extends Controller
         if ($request->has('to')) $orderlines = $orderlines->where('created_at', '<', $validated['to']);
 
         $orderlines = $orderlines->orderBy('created_at', 'DESC');
-        if (!$request->has('from') && !$request->has('to')) $orderlines = $orderlines->limit(100);
+        if (! $request->has('from') && ! $request->has('to')) $orderlines = $orderlines->limit(100);
         return $orderlines->get();
     }
-
 
     /** @return int */
     public function getNextWithdrawal()
