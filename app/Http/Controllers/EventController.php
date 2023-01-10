@@ -309,6 +309,8 @@ class EventController extends Controller
             return Redirect::back();
         }
 
+        $activity->attendees = $request->input('attendees');
+
         $account = Account::findOrFail($request->input('account'));
 
         if (count($activity->users) == 0 || $activity->price == 0) {

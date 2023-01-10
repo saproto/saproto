@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property float|null $price
  * @property float $no_show_fee
  * @property int $participants
+ * @property int $attendees
  * @property int $registration_start
  * @property int $registration_end
  * @property int $deregistration_end
