@@ -45,7 +45,7 @@
     <div class="card mb-3">
 
         <div class="card-header bg-dark text-white">
-            Past committee memberships
+            Past society memberships
         </div>
 
         <div class="card-body">

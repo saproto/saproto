@@ -65,6 +65,8 @@ class Product extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    protected $appends = ['image_url'];
+
     /** @return BelongsTo */
     public function account()
     {
@@ -75,6 +77,17 @@ class Product extends Model
     public function image()
     {
         return $this->belongsTo('Proto\Models\StorageEntry', 'image_id');
+    }
+
+    /** @raturn String */
+    public function getImageUrlAttribute() {
+        if ($this->image_id) {
+            $image = StorageEntry::find($this->image_id);
+            if ($image) {
+                return $image->generateImagePath(null, null);
+            }
+        }
+        return null;
     }
 
     /** @return BelongsToMany */
