@@ -23,7 +23,7 @@ class ProtoPolicy extends Policy
                     Keyword::SELF,
                     'https://www.mollie.com/checkout/',
                     'https://protu.be',
-                    'https://wrapped.omnomcom.nl'
+                    'https://wrapped.omnomcom.nl',
                 ])
                 ->addDirective(Directive::OBJECT, Keyword::NONE)
                 ->addDirective(Directive::SCRIPT, [
