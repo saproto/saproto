@@ -116,9 +116,16 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($dinnerformCurrent)
-                <a href="{{ route("dinnerform::delete", ['id' => $dinnerformCurrent->id]) }}" class="btn btn-danger ms-3">
-                    Delete
-                </a>
+
+                @include('website.layouts.macros.confirm-modal', [
+                                           'action' => route("dinnerform::delete", ['id' => $dinnerformCurrent->id]),
+                                           'text' => 'Delete',
+                                           'title' => 'Confirm Delete',
+                                           'classes' => 'btn btn-danger ms-2',
+                                           'message' => "Are you sure you want to remove the dinnerform opening $dinnerformCurrent->start ordering at $dinnerformCurrent->restaurant?<br><br> This will also delete all orderlines!",
+                                           'confirm' => 'Delete',
+                                       ])
+
             @endif
         </div>
 
