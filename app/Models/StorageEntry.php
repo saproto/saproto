@@ -64,6 +64,10 @@ class StorageEntry extends Model
             Newsitem::where('featured_image_id', $id)->count() == 0 &&
             SoundboardSound::where('file_id', $id)->count() == 0 &&
             HeaderImage::where('image_id', $id)->count() == 0 &&
+            Photo::where('large_file_id', $id)->count() == 0 &&
+            Photo::where('medium_file_id', $id)->count() == 0 &&
+            Photo::where('small_file_id', $id)->count() == 0 &&
+            Photo::where('tiny_file_id', $id)->count() == 0 &&
             Photo::where('file_id', $id)->count() == 0;
     }
 
