@@ -312,9 +312,9 @@ class Activity extends Validatable
      */
     public function getAttendees(): int
     {
-        if (ParticipationController::getPresent($this->id)>0){
+        if (ParticipationController::getPresent($this->id) > 0){
             return ParticipationController::getPresent($this->id);
         }
-        return $this->attendees??0;
+        return $this->attendees ?? 0;
     }
 }
