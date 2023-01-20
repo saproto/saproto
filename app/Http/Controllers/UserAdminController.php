@@ -11,7 +11,7 @@ use Illuminate\View\View;
 use Mail;
 use PDF;
 use Proto\Mail\MembershipEnded;
-use Proto\Mail\MembershipStarted;
+use Proto\Mail\MembershipEndSet;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\User;
@@ -25,7 +25,7 @@ class UserAdminController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $search = $request->input('query');
         $filter = $request->input('filter');
@@ -198,7 +198,7 @@ class UserAdminController extends Controller
         $member->proto_username = $alias;
         $member->save();
 
-        Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
+        Mail::to($user)->queue((new MembershipEndSet($user))->onQueue('high'));
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
@@ -223,7 +223,7 @@ class UserAdminController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function endMembership($id)
+    public function endMembership($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -239,20 +239,27 @@ class UserAdminController extends Controller
     public function EndMembershipInSeptember($id): RedirectResponse
     {
         $user=User::findOrFail($id);
-        if($user->is_member) {
-            $user->member->member_until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
-            $user->member->save();
+        if(!$user->is_member) {
+            Session::flash('flash_message', "The user needs to be a member for its membership to receive an end date!");
+            return Redirect::back();
         }
+
+        $user->member->member_until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->save();
+        Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
         return Redirect::back();
     }
 
-    public function removeMembershipEnd($id){
+    public function removeMembershipEnd($id): RedirectResponse
+    {
         $user=User::findOrFail($id);
-        if($user->is_member) {
-            $user->member->member_until = null;
-            $user->member->save();
+        if(!$user->is_member) {
+            Session::flash('flash_message', "The user needs to be a member for its membership to receive an end date!");
+            return Redirect::back();
         }
+        $user->member->member_until = null;
+        $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
         return Redirect::back();
     }
@@ -262,7 +269,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function setMembershipType(Request $request, $id)
+    public function setMembershipType(Request $request, $id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
@@ -286,7 +293,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleNda($id)
+    public function toggleNda($id): RedirectResponse
     {
         if (! Auth::user()->can('board')) {
             abort(403, 'Only board members can do this.');
@@ -305,7 +312,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function unblockOmnomcom($id)
+    public function unblockOmnomcom($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -320,7 +327,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleStudiedCreate($id)
+    public function toggleStudiedCreate($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -335,7 +342,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function toggleStudiedITech($id)
+    public function toggleStudiedITech($id): RedirectResponse
     {
         /** @var User $user */
         $user = User::findOrFail($id);
@@ -350,7 +357,7 @@ class UserAdminController extends Controller
      * @param int $id
      * @return RedirectResponse
      */
-    public function getSignedMemberForm($id)
+    public function getSignedMemberForm(int $id): RedirectResponse
     {
         $user = Auth::user();
         $member = Member::withTrashed()->where('membership_form_id', '=', $id)->first();
