@@ -83,6 +83,8 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
             Route::post('add', ['as' => 'add', 'uses' => 'UserAdminController@addMembership']);
             Route::post('remove', ['as' => 'remove', 'uses' => 'UserAdminController@endMembership']);
+            Route::post('end_in_september', ['as' => 'endinseptember', 'uses' => 'UserAdminController@EndMembershipInSeptember']);
+            Route::post('remove_end', ['as' => 'removeend', 'uses' => 'UserAdminController@removeMembershipEnd']);
             Route::post('settype', ['as' => 'settype', 'uses' => 'UserAdminController@setMembershipType']);
         });
 

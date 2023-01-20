@@ -236,6 +236,27 @@ class UserAdminController extends Controller
         return Redirect::back();
     }
 
+    public function EndMembershipInSeptember($id): RedirectResponse
+    {
+        $user=User::findOrFail($id);
+        if($user->is_member) {
+            $user->member->member_until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
+            $user->member->save();
+        }
+        Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
+        return Redirect::back();
+    }
+
+    public function removeMembershipEnd($id){
+        $user=User::findOrFail($id);
+        if($user->is_member) {
+            $user->member->member_until = null;
+            $user->member->save();
+        }
+        Session::flash('flash_message', "End date for membership of $user->name removed!");
+        return Redirect::back();
+    }
+
     /**
      * @param Request $request
      * @param int $id
