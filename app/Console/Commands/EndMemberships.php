@@ -42,8 +42,8 @@ class EndMemberships extends Command
     public function handle()
     {
         foreach(Member::all()->whereNotNull('member_until') as $member){
-            if(Carbon::createFromTimestamp($member->member_until)<Carbon::now()->timestamp){
-                (new UserAdminController)->endMembership($member->user->id);
+            if(Carbon::createFromTimestamp($member->member_until) < Carbon::now()->timestamp){
+                (new UserAdminController())->endMembership($member->user->id);
                 $this->info("Membership from $member->proto_username ended!");
             }
         }

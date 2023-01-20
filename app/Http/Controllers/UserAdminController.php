@@ -238,9 +238,9 @@ class UserAdminController extends Controller
 
     public function EndMembershipInSeptember($id): RedirectResponse
     {
-        $user=User::findOrFail($id);
-        if(!$user->is_member) {
-            Session::flash('flash_message', "The user needs to be a member for its membership to receive an end date!");
+        $user = User::findOrFail($id);
+        if(! $user->is_member) {
+            Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
             return Redirect::back();
         }
 
@@ -253,9 +253,9 @@ class UserAdminController extends Controller
 
     public function removeMembershipEnd($id): RedirectResponse
     {
-        $user=User::findOrFail($id);
-        if(!$user->is_member) {
-            Session::flash('flash_message', "The user needs to be a member for its membership to receive an end date!");
+        $user = User::findOrFail($id);
+        if(! $user->is_member) {
+            Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
             return Redirect::back();
         }
         $user->member->member_until = null;
