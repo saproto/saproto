@@ -12,6 +12,7 @@ use Mail;
 use PDF;
 use Proto\Mail\MembershipEnded;
 use Proto\Mail\MembershipEndSet;
+use Proto\Mail\MembershipStarted;
 use Proto\Models\HashMapItem;
 use Proto\Models\Member;
 use Proto\Models\User;
@@ -198,7 +199,7 @@ class UserAdminController extends Controller
         $member->proto_username = $alias;
         $member->save();
 
-        Mail::to($user)->queue((new MembershipEndSet($user))->onQueue('high'));
+        Mail::to($user)->queue((new MembershipStarted($user))->onQueue('high'));
 
         EmailListController::autoSubscribeToLists('autoSubscribeMember', $user);
 
@@ -244,7 +245,7 @@ class UserAdminController extends Controller
             return Redirect::back();
         }
 
-        $user->member->member_until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
+        $user->member->until = Carbon::create('Last day of September')->endOfDay()->subDay()->timestamp;
         $user->member->save();
         Mail::to($user)->queue((new MemberShipEndSet($user))->onQueue('high'));
         Session::flash('flash_message', "End date for membership of $user->name set to the end of september!");
@@ -258,7 +259,7 @@ class UserAdminController extends Controller
             Session::flash('flash_message', 'The user needs to be a member for its membership to receive an end date!');
             return Redirect::back();
         }
-        $user->member->member_until = null;
+        $user->member->until = null;
         $user->member->save();
         Session::flash('flash_message', "End date for membership of $user->name removed!");
         return Redirect::back();

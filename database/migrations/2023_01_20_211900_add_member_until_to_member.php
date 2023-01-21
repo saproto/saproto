@@ -14,7 +14,7 @@ class AddMemberUntilToMember extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->bigInteger('member_until')->after('is_pending')->nullable();
+            $table->bigInteger('until')->after('is_pending')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddMemberUntilToMember extends Migration
     public function down()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('member_until');
+            $table->dropColumn('until');
         });
     }
 }

@@ -11,7 +11,7 @@
             </li>
 
             @if($user->is_member)
-                @if(!$user->member->member_until)
+                @if(!$user->member->until)
                     @include('website.layouts.macros.confirm-modal', [
                              'action' => route("user::member::endinseptember", ['id'=>$user->id]),
                              'method' => 'POST',
@@ -39,8 +39,8 @@
                            'action' => route("user::member::removeend", ['id'=>$user->id]),
                            'method' => 'POST',
                            'classes' => 'list-group-item text-danger',
-                           'text' => 'Remove membership end!',
-                           'message' => "Are you sure you want to remove then end of the membership of $user->name?"
+                           'text' => 'Cancel membership removal!',
+                           'message' => "Are you sure you do not want to let the membership of $user->name end anymore?"
                        ])
                 @endif
 
@@ -119,10 +119,10 @@
                             </tr>
                         </tbody>
                         <trow>
-                        @if($user->member->member_until)
+                        @if($user->member->until)
                             <tr>
                                 <td>
-                                    <b>Until: </b><i>{{Carbon::createFromTimestamp($user->member->member_until)->format('d M Y')}}</i>
+                                    <b>Until: </b><i>{{Carbon::createFromTimestamp($user->member->until)->format('d M Y')}}</i>
                                 </td>
                             </tr>
                         @endif
