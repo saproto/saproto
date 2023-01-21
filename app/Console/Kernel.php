@@ -40,6 +40,7 @@ class Kernel extends ConsoleKernel
         Commands\SyncWikiAccounts::class,
         Commands\MemberCleanup::class,
         Commands\AddSysadmin::class,
+        Commands\EndMemberships::class,
     ];
 
     /**
@@ -57,11 +58,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:birthdaycron')->daily()->at('00:01');
         $schedule->command('proto:achievementscron')->daily()->at('00:10');
         $schedule->command('proto:clearsessions')->daily()->at('01:00');
-        $schedule->command('proto:feecron')->daily()->at('02:00');
-        $schedule->command('proto:membercleanup')->daily()->at('3:00');
-        $schedule->command('proto:filecleanup')->daily()->at('04:00');
-        $schedule->command('proto:spotifysync')->daily()->at('05:00');
-        $schedule->command('proto:omnomcleanup')->daily()->at('06:00');
+        $schedule->command('proto:endmemberships')->hourly()->at('02:00');
+        $schedule->command('proto:feecron')->daily()->at('03:00');
+        $schedule->command('proto:membercleanup')->daily()->at('04:00');
+        $schedule->command('proto:filecleanup')->daily()->at('05:00');
+        $schedule->command('proto:spotifysync')->daily()->at('06:00');
+        $schedule->command('proto:omnomcleanup')->daily()->at('07:00');
         $schedule->command('proto:helperremindercron')->daily()->at('08:00');
         $schedule->command('proto:helpernotificationcron')->daily()->at('10:00');
 //        $schedule->command('proto:playsound '.config('proto.soundboardSounds')['1337'])->daily()->at('13:37');
