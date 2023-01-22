@@ -43,16 +43,16 @@ class EndMemberships extends Command
      */
     public function handle()
     {
-        $deleted =[];
+        $deleted = [];
         foreach(Member::all()->whereNotNull('until') as $member){
             if($member->until < Carbon::now()->timestamp){
                 (new UserAdminController())->endMembership($member->user->id);
                 $this->info("Membership from $member->proto_username ended!");
-                $deleted[]=$member;
+                $deleted[] = $member;
             }
         }
 
-        if(count($deleted)>0){
+        if(count($deleted) > 0){
             Mail::queue((new MembershipEndedForBoard($deleted))->onQueue('high'));
         }else{
             $this->info("No users who's membership to end!");
