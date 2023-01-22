@@ -21,7 +21,7 @@
 
     <p>
         Kind regards,<br>
-        The Membership Ending Clerk
+        The Membership Terminating Clerk
     </p>
 
 @endsection

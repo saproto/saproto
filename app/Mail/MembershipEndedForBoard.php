@@ -31,7 +31,7 @@ class MembershipEndedForBoard extends Mailable
     public function build()
     {
         return $this
-            ->to('board@proto.utwente.nl', 'S.A. Proto Memberships update')
+            ->to('board@proto.utwente.nl', 'S.A. Proto Membership Terminations')
             ->subject('Member ship automatically ended for '.count($this->deleted_memberships).' members! '.date('d-m-Y'))
             ->view('emails.membershipsendedforboard');
     }
