@@ -209,7 +209,7 @@ class WithdrawalController extends Controller
         }
 
         /** @var User $user */
-        $user = User::findOrFail($user_id);
+        $user = User::withTrashed()->findOrFail($user_id);
 
         foreach ($withdrawal->orderlinesForUser($user) as $orderline) {
             $orderline->withdrawal()->dissociate();

@@ -11,13 +11,21 @@
             </li>
 
             @if($user->is_member)
-                @include('website.layouts.macros.confirm-modal', [
-                    'action' => route("user::member::remove", ['id'=>$user->id]),
-                    'method' => 'POST',
-                    'classes' => 'list-group-item text-danger',
-                    'text' => 'End membership',
-                    'message' => "Are you sure you want to end the membership of $user->name?"
-                ])
+                @if(!$user->member->until)
+                    @include('website.layouts.macros.confirm-modal', [
+                             'action' => route("user::member::endinseptember", ['id'=>$user->id]),
+                             'method' => 'POST',
+                             'classes' => 'list-group-item text-warning',
+                             'text' => 'End membership at the end of September',
+                             'message' => "Are you sure you want to end the membership of $user->name at the end of September?"
+                         ])
+                    @include('website.layouts.macros.confirm-modal', [
+                            'action' => route("user::member::remove", ['id'=>$user->id]),
+                            'method' => 'POST',
+                            'classes' => 'list-group-item text-danger',
+                            'text' => 'End membership immediately!',
+                            'message' => "Are you sure you want to end the membership of $user->name?"
+                        ])
                 <a href="#" class="list-group-item text-warning" data-bs-toggle="modal" data-bs-target="#setMembershipType">
                     Change membership type
                 </a>
@@ -25,6 +33,16 @@
                    class="list-group-item">
                     Preview membership card
                 </a>
+
+                @else
+                    @include('website.layouts.macros.confirm-modal', [
+                           'action' => route("user::member::removeend", ['id'=>$user->id]),
+                           'method' => 'POST',
+                           'classes' => 'list-group-item text-danger',
+                           'text' => 'Cancel membership removal!',
+                           'message' => "Are you sure you do not want to let the membership of $user->name end anymore?"
+                       ])
+                @endif
 
                 @include('website.layouts.macros.confirm-modal', [
                     'action' => route("membercard::print", ['id'=>$user->id]),
@@ -100,6 +118,15 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <trow>
+                        @if($user->member->until)
+                            <tr>
+                                <td>
+                                    <b>Until: </b><i>{{Carbon::createFromTimestamp($user->member->until)->format('d M Y')}}</i>
+                                </td>
+                            </tr>
+                        @endif
+                        </trow>
                     </table>
                 </li>
 
