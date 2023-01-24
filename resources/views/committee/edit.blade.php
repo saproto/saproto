@@ -30,7 +30,7 @@
 
             <div class="col-md-4">
 
-                @include('committee.include.members-list')
+                @include('committee.include.members-list', ['edit'=>true])
 
             </div>
 
