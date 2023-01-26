@@ -45,6 +45,7 @@
         <p>
             Your e-mail address will also be your username. Please enter a valid e-mail address as your password will be
             sent to this e-mail address.
+            <br><i>Note: For practical reasons you cannot set your e-mail address to an ".utwente.nl" account.</i>
         </p>
 
         <hr>
