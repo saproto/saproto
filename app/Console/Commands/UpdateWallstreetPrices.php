@@ -47,30 +47,39 @@ class UpdateWallstreetPrices extends Command
         $products = Product::where('does_wallstreet', true)->get();
         //loop through all products and decrease the current_wallstreet_price by 0.02
         foreach ($products as $product) {
-            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->orderBy('created_at', 'desc')->first();
+            //search for the latest price of the current product and if it does not exist take the current price
+            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
+            if ($latestPrice === null) {
+                $latestPrice = new WallstreetPrice([
+                    'drink_id' => $currentDrink->id,
+                    'product_id' => $product->id,
+                    'price' => $product->price,
+                ]);
+                $latestPrice->save();
+                continue;
+            }
 
             $newOrderlines=OrderLine::query()->where('created_at', '>=', \Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
 
-                if($newOrderlines>0){
-                    $delta= $newOrderlines*0.05;
-                        $newPriceObject = new WallstreetPrice([
-                            'drink_id' => $product->id,
-                            'product_id' => $product->id,
-                            'price' => $latestPrice->price+$delta>$product->price?$product->price:$latestPrice->price+$delta,
-                        ]);
-                        $newPriceObject->save();
-                        continue;
-                }
-
-                if($latestPrice->price!==0.10) {
+            if($newOrderlines>0){
+                $delta= $newOrderlines*$currentDrink->price_increase;
                     $newPriceObject = new WallstreetPrice([
-                        'drink_id' => $currentDrink->id,
+                        'drink_id' => $product->id,
                         'product_id' => $product->id,
-                        'price' => $latestPrice->price - 0.02 < 0.10 ? 0.10 : $latestPrice->price - 0.02,
+                        'price' => $latestPrice->price+$delta>$product->price?$product->price:$latestPrice->price+$delta,
                     ]);
                     $newPriceObject->save();
-                }
-        }
+                    continue;
+            }
 
+            if($latestPrice->price!==0.10) {
+                $newPriceObject = new WallstreetPrice([
+                    'drink_id' => $currentDrink->id,
+                    'product_id' => $product->id,
+                    'price' => $latestPrice->price - $currentDrink->price_decrease < $currentDrink->minimum_price ? $currentDrink->minimum_price : $latestPrice->price - $currentDrink->price_decrease,
+                ]);
+                $newPriceObject->save();
+            }
+        }
     }
 }

@@ -313,6 +313,15 @@ Route::group(['middleware' => ['forcedomain']], function () {
         Route::get('{id}', ['as' => 'show', 'uses' => 'DinnerformController@show']);
     });
 
+    /* routes related to the wallstreet drink system */
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'WallstreetController@index']);
+        Route::get('admin', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
+//        Route::get('add', ['as' => 'add', 'uses' => 'WallstreetController@create']);
+        Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
+        Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
+    });
+
     /*
      * Routes related to events.
      * Important: routes in this block always use event_id or a relevant other ID. activity_id is in principle never used.

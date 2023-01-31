@@ -16,8 +16,12 @@ class AddWallstreetDrink extends Migration
         //add table called wallStreetDrink and add the following columns to it: id, end_time, start_time, name
         Schema::create('wallstreet_drink', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('end_time');
-            $table->dateTime('start_time');
+            $table->bigInteger('end_time');
+            $table->bigInteger('start_time');
+            $table->float('price_increase');
+            $table->float('price_decrease');
+            $table->float('minimum_price');
+            $table->timestamps();
         });
 
         //make a table that references the wallstreet_drink table and has the following columns: id, wallstreet_drink_id, product_id, price
@@ -30,7 +34,7 @@ class AddWallstreetDrink extends Migration
         });
 
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('does_wallstreet')->default(false);
+            $table->boolean('does_wallstreet')->default(false);
         });
     }
 
