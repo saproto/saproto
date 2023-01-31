@@ -24,6 +24,10 @@ class WallstreetDrink extends Model
     protected $table = 'wallstreet_drink';
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
 
+    public function isCurrent(){
+        return $this->start_time <= time() && $this->end_time >= time();
+    }
+
     //todo update to a many to many relationship
     public function products(){
         return Product::where('does_wallstreet', true)->get();

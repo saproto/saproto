@@ -13,7 +13,6 @@ class AddWallstreetDrink extends Migration
      */
     public function up()
     {
-        //add table called wallStreetDrink and add the following columns to it: id, end_time, start_time, name
         Schema::create('wallstreet_drink', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('end_time');
@@ -24,7 +23,6 @@ class AddWallstreetDrink extends Migration
             $table->timestamps();
         });
 
-        //make a table that references the wallstreet_drink table and has the following columns: id, wallstreet_drink_id, product_id, price
         Schema::create('wallstreet_drink_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('wallstreet_drink_id');

@@ -317,9 +317,11 @@ Route::group(['middleware' => ['forcedomain']], function () {
     Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
         Route::get('', ['as' => 'index', 'uses' => 'WallstreetController@index']);
         Route::get('admin', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
-//        Route::get('add', ['as' => 'add', 'uses' => 'WallstreetController@create']);
         Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
+        Route::get('close/{id}', ['as' => 'close', 'uses' => 'WallstreetController@close']);
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
+        Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
+        Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
     });
 
     /*

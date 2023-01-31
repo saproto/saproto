@@ -43,15 +43,18 @@ class UpdateWallstreetPrices extends Command
     {
         //get the wallstreet drink that is currently active
         $currentDrink = WallstreetDrink::where('start_time', '<=', time())->where('end_time', '>=', time())->first();
-        //get all products that does_wallstreet is true
+        if ($currentDrink === null) {
+            $this->info('No active wallstreet drink found');
+            return 0;
+        }
         $products = Product::where('does_wallstreet', true)->get();
-        //loop through all products and decrease the current_wallstreet_price by 0.02
+
         foreach ($products as $product) {
             //search for the latest price of the current product and if it does not exist take the current price
-            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
+            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
             if ($latestPrice === null) {
                 $latestPrice = new WallstreetPrice([
-                    'drink_id' => $currentDrink->id,
+                    'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
                     'price' => $product->price,
                 ]);
@@ -60,11 +63,11 @@ class UpdateWallstreetPrices extends Command
             }
 
             $newOrderlines=OrderLine::query()->where('created_at', '>=', \Carbon::now()->subMinute())->where('product_id', $product->id)->sum('units');
-
+            //heighten the price if there are new orders and the price is not the actual price
             if($newOrderlines>0){
                 $delta= $newOrderlines*$currentDrink->price_increase;
                     $newPriceObject = new WallstreetPrice([
-                        'drink_id' => $product->id,
+                        'wallstreet_drink_id' => $product->id,
                         'product_id' => $product->id,
                         'price' => $latestPrice->price+$delta>$product->price?$product->price:$latestPrice->price+$delta,
                     ]);
@@ -72,9 +75,10 @@ class UpdateWallstreetPrices extends Command
                     continue;
             }
 
+            //lower the price if no orders have been made and the price is not the minimum price
             if($latestPrice->price!==0.10) {
                 $newPriceObject = new WallstreetPrice([
-                    'drink_id' => $currentDrink->id,
+                    'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
                     'price' => $latestPrice->price - $currentDrink->price_decrease < $currentDrink->minimum_price ? $currentDrink->minimum_price : $latestPrice->price - $currentDrink->price_decrease,
                 ]);

@@ -11,40 +11,54 @@
 
                 <thead>
                     <tr class="bg-dark text-white">
-                        <th></th>
-                        <th>Restaurant</th>
-                        <th>Event</th>
-                        <th class="text-center">Status</th>
+
+                        <th>Id</th>
                         <th>Start</th>
                         <th>End</th>
-                        <th>Total</th>
+                        <th>Minimum price</th>
+                        <th>Decrease</th>
+                        <th>Increase/item</th>
                         <th class="text-center">Admin</th>
-                        <th class="text-center">Controls</th>
+                        <th>Controls</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                        @foreach($allDrinks as $dinnerform)
+                        @foreach($allDrinks as $wallstreetDrink)
                             <tr class="align-middle text-nowrap">
-                                <td class="text-muted">#{{ $dinnerform->id }}</td>
-                                <td>
-                                    <a href="{{ route('dinnerform::show', ['id' => $dinnerform->id]) }}">
-{{--                                        {{ $dinnerform->restaurant }}--}}
-                                    </a>
-                                </td>
-                                <td>
-                                    @isset($dinnerform->event)
-                                        <a href="{{ route('event::show', ['id' => $dinnerform->event->getPublicId()]) }}">{{ $dinnerform->event->title}}</a>
-                                    @endisset
-                                </td>
-                                <td>{{ $dinnerform->start_time->format('Y m-d H:i') }}</td>
-                                <td>{{ $dinnerform->end_time->format('Y m-d H:i') }}</td>
-                                <td>€{{ number_format($dinnerform->totalAmountWithDiscount(), 2) }}</td>
+                                <td class="text-muted">#{{ $wallstreetDrink->id }}</td>
+                                <td>{{ Carbon::createFromTimestamp($wallstreetDrink->start_time)->format('m-d-Y H:i') }}</td>
+                                <td>{{ Carbon::createFromTimestamp($wallstreetDrink->end_time)->format('m-d-Y H:i') }}</td>
+                                <td> €{{$wallstreetDrink->minimum_price}} </td>
+                                <td> €{{$wallstreetDrink->price_decrease}} </td>
+                                <td> €{{$wallstreetDrink->price_increase}} </td>
                                 <td class="text-center px-4">
-                                    <a class="btn btn-info badge" href="{{ route('dinnerform::admin', ['id' => $dinnerform->id]) }}">
-                                        View orders
+                                    <a class="btn btn-info badge" href="{{ route('dinnerform::admin', ['id' => $wallstreetDrink->id]) }}">
+                                        View prices
                                     </a>
                                 </td>
+
+                            <td>
+                                    @if($wallstreetDrink->isCurrent())
+                                        @include('website.layouts.macros.confirm-modal', [
+                                            'action' => route("wallstreet::close", ['id' => $wallstreetDrink->id]),
+                                            'text' => '<i class="fas fa-ban text-warning me-4"></i>',
+                                            'title' => 'Confirm Close',
+                                            'message' => "Are you sure you want to close this wallstreet drink early? The drink will close automatically at:".Carbon::createFromTimestamp($wallstreetDrink->end_time)->format('m-d-Y H:i'),
+                                            'confirm' => 'Close',
+                                        ])
+                                    @endif
+                                    <a href="{{ route('wallstreet::edit', ['id' => $wallstreetDrink->id]) }}">
+                                        <i class="fas fa-edit me-4"></i>
+                                    </a>
+                                    @include('website.layouts.macros.confirm-modal', [
+                                        'action' => route("wallstreet::delete", ['id' => $wallstreetDrink->id]),
+                                        'text' => '<i class="fas fa-trash text-danger"></i>',
+                                        'title' => 'Confirm Delete',
+                                        'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
+                                        'confirm' => 'Delete',
+                                    ])
+                            </td>
                             </tr>
                         @endforeach
 
@@ -57,7 +71,7 @@
     @else
 
         <div class="text-center text-muted py-3">
-            There are no dinnerforms!
+            There are no wallstreet drinks yet!
         </div>
 
     @endif

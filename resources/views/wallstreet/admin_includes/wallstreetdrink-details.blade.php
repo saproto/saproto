@@ -36,7 +36,7 @@
 
                     <!-- minimum_price -->
                     <div class="col-md-12 mb-3">
-                        <label for="minimum_price">Minumum € a product can get:</label>
+                        <label for="minimum_price">€ minimum price:</label>
                         <input type="number" step="0.01" class="form-control" id="minimum_price" name="minimum_price"
                                placeholder='0'
                                value="{{ $currentDrink->minimum_price ?? ''}}"
@@ -77,13 +77,12 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
             @if($currentDrink)
-
                 @include('website.layouts.macros.confirm-modal', [
-                                           'action' => route("dinnerform::delete", ['id' => $dinnerformCurrent->id]),
+                                           'action' => route("wallstreet::delete", ['id' => $currentDrink->id]),
                                            'text' => 'Delete',
                                            'title' => 'Confirm Delete',
                                            'classes' => 'btn btn-danger ms-2',
-                                           'message' => "Are you sure you want to remove the dinnerform opening  ordering at?<br><br> This will also delete all orderlines!",
+                                           'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
                                            'confirm' => 'Delete',
                                        ])
 
