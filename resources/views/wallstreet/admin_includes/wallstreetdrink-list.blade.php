@@ -33,8 +33,8 @@
                                 <td> €{{$wallstreetDrink->price_decrease}} </td>
                                 <td> €{{$wallstreetDrink->price_increase}} </td>
                                 <td class="text-center px-4">
-                                    <a class="btn btn-info badge" href="{{ route('dinnerform::admin', ['id' => $wallstreetDrink->id]) }}">
-                                        View prices
+                                    <a class="btn btn-info badge" href="{{ route('wallstreet::admin', ['id' => $wallstreetDrink->id]) }}">
+                                        View Orders and Prices
                                     </a>
                                 </td>
 

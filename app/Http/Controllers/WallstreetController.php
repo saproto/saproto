@@ -74,7 +74,7 @@ class WallstreetController extends Controller
     }
 
     //function that returns if there is an active drink
-    public function active(){
+    public static function active(){
         $activeDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if($activeDrink){
             return true;
