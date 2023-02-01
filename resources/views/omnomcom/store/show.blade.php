@@ -206,7 +206,7 @@
                 await get(config.routes.api_wallstreet_active)
                     .then(data => {
                         if(data===1){
-                            setInterval(updateWallstreetPricing, 1000)
+                            setInterval(updateWallstreetPricing, 5000)
                             console.log("Wallstreet drink is active")
                         }
                     })
@@ -367,15 +367,14 @@
 
             async function updateWallstreetPricing(){
                 await get(config.routes.api_wallstreet_updated_prices).then((response)=> {
-                    if(response.ok){
+                    console.log("updating prices!");
                     response.forEach((product) => {
-                        console.log(product)
                             price[product.id] = product.price
                             document.querySelectorAll(`[data-id="${product.id}"]`).forEach((el) => {
                                 el.querySelector('.product-price').innerHTML = "€".concat(product.price.toFixed(2))
                             })
                         }
-                    )}
+                    )
                 }).catch((error) => {
                     console.log(error)
                 })
