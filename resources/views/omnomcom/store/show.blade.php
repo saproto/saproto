@@ -97,6 +97,7 @@
             let price = []
 
             initializeOmNomCom()
+            initializeWallstreetDrink()
 
             async function initializeOmNomCom() {
                 await get(config.routes.api_omnomcom_stock, {store: "{{ $store_slug }}"})
@@ -199,6 +200,16 @@
                         'Complete purchase as cashier, payed with bank card.'
                     ))
                 }
+            }
+
+            async function initializeWallstreetDrink(){
+                await get(config.routes.api_wallstreet_active)
+                    .then(data => {
+                        if(data===1){
+                            setInterval(updateWallstreetPricing, 1000)
+                            console.log("Wallstreet drink is active")
+                        }
+                    })
             }
 
             function anythingInCart() {
@@ -352,6 +363,22 @@
                     products.forEach(el => { if (stock[el.getAttribute('data-id')] > 0) count++ })
                     lists[i].setAttribute('data-stock', count.toString())
                 }
+            }
+
+            async function updateWallstreetPricing(){
+                await get(config.routes.api_wallstreet_updated_prices).then((response)=> {
+                    if(response.ok){
+                    response.forEach((product) => {
+                        console.log(product)
+                            price[product.id] = product.price
+                            document.querySelectorAll(`[data-id="${product.id}"]`).forEach((el) => {
+                                el.querySelector('.product-price').innerHTML = "€".concat(product.price.toFixed(2))
+                            })
+                        }
+                    )}
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
 
             function establishNfcConnection() {

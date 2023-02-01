@@ -72,4 +72,21 @@ class WallstreetController extends Controller
         Session::flash('flash_message', 'Wallstreet drink closed.');
         return Redirect::back();
     }
+
+    //function that returns if there is an active drink
+    public function active(){
+        $activeDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
+        if($activeDrink){
+            return true;
+        }
+        return false;
+    }
+
+    public function getUpdatedPrices(){
+        $products= Product::query()->where('does_wallstreet', true)->select(['id', 'price'])->get();
+        foreach($products as $product) {
+            $product->price= WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->first()->price;
+        }
+        return $products;
+    }
 }

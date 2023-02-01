@@ -107,6 +107,11 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
         Route::get('stock', ['as' => 'stock', 'uses' => 'OmNomController@stock']);
     });
 
+    Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['web']], function () {
+        Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
+        Route::get('updated_prices', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPrices']);
+    });
+
     /* Route related to the IsAlfredThere API */
     Route::get('isalfredthere', ['as' => 'isalfredthere', 'uses' => 'IsAlfredThereController@getApi']);
 });

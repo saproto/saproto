@@ -53,6 +53,7 @@ class UpdateWallstreetPrices extends Command
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
             if ($latestPrice === null) {
+                $this->info('No price found for product ' . $product->id . ' creating new price object with current price (' . $product->price . ') for drink '. $currentDrink->id);
                 $latestPrice = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,

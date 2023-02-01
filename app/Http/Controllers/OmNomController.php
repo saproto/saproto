@@ -95,7 +95,6 @@ class OmNomController extends Controller
                 }
             }
         }
-
         return json_encode($products);
     }
 

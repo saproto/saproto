@@ -85,7 +85,6 @@
                                            'message' => "Are you sure you want to remove this wallstreet drink?<br><br> This will also delete all price history!",
                                            'confirm' => 'Delete',
                                        ])
-
             @endif
         </div>
 

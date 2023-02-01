@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 /**
  * Class WallstreetPrice
- * @property integer drink_id
+ * @property integer wallstreet_drink_id
  * @property float price
  **/
 
@@ -14,7 +14,7 @@ class WallstreetPrice extends Model
 {
     use HasFactory;
     protected $table = 'wallstreet_drink_prices';
-    protected $fillable = ['drink_id', 'product_id', 'price'];
+    protected $fillable = ['wallstreet_drink_id', 'product_id', 'price'];
 
     public function drink()
     {
