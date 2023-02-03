@@ -75,7 +75,7 @@
                                         <li role="separator" class="dropdown-divider"></li>
                                         <a class="dropdown-item" href="{{ route("dinnerform::add") }}">Dinnerforms</a>
                                         <a class="dropdown-item" href="{{ route("omnomcom::tipcie::orderhistory") }}">TIPCie Order Overview</a>
-                                            <a class="dropdown-item" href="{{ route("wallstreet::index") }}">Wallstreet Drinks</a>
+                                            <a class="dropdown-item" href="{{ route("wallstreet::admin") }}">Wallstreet Drinks</a>
                                     @endcan
 
                                     @cannot('board')

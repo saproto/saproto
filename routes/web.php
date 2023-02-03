@@ -315,13 +315,13 @@ Route::group(['middleware' => ['forcedomain']], function () {
 
     /* routes related to the wallstreet drink system */
     Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['permission:tipcie']], function () {
-        Route::get('', ['as' => 'index', 'uses' => 'WallstreetController@index']);
-        Route::get('admin', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
+        Route::get('', ['as' => 'admin', 'uses' => 'WallstreetController@admin']);
         Route::post('add', ['as' => 'add', 'uses' => 'WallstreetController@store']);
         Route::get('close/{id}', ['as' => 'close', 'uses' => 'WallstreetController@close']);
         Route::get('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@edit']);
         Route::post('edit/{id}', ['as' => 'edit', 'uses' => 'WallstreetController@update']);
         Route::get('delete/{id}', ['as' => 'delete', 'uses' => 'WallstreetController@destroy']);
+        Route::get('statistics/{id}', ['as' => 'index', 'uses' => 'WallstreetController@statistics']);
     });
 
     /*

@@ -10,13 +10,19 @@ use Illuminate\Support\Facades\Session;
 use Proto\Models\Product;
 use Proto\Models\WallstreetDrink;
 use Proto\Models\WallstreetPrice;
+use Response;
 
 class WallstreetController extends Controller
 {
-    public function index()
+    public function admin()
     {
         $allDrinks = WallstreetDrink::query()->orderby('start_time', 'desc')->get();
         return view('wallstreet.admin', ['allDrinks' => $allDrinks, 'currentDrink'=>null]);
+    }
+
+    public function statistics($id)
+    {
+        return view('wallstreet.index', ['id'=>$id]);
     }
 
     public function edit($id){
@@ -73,7 +79,6 @@ class WallstreetController extends Controller
         return Redirect::back();
     }
 
-    //function that returns if there is an active drink
     public static function active(){
         $activeDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         if($activeDrink){
@@ -83,10 +88,23 @@ class WallstreetController extends Controller
     }
 
     public function getUpdatedPrices(){
-        $products= Product::query()->where('does_wallstreet', true)->select(['id', 'price'])->get();
+        $products= Product::query()->where('does_wallstreet', true)->select(['id', 'name'])->get();
         foreach($products as $product) {
-            $product->price= WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->first()->price;
+            $newPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->first()->price;
+            $product->price= $newPrice;
+            $product->diff= $newPrice - WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->skip(1)->first()->price;
+
+            if($product->image) {
+                /* @phpstan-ignore-next-line  */
+                $product->image_url = $product->image->generateImagePath(100, null);
+            }
         }
-        return $products;
+        $json = array('products' => $products);
+        return Response::json($json);
+    }
+
+    public function getAllPrices($drinkID){
+        $prices = WallstreetPrice::query()->where('wallstreet_drink_id', $drinkID)->select(['product_id', 'price', 'created_at'])->get()->groupBy('product_id');
+        return $prices;
     }
 }

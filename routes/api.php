@@ -110,6 +110,7 @@ Route::group(['middleware' => ['forcedomain'], 'as' => 'api::'], function () {
     Route::group(['prefix' => 'wallstreet', 'as' => 'wallstreet::', 'middleware' => ['web']], function () {
         Route::get('active', ['as' => 'active', 'uses' => 'WallstreetController@active']);
         Route::get('updated_prices', ['as' => 'updated_prices', 'uses' => 'WallstreetController@getUpdatedPrices']);
+        Route::get('all_prices/{id}', ['as' => 'all_prices', 'uses' => 'WallstreetController@getAllPrices']);
     });
 
     /* Route related to the IsAlfredThere API */
