@@ -73,17 +73,19 @@ class UpdateWallstreetPrices extends Command
                         'price' => $latestPrice->price+$delta>$product->price?$product->price:$latestPrice->price+$delta,
                     ]);
                     $newPriceObject->save();
+                    $this->info($product->id . ' has ' . $newOrderlines . ' new orderlines, increasing price by ' . $delta . ' to ' . $newPriceObject->price);
                     continue;
             }
 
             //lower the price if no orders have been made and the price is not the minimum price
-            if($latestPrice->price!==0.10) {
+            if($latestPrice->price!==$currentDrink->minimum_price) {
                 $newPriceObject = new WallstreetPrice([
                     'wallstreet_drink_id' => $currentDrink->id,
                     'product_id' => $product->id,
                     'price' => $latestPrice->price - $currentDrink->price_decrease < $currentDrink->minimum_price ? $currentDrink->minimum_price : $latestPrice->price - $currentDrink->price_decrease,
                 ]);
                 $newPriceObject->save();
+                $this->info($product->id . ' has no new orderlines, lowering price by ' . $currentDrink->price_decrease . ' to ' . $newPriceObject->price);
             }
         }
     }

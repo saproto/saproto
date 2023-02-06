@@ -88,16 +88,13 @@ class WallstreetController extends Controller
     }
 
     public function getUpdatedPrices(){
-        $products= Product::query()->where('does_wallstreet', true)->select(['id', 'name'])->get();
+        $products= Product::query()->where('does_wallstreet', true)->select(['id', 'name', 'image_id'])->get();
         foreach($products as $product) {
             $newPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->first()->price;
+            $oldPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->skip(1)->first()->price;
             $product->price= $newPrice;
-            $product->diff= $newPrice - WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->skip(1)->first()->price;
-
-            if($product->image) {
-                /* @phpstan-ignore-next-line  */
-                $product->image_url = $product->image->generateImagePath(100, null);
-            }
+            $product->diff= ($newPrice - $oldPrice)/$oldPrice*100;
+            $product->img=is_null($product->image_url)?'':$product->image_url;
         }
         $json = array('products' => $products);
         return Response::json($json);
