@@ -12,8 +12,6 @@
 
             <div id="fishcam-warning" class="card mb-3">
 
-            <div id="fishcam-warning" class="card mb-3">
-
                 <div class="card-header bg-danger text-white">
                     <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i> Warning | Please don't
                     load this stream over a mobile connection.
@@ -48,8 +46,8 @@
 
             </div>
 
-            <div id="fishcam" class="card mb-3 d-none">
-                <img class="card-img-top card-img-bottom d-none" id="fishcam-src">
+            <div id="fishcam" class="card mb-3 d-none h-100 w-auto">
+                <img class="d-none h-100 ml-auto" id="fishcam-src" style="object-fit:contain">
             </div>
 
         </div>
@@ -68,11 +66,13 @@
 
         activate.addEventListener("click", () => {
             fishcamSrc.src = '{{ route("api::fishcam") }}'
+            fishcamSrc.classList.remove('d-none')
             warning.classList.add("d-none")
         })
 
         fishcamSrc.addEventListener("error", () => {
             unavailable.classList.remove("d-none")
+            fishcam.classList.add('d-none')
         })
 
         fishcamSrc.addEventListener("load", () => {
