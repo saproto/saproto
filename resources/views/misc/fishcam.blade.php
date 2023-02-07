@@ -6,9 +6,9 @@
 
 @section('container')
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" style="height: 75vh">
 
-        <div class="col-12">
+        <div class="col-12 h-100">
 
             <div id="fishcam-warning" class="card mb-3">
 
