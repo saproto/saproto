@@ -159,7 +159,7 @@ class ApiController extends Controller
     /** @return void */
     public function fishcamStream()
     {
-        if (! file_exists(env('FISHCAM_URL'))) {
+        if (env('FISHCAM_URL') == null) {
             abort(404);
         }
 
