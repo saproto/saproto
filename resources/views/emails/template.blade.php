@@ -33,7 +33,8 @@
         </td>
         <td style="color: #fff; padding: 0;">
             <br>
-            Mon-Fri, 09:30-16:30<br>
+            Mon&Fri, 08:30-16:00<br>
+            Tue-Thu, 08:30-17:30<br>
             <a style="color: #fff; text-decoration: none;" href="tel:+31534894423">+31 (0)53 489 4423</a><br>
             <a style="color: #fff; text-decoration: none;" href="mailto:board@proto.utwente.nl">
                 board@proto.utwente.nl
