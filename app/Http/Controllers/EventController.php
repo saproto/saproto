@@ -560,7 +560,7 @@ class EventController extends Controller
                     if ($event->activity->isHelping($user)) {
                         $status = 'Helping';
                         $info_text .= ' You are helping with this activity.';
-                    } elseif ($event->activity->isOnBackupList()){
+                    } elseif ($event->activity->isOnBackupList($user)){
                         $status = 'On back-up list';
                         $info_text .= ' You are on the back-up list for this activity';
                     }elseif ($event->activity->isParticipating($user) || $event->hasBoughtTickets($user)) {
