@@ -75,6 +75,12 @@ class ExportController extends Controller
                         return $event->mayViewEvent($user);
                     });
                 }
+
+                // Exclude 'activity' relation
+                foreach($data as $key => $val){
+                    unset($val->activity);
+                }
+
                 break;
             case 'mailinglists':
                 $data = EmailList::all();
