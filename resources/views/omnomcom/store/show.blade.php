@@ -367,8 +367,15 @@
 
             async function updateWallstreetPricing(){
                 await get(config.routes.api_wallstreet_updated_prices).then((response)=> {
-                    console.log("updating prices!");
-                    response.forEach((product) => {
+                    console.log("updating prices!")
+                    console.log(response)
+                    if(typeof response.products === 'undefined' || response.products.length === 0)
+                    {
+                        console.log('no products associated with the active drink!');
+                        return;
+                    }
+
+                    response.products.forEach((product) => {
                             price[product.id] = product.price
                             document.querySelectorAll(`[data-id="${product.id}"]`).forEach((el) => {
                                 el.querySelector('.product-price').innerHTML = "€".concat(product.price.toFixed(2))

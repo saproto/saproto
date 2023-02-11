@@ -49,6 +49,7 @@ class UpdateWallstreetPrices extends Command
         }
 
         foreach ($currentDrink->products as $product) {
+            $this->info($product->id . ' is a product of the current drink');
             //search for the latest price of the current product and if it does not exist take the current price
             $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
             if ($latestPrice === null) {
@@ -85,6 +86,8 @@ class UpdateWallstreetPrices extends Command
                 ]);
                 $newPriceObject->save();
                 $this->info($product->id . ' has no new orderlines, lowering price by ' . $currentDrink->price_decrease . ' to ' . $newPriceObject->price);
+            }else{
+                $this->info($product->id . ' has no new orderlines and the price is already the minimum price');
             }
         }
     }

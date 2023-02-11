@@ -22,7 +22,7 @@ class WallstreetController extends Controller
 
     public function statistics($id)
     {
-        return view('wallstreet.index', ['id'=>$id]);
+        return view('wallstreet.price-history', ['id'=>$id]);
     }
 
     public function edit($id){
@@ -120,7 +120,9 @@ class WallstreetController extends Controller
     }
 
     public function getAllPrices($drinkID){
-        $prices = WallstreetPrice::query()->where('wallstreet_drink_id', $drinkID)->select(['product_id', 'price', 'created_at'])->get()->groupBy('product_id');
-        return $prices;
+        $products= WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', function ($q) use ($drinkID){
+            $q->where('wallstreet_drink_id', $drinkID)->orderBy('created_at', 'asc');
+        })->select('id', 'image_id', 'name')->get();
+        return $products;
     }
 }
