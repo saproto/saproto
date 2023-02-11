@@ -73,7 +73,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('proto:verifydetailscron')->monthlyOn(1, '12:00');
 
         $schedule->command('proto:updatewallstreetprices')->everyMinute()->when(function () {
-            return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count()>0;
+            return WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->count() > 0;
         });
     }
 }

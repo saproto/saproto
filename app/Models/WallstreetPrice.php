@@ -4,12 +4,12 @@ namespace Proto\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 /**
- * Class WallstreetPrice
- * @property integer wallstreet_drink_id
+ * Class WallstreetPrice.
+ * @property int wallstreet_drink_id
  * @property float price
  **/
-
 class WallstreetPrice extends Model
 {
     use HasFactory;

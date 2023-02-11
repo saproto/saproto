@@ -44,7 +44,6 @@ class AddWallstreetDrink extends Migration
      *
      * @return void
      */
-
     public function down()
     {
         Schema::dropIfExists('wallstreet_drink');
