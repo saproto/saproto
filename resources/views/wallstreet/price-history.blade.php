@@ -5,13 +5,15 @@
 @endsection
 
 @section('container')
-<div class="mh-100 d-flex justify-content-center">
+<div style="position: relative; height:90vh; width:95vw; margin-left:auto">
 <canvas id="myChart"></canvas>
 </div>
 @endsection
 
 @push('javascript')
+{{--    chart.js and the date adapter--}}
 <script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script nonce="{{ csp_nonce() }}" src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
 <script nonce="{{ csp_nonce() }}">
     const ctx = document.getElementById('myChart');
@@ -21,26 +23,20 @@
         console.log("creating chart")
 
         chart = new Chart(ctx, {
-            type: 'line',
+            type: "line",
+            options: {
+                spanGaps: true,
+                scales: {
+                    x: {
+                        type: "time",
+                        parsing: false
+                    }
+                },
+                responsive:true,
+            },
             data: createDataSets(products),
-            scales: {
-                x: {
-                    stacked: true
-                },
-            },
-            plugins: {
-                filler: {
-                    propagate: false
-                },
-                'samples-filler-analyser': {
-                    target: 'chart-analyser'
-                }
-            },
-            interaction: {
-                intersect: false,
-            },
         });
-    })
+    });
 
     function createDataSets(products){
         let myData = {
@@ -50,7 +46,7 @@
             let prices = [];
             product.wallstreet_prices.forEach((price) => {
                 prices.push({
-                    x: `${new Date(Date.parse(price.created_at)).getHours()}:${new Date(Date.parse(price.created_at)).getMinutes()}`,
+                    x: Date.parse(price.created_at),
                     y: price.price
                 })
             });
