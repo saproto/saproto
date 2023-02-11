@@ -109,8 +109,8 @@ class WallstreetController extends Controller
         $activeDrink = WallstreetDrink::query()->where('start_time', '<=', time())->where('end_time', '>=', time())->first();
         $products = $activeDrink->products()->select('name','price', 'id', 'image_id')->get();
         foreach($products as $product) {
-            $newPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->first()->price;
-            $oldPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('created_at', 'desc')->skip(1)->first()->price;
+            $newPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->first()->price;
+            $oldPrice=WallstreetPrice::where('product_id', $product->id)->orderBy('id', 'desc')->skip(1)->first()->price;
             $product->price= $newPrice;
             $product->diff= ($newPrice - $oldPrice)/$oldPrice*100;
             $product->img=is_null($product->image_url)?'':$product->image_url;
@@ -121,7 +121,7 @@ class WallstreetController extends Controller
 
     public function getAllPrices($drinkID){
         $products= WallstreetDrink::find($drinkID)->products()->with('wallstreetPrices', function ($q) use ($drinkID){
-            $q->where('wallstreet_drink_id', $drinkID)->orderBy('created_at', 'asc');
+            $q->where('wallstreet_drink_id', $drinkID)->orderBy('id', 'asc');
         })->select('id', 'image_id', 'name')->get();
         return $products;
     }

@@ -49,9 +49,8 @@ class UpdateWallstreetPrices extends Command
         }
 
         foreach ($currentDrink->products as $product) {
-            $this->info($product->id . ' is a product of the current drink');
             //search for the latest price of the current product and if it does not exist take the current price
-            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('created_at', 'desc')->first();
+            $latestPrice = WallstreetPrice::query()->where('product_id', $product->id)->where('wallstreet_drink_id', $currentDrink->id)->orderBy('id', 'desc')->first();
             if ($latestPrice === null) {
                 $this->info('No price found for product ' . $product->id . ' creating new price object with current price (' . $product->price . ') for drink '. $currentDrink->id);
                 $latestPrice = new WallstreetPrice([
@@ -67,14 +66,14 @@ class UpdateWallstreetPrices extends Command
             //heighten the price if there are new orders and the price is not the actual price
             if($newOrderlines>0){
                 $delta= $newOrderlines*$currentDrink->price_increase;
-                    $newPriceObject = new WallstreetPrice([
-                        'wallstreet_drink_id' => $product->id,
-                        'product_id' => $product->id,
-                        'price' => $latestPrice->price+$delta>$product->price?$product->price:$latestPrice->price+$delta,
-                    ]);
-                    $newPriceObject->save();
-                    $this->info($product->id . ' has ' . $newOrderlines . ' new orderlines, increasing price by ' . $delta . ' to ' . $newPriceObject->price);
-                    continue;
+                $newPriceObject = new WallstreetPrice([
+                    'wallstreet_drink_id' => $currentDrink->id,
+                    'product_id' => $product->id,
+                    'price' =>$latestPrice->price+$delta>=$product->price?$product->price:$latestPrice->price+$delta,
+                ]);
+                $newPriceObject->save();
+                $this->info($product->id . ' has ' . $newOrderlines . ' new orderlines, increasing price by ' . $delta .'to ' . $newPriceObject->price);
+                continue;
             }
 
             //lower the price if no orders have been made and the price is not the minimum price
