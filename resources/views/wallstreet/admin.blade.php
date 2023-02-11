@@ -10,6 +10,9 @@
 
             @include('wallstreet.admin_includes.wallstreetdrink-details')
 
+            @if($currentDrink)
+                @include('wallstreet.admin_includes.wallstreetdrink-product-list')
+            @endif
         </div>
         <div class="col-xl-8">
 

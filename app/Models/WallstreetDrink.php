@@ -5,6 +5,8 @@ namespace Proto\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
 
 /**
@@ -24,18 +26,19 @@ class WallstreetDrink extends Model
     protected $table = 'wallstreet_drink';
     protected $fillable = ['end_time', 'start_time', 'name', 'minimum_price', 'price_increase', 'price_decrease'];
 
-    public function isCurrent(){
+    public function isCurrent(): bool
+    {
         return $this->start_time <= time() && $this->end_time >= time();
     }
 
-    //todo update to a many to many relationship
-    public function products(){
-        return Product::where('does_wallstreet', true)->get();
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_wallstreet_drink');
     }
 
-    public function latestPrices(){
-        $latestPrices = WallstreetPrice::query()->whereIn('product_id', $this->products()->pluck('id'))->orderBy('created_at', 'desc')->get();
-        return $latestPrices;
+    public function latestPrices()
+    {
+        return WallstreetPrice::query()->whereIn('product_id', $this->products()->pluck('id'))->orderBy('created_at', 'desc')->get();
     }
 
     public function orders(){
