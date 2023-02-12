@@ -9,7 +9,6 @@
             api_search_achievement: "{{ route('api::search::achievement') }}",
             api_omnomcom_stock: "{{ route('api::omnomcom::stock') }}",
             api_wallstreet_active: "{{ route('api::wallstreet::active') }}",
-            api_wallstreet_updated_prices: "{{ route('api::wallstreet::updated_prices') }}",
         },
         analytics_url: "{{ config('proto.analytics_url') }}",
         discord_server_id: "{{ config('proto.discord_server_id') }}",

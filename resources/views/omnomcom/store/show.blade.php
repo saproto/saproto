@@ -205,8 +205,8 @@
             async function initializeWallstreetDrink(){
                 await get(config.routes.api_wallstreet_active)
                     .then(data => {
-                        if(data===1){
-                            setInterval(updateWallstreetPricing, 5000)
+                        if(data){
+                            setInterval(updateWallstreetPricing,5000, data.id)
                             console.log("Wallstreet drink is active")
                         }
                     })
@@ -365,10 +365,9 @@
                 }
             }
 
-            async function updateWallstreetPricing(){
-                await get(config.routes.api_wallstreet_updated_prices).then((response)=> {
+            async function updateWallstreetPricing(id){
+                await get(`{{route('api::wallstreet::updated_prices', ['id'=>'_id'])}}`.replace('_id', id)).then((response)=> {
                     console.log("updating prices!")
-                    console.log(response)
                     if(typeof response.products === 'undefined' || response.products.length === 0)
                     {
                         console.log('no products associated with the active drink!');
